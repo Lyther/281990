@@ -1,0 +1,171 @@
+portraits = {
+	magi_nekoajin_dan = {	entity = "portrait_magi_nekoajin_entity" clothes_selector = "magi_nekoajin_dan_clothes_01" attachment_selector = "no_texture"
+		greeting_sound = "magi_cat_nyaa_sound"
+		character_textures = {
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_001.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_002.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_003.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_004.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_005.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_006.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_007.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_008.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_009.dds"
+			"gfx/models/portraits/me_ajin_dan_dds/ajin_dan_me_010.dds"
+		}
+	}
+	magi_nekoajin_jo = {	entity = "portrait_magi_nekoajin_entity" clothes_selector = "magi_nekoajin_jo_clothes_01" attachment_selector = "no_texture"
+		greeting_sound = "magi_cat_nyaa_sound"
+		character_textures = {
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_001.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_002.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_003.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_004.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_005.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_006.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_007.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_008.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_009.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_010.dds"
+			"gfx/models/portraits/me_ajin_jo_dds/ajin_jo_me_011.dds"
+		}
+	}
+}
+
+portrait_groups = {
+	magi_nekoajin = {
+		default = magi_nekoajin_dan
+		game_setup = { #will run with a limited country scope. species and government is set but the country does not actually exist
+			add = {
+				trigger = {
+					ruler = {
+						OR = {
+							gender = male
+							gender = indeterminable
+						}
+					}
+				}
+				portraits = {
+					# male add here
+					magi_nekoajin_dan
+				}
+			}
+			add = {
+				trigger = {
+					ruler = {
+						OR = {
+							gender = female
+							gender = indeterminable
+						}
+					}
+				}
+				portraits = {
+					#female add here
+					magi_nekoajin_jo
+				}
+			}
+
+		}
+
+		#species scope
+		species = { #generic portrait for a species
+			add = {
+				trigger = {
+					exists = species
+					NOT = { species = { species_gender = female } }
+				}
+				portraits = {
+					# male add here
+					magi_nekoajin_dan
+				}
+			}
+			add = {
+				trigger = {
+					exists = species
+					NOT = { species = { species_gender = male } }
+				}
+				portraits = {
+					#female add here
+					magi_nekoajin_jo
+				}
+			}
+		}
+
+		#pop scope
+		pop = { #for a specific pop
+			add = {
+				trigger = {
+					NOT = { species = { species_gender = female } }
+				}
+				portraits = {
+					# male add here
+					magi_nekoajin_dan
+				}
+			}
+			add = {
+				trigger = {
+					NOT = { species = { species_gender = male } }
+				}
+				portraits = {
+					# female add here
+					magi_nekoajin_jo
+				}
+			}
+		}
+
+		leader = {
+			add = {
+				trigger = {
+					OR = {
+						gender = male
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					# male add here
+					magi_nekoajin_dan
+				}
+			}
+			add = {
+				trigger = {
+					OR = {
+						gender = female
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					# female add here
+					magi_nekoajin_jo
+				}
+			}
+		}
+
+		ruler = {
+			add = {
+				trigger = {
+					OR = {
+						gender = male
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					# male add here
+					magi_nekoajin_dan
+				}
+			}
+			add = {
+				trigger = {
+					OR = {
+						gender = female
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					#female add here
+					magi_nekoajin_jo
+				}
+			}
+		}
+	}
+}
+

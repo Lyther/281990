@@ -1,0 +1,5039 @@
+################################################
+#### 	   	ZoFE Return of the Original Empire
+####					By Kolyn
+################################################
+
+namespace = zofe_crisis
+
+event = {
+	id = zofe_crisis.1
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { any_country = { has_origin = origin_original_people } }
+			}
+			set_global_flag = original_empire_crisis_1
+		}
+		if = {
+			limit = {
+				any_country = { has_origin = origin_original_people }
+			}
+			set_global_flag = original_empire_crisis_2
+			random_country = {
+				limit = { has_origin = origin_original_people }
+				save_global_event_target_as = original_people_origin
+				owner_species = { save_global_event_target_as = original_species }
+			}
+		}
+	}
+}
+
+
+##Original Empire talks to original People some more
+country_event = {
+	id = zofe_crisis.3
+	title = zofe_crisis.3.name
+	desc = zofe_crisis.3.desc
+	is_triggered_only = yes
+	diplomatic = yes	
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	option = {
+		name = zofe_crisis.3.a
+	}
+}
+
+# Original Empire Gets Reinforcements When At War
+country_event = {
+	id = zofe_crisis.4
+	title = OK
+	desc = OK
+	
+	hide_window = yes
+	
+	trigger = {
+		is_zofe_oe = yes
+		is_at_war = yes
+		NOT = { has_country_flag = new_original_empire }
+		NOT = { has_country_flag = oe_reinforcements_received }
+		OR = {
+			has_global_flag = original_empire_vanilla_difficulty 
+			has_global_flag = original_empire_normal_difficulty
+			has_global_flag = original_empire_hard_difficulty
+			has_global_flag = original_empire_veteran_difficulty
+			has_global_flag = original_empire_nightmare_difficulty
+		}
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		if = {
+			limit = { has_global_flag = original_empire_vanilla_difficulty }
+			set_timed_country_flag = {
+				flag = oe_reinforcements_received
+				days = -1
+			}
+		}
+		if = {
+			limit = { has_global_flag = original_empire_normal_difficulty }
+			set_timed_country_flag = {
+				flag = oe_reinforcements_received
+				days = 3600
+			}
+			create_original_empire_reinforcement = yes
+		}
+		if = {
+			limit = { has_global_flag = original_empire_hard_difficulty }
+			set_timed_country_flag = {
+				flag = oe_reinforcements_received
+				days = 1800
+			}
+			create_original_empire_reinforcement = yes
+		}
+		if = {
+			limit = { has_global_flag = original_empire_veteran_difficulty }
+			set_timed_country_flag = {
+				flag = oe_reinforcements_received
+				days = 1080
+			}
+			create_original_empire_reinforcement = yes
+		}
+		if = {
+			limit = { has_global_flag = original_empire_nightmare_difficulty }
+			set_timed_country_flag = {
+				flag = oe_reinforcements_received
+				days = 720
+			}
+			create_original_empire_reinforcement = yes
+		}			
+	}
+}
+
+planet_event = { 
+	id = zofe_crisis.5
+	title = zofe_crisis.5.name
+	desc = zofe_crisis.5.desc
+	picture = GFX_evt_overgrown_city
+	show_sound = event_mystic_reveal
+	location = root
+
+	trigger = {
+		has_planet_flag = original_empire_world
+		original_owner = no
+		OR = {
+			has_building = building_original_empire_sun_generator
+			has_building = building_original_empire_siphoner
+			has_building = building_original_empire_cornucopia
+			has_building = building_original_empire_pleasure_palace
+			has_building = building_original_empire_star_forge
+			has_building = building_original_empire_eternal_archive
+			has_building = building_original_empire_star_forts
+		}
+		exists = owner
+		owner = {
+			OR = {
+				is_ascended_empire = yes
+				is_lost_empire = yes
+			}
+			has_technology = tech_original_empire_power_core
+			has_all_lost_tech_buildings = yes
+			NOT = { has_country_flag = original_people_buildings }
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 10
+	}	
+	
+	immediate = {
+		owner = { 
+			set_country_flag = original_people_buildings
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.5.a
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			owner = {
+				original_technologies_more_attuned = yes
+				original_technologies_more_attuned = yes
+				original_technologies_more_attuned = yes
+			}
+		}
+		owner = {
+			give_technology = { tech = tech_original_technologies_1	message = no }
+			if = {
+				limit = {
+					NOR = {
+						has_technology = tech_original_empire_sun_generator
+						has_tech_option = tech_original_empire_sun_generator
+					}
+					has_technology = tech_fe_dark_matter_power_plant
+				}
+				add_research_option = tech_original_empire_sun_generator
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = tech_original_empire_siphoner
+						has_tech_option = tech_original_empire_siphoner
+					}
+					has_technology = tech_fe_autonomous_fabricator
+				}
+				add_research_option = tech_original_empire_siphoner
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = tech_original_empire_cornucopia
+						has_tech_option = tech_original_empire_cornucopia
+					}
+					has_technology = tech_fe_agri_processing_complex
+				}
+				add_research_option = tech_original_empire_cornucopia
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = tech_original_empire_pleasure_palace
+						has_tech_option = tech_original_empire_pleasure_palace
+					}
+					has_technology = tech_fe_opulent_tower
+				}
+				add_research_option = tech_original_empire_pleasure_palace
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = tech_original_empire_star_forge
+						has_tech_option = tech_original_empire_star_forge
+					}
+					has_technology = tech_fe_pico_forge
+				}
+				add_research_option = tech_original_empire_star_forge
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = tech_original_empire_eternal_archive
+						has_tech_option = tech_original_empire_eternal_archive
+					}
+					has_technology = tech_fe_master_archive_3
+				}
+				add_research_option = tech_original_empire_eternal_archive
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_technology = tech_original_empire_star_forts
+						has_tech_option = tech_original_empire_star_forts
+					}
+					has_technology = tech_fe_aegis_complex_3
+				}
+				add_research_option = tech_original_empire_star_forts
+			}
+			if = {
+				limit = {
+					question_of_style = yes
+					NOT = { has_technology = tech_original_technologies_3 }
+				}
+				add_research_option = tech_original_technologies_3
+			}
+		}
+	}
+	option = {
+		name = zofe_crisis.5.b	
+		root.owner = {
+			add_resource = { influence = 500 }
+		}
+	}
+}
+
+#Original Empire Home World Garrison
+
+country_event = {
+	id = zofe_crisis.6
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		NOT = { has_country_flag = oe_garrisons_created }
+		is_zofe_oe = yes
+		is_at_war = no
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		set_country_flag = oe_garrisons_created
+		
+		if = {
+			limit = {
+				NOT = {
+					any_system_within_border = {
+						any_fleet_in_system = {
+							is_ship_size = fe_garrison_station
+						}
+					}
+				}
+			}
+			every_owned_planet = {
+				limit = {
+					is_colony = yes
+					has_planet_flag = original_empire_world
+				}
+				save_event_target_as = oe_planet
+				create_fleet = {
+					effect = {
+						set_owner = event_target:original_empire
+						create_ship = {
+							name = "NAME_CITADEL_OF_LIGHT"
+							design = "NAME_OE_GARRISON_STATION"
+							graphical_culture = "original_empire_01"
+						}
+						set_location = {
+							target = prev
+							distance = 0
+							angle = random
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+event = {
+	id = zofe_crisis.1000
+	hide_window = yes
+	
+	fire_only_once = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		is_crises_allowed = yes
+		end_game_years_passed >= 0
+		original_empire_returns = yes
+		OR = {
+			has_global_flag = galactic_crisis_happened
+			AND = {
+				allowed_crisis_type = all
+				OR = {
+					has_global_flag = galactic_crisis_recently_fired
+					any_country = {
+						is_crisis_faction = yes
+					}
+				}
+			}
+		}
+	}
+		
+	immediate = {	
+	
+		##No Original People Origin
+		
+		if = {
+			limit = { has_global_flag = original_empire_crisis_1 }
+			random_rim_system = {
+				spawn_system = {
+					min_distance >= 20
+					max_distance <= 50
+					initializer = "original_empire_init_01"
+				}
+			}
+			random_system = {
+				limit = { has_star_flag = original_empire_system }
+				save_event_target_as = original_empire_system
+				random_system_planet = {
+					limit = { has_planet_flag = original_empire_capital }
+					save_event_target_as = original_empire_capital
+					create_species = {
+						name = "NAME_ORIGINAL"
+						plural = "NAME_ORIGINALS"
+						class = ORIGINAL
+						namelist = HUM3
+						portrait = original		
+							traits = {
+							trait = trait_punctual
+							trait = trait_patriotic
+							trait = trait_disciplined
+							trait = trait_intelligent 
+							trait = trait_natural_engineers 
+							trait = trait_industrious 
+							trait = trait_slow_breeders 
+							trait = trait_solitary 
+						}
+						homeworld = this
+						effect = { save_global_event_target_as = original_species }
+					}
+					create_country = {
+						name = "NAME_SECRET_OE"
+						origin = origin_fallen_empire
+						ethos = {
+							ethic = ethic_fanatic_militarist
+						}
+						authority = auth_imperial
+						civics = {
+							civic = civic_original_empire_lethargic_leadership
+							civic = civic_original_empire_in_decline
+						}
+						species = last_created_species
+						type = original_empire
+						name_list = "HUM3"
+						flag = {
+							icon={
+								category="pointy"
+								file="flag_pointy_3.dds"
+							}
+							background={
+								category="backgrounds"
+								file="v.dds"
+							}
+							colors={
+								"beige"
+								"black"
+								"null"
+								"null"
+							}
+						}
+						effect = {
+							save_global_event_target_as = original_empire
+							set_country_flag = original_empire
+							set_country_flag = giga_weapon_immune
+							set_graphical_culture = original_empire_01			
+							add_modifier = {
+								modifier = original_empire_base
+								days = -1
+							}
+										
+							##Add resources
+							add_resource = { energy = 100000 }
+							add_resource = { minerals = 100000 }
+							add_resource = { food = 100000 }
+							add_resource = { consumer_goods = 100000 }
+							add_resource = { alloys = 100000 }
+							add_resource = { influence = 1000 }
+							add_resource = { unity = 270000 }
+							add_resource = { rare_crystals = 100000 }
+							add_resource = { exotic_gases = 100000 }
+							add_resource = { volatile_motes = 100000 }
+							add_resource = { sr_dark_matter = 100000 }
+							add_resource = { sr_living_metal = 100000 }
+							add_resource = { sr_zro = 100000 }
+							
+							#Give Technologies
+							
+							if = {
+								limit = {
+									NOT = { has_technology = tech_divine_judgement }
+								}
+								give_technology = { tech = tech_divine_judgement }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_light_of_salvation }
+								}
+								give_technology = { tech = tech_light_of_salvation }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_light_of_arya }
+								}
+								give_technology = { tech = tech_light_of_arya }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_blessed_sling }
+								}
+								give_technology = { tech = tech_blessed_sling }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_holy_thunder }
+								}
+								give_technology = { tech = tech_holy_thunder }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_deliverer_strike_craft }
+								}
+								give_technology = { tech = tech_deliverer_strike_craft }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_righteous_fire }
+								}
+								give_technology = { tech = tech_righteous_fire }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_power_core }
+								}
+								give_technology = { tech = tech_original_empire_power_core }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_shield }
+								}
+								give_technology = { tech = tech_original_empire_shield }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_chalice }
+								}
+								give_technology = { tech = tech_original_empire_chalice }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_crucible }
+								}
+								give_technology = { tech = tech_original_empire_crucible }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_celestial_armor }
+								}
+								give_technology = { tech = tech_celestial_armor }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_celestial_plating }
+								}
+								give_technology = { tech = tech_celestial_plating }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_shield }
+								}
+								give_technology = { tech = tech_original_empire_shield }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_jump_drive }
+								}
+								give_technology = { tech = tech_original_empire_jump_drive }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_thruster }
+								}
+								give_technology = { tech = tech_original_empire_thruster }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_sensors }
+								}
+								give_technology = { tech = tech_original_empire_sensors }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_shield_disabler }
+								}
+								give_technology = { tech = tech_original_empire_shield_disabler }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_controls_jammer }
+								}
+								give_technology = { tech = tech_original_empire_controls_jammer }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_subspace_snare }
+								}
+								give_technology = { tech = tech_original_empire_subspace_snare }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_technologies_1 }
+								}
+								give_technology = { tech = tech_original_technologies_1 }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_technologies_3 }
+								}
+								give_technology = { tech = tech_original_technologies_3 }
+							}
+
+							#Set Difficulties
+
+							if = {
+								limit = { has_global_flag = original_empire_normal_difficulty }
+								add_modifier = {
+									modifier = original_technology_insights_3
+									days = -1
+								}	
+							}
+							if = {
+								limit = { has_global_flag = original_empire_hard_difficulty }
+								add_modifier = {
+									modifier = original_technology_insights_5
+									days = -1
+								}	
+							}
+							if = {
+								limit = { has_global_flag = original_empire_veteran_difficulty }
+								add_modifier = {
+									modifier = original_technology_insights_7
+									days = -1
+								}	
+							}
+							if = {
+								limit = { has_global_flag = original_empire_nightmare_difficulty }
+								add_modifier = {
+									modifier = original_technology_mastery
+									days = -1
+								}	
+							}
+							
+							
+							
+							#Create Leaders
+						
+							create_leader = {
+								class = scientist
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							create_leader = {
+								class = scientist
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							create_leader = {
+								class = scientist
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							create_leader = {
+								class = scientist
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							create_leader = {
+								class = governor
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+							create_fleet = {
+								name = "NAME_IMPERIAL_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_GOLIATH"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 2
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 2
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 32
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+							create_fleet = {
+								name = "NAME_NORTHERN_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_TITAN"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 1
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 8
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+							create_fleet = {
+								name = "NAME_EASTERN_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_TITAN"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 1
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 8
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+
+							create_fleet = {
+								name = "NAME_SOUTHERN_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_TITAN"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 1
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 8
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+
+							create_fleet = {
+								name = "NAME_WESTERN_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_TITAN"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 1
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 8
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_fleet = {
+								name = NAME_DIVINE_RETRIBUTION
+								settings = { 
+#									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_DIVINE_PUNISHER"
+										graphical_culture = original_empire_01
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}	
+						}
+					}
+				}
+				every_system_planet = {
+					limit = {
+						has_planet_flag = original_empire_world
+					}
+					set_owner = event_target:original_empire
+					set_controller = event_target:original_empire
+					
+					add_building = building_system_capital
+					add_building = building_original_empire_star_forts
+					add_building = building_original_empire_star_forts
+					add_building = building_original_empire_star_forts
+					add_building = building_original_empire_star_forge
+					add_building = building_original_empire_star_forge
+					add_building = building_original_empire_sun_generator
+					add_building = building_original_empire_sun_generator
+					add_building = building_original_empire_sun_generator
+					add_building = building_original_empire_siphoner	
+					add_building = building_original_empire_pleasure_palace
+					add_building = building_original_empire_cornucopia
+
+					while = {
+						count = 1
+						add_district = district_utopian_city_rw
+					}
+					while = {
+						count = 1
+						add_district = district_utopian_leisure_rw
+					}
+					while = {
+						count = 1
+						add_district = district_utopian_production_rw
+					}
+					while = {
+						count = 1
+						add_district = district_utopian_foundry_rw
+					}
+					while = {
+						count = 6
+						add_district = district_utopian_science_rw
+					}
+					
+					while = {
+						count = 94
+						create_pop = {
+							species = event_target:original_species
+						}
+					}
+				}
+				create_original_empire_citadel = yes
+			}
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = { has_communications = event_target:original_empire }
+				}
+				establish_communications_no_message = event_target:original_empire
+				country_event = { id = zofe_crisis.1001 days = 5 }
+			}
+			every_playable_country = {
+				limit = { is_ai = yes }
+				establish_communications_no_message = event_target:original_empire
+			}
+		}
+		
+		
+		##With Original People Origin
+		
+		if = {
+			limit = { has_global_flag = original_empire_crisis_2 }
+			random_rim_system = {
+				spawn_system = {
+					min_distance >= 20
+					max_distance <= 50
+					initializer = "original_empire_init_01"
+				}
+			}
+			random_system = {
+				limit = { has_star_flag = original_empire_system }
+				save_event_target_as = original_empire_system
+				random_system_planet = {
+					limit = { has_planet_flag = original_empire_capital }
+					save_event_target_as = original_empire_capital
+					
+					create_country = {
+						name = "NAME_SECRET_OE"
+						origin = origin_fallen_empire
+						ethos = {
+							ethic = ethic_fanatic_militarist
+						}
+						authority = auth_imperial
+						civics = {
+							civic = civic_original_empire_lethargic_leadership
+							civic = civic_original_empire_in_decline
+						}
+						species = event_target:original_species
+						type = original_empire
+						name_list = event_target:original_people_origin
+						flag = event_target:original_people_origin
+						effect = {
+							save_global_event_target_as = original_empire
+							set_country_flag = original_empire
+							set_country_flag = giga_weapon_immune
+							set_graphical_culture = original_empire_01
+							add_modifier = {
+								modifier = original_empire_base
+								days = -1
+							}
+			
+							##Add resources
+							add_resource = { energy = 100000 }
+							add_resource = { minerals = 100000 }
+							add_resource = { food = 100000 }
+							add_resource = { consumer_goods = 100000 }
+							add_resource = { alloys = 100000 }
+							add_resource = { influence = 1000 }
+							add_resource = { unity = 270000 }
+							add_resource = { rare_crystals = 100000 }
+							add_resource = { exotic_gases = 100000 }
+							add_resource = { volatile_motes = 100000 }
+							add_resource = { sr_dark_matter = 100000 }
+							add_resource = { sr_living_metal = 100000 }
+							add_resource = { sr_zro = 100000 }
+							
+							#Give Technologies
+							
+							if = {
+								limit = {
+									NOT = { has_technology = tech_divine_judgement }
+								}
+								give_technology = { tech = tech_divine_judgement }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_light_of_salvation }
+								}
+								give_technology = { tech = tech_light_of_salvation }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_light_of_arya }
+								}
+								give_technology = { tech = tech_light_of_arya }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_blessed_sling }
+								}
+								give_technology = { tech = tech_blessed_sling }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_holy_thunder }
+								}
+								give_technology = { tech = tech_holy_thunder }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_deliverer_strike_craft }
+								}
+								give_technology = { tech = tech_deliverer_strike_craft }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_righteous_fire }
+								}
+								give_technology = { tech = tech_righteous_fire }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_power_core }
+								}
+								give_technology = { tech = tech_original_empire_power_core }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_shield }
+								}
+								give_technology = { tech = tech_original_empire_shield }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_chalice }
+								}
+								give_technology = { tech = tech_original_empire_chalice }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_crucible }
+								}
+								give_technology = { tech = tech_original_empire_crucible }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_celestial_armor }
+								}
+								give_technology = { tech = tech_celestial_armor }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_celestial_plating }
+								}
+								give_technology = { tech = tech_celestial_plating }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_shield }
+								}
+								give_technology = { tech = tech_original_empire_shield }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_jump_drive }
+								}
+								give_technology = { tech = tech_original_empire_jump_drive }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_thruster }
+								}
+								give_technology = { tech = tech_original_empire_thruster }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_sensors }
+								}
+								give_technology = { tech = tech_original_empire_sensors }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_shield_disabler }
+								}
+								give_technology = { tech = tech_original_empire_shield_disabler }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_controls_jammer }
+								}
+								give_technology = { tech = tech_original_empire_controls_jammer }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_empire_subspace_snare }
+								}
+								give_technology = { tech = tech_original_empire_subspace_snare }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_technologies_1 }
+								}
+								give_technology = { tech = tech_original_technologies_1 }
+							}
+							if = {
+								limit = {
+									NOT = { has_technology = tech_original_technologies_3 }
+								}
+								give_technology = { tech = tech_original_technologies_3 }
+							}
+							
+							#Set Difficulties
+
+							if = {
+								limit = { has_global_flag = original_empire_normal_difficulty }
+								add_modifier = {
+									modifier = original_technology_insights_3
+									days = -1
+								}	
+							}
+							if = {
+								limit = { has_global_flag = original_empire_hard_difficulty }
+								add_modifier = {
+									modifier = original_technology_insights_5
+									days = -1
+								}	
+							}
+							if = {
+								limit = { has_global_flag = original_empire_veteran_difficulty }
+								add_modifier = {
+									modifier = original_technology_insights_7
+									days = -1
+								}	
+							}
+							if = {
+								limit = { has_global_flag = original_empire_nightmare_difficulty }
+								add_modifier = {
+									modifier = original_technology_mastery
+									days = -1
+								}	
+							}
+							
+							
+							#Create Leaders
+						
+							create_leader = {
+								class = scientist
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							create_leader = {
+								class = scientist
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							create_leader = {
+								class = scientist
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							create_leader = {
+								class = scientist
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							create_leader = {
+								class = governor
+								species = event_target:original_species
+								name = random
+								skill = 10
+							}
+							assign_leader = last_created_leader
+							
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+							create_fleet = {
+								name = "NAME_IMPERIAL_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_GOLIATH"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 2
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 2
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 32
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+							create_fleet = {
+								name = "NAME_NORTHERN_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_TITAN"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 1
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 8
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+							create_fleet = {
+								name = "NAME_EASTERN_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_TITAN"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 1
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 8
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+
+							create_fleet = {
+								name = "NAME_SOUTHERN_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_TITAN"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 1
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 8
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_leader = {
+								class = admiral
+								species = event_target:original_species
+								name = random
+								skill = 10
+								traits = {
+									trait = leader_trait_cautious
+									trait = leader_trait_aggressive
+									trait = leader_trait_engineer
+								}
+							}
+
+							create_fleet = {
+								name = "NAME_WESTERN_ARMADA"
+								settings = { 
+									can_change_composition = no
+									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_ORIGINAL_EMPIRE_TITAN"
+										graphical_culture = "original_empire_01"
+										upgradable = no
+									}
+									assign_leader = last_created_leader
+									while = {
+										count = 1
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_TITAN_02"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 8
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									while = {
+										count = 16
+										create_ship = {
+											name = random
+											design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+											graphical_culture = "original_empire_01"
+											upgradable = no
+										}
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}
+							create_fleet = {
+								name = NAME_DIVINE_RETRIBUTION
+								settings = { 
+#									spawn_debris = yes
+									is_boss = yes
+								}
+								effect = {
+									set_owner = event_target:original_empire
+									create_ship = {
+										name = random
+										design = "NAME_DIVINE_PUNISHER"
+										graphical_culture = original_empire_01
+									}
+									set_location = {
+										target = event_target:original_empire_capital
+										distance = 10
+										angle = random
+									}
+									set_fleet_stance = passive
+									set_aggro_range_measure_from = self
+									set_aggro_range = 500	
+								}
+							}	
+						}
+					}
+				}
+				every_system_planet = {
+					limit = {
+						has_planet_flag = original_empire_world
+					}
+					set_owner = event_target:original_empire
+					set_controller = event_target:original_empire
+					
+					add_building = building_system_capital
+					add_building = building_original_empire_star_forts
+					add_building = building_original_empire_star_forts
+					add_building = building_original_empire_star_forts
+					add_building = building_original_empire_star_forge
+					add_building = building_original_empire_star_forge
+					add_building = building_original_empire_sun_generator
+					add_building = building_original_empire_sun_generator
+					add_building = building_original_empire_sun_generator
+					add_building = building_original_empire_siphoner	
+					add_building = building_original_empire_pleasure_palace
+					add_building = building_original_empire_cornucopia
+
+					while = {
+						count = 1
+						add_district = district_utopian_city_rw
+					}
+					while = {
+						count = 1
+						add_district = district_utopian_leisure_rw
+					}
+					while = {
+						count = 1
+						add_district = district_utopian_production_rw
+					}
+					while = {
+						count = 1
+						add_district = district_utopian_foundry_rw
+					}
+					while = {
+						count = 6
+						add_district = district_utopian_science_rw
+					}
+					
+					while = {
+						count = 94
+						create_pop = {
+							species = event_target:original_species
+						}
+					}
+				}
+				create_original_empire_citadel = yes
+			}
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					NOT = { has_communications = event_target:original_empire }
+				}
+				establish_communications_no_message = event_target:original_empire
+				country_event = { id = zofe_crisis.1001 days = 5 }
+			}
+			every_playable_country = {
+				limit = { 
+					is_ai = yes 
+					is_primitive = no
+				}
+				establish_communications_no_message = event_target:original_empire
+			}
+		}
+		event_target:original_empire = {
+			set_timed_country_flag = { flag = new_original_empire days = 7200 }
+		}
+	}
+}
+
+
+
+#Original Empire Establishes Communications
+country_event = {
+	id = zofe_crisis.1001
+	title = zofe_crisis.1001.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	desc = {
+		text = zofe_crisis.1001.desc
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+			is_country_type = default
+			is_ascended_empire = no
+			NOR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+	}
+	desc = {
+		text = zofe_crisis.1001.desc.b
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+			is_ascended_empire = yes
+			NOR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+	}
+	desc = {
+		text = zofe_crisis.1001.desc.c
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+			is_lost_empire = yes
+			NOR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+	}
+	desc = {
+		text = zofe_crisis.1001.desc.d
+		trigger = {
+			has_origin = origin_original_people
+		}
+	}
+	desc = {
+		text = zofe_crisis.1001.desc.e
+		trigger = {
+			OR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+	}
+
+	option = {
+		name = zofe_crisis.1001.a
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+			is_country_type = default
+			is_ascended_empire = no
+			NOR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+		hidden_effect = {
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_appeared }
+					}
+					set_country_flag = original_empire_appeared
+				}
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1001.b
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+			is_ascended_empire = yes
+			NOR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+		hidden_effect = {
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_appeared }
+					}
+					set_country_flag = original_empire_appeared
+				}
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1001.c
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+			is_lost_empire = yes
+			NOR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+		hidden_effect = {
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_appeared }
+					}
+					set_country_flag = original_empire_appeared
+				}
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1001.d
+		trigger = {
+			has_origin = origin_original_people
+			NOR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+		hidden_effect = {
+			country_event = { id = zofe_crisis.3 }
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_appeared }
+					}
+					set_country_flag = original_empire_appeared
+				}
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1001.e
+		trigger = {
+			OR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+		}
+		hidden_effect = {
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_appeared }
+					}
+					set_country_flag = original_empire_appeared
+				}
+			}	
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1002
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {		
+		is_country_type = original_empire
+		is_at_war = no
+		has_country_flag = original_empire_appeared
+		NOT = { has_country_flag = 	original_empire_preparations_1 }	
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		set_country_flag = original_empire_preparations_1
+		set_timed_country_flag = { flag = original_empire_preparations_ongoing days = 1800 }
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				OR = {
+					has_global_flag = original_empire_normal_difficulty
+					has_global_flag = original_empire_hard_difficulty
+					has_global_flag = original_empire_veteran_difficulty
+					has_global_flag = original_empire_nightmare_difficulty
+				}
+			}
+			add_to_galactic_community = yes
+		}
+		every_playable_country = {
+			limit = { 
+				NOR = {
+					has_ascension_perk = ap_become_the_crisis
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+				}
+			}
+			country_event = { id = zofe_crisis.1003 }
+		}
+	}
+}
+
+## First Deal
+
+country_event = {
+	id = zofe_crisis.1003
+	title = zofe_crisis.1003.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	desc = {
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		text = "zofe_crisis.1003.desc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+		}
+		text = "zofe_crisis.1003.desc.a"
+	}
+	
+	option = {
+		name = zofe_crisis.1003.a
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+		}
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		root = {
+			add_resource = { minor_artifacts = 3000 }
+		}
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = helped_original_empire }
+					}
+					set_country_flag = helped_original_empire
+				}
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_1_complete }
+					}
+					set_country_flag = original_empire_preparations_1_complete
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_modifier = original_empire_buff_1
+						}
+					}
+					add_modifier = {
+						modifier = original_empire_buff_1
+						days = -1
+					}
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1003.b
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_1_complete }
+					}
+					set_country_flag = original_empire_preparations_1_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1003.c
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		root = {
+			add_resource = { minor_artifacts = 3000 }
+		}
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = helped_original_empire }
+					}
+					set_country_flag = helped_original_empire
+				}
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_1_complete }
+					}
+					set_country_flag = original_empire_preparations_1_complete
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_modifier = original_empire_buff_1
+						}
+					}
+					add_modifier = {
+						modifier = original_empire_buff_1
+						days = -1
+					}
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1003.d
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_1_complete }
+					}
+					set_country_flag = original_empire_preparations_1_complete
+				}	
+			}	
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1004
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		OR = {
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		any_country = {
+			is_ai = no
+			OR = {
+				has_country_flag = helped_original_empire
+				has_country_flag = defied_original_empire
+			}
+			NOT = { has_country_flag = warned_about_original_empire }
+		}
+		NOT = { has_country_flag = 	original_empire_warning_given }	
+	}
+	
+	mean_time_to_happen = {
+		days = 3
+	}
+	
+	immediate = {
+		set_country_flag = original_empire_warning_given
+		save_event_target_as = fallen_empire_warner
+		every_playable_country = {
+			limit = { 
+				is_ai = no
+				has_country_flag = helped_original_empire
+#				NOT = { has_country_flag = warned_about_original_empire }
+			}
+			establish_communications_no_message = event_target:fallen_empire_warner
+			country_event = { id = zofe_crisis.1005 }
+		}
+		every_playable_country = {
+			limit = { 
+				is_ai = no
+				has_country_flag = defied_original_empire
+#				NOT = { has_country_flag = warned_about_original_empire }
+			}
+			establish_communications_no_message = event_target:fallen_empire_warner
+			country_event = { id = zofe_crisis.1006 }
+		}
+	}
+}
+
+
+country_event = {
+	id = zofe_crisis.1005
+	title = zofe_crisis.1005.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Spiritualists
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		text = "zofe_crisis.1005.desc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		text = "zofe_crisis.1005.desc.aa"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		text = "zofe_crisis.1005.desc.aaa"
+	}
+	
+	#Materialists
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		text = "zofe_crisis.1005.desc.b"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		text = "zofe_crisis.1005.desc.bb"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		text = "zofe_crisis.1005.desc.bbb"
+	}
+	
+	#Xenophile
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		text = "zofe_crisis.1005.desc.c"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		text = "zofe_crisis.1005.desc.cc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		text = "zofe_crisis.1005.desc.ccc"
+	}
+	
+	#Xenophobe
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		text = "zofe_crisis.1005.desc.d"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		text = "zofe_crisis.1005.desc.dd"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		text = "zofe_crisis.1005.desc.ddd"
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_modifier = ancestors_insights }
+			remove_modifier = "ancestors_insights"
+			add_modifier = {
+				modifier = ancestors_insights_2
+				days = -1
+			}
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1005.a
+		custom_tooltip = fallen_empire_warning_happy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_accepted_fallen_empire_request } } }
+		set_country_flag = warned_about_original_empire
+	}
+	
+	option = {
+		name = zofe_crisis.1005.b
+		custom_tooltip = fallen_empire_warning_unhappy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_refused_fallen_empire_task } } }
+		set_country_flag = warned_about_original_empire
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1006
+	title = zofe_crisis.1006.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Spiritualists
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		text = "zofe_crisis.1006.desc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		text = "zofe_crisis.1006.desc.aa"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		text = "zofe_crisis.1006.desc.aaa"
+	}
+	
+	#Materialists
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		text = "zofe_crisis.1006.desc.b"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		text = "zofe_crisis.1006.desc.bb"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		text = "zofe_crisis.1006.desc.bbb"
+	}
+	
+	#Xenophile
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		text = "zofe_crisis.1006.desc.c"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		text = "zofe_crisis.1006.desc.cc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		text = "zofe_crisis.1006.desc.ccc"
+	}
+	
+	#Xenophobe
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		text = "zofe_crisis.1006.desc.d"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		text = "zofe_crisis.1006.desc.dd"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		text = "zofe_crisis.1006.desc.ddd"
+	}
+	
+	immediate = {
+		if = {
+			limit = { has_modifier = ancestors_insights }
+			remove_modifier = "ancestors_insights"
+			add_modifier = {
+				modifier = ancestors_insights_2
+				days = -1
+			}
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1006.a
+		custom_tooltip = fallen_empire_warning_happy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_accepted_fallen_empire_request } } }
+		set_country_flag = warned_about_original_empire
+	}
+	
+	option = {
+		name = zofe_crisis.1006.b
+		custom_tooltip = fallen_empire_warning_unhappy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_refused_fallen_empire_task } } }
+		set_country_flag = warned_about_original_empire
+	}
+
+}	
+
+###Second Deal
+
+country_event = {
+	id = zofe_crisis.1007
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {		
+		is_country_type = original_empire
+		is_at_war = no
+		has_country_flag = original_empire_appeared
+		has_country_flag = original_empire_preparations_1_complete
+		NOT = { has_country_flag = 	original_empire_preparations_2 }
+		NOT = {	has_country_flag = 	original_empire_preparations_ongoing }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		set_country_flag = original_empire_preparations_2
+		set_timed_country_flag = { flag = original_empire_preparations_ongoing days = 1800 }
+		every_playable_country = {
+			limit = {
+				NOR = {
+					has_ascension_perk = ap_become_the_crisis
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+				}
+			}
+			country_event = { id = zofe_crisis.1008 }
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1008
+	title = zofe_crisis.1008.name
+
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	desc = {
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		text = "zofe_crisis.1008.desc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+		}
+		text = "zofe_crisis.1008.desc.a"
+	}
+	
+	option = {
+		name = zofe_crisis.1008.a
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		custom_tooltip = original_empire_tasks.1.tooltip
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		root = {
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_omni_emitter
+						has_tech_option = tech_omni_emitter
+					}
+				}
+				add_research_option = tech_omni_emitter
+			}
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_omni_lance
+						has_tech_option = tech_omni_lance
+					}
+				}
+				add_research_option = tech_omni_lance
+			}
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_massive_autocannons
+						has_tech_option = tech_massive_autocannons
+					}
+				}
+				add_research_option = tech_massive_autocannons
+			}
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_omni_cannon
+						has_tech_option = tech_omni_cannon
+					}
+				}
+				add_research_option = tech_omni_cannon
+			}
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_omni_titan_lance
+						has_tech_option = tech_omni_titan_lance
+					}
+				}
+				add_research_option = tech_omni_titan_lance
+			}
+			add_resource = { alloys = 50000 }
+			
+			
+		}
+		hidden_effect = {
+			root = {
+				random_owned_planet = {
+					limit = {
+						num_pops > 1
+						any_owned_pop = {
+							is_same_species = root
+						}
+					}
+					random_owned_pop = {
+						limit = {
+							is_same_species = root
+						}
+						kill_pop = yes
+					}
+				}
+				add_modifier = {
+					modifier = exposed_by_oe
+					days = -1
+				}
+				if = {
+					limit = {
+						NOT = { has_country_flag = helped_original_empire }
+					}
+					set_country_flag = helped_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = defied_original_empire
+					}
+					remove_country_flag = defied_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_majorly_failed_fallen_empire_task }
+			}			
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_modifier = original_empire_buff_2
+						}
+					}
+					add_modifier = {
+						modifier = original_empire_buff_2
+						days = -1
+					}
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1008.b
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}	
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1008.c
+		trigger = {
+			has_country_flag = warned_about_original_empire
+		}
+
+		hidden_effect = {
+			root = {
+				country_event = { id = zofe_crisis.1009 }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1008.d
+		trigger = {
+			has_origin = origin_ringworld_empire
+			has_country_flag = warned_about_original_empire
+		}
+		hidden_effect = {
+			root = {
+				country_event = { id = zofe_crisis.1010 }
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1008.e
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		root = {
+			add_resource = { alloys = 100000 }
+		}
+		hidden_effect = {
+			root = {	
+				if = {
+					limit = {
+						NOT = { has_country_flag = helped_original_empire }
+					}
+					set_country_flag = helped_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = defied_original_empire
+					}
+					remove_country_flag = defied_original_empire
+				}
+				add_modifier = {
+					modifier = exposed_by_oe
+					days = -1
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_majorly_failed_fallen_empire_task }
+			}			
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_modifier = original_empire_buff_2
+						}
+					}
+					add_modifier = {
+						modifier = original_empire_buff_2
+						days = -1
+					}
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1008.f
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}	
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}	
+			}	
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1009
+	title = zofe_crisis.1009.name
+
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	desc = {
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		text = "zofe_crisis.1009.desc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+		}
+		text = "zofe_crisis.1009.desc.a"
+	}
+	
+	option = {
+		name = zofe_crisis.1009.a
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		custom_tooltip = original_empire_tasks.1.tooltip
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		root = {
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_omni_emitter
+						has_tech_option = tech_omni_emitter
+					}
+				}
+				add_research_option = tech_omni_emitter
+			}
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_omni_lance
+						has_tech_option = tech_omni_lance
+					}
+				}
+				add_research_option = tech_omni_lance
+			}
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_massive_autocannons
+						has_tech_option = tech_massive_autocannons
+					}
+				}
+				add_research_option = tech_massive_autocannons
+			}
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_omni_cannon
+						has_tech_option = tech_omni_cannon
+					}
+				}
+				add_research_option = tech_omni_cannon
+			}
+			if = {
+				limit { 
+					is_zofe_country = yes
+					NOR = {
+						has_technology = tech_omni_titan_lance
+						has_tech_option = tech_omni_titan_lance
+					}
+				}
+				add_research_option = tech_omni_titan_lance
+			}
+			add_resource = { alloys = 50000 }
+		}
+		hidden_effect = {
+			root = {
+				random_owned_planet = {
+					limit = {
+						num_pops > 1
+						any_owned_pop = {
+							is_same_species = root
+						}
+					}
+					random_owned_pop = {
+						limit = {
+							is_same_species = root
+						}
+						kill_pop = yes
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_country_flag = helped_original_empire }
+					}
+					set_country_flag = helped_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = defied_original_empire
+					}
+					remove_country_flag = defied_original_empire
+				}
+				add_modifier = {
+					modifier = exposed_by_oe
+					days = -1
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_majorly_failed_fallen_empire_task }
+			}		
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_modifier = original_empire_buff_2
+						}
+					}
+					add_modifier = {
+						modifier = original_empire_buff_2
+						days = -1
+					}
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1009.b
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1009.c
+		trigger = { has_origin = origin_ringworld_empire }
+		hidden_effect = {
+			root = {
+				country_event = { id = zofe_crisis.1010 }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1009.d
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		root = {
+			add_resource = { alloys = 100000 }
+		}
+		hidden_effect = {
+			root = {			
+				if = {
+					limit = {
+						NOT = { has_country_flag = helped_original_empire }
+					}
+					set_country_flag = helped_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = defied_original_empire
+					}
+					remove_country_flag = defied_original_empire
+				}
+				add_modifier = {
+					modifier = exposed_by_oe
+					days = -1
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_majorly_failed_fallen_empire_task }
+			}		
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_modifier = original_empire_buff_2
+						}
+					}
+					add_modifier = {
+						modifier = original_empire_buff_2
+						days = -1
+					}
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1009.e
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1009.f
+		trigger = { has_origin = origin_original_people }
+		hidden_effect = {
+			root = {
+				country_event = { id = zofe_crisis.1010 }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_2_complete }
+					}
+					set_country_flag = original_empire_preparations_2_complete
+				}	
+			}	
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1010
+	title = zofe_crisis.1010.name
+	desc = zofe_crisis.1010.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	option = {
+		name = zofe_crisis.1010.a
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}			
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1010.b
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}			
+		}
+	}
+}
+
+###Third Deal
+
+country_event = {
+	id = zofe_crisis.1011
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {		
+		is_country_type = original_empire
+		is_at_war = no
+		has_country_flag = original_empire_appeared
+		has_country_flag = original_empire_preparations_2_complete
+		NOT = { has_country_flag = 	original_empire_preparations_3 }
+		NOT = {	has_country_flag = 	original_empire_preparations_ongoing }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		set_country_flag = original_empire_preparations_3
+		set_timed_country_flag = { flag = original_empire_preparations_ongoing days = 1800 }
+		every_playable_country = {
+			limit = { 
+				NOR = {
+					has_ascension_perk = ap_become_the_crisis
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+				}
+				NOT = { has_country_flag = defied_original_empire }
+			}
+			country_event = { id = zofe_crisis.1012 }
+		}
+		if = {
+			limit = {
+				any_country = {
+					has_country_flag = defied_original_empire
+				}
+			}
+			set_country_flag = original_empire_preparations_3_complete
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1012
+	title = zofe_crisis.1012.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	desc = {
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		text = "zofe_crisis.1012.desc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+		}
+		text = "zofe_crisis.1012.desc.a"
+	}
+	
+	option = {
+		name = zofe_crisis.1012.a
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		custom_tooltip = original_empire_tasks.2.tooltip
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_majorly_failed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				create_leader = {
+					class = admiral
+					species = event_target:original_species
+					name = random
+					skill = 3
+				}
+			}
+			root = {
+				capital_scope = {
+					save_event_target_as = capital_planet
+					solar_system = { save_event_target_as = capital_system }
+				}
+				create_fleet = {
+					effect = {
+						set_owner = event_target:original_empire
+						create_ship = {
+							name = "NAME_CITADEL_OF_LIGHT"
+							design = "NAME_OE_GARRISON_STATION"
+							graphical_culture = "original_empire_01"
+						}
+						set_location = {
+							target = event_target:capital_planet
+							distance = 50
+							angle = random
+						}
+					}
+				}
+				last_created_fleet = {
+					save_event_target_as = garrison_base
+					set_fleet_flag = oe_garrison
+#					fleet_event = { id = marauder.560 days = 10 }
+				}
+			
+				create_fleet = {
+					name = "NAME_OE_GARRISON_FLEET"
+					effect = {
+						set_owner = event_target:original_empire
+						while = {
+							count = 3
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+							}
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 6
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+							}
+						}
+						set_fleet_stance = passive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500
+						set_location = {
+							target = event_target:garrison_base
+							distance = 20
+							angle = random
+						}
+						queue_actions = {
+							repeat = {
+								wait = {
+									duration = 100
+								}
+							}
+						}
+					}
+					settings = {
+						garrison = yes
+					}
+				}
+				last_created_fleet = {
+					set_fleet_flag = oe_garrison_fleet
+				}
+				if = {
+					limit = {
+						NOT = { has_country_flag = helped_original_empire }
+					}
+					set_country_flag = helped_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = defied_original_empire
+					}
+					remove_country_flag = defied_original_empire
+				}
+			}
+			event_target:original_empire = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = no
+					set_neutral = no
+					set_friendly = yes
+				}
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_3_complete }
+					}
+					set_country_flag = original_empire_preparations_3_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1012.b
+		trigger = {
+			NOT = {
+				has_origin = origin_original_people
+			}
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_3_complete }
+					}
+					set_country_flag = original_empire_preparations_3_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1012.c
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_tasks.2.tooltip
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_majorly_failed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				create_leader = {
+					class = admiral
+					species = event_target:original_species
+					name = random
+					skill = 3
+				}
+			}
+			root = {
+				capital_scope = {
+					save_event_target_as = capital_planet
+					solar_system = { save_event_target_as = capital_system }
+				}
+				create_fleet = {
+					effect = {
+						set_owner = event_target:original_empire
+						create_ship = {
+							name = "NAME_CITADEL_OF_LIGHT"
+							design = "NAME_OE_GARRISON_STATION"
+							graphical_culture = "original_empire_01"
+						}
+						set_location = {
+							target = event_target:capital_planet
+							distance = 50
+							angle = random
+						}
+					}
+				}
+				last_created_fleet = {
+					save_event_target_as = garrison_base
+					set_fleet_flag = oe_garrison
+#					fleet_event = { id = marauder.560 days = 10 }
+				}
+			
+				create_fleet = {
+					name = "NAME_OE_GARRISON_FLEET"
+					effect = {
+						set_owner = event_target:original_empire
+						while = {
+							count = 3
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+							}
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 6
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+							}
+						}
+						set_fleet_stance = passive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500
+						set_location = {
+							target = event_target:garrison_base
+							distance = 20
+							angle = random
+						}
+						queue_actions = {
+							repeat = {
+								wait = {
+									duration = 100
+								}
+							}
+						}
+					}
+					settings = {
+						garrison = yes
+					}
+				}
+				last_created_fleet = {
+					set_fleet_flag = oe_garrison_fleet
+				}
+				if = {
+					limit = {
+						NOT = { has_country_flag = helped_original_empire }
+					}
+					set_country_flag = helped_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = defied_original_empire
+					}
+					remove_country_flag = defied_original_empire
+				}
+			}
+			event_target:original_empire = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = no
+					set_neutral = no
+					set_friendly = yes
+				}
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_3_complete }
+					}
+					set_country_flag = original_empire_preparations_3_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1012.d
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_3_complete }
+					}
+					set_country_flag = original_empire_preparations_3_complete
+				}	
+			}	
+		}
+	}
+}
+
+
+# Fallen Empire Notices Original Empire Return
+country_event = {
+	id = zofe_crisis.1013
+	title = OK
+	desc = OK
+	hide_window = yes
+	trigger = {
+		OR = {
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		is_at_war = no
+		any_country = {
+			OR = {
+				AND = {
+					is_country_type = original_empire
+					has_country_flag = original_empire_preparations_3_complete
+					NOT = {	has_country_flag = 	original_empire_preparations_ongoing }
+				}
+				is_country_type = awakened_original_empire
+			}
+		}
+		NOT = { has_country_flag = fe_begins_waking }
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+
+	immediate = {
+		set_country_flag = fe_begins_waking
+		# Notify players
+		
+		every_playable_country = {
+			limit = {
+				NOT = { has_country_flag = second_crusade_picked_sides }
+			}
+			country_event = { id = zofe_crisis.1014 }
+		}
+	}
+}
+
+#Awakened Fallen Empire prepares for war
+country_event = {
+	id = zofe_crisis.1014
+	title = zofe_crisis.1014.name
+	
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			from = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		text = zofe_crisis.1014.desc
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			from = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		text = zofe_crisis.1014.desc.aa
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			from = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		text = zofe_crisis.1014.desc.aaa
+	}
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			from = { has_ethic = ethic_fanatic_materialist }
+		}
+		text = zofe_crisis.1014.desc.b
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			from = { has_ethic = ethic_fanatic_materialist }
+		}
+		text = zofe_crisis.1014.desc.bb
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			from = { has_ethic = ethic_fanatic_materialist }
+		}
+		text = zofe_crisis.1014.desc.bbb
+	}
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			from = { has_ethic = ethic_fanatic_xenophile }
+		}
+		text = zofe_crisis.1014.desc.c
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			from = { has_ethic = ethic_fanatic_xenophile }
+		}
+		text = zofe_crisis.1014.desc.cc
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			from = { has_ethic = ethic_fanatic_xenophile }
+		}
+		text = zofe_crisis.1014.desc.ccc
+	}
+	desc = {
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+			from = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		text = zofe_crisis.1014.desc.d
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_ringworld_empire
+			from = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		text = zofe_crisis.1014.desc.dd
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+			from = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		text = zofe_crisis.1014.desc.ddd
+	}
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+	
+	immediate = {
+		set_country_flag = second_crusade_picked_sides
+	}
+	
+	option = {
+		name = zofe_crisis.1014.a
+		custom_tooltip = fallen_empire_recruitment_happy_tooltip
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				has_country_flag = defied_original_empire
+			}
+		}
+		hidden_effect = { 
+			set_country_flag = second_crusade_join_fe
+			if = {
+				limit = {
+					from = { is_country_type = fallen_empire }
+				}
+				from = { country_event = { id = zofe_crisis.1015 } }
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1014.b
+		custom_tooltip = fallen_empire_recruitment_unhappy_tooltip
+		trigger = {
+			NOR = {
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				has_country_flag = helped_original_empire
+			}
+		}
+		hidden_effect = { 
+			set_country_flag = second_crusade_neutral
+			if = {
+				limit = {
+					from = { is_country_type = fallen_empire }
+				}
+				from = { country_event = { id = zofe_crisis.1015 } }
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1014.c
+		custom_tooltip = fallen_empire_recruitment_happy_tooltip
+		trigger = {
+			has_origin = origin_ringworld_empire
+		}
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				has_country_flag = defied_original_empire
+			}
+		}
+		hidden_effect = { 
+			set_country_flag = second_crusade_join_fe
+			if = {
+				limit = {
+					from = { is_country_type = fallen_empire }
+				}
+				from = { country_event = { id = zofe_crisis.1015 } }
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1014.d
+		custom_tooltip = fallen_empire_recruitment_unhappy_tooltip
+		trigger = {
+			has_origin = origin_ringworld_empire
+		}
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				has_country_flag = helped_original_empire
+			}
+		}
+		hidden_effect = { 
+			set_country_flag = second_crusade_neutral
+			if = {
+				limit = {
+					from = { is_country_type = fallen_empire }
+				}
+				from = { country_event = { id = zofe_crisis.1015 } }
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1014.e
+		custom_tooltip = fallen_empire_recruitment_happy_tooltip
+		trigger = {
+			has_origin = origin_original_people
+		}
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				has_country_flag = defied_original_empire
+			}
+		}
+		hidden_effect = { 
+			set_country_flag = second_crusade_join_fe
+			if = {
+				limit = {
+					from = { is_country_type = fallen_empire }
+				}
+				from = { country_event = { id = zofe_crisis.1015 } }
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1014.f
+		custom_tooltip = fallen_empire_recruitment_unhappy_tooltip
+		trigger = {
+			has_origin = origin_original_people
+		}
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				has_country_flag = helped_original_empire
+			}
+		}
+		hidden_effect = { 
+			set_country_flag = second_crusade_neutral
+			if = {
+				limit = {
+					from = { is_country_type = fallen_empire }
+				}
+				from = { country_event = { id = zofe_crisis.1015 } }
+			}
+		}
+	}
+}
+
+# Fallen Empire Wakes up
+country_event = {
+	id = zofe_crisis.1015
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		set_timed_country_flag = { flag = ai_no_wars days = 7200 }
+		set_country_flag = fe_preparing_for_second_crusade
+		if = { 
+			limit = { is_country_type = fallen_empire }
+			
+			# Notify players
+			country_event = { id = fallen_empires_awakening.3 }
+			every_country = {
+				limit = {
+					is_ai = no		
+				}
+				country_event = { id = fallen_empires_awakening.2 }
+			}
+		}
+		observer_event = { id = observer.73 }
+	}
+}
+
+# Original Empire Prepares for the Second Crusade
+country_event = {
+	id = zofe_crisis.1016
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		OR = {
+			AND = {
+				is_country_type = original_empire
+				has_country_flag = original_empire_preparations_3_complete
+			}
+			is_country_type = awakened_original_empire
+		}
+#		is_at_war = no
+		any_country = {
+			is_country_type = awakened_fallen_empire
+			has_country_flag = fe_preparing_for_second_crusade
+		}
+		NOT = { has_country_flag = oe_preparing_for_second_crusade }
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+
+	immediate = {
+		set_country_flag = oe_preparing_for_second_crusade
+		set_name = NAME_ORIGINAL_EMPIRE_REMNANTS
+		# Notify players
+		every_playable_country = {
+			limit = {
+				has_country_flag = second_crusade_neutral
+				has_country_flag = second_crusade_picked_sides
+				NOT = { has_country_flag = second_crusade_picked_sides_2 }
+			}
+			country_event = { id = zofe_crisis.1017 }
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1017
+	title = zofe_crisis.1017.name
+	desc = zofe_crisis.1017.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	immediate = {
+		set_country_flag = second_crusade_picked_sides_2
+	}
+	
+	option = {
+		name = zofe_crisis.1017.a
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		set_country_flag = second_crusade_join_oe
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				has_country_flag = helped_original_empire
+			}
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_majorly_failed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_4_complete }
+					}
+					set_country_flag = original_empire_preparations_4_complete
+				}	
+			}	
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1017.b
+		custom_tooltip = original_empire_unhappy_tooltip
+		custom_tooltip = original_technologies_less_attuned_tooltip
+		hidden_effect = {
+			original_technologies_less_attuned = yes
+		}
+		set_country_flag = second_crusade_join_noone
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				NOT = { has_country_flag = helped_original_empire }
+			}
+		}
+		hidden_effect = {
+			root = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = defied_original_empire }
+					}
+					set_country_flag = defied_original_empire
+				}
+				if = {
+					limit = {
+						has_country_flag = helped_original_empire
+					}
+					remove_country_flag = helped_original_empire
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				add_opinion_modifier = { who = root modifier = opinion_completed_fallen_empire_task }
+			}
+			event_target:original_empire = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = original_empire_preparations_4_complete }
+					}
+					set_country_flag = original_empire_preparations_4_complete
+				}	
+			}	
+		}
+	}
+}
+
+# Awakened Empire declares war
+country_event = {
+	id = zofe_crisis.1018
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		is_country_type = awakened_fallen_empire
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		NOT = { has_country_flag = wrath_of_the_ancients_2 }
+		is_at_war = no
+		any_country = {
+			OR = {
+				AND = {
+					is_country_type = original_empire
+					has_country_flag = original_empire_preparations_4_complete
+				}
+				is_country_type = awakened_original_empire
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 5
+	}
+
+	immediate = {
+		set_country_flag = wrath_of_the_ancients_2
+
+		every_country = {
+			limit = {
+				OR = {
+					AND = {
+						is_country_type = awakened_fallen_empire
+						NOT = { is_same_value = root }
+						NOT = { has_ethic = ethic_gestalt_consciousness }
+					}
+					has_country_flag = second_crusade_join_fe
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = great_crusade_lessons }
+				}
+				add_modifier = {
+					modifier = great_crusade_lessons
+					days = -1
+				}
+			}
+			join_alliance = { who = root override_requirements = yes }
+		}
+		
+		federation = {
+			set_federation_type = military_federation
+			set_name = "Grand Coalition of the Second Crusade"
+			set_federation_law = succession_term_years_20
+			add_federation_experience = 20000
+		}
+		
+		set_federation_leader = root
+		
+		every_country = {
+			limit = { is_country_type = awakened_fallen_empire }
+#			remove_country_flag = ai_no_wars
+
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+		}
+
+		if = {
+			limit = { has_global_flag = fallen_empire_nightmare_difficulty }
+			
+			every_country = {
+				limit = { 
+					is_country_type = awakened_fallen_empire
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+			}
+		}
+		
+		if = {
+			limit = { has_global_flag = fallen_empire_veteran_difficulty }
+			
+			every_country = {
+				limit = { 
+					is_country_type = awakened_fallen_empire
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+			}
+		}
+		
+		if = {
+			limit = { has_global_flag = fallen_empire_hard_difficulty }
+			
+			every_country = {
+				limit = { 
+					is_country_type = awakened_fallen_empire
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+			}
+		}
+
+		random_country = {
+			limit = { 
+				OR = {
+					AND = {
+						is_country_type = original_empire
+						has_country_flag = original_empire_preparations_4_complete
+					}
+					is_country_type = awakened_original_empire
+				}
+			}
+			country_event = { id = zofe_crisis.1019 }
+		}
+	}
+}
+
+#Awakened Fallen Empire declares Crusade
+country_event = {
+	id = zofe_crisis.1019
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = second_crusade_started_oe
+		from = {
+			declare_war = {
+				target = event_target:original_empire
+				name = "NAME_The_Wrath_Of_The_Ancients"
+				attacker_war_goal = "wg_total_annihilation"
+			}
+		}	
+		every_country = {
+			limit = {
+				has_country_flag = second_crusade_join_oe
+			}
+			join_war = event_target:original_empire
+		}
+	}
+}
+
+# Original Empire Wakes
+country_event = {
+	id = zofe_crisis.1020
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		is_country_type = original_empire
+		NOT = { has_global_flag = original_empire_wakes_up }
+		NOT = { has_country_flag = new_original_empire }
+		is_at_war = no
+	}
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 2.0
+			has_global_flag = original_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = original_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = original_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = original_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = original_empire_nightmare_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			num_fallen_empires < 1
+		}
+		modifier = {
+			factor = 0.5
+			num_fallen_empires < 2
+		}
+		modifier = {
+			factor = 1.0
+			num_fallen_empires > 1
+			num_fallen_empires < 3
+		}
+		modifier = {
+			factor = 1.5
+			num_fallen_empires > 2
+			num_fallen_empires < 4
+		}
+		modifier = {
+			factor = 2.0
+			num_fallen_empires > 3
+		}
+		modifier = {
+			factor = 0.1
+			OR = {
+				has_global_flag = extradimensional_invasion_defeated
+				has_global_flag = prethoryn_invasion_defeated
+				has_global_flag = ai_invasion_defeated
+			}
+		}
+		modifier = {
+			factor = 0.1
+			any_country = {
+				has_ascension_perk = ap_become_the_crisis
+				has_crisis_level = crisis_level_5
+			}
+		}
+		modifier = {
+			factor = 0.5
+			any_country = {
+				has_ascension_perk = ap_become_the_crisis
+				has_crisis_level = crisis_level_4
+			}
+		}
+	}
+
+	immediate = {
+		set_global_flag = original_empire_wakes_up
+
+		country_event = { id = zofe_crisis.1121 }
+		
+		# Notify players
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = zofe_crisis.1122 }
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1121
+	title = OK
+	desc = OK
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = awakened_original_empire
+		set_country_type = awakened_original_empire
+		set_name = NAME_ORIGINAL_EMPIRE
+		set_origin = origin_original_empire
+		change_government = {
+			civics = {
+				civic = civic_original_empire_revanchist_fervor
+				civic = civic_original_empire_ancient_caches_of_technology
+				civic = civic_distinguished_admiralty
+			}
+		}
+
+		##Add resources
+		add_resource = { energy = 100000 }
+		add_resource = { minerals = 100000 }
+		add_resource = { food = 100000 }
+		add_resource = { consumer_goods = 100000 }
+		add_resource = { alloys = 100000 }
+		add_resource = { influence = 1000 }
+		add_resource = { unity = 270000 }
+		add_resource = { rare_crystals = 100000 }
+		add_resource = { exotic_gases = 100000 }
+		add_resource = { volatile_motes = 100000 }
+		add_resource = { sr_dark_matter = 100000 }
+		add_resource = { sr_living_metal = 100000 }
+		add_resource = { sr_zro = 100000 }
+
+		# Establish communications
+		every_country = {
+			limit = {
+				OR = {
+					is_playable_country = yes
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+				NOT = { has_communications = root }
+			}
+
+			establish_communications_no_message = root
+			root = { save_event_target_as = contact_empire }
+			country_event = { id = action.1 }
+		}
+	}
+}
+
+country_event = {
+	id = zofe_crisis.1122
+	title = zofe_crisis.1122.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:original_empire
+		planet_background = event_target:original_empire
+		graphical_culture = event_target:original_empire
+		city_level = event_target:original_empire
+		room = event_target:original_empire
+	}
+	
+	desc = {
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+		}
+		text = "zofe_crisis.1122.desc"
+	}
+	desc = {
+		trigger = {
+			has_origin = origin_original_people
+		}
+		text = "zofe_crisis.1122.desc.a"
+	}
+	
+	option = {
+		name = zofe_crisis.1122.a
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+		}
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		ai_chance = {										# AI chance
+			factor = 10
+			modifier = {
+				factor = 10
+				has_country_flag = helped_original_empire
+			}
+		}
+		custom_tooltip = original_empire_happy_tooltip
+		set_subject_of = {
+			who = event_target:original_empire
+			preset = preset_original_empire_subject
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1122.b
+		trigger = {
+			NOT = { has_origin = origin_original_people }
+		}
+		ai_chance = {										# AI chance
+			factor = 10
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		custom_tooltip = original_technologies_less_attuned_tooltip
+		hidden_effect = {
+			original_technologies_less_attuned = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = defied_original_empire }
+				}
+				set_country_flag = defied_original_empire
+			}
+			if = {
+				limit = {
+					has_country_flag = helped_original_empire
+				}
+				remove_country_flag = helped_original_empire
+			}
+		}
+	}
+
+	
+	option = {
+		name = zofe_crisis.1122.c
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_happy_tooltip
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			original_technologies_more_attuned = yes
+		}
+		set_subject_of = {
+			who = event_target:original_empire
+			preset = preset_original_empire_special_subject
+		}
+	}
+	
+	option = {
+		name = zofe_crisis.1122.d
+		trigger = {
+			has_origin = origin_original_people
+		}
+		custom_tooltip = original_empire_unhappy_tooltip
+		custom_tooltip = original_technologies_less_attuned_tooltip
+		hidden_effect = {
+			original_technologies_less_attuned = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = defied_original_empire }
+				}
+				set_country_flag = defied_original_empire
+			}
+			if = {
+				limit = {
+					has_country_flag = helped_original_empire
+				}
+				remove_country_flag = helped_original_empire
+			}
+		}
+	}
+}
+
+
+# Original Empire declares war against defiant empires.
+country_event = {
+	id = zofe_crisis.1023
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		is_country_type = awakened_original_empire
+		is_at_war = no
+		any_country = {
+			OR = {
+				is_playable_country = yes
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+			is_primitive = no
+			NOT = { has_overlord = root }
+			has_country_flag = defied_original_empire
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 10
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { has_overlord = root }
+				has_country_flag = defied_original_empire
+			}
+			save_event_target_as = defiant_empire_oe
+		}
+		declare_war = {
+			target = event_target:defiant_empire_oe
+			name = "NAME_ORIGINAL_EMPIRE_SUBJUGATION"
+			attacker_war_goal = "wg_original_empire_domination"
+		}
+	}
+}
+
+# Original Empire declares war against neutral empires.
+country_event = {
+	id = zofe_crisis.1024
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		is_country_type = awakened_original_empire
+		is_at_war = no
+		NOT = {
+			any_country = {
+				OR = {
+					is_playable_country = yes
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+				is_primitive = no
+				NOT = { has_overlord = root }
+				has_country_flag = defied_original_empire
+			}
+		}
+		any_country = {
+			OR = {
+				is_playable_country = yes
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+			is_primitive = no
+			NOT = { has_overlord = root }
+			has_country_flag = second_crusade_neutral
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 10
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { has_overlord = root }
+				has_country_flag = second_crusade_neutral
+			}
+			save_event_target_as = neutral_empire_oe
+		}
+		declare_war = {
+			target = event_target:neutral_empire_oe
+			name = "NAME_ORIGINAL_EMPIRE_SUBJUGATION"
+			attacker_war_goal = "wg_original_empire_domination"
+		}
+	}
+}
+
+#Original Empire Sets up Garrison in their subject's colonies
+
+
+country_event = {
+	id = zofe_crisis.1025
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		NOT = { has_country_flag = oe_garrisons_created }
+		any_country = {
+			is_country_type = awakened_original_empire
+			is_overlord_to = root
+		}
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		set_country_flag = oe_garrisons_created
+		
+		if = {
+			limit = {
+				NOT = {
+					any_system_within_border = {
+						any_fleet_in_system = {
+							is_ship_size = fe_garrison_station
+						}
+					}
+				}
+			}
+			capital_scope = {
+				save_event_target_as = capital_planet
+				solar_system = { save_event_target_as = capital_system }
+			}
+			create_fleet = {
+				effect = {
+					set_owner = event_target:original_empire
+					create_ship = {
+						name = "NAME_CITADEL_OF_LIGHT"
+						design = "NAME_OE_GARRISON_STATION"
+						graphical_culture = "original_empire_01"
+					}
+					set_location = {
+						target = event_target:capital_planet
+						distance = 50
+						angle = random
+					}
+				}
+			}
+			last_created_fleet = {
+				save_event_target_as = garrison_base
+				set_fleet_flag = oe_garrison
+	#					fleet_event = { id = marauder.560 days = 10 }
+			}
+			create_fleet = {
+				name = "NAME_OE_GARRISON_FLEET"
+				effect = {
+					set_owner = event_target:original_empire
+					while = {
+						count = 3
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+							graphical_culture = "original_empire_01"
+						}
+					}
+					assign_leader = last_created_leader
+					while = {
+						count = 6
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+							graphical_culture = "original_empire_01"
+						}
+					}
+					set_fleet_stance = passive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 500
+					set_location = {
+						target = event_target:garrison_base
+						distance = 20
+						angle = random
+					}
+					queue_actions = {
+						repeat = {
+							wait = {
+								duration = 100
+							}
+						}
+					}
+				}
+				settings = {
+					garrison = yes
+				}
+			}
+			last_created_fleet = {
+				set_fleet_flag = oe_garrison_fleet
+			}
+		}
+	}
+}
+
+# Original Empire becomes a servant of Kolyn
+country_event = {
+	id = zofe_crisis.1026
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		is_zofe_oe = yes
+		OR = {
+			has_global_flag = acot_full_activated
+			has_global_flag = has_aot_mod
+			has_global_flag = has_sots_mod
+		}
+		NOT = { has_country_flag = oe_became_servant_of_kolyn }
+	}
+	
+	mean_time_to_happen = {
+		days = 3
+	}
+
+	immediate = {
+		set_country_flag = oe_became_servant_of_kolyn
+		add_modifier = {
+			modifier = servant_of_kolyn
+			days = -1
+		}
+	}
+}
+
+# Original Empire declares war against genocidal empires.
+country_event = {
+	id = zofe_crisis.1027
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		is_country_type = awakened_original_empire
+		is_at_war = no
+		any_country = {
+			OR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+			NOT = { has_overlord = root }
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				NOT = { has_overlord = root }
+				
+			}
+			save_event_target_as = genocidal_empire_oe
+		}
+		declare_war = {
+			target = event_target:genocidal_empire_oe
+			name = "NAME_ORIGINAL_EMPIRE_SUBJUGATION"
+			attacker_war_goal = "wg_original_empire_domination"
+		}
+	}
+}
+

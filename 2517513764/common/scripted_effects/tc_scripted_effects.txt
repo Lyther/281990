@@ -1,0 +1,999 @@
+tc_warp_effect_mult = {
+	optimize_memory
+	while = {
+		add_modifier = {
+			modifier = $MODIFIER$
+			days = $DAYS$
+		}
+		count = $COUNT$
+	}
+}
+
+tc_relic_scanner_active_effect = {
+	optimize_memory
+	hidden_effect = {
+		if = {
+			limit = {
+				NAND = {
+					has_global_flag = tc_thaumic_disassembler_relic_discovered	
+					has_global_flag = tc_tempus_system_discovered	
+					has_global_flag = tc_crimson_cleric_system_discovered
+					has_global_flag = tc_auram_system_discovered
+				}
+			}
+			random_list = {
+				10 = {
+					modifier = {
+						factor = 0
+						has_global_flag = tc_thaumic_disassembler_relic_discovered
+					}
+					if = {
+						limit = {
+							NOT = { has_global_flag = tc_thaumic_disassembler_relic_discovered }
+						}
+						random_planet_within_border = {
+							limit = {
+								has_anomaly = no
+								NOT = { exists = archaeological_site }
+								OR = {
+									is_planet_class = pc_barren
+									is_planet_class = pc_barren_cold
+									is_planet_class = pc_frozen
+								}
+							}
+							create_archaeological_site = "tc_thaumic_disassembler_relic_event_set"
+							save_event_target_as = tc_archaeological_point_target
+							solar_system = {
+								owner = {
+									country_event = {
+										id = tc_relic.15
+									}
+								}
+							}
+							set_global_flag = tc_thaumic_disassembler_relic_discovered
+						}
+					}
+					else = {
+						tc_relic_scanner_resources_active_effect = yes
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_global_flag = tc_tempus_system_discovered
+					}
+					if = {
+						limit = {
+							NOT = { has_global_flag = tc_tempus_system_discovered }
+						}
+						random_system_within_border = {
+							limit = {
+								NOT = { has_star_flag = community_can_jump_drive_false }
+								NOT = { has_star_flag = lcluster }
+								NOT = { has_star_flag = tc_ol_system }
+							}
+							spawn_system = {
+								min_distance = 10
+								max_distance = 30
+								max_jumps = 0
+								initializer = "tc_tempus_system"
+							}
+						}
+						set_global_flag = tc_tempus_system_discovered
+						country_event = {
+							id = tc_relic.17
+						}
+					}
+					else = {
+						tc_relic_scanner_resources_active_effect = yes
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_global_flag = tc_auram_system_discovered
+					}
+					if = {
+						limit = {
+							NOT = { has_global_flag = tc_auram_system_discovered }
+						}
+						random_system_within_border = {
+							limit = {
+								NOT = { has_star_flag = community_can_jump_drive_false }
+								NOT = { has_star_flag = lcluster }
+								NOT = { has_star_flag = tc_ol_system }
+							}
+							spawn_system = {
+								min_distance = 10
+								max_distance = 30
+								max_jumps = 0
+								initializer = "tc_auram_system"
+							}
+						}
+						set_global_flag = tc_auram_system_discovered
+						country_event = {
+							id = tc_relic.17
+						}
+					}
+					else = {
+						tc_relic_scanner_resources_active_effect = yes
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_global_flag = tc_crimson_cleric_system_discovered
+					}
+					if = {
+						limit = {
+							NOT = { has_global_flag = tc_crimson_cleric_system_discovered }
+						}
+						random_system_within_border = {
+							limit = {
+								NOT = { has_star_flag = community_can_jump_drive_false }
+								NOT = { has_star_flag = lcluster }
+								NOT = { has_star_flag = tc_ol_system }
+							}
+							spawn_system = {
+								min_distance = 10
+								max_distance = 30
+								max_jumps = 0
+								initializer = "tc_crimson_cleric_system"
+							}
+						}
+						set_global_flag = tc_crimson_cleric_system_discovered
+						while = {
+							count = 5
+							random_system = {
+								spawn_system = {
+									min_distance = 10
+									max_distance = 30
+									max_jumps = 0
+									initializer = "tc_crimson_cleric_system"
+								}
+							}
+						}
+						country_event = {
+							id = tc_relic.17
+						}
+					}
+					else = {
+						tc_relic_scanner_resources_active_effect = yes
+					}
+				}
+			}
+		}
+		else = {
+			tc_relic_scanner_resources_active_effect = yes
+		}
+		add_modifier = {
+			modifier = tc_scanner_cooldown
+			days = 360
+		}
+	}
+}
+
+tc_relic_scanner_resources_active_effect = {
+	optimize_memory
+	random_list = {
+		25 = {
+			random_owned_planet = {
+				limit = {
+					is_artificial = no				
+				}
+				planet_event = {
+					id = tc_relic.13
+				}
+			}
+		}
+		25 = {
+			random_owned_planet = {
+				limit = {
+					is_artificial = no				
+				}
+				planet_event = {
+					id = tc_relic.14
+				}
+			}
+		}
+		75 = {
+			country_event = {
+				id = tc_relic.12
+			}
+		}
+	}
+}
+
+tc_ol_system_random_defender_spawn = {
+	optimize_memory
+	while = {
+		count = $COUNT$
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = solar_system
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		create_fleet = {
+			name = "NAME_tc_ol_defen_tower"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_outer_land_defender_country_target
+				set_location = last_created_ambient_object
+				random_list = {
+					10 = {
+						create_ship = {
+							name = "NAME_tc_ol_tower"
+							design = "NAME_tc_void_defense_tower_shock_design"
+						}
+					}
+					10 = {
+						create_ship = {
+							name = "NAME_tc_ol_tower"
+							design = "NAME_tc_void_defense_tower_eldritch_design"
+						}
+					}
+					10 = {
+						create_ship = {
+							name = "NAME_tc_ol_tower"
+							design = "NAME_tc_void_defense_tower_shadowbeam_design"
+						}
+					}
+					10 = {
+						create_ship = {
+							name = "NAME_tc_ol_tower"
+							design = "NAME_tc_void_defense_tower_taintedstorm_design"
+						}
+					}
+					10 = {
+						create_ship = {
+							name = "NAME_tc_ol_tower"
+							design = "NAME_tc_void_defense_tower_primal_design"
+						}
+					}
+				}
+
+				queue_actions = {
+					move_to = event_target:tc_primal_orb_move_target
+				}
+			}
+		}
+	}
+}
+
+tc_pocket_planar_deposits_spawn = {
+	optimize_memory
+	random_list = {
+		10 = { add_deposit = tc_pocket_planar_potentia }
+		10 = { add_deposit = tc_pocket_planar_perfodio }
+		10 = { add_deposit = tc_pocket_planar_herba }
+		10 = { add_deposit = tc_pocket_planar_metallum }
+		10 = { add_deposit = tc_pocket_planar_pannus }
+		10 = { add_deposit = tc_pocket_planar_fabrico }
+		10 = { add_deposit = tc_pocket_planar_sensus }
+		10 = { add_deposit = tc_pocket_planar_auram }
+		10 = { add_deposit = tc_pocket_planar_vitreus }
+		10 = { add_deposit = tc_pocket_planar_praecantatio }
+		10 = { add_deposit = tc_pocket_planar_alienis }
+		10 = { add_deposit = tc_pocket_planar_cognitio }
+		10 = { add_deposit = tc_pocket_planar_instrumentum }
+	}
+}
+
+tc_pocket_planar_initialization = {
+	while = {
+		count = 50
+		tc_pocket_planar_deposits_spawn = yes
+	}
+}
+
+#定位器创建
+tc_target_locator_spawn = {
+	optimize_memory
+	spawn_megastructure = {
+		type = tc_move_target
+		planet = solar_system.star
+		orbit_angle = $ANGLE$
+		orbit_distance = $RADIU$
+		init_effect = {
+			create_ambient_object = {
+				type = tc_target_locator
+				location = this
+				entity_offset = 0
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				use_3d_location = no
+				duration = 30
+			}
+		}
+	}
+}
+
+tc_target_locator_circle_ang_10_spawn = {
+	optimize_memory
+	tc_target_locator_spawn = { RADIU = 0 ANGLE = 0 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 0 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 10 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 20 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 30 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 40 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 50 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 60 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 70 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 80 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 90 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 100 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 110 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 120 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 130 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 140 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 150 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 160 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 170 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 180 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 190 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 200 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 210 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 220 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 230 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 240 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 250 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 260 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 270 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 280 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 290 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 300 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 310 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 320 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 330 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 340 }
+	tc_target_locator_spawn = { RADIU = 300 ANGLE = 350 }
+}
+
+#巨构信息提示
+tc_megastructure_message = {
+	FROMFROM.owner = {
+		create_message = {
+			type = TC_MEGASTRUCTURE_UPGRADED
+			localization = tc_megastructure_message_tip
+			days = 60
+			target = ROOT
+		}
+	}
+}
+
+###注魔祭坛UI
+#资源乘数计算
+tc_infusion_resource_calculate = {
+	optimize_memory
+	#添加乘数
+	set_variable = {
+		which = tc_infusion_essence_cost_mult
+		value = $ESSENCE$
+	}
+	set_variable = {
+		which = tc_infusion_thaumium_cost_mult
+		value = $THAUMIUM$
+	}
+	set_variable = {
+		which = tc_infusion_void_metal_cost_mult
+		value = $VOID$
+	}
+	set_variable = {
+		which = tc_infusion_element_shard_cost_mult
+		value = $SHARD$
+	}
+	event_target:tc_infusion_mega = {
+		set_variable = {
+			which = tc_infusion_halted_time
+			value = $TIME$
+		}
+	}
+	set_variable = {
+		which = tc_infusion_halted_time
+		value = $TIME$
+	}
+	#计算乘数
+	set_variable = { 
+		which = tc_infusion_essence_cost
+		value = 0
+	}
+	change_variable = {
+		which = tc_infusion_essence_cost
+		value = tc_infusion_essence_cost_base
+	}
+	multiply_variable = {
+		which = tc_infusion_essence_cost
+		value = tc_infusion_essence_cost_mult
+	}
+	set_variable = { 
+		which = tc_infusion_thaumium_cost
+		value = 0
+	}
+	change_variable = {
+		which = tc_infusion_thaumium_cost
+		value = tc_infusion_thaumium_cost_base
+	}
+	multiply_variable = {
+		which = tc_infusion_thaumium_cost
+		value = tc_infusion_thaumium_cost_mult
+	}
+	set_variable = { 
+		which = tc_infusion_void_metal_cost
+		value = 0
+	}
+	change_variable = {
+		which = tc_infusion_void_metal_cost
+		value = tc_infusion_void_metal_cost_base
+	}
+	multiply_variable = {
+		which = tc_infusion_void_metal_cost
+		value = tc_infusion_void_metal_cost_mult
+	}
+	set_variable = { 
+		which = tc_infusion_element_shard_cost
+		value = 0
+	}
+	change_variable = {
+		which = tc_infusion_element_shard_cost
+		value = tc_infusion_element_shard_cost_base
+	}
+	multiply_variable = {
+		which = tc_infusion_element_shard_cost
+		value = tc_infusion_element_shard_cost_mult
+	}
+}
+
+#完成结果创建
+tc_infusion_complete_01 = { #神秘巡航舰
+	optimize_memory
+	random_system_megastructure = {
+		limit = {
+			exists = owner
+			is_megastructure_type = tc_infuster_ancient_03
+		}
+		save_event_target_as = tc_infusion_target
+		owner = {
+			save_event_target_as = tc_infusion_owner
+		}
+	}
+	create_fleet = {
+		#name = ""
+		settings = {
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:tc_infusion_owner
+			set_location = event_target:tc_infusion_target
+			while = {
+				count = 10
+				create_ship = {
+					#name = ""
+					random_existing_design = tc_cruise_ship
+					effect = {
+						add_modifier = {
+							modifier = tc_thaumic_ship_upkeep_clear
+						}
+					}
+				}
+			}
+		}
+	}
+	remove_star_flag = tc_infusion_select_01
+	remove_star_flag = tc_infusion_active
+}
+
+tc_infusion_complete_05 = { #神秘战列舰
+	optimize_memory
+	random_system_megastructure = {
+		limit = {
+			exists = owner
+			is_megastructure_type = tc_infuster_ancient_03
+		}
+		save_event_target_as = tc_infusion_target
+		owner = {
+			save_event_target_as = tc_infusion_owner
+		}
+	}
+	create_fleet = {
+		#name = ""
+		settings = {
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:tc_infusion_owner
+			set_location = event_target:tc_infusion_target
+			while = {
+				count = 5
+				create_ship = {
+					#name = ""
+					random_existing_design = tc_batter_ship
+					effect = {
+						add_modifier = {
+							modifier = tc_thaumic_ship_upkeep_clear
+						}
+					}
+				}
+			}
+		}
+	}
+	remove_star_flag = tc_infusion_select_05
+	remove_star_flag = tc_infusion_active
+}
+
+tc_infusion_complete_09 = { #神秘主宰舰
+	optimize_memory
+	random_system_megastructure = {
+		limit = {
+			exists = owner
+			is_megastructure_type = tc_infuster_ancient_03
+		}
+		save_event_target_as = tc_infusion_target
+		owner = {
+			save_event_target_as = tc_infusion_owner
+		}
+	}
+	create_fleet = {
+		#name = ""
+		settings = {
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:tc_infusion_owner
+			set_location = event_target:tc_infusion_target
+			create_ship = {
+				#name = ""
+				random_existing_design = tc_juggernaut_ship
+				effect = {
+					add_modifier = {
+						modifier = tc_thaumic_ship_upkeep_clear
+					}
+				}
+			}
+		}
+	}
+	remove_star_flag = tc_infusion_select_09
+	remove_star_flag = tc_infusion_active
+}
+
+tc_infusion_complete_12 = { #防御核心
+	optimize_memory
+	random_system_megastructure = {
+		limit = {
+			is_megastructure_type = tc_infuster_ancient_03
+		}
+		owner = {
+			save_global_event_target_as = tc_infusion_owner
+		}
+		save_event_target_as = tc_infusion_target
+	}
+	create_fleet = {
+		name = "NAME_tc_defence_tower_fleet"
+		settings = { }
+		effect = {
+			set_owner = event_target:tc_infusion_owner
+			set_location = event_target:tc_infusion_target
+			while = {
+				count = 8
+				create_ship = {
+					name = "NAME_tc_package_tower"
+					design = "NAME_tc_package_tower_design"
+					effect = {
+						set_ship_flag = tc_not_animation_target
+						set_ship_flag = cant_copy_design
+					}
+				}
+			}
+		}
+	}
+	remove_star_flag = tc_infusion_select_12
+	remove_star_flag = tc_infusion_active
+}
+
+tc_infusion_complete_13 = { #MCV
+	optimize_memory
+	random_system_megastructure = {
+		limit = {
+			is_megastructure_type = tc_infuster_ancient_03
+		}
+		owner = {
+			save_global_event_target_as = tc_infusion_owner
+		}
+		save_event_target_as = tc_infusion_target
+	}
+	create_fleet = {
+		name = "NAME_tc_mcv_fleet"
+		settings = {
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:tc_infusion_owner
+			set_location = event_target:tc_infusion_target
+			while = {
+				count = 8
+				create_ship = {
+					name = "NAME_tc_mcv_ship"
+					random_existing_design = tc_mcv_ship
+					effect = {
+						add_modifier = {
+							modifier = tc_thaumic_ship_upkeep_clear
+						}
+					}
+				}
+			}
+		}
+	}
+	remove_star_flag = tc_infusion_select_13
+	remove_star_flag = tc_infusion_active
+}
+
+tc_infusion_complete_04 = { #洞穴创造者
+	optimize_memory
+	random_system_megastructure = {
+		limit = {
+			is_megastructure_type = tc_infuster_ancient_03
+		}
+		owner = {
+			save_global_event_target_as = tc_cave_creater_ship_owner_target
+		}
+		save_event_target_as = tc_infusion_target
+	}
+	create_fleet = {
+		name = "NAME_tc_cave_creater_ship"
+		settings = {
+			is_boss = yes
+			spawn_debris = no
+			can_upgrade = no
+		}
+		effect = {
+			set_owner = event_target:tc_cave_creater_ship_owner_target
+			set_location = event_target:tc_infusion_target
+			save_global_event_target_as = tc_cave_creater_ship_target
+			create_ship = {
+				name = "NAME_tc_cave_creater_ship"
+				design = "NAME_tc_cave_creater_ship_design"
+				effect = {
+					set_ship_flag = tc_not_animation_target
+					set_ship_flag = cant_copy_design
+				}
+			}
+		}
+	}
+	event_target:tc_cave_creater_ship_owner_target = {
+		if = {
+			limit = {
+				NOT = { any_owned_ship = { is_ship_size = tc_cave_creater_target } }
+			}
+			create_fleet = {
+				name = "NAME_tc_cave_creater_target"
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+					can_upgrade = no
+				}
+				effect = {
+					set_owner = event_target:tc_cave_creater_ship_owner_target
+					set_location = event_target:tc_infusion_target
+					create_ship = {
+						name = "NAME_tc_cave_creater_target"
+						design = "NAME_tc_cave_creater_target_design"
+						effect = {
+							set_ship_flag = tc_not_animation_target
+							set_ship_flag = cant_copy_design
+						}
+					}
+				}
+			}
+		}
+		else = {
+			
+		}
+	}
+	remove_star_flag = tc_infusion_select_04
+	remove_star_flag = tc_infusion_active
+}
+
+tc_infusion_complete_08 = { #洞穴标记
+	optimize_memory
+	random_system_megastructure = {
+		limit = {
+			is_megastructure_type = tc_infuster_ancient_03
+		}
+		owner = {
+			save_global_event_target_as = tc_cave_creater_ship_owner_target
+		}
+		save_event_target_as = tc_infusion_target
+	}
+	create_fleet = {
+		name = "NAME_tc_cave_creater_target"
+		settings = {
+			is_boss = yes
+			spawn_debris = no
+			can_upgrade = no
+		}
+		effect = {
+			set_owner = event_target:tc_cave_creater_ship_owner_target
+			set_location = event_target:tc_infusion_target
+			create_ship = {
+				name = "NAME_tc_cave_creater_target"
+				design = "NAME_tc_cave_creater_target_design"
+				effect = {
+					set_ship_flag = tc_not_animation_target
+					set_ship_flag = cant_copy_design
+				}
+			}
+		}
+	}
+	remove_star_flag = tc_infusion_select_08
+	remove_star_flag = tc_infusion_active
+}
+
+#行星护盾更新
+tc_rune_planet_shield_change_effect = {
+	optimize_memory
+	if = {
+		limit = { 
+			has_building = building_tc_rune_shield_t1
+		}
+		create_ambient_object = {
+			type = "tc_target_locator"
+			use_3d_location = yes
+			location = ROOT
+			entity_offset = 10
+			duration = 1
+		}
+		solar_system = {
+			random_system_ambient_object = {
+				limit = {
+					OR = {
+						is_ambient_object_type = tc_planet_shield_gold_object
+						is_ambient_object_type = tc_planet_shield_red_object
+						is_ambient_object_type = tc_planet_shield_void_object							
+					}
+					OR = {
+						compare_distance = { closer_object = THIS further_object = last_created_ambient_object }
+						distance = {
+							source = ROOT
+							min_distance >= 0
+							max_distance <= 50
+							type = euclidean
+							same_solar_system = yes
+						}
+					}
+				}
+				destroy_ambient_object = this
+				create_ambient_object = {
+					type = "tc_planet_shield_gold_object"
+					entity_scale_to_size = yes
+					scale = 0.125
+					use_3d_location = yes
+					location = ROOT
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { 
+			has_building = building_tc_rune_shield_t2
+		}
+		create_ambient_object = {
+			type = "tc_target_locator"
+			use_3d_location = yes
+			location = ROOT
+			entity_offset = 10
+			duration = 1
+		}
+		solar_system = {
+			random_system_ambient_object = {
+				limit = {
+					OR = {
+						is_ambient_object_type = tc_planet_shield_gold_object
+						is_ambient_object_type = tc_planet_shield_red_object
+						is_ambient_object_type = tc_planet_shield_void_object							
+					}
+					OR = {
+						compare_distance = { closer_object = THIS further_object = last_created_ambient_object }
+						distance = {
+							source = ROOT
+							min_distance >= 0
+							max_distance <= 50
+							type = euclidean
+							same_solar_system = yes
+						}
+					}
+				}
+				destroy_ambient_object = this
+				create_ambient_object = {
+					type = "tc_planet_shield_red_object"
+					entity_scale_to_size = yes
+					scale = 0.125
+					use_3d_location = yes
+					location = ROOT
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { 
+			has_building = building_tc_rune_shield_t3
+		}
+		create_ambient_object = {
+			type = "tc_target_locator"
+			use_3d_location = yes
+			location = ROOT
+			entity_offset = 10
+			duration = 1
+		}
+		solar_system = {
+			random_system_ambient_object = {
+				limit = {
+					OR = {
+						is_ambient_object_type = tc_planet_shield_gold_object
+						is_ambient_object_type = tc_planet_shield_red_object
+						is_ambient_object_type = tc_planet_shield_void_object							
+					}
+					OR = {
+						compare_distance = { closer_object = THIS further_object = last_created_ambient_object }
+						distance = {
+							source = ROOT
+							min_distance >= 0
+							max_distance <= 50
+							type = euclidean
+							same_solar_system = yes
+						}
+					}
+				}
+				destroy_ambient_object = this
+				create_ambient_object = {
+					type = "tc_planet_shield_void_object"
+					entity_scale_to_size = yes
+					scale = 0.125
+					use_3d_location = yes
+					location = ROOT
+				}
+			}
+		}
+	}
+	else = { }
+}
+
+#封装巨像通用效果
+tc_pk_utilitie_effect = {
+	optimize_memory
+	#观察站拆除
+	if = {
+		limit = {
+			has_observation_outpost = yes
+		}
+		observation_outpost_owner = {
+			country_event = { id = planet_destruction.1000 days = 1 }
+		}
+	}
+	#肃正净化中心
+	if = {
+		limit = {
+			is_planet_class = pc_ai
+			NOT = { has_planet_flag = machine_lair }
+		}
+		set_planet_flag = destroyed_by_colossus
+		set_planet_flag = planet_shielded
+		planet_event = { id = crisis.2040 }
+	}
+	#肃正老家
+	if = {
+		limit = {
+			is_planet_class = pc_ai
+			has_planet_flag = machine_lair
+		}
+		set_planet_flag = destroyed_by_colossus
+		set_planet_flag = planet_shielded
+		stop_crisis_sound = yes
+		from.owner = { save_event_target_as = final_machine_world_destroyer }
+		planet_event = { id = crisis.2046 }
+	}
+	#虫灾计数器
+	if = {
+		limit = {
+			exists = owner
+			owner = { is_country_type = swarm }
+		}
+		every_country = {
+			limit = { has_event_chain = "prethoryn_scourge_chain" }
+			add_event_chain_counter = {
+				event_chain = "prethoryn_scourge_chain"
+				counter = "infested_worlds"
+				amount = -1
+			}
+			add_event_chain_counter = {
+				event_chain = "prethoryn_scourge_chain"
+				counter = "infested_worlds_cleansed"
+				amount = 1
+			}
+		}
+	}
+	#威胁度和外交关系
+	if = {
+		limit = {
+			exists = owner
+			owner = {
+				NOT = { is_same_value = from.owner }
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+			}
+		}
+		#添加威胁度
+		add_threat = { who = from.owner amount = 3 }
+		#非目标修正
+		every_country = {
+			limit = {
+				NOR = {
+					is_same_value = from.owner
+					is_same_value = root.owner
+					AND = {
+						has_federation = yes
+						is_in_federation_with = from.owner
+					}
+				}
+				OR = {
+					has_communications = from.owner
+					has_communications = root.owner
+				}
+				OR = {
+					AND = {
+						has_federation = yes
+						is_in_federation_with = root.owner
+					}
+					has_ai_personality = awakened_fallen_empire_xenophile
+					AND = {
+						is_country_type = default
+						OR = {
+							is_egalitarian = yes
+							is_xenophile = yes
+							is_militarist = yes
+						}
+					}
+				}
+			}
+			add_opinion_modifier = {
+				modifier = tc_opinion_destroy_a_world
+				who = from.owner
+			}
+		}
+		#目标修正
+		owner = {
+			add_opinion_modifier = {
+				modifier = tc_opinion_destroy_my_world
+				who = from.owner
+			}
+			if = {
+				limit = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+				add_modifier = {
+					modifier = colossus_victim
+					days = 10800
+				}
+			}
+		}
+	}
+	#添加战争疲劳
+	owner = {
+		if = {
+			limit = {
+				is_at_war_with = from.fleet.owner
+			}
+			add_static_war_exhaustion = {
+				attacker = from.fleet.owner
+				location = root
+				value_for_planet_destruction = 1.0
+			}
+		}
+	}
+}

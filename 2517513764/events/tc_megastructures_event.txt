@@ -1,0 +1,976 @@
+namespace = tc_mega
+###渗透附魔###
+fleet_event = {
+	id = tc_mega.3
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_fleet_flag = tc_oe_fleet
+		save_global_event_target_as = "tc_oe_fleet"
+		set_event_locked = yes
+		#初始化变量
+		set_variable = { which = tc_oe_1_level value = 0 }
+		set_variable = { which = tc_oe_2_level value = 0 }
+		set_variable = { which = tc_oe_3_level value = 0 }
+		set_variable = { which = tc_oe_4_level value = 0 }
+		set_variable = { which = tc_oe_5_level value = 0 }
+		set_variable = { which = tc_oe_6_level value = 0 }
+		set_variable = { which = tc_oe_7_level value = 0 }
+		set_variable = { which = tc_oe_8_level value = 0 }
+
+		set_variable = { #舰队占用导出
+			which = tc_oe_size_var
+			value = trigger:fleet_size
+		}
+		owner = {
+			country_event = {
+				id = tc_mega.10
+			}
+		}
+	}
+}
+
+#成本计算更新
+fleet_event = {
+	id = tc_mega.4
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_variable = { which = tc_oe_essence_cost value = 64 }
+		multiply_variable = { which = tc_oe_essence_cost value = tc_oe_size_var }
+
+		set_variable = { which = tc_oe_sum_level value = 0 }
+		change_variable = { which = tc_oe_sum_level value = tc_oe_1_level }
+		change_variable = { which = tc_oe_sum_level value = tc_oe_2_level }
+		change_variable = { which = tc_oe_sum_level value = tc_oe_3_level }
+		change_variable = { which = tc_oe_sum_level value = tc_oe_4_level }
+		change_variable = { which = tc_oe_sum_level value = tc_oe_5_level }
+		change_variable = { which = tc_oe_sum_level value = tc_oe_6_level }
+		change_variable = { which = tc_oe_sum_level value = tc_oe_7_level }
+		change_variable = { which = tc_oe_sum_level value = tc_oe_8_level }
+
+		multiply_variable = { which = tc_oe_essence_cost value = tc_oe_sum_level }
+
+		owner = {
+			set_variable = {
+				which = tc_oe_essence_cost
+				value = PREV.tc_oe_essence_cost
+			}
+			set_variable = {
+				which = tc_oe_sum_level
+				value = PREV.tc_oe_sum_level
+			}
+		}
+	}
+}
+
+#窗口事件
+country_event = {
+	id = tc_mega.10
+	is_triggered_only = yes
+	custom_gui = "tc_osmotic_enchanter_ui"
+	diplomatic = yes
+
+	option = {
+		name = "tc_osmotic_enchanter_start_button"
+		custom_gui = "tc_osmotic_enchanter_start_button"
+		#custom_tooltip = "START"
+		allow = {
+			resource_stockpile_compare = { resource = "tc_essences" value >= tc_oe_essence_cost }
+		}
+		add_resource = {
+			tc_essences = -1
+			mult = tc_oe_essence_cost
+		}
+		hidden_effect = {
+			event_target:tc_oe_fleet = {
+				solar_system = {
+					random_megastructure = {
+						limit = {
+							is_megastructure_type = tc_osmotic_enchanter_03
+						}
+						set_variable = { which = tc_oe_sum_level value = root.tc_oe_sum_level }
+						set_halted = 0
+						add_modifier = {
+							modifier = tc_megastructures_speed_debuff
+							mult = tc_oe_sum_level
+							days = -1
+						}
+						clear_variable = tc_oe_sum_level
+					}
+				}
+				clear_variable = tc_oe_size_var
+				clear_variable = tc_oe_essence_cost
+				clear_variable = tc_oe_sum_level
+			}
+			clear_global_event_target = tc_oe_fleet
+			clear_variable = tc_oe_essence_cost
+		}
+	}
+}
+
+#完成事件-添加buff
+fleet_event = {
+	id = tc_mega.11
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		while = { #力量
+			limit = { check_variable = { which = tc_oe_1_level value > 0 } }
+			subtract_variable = { which = tc_oe_1_level value = 1 }
+			every_owned_ship = { 
+				change_variable = { which = tc_oe_1_level value = 1 }
+				add_modifier = { modifier = tc_power_modifier mult = tc_oe_1_level }
+			}
+		}
+		while = { #战备
+			limit = { check_variable = { which = tc_oe_2_level value > 0 } }
+			subtract_variable = { which = tc_oe_2_level value = 1 }
+			every_owned_ship = { 
+				change_variable = { which = tc_oe_2_level value = 1 }
+				add_modifier = { modifier = tc_quick_draw_modifier mult = tc_oe_2_level }
+			}
+		}
+		while = { #耐久
+			limit = { check_variable = { which = tc_oe_3_level value > 0 } }
+			subtract_variable = { which = tc_oe_3_level value = 1 }
+			every_owned_ship = { 
+				change_variable = { which = tc_oe_3_level value = 1 }
+				add_modifier = { modifier = tc_unbreaking_modifier mult = tc_oe_3_level }
+			}
+		}
+		while = { #保护
+			limit = { check_variable = { which = tc_oe_4_level value > 0 } }
+			subtract_variable = { which = tc_oe_4_level value = 1 }
+			every_owned_ship = { 
+				change_variable = { which = tc_oe_4_level value = 1 }
+				add_modifier = { modifier = tc_protection_modifier mult = tc_oe_4_level }
+			}
+		}
+		while = { #夜市
+			limit = { check_variable = { which = tc_oe_5_level value > 0 } }
+			subtract_variable = { which = tc_oe_5_level value = 1 }
+			every_owned_ship = { 
+				limit = { 
+					check_variable = { which = tc_oe_5_level value < 5 }
+				}
+				change_variable = { which = tc_oe_5_level value = 1 }
+				add_modifier = { modifier = tc_night_vision_modifier mult = tc_oe_5_level } 
+			}
+		}
+		while = { #急急
+			limit = { check_variable = { which = tc_oe_6_level value > 0 } }
+			subtract_variable = { which = tc_oe_6_level value = 1 }
+			every_owned_ship = { 
+				change_variable = { which = tc_oe_6_level value = 1 }
+				add_modifier = { modifier = tc_haste_modifier mult = tc_oe_6_level }
+			}
+		}
+		while = { #虚空
+			limit = { check_variable = { which = tc_oe_7_level value > 0 } }
+			subtract_variable = { which = tc_oe_7_level value = 1 }
+			every_owned_ship = { 
+				limit = { 
+					check_variable = { which = tc_oe_7_level value < 5 }
+				}
+				change_variable = { which = tc_oe_7_level value = 1 }
+				add_modifier = { modifier = tc_voidtouched_modifier mult = tc_oe_7_level } 
+			}
+		}
+		while = { #教育
+			limit = { check_variable = { which = tc_oe_8_level value > 0 } }
+			subtract_variable = { which = tc_oe_8_level value = 1 }
+			every_owned_ship = { 
+				change_variable = { which = tc_oe_8_level value = 1 }
+				add_modifier = { modifier = tc_educational_modifier mult = tc_oe_8_level }
+			}
+		}
+		set_event_locked = no
+	}
+}
+
+###巨型钻探仪###
+#采掘进度计算
+planet_event = { #增加采掘进度 90天自触发
+	id = tc_mega.20
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = {
+			is_planet_class = pc_tc_bedrock
+		}
+	}
+
+	immediate = {
+		if = { #flag 备用
+			limit = {
+				NOT = {
+					has_planet_flag = tc_mega_arcane_bore_planet
+				}
+			}
+			set_planet_flag = tc_mega_arcane_bore_planet
+			set_variable = { which = tc_mega_arcane_bore_point value = 0 } #初始化变量
+			set_variable = { which = tc_mega_arcane_bore_size_point value = 0 }
+		}
+
+		if = { #点数累计
+			limit = {
+				has_planet_flag = tc_mega_arcane_bore_01_flag 
+			}
+			change_variable = {
+				which = tc_mega_arcane_bore_point
+				value = 10
+			}
+		}
+		else_if = {
+			limit = {
+				has_planet_flag = tc_mega_arcane_bore_02_flag 
+			}
+			change_variable = {
+				which = tc_mega_arcane_bore_point
+				value = 20
+			}
+		}
+		else_if = {
+			limit = {
+				has_planet_flag = tc_mega_arcane_bore_03_flag 
+			}
+			change_variable = {
+				which = tc_mega_arcane_bore_point
+				value = 40
+			}
+		}
+
+		if = { #到达点数减小星球大小
+			limit = {
+				check_variable = {
+					which = tc_mega_arcane_bore_point
+					value > 500
+				}
+			}
+			subtract_variable = {
+				which = tc_mega_arcane_bore_point
+				value = 500
+			}
+			change_variable = {
+				which = tc_mega_arcane_bore_size_point
+				value = 1
+			}
+			change_planet_size = -1
+		}
+
+		if = { #星球过小或达到10size点数则转化为基岩星球
+			limit = {
+				OR = {
+					planet_size < 6
+					check_variable = {
+						which = tc_mega_arcane_bore_size_point
+						value > 9
+					}
+				}
+			}
+			change_pc = pc_tc_bedrock
+			clear_deposits = yes
+			solar_system = { #移除巨构
+				every_system_megastructure = {
+					limit = {
+						OR = {
+							is_megastructure_type = tc_mega_arcane_bore_00
+							is_megastructure_type = tc_mega_arcane_bore_01
+							is_megastructure_type = tc_mega_arcane_bore_02
+							is_megastructure_type = tc_mega_arcane_bore_03
+							is_megastructure_type = tc_mega_arcane_bore_disintegration_01
+							is_megastructure_type = tc_mega_arcane_bore_disintegration_02
+							is_megastructure_type = tc_mega_arcane_bore_disintegration_03
+						}
+						planet = {
+							is_planet_class = pc_tc_bedrock
+						}
+					}
+					planet = {
+						remove_planet_flag = has_megastructure
+						remove_planet_flag = tc_mega_arcane_bore_planet
+						remove_modifier = tc_mega_arcane_bore_tooltip
+						clear_variable = tc_mega_arcane_bore_size_point
+						clear_variable = tc_mega_arcane_bore_point
+					}
+					remove_megastructure = this
+				}
+			}
+			solar_system.owner = {
+				country_event = {
+					id = tc_mega.21
+				}
+			}
+		}
+		planet_event = { #自循环触发
+			id = tc_mega.20
+			days = 90
+		}
+	}
+}
+
+#采掘完毕通知
+country_event = {
+	id = tc_mega.21
+	title = "tc_mega.21.title"
+	desc = "tc_mega.21.desc"
+	is_triggered_only = yes
+	location = FROM
+	picture = GFX_evt_cold_barren
+
+	option = {
+		name = "tc_mega.21.a"
+		add_resource = {
+			tc_thaumium = 2560
+		}
+	}
+}
+
+###洞穴创建者###
+#当舰队解散
+# This = owner of fleet
+# From = disbanded fleet
+country_event = {
+	id = tc_mega.30
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			any_owned_ship = {
+				is_ship_size = tc_cave_creater_ship
+			}
+		}
+	}
+
+	immediate = {
+		FROM.owner = {
+			save_global_event_target_as = tc_cave_creater_ship_owner_target
+			set_timed_country_flag = {
+				flag = tc_cave_creater_convert
+				days = 11
+			}
+		}
+		create_ambient_object = {
+			type = tc_cave_creater_ship_mega
+			location = FROM
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			entity_offset = 0
+			use_3d_location = no
+			duration = 10
+		}
+		last_created_ambient_object = {
+			save_global_event_target_as = tc_cave_creater_ship_mega_target
+		}
+		FROM.solar_system = {
+			system_event = {
+				id = tc_mega.31
+				days = 10
+			}
+		}
+	}
+}
+
+system_event = {
+	id = tc_mega.31
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		spawn_megastructure = {
+			type = tc_cave_creater_mega
+			owner = event_target:tc_cave_creater_ship_owner_target
+			coords_from = event_target:tc_cave_creater_ship_mega_target
+			orbit_angle = 0
+			orbit_distance = 0
+			init_effect = {
+				save_global_event_target_as = tc_cave_creater_mega_target
+				solar_system = {
+					system_event = {
+						id = tc_mega.36
+					}
+				}
+			}
+		}
+	}
+}
+
+system_event = {
+	id = tc_mega.32
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		create_fleet = {
+			name = "NAME_tc_cave_creater_ship"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+				can_upgrade = no
+			}
+			effect = {
+				set_owner = event_target:tc_cave_creater_ship_owner_target
+				set_location = event_target:tc_cave_creater_mega_ship_target
+				save_global_event_target_as = tc_cave_creater_ship_target
+				create_ship = {
+					name = "NAME_tc_cave_creater_ship"
+					design = "NAME_tc_cave_creater_ship_design"
+					effect = {
+						set_ship_flag = tc_not_animation_target
+						set_ship_flag = cant_copy_design
+					}
+				}
+			}
+		}
+	}
+}
+
+#巨像武器激活
+# this/root = planet that have been fired upon
+# from = fleet that fired
+planet_event = {
+	id = tc_mega.33
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		solar_system = { #所在星系标记
+			save_global_event_target_as = tc_cave_start_target
+		}
+		FROM.owner = { #目标星系标记
+			random_owned_ship = {
+				limit = {
+					is_ship_size = tc_cave_creater_target
+				}
+				solar_system = {
+					save_global_event_target_as = tc_cave_end_target
+				}
+			}
+		}
+		if = { #目标正确 激活超空间
+			limit = {
+				exists = event_target:tc_cave_end_target
+				event_target:tc_cave_end_target = {
+					NOT = { has_star_flag = community_can_enter_system_by_jump_false }
+					NOT = { is_same_value = event_target:tc_cave_start_target }
+					NOT = { has_star_flag = lcluster }
+				}
+			}
+			solar_system = {
+				system_event = {
+					id = tc_mega.34
+				}
+			}
+		}
+		else = { #目标错误 弹出失败提示
+			FROM.owner = {
+				country_event = {
+					id = tc_mega.35
+				}
+			}
+		}
+	}
+}
+
+system_event = {
+	id = tc_mega.34
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		if = {
+			limit = { #目标不带禁止跃迁标签
+				event_target:tc_cave_end_target = {
+					NOT = { has_star_flag = community_can_enter_system_by_jump_false }
+					NOT = { has_star_flag = lcluster }
+				}
+			}
+			set_spawn_system_batch = begin
+			if = { #无航道 生成航道
+				limit = { 
+					event_target:tc_cave_start_target = {
+						NOT = { has_hyperlane_to = event_target:tc_cave_end_target }
+					}
+				}
+				add_hyperlane = {
+					from = event_target:tc_cave_start_target
+					to = event_target:tc_cave_end_target
+				}
+				event_target:tc_cave_creater_ship_owner_target = {
+					create_message = {
+						type = TC_HYPERLANE_CHANGE
+						localization = "TC_HYPERLANE_ADD"
+						days = 30
+						target = event_target:tc_cave_start_target
+					}
+				}
+			}
+			else_if = { #有航道 删除航道
+				limit = { 
+					event_target:tc_cave_start_target = {
+						has_hyperlane_to = event_target:tc_cave_end_target
+					}
+				}
+				remove_hyperlane = {
+					from = event_target:tc_cave_start_target
+					to = event_target:tc_cave_end_target
+				}
+				event_target:tc_cave_creater_ship_owner_target = {
+					create_message = {
+						type = TC_HYPERLANE_CHANGE
+						localization = "TC_HYPERLANE_DEL"
+						days = 30
+						target = event_target:tc_cave_start_target
+					}
+				}
+			}
+			set_spawn_system_batch = end
+		}
+		#清除全局目标
+		clear_global_event_target = tc_cave_start_target
+		clear_global_event_target = tc_cave_end_target
+	}
+}
+
+#失败提示
+country_event = {
+	id = tc_mega.35
+	title = "tc_mega.35.title"
+	desc = "tc_mega.35.desc"
+	is_triggered_only = yes
+	picture = ""
+	location = event_target:tc_cave_end_target
+
+	immediate = {
+		#清除全局目标
+		clear_global_event_target = tc_cave_start_target
+		clear_global_event_target = tc_cave_end_target
+	}
+
+	option = {
+		name = tc_mega.35.a
+	}
+}
+
+#重设巨构所有者
+system_event = {
+	id = tc_mega.36
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:tc_cave_creater_mega_target
+	}
+	immediate = {
+		event_target:tc_cave_creater_mega_target = {
+			if = {
+				limit = {
+					OR = {
+						NOT = { exists = owner }
+						AND = {
+							exists = owner
+							owner = {
+								NOT = {
+									is_same_value = event_target:tc_cave_creater_ship_owner_target
+								}
+							}
+						}
+					}
+				}
+				set_owner = event_target:tc_cave_creater_ship_owner_target
+			}
+		}
+		system_event = { #3天周期循环
+			id = tc_mega.36
+			days = 3
+		}
+	}
+}
+
+###暴怒之笼 #40
+#创建托管国家
+country_event = {
+	id = tc_mega.40
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_global_flag = tc_wc_crystal_country_spawn }
+	}
+
+	immediate = {
+		#托管国家
+		create_country = {
+			name = "NAME_tc_wc_crystal"
+			type = tc_wc_crystal_county
+			flag = {
+				icon={
+					category = "tc_event"
+					file="tc_wc_crystal_flag.dds"
+				}
+				background={
+					category="backgrounds"
+					file="circle.dds"
+				}
+				colors={
+					"orange"
+					"orange"
+					"null"
+					"null"
+				}
+			}
+			species = random
+			effect = {
+				save_global_event_target_as = tc_wc_crystal_country_target
+			}
+		}
+		#敌对国家
+		create_country = {
+			name = "NAME_tc_wc_enemy"
+			type = tc_wc_enemy_county
+			flag = {
+				icon={
+					category = "tc_event"
+					file="tc_wc_crystal_flag.dds"
+				}
+				background={
+					category="backgrounds"
+					file="circle.dds"
+				}
+				colors={
+					"red"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			species = random
+			effect = {
+				save_global_event_target_as = tc_wc_enemy_country_target
+			}
+		}
+		set_global_flag = tc_wc_crystal_country_spawn
+	}
+}
+#移交舰队所有权
+system_event = {
+	id = tc_mega.41
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {}
+	immediate = {
+		random_fleet_in_system = {
+			limit = {
+				has_fleet_flag = tc_wc_copy_target
+			}
+			set_owner = event_target:tc_wc_crystal_country_target
+		}
+	}
+}
+#敌对类别
+system_event = {
+	id = tc_mega.42
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_system_megastructure = {
+			is_megastructure_type = tc_weath_cage_hostile
+		}
+	}
+	immediate = {
+		system_event = {
+			id = tc_mega.42
+			days = 180
+		}
+		random_fleet_in_system = {
+			#保存复制目标
+			limit = {
+				has_fleet_flag = tc_wc_copy_target
+			}
+			random_owned_ship = {
+				save_event_target_as = tc_wc_copy_target_temp
+			}
+		}
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_weath_cage_hostile
+			}
+			save_event_target_as = tc_wc_spawn_target
+		}
+		if = { #没有舰队就创建
+			limit = {
+				NOT = { any_fleet_in_system = { has_fleet_flag = tc_wc_enemy_fleet } }
+			}
+			create_fleet = {
+				name = "NAME_tc_wc_enemy_fleet"
+				settings = {
+					spawn_debris = yes
+					uses_naval_capacity = no
+					can_upgrade = no
+					can_change_leader = no
+				}
+				effect = {
+					set_owner = event_target:tc_wc_enemy_country_target
+					set_location = event_target:tc_wc_spawn_target
+					set_fleet_stance = aggressive
+					set_fleet_flag = tc_wc_enemy_fleet
+					while = {
+						count = 20
+						fleet_event = { id = tc_mega.45 }
+					}
+				}
+			}
+		}
+		else = {
+			random_fleet_in_system = {
+				limit = {
+					has_fleet_flag = tc_wc_enemy_fleet
+					fleet_size < 240
+				}
+				while = {
+					#count = 20
+					fleet_event = { id = tc_mega.45 }
+				}
+			}
+		}
+	}
+}
+#友军类别
+#舰队进入星系
+# Scope = Fleet
+# From = System
+# on_entering_system_fleet
+fleet_event = {
+	id = tc_mega.43
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			NOT = { has_star_flag = tc_wc_friendly_cooldown }
+			any_system_megastructure = {
+				is_megastructure_type = tc_weath_cage_friendly
+				#owner = { is_hostile_to = ROOT.owner }
+			}
+		}
+	}
+	immediate = {
+		FROM = {
+			set_timed_star_flag = {
+				flag = tc_wc_friendly_cooldown
+				days = 180
+			}
+			system_event = {
+				id = tc_mega.44
+			}
+		}
+	}
+}
+system_event = {
+	id = tc_mega.44
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {}
+	immediate = {
+		random_fleet_in_system = {
+			#保存复制目标
+			limit = {
+				has_fleet_flag = tc_wc_copy_target
+			}
+			random_owned_ship = {
+				save_event_target_as = tc_wc_copy_target_temp
+			}
+		}
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_weath_cage_friendly
+			}
+			save_event_target_as = tc_wc_spawn_target
+		}
+		create_fleet = {
+			name = "NAME_tc_wc_temp_fleet"
+			settings = {
+				spawn_debris = yes
+				uses_naval_capacity = no
+				can_upgrade = no
+				can_change_leader = no
+			}
+			effect = {
+				set_owner = event_target:tc_wc_spawn_target.owner
+				set_location = event_target:tc_wc_spawn_target
+				set_fleet_stance = aggressive
+				set_fleet_flag = tc_wc_friendly_fleet
+				while = {
+					fleet_event = { id = tc_mega.45 }
+				}
+				add_modifier = { modifier = tc_not_flee }
+				add_modifier = { modifier = tc_thaumic_ship_upkeep_clear }
+				add_modifier = { modifier = tc_hyperlane_disable }
+				fleet_event = {
+					id = tc_weapon.5
+					days = 180
+				}
+			}
+		}
+	}
+}
+#补充舰船
+fleet_event = {
+	id = tc_mega.45
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		fleet_size < 240
+	}
+	immediate = {
+		create_ship = {
+			name = "-"
+			prefix = no
+			graphical_culture = event_target:tc_wc_copy_target_temp
+			design = event_target:tc_wc_copy_target_temp
+			effect = {}
+		}
+	}
+}
+#如果舰队离开星系，将其摧毁
+fleet_event = {
+	id = tc_mega.46
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_fleet_flag = tc_wc_friendly_fleet
+	}
+	immediate = {
+		fleet_event = {
+			id = tc_weapon.5
+		}
+	}
+}
+
+###巨构注魔祭坛 # 1000
+#启动UI
+country_event = {
+	id = tc_mega.1000
+	is_triggered_only = yes
+	custom_gui = tc_infusion_ui_main
+	diplomatic = yes
+
+	immediate = {
+		event_target:tc_infusion_system = {
+			set_variable = {
+				which = tc_infusion_essence_cost_base
+				value = 100
+			}
+			set_variable = {
+				which = tc_infusion_thaumium_cost_base
+				value = 100
+			}
+			set_variable = {
+				which = tc_infusion_void_metal_cost_base
+				value = 100
+			}
+			set_variable = {
+				which = tc_infusion_element_shard_cost_base
+				value = 100
+			}
+		}
+	}
+	option = {
+		name = "tc_infusion_start"
+		custom_gui = "tc_infusion_ui_confirm_button"
+		custom_tooltip = "tc_infusion_start_desc"
+
+		allow = {
+			custom_tooltip = {
+				fail_text = "tc_infuster_need_select"
+				event_target:tc_infusion_system = {
+					has_star_flag = tc_infusion_select
+				}
+			}
+			custom_tooltip = {
+				fail_text = "tc_infuster_insufficient_resources"
+				resource_stockpile_compare = { resource = "tc_essences" value >= tc_infusion_essence_cost }
+				resource_stockpile_compare = { resource = "tc_thaumium" value >= tc_infusion_thaumium_cost }
+				resource_stockpile_compare = { resource = "tc_void_metal" value >= tc_infusion_void_metal_cost }
+				resource_stockpile_compare = { resource = "tc_element_shard" value >= tc_infusion_element_shard_cost }
+			}
+		}
+		hidden_effect = {
+			event_target:tc_infusion_system = {
+				set_star_flag = tc_infusion_active
+				remove_star_flag = tc_infusion_select
+			}
+			add_resource = {
+				tc_essences = -1
+				mult = tc_infusion_essence_cost
+			}
+			add_resource = {
+				tc_thaumium = -1
+				mult = tc_infusion_thaumium_cost
+			}
+			add_resource = {
+				tc_void_metal = -1
+				mult = tc_infusion_void_metal_cost
+			}
+			add_resource = {
+				tc_element_shard = -1
+				mult = tc_infusion_element_shard_cost
+			}
+			event_target:tc_infusion_mega = {
+				set_halted = -1
+				solar_system = {
+					spawn_megastructure = {
+						type = tc_infusion_construction
+						planet = system_star
+						owner = FROM.owner
+					}
+				}
+			}
+			clear_global_event_target = tc_infusion_owner
+			clear_global_event_target = tc_infusion_system
+			clear_variable = tc_infusion_essence_cost
+			clear_variable = tc_infusion_thaumium_cost
+			clear_variable = tc_infusion_void_metal_cost
+			clear_variable = tc_infusion_element_shard_cost
+			clear_variable = tc_infusion_halted_time
+		}
+	}
+
+	option = {
+		name = "tc_infusion_cancel"
+		custom_gui = "tc_infusion_ui_cancel_button"
+		hidden_effect = {
+			event_target:tc_infusion_system = {
+				spawn_megastructure = {
+					type = tc_infuster_ancient_03
+					planet = this.star
+					owner = event_target:tc_infusion_owner
+				}
+				solar_system = {
+					every_system_ambient_object = {
+						limit = {
+							is_ambient_object_type = tc_infuster_start_object
+						}
+						destroy_ambient_object = this
+					}
+				}
+				remove_megastructure = event_target:tc_infusion_mega
+			}
+		}
+	}
+}

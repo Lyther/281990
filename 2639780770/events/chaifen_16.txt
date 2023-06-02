@@ -1,0 +1,565 @@
+namespace = chaifen
+
+#堕落不用触发器，要自己做
+
+country_event = {
+	is_triggered_only = yes
+	id = chaifen.1600
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire = yes
+		#fleet_power < 8000000    
+		not = {
+			has_global_flag = no_fallen_strength_megumin
+			#has_country_flag = no_ship_fallen_megumin
+		}
+	}
+
+	immediate = {	
+		if = {
+			limit = { 
+				is_country_type = fallen_empire
+				is_fallen_empire_machine = no
+				mid_game_years_passed > 0
+				any_country = {
+					is_country_type = default
+					fleet_power > 500000
+				}
+			}
+			random_list = { #如果有国家舰队实力超过500k，用破坏圣地的预设唤醒自己。
+				1 = {
+					set_country_flag = holy_world_killed
+					country_event = {
+						id = fallen_empires_awakening.1
+					}
+				}
+				24 = {}
+			}
+		}
+		if = {
+			limit = {  #如果有国家已经拿到了不管是不是自己的堕落殖民地，自己又在战争中，用破坏圣地的预设唤醒自己。
+				is_country_type = fallen_empire
+				is_fallen_empire_machine = no
+				is_at_war = yes
+				any_country = {
+					is_country_type = default
+					any_owned_planet = {
+						has_planet_flag = fallen_empire_world
+					}
+				}
+			}
+			set_country_flag = holy_world_killed
+			country_event = {
+				id = fallen_empires_awakening.1
+			}			
+		}
+		if = {
+			limit = { 
+				is_country_type = awakened_fallen_empire
+			}
+			get_galaxy_setup_value = {
+				which = duoluocrsis_level
+				setting = crisis_strength_scale
+			}
+			multiply_variable = {
+				which = duoluocrsis_level
+				value = event_target:global_event_country.global_fallen_differ
+			}
+			add_modifier = { #乘上难度的倍数
+				modifier = difficulty_warship_basic_chaifen
+				multiplier = duoluocrsis_level				
+			}
+			# add_modifier = { #乘上危机的倍数
+			# 	modifier = difficulty_warship_basic_chaifen
+			# 	multiplier = duoluocrsis_level				
+			# }	
+			# if	= {
+			# 	limit = { 
+			# 		event_target:global_event_country = {
+			# 			check_variable = {
+			# 				which = global_fallen_differ
+			# 				value > 2
+			# 			}
+			# 		}	
+			# 		NOT = {	has_country_flag = thedifferon }	
+			# 	}
+			# 	multiply_variable = {
+			# 		which = duoluocrsis_level
+			# 		value = global_fallen_differ
+			# 	}
+			# 	remove_modifier = difficulty_warship_basic_chaifen
+			# 	add_modifier = { #乘上难度的倍数
+			# 		modifier = difficulty_warship_basic_chaifen
+			# 		multiplier = duoluocrsis_level				
+			# 	}
+			# 	set_country_flag = 	thedifferon
+			# }		
+		}					
+			
+		if = {
+			limit = { 
+				is_country_type = fallen_empire
+			}
+			# set_timed_country_flag = { #5年的冷静期
+			# 	flag = no_ship_fallen_megumin
+			# 	years = 5
+			# }
+			if = {
+				limit = { 
+					has_global_flag = galactic_crisis_happened
+					fleet_power < event_target:global_event_country.chaifen8_fallen_power_crisis 
+				}
+				
+				while = {
+					count = 4
+					##add_awakened_fallen_empire_resources = yes
+					owner = {
+						create_leader = {
+							class = admiral
+							species = owner_main_species
+							name = random
+							skill = 10
+							leader_age_min = 25
+							leader_age_max = 45
+							traits = {
+								trait = leader_trait_cautious
+								trait = leader_trait_scout
+								trait = leader_trait_aggressive
+								trait = leader_trait_engineer
+							}
+						}
+					}
+					create_fleet = {
+						effect = {
+							set_owner = prev.owner
+							while = {
+								count = 6
+								create_fallen_empire_large_ship = yes
+							}
+							while = {
+								count = 10
+								create_fallen_empire_small_ship = yes
+							}
+							while = {
+								count = 4
+								create_fallen_empire_titan = yes
+							}							
+							set_location = {
+								target = owner.capital_scope
+								distance = 30
+								angle = random
+							}
+						}
+					}
+					last_created_fleet = { assign_leader = last_created_leader }
+				}
+			}
+			else_if = {
+				limit = {
+					not = { has_global_flag = galactic_crisis_happened }
+					fleet_power < event_target:global_event_country.chaifen8_fallen_power_fallen 
+				}
+				
+				while = {
+					count = 1
+					#add_awakened_fallen_empire_resources = yes
+					owner = {
+						create_leader = {
+							class = admiral
+							species = owner_main_species
+							name = random
+							skill = 10
+							leader_age_min = 25
+							leader_age_max = 45
+							traits = {
+								trait = leader_trait_cautious
+								trait = leader_trait_scout
+								trait = leader_trait_aggressive
+								trait = leader_trait_engineer
+ 
+							}
+						}
+					}
+					create_fleet = {
+						effect = {
+							set_owner = prev.owner
+							while = {
+								count = 6
+								create_fallen_empire_large_ship = yes
+							}
+							while = {
+								count = 10
+								create_fallen_empire_small_ship = yes
+							}
+							while = {
+								count = 4
+								create_fallen_empire_titan = yes
+							}							
+							set_location = {
+								target = owner.capital_scope
+								distance = 30
+								angle = random
+							}
+						}
+					}
+					last_created_fleet = { assign_leader = last_created_leader }
+				}
+			}
+		}
+		else_if = {
+			limit = { 
+				is_country_type = awakened_fallen_empire
+			}
+			if = {
+				limit = {
+					has_global_flag = galactic_crisis_happened
+					fleet_power < event_target:global_event_country.chaifen8_fallen_power_crisis
+				}
+				
+				while = {
+					count = 6
+					#add_awakened_fallen_empire_resources = yes
+					owner = {
+						create_leader = {
+							class = admiral
+							species = owner_main_species
+							name = random
+							skill = 10
+							leader_age_min = 25
+							leader_age_max = 45
+							traits = {
+								trait = leader_trait_cautious
+								trait = leader_trait_scout
+								trait = leader_trait_aggressive
+								trait = leader_trait_engineer
+ 
+							}
+						}
+					}
+					create_fleet = {
+						effect = {
+							set_owner = prev.owner
+							while = {
+								count = 6
+								create_fallen_empire_large_ship = yes
+							}
+							while = {
+								count = 10
+								create_fallen_empire_small_ship = yes
+							}
+							while = {
+								count = 4
+								create_fallen_empire_titan = yes
+							}							
+							set_location = {
+								target = owner.capital_scope
+								distance = 30
+								angle = random
+							}
+						}
+					}
+					last_created_fleet = { assign_leader = last_created_leader }
+				}
+			}
+			else_if = {
+				limit = {
+					not = { has_global_flag = galactic_crisis_happened } 
+					fleet_power < event_target:global_event_country.chaifen8_fallen_power_awaken
+				}
+				
+				while = {
+					count = 4
+					#add_awakened_fallen_empire_resources = yes
+					owner = {
+						create_leader = {
+							class = admiral
+							species = owner_main_species
+							name = random
+							skill = 10
+							leader_age_min = 25
+							leader_age_max = 45
+							traits = {
+								trait = leader_trait_cautious
+								trait = leader_trait_scout
+								trait = leader_trait_aggressive
+								trait = leader_trait_engineer
+ 
+							}
+						}
+					}
+					create_fleet = {
+						effect = {
+							set_owner = prev.owner
+							while = {
+								count = 6
+								create_fallen_empire_large_ship = yes
+							}
+							while = {
+								count = 10
+								create_fallen_empire_small_ship = yes
+							}
+							while = {
+								count = 4
+								create_fallen_empire_titan = yes
+							}							
+							set_location = {
+								target = owner.capital_scope
+								distance = 30
+								angle = random
+							}
+						}
+					}
+					last_created_fleet = { assign_leader = last_created_leader }
+				}
+			}
+		}		
+	}
+}
+
+country_event = { #初始堕落事件
+	id = chaifen.1601
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = global_event
+	}
+	immediate = { 
+		set_variable = { #设置难度和战力上限
+			which = global_fallen_differ
+			value = 2
+		}
+		set_variable = {
+			which = chaifen8_fallen_power_fallen
+			value = 2000000 
+		}
+		set_variable = {
+			which = chaifen8_fallen_power_awaken
+			value = 4000000
+		}
+		set_variable = {
+			which = chaifen8_fallen_power_crisis
+			value = 6000000
+		}
+		every_country = { #增加资源上限修正
+			limit = {
+				is_country_type = fallen_empire
+			}
+			add_modifier = {
+				modifier = 沉睡的雄狮
+			}
+
+			capital_scope.solar_system  = { 
+				spawn_megastructure = { #刷巨型船坞
+					type = mega_shipyard_restored
+					planet = star
+					owner = prev
+					graphical_culture = prev
+				}
+				starbase = { #刷防御平台
+					while = {
+						count = 15
+						create_ship = {
+							name = random
+							design = "守护者"
+							graphical_culture = owner
+						}
+					}
+					fleet = {
+						add_modifier = { #给防御平台刷修正，同时和难度系数相乘。
+							modifier = enigmatic_power_16
+							multiplier = global_fallen_differ
+						}
+					}					
+				}
+			}
+			while = { #刷4次
+				count = 4
+				owner = {
+					create_leader = { #刷一个十级超级舰长
+						class = admiral
+						species = owner_main_species
+						name = random
+						skill = 10
+						leader_age_min = 25
+						leader_age_max = 45
+						traits = {
+							trait = leader_trait_cautious
+							trait = leader_trait_scout
+							trait = leader_trait_aggressive
+							trait = leader_trait_engineer
+						}
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = prev.owner
+						while = {
+							count = 6
+							create_fallen_empire_large_ship = yes
+						}
+						while = {
+							count = 10
+							create_fallen_empire_small_ship = yes
+						}
+						while = {
+							count = 4
+							create_fallen_empire_titan = yes
+						}
+						
+						set_location = {
+							target = owner.capital_scope
+							distance = 30
+							angle = random
+						}
+					}
+				}
+				last_created_fleet = { assign_leader = last_created_leader }
+			}
+		}
+	}
+}
+
+
+country_event = { #做一个计时器，放在堕落上的计数器会因为他的觉醒而消失。
+	id = chaifen.1602
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = global_event
+	}
+	immediate = {
+		set_global_flag = chaifen_16_setup
+		every_country = {
+			limit = {
+				is_fallen_empire = yes
+			}
+			# set_variable = {
+			# 	which = global_fallen_differ
+			# 	value = root.global_fallen_differ
+			# }
+			# set_variable = {
+			# 	which = chaifen8_fallen_power_fallen
+			# 	value = root.chaifen8_fallen_power_fallen
+			# }
+			# set_variable = {
+			# 	which = chaifen8_fallen_power_awaken
+			# 	value = root.chaifen8_fallen_power_awaken
+			# }
+			# set_variable = {
+			# 	which = chaifen8_fallen_power_crisis
+			# 	value = root.chaifen8_fallen_power_crisis
+			# }
+			if = {
+				limit = { 
+					is_country_type = awakened_fallen_empire
+					NOT = {
+						has_country_flag = has_resource_megumin
+					}
+				}
+				set_country_flag = has_resource_megumin
+				while = { #刷一下资源
+					count = event_target:global_event_country.month_passed
+					add_monthly_resource_mult = {
+						resource = minerals
+						value = 1		
+					}
+					add_monthly_resource_mult = {
+						resource = energy
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = food
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = influence
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = consumer_goods
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = alloys
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = exotic_gases
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = volatile_motes
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = rare_crystals
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = sr_dark_matter
+						value = 1
+					}
+					add_monthly_resource_mult = {
+						resource = sr_zro
+						value = 1
+					}			
+				}
+			}
+			country_event = {
+				id = chaifen.1600
+			}
+		}
+		if = { #没堕落就可以停止计数了。
+			limit = { 
+				any_country = {
+					is_country_type = fallen_empire
+				}
+			}
+			country_event = {
+				id = chaifen.1602
+				days = 360
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = chaifen.1604
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = global_event
+	}
+	immediate = {
+		change_variable = {
+			which = month_passed
+			value = 0.9
+		}		
+		country_event = {
+			id = chaifen.1604
+			days = 30
+		}
+	}
+}
+
+
+country_event = {
+	id = chaifen.1605
+	title = chaifen.1605.name
+	desc = chaifen.1605.desc
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = haifen.1605.a
+	}
+	# option = {
+	# 	name = haifen.1605.b
+	# }
+}
+

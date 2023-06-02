@@ -1,0 +1,390 @@
+origin_time_ruler_gain_trait_edict = {
+	length = 1
+	icon = "GFX_leader_trait_ruler_time"
+
+	modifier = {
+	}
+
+	potential = {
+		if = {
+			limit = {
+				has_origin = origin_time
+				ruler = { is_origin_time_ruler = yes }
+			}
+			ruler = {
+				if = {
+					limit = {
+						species = { has_trait = trait_mechanical }
+					}
+					NOT = { has_trait = leader_trait_synthetic }
+				}
+				else_if = {
+					limit = {
+						species = { has_trait = trait_cybernetic }
+					}
+					NOT = { has_trait = leader_trait_cyborg }
+				}
+				else_if = {
+					limit = {
+						species = { has_trait = trait_psionic }
+					}
+					NOR = {
+						has_trait = leader_trait_psionic
+						has_trait = leader_trait_chosen
+						has_trait = leader_trait_composer_chosen
+						has_trait = leader_trait_instrument_chosen
+						has_trait = leader_trait_eater_chosen
+						has_trait = leader_trait_whisperers_chosen
+					}
+				}
+				else_if = {
+					limit = {
+						species = { has_trait = trait_erudite }
+					}
+					NOT = { has_trait = leader_trait_erudite }
+				}
+				else = {
+					always = no
+				}
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+	
+	effect = {
+		ruler = {
+			if = {
+				limit = {
+					species = { has_trait = trait_mechanical }
+					NOT = { has_trait = leader_trait_synthetic }
+				}
+				add_trait = leader_trait_synthetic
+			}
+			if = {
+				limit = {
+					species = { has_trait = trait_cybernetic }
+					NOT = { has_trait = leader_trait_cyborg }
+				}
+				add_trait = leader_trait_cyborg
+			}
+			if = {
+				limit = {
+					species = { has_trait = trait_psionic }
+					NOR = {
+						has_trait = leader_trait_psionic
+						has_trait = leader_trait_chosen
+						has_trait = leader_trait_composer_chosen
+						has_trait = leader_trait_instrument_chosen
+						has_trait = leader_trait_eater_chosen
+						has_trait = leader_trait_whisperers_chosen
+					}
+				}
+				add_trait = leader_trait_psionic
+			}
+			if = {
+				limit = {
+					species = { has_trait = trait_erudite }
+					NOT = { has_trait = leader_trait_erudite }
+				}
+				add_trait = leader_trait_erudite
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+origin_gas_colony_edict_1 = {
+	length = -1
+	icon = "GFX_edict_type_time"
+	resources = {
+		category = rare_edicts
+		upkeep = {
+			volatile_motes = 2
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	modifier = {
+		planet_jobs_energy_produces_mult = 0.25
+		planet_jobs_physics_research_produces_mult = 0.1
+	}
+
+	potential = {
+		has_origin = origin_gas_colony
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = @EdictHighPrio
+			has_monthly_income = { resource = volatile_motes value > 2 }
+		}
+	}
+}
+
+origin_gas_colony_edict_2 = {
+	length = -1
+	icon = "GFX_edict_type_time"
+	resources = {
+		category = rare_edicts
+		upkeep = {
+			rare_crystals = 2
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	modifier = {
+		planet_jobs_minerals_produces_mult = 0.25
+		planet_jobs_engineering_research_produces_mult = 0.1
+	}
+
+	potential = {
+		has_origin = origin_gas_colony
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = @EdictHighPrio
+			has_monthly_income = { resource = rare_crystals value > 2 }
+		}
+	}
+}
+
+origin_gas_colony_edict_3 = {
+	length = -1
+	icon = "GFX_edict_type_time"
+	resources = {
+		category = rare_edicts
+		upkeep = {
+			exotic_gases = 2
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	modifier = {
+		planet_jobs_food_produces_mult = 0.25
+		planet_jobs_society_research_produces_mult = 0.1
+	}
+
+	potential = {
+		has_origin = origin_gas_colony
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = @EdictHighPrio
+			has_monthly_income = { resource = exotic_gases value > 2 }
+		}
+	}
+}
+
+origin_psionic_edict = {
+	length = -1
+	icon = "GFX_edict_type_time"
+	resources = {
+		category = rare_edicts
+		upkeep = {
+			sr_zro = 2
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	modifier = {
+		planet_jobs_unity_produces_mult = 0.15
+		planet_jobs_specialist_produces_mult = 0.15
+		pop_happiness = 0.15
+	}
+
+	potential = {
+		has_origin = origin_psionic
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = @EdictHighPrio
+			has_monthly_income = { resource = sr_zro value > 2 }
+		}
+	}
+}
+
+origin_nanites_edict = {
+	length = -1
+	icon = "GFX_edict_type_time"
+	resources = {
+		category = rare_edicts
+		upkeep = {
+			nanites = 2
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	modifier = {
+		planet_jobs_physics_research_produces_mult = 0.15
+		planet_jobs_society_research_produces_mult = 0.15
+		planet_jobs_engineering_research_produces_mult = 0.15
+		planet_jobs_produces_mult = 0.1
+	}
+
+	potential = {
+		has_origin = origin_nanites
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = @EdictHighPrio
+			has_monthly_income = { resource = nanites value > 2 }
+		}
+	}
+}
+
+upgrade_to_time_titan_edict = {
+	length = 1
+	icon = "GFX_mod_district_endless_time_max"
+	resources = {
+		category = edicts
+		cost = {
+			sr_dark_matter = 1000
+		}
+	}
+
+	modifier = {
+	}
+
+	potential = {
+		if = {
+			limit = {
+				has_country_flag = gain_time_titan
+			}
+			NOT = { has_country_flag = upgrade_to_time_titan }
+			has_ascension_perk = ap_horror
+			exists = event_target:time_titan_fleet
+			event_target:time_titan_fleet = {
+				is_owned_by = root
+				is_controlled_by = root
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+	
+	effect = {
+		custom_tooltip = "upgrade_to_time_titan_edict_tooltip"
+		hidden_effect = {
+			set_country_flag = upgrade_to_time_titan
+			enable_special_project = {
+				name = UPGRADE_TO_TIME_TITAN_PROJECT
+				location = event_target:syzygy_admiral_planet
+				owner = root
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+upgrade_to_end_titan_edict = {
+	length = 1
+	icon = "GFX_mod_district_endless_time_max"
+	resources = {
+		category = edicts
+		cost = {
+			sr_dark_matter = 2000
+		}
+	}
+
+	modifier = {
+	}
+
+	potential = {
+		if = {
+			limit = {
+				has_country_flag = upgrade_to_time_titan_finished
+			}
+			NOT = { has_country_flag = upgrade_to_end_titan }
+			has_ascension_perk = ap_time
+			exists = event_target:time_titan_fleet
+			event_target:time_titan_fleet = {
+				is_owned_by = root
+				is_controlled_by = root
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+	
+	effect = {
+		custom_tooltip = "upgrade_to_end_titan_edict_tooltip"
+		hidden_effect = {
+			set_country_flag = upgrade_to_end_titan
+			enable_special_project = {
+				name = UPGRADE_TO_END_TITAN_PROJECT
+				location = event_target:syzygy_admiral_planet
+				owner = root
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+create_pass_black_hole_edict = {
+	length = 1
+	icon = "GFX_leader_trait_ruler_time"
+
+	modifier = {
+	}
+
+	potential = {
+		is_ai = no
+		has_technology = tech_end_dimension
+	}
+	
+	effect = {
+		custom_tooltip = "create_pass_black_hole_edict_tooltip"
+		hidden_effect = {
+			create_pass_black_hole = yes
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+time_help_edict = {
+	length = 1
+	icon = "GFX_mod_district_endless_time_max"
+
+	modifier = {
+	}
+
+	potential = {
+		is_ai = no
+	}
+	
+	effect = {
+		custom_tooltip = "time_help_edict_tooltip"
+		hidden_effect = {
+			country_event = { id = time_help.0 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}

@@ -1,0 +1,320 @@
+@tc_cafe_creater_scale = 5
+#舰船
+entity = {
+	name = "tc_cave_creater_ship_entity"
+	pdxmesh = "tc_cave_creater_mesh"
+	scale = @tc_cafe_creater_scale
+
+	default_state = idle
+	state = { #默认
+		name = "idle" animation = idle animation_blend_time = 0 animation_speed = 1 next_state = idle looping = no 
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 0
+				"working_looping" = 0
+			}
+		}
+	}
+	state = { #移动
+		name = "moving" animation = idle animation_blend_time = 0 animation_speed = 1 next_state = moving looping = no 
+		event = { time = 0 node = "rune_1"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_2"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_3"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_4"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_5"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_6"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_7"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_8"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_9"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_10" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_11" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_12" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 0
+				"working_looping" = 0
+			}
+		}
+	}
+	state = { #工作-默认
+		name = "idle" animation = ed animation_blend_time = 0 animation_speed = 1 next_state = idle looping = no 
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 100
+				"working_looping" = 100
+			}
+		}
+	}
+	state = { #工作-移动
+		name = "moving" animation = ed animation_blend_time = 0 animation_speed = 1 next_state = moving looping = no 
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 100
+				"working_looping" = 100
+			}
+		}
+	}
+	state = { #开火准备
+		name = "working" animation = op animation_blend_time = 0 animation_speed = 1 looping = no next_state = "working_looping"
+		event = { time = 1000 id = "beam_start" }
+
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_windup_layer_1" stop_on_state_change = yes } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_windup_layer_2" stop_on_state_change = yes } }
+	}
+	state = { #开火过程
+		name = "working_looping" animation = worker animation_blend_time = 0 animation_speed = 0.5 looping = yes
+
+		event = { time = 0	id = "beam_start" }
+		event = { time = 0 node = "rune_1"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_2"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_3"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_4"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_5"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_6"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_7"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_8"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_9"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_10" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_11" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_12" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+
+		event = { time = 0 node = "core" particle = "tc_cave_creater_windup_particle" trigger_once = yes keep_particle = no }
+		start_event = { node = "core" particle = "tc_cave_creater_muzzle_particle" trigger_once = yes keep_particle = no }
+
+		start_event = { node = "ring" particle = "tc_cave_creater_vortex_particle" trigger_once = yes keep_particle = yes stop_on_state_change = yes }
+
+		event = { trigger_once = yes sound = { soundeffect = "planet_killer_fire_layer_1" stop_on_state_change = yes } }
+		event = { trigger_once = yes sound = { soundeffect = "planet_killer_fire_layer_2" stop_on_state_change = yes } }
+		event = { trigger_once = yes sound = { soundeffect = "planet_killer_fire_layer_3" stop_on_state_change = yes } }
+		event = { trigger_once = yes sound = { soundeffect = "planet_killer_fire_layer_4" stop_on_state_change = yes } }
+
+		event = { trigger_once = yes sound = { soundeffect = "distance_planet_killer_fire_layer_1" stop_on_state_change = yes } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_planet_killer_fire_layer_2" stop_on_state_change = yes } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_planet_killer_fire_layer_3" stop_on_state_change = yes } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_planet_killer_fire_layer_4" stop_on_state_change = yes } }
+
+		event = { trigger_once = yes sound = { soundeffect = "colossus_shatter_beam" stop_on_state_change = yes } }
+	}
+
+	state = { #常规状态死亡
+		name = "death" animation = idle looping = no animation_speed = 1
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 0
+				"working_looping" = 0
+			}
+		}
+	}
+	state = { #开火过程死亡
+		name = "death" animation = worker looping = no animation_speed = 0.5 next_state = death
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 0
+				"working_looping" = 100
+			}
+		}
+	}
+	state = { #准备过程死亡
+		name = "death" animation = op looping = no animation_speed = 1 next_state = death
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 100
+				"working_looping" = 0
+			}
+		}
+	}
+	state = { #死亡动画
+		name = "death" looping = no
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 100
+				"working" = 0
+				"working_looping" = 0
+			}
+		}
+	}
+
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+	attach = { core = "tc_cave_creater_core_effect_entity" }
+}
+
+#标记
+entity = {
+	name = "tc_cave_creater_target_entity"
+	scale = 2
+
+	default_state = idle
+	state = {
+		name = idle state_time = 3 looping = yes
+		event = { time = 0 particle = "tc_cave_creater_target_particle" keep_particle = yes trigger_once = yes }
+	}
+}
+
+#巨构
+entity = {
+	name = "tc_cave_creater_mega_frame_entity"
+	scale = 1
+
+	locator = { name = root position = { 0 0 0 } }
+	attach = { root = tc_cave_creater_mega_entity }
+}
+
+entity = {
+	name = "tc_cave_creater_mega_entity"
+	pdxmesh = "tc_cave_creater_mesh"
+	scale = @tc_cafe_creater_scale
+
+	default_state = "mega"
+	state = {
+		name = "mega" animation = "mega" animation_blend_time = 0 animation_speed = 1 looping = yes
+		event = { time = 0 node = "rune_1"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_2"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_3"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_4"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_5"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_6"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_7"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_8"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_9"  particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_10" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_11" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "rune_12" particle = "tc_cave_creater_rune_particle" trigger_once = yes keep_particle = yes }
+
+		event = { time = 0 node = "ring" particle = "tc_cave_creater_vortex_particle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "root" particle = "tc_cave_creater_gate_particle" trigger_once = yes keep_particle = yes }
+	}
+
+	attach = { core = "tc_cave_creater_core_effect_entity" }
+	attach = { core = "tc_cave_creater_mega_effect_entity" }
+
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+}
+
+#效果
+entity = {
+	name = "tc_cave_creater_core_effect_entity"
+
+	scale = 0.4
+	locator = { name = root position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" looping = yes
+		start_event = { node = "root" particle = "tc_focus_portablehole_particle" keep_particle = no trigger_once = yes }
+	}
+}
+
+entity = {
+	name = "tc_cave_creater_mega_effect_entity"
+	pdxmesh = "tc_gate_core_effect_mesh"
+
+	scale = 0.25
+	locator = { name = root position = { 0 0 0 } }
+
+	default_state = idle
+	get_state_from_parent = no
+	state = {
+		name = idle looping = yes 
+	}
+	game_data = {
+		uv_animation_speed 		= -0.05
+		uv_animation_direction 	= { 0.5 0.0 }
+		bloom_factor = 0.8
+	}
+}
+
+#形态转换
+entity = {
+	name = "tc_cave_creater_mega_ship_entity"
+	pdxmesh = "tc_cave_creater_mesh"
+	scale = @tc_cafe_creater_scale
+
+	default_state = mega_ship
+	state = {
+		name = mega_ship animation = mega_ship animation_blend_time = 0 animation_speed = 1 looping = no
+	}
+
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+	attach = { core = "tc_cave_creater_core_effect_entity" }
+}
+
+entity = {
+	name = "tc_cave_creater_ship_mega_entity"
+	pdxmesh = "tc_cave_creater_mesh"
+	scale = @tc_cafe_creater_scale
+
+	default_state = ship_mega
+	state = {
+		name = ship_mega animation = ship_mega animation_blend_time = 0 animation_speed = 1 looping = no
+	}
+
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+	attach = { core = "tc_cave_creater_core_effect_entity" }
+}
+
+animation = {
+	name = tc_cave_creater_idle
+	file = tc_cave_creater_idle.anim
+}
+
+animation = {
+	name = tc_cave_creater_mega
+	file = tc_cave_creater_mega.anim
+}
+
+animation = {
+	name = tc_cave_creater_mega_ship
+	file = tc_cave_creater_mega_ship.anim
+}
+
+animation = {
+	name = tc_cave_creater_ship_mega
+	file = tc_cave_creater_ship_mega.anim
+}
+
+animation = {
+	name = tc_cave_creater_op
+	file = tc_cave_creater_op.anim
+}
+
+animation = {
+	name = tc_cave_creater_ed
+	file = tc_cave_creater_ed.anim
+}
+
+animation = {
+	name = tc_cave_creater_worker
+	file = tc_cave_creater_worker.anim
+}

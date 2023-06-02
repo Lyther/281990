@@ -1,0 +1,114 @@
+###############################################
+#这里是重要的on_action
+#在复制模板进行更改时，请同时复制这个文件，更改文件名，还有内部的事件ID
+###############################################
+
+
+##################################
+#开局时触发事件，没有scope的event。
+#用于生成飞地
+##################################
+on_game_start = {
+	events = {
+		GHCO_basic.1	#飞地的生成：生成飞地（星系，种族，领袖，国家，舰队）
+		GHCO_basic.10	#初始化GHCO外部相关
+		GHCO_facility.1	#开局在地图上生成4个GHC设施
+	}
+}
+ 
+##################################
+#舰队被探测到时
+#用于飞地和国家建立联络
+##################################
+# This = Country
+# From = Fleet
+on_fleet_detected = {
+	events = {
+		GHCO_basic.2	#发现GHCO（我方探测到GHCO）
+	}
+}
+
+##################################
+#用于在联络菜单中，点击country_type中 custom_diplomacy = yes 的国家图标后触发事件
+#用于打开飞地对应的菜单
+##################################
+# Triggers when trying to open the diplomacy view for countries with custom diplomacy.
+# Country scope
+# This = target country (player)	#点击图标的国家（玩家国家）
+# From = source country				#图标对应的国家（飞地）
+on_custom_diplomacy = {
+	events = {
+		GHCO_diplomacy.1	#与GHCO的外交通信
+	}
+}
+ 
+##################################
+#在飞地被摧毁时触发事件
+##################################
+# This = owner of fleet 1 (combatant)	#攻击舰队的所有者
+# From = owner of fleet 2 (destroyed)	#遇害舰队的所有者
+# FromFrom = fleet 1		#攻击舰队
+# FromFromFrom = fleet 2	#遇害舰队
+on_fleet_destroyed_perp = {
+	events = {
+		GHCO_basic.152	#摧毁了GHCO的空间站/舰队
+	}
+}
+ 
+# Triggers event when each country first sends a ship into the system (once per country)
+# Scope = Ship
+# From = System
+# FromFrom = Country
+on_entering_system_first_time = {
+	events = {
+		GHCO_basic.5	#舰船进入GHCO星系或者进入含有GHC设施的星系时
+	}
+}
+
+# No scope, like on_game_start
+on_yearly_pulse = {
+	events = {
+		GHCO_external.1
+	}
+}
+
+# this = country
+on_yearly_pulse_country = {
+	events = {
+		GHCO_basic.100	#好感度相关
+		GHCO_basic.200	#GHCO自动年检，提供debug和一些机制
+	}
+}
+
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_entering_battle = {
+	events = {
+		GHCO_basic.150
+	}
+}
+
+# This = Ship
+# From = Disabler Ship
+on_ship_disabled = {
+	events = {
+		GHCO_basic.155
+	}
+}
+
+# No scope, like on_game_start
+on_late_game_pulse = {
+	events = {
+		GHCO_ctg.1		## 准备触发：意料之外的入侵
+	}
+}
+
+#This = destroyed country
+#From = optional, destroyer (country)
+on_country_destroyed = {
+	events = {
+		GHCO_ctg.100	## 肃正协议/GHCO/本次事件链的GHCO守护者 被消灭
+	}
+}

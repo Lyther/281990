@@ -1,0 +1,580 @@
+on_game_start = {
+	events = {
+		time.0 # MOD全局标识
+		time.10000 # 起源全局唯一
+		time_wanderer.1 # 游荡奇点
+	}
+}
+
+on_game_start_country = {
+	events = {
+		time.1
+		origin_pc_hive.1
+		contract.1
+		gas.1
+		psionic.1
+		nanites.1
+		praise_the_sun.1
+		tao_of_ninghe.1
+		origin_the_matrix.1
+		origin_reassembler.1
+		origin_bright_pearl.1
+		origin_pirate_king.1
+		origin_no_water_no_fish.1
+		dimension_traveler.0
+		origin_dyson_sphere_and_matter_decompressor.1
+		origin_dyson_sphere_and_matter_decompressor.2
+		origin_adeptus_mechanicus.1
+		origin_hypocritical_face.1
+		origin_noah_ark.1
+		origin_monster_hunter.1
+		origin_curator_artist_and_me.1
+		origin_ever_changing.1
+		origin_knowledge_from_alien.1
+		origin_born_in_the_purple.1
+		origin_corrupt_brain.1
+		swarm_crisis.0
+		ai_crisis.0
+		exd_crisis.0
+		fourth_crisis.0
+		new_country.0
+		dark_forest.0
+		swarm_crisis.1
+		ai_crisis.1
+		exd_crisis.1
+		fourth_crisis.1
+		new_country.1
+		dark_forest.1
+		time_replaced_origin.1
+		time_replaced_origin.2
+		time_replaced_origin.3
+		time_replaced_origin.4
+		time_replaced_origin.5
+		time_wonder.1
+	}
+}
+
+# No scope, like on_game_start
+on_mid_game_pulse = {
+	events = {
+		time_wonder.2
+		gas.3
+	}
+}
+
+# No scope, like on_game_start
+# Does not run when loading MP saves due to OOS concerns
+on_single_player_save_game_load = {
+	events = {
+		time.0 # MOD全局标识
+		dimension_traveler.300 # 世界线变动
+	}
+}
+
+# A country is created via create_country or create_rebels
+# This = created country
+# From = root of context where create_country/create_rebels happens
+on_country_created = {
+	events = {
+		time_wonder.3
+		origin_monster_hunter.1
+		dark_forest.2 # 让事件创建的国家也进入黑暗森林
+	}
+}
+
+# This = subject
+# From = subject's overlord
+on_becoming_subject = {
+	events = {
+		origin_monster_hunter.1
+		dark_forest.2 # 让事件创建的国家也进入黑暗森林
+	}
+}
+
+# This = country
+# From = opponent war leader
+on_entering_war = {
+	random_events = {
+		4 = 0
+		4 = dark_forest.4
+		2 = dark_forest.3
+	}
+}
+
+# A fleet has entered a system | See also: on_fleet_auto_move_arrival
+# Scope = Fleet
+# From = System
+on_entering_system_fleet = {
+	events = {
+		time.201
+		dimension_traveler.1
+		dimension_traveler.2
+		dimension_traveler.50
+		origin_pirate_king.10
+		time_akx.210 # 终末使者跃迁
+		time_wonder.10 # 摘录者土著
+		time_wanderer.5 # 进入游荡奇点星系
+	}
+}
+
+# Planet has been terraformed
+# This = Planet
+# From = Terraforming country
+on_terraforming_complete = {
+	events = {
+		time.20
+		time.22
+		gas.20
+		gas.100
+		psionic.10
+		psionic.12
+		psionic.100
+		psionic.101
+		nanites.10
+		nanites.100
+		origin_noah_ark.11
+	}
+}
+
+# Triggers country_event for the attacker upon victory
+# (Before controller is switched)
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+on_planet_attackers_win = {
+	events = {
+		under_the_haze.43
+		under_the_haze.53
+		parallel_sky.52
+		parallel_sky.54
+		parallel_sky.56
+	}
+}
+
+# Triggers country_event for the defender upon victory
+# Root = country, planet owner
+# From = country, attack leader
+# FromFrom = planet
+on_planet_defenders_win = {
+	events = {
+		under_the_haze.43
+		under_the_haze.53
+		parallel_sky.52
+		parallel_sky.54
+		parallel_sky.56
+	}
+}
+
+#Fired whenever a new owner is set for a planet, and the planet was aggressively conquered
+#Fired in ADDITION to on_planet_transfer
+#FromFrom = Former Owner
+#From = Country scope (new owner)
+#This = Planet scope
+on_planet_conquer = {
+	events = {
+		time_crisis_country.6
+	}
+}
+
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_ship_destroyed_perp = {
+	events = {
+		time_crisis_country.2
+		origin_pirate_king.0
+	}
+}
+
+# This = starbase being destroyed (not ship!)
+# From = fleet that destroyed the starbase
+on_starbase_destroyed = {
+	events = {
+		time_crisis_country.3
+	}
+}
+
+# This = owner of fleet 1 (destroyed)
+# From = owner of fleet 2 (combatant)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_fleet_destroyed_victim = {
+	events = {
+		time_akx.208 # 终末使者被摧毁
+		origin_colossus.0
+		origin_colossus.100
+	}
+}
+
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_fleet_destroyed_perp = {
+	events = {
+		under_the_haze.45
+		under_the_haze.55
+		under_the_haze.7
+		parallel_sky.119
+		origin_colossus.41
+		origin_pirate_king.6
+		origin_pirate_king.13
+		origin_pirate_king.23
+		origin_pirate_king.33
+		origin_pirate_king.41
+	}
+}
+
+# This = owner of fleet
+# From = fleet
+# FromFrom = planet (if any)
+on_fleet_auto_move_arrival = {
+	events = {
+		origin_colossus.42
+	}
+}
+
+on_pop_assembled = {
+	events = {
+		origin_reassembler.2
+	}
+}
+
+# A pop has finished purging
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+on_pop_purged = {
+	events = {
+		time_crisis_country.4
+	}
+}
+
+on_yearly_pulse_country = {
+	events = {
+		dimension_traveler.66 # 刷新界旅者
+		time_crisis_country.8
+		time_crisis_country.9
+	}
+}
+
+# No scope, like on_game_start
+on_monthly_pulse = {
+	events = {
+		time.40 # 神秘奇点理念建筑计数
+		dimension_traveler.1000 # 始终因果/超越因果
+	}
+}
+
+# this = country
+on_monthly_pulse_country = {
+	events = {
+		parallel_sky.18 #平行帝国关系较差取消协议
+		dimension_traveler.65 #界旅者避难提示
+	}
+}
+
+# A country has increased the level of a tech, use last_increased_tech trigger to check tech and level.
+# This = Country
+on_tech_increased = {
+	events = {
+		time.60 # 危险科技
+		time.61 # 负相科技
+		time.62 # 时空科技
+		time.63 # 终末科技
+		time.64 # 时虫科技
+		origin_corrupt_brain.6
+	}
+}
+
+#A building construction has been completed.
+# This = Planet
+on_building_complete = {
+	events = {
+		tao_of_ninghe.201
+		# 理念专属建筑替换事件
+		origin_monster_hunter.2
+		time_civic_building.1
+		time_civic_building.2
+		time_civic_building.3
+		time_civic_building.4
+		time_civic_building.5
+		time_civic_building.6
+		time_civic_building.7
+		time_civic_building.8
+		# 禁用原版建筑
+		time_civic_building.1000
+		# 无尽区划保护机制
+		time.28
+	}
+}
+
+# A building construction has been queued.
+# This = Planet
+on_building_queued = {
+	events = {
+		# 理念专属建筑提示事件
+		origin_monster_hunter.2
+		time_civic_building.101
+		time_civic_building.102
+		time_civic_building.103
+		time_civic_building.104
+		time_civic_building.105
+		time_civic_building.106
+		time_civic_building.107
+		time_civic_building.108
+		# 禁用原版建筑
+		time_civic_building.2000
+		# 无尽区划保护机制
+		time.28
+	}
+}
+
+# A building construction has demolished.
+# This = Planet
+on_building_demolished = {
+	events = {
+		tao_of_ninghe.201
+		# 无尽区划保护机制
+		time.28
+	}
+}
+
+# A building construction has finished, replacing another building.
+# This = Planet
+on_building_replaced = {
+	events = {
+		tao_of_ninghe.201
+		# 理念专属建筑替换事件
+		origin_monster_hunter.2
+		time_civic_building.1
+		time_civic_building.2
+		time_civic_building.3
+		time_civic_building.4
+		time_civic_building.5
+		time_civic_building.6
+		time_civic_building.7
+		time_civic_building.8
+		# 禁用原版建筑
+		time_civic_building.1000
+		# 无尽区划保护机制
+		time.28
+	}
+}
+
+#A district construction has been completed.
+# This = Planet
+on_district_complete = {
+	events = {
+		tao_of_ninghe.201
+	}
+}
+
+# A district construction has demolished.
+# This = Planet
+on_district_demolished = {
+	events = {
+		time.28 # 无尽区划保护机制
+		tao_of_ninghe.201
+	}
+}
+
+# Planet has changed planet class in whatever way. Note that this is also called during galaxy creation in some places.
+# This = Planet
+on_planet_class_changed = {
+	events = {
+		time.65 # 位面传送门特殊地块保护机制
+		time.66 # 出现新的黑洞
+		origin_noah_ark.10 # 诺亚方舟
+		parallel_sky.11 # 平行星球被摧毁或保存平行星空初始特殊地块
+		parallel_sky.19 # 保存平行星空进阶特殊地块
+		under_the_haze.58 # 保存阴霾之下特殊地块
+		dimension_traveler.100 # 保存天籁之音特殊地块
+	}
+}
+
+# A planet has been colonized.
+# Scope = Planet
+on_colonized = {
+	events = {
+		time.15 # 恐怖负相物质
+		tao_of_ninghe.5 # 开始宁和
+	}
+}
+
+# A colony has been destroyed. Called just before owner and controller is cleared
+# Scope = Planet
+on_colony_destroyed = {
+	events = {
+	}
+}
+
+#Fired whenever a new owner is set for a planet,
+#be it after a war or through a trade
+#From = Country scope (new owner)
+#This = Planet scope
+on_planet_transfer = {
+	events = {
+		time.15 # 恐怖负相物质
+		tao_of_ninghe.5 # 开始宁和
+		parallel_sky.13 # 平行交流
+		praise_the_sun.3 # 赞美太阳区划修正
+		origin_no_water_no_fish.3 # 竭泽而渔区划修正
+	}
+}
+
+# Called when a Starbase changes owner
+# THIS = Ship (Starbase)
+# FROM = Former Owner (Country)
+on_starbase_transfer = {
+	events = {
+		origin_bright_pearl.2
+	}
+}
+
+# This = starbase being destroyed (not ship!)
+# From = fleet that destroyed the starbase
+on_starbase_destroyed = {
+	events = {
+		origin_bright_pearl.3
+	}
+}
+
+#This = ship (starbase)
+#From = owner country
+on_building_starbase_outpost = {
+	events = {
+		origin_bright_pearl.4
+	}
+}
+
+# Triggers when trying to open the diplomacy view for countries with custom diplomacy.
+# Country scope
+# This = target country (player)
+# From = source country
+on_custom_diplomacy = {
+	events = {
+		dimension_traveler.59 # 界旅者正常交谈
+		dimension_traveler.61 # 界旅者异界避难
+		dimension_traveler.70 # 强制召回界旅者
+		parallel_sky.10
+	}
+}
+
+# Executed as a leader has died
+# This = Country
+# From = Leader
+on_leader_death = {
+	events = {
+		dimension_traveler.62 # 界旅者避难提示
+	}
+}
+
+# a new leader is created
+# scope: country, from: leader
+on_leader_spawned = {
+	events = {
+		origin_born_in_the_purple.2
+		origin_corrupt_brain.2
+	}
+}
+
+# Executed as a leader has been fired
+# This = Country
+# From = Leader
+on_leader_fired = {
+	events = {
+		dimension_traveler.67 # 界旅者解雇提示
+	}
+}
+
+# A leader leveled up.
+# Scope = Country
+# From = Leader
+on_leader_level_up = {
+	events = {
+		dimension_traveler.64 # 界旅者升级
+	}
+}
+
+#This = destroyed country
+#From = optional, destroyer (country)
+on_country_destroyed = {
+	events = {
+		fourth_crisis.3
+		time_crisis_country.1
+	}
+}
+
+# THIS = Espionage operation
+# FROM = Operation target
+on_operation_finished = {
+	events = {
+		time_crisis_country.11
+	}
+}
+
+# This = subject
+# From = subject's overlord
+on_becoming_subject = {
+	events = {
+		time_crisis_country.7
+	}
+}
+
+# Called upon entering FTL (on-action name scripted on the Bypass type)
+# THIS = Fleet
+# FROM = System jumping to
+# FROMFROM = System jumped from
+on_entering_pass_black_hole = {
+	events = {
+		time.67 # 进行黑洞穿行
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_CRACKER = {
+	events = {
+		time_crisis_country.5
+		fourth_crisis.7
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_SHIELDER = {
+	events = {
+		fourth_crisis.7
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_NEUTRON = {
+	events = {
+		time_crisis_country.10
+		fourth_crisis.7
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_GODRAY = {
+	events = {
+		time_crisis_country.10
+		fourth_crisis.7
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_NANOBOTS = {
+	events = {
+		fourth_crisis.7
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_DELUGE = {
+	events = {
+		time_crisis_country.10
+		fourth_crisis.7
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_TOXIFIER = {
+	events = {
+		fourth_crisis.7
+	}
+}

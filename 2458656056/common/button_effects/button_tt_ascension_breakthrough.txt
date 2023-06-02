@@ -1,0 +1,60 @@
+button_tt_ascension_breakthrough_start = {
+	potential = {
+		has_global_flag = tidy_tradition_active
+		from = { NOT = { is_variable_set = TT_var_ascension_breakthrough_times } }
+	}
+	allow = { from = { has_technology = tech_ascension_theory } }
+	effect = {
+		custom_tooltip = TT_btn_effect_ascension_breakthrough_start
+		hidden_effect = {
+			from = {
+				set_variable = { which = TT_var_ascension_breakthrough_times value = 1 }
+			}
+		}
+	}
+}
+button_tt_ascension_breakthrough = {
+	potential = {
+		has_global_flag = tidy_tradition_active
+		from = { is_variable_set = TT_var_ascension_breakthrough_times }
+	}
+	allow = {
+		from = { has_technology = tech_ascension_theory }
+		from = {
+			resource_stockpile_compare = {
+				resource = unity
+				value >= 5000
+				mult = TT_var_ascension_breakthrough_times
+			}
+		}
+	}
+	effect = {
+		from = {
+			add_resource = {
+				unity = -5000
+				mult = TT_var_ascension_breakthrough_times
+			}
+			hidden_effect = {
+				remove_modifier = TT_mod_ascension_breakthrough
+				remove_modifier = TT_mod_ascension_breakthrough_EACI
+			}
+			if = {#原版加凝聚力
+				limit = { NOT = { has_global_flag = cultural_overhaul_active } }
+				add_modifier = {
+					modifier = TT_mod_ascension_breakthrough
+					multiplier = TT_var_ascension_breakthrough_times
+					days = -1
+				}
+			}
+			else_if = {#无限思潮mod加行政管理
+				limit = { has_global_flag = cultural_overhaul_active }
+				add_modifier = {
+					modifier = TT_mod_ascension_breakthrough_EACI
+					multiplier = TT_var_ascension_breakthrough_times
+					days = -1
+				}
+			}
+			hidden_effect = { change_variable = { which = TT_var_ascension_breakthrough_times value = 1 } }
+		}
+	}
+}

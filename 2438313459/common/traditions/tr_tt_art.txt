@@ -1,0 +1,126 @@
+tr_tt_art_adopt = {
+	unlocks_agenda = TT_agenda_tradition_art
+	modifier = {
+		planet_amenities_mult = 0.05
+	}
+}
+
+tr_tt_art_finish = {
+	custom_tooltip_with_modifiers = tr_tt_art_finish_desc
+	modifier = {
+		ascension_perks_add = 1
+	}
+}
+
+tr_tt_art_1 = {
+	modifier = {
+		planet_housing_mult = 0.1
+		empire_size_districts_mult = -0.1
+	}
+	ai_weight = {
+		factor = 5000
+	}
+}
+
+tr_tt_art_2 = {
+	possible = {
+		has_tradition = tr_tt_art_1
+	}
+	modifier = {
+		planet_artisans_consumer_goods_produces_add = 1
+	}
+	tradition_swap = {
+		name = tr_tt_art_2_gestalt
+		inherit_effects = no
+		inherit_icon = yes
+		inherit_name = no
+		trigger = {
+			is_gestalt = yes
+		}
+		modifier = {
+			country_minor_artifacts_produces_mult = 0.25
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	ai_weight = {
+		factor = 5000
+	}
+}
+
+tr_tt_art_3 = {
+	possible = {
+		has_tradition = tr_tt_art_2
+		has_tradition = tr_tt_art_5
+	}
+	modifier = {
+		pop_job_amenities_mult = 0.1
+		planet_jobs_unity_produces_mult = 0.1
+	}
+	tradition_swap = {
+		name = tr_tt_art_3_gestalt
+		inherit_effects = no
+		inherit_icon = yes
+		inherit_name = no
+		trigger = {
+			is_gestalt = yes
+			NOT = { has_valid_civic = civic_machine_servitor }
+		}
+		modifier = {
+			pop_job_amenities_mult = 0.1
+			planet_jobs_unity_produces_mult = 0.1
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	tradition_swap = {
+		name = tr_tt_art_3_servitor
+		inherit_effects = no
+		inherit_icon = no
+		inherit_name = no
+		trigger = {
+			has_valid_civic = civic_machine_servitor
+		}
+		modifier = {
+			pop_cat_bio_trophy_happiness = 0.05
+			planet_bio_trophies_produces_mult = 0.25
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+tr_tt_art_4 = {#战争：影响力+2
+	custom_tooltip = tr_tt_art_4_desc
+	on_enabled = {
+		if = {
+			limit = { is_at_war = yes }
+			add_modifier = { modifier = mod_tr_tt_art_war days = -1 }
+		}
+	}
+	ai_weight = {
+		factor = 5000
+	}
+}
+
+tr_tt_art_5 = {#和平：舰船陆军维护费-33%
+	custom_tooltip = tr_tt_art_5_desc
+	on_enabled = {
+		if = {
+			limit = { is_at_war = no }
+			add_modifier = { modifier = mod_tr_tt_art_peace days = -1 }
+		}
+	}
+	possible = {
+		has_tradition = tr_tt_art_4
+	}
+	ai_weight = {
+		factor = 5000
+	}
+}

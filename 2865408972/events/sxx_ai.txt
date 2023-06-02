@@ -1,0 +1,1290 @@
+namespace = sxx_ai
+
+# ai星球修士防御升空（进入星系）
+fleet_event = {
+	id = sxx_ai.10
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		from = {
+			any_system_colony = {
+				owner = {
+					is_sxx_jindan_country = yes
+					is_same_value = prev.controller
+					is_hostile = root.controller
+					is_ai = yes
+				}
+			}
+			NOT = {
+				has_star_flag = sxx_call_cultivator_cooldown
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			set_timed_star_flag = {
+				flag = sxx_call_cultivator_cooldown
+				days = 7
+			}
+			every_system_colony = {
+				limit = {
+					owner = {
+						is_sxx_jindan_country = yes
+						is_same_value = prev.controller
+						is_hostile = root.controller
+						is_ai = yes
+					}
+				}
+				while = {
+					count = 5
+					random_owned_pop = {
+						limit = {
+							OR = {
+								is_sxx_planet_top_1_state = yes
+								is_sxx_planet_top_2_state = yes
+								has_job = sxx_supreme_elder
+								has_job = sxx_sealer
+								prev = { is_sxx_lianqi_planet = no }
+							}
+							is_sxx_fairy_pop = no
+							sxx_pop_is_not_under_jindan = yes
+							NOT = { has_job = criminal }
+							is_being_purged = no
+							is_being_assimilated = no
+							is_sapient = yes
+							prev = {
+								count_owned_pop = {
+									count > 1
+								}
+							}
+						}
+						weights = {
+							inline_script = sxx_call_cultivator_ship_weights
+						}
+						switch = {
+							trigger = has_pop_flag
+							sxx_jindan = { create_sxx_cultivator_ship_3 = yes }
+							sxx_yuanying = { create_sxx_cultivator_ship_4 = yes }
+							sxx_huashen = { create_sxx_cultivator_ship_5 = yes }
+							sxx_lianxu = { create_sxx_cultivator_ship_6 = yes }
+							sxx_heti = { create_sxx_cultivator_ship_7 = yes }
+							sxx_dacheng = { create_sxx_cultivator_ship_8 = yes }
+							sxx_dujie = { create_sxx_cultivator_ship_9 = yes }
+						}
+						last_created_ship = {
+							set_ship_flag = sxx_cultivator_of_planet@prevprev
+						}
+						resettle_pop = {
+							pop = this
+							planet = event_target:sxx_pool_planet
+						}
+					}
+				}
+				owner = {
+					save_event_target_as = sxx_planet_owner
+				}
+				planet_event = { id = sxx_ai.15 days = 30 }
+			}
+		}
+	}
+}
+
+# ai星球修士防御升空（进入殖民地轨道）
+#From = Planet/Starbase/Megastructure scope
+#This = Fleet scope
+fleet_event = {
+	id = sxx_ai.11
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		from = {
+			is_scope_type = planet
+			solar_system = {
+				any_system_colony = {
+					owner = {
+						is_sxx_jindan_country = yes
+						is_same_value = prev.controller
+						is_hostile = root.controller
+						is_ai = yes
+					}
+				}
+				NOT = {
+					has_star_flag = sxx_call_cultivator_cooldown
+				}
+			}
+		}
+	}
+
+	immediate = {
+		from.solar_system = {
+			set_timed_star_flag = {
+				flag = sxx_call_cultivator_cooldown
+				days = 7
+			}
+			every_system_colony = {
+				limit = {
+					owner = {
+						is_sxx_jindan_country = yes
+						is_same_value = prev.controller
+						is_hostile = root.controller
+						is_ai = yes
+					}
+				}
+				while = {
+					count = 5
+					random_owned_pop = {
+						limit = {
+							OR = {
+								is_sxx_planet_top_1_state = yes
+								is_sxx_planet_top_2_state = yes
+								has_job = sxx_supreme_elder
+								has_job = sxx_sealer
+								prev = { is_sxx_lianqi_planet = no }
+							}
+							is_sxx_fairy_pop = no
+							sxx_pop_is_not_under_jindan = yes
+							NOT = { has_job = criminal }
+							is_being_purged = no
+							is_being_assimilated = no
+							is_sapient = yes
+							prev = {
+								count_owned_pop = {
+									count > 1
+								}
+							}
+						}
+						weights = {
+							inline_script = sxx_call_cultivator_ship_weights
+						}
+						switch = {
+							trigger = has_pop_flag
+							sxx_jindan = { create_sxx_cultivator_ship_3 = yes }
+							sxx_yuanying = { create_sxx_cultivator_ship_4 = yes }
+							sxx_huashen = { create_sxx_cultivator_ship_5 = yes }
+							sxx_lianxu = { create_sxx_cultivator_ship_6 = yes }
+							sxx_heti = { create_sxx_cultivator_ship_7 = yes }
+							sxx_dacheng = { create_sxx_cultivator_ship_8 = yes }
+							sxx_dujie = { create_sxx_cultivator_ship_9 = yes }
+						}
+						last_created_ship = {
+							set_ship_flag = sxx_cultivator_of_planet@prevprev
+						}
+						resettle_pop = {
+							pop = this
+							planet = event_target:sxx_pool_planet
+						}
+					}
+				}
+				owner = {
+					save_event_target_as = sxx_planet_owner
+				}
+				planet_event = { id = sxx_ai.15 days = 30 }
+			}
+		}
+	}
+}
+
+# ai星球修士防御升空回归
+planet_event = {
+	id = sxx_ai.15
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			is_same_value = event_target:sxx_planet_owner
+			any_owned_ship = {
+				has_ship_flag = sxx_cultivator_of_planet@root
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			every_owned_ship = {
+				limit = {
+					has_ship_flag = sxx_cultivator_of_planet@root
+					fleet = {
+						is_in_combat = no
+						controller = { is_same_value = prevprevprev }
+					}
+				}
+				fleet = {
+					if = {
+						limit = {
+							exists = leader
+							NOT = { any_owned_ship = { NOT = { has_ship_flag = sxx_cultivator_of_planet@root } } }
+						}
+						leader = {
+							unassign_leader = this
+						}
+					}
+				}
+				event_target:sxx_pool_planet = {
+					random_owned_pop = {
+						limit = {
+							has_pop_flag = sxx_cultivator_of@prevprev
+						}
+						resettle_pop = {
+							pop = this
+							planet = root
+						}
+						remove_pop_flag = sxx_cultivator_of@prevprev
+					}
+				}
+				delete_ship = this
+			}
+		}
+		planet_event = { id = sxx_ai.15 days = 30 }
+	}
+}
+
+# ai建造建筑
+country_event = {
+	id = sxx_ai.20
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+	}
+
+	immediate = {
+		# 移除机器人组装厂
+		every_owned_planet = {
+			limit = {
+				OR = {
+					has_building = building_robot_assembly_complex
+					has_building = building_robot_assembly_plant
+				}
+			}
+			remove_building = building_robot_assembly_complex
+			remove_building = building_robot_assembly_plant
+		}
+
+		# 建造升仙台和灵石开采井
+		every_owned_planet = {
+			limit = {
+				is_occupied_flag = no
+			}
+			if = {
+				limit = {
+					NOT = { has_building = building_sxx_shengxiantai }
+				}
+				add_building = building_sxx_shengxiantai
+			}
+			
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_sxx_stones_mine_1
+						value < value:building_sxx_stones_mine_max_count|LEVEL|1|
+					}
+				}
+				add_building = building_sxx_stones_mine_1
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_sxx_stones_mine_2
+						value < value:building_sxx_stones_mine_max_count|LEVEL|2|
+					}
+				}
+				add_building = building_sxx_stones_mine_2
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_sxx_stones_mine_3
+						value < value:building_sxx_stones_mine_max_count|LEVEL|3|
+					}
+				}
+				add_building = building_sxx_stones_mine_3
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_sxx_stones_mine_4
+						value < value:building_sxx_stones_mine_max_count|LEVEL|4|
+					}
+				}
+				add_building = building_sxx_stones_mine_4
+			}
+		}
+
+		# 建造大殿
+		switch = {
+			trigger = has_modifier
+			sxx_lianqi_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_lianqi_planet = no
+					}
+					add_building = building_sxx_zongmen_1
+				}
+			}
+			sxx_zhuji_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_zhuji_planet = no
+						OR = {
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_jindan_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_jindan_planet = no
+						OR = {
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_yuanying_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_yuanying_planet = no
+						OR = {
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_huashen_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_huashen_planet = no
+						OR = {
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_lianxu_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_lianxu_planet = no
+						OR = {
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_heti_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_heti_planet = no
+						OR = {
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_dacheng_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_dacheng_planet = no
+						OR = {
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_dujie_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_dujie_planet = no
+						OR = {
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_fairy_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_fairy_planet = no
+						OR = {
+							has_building = building_sxx_zongmen_9
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+			sxx_heaven_country = {
+				every_owned_planet = {
+					limit = {
+						is_occupied_flag = no
+						is_sxx_fairy_planet = no
+						OR = {
+							has_building = building_sxx_zongmen_9
+							is_sxx_lianqi_planet = no
+							any_owned_pop = {
+								sxx_pop_is_above_planet_zongmen = yes
+								is_sxx_cultivable_cultivator = yes
+							}
+						}
+					}
+					sxx_upgrade_building_zongmen = yes
+				}
+			}
+		}
+
+		# 建造炼丹房
+		if = {
+			limit = {
+				has_monthly_income = {
+					resource = food
+					value > 20
+				}
+			}
+			if = {
+				limit = {
+					has_technology = tech_sxx_liandanfang_4
+				}
+				every_owned_planet = {
+					limit = {
+						NOT = {
+							has_building = building_sxx_liandanfang_4
+						}
+						is_sxx_fairy_planet = yes
+					}
+					remove_building = building_sxx_liandanfang_1
+					remove_building = building_sxx_liandanfang_2
+					remove_building = building_sxx_liandanfang_3
+					add_building = building_sxx_liandanfang_4
+				}
+			}
+			else_if = {
+				limit = {
+					has_technology = tech_sxx_liandanfang_3
+				}
+				every_owned_planet = {
+					limit = {
+						NOR = {
+							has_building = building_sxx_liandanfang_3
+							has_building = building_sxx_liandanfang_4
+						}
+						is_sxx_heti_planet = yes
+					}
+					remove_building = building_sxx_liandanfang_1
+					remove_building = building_sxx_liandanfang_2
+					add_building = building_sxx_liandanfang_3
+				}
+			}
+			else_if = {
+				limit = {
+					has_technology = tech_sxx_liandanfang_2
+				}
+				every_owned_planet = {
+					limit = {
+						NOR = {
+							has_building = building_sxx_liandanfang_2
+							has_building = building_sxx_liandanfang_3
+							has_building = building_sxx_liandanfang_4
+						}
+						is_sxx_yuanying_planet = yes
+					}
+					remove_building = building_sxx_liandanfang_1
+					add_building = building_sxx_liandanfang_2
+				}
+			}
+			else_if = {
+				limit = {
+					has_technology = tech_sxx_liandanfang_1
+				}
+				every_owned_planet = {
+					limit = {
+						NOR = {
+							has_building = building_sxx_liandanfang_1
+							has_building = building_sxx_liandanfang_2
+							has_building = building_sxx_liandanfang_3
+							has_building = building_sxx_liandanfang_4
+						}
+						is_sxx_lianqi_planet = yes
+					}
+					add_building = building_sxx_liandanfang_1
+				}
+			}
+		}
+
+		# 建造炼器室
+		if = {
+			limit = {
+				has_monthly_income = {
+					resource = minerals
+					value > 20
+				}
+			}
+			if = {
+				limit = {
+					has_technology = tech_sxx_lianqishi_4
+				}
+				every_owned_planet = {
+					limit = {
+						NOT = {
+							has_building = building_sxx_lianqishi_4
+						}
+						is_sxx_fairy_planet = yes
+					}
+					remove_building = building_sxx_lianqishi_1
+					remove_building = building_sxx_lianqishi_2
+					remove_building = building_sxx_lianqishi_3
+					add_building = building_sxx_lianqishi_4
+				}
+			}
+			else_if = {
+				limit = {
+					has_technology = tech_sxx_lianqishi_3
+				}
+				every_owned_planet = {
+					limit = {
+						NOR = {
+							has_building = building_sxx_lianqishi_3
+							has_building = building_sxx_lianqishi_4
+						}
+						is_sxx_heti_planet = yes
+					}
+					remove_building = building_sxx_lianqishi_1
+					remove_building = building_sxx_lianqishi_2
+					add_building = building_sxx_lianqishi_3
+				}
+			}
+			else_if = {
+				limit = {
+					has_technology = tech_sxx_lianqishi_2
+				}
+				every_owned_planet = {
+					limit = {
+						NOR = {
+							has_building = building_sxx_lianqishi_2
+							has_building = building_sxx_lianqishi_3
+							has_building = building_sxx_lianqishi_4
+						}
+						is_sxx_yuanying_planet = yes
+					}
+					remove_building = building_sxx_lianqishi_1
+					add_building = building_sxx_lianqishi_2
+				}
+			}
+			else_if = {
+				limit = {
+					has_technology = tech_sxx_lianqishi_1
+				}
+				every_owned_planet = {
+					limit = {
+						NOR = {
+							has_building = building_sxx_lianqishi_1
+							has_building = building_sxx_lianqishi_2
+							has_building = building_sxx_lianqishi_3
+							has_building = building_sxx_lianqishi_4
+						}
+						is_sxx_lianqi_planet = yes
+					}
+					add_building = building_sxx_lianqishi_1
+				}
+			}
+		}
+
+		# 建造学府
+		every_owned_planet = {
+			limit = {
+				is_occupied_flag = no
+			}
+			switch = {
+				trigger = has_active_building
+				building_sxx_zongmen_3 = {
+					if = {
+						limit = {
+							NOT = { has_building = building_sxx_xuefu_1 }
+						}
+						add_building = building_sxx_xuefu_1
+					}
+				}
+				building_sxx_zongmen_4 = {
+					if = {
+						limit = {
+							NOT = { has_building = building_sxx_xuefu_2 }
+						}
+						remove_building = building_sxx_xuefu_1
+						add_building = building_sxx_xuefu_2
+					}
+				}
+				building_sxx_zongmen_5 = {
+					if = {
+						limit = {
+							NOT = { has_building = building_sxx_xuefu_3 }
+						}
+						remove_building = building_sxx_xuefu_1
+						remove_building = building_sxx_xuefu_2
+						add_building = building_sxx_xuefu_3
+					}
+				}
+				building_sxx_zongmen_6 = {
+					if = {
+						limit = {
+							NOT = { has_building = building_sxx_xuefu_4 }
+						}
+						remove_building = building_sxx_xuefu_1
+						remove_building = building_sxx_xuefu_2
+						remove_building = building_sxx_xuefu_3
+						add_building = building_sxx_xuefu_4
+					}
+				}
+				building_sxx_zongmen_7 = {
+					if = {
+						limit = {
+							NOT = { has_building = building_sxx_xuefu_5 }
+						}
+						remove_building = building_sxx_xuefu_1
+						remove_building = building_sxx_xuefu_2
+						remove_building = building_sxx_xuefu_3
+						remove_building = building_sxx_xuefu_4
+						add_building = building_sxx_xuefu_5
+					}
+				}
+				building_sxx_zongmen_8 = {
+					if = {
+						limit = {
+							NOT = { has_building = building_sxx_xuefu_6 }
+						}
+						remove_building = building_sxx_xuefu_1
+						remove_building = building_sxx_xuefu_2
+						remove_building = building_sxx_xuefu_3
+						remove_building = building_sxx_xuefu_4
+						remove_building = building_sxx_xuefu_5
+						add_building = building_sxx_xuefu_6
+					}
+				}
+				building_sxx_zongmen_9 = {
+					if = {
+						limit = {
+							NOT = { has_building = building_sxx_xuefu_7 }
+						}
+						remove_building = building_sxx_xuefu_1
+						remove_building = building_sxx_xuefu_2
+						remove_building = building_sxx_xuefu_3
+						remove_building = building_sxx_xuefu_4
+						remove_building = building_sxx_xuefu_5
+						remove_building = building_sxx_xuefu_6
+						add_building = building_sxx_xuefu_7
+					}
+				}
+				building_sxx_zongmen_10 = {
+					if = {
+						limit = {
+							NOT = { has_building = building_sxx_xuefu_8 }
+						}
+						remove_building = building_sxx_xuefu_1
+						remove_building = building_sxx_xuefu_2
+						remove_building = building_sxx_xuefu_3
+						remove_building = building_sxx_xuefu_4
+						remove_building = building_sxx_xuefu_5
+						remove_building = building_sxx_xuefu_6
+						remove_building = building_sxx_xuefu_7
+						add_building = building_sxx_xuefu_8
+					}
+				}
+			}
+		}
+
+		# 首都建造血冥碑
+		if = {
+			limit = {
+				has_valid_civic = civic_sxx_evil_way
+			}
+			capital_scope = {
+				if = {
+					limit = {
+						is_occupied_flag = no
+						NOR = {
+							has_building = building_sxx_xuemingbei_0
+							has_building = building_sxx_xuemingbei_1
+						}
+					}
+					add_building = building_sxx_xuemingbei_0
+				}
+			}
+		}
+
+		# 首都建造神庙
+		if = {
+			limit = {
+				has_valid_civic = civic_sxx_faith
+			}
+			capital_scope = {
+				if = {
+					limit = {
+						is_occupied_flag = no
+						NOT = { has_building = building_sxx_temple }
+					}
+					add_building = building_sxx_temple
+				}
+			}
+		}
+
+		# 建造附庸地产
+		if = {
+			limit = {
+				is_overlord = yes
+				any_subject = { is_sxx_sect = no }
+			}
+			every_subject = {
+				limit = {
+					is_sxx_sect = no
+				}
+				if = {
+					limit = {
+						is_gestalt = no
+					}
+					every_owned_planet = {
+						if = {
+							limit = {
+								NOT = { has_holding = { holding = holding_sxx_shengxiantai owner = root } }
+								has_holding = { holding = holding_garrison owner = root }
+							}
+							remove_holding = { holding = holding_garrison owner = root }
+							add_holding = { holding = holding_sxx_shengxiantai owner = root }
+						}
+						if = {
+							limit = {
+								has_sxx_lingmai = yes
+								NOT = { has_holding = { holding = holding_sxx_stones_mine owner = root } }
+								has_holding = { holding = holding_orbital_assembly_complex owner = root }
+							}
+							remove_holding = { holding = holding_orbital_assembly_complex owner = root }
+							add_holding = { holding = holding_sxx_stones_mine owner = root }
+						}
+					}
+				}
+				else = {
+					every_owned_planet = {
+						if = {
+							limit = {
+								has_sxx_lingmai = yes
+								NOT = { has_holding = { holding = holding_sxx_stones_mine owner = root } }
+								has_holding = { holding = holding_orbital_assembly_complex owner = root }
+							}
+							remove_holding = { holding = holding_orbital_assembly_complex owner = root }
+							add_holding = { holding = holding_sxx_stones_mine owner = root }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# ai创建修士舰船
+country_event = {
+	id = sxx_ai.25
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		OR = {
+			is_sxx_final_country = no
+			count_owned_ship = { limit = { is_ship_size = sxx_fairy } count < 10 }
+		}
+	}
+
+	immediate = {
+		switch = {
+			trigger = has_modifier
+			sxx_yuanying_country = {
+				sxx_ai_create_pop_ship = { STATE = yuanying LEVEL = 4 }
+			}
+			sxx_huashen_country = {
+				sxx_ai_create_pop_ship = { STATE = yuanying LEVEL = 4 }
+				sxx_ai_create_pop_ship = { STATE = yuanying LEVEL = 4 }
+				sxx_ai_create_pop_ship = { STATE = huashen LEVEL = 5 }
+			}
+			sxx_lianxu_country = {
+				sxx_ai_create_pop_ship = { STATE = huashen LEVEL = 5 }
+				sxx_ai_create_pop_ship = { STATE = huashen LEVEL = 5 }
+				sxx_ai_create_pop_ship = { STATE = lianxu LEVEL = 6 }
+			}
+			sxx_heti_country = {
+				sxx_ai_create_pop_ship = { STATE = lianxu LEVEL = 6 }
+				sxx_ai_create_pop_ship = { STATE = lianxu LEVEL = 6 }
+				sxx_ai_create_pop_ship = { STATE = heti LEVEL = 7 }
+			}
+			sxx_dacheng_country = {
+				sxx_ai_create_pop_ship = { STATE = heti LEVEL = 7 }
+				sxx_ai_create_pop_ship = { STATE = heti LEVEL = 7 }
+				sxx_ai_create_pop_ship = { STATE = dacheng LEVEL = 8 }
+			}
+			sxx_dujie_country = {
+				sxx_ai_create_pop_ship = { STATE = dacheng LEVEL = 8 }
+				sxx_ai_create_pop_ship = { STATE = dacheng LEVEL = 8 }
+				sxx_ai_create_pop_ship = { STATE = dujie LEVEL = 9 }
+			}
+			sxx_fairy_country = {
+				sxx_ai_create_pop_ship = { STATE = dujie LEVEL = 9 }
+				sxx_ai_create_pop_ship = { STATE = dujie LEVEL = 9 }
+			}
+			sxx_heaven_country = {
+				sxx_ai_create_pop_ship = { STATE = dujie LEVEL = 9 }
+				sxx_ai_create_pop_ship = { STATE = dujie LEVEL = 9 }
+			}
+		}
+	}
+}
+
+# 魔道ai血祭
+planet_event = {
+	id = sxx_ai.30
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		from = {
+			is_sxx_sect = yes
+			is_ai = yes
+			has_valid_civic = civic_sxx_evil_way
+			capital_scope = {
+				is_occupied_flag = no
+				OR = {
+					has_active_building = building_sxx_xuemingbei_0
+					has_active_building = building_sxx_xuemingbei_1
+				}
+			}
+		}
+	}
+
+	immediate = {
+		sxx_evil_ai_xueji_pop = yes
+		from.capital_scope = {
+			change_variable = {
+				which = sxx_evil_break_count
+				value = root.sxx_evil_break_count
+			}
+		}
+		clear_variable = sxx_evil_break_count
+		planet_event = { id = sxx_ai.31 days = 30 }
+	}
+}
+
+# 魔道ai血祭
+planet_event = {
+	id = sxx_ai.31
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = {
+			is_sxx_sect = yes
+			is_ai = yes
+			has_valid_civic = civic_sxx_evil_way
+			capital_scope = {
+				is_occupied_flag = no
+				OR = {
+					has_active_building = building_sxx_xuemingbei_0
+					has_active_building = building_sxx_xuemingbei_1
+				}
+			}
+		}
+	}
+
+	immediate = {
+		sxx_evil_xueji_pop = yes
+		owner.capital_scope = {
+			change_variable = {
+				which = sxx_evil_break_count
+				value = root.sxx_evil_break_count
+			}
+		}
+		clear_variable = sxx_evil_break_count
+	}
+}
+
+# ai召唤仙人
+country_event = {
+	id = sxx_ai.50
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_ai = yes
+		is_sxx_fallen_1 = no
+		has_modifier = sxx_fairy_country
+		resource_stockpile_compare = { resource = sxx_qiyun value >= 10 }
+	#	check_variable = { which = value_sxx_fate_point value >= 10 }
+	}
+
+	immediate = {
+		country_event = { id = sxx_fairy.1000 }
+	}
+}
+
+# ai突破瓶颈
+country_event = {
+	id = sxx_ai.51
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_ai = yes
+		is_sxx_fallen_1 = no
+		is_sxx_final_country = yes
+		resource_stockpile_compare = { resource = sxx_qiyun value >= 1 }
+	#	check_variable = { which = value_sxx_fate_point value >= 1 }
+	}
+
+	immediate = {
+		country_event = { id = sxx_fairy.1010 }
+	}
+}
+
+# ai生成灵脉
+country_event = {
+	id = sxx_ai.52
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_ai = yes
+		is_sxx_fallen_1 = no
+		is_sxx_final_country = yes
+		resource_stockpile_compare = { resource = sxx_qiyun value >= 10 }
+	#	check_variable = { which = value_sxx_fate_point value >= 10 }
+		any_owned_planet = {
+			is_artificial = no
+			NOR = {
+				is_planet_class = pc_relic
+				is_planet_class = pc_city
+				is_planet_class = pc_sxx_heaven
+			}
+		}
+		has_monthly_income = { resource = sxx_stones value < 0 }
+	}
+
+	immediate = {
+		country_event = { id = sxx_fairy.1020 }
+	}
+}
+
+# ai幻妖典（非炼丹之道主修）
+country_event = {
+	id = sxx_ai.100
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		NOT = { has_valid_civic = civic_sxx_pills_master }
+		OR = {
+			check_variable = { which = sxx_practice_2 value < 9 } # 没点完9重幻妖典
+			NOT = { check_variable = { which = sxx_main_select value = 2 } } # 没主修幻妖典
+		}
+	}
+
+	immediate = {
+		# ai主修青鸾幻妖典
+		if = {
+			limit = {
+				NOR = {
+					check_variable = { which = sxx_main_select value = 2 }
+					has_modifier = sxx_change_practice_first_modifier
+					has_modifier = sxx_change_practice_modifier
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { which = sxx_main_select value = 0 }
+				}
+				custom_tooltip = sxx_main_select_first_tooltip
+				hidden_effect = {
+					country_event = { id = sxx_practice.2 days = 360 }
+					add_modifier = { modifier = sxx_change_practice_first_modifier days = 360 }
+				}
+			}
+			else = {
+				custom_tooltip = sxx_main_select_tooltip
+				hidden_effect = { country_event = { id = sxx_practice.2 days = 1800 } }
+				add_modifier = { modifier = sxx_change_practice_modifier days = 1800 }
+			}
+		}
+
+		# ai点青鸾幻妖典
+		sxx_ai_get_practice_effect = { NUM = 2 GONGFA1 = 30 GONGFA2 = 100 }
+	}
+}
+
+# ai天丹诀（炼丹之道主修）
+country_event = {
+	id = sxx_ai.105
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		has_valid_civic = civic_sxx_pills_master
+		OR = {
+			check_variable = { which = sxx_practice_3 value < 9 } # 没点完9重天丹诀
+			NOT = { check_variable = { which = sxx_main_select value = 3 } } # 没主修天丹诀
+		}
+	}
+
+	immediate = {
+		# ai主修九转天丹诀
+		if = {
+			limit = {
+				NOR = {
+					check_variable = { which = sxx_main_select value = 3 }
+					has_modifier = sxx_change_practice_first_modifier
+					has_modifier = sxx_change_practice_modifier
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { which = sxx_main_select value = 0 }
+				}
+				custom_tooltip = sxx_main_select_first_tooltip
+				hidden_effect = {
+					country_event = { id = sxx_practice.3 days = 360 }
+					add_modifier = { modifier = sxx_change_practice_first_modifier days = 360 }
+				}
+			}
+			else = {
+				custom_tooltip = sxx_main_select_tooltip
+				hidden_effect = { country_event = { id = sxx_practice.3 days = 1800 } }
+				add_modifier = { modifier = sxx_change_practice_modifier days = 1800 }
+			}
+		}
+
+		# ai点九转天丹诀
+		sxx_ai_get_practice_effect = { NUM = 3 GONGFA1 = 25 GONGFA2 = 75 }
+	}
+}
+
+# ai地煞诀（辅修）
+country_event = {
+	id = sxx_ai.150
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		check_variable = { which = sxx_practice_7 value < 9 } # 没点完9重
+		OR = {
+			has_monthly_income = { resource = minerals value < 50 }
+			has_monthly_income = { resource = sxx_stones value < 50 }
+		}
+	}
+
+	immediate = {
+		# ai点地煞诀
+		sxx_ai_get_practice_effect = { NUM = 7 GONGFA1 = 50 GONGFA2 = 150 }
+	}
+}
+
+# ai天丹诀（非炼丹之道辅修）
+country_event = {
+	id = sxx_ai.155
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		NOT = { has_valid_civic = civic_sxx_pills_master }
+		check_variable = { which = sxx_practice_3 value < 9 } # 没点完9重天丹诀
+	}
+
+	immediate = {
+		# ai点九转天丹诀
+		sxx_ai_get_practice_effect = { NUM = 3 GONGFA1 = 50 GONGFA2 = 150 }
+	}
+}
+
+# ai幻妖典（炼丹之道辅修）
+country_event = {
+	id = sxx_ai.160
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		has_valid_civic = civic_sxx_pills_master
+		check_variable = { which = sxx_practice_2 value < 9 } # 没点完9重幻妖典
+		has_monthly_income = { resource = consumer_goods value < 50 }
+	}
+
+	immediate = {
+		# ai点青鸾幻妖典
+		sxx_ai_get_practice_effect = { NUM = 2 GONGFA1 = 30 GONGFA2 = 100 }
+	}
+}
+
+# ai青元诀（辅修）
+country_event = {
+	id = sxx_ai.165
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		check_variable = { which = sxx_practice_8 value < 9 } # 没点完9重
+		has_monthly_income = { resource = food value < 50 }
+	}
+
+	immediate = {
+		# ai点青元诀
+		sxx_ai_get_practice_effect = { NUM = 8 GONGFA1 = 30 GONGFA2 = 100 }
+	}
+}
+
+# ai天罡经（辅修）
+country_event = {
+	id = sxx_ai.170
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		check_variable = { which = sxx_practice_6 value < 9 } # 没点完9重
+		has_monthly_income = { resource = sxx_stones value < 50 }
+	}
+
+	immediate = {
+		sxx_ai_get_practice_effect = { NUM = 6 GONGFA1 = 50 GONGFA2 = 150 }
+	}
+}
+
+# ai百巧书（辅修）
+country_event = {
+	id = sxx_ai.175
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_ai = yes
+		check_variable = { which = sxx_practice_9 value < 9 } # 没点完9重
+		sxx_ai_finished_main_practice_at_present_state = yes
+	}
+
+	immediate = {
+		sxx_ai_get_practice_effect = { NUM = 9 GONGFA1 = 50 GONGFA2 = 150 }
+	}
+}
+
+# ai天书
+country_event = {
+	id = sxx_ai.300
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+		is_sxx_final_country = yes
+		is_ai = yes
+		check_variable = { which = sxx_practice_21 value < 9 } # 没点完9重
+		sxx_ai_finished_main_practice_at_present_state = yes
+	}
+
+	immediate = {
+		sxx_ai_get_practice_effect = { NUM = 21 GONGFA1 = 30000 GONGFA2 = 100000 STATE = final }
+	}
+}

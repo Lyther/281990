@@ -1,0 +1,210 @@
+namespace = mt_fleet_event
+#紧急舰队
+country_event = {
+	id = mt_fleet_event.1
+	title = mt_fleet_event.1.name
+	desc = mt_fleet_event.1.desc
+	picture = GFX_evt_caravaneers
+	show_sound = select_click
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	#具体生成舰队
+	immediate = {
+		create_fleet = {
+			name = "紧急舰队"
+			effect = {
+				set_owner = root
+				while = {
+					count = 10
+					create_ship = {
+						name = random
+						random_existing_design = corvette
+					}
+				}
+				set_location = root.capital_scope
+			}
+		}
+	}
+	option = {
+		name = mt_fleet_event.1.a
+	}
+}
+#变形虫舰队
+country_event = {
+	id = mt_fleet_event.2
+	title = mt_fleet_event.2.name
+	desc = mt_fleet_event.2.desc
+	picture = GFX_evt_friendly_amoeba
+	show_sound = select_click
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	#具体生成舰队
+	immediate = {
+		create_fleet = {
+			name = "变形虫舰队"
+			effect = {
+				set_owner = root
+				while = {
+					count = 10
+					create_ship = {
+						name = random
+						design = "NAME_Great_Space_Organism"
+					}
+				}
+				set_location = root.capital_scope
+			}
+		}
+	}
+	option = {
+		name = mt_fleet_event.1.a
+	}
+}
+#缇杨奇舰队
+country_event = {
+	id = mt_fleet_event.3
+	title = mt_fleet_event.2.name
+	desc = mt_fleet_event.2.desc
+	picture = GFX_evt_fleet_evil
+	show_sound = select_click
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	#具体生成舰队
+	immediate = {
+		create_fleet = {
+			name = "缇扬奇舰队"
+			effect = {
+				set_owner = root
+				while = {
+					count = 10
+					create_ship = {
+						name = random
+						design = "NAME_Tiyanki_Cow"
+					}
+				}
+				set_location = root.capital_scope
+			}
+		}
+	}
+	option = {
+		name = mt_fleet_event.1.a
+	}
+}
+#星战传统：愈战愈勇 赢得太空战后额外获得20经验
+country_event = {
+	id = mt_fleet_event.4
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_active_tradition = tr_mt_starwar_2
+		fromfrom = {
+			exists = leader
+			leader = {
+				leader_class = admiral
+			}
+		}
+	}
+
+	immediate = {
+		fromfrom = {
+			leader = {
+				add_experience = 20
+			}
+		}
+	}
+}
+#星战传统：常胜将军 赢得太空战后获得或升级常胜将军特质
+country_event = {
+	id = mt_fleet_event.5
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_active_tradition = tr_mt_starwar_3
+		fromfrom = {
+			exists = leader
+			leader = {
+				leader_class = admiral
+				NOT = {
+					has_trait = leader_trait_mt_evervictorious_10
+				}
+			}
+		}
+	}
+
+	immediate = {
+		fromfrom = {
+			leader = {
+
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_9 }
+					remove_trait = leader_trait_mt_evervictorious_9
+					add_trait = leader_trait_mt_evervictorious_10
+				}
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_8 }
+					remove_trait = leader_trait_mt_evervictorious_8
+					add_trait = leader_trait_mt_evervictorious_9
+				}
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_7 }
+					remove_trait = leader_trait_mt_evervictorious_7
+					add_trait = leader_trait_mt_evervictorious_8
+				}
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_6 }
+					remove_trait = leader_trait_mt_evervictorious_6
+					add_trait = leader_trait_mt_evervictorious_7
+				}
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_5 }
+					remove_trait = leader_trait_mt_evervictorious_5
+					add_trait = leader_trait_mt_evervictorious_6
+				}
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_4 }
+					remove_trait = leader_trait_mt_evervictorious_4
+					add_trait = leader_trait_mt_evervictorious_5
+				}
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_3 }
+					remove_trait = leader_trait_mt_evervictorious_3
+					add_trait = leader_trait_mt_evervictorious_4
+				}
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_2 }
+					remove_trait = leader_trait_mt_evervictorious_2
+					add_trait = leader_trait_mt_evervictorious_3
+				}
+				if = {
+					limit = { has_trait = leader_trait_mt_evervictorious_1 }
+					remove_trait = leader_trait_mt_evervictorious_1
+					add_trait = leader_trait_mt_evervictorious_2
+				}
+				if = {
+					limit = { 
+						NOT = {
+							has_trait = leader_trait_mt_evervictorious_1
+							has_trait = leader_trait_mt_evervictorious_2
+							has_trait = leader_trait_mt_evervictorious_3
+							has_trait = leader_trait_mt_evervictorious_4
+							has_trait = leader_trait_mt_evervictorious_5
+							has_trait = leader_trait_mt_evervictorious_6
+							has_trait = leader_trait_mt_evervictorious_7
+							has_trait = leader_trait_mt_evervictorious_8
+							has_trait = leader_trait_mt_evervictorious_9
+							has_trait = leader_trait_mt_evervictorious_10
+						}
+					}
+					add_trait = leader_trait_mt_evervictorious_1
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,45 @@
+###############################
+# Pop Faction Events
+# by Maximilian Olbers
+###############################
+
+namespace = zofe_factions
+
+# A faction is formed
+pop_faction_event = {
+	id = zofe_factions.1
+	title = factions.1.title
+	desc = {
+		trigger = {
+			text = factions.1.desc.start
+			text = newline
+			success_text = {
+				text = factions.1.desc.hedonist
+				is_pop_faction_type = hedonist
+			}
+			success_text = {
+				hidden:owner = { NOT = { has_country_flag = first_faction } }
+				text = factions.1.desc.firstfinisher
+			}
+		}
+	}
+
+	picture = GFX_evt_galactic_senate
+	show_sound = event_factions
+
+	is_triggered_only = yes
+	
+
+	option = {
+		name = OK
+		hidden_effect = {
+			owner = {
+				every_owned_planet = {
+					every_owned_pop = {
+						force_faction_evaluation = yes
+					}
+				}
+			}
+		}
+	}
+}

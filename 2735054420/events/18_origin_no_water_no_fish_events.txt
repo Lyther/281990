@@ -1,0 +1,290 @@
+
+namespace = origin_no_water_no_fish
+
+planet_event = {
+	id = origin_no_water_no_fish.0
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOR = {
+					is_variable_set = no_water_no_fish_energy_count
+					is_variable_set = no_water_no_fish_minerals_count
+					is_variable_set = no_water_no_fish_food_count
+				}
+			}
+			set_variable = {
+				which = no_water_no_fish_energy_count
+				value = 0
+			}
+			set_variable = {
+				which = no_water_no_fish_minerals_count
+				value = 0
+			}
+			set_variable = {
+				which = no_water_no_fish_food_count
+				value = 0
+			}
+			# 旧档转换
+			if = {
+				limit = {
+					is_variable_set = no_water_no_fish_count
+				}
+				divide_variable = {
+					which = no_water_no_fish_count
+					value = 3
+				}
+				floor_variable = no_water_no_fish_count
+				set_variable = {
+					which = no_water_no_fish_energy_count
+					value = no_water_no_fish_count
+				}
+				set_variable = {
+					which = no_water_no_fish_minerals_count
+					value = no_water_no_fish_count
+				}
+				set_variable = {
+					which = no_water_no_fish_food_count
+					value = no_water_no_fish_count
+				}
+				clear_variable = no_water_no_fish_count
+			}
+		}
+		else = {
+			remove_modifier = origin_no_water_no_fish_modifier
+			remove_modifier = origin_no_water_no_fish_energy_modifier
+			remove_modifier = origin_no_water_no_fish_minerals_modifier
+			remove_modifier = origin_no_water_no_fish_food_modifier
+			export_trigger_value_to_variable = {
+				trigger = num_assigned_jobs
+				parameters = { job = technician }
+				variable = no_water_no_fish_technician_count
+				rounded = yes
+			}
+			export_trigger_value_to_variable = {
+				trigger = num_assigned_jobs
+				parameters = { job = miner }
+				variable = no_water_no_fish_miner_count
+				rounded = yes
+			}
+			export_trigger_value_to_variable = {
+				trigger = num_assigned_jobs
+				parameters = { job = scrap_miner }
+				variable = no_water_no_fish_scrap_miner_count
+				rounded = yes
+			}
+			export_trigger_value_to_variable = {
+				trigger = num_assigned_jobs
+				parameters = { job = farmer }
+				variable = no_water_no_fish_farmer_count
+				rounded = yes
+			}
+			export_trigger_value_to_variable = {
+				trigger = num_assigned_jobs
+				parameters = { job = angler }
+				variable = no_water_no_fish_angler_count
+				rounded = yes
+			}
+			change_variable = {
+				which = no_water_no_fish_energy_count
+				value = no_water_no_fish_technician_count
+			}
+			change_variable = {
+				which = no_water_no_fish_minerals_count
+				value = no_water_no_fish_miner_count
+			}
+			change_variable = {
+				which = no_water_no_fish_minerals_count
+				value = no_water_no_fish_scrap_miner_count
+			}
+			change_variable = {
+				which = no_water_no_fish_food_count
+				value = no_water_no_fish_farmer_count
+			}
+			change_variable = {
+				which = no_water_no_fish_food_count
+				value = no_water_no_fish_angler_count
+			}
+			clear_variable = no_water_no_fish_technician_count
+			clear_variable = no_water_no_fish_miner_count
+			clear_variable = no_water_no_fish_scrap_miner_count
+			clear_variable = no_water_no_fish_farmer_count
+			clear_variable = no_water_no_fish_angler_count
+			# 笨蛋AI不会改变岗位，给个保底
+			if = {
+				limit = {
+					check_variable = {
+						which = no_water_no_fish_energy_count
+						value > 1500
+					}
+					owner = {
+						is_ai = yes
+					}
+				}
+				set_variable = {
+					which = no_water_no_fish_energy_count
+					value = 1500
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = no_water_no_fish_minerals_count
+						value > 1500
+					}
+					owner = {
+						is_ai = yes
+					}
+				}
+				set_variable = {
+					which = no_water_no_fish_minerals_count
+					value = 1500
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = no_water_no_fish_food_count
+						value > 1500
+					}
+					owner = {
+						is_ai = yes
+					}
+				}
+				set_variable = {
+					which = no_water_no_fish_food_count
+					value = 1500
+				}
+			}
+			add_modifier = {
+				modifier = origin_no_water_no_fish_energy_modifier
+				days = -1
+				multiplier = no_water_no_fish_energy_count
+			}
+			add_modifier = {
+				modifier = origin_no_water_no_fish_minerals_modifier
+				days = -1
+				multiplier = no_water_no_fish_minerals_count
+			}
+			add_modifier = {
+				modifier = origin_no_water_no_fish_food_modifier
+				days = -1
+				multiplier = no_water_no_fish_food_count
+			}
+		}
+	}
+}
+
+country_event = {
+	id = origin_no_water_no_fish.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_no_water_no_fish
+	}
+
+	immediate = {
+		country_event = { id = origin_no_water_no_fish.2 days = 30 }
+		every_owned_planet = {
+			while = {
+				limit = {
+					has_district = district_generator
+				}
+				remove_district = district_generator
+				add_district = district_generator_uncapped
+			}
+			while = {
+				limit = {
+					has_district = district_mining
+				}
+				remove_district = district_mining
+				add_district = district_mining_uncapped
+			}
+			while = {
+				limit = {
+					has_district = district_farming
+				}
+				remove_district = district_farming
+				add_district = district_farming_uncapped
+			}
+			planet_event = { id = origin_no_water_no_fish.0 }
+		}
+	}
+}
+
+country_event = {
+	id = origin_no_water_no_fish.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_no_water_no_fish
+	}
+
+	immediate = {
+		country_event = { id = origin_no_water_no_fish.2 days = 30 }
+		every_owned_planet = {
+			limit = {
+				OR = {
+					owner = { is_ai = no }
+					check_variable = {
+						which = no_water_no_fish_energy_count
+						value < 1500
+					}
+					check_variable = {
+						which = no_water_no_fish_minerals_count
+						value < 1500
+					}
+					check_variable = {
+						which = no_water_no_fish_food_count
+						value < 1500
+					}
+				}
+			}
+			planet_event = { id = origin_no_water_no_fish.0 }
+		}
+	}
+}
+
+planet_event = {
+	id = origin_no_water_no_fish.3
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		From = {
+			has_origin = origin_no_water_no_fish
+		}
+	}
+	
+	immediate = {
+		while = {
+			limit = {
+				has_district = district_generator
+			}
+			remove_district = district_generator
+			add_district = district_generator_uncapped
+		}
+		while = {
+			limit = {
+				has_district = district_mining
+			}
+			remove_district = district_mining
+			add_district = district_mining_uncapped
+		}
+		while = {
+			limit = {
+				has_district = district_farming
+			}
+			remove_district = district_farming
+			add_district = district_farming_uncapped
+		}
+		planet_event = { id = origin_no_water_no_fish.0 }
+	}
+}

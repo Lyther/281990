@@ -1,0 +1,594 @@
+#################
+# ASCENSION PATHS
+#################
+
+# 基飞
+ap_engineered_evolution = {
+	on_enabled = {
+		custom_tooltip = "engineered_evolution_tooltip"
+		add_research_option = tech_gene_seed_purification
+		if = {
+			limit = {
+				has_origin = origin_clone_army
+				OR = {
+					has_trait = trait_clone_soldier_infertile
+					has_trait = trait_clone_soldier_infertile_full_potential
+				}
+			}
+			custom_tooltip = clone_soldier_locked_genes
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "synthetic_empire_biological_ascension"
+			NOT = { has_trait = trait_mechanical }
+		}
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_1"
+			num_ascension_perks > 0
+		}
+		custom_tooltip = {
+			fail_text = "requires_technology_gene_tailoring"
+			has_technology = tech_gene_tailoring
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_the_flesh_is_weak"
+				NOT = { has_ascension_perk = ap_the_flesh_is_weak }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_organo_machine_interfacing"
+				NOT = { has_ascension_perk = ap_organo_machine_interfacing }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_mind_over_matter"
+				NOT = { has_ascension_perk = ap_mind_over_matter }
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_ap_synthetic_evolution"
+			NOT = { has_ascension_perk = ap_synthetic_evolution }
+		}
+	}
+
+	potential = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			NOR = {
+				has_origin = origin_shroudwalker_apprentice #灵飞
+				has_origin = origin_the_matrix #义飞
+				has_origin = origin_contract #锁灵飞
+				has_origin = origin_psionic #锁灵飞
+			}
+			is_cyborg_empire = no
+		}
+		NOR = {
+			has_ascension_perk = ap_engineered_evolution
+			has_authority = "auth_machine_intelligence"
+			has_origin = origin_syncretic_evolution #基飞
+			has_origin = origin_pc_hive #基飞
+			has_origin = origin_mechanists #机飞
+		}
+		is_mechanical_empire = no
+	}
+
+	ai_weight = {
+		factor = 15
+		modifier = {
+			factor = 0
+			num_owned_planets < 6
+		}
+		modifier = {
+			factor = 3
+			has_authority = auth_hive_mind
+		}
+	}
+}
+
+# 有机义飞
+ap_the_flesh_is_weak = {
+	on_enabled = {
+		custom_tooltip = "flesh_is_weak_tooltip"
+		add_research_option = tech_neuro_quantum_links
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "synthetic_empire_synthetic_ascension"
+			NOT = { has_trait = trait_mechanical }
+		}
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_1"
+			num_ascension_perks > 0
+		}
+		custom_tooltip = {
+			fail_text = "requires_technology_integrated_cybernetics"
+			has_technology = tech_integrated_cybernetics
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_engineered_evolution"
+				NOT = { has_ascension_perk = ap_engineered_evolution }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_mind_over_matter"
+				NOT = { has_ascension_perk = ap_mind_over_matter }
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_ap_synthetic_evolution"
+			NOT = { has_ascension_perk = ap_synthetic_evolution }
+		}
+	}
+
+	potential = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			NOR = {
+				has_origin = origin_shroudwalker_apprentice #灵飞
+				has_origin = origin_syncretic_evolution #基飞
+				has_origin = origin_contract #锁灵飞
+				has_origin = origin_psionic #锁灵飞
+			}
+		}
+		NOR = {
+			has_ascension_perk = ap_the_flesh_is_weak
+			has_origin = origin_mechanists #机飞
+			has_origin = origin_the_matrix #义飞
+		}
+		is_gestalt = no
+	}
+
+	ai_weight = {
+		factor = 20
+		modifier = {
+			factor = 0.5
+			NOR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		modifier = {
+			factor = 0
+			num_owned_planets < 6
+		}
+	}
+}
+
+# 蜂巢义飞
+ap_organo_machine_interfacing = {
+	on_enabled = {
+		custom_tooltip = "organo_machine_interfacing_tooltip"
+		add_research_option = tech_neuro_quantum_links
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_1"
+			num_ascension_perks > 0
+		}
+		custom_tooltip = {
+			fail_text = "requires_technology_integrated_cybernetics"
+			has_technology = tech_integrated_cybernetics
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_engineered_evolution"
+				NOT = { has_ascension_perk = ap_engineered_evolution }
+			}
+		}
+	}
+
+	potential = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			NOT = {
+				has_origin = origin_pc_hive #基飞
+			}
+		}
+		NOT = {
+			has_ascension_perk = ap_organo_machine_interfacing
+		}
+		has_authority = auth_hive_mind
+	}
+
+	ai_weight = {
+		factor = 20
+		modifier = {
+			factor = 0
+			num_owned_planets < 10
+		}
+	}
+}
+
+# 同化义飞
+ap_organo_machine_interfacing_assimilator = {
+	on_enabled = {
+		custom_tooltip = "organo_machine_interfacing_tooltip"
+		add_research_option = tech_integrated_cybernetics
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_1"
+			num_ascension_perks > 0
+		}
+		custom_tooltip = {
+			fail_text = "requires_assimilated_pops"
+			check_variable = {
+				which = num_assimilated_pops
+				value >= 30
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_synthetic_age"
+				NOT = { has_ascension_perk = ap_synthetic_age }
+			}
+		}
+	}
+
+	potential = {
+		NOR = {
+			has_ascension_perk = ap_organo_machine_interfacing_assimilator
+			has_origin = origin_reassembler #义飞/机飞
+		}
+		has_civic = civic_machine_assimilator
+	}
+
+	ai_weight = {
+		factor = 20
+		modifier = {
+			factor = 0
+			num_owned_planets < 10
+		}
+	}
+}
+
+# 有机机飞
+ap_synthetic_evolution = {
+	on_enabled = {
+		custom_tooltip = "synthetic_evolution_tooltip"
+		add_research_option = tech_synthetic_leaders
+		hidden_effect = {
+			country_event = { id = utopia.2545  }
+		}
+		if = {
+			limit = {
+				has_origin = origin_necrophage
+				has_trait = trait_necrophage
+			}
+			custom_tooltip = disables_necrophage_features
+		}
+		if = {
+			limit = {
+				has_origin = origin_clone_army
+				OR = {
+					has_trait = trait_clone_soldier_infertile
+					has_trait = trait_clone_soldier_infertile_full_potential
+					has_trait = trait_clone_soldier_fertile
+				}
+			}
+			custom_tooltip = disables_clone_army_origin_features
+		}
+		if = {
+			limit = {
+				has_origin = origin_overtuned
+			}
+			custom_tooltip = disables_overtuned_features
+		}
+		if = {
+			limit = {
+				OR = {
+					has_valid_civic = civic_idyllic_bloom
+					has_valid_civic = civic_hive_idyllic_bloom
+				}
+			}
+			custom_tooltip = disables_idyllic_bloom
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "synthetic_empire_synthetic_ascension"
+			NOT = { has_trait = trait_mechanical }
+		}
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_1"
+			num_ascension_perks > 0
+		}
+		custom_tooltip = {
+			fail_text = "requires_technology_synthetic_workers"
+			has_technology = tech_synthetic_workers
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_ap_engineered_evolution"
+			NOT = { has_ascension_perk = ap_engineered_evolution }
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_ap_the_flesh_is_weak"
+			NOT = { has_ascension_perk = ap_the_flesh_is_weak }
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_ap_mind_over_matter"
+			NOT = { has_ascension_perk = ap_mind_over_matter }
+		}
+	}
+
+	potential = {
+		NOR = {
+			has_ascension_perk = ap_synthetic_evolution
+			has_authority = "auth_machine_intelligence"
+			has_origin = origin_shroudwalker_apprentice #灵飞
+			has_origin = origin_mechanists #机飞
+			has_origin = origin_syncretic_evolution #基飞
+			has_origin = origin_the_matrix #义飞
+			has_origin = origin_contract #锁灵飞
+			has_origin = origin_psionic #锁灵飞
+		}
+		is_gestalt = no
+		is_mechanical_empire = no
+	}
+
+	ai_weight = {
+		factor = 20
+		modifier = {
+			factor = 0.1
+			NOR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		modifier = {
+			factor = 0
+			num_owned_planets < 6
+		}
+		modifier = {
+			factor = 0
+			has_origin = origin_necrophage
+		}
+	}
+}
+
+# 灵飞
+ap_mind_over_matter = {
+	on_enabled = {
+		custom_tooltip = "mind_over_matter_tooltip"
+		add_research_option = tech_telepathy
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "synthetic_empire_psionic_ascension"
+			NOT = { has_trait = trait_mechanical }
+		}
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_1"
+			num_ascension_perks > 0
+		}
+		custom_tooltip = {
+			fail_text = "requires_technology_psionic_theory"
+			has_technology = tech_psionic_theory
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_engineered_evolution"
+				NOT = { has_ascension_perk = ap_engineered_evolution }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_the_flesh_is_weak"
+				NOT = { has_ascension_perk = ap_the_flesh_is_weak }
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_ap_synthetic_evolution"
+			NOT = { has_ascension_perk = ap_synthetic_evolution }
+		}
+	}
+
+	potential = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			NOR = {
+				has_origin = origin_syncretic_evolution #基飞
+				has_origin = origin_the_matrix #义飞
+			}
+			is_cyborg_empire = no
+		}
+		NOR = {
+			has_ascension_perk = ap_mind_over_matter
+			has_origin = origin_shroudwalker_apprentice #灵飞
+			has_origin = origin_mechanists #机飞
+		}
+		is_gestalt = no
+		is_mechanical_empire = no
+	}
+
+	ai_weight = {
+		factor = 100
+		modifier = {
+			factor = 0.1
+			NOR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		modifier = {
+			factor = 0
+			num_owned_planets < 6
+		}
+		modifier = {
+			factor = 10
+			has_ascension_perk = ap_become_the_crisis
+		}
+	}
+}
+
+# 智械机飞
+ap_synthetic_age = {
+	on_enabled = {
+		custom_tooltip = "synthetic_age_tooltip"
+		add_research_option = tech_binary_motivators
+	}
+
+	potential = {
+		has_authority = auth_machine_intelligence
+		NOR = {
+			has_ascension_perk = ap_synthetic_age
+			has_origin = origin_reassembler #义飞/机飞
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_technology_robomodding"
+			OR = {
+				has_technology = tech_robomodding_m
+				has_technology = tech_robomodding
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_1"
+			num_ascension_perks > 0
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = time_ascension_paths }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ap_organo_machine_interfacing"
+				NOT = { has_ascension_perk = ap_organo_machine_interfacing_assimilator }
+			}
+		}
+	}
+
+	ai_weight = {
+		factor = 20
+		modifier = {
+			factor = 0
+			num_owned_planets < 10
+		}
+	}
+}
+
+#################
+# 化身天灾
+#################
+
+ap_become_the_crisis = {
+	potential = {
+		NOR = {
+			has_ascension_perk = ap_become_the_crisis
+			has_country_flag = time_crisis_country
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_2"
+			num_ascension_perks > 1
+		}
+		custom_tooltip = {
+			fail_text = "requires_independence"
+			is_subject = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_custodian"
+			is_galactic_custodian = no
+		}
+		custom_tooltip = {
+			fail_text = "must_not_be_emperor"
+			is_galactic_emperor = no
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_psionic"
+			NOT = { has_origin = origin_psionic }
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_nanites"
+			NOT = { has_origin = origin_nanites }
+		}
+		custom_tooltip = {
+			fail_text = "requires_not_manifesti"
+			NOT = { has_origin = origin_manifesti }
+		}
+		NOR = {
+			has_ethic = ethic_xenophile
+			has_ethic = ethic_fanatic_xenophile
+			has_ethic = ethic_pacifist
+			has_ethic = ethic_fanatic_pacifist
+			has_civic = civic_machine_servitor
+		}
+	}
+
+	on_enabled = {
+		hidden_effect = {
+			set_ai_personality = became_the_crisis
+		}
+		activate_crisis_progression = yes
+	}
+
+	ai_weight = {
+		factor = 7.5
+		modifier = {
+			factor = 0
+			is_militarist = no
+			is_xenophobe = no
+			is_gestalt = no
+		}
+		modifier = {
+			factor = 10
+			is_homicidal = yes
+		}
+		modifier = {
+			factor = 2
+			has_tradition = tr_supremacy_finish
+		}
+		modifier = {
+			factor = 0
+			galaxy_percentage < 0.1
+		}
+		modifier = {
+			factor = 2
+			galaxy_percentage > 0.2
+		}
+		modifier = {
+			factor = 0
+			count_playable_country = {
+				count > 1
+				limit = {
+					OR = {
+						has_ascension_perk = ap_become_the_crisis
+						has_country_flag = time_crisis_country
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			has_country_flag = normal_wonder_country_35
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = crazy_wonder_country_35
+		}
+	}
+}

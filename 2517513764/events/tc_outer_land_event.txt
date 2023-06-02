@@ -1,0 +1,2443 @@
+namespace = tc_outer
+#星团生成
+country_event = {
+	id = tc_outer.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_spawn_system_batch = begin
+		create_country = {
+			type = tc_ol_defender_county
+			name = "Outer Land"
+			flag = {
+				icon={
+					category = "tc_event"
+					file="tc_eldeye_flag.dds"
+				}
+				background={
+					category="backgrounds"
+					file="circle.dds"
+				}
+				colors={
+					"purple"
+					"purple"
+					"null"
+					"null"
+				}
+			}
+			species = ""
+			effect = {
+				save_global_event_target_as = tc_outer_land_defender_country_target
+			}
+		}
+		no_scope = {
+			spawn_system = { #核心
+				min_distance >= 550
+				max_distance <= 550
+				min_orientation_angle = 144
+				max_orientation_angle = 146
+				initializer = "tc_ol_ancient_lock_system"
+				hyperlane = no
+				
+				effect = {
+					save_global_event_target_as = tc_ol_system_core
+					#内圈
+					spawn_system = { #石碑
+						initializer = tc_ol_ancient_library_system
+						min_distance >= 15
+						max_distance <= 15
+						min_orientation_angle = 0
+						max_orientation_angle = 0
+						effect = {
+							save_global_event_target_as = tc_ol_system_01
+						}
+					}
+					spawn_system = { #石碑
+						initializer = tc_ol_ancient_library_system
+						min_distance >= 15
+						max_distance <= 15
+						min_orientation_angle = 120
+						max_orientation_angle = 120
+						effect = {
+							save_global_event_target_as = tc_ol_system_03
+						}
+					}
+					spawn_system = { #石碑
+						initializer = tc_ol_ancient_library_system
+						min_distance >= 15
+						max_distance <= 15
+						min_orientation_angle = 240
+						max_orientation_angle = 240
+						effect = {
+							save_global_event_target_as = tc_ol_system_05
+						}
+					}
+					spawn_system = { #虚空
+						initializer = tc_ol_aisle_system
+						min_distance >= 15
+						max_distance <= 15
+						min_orientation_angle = 60
+						max_orientation_angle = 60
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_02
+						}
+					}
+					spawn_system = { #虚空
+						initializer = tc_ol_aisle_system
+						min_distance >= 15
+						max_distance <= 15
+						min_orientation_angle = 180
+						max_orientation_angle = 180
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_04
+						}
+					}
+					spawn_system = { #虚空
+						initializer = tc_ol_aisle_system
+						min_distance >= 15
+						max_distance <= 15
+						min_orientation_angle = 300
+						max_orientation_angle = 300
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_06
+						}
+					}
+
+					#外圈
+					spawn_system = { #石板
+						initializer = tc_ol_runetable_system
+						min_distance >= 30
+						max_distance <= 30
+						min_orientation_angle = 30
+						max_orientation_angle = 30
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_11
+						}
+					}
+					spawn_system = { #腐化
+						initializer = tc_ol_tainted_system
+						min_distance >= 30
+						max_distance <= 30
+						min_orientation_angle = 90
+						max_orientation_angle = 90
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_12
+						}
+					}
+					spawn_system = { #荒古祭坛
+						initializer = tc_ol_infusion_system
+						min_distance >= 30
+						max_distance <= 30
+						min_orientation_angle = 150
+						max_orientation_angle = 150
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_13
+						}
+					}
+					spawn_system = { #陈年障碍
+						initializer = tc_ol_crusted_system
+						min_distance >= 30
+						max_distance <= 30
+						min_orientation_angle = 210
+						max_orientation_angle = 210
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_14
+						}
+					}
+					spawn_system = { #传送门
+						initializer = tc_ol_ancient_gate_system
+						min_distance >= 30
+						max_distance <= 30
+						min_orientation_angle = 270
+						max_orientation_angle = 270
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_15
+						}
+					}
+					spawn_system = { #陈年障碍
+						initializer = tc_ol_crusted_system
+						min_distance >= 30
+						max_distance <= 30
+						min_orientation_angle = 330
+						max_orientation_angle = 330
+						hyperlane = no
+						effect = {
+							save_global_event_target_as = tc_ol_system_16
+						}
+					}
+					#航道生成
+					#01-02-11-16
+					add_hyperlane = { from = event_target:tc_ol_system_01 to = event_target:tc_ol_system_02 }
+					add_hyperlane = { from = event_target:tc_ol_system_01 to = event_target:tc_ol_system_11 }
+					add_hyperlane = { from = event_target:tc_ol_system_01 to = event_target:tc_ol_system_16 }
+					#02-03-12-11
+					add_hyperlane = { from = event_target:tc_ol_system_02 to = event_target:tc_ol_system_03 }
+					add_hyperlane = { from = event_target:tc_ol_system_02 to = event_target:tc_ol_system_12 }
+					add_hyperlane = { from = event_target:tc_ol_system_02 to = event_target:tc_ol_system_11 }
+					#03-04-13-12
+					add_hyperlane = { from = event_target:tc_ol_system_03 to = event_target:tc_ol_system_04 }
+					add_hyperlane = { from = event_target:tc_ol_system_03 to = event_target:tc_ol_system_13 }
+					add_hyperlane = { from = event_target:tc_ol_system_03 to = event_target:tc_ol_system_12 }
+					#04-05-14-13
+					add_hyperlane = { from = event_target:tc_ol_system_04 to = event_target:tc_ol_system_05 }
+					add_hyperlane = { from = event_target:tc_ol_system_04 to = event_target:tc_ol_system_14 }
+					add_hyperlane = { from = event_target:tc_ol_system_04 to = event_target:tc_ol_system_13 }
+					#05-06-15-14
+					add_hyperlane = { from = event_target:tc_ol_system_05 to = event_target:tc_ol_system_06 }
+					add_hyperlane = { from = event_target:tc_ol_system_05 to = event_target:tc_ol_system_15 }
+					add_hyperlane = { from = event_target:tc_ol_system_05 to = event_target:tc_ol_system_14 }
+					#06-01-16-15
+					add_hyperlane = { from = event_target:tc_ol_system_06 to = event_target:tc_ol_system_01 }
+					add_hyperlane = { from = event_target:tc_ol_system_06 to = event_target:tc_ol_system_16 }
+					add_hyperlane = { from = event_target:tc_ol_system_06 to = event_target:tc_ol_system_15 }
+				}
+			}
+		}
+		set_spawn_system_batch = end
+	}
+}
+
+# 5 更新提示
+#country_event = {
+#	id = tc_outer.5
+#	title = Update_Tips
+#	desc = Update_Tips_desc
+#	picture = GFX_event_tc_elder_gate
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		is_ai = no
+#	}
+#
+#	option = {
+#		name = Update_Tips_a
+#	}
+#}
+
+#进入星团通知
+ship_event = {
+	id = tc_outer.10
+	title = tc_outer.10.title
+	desc = tc_outer.10.desc
+	picture = "GFX_event_tc_elder_gate"
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			NOT = {
+				has_country_flag = tc_ol_ancient_gate_detection
+			}
+		}
+		FROM = { has_star_flag = tc_ancient_gate_system }
+	}
+	immediate = {
+		FROMFROM = {
+			set_country_flag = tc_ol_ancient_gate_detection
+		}
+	}
+	option = {
+		name = tc_outer.10.a
+	}
+}
+#初见锁具通知
+ship_event = {
+	id = tc_outer.11
+	title = tc_outer.11.title
+	desc = tc_outer.11.desc
+	picture = "GFX_event_tc_ancient_lock"
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			NOT = { has_country_flag = tc_ol_ancient_lock_detection }
+		}
+		FROM = { has_star_flag = tc_ancient_lock_system }
+	}
+	immediate = {
+		FROMFROM = {
+			set_country_flag = tc_ol_ancient_lock_detection
+		}
+	}
+	option = {
+		name = tc_outer.11.a
+	}
+}
+#初见石板通知
+ship_event = {
+	id = tc_outer.12
+	title = tc_outer.12.title
+	desc = tc_outer.12.desc
+	picture = "GFX_event_tc_runetable"
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			NOT = { has_country_flag = tc_ol_ancient_table_detection }
+		}
+		FROM = { has_star_flag = tc_ol_runetable_system }
+	}
+	immediate = {
+		FROMFROM = {
+			set_country_flag = tc_ol_ancient_table_detection
+		}
+		FROM = {
+			every_system_megastructure = {
+				limit = {
+					is_megastructure_type = tc_runetable_exist
+				}
+				enable_special_project = {
+					name = tc_ol_get_table
+					location = THIS
+					owner = PREVPREV.owner
+				}
+			}
+		}
+	}
+	option = {
+		name = tc_outer.12.a
+	}
+}
+#初见注魔祭坛通知
+ship_event = {
+	id = tc_outer.13
+	title = tc_outer.13.title
+	desc = tc_outer.13.desc
+	picture = "GFX_event_tc_infuster_broken"
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			NOT = {
+				has_country_flag = tc_ol_ancient_infuser_detection
+			}
+		}
+		FROM = { has_star_flag = tc_ol_ancient_infusion_system }
+	}
+	immediate = {
+		FROMFROM = {
+			set_country_flag = tc_ol_ancient_infuser_detection
+		}
+	}
+	option = {
+		name = tc_outer.13.a
+	}
+}
+#收集石板通知
+country_event = {
+	id = tc_outer.14
+	title = tc_outer.14.title
+	desc = tc_outer.14.desc
+	picture = "GFX_event_tc_runetable"
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = tc_outer.14.a
+	}
+}
+#得到石板后再次进入锁具星系
+ship_event = {
+	id = tc_outer.15
+	title = tc_outer.15.title
+	desc = tc_outer.15.desc
+	picture = "GFX_event_tc_ancient_lock"
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			has_country_flag = tc_has_runetable
+			NOT = { has_country_flag = tc_ol_ancient_lock_detection_2 }
+		}
+		FROM = { has_star_flag = tc_ancient_lock_system }
+	}
+	immediate = {
+		FROMFROM = {
+			set_country_flag = tc_ol_ancient_lock_detection_2
+		}
+		solar_system = {
+			every_ambient_object = {
+				limit = {
+					is_ambient_object_type = tc_ancient_room_lock_off
+				}
+				enable_special_project = {
+					name = tc_ol_open_door
+					location = THIS
+					owner = PREVPREV.owner
+				}
+			}
+		}
+	}
+	option = {
+		name = tc_outer.15.a
+	}
+}
+
+#解锁
+system_event = {
+	id = tc_outer.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_ancient_room_lock_off
+			}
+			create_ambient_object = {
+				type = "tc_ancient_room_lock_on"
+				location = star
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				entity_offset = 0
+				use_3d_location = yes
+				entity_face_object = star
+			}
+			destroy_ambient_object = this
+		}
+		create_country = {
+			type = tc_primal_boss_county
+			name = "PRIMAL"
+			flag = {
+				icon={
+					category = "tc_event"
+					file="tc_primal_flag.dds"
+				}
+				background={
+					category="backgrounds"
+					file="circle.dds"
+				}
+				colors={
+					"pink"
+					"pink"
+					"null"
+					"null"
+				}
+			}
+			species = ""
+			effect = {
+				save_global_event_target_as = tc_primal_boss_country_target
+			}
+		}
+		system_event = {
+			id = tc_outer.21
+			days = 30
+		}
+	}
+}
+
+#BOSS战初始化
+system_event = {
+	id = tc_outer.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_ancient_room_lock_on
+			}
+			create_ambient_object = {
+				type = "tc_ancient_room_lock_frame"
+				location = star
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				entity_offset = 0
+				use_3d_location = yes
+				entity_face_object = star
+			}
+			create_ambient_object = {
+				type = "tc_void_shield_effect_object"
+				location = star
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				entity_offset = 0
+				use_3d_location = yes
+				entity_face_object = star
+			}
+			destroy_ambient_object = this
+		}
+		spawn_megastructure = {
+			type = tc_move_target
+			owner = event_target:tc_primal_boss_country_target
+			coords_from = solar_system.star
+			orbit_distance = 0
+			orbit_angle = 0
+			init_effect = {
+				save_event_target_as = tc_primal_boss_spawn_target
+			}
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_primal"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+				can_upgrade = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = event_target:tc_primal_boss_spawn_target
+				create_ship = {
+					name = "PRIMAL"
+					design = "NAME_tc_boss_primal_1_design"
+					effect = {
+						save_global_event_target_as = tc_boss_primal_ship_1_target
+					}
+				}
+				save_global_event_target_as = tc_boss_primal_fleet_target
+				fleet_event = { id = tc_weapon.6 days = 0 }
+				fleet_event = { id = tc_weapon.7 days = 30 }
+			}
+		}
+		star = { #移除星系恒星基地
+			starbase.fleet = {
+				fleet_event = {
+					id = tc_weapon.5 #通用删船事件
+				}
+			}
+		}
+		set_star_flag = tc_boss_primal_stage_1_flag
+		set_star_flag = tc_boss_primal_on_battle_flag
+		system_event = {
+			id = tc_outer.1000
+		}
+	}
+}
+
+#BOSS战过程中 阻止外来舰队进入
+fleet_event = {
+	id = tc_outer.25
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			has_star_flag = tc_boss_primal_on_battle_flag
+		}
+	}
+	immediate = {
+		set_mia = mia_return_home
+	}
+}
+#50
+#阶段转换
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = tc_outer.50
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			is_ship_size = tc_boss_primal
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				FROMFROM = {
+					is_same_value = event_target:tc_boss_primal_ship_1_target
+				}
+			}
+			event_target:tc_boss_primal_fleet_target = {
+				create_ship = {
+					name = "PRIMAL"
+					design = "NAME_tc_boss_primal_2_design"
+					effect = {
+						save_global_event_target_as = tc_boss_primal_ship_2_target
+					}
+				}
+				fleet_event = { id = tc_weapon.6 days = 0 }
+				fleet_event = { id = tc_weapon.7 days = 30 }
+				solar_system = {
+					remove_star_flag = tc_boss_primal_stage_1_flag
+					set_star_flag = tc_boss_primal_stage_2_flag
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				FROMFROM = {
+					is_same_value = event_target:tc_boss_primal_ship_2_target
+				}
+			}
+			event_target:tc_boss_primal_fleet_target = {
+				create_ship = {
+					name = "PRIMAL"
+					design = "NAME_tc_boss_primal_3_design"
+					effect = {
+						save_global_event_target_as = tc_boss_primal_ship_3_target
+					}
+				}
+				fleet_event = { id = tc_weapon.6 days = 0 }
+				fleet_event = { id = tc_weapon.7 days = 30 }
+				solar_system = {
+					remove_star_flag = tc_boss_primal_stage_2_flag
+					set_star_flag = tc_boss_primal_stage_3_flag
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				FROMFROM = {
+					is_same_value = event_target:tc_boss_primal_ship_3_target
+				}
+			}
+			event_target:tc_boss_primal_fleet_target = {
+				create_ship = {
+					name = "PRIMAL"
+					design = "NAME_tc_boss_primal_4_design"
+					effect = {
+						save_global_event_target_as = tc_boss_primal_ship_4_target
+					}
+				}
+				fleet_event = { id = tc_weapon.6 days = 0 }
+				fleet_event = { id = tc_weapon.7 days = 30 }
+				solar_system = {
+					remove_star_flag = tc_boss_primal_stage_3_flag
+					set_star_flag = tc_boss_primal_stage_4_flag
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				FROMFROM = {
+					is_same_value = event_target:tc_boss_primal_ship_4_target
+				}
+			}
+			FROMFROM = {
+				solar_system = {
+					remove_star_flag = tc_boss_primal_stage_4_flag
+					set_star_flag = tc_boss_primal_stage_end_flag
+					system_event = {
+						id = tc_outer.51
+					}
+				}
+			}
+			FROM = {
+				country_event = {
+					id = tc_outer.52
+				}
+			}
+		}
+	}
+}
+
+#BOSS战胜利
+country_event = {
+	id = tc_outer.52
+	title = tc_outer.52.title
+	desc = tc_outer.52.desc
+	picture = "GFX_event_tc_primal_pearl_end"
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		set_country_flag = tc_has_primal_pearl
+	}
+
+	option = {
+		name = tc_outer.52.a
+		add_relic = tc_ex_primordial_pearl
+	}
+}
+
+#BOSS战结束
+system_event = {
+	id = tc_outer.51
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_void_shield_effect_object
+			}
+			destroy_ambient_object = this
+		}
+		every_system_megastructure = {
+			limit = {
+				OR = {
+					is_megastructure_type = tc_primal_prism_mega_unit_00
+					is_megastructure_type = tc_primal_prism_mega_unit_01
+					is_megastructure_type = tc_move_target
+				}
+			}
+			remove_megastructure = this
+		}
+		remove_star_flag =  tc_boss_primal_on_battle_flag
+	}
+}
+#BOSS战中断初始化
+system_event = {
+	id = tc_outer.55
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		every_fleet_in_system = {
+			if = {
+				limit = { 
+					is_owned_by = event_target:tc_primal_boss_country_target
+				}
+				fleet_event = {
+					id = tc_weapon.5
+				}
+			}
+		}
+		create_ambient_object = {
+			type = "tc_ancient_room_lock_off"
+			location = star
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			entity_offset = 0
+			use_3d_location = yes
+			entity_face_object = star
+		}
+		last_created_ambient_object = {
+			save_event_target_as = tc_ol_open_door_again_target
+		}
+		every_country = {
+			limit = {
+				has_country_flag = tc_has_runetable
+			}
+			enable_special_project = {
+				name = tc_ol_open_door_again
+				location = event_target:tc_ol_open_door_again_target
+				owner = THIS
+			}
+			country_event = {
+				id = tc_outer.56
+			}
+		}
+		remove_star_flag = tc_boss_primal_stage_1_flag
+		remove_star_flag = tc_boss_primal_stage_2_flag
+		remove_star_flag = tc_boss_primal_stage_3_flag
+		remove_star_flag = tc_boss_primal_stage_4_flag
+		remove_star_flag = tc_boss_primal_stage_end_flag
+		remove_star_flag = tc_boss_primal_on_battle_flag
+		every_fleet_in_system = {
+			limit = {
+				is_same_value = event_target:tc_boss_primal_fleet_target
+			}
+			fleet_event = {
+				id = tc_weapon.5
+			}
+		}
+		every_system_ambient_object = {
+			limit = {
+				OR = {
+					is_ambient_object_type = tc_void_shield_effect_object
+					is_ambient_object_type = tc_ancient_room_lock_frame
+				}
+			}
+			destroy_ambient_object = this
+		}
+		every_system_megastructure = {
+			limit = {
+				OR = {
+					is_megastructure_type = tc_primal_prism_mega_unit_00
+					is_megastructure_type = tc_primal_prism_mega_unit_01
+					is_megastructure_type = tc_move_target
+				}
+			}
+			remove_megastructure = this
+		}
+	}
+}
+country_event = {
+	id = tc_outer.56
+	title = tc_outer.56.title
+	desc = tc_outer.56.desc
+	picture = "GFX_event_tc_ancient_lock"
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = tc_outer.56.a
+	}
+}
+#BOSS战异常初始化
+system_event = {
+	id = tc_outer.57
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		every_fleet_in_system = {
+			if = {
+				limit = {
+					is_owned_by = event_target:tc_primal_boss_country_target
+				}
+				fleet_event = {
+					id = tc_weapon.5
+				}
+			}
+			if = {
+				limit = {
+					NOT = { is_owned_by = event_target:tc_primal_boss_country_target }
+					any_owned_ship = {
+						is_ship_size = tc_boss_primal
+					}
+				}
+				fleet_event = {
+					id = tc_weapon.5
+				}
+			}
+			if = {
+				limit = {
+					NOT = { is_owned_by = event_target:tc_primal_boss_country_target }
+				}
+				set_mia = mia_return_home
+			}
+		}
+		create_ambient_object = {
+			type = "tc_ancient_room_lock_off"
+			location = star
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			entity_offset = 0
+			use_3d_location = yes
+			entity_face_object = star
+		}
+		last_created_ambient_object = {
+			save_event_target_as = tc_ol_open_door_again_target
+		}
+		every_country = {
+			limit = {
+				has_country_flag = tc_has_runetable
+			}
+			enable_special_project = {
+				name = tc_ol_open_door_again
+				location = event_target:tc_ol_open_door_again_target
+				owner = THIS
+			}
+			country_event = {
+				id = tc_outer.58
+			}
+		}
+		remove_star_flag = tc_boss_primal_stage_1_flag
+		remove_star_flag = tc_boss_primal_stage_2_flag
+		remove_star_flag = tc_boss_primal_stage_3_flag
+		remove_star_flag = tc_boss_primal_stage_4_flag
+		remove_star_flag = tc_boss_primal_stage_end_flag
+		remove_star_flag = tc_boss_primal_on_battle_flag
+		every_system_ambient_object = {
+			limit = {
+				OR = {
+					is_ambient_object_type = tc_void_shield_effect_object
+					is_ambient_object_type = tc_ancient_room_lock_frame
+				}
+			}
+			destroy_ambient_object = this
+		}
+		every_system_megastructure = {
+			limit = {
+				OR = {
+					is_megastructure_type = tc_primal_prism_mega_unit_00
+					is_megastructure_type = tc_primal_prism_mega_unit_01
+					is_megastructure_type = tc_move_target
+				}
+			}
+			remove_megastructure = this
+		}
+	}
+}
+country_event = {
+	id = tc_outer.58
+	title = tc_outer.58.title
+	desc = tc_outer.58.desc
+	picture = "GFX_event_tc_ancient_lock"
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = tc_outer.58.a
+	}
+}
+#100
+###血腥教徒相关
+#建立联系
+#舰船被探测
+# This = country
+# From = Fleet
+country_event = {
+	id = tc_outer.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			OR = {
+				is_owned_by = event_target:tc_crimson_cleric_country_target
+				is_owned_by = event_target:tc_outer_land_defender_country_target
+				is_owned_by = event_target:tc_primal_boss_country_target
+			}
+		}
+	}
+
+	immediate = {
+		establish_communications_no_message = FROM.owner
+	}
+}
+
+#外交事件
+# Country scope
+# This = target country (player)
+# From = source country	
+country_event = {
+	id = tc_outer.101
+	title = tc_outer.101.title
+	desc = tc_outer.101.desc
+	desc = tc_outer.101.desc2
+	desc = tc_outer.101.desc3
+	message_desc = tc_outer.101.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	diplomatic_title = BLANK_STRING
+
+	picture_event_data = {
+		portrait = event_target:tc_crimson_cleric_country_target
+		room = tc_crimson_room
+	}
+
+	trigger = {
+		FROM = {
+			is_same_value = event_target:tc_crimson_cleric_country_target
+			#is_country_type = tc_crimson_county
+		}
+	}
+	immediate = {
+		
+	}
+
+	option = {
+		name = tc_outer.101.a
+		response_text = tc_outer.101.a.text
+		is_dialog_only = yes
+	}
+	option = {
+		name = tc_outer.101.b
+		response_text = tc_outer.101.b.text
+		is_dialog_only = yes
+	}
+	option = {
+		name = tc_outer.101.c
+	}
+}
+
+#摧毁血腥恒星基地触发 添加研究项目
+#摧毁舰船
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = tc_outer.102
+	title = "tc_outer.102.title"
+	desc = "tc_outer.102.desc"
+	picture = "GFX_evt_debris"
+	is_triggered_only = yes
+
+	trigger = {
+		#NOT = { has_country_flag = tc_crimson_rites_get }
+		#NOT = { has_technology = tc_tech_crimson_rites }
+		FROMFROMFROM = {
+			is_owned_by = event_target:tc_crimson_cleric_country_target
+			is_ship_size = tc_starbase
+		}
+	}
+
+	immediate = {
+		FROMFROMFROM = {
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = THIS
+			}
+			enable_special_project = {
+				name = tc_crimson_base_wreck_search
+				location = last_created_ambient_object
+				owner = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = "tc_outer.102.a"
+	}
+}
+
+#调查完毕通知
+country_event = {
+	id = tc_outer.103
+	title = "tc_outer.103.title"
+	desc = "tc_outer.103.desc"
+	picture = "GFX_evt_sabotaged_ship"
+	is_triggered_only = yes
+
+	option = {
+		name = "tc_outer.103.a"
+		custom_tooltip = "tc_crimson_rites_get_text"
+	}
+}
+#重复调查完毕通知
+country_event = {
+	id = tc_outer.104
+	title = "tc_outer.104.title"
+	desc = "tc_outer.104.desc"
+	picture = "GFX_evt_sabotaged_ship"
+	is_triggered_only = yes
+
+	option = {
+		name = "tc_outer.104.a"
+	}
+}
+#六个基地全收集通知
+country_event = {
+	id = tc_outer.105
+	title = "tc_outer.105.title"
+	desc = "tc_outer.105.desc"
+	picture = "GFX_evt_sabotaged_ship"
+	is_triggered_only = yes
+
+	option = {
+		name = "tc_outer.105.a"
+		add_tech_progress = {
+			tech = tc_tech_crimson_weapon
+			progress = 0.01
+		}
+	}
+}
+
+#1000
+#BOSS战技能
+
+#技能组循环
+system_event = {
+	id = tc_outer.1000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		if = { #异常中断检测
+			limit = { 
+				has_star_flag =  tc_boss_primal_on_battle_flag
+				NOT = {
+					any_ship_in_system = {
+						is_ship_size = tc_boss_primal
+						is_owned_by = event_target:tc_primal_boss_country_target
+					}
+				}
+			}
+			system_event = {
+				id = tc_outer.57
+			}
+			break = yes
+		}
+		else_if = { #中断检测
+			limit = {
+				NOT = {
+					any_ship_in_system = {
+						NOT = { is_owned_by = event_target:tc_primal_boss_country_target }
+					}
+				}
+			}
+			system_event = {
+				id = tc_outer.55
+			}
+			break = yes
+		}
+		if = { #技能组
+			limit = {
+				has_star_flag = tc_boss_primal_stage_1_flag
+			}
+			random_list = {
+				0 = {
+					system_event = {
+						id = tc_outer.1100 #元素爆破技能组
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1200 #线列冲击技能组 
+					}
+				}
+				0 = {
+					system_event = {
+						id = tc_outer.1300 #爆破光球技能组 #放弃
+					}
+				}
+				0 = {
+					system_event = {
+						id = tc_outer.1400 #召唤元始棱镜
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1500 #随机光束
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_2_flag
+			}
+			random_list = {
+				10 = {
+					system_event = {
+						id = tc_outer.1100 #元素爆破技能组
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1200 #线列冲击技能组 
+					}
+				}
+				0 = {
+					system_event = {
+						id = tc_outer.1300 #爆破光球技能组 #放弃
+					}
+				}
+				0 = {
+					system_event = {
+						id = tc_outer.1400 #召唤元始棱镜
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1500 #随机光束
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_3_flag
+			}
+			random_list = {
+				10 = {
+					system_event = {
+						id = tc_outer.1100 #元素爆破技能组
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1200 #线列冲击技能组 
+					}
+				}
+				0 = {
+					system_event = {
+						id = tc_outer.1300 #爆破光球技能组 #放弃
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1400 #召唤元始棱镜
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1500 #随机光束
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_4_flag
+			}
+			random_list = {
+				10 = {
+					system_event = {
+						id = tc_outer.1100 #元素爆破技能组
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1200 #线列冲击技能组 
+					}
+				}
+				0 = {
+					system_event = {
+						id = tc_outer.1300 #爆破光球技能组 #放弃
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1400 #召唤元始棱镜
+					}
+				}
+				10 = {
+					system_event = {
+						id = tc_outer.1500 #随机光束
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_end_flag
+			}
+			break = yes
+		}
+	}
+}
+
+#元素爆破技能组
+system_event = {
+	id = tc_outer.1100
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_1_flag
+			}
+			system_event = { id = tc_outer.1110 days = 0  }
+			system_event = { id = tc_outer.1120 days = 5 }
+			system_event = { id = tc_outer.1130 days = 10 }
+			system_event = { id = tc_outer.1140 days = 15 }
+			system_event = { id = tc_outer.1150 days = 20 }
+			system_event = { id = tc_outer.1160 days = 25 }
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_2_flag
+			}
+			system_event = { id = tc_outer.1110 days = 0  }
+			system_event = { id = tc_outer.1120 days = 5 }
+			system_event = { id = tc_outer.1130 days = 10 }
+			system_event = { id = tc_outer.1140 days = 15 }
+			system_event = { id = tc_outer.1150 days = 20 }
+			system_event = { id = tc_outer.1160 days = 25 }
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_3_flag
+			}
+			system_event = { id = tc_outer.1110 days = 0  }
+			system_event = { id = tc_outer.1120 days = 2  }
+			system_event = { id = tc_outer.1130 days = 4  }
+			system_event = { id = tc_outer.1140 days = 6  }
+			system_event = { id = tc_outer.1150 days = 8  }
+			system_event = { id = tc_outer.1160 days = 10 }
+			system_event = { id = tc_outer.1110 days = 12 }
+			system_event = { id = tc_outer.1120 days = 14 }
+			system_event = { id = tc_outer.1130 days = 16 }
+			system_event = { id = tc_outer.1140 days = 18 }
+			system_event = { id = tc_outer.1150 days = 20 }
+			system_event = { id = tc_outer.1160 days = 22 }
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_4_flag
+			}
+			system_event = { id = tc_outer.1110 days = 0  }
+			system_event = { id = tc_outer.1120 days = 1  }
+			system_event = { id = tc_outer.1130 days = 2  }
+			system_event = { id = tc_outer.1140 days = 3  }
+			system_event = { id = tc_outer.1150 days = 4  }
+			system_event = { id = tc_outer.1160 days = 5  }
+
+			system_event = { id = tc_outer.1110 days = 6  }
+			system_event = { id = tc_outer.1120 days = 7  }
+			system_event = { id = tc_outer.1130 days = 8  }
+			system_event = { id = tc_outer.1140 days = 9  }
+			system_event = { id = tc_outer.1150 days = 10 }
+			system_event = { id = tc_outer.1160 days = 11 }
+
+			system_event = { id = tc_outer.1110 days = 12 }
+			system_event = { id = tc_outer.1120 days = 13 }
+			system_event = { id = tc_outer.1130 days = 14 }
+			system_event = { id = tc_outer.1140 days = 15 }
+			system_event = { id = tc_outer.1150 days = 16 }
+			system_event = { id = tc_outer.1160 days = 17 }
+
+			system_event = { id = tc_outer.1110 days = 18 }
+			system_event = { id = tc_outer.1120 days = 19 }
+			system_event = { id = tc_outer.1130 days = 20 }
+			system_event = { id = tc_outer.1140 days = 21 }
+			system_event = { id = tc_outer.1150 days = 22 }
+			system_event = { id = tc_outer.1160 days = 23 }
+
+			system_event = { id = tc_outer.1110 days = 24 }
+			system_event = { id = tc_outer.1120 days = 25 }
+			system_event = { id = tc_outer.1130 days = 26 }
+			system_event = { id = tc_outer.1140 days = 27 }
+			system_event = { id = tc_outer.1150 days = 28 }
+			system_event = { id = tc_outer.1160 days = 29 }
+		}
+		system_event = {
+			id = tc_outer.1000
+			days = 30
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1110
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_ship_in_system = {
+			limit = {
+				NOT = {
+					is_owned_by = event_target:tc_primal_boss_country_target
+				}
+			}
+			create_ambient_object = {
+				type = "tc_boss_beam_transfer_target"
+				location = this
+				entity_offset = 0
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				use_3d_location = yes
+				duration = 4
+			}
+		}
+		create_ambient_object = {
+			type = "tc_boss_beam_aer_target"
+			location = last_created_ambient_object
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = no
+			duration = 4
+		}
+		system_event = {
+			id = tc_outer.1111
+			days = 3
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1111
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_boss_beam_aer_target
+			}
+			create_fleet = {
+				name = "NAME_tc_boss_beam"
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:tc_primal_boss_country_target
+					set_location = prev
+					create_ship = {
+						name = "BEAM"
+						design = "NAME_tc_boss_aer_beam"
+					}
+					set_event_locked = yes
+					fleet_event = {
+						id = tc_weapon.5 #通用删船事件
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1120
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_ship_in_system = {
+			limit = {
+				NOT = {
+					is_owned_by = event_target:tc_primal_boss_country_target
+				}
+			}
+			create_ambient_object = {
+				type = "tc_boss_beam_transfer_target"
+				location = this
+				entity_offset = 0
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				use_3d_location = yes
+				duration = 4
+			}
+		}
+		create_ambient_object = {
+			type = "tc_boss_beam_ignis_target"
+			location = last_created_ambient_object
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = no
+			duration = 4
+		}
+		system_event = {
+			id = tc_outer.1121
+			days = 3
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1121
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_boss_beam_ignis_target
+			}
+			create_fleet = {
+				name = "NAME_tc_boss_beam"
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:tc_primal_boss_country_target
+					set_location = prev
+					create_ship = {
+						name = "BEAM"
+						design = "NAME_tc_boss_ignis_beam"
+					}
+					set_event_locked = yes
+					fleet_event = {
+						id = tc_weapon.5 #通用删船事件
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1130
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_ship_in_system = {
+			limit = {
+				NOT = {
+					is_owned_by = event_target:tc_primal_boss_country_target
+				}
+			}
+			create_ambient_object = {
+				type = "tc_boss_beam_transfer_target"
+				location = this
+				entity_offset = 0
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				use_3d_location = yes
+				duration = 4
+			}
+		}
+		create_ambient_object = {
+			type = "tc_boss_beam_aqua_target"
+			location = last_created_ambient_object
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = no
+			duration = 4
+		}
+		system_event = {
+			id = tc_outer.1131
+			days = 3
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1131
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_boss_beam_aqua_target
+			}
+			create_fleet = {
+				name = "NAME_tc_boss_beam"
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:tc_primal_boss_country_target
+					set_location = prev
+					create_ship = {
+						name = "BEAM"
+						design = "NAME_tc_boss_aqua_beam"
+					}
+					set_event_locked = yes
+					fleet_event = {
+						id = tc_weapon.5 #通用删船事件
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1140
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_ship_in_system = {
+			limit = {
+				NOT = {
+					is_owned_by = event_target:tc_primal_boss_country_target
+				}
+			}
+			create_ambient_object = {
+				type = "tc_boss_beam_transfer_target"
+				location = this
+				entity_offset = 0
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				use_3d_location = yes
+				duration = 4
+			}
+		}
+		create_ambient_object = {
+			type = "tc_boss_beam_terra_target"
+			location = last_created_ambient_object
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = no
+			duration = 4
+		}
+		system_event = {
+			id = tc_outer.1141
+			days = 3
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1141
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_boss_beam_terra_target
+			}
+			create_fleet = {
+				name = "NAME_tc_boss_beam"
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:tc_primal_boss_country_target
+					set_location = prev
+					create_ship = {
+						name = "BEAM"
+						design = "NAME_tc_boss_terra_beam"
+					}
+					set_event_locked = yes
+					fleet_event = {
+						id = tc_weapon.5 #通用删船事件
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1150
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_ship_in_system = {
+			limit = {
+				NOT = {
+					is_owned_by = event_target:tc_primal_boss_country_target
+				}
+			}
+			create_ambient_object = {
+				type = "tc_boss_beam_transfer_target"
+				location = this
+				entity_offset = 0
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				use_3d_location = yes
+				duration = 4
+			}
+		}
+		create_ambient_object = {
+			type = "tc_boss_beam_ordo_target"
+			location = last_created_ambient_object
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = no
+			duration = 4
+		}
+		system_event = {
+			id = tc_outer.1151
+			days = 3
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1151
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_boss_beam_ordo_target
+			}
+			create_fleet = {
+				name = "NAME_tc_boss_beam"
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:tc_primal_boss_country_target
+					set_location = prev
+					create_ship = {
+						name = "BEAM"
+						design = "NAME_tc_boss_ordo_beam"
+					}
+					set_event_locked = yes
+					fleet_event = {
+						id = tc_weapon.5 #通用删船事件
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1160
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_ship_in_system = {
+			limit = {
+				NOT = {
+					is_owned_by = event_target:tc_primal_boss_country_target
+				}
+			}
+			create_ambient_object = {
+				type = "tc_boss_beam_transfer_target"
+				location = this
+				entity_offset = 0
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				use_3d_location = yes
+				duration = 4
+			}
+		}
+		create_ambient_object = {
+			type = "tc_boss_beam_perditio_target"
+			location = last_created_ambient_object
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = no
+			duration = 4
+		}
+		system_event = {
+			id = tc_outer.1161
+			days = 3
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1161
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_boss_beam_perditio_target
+			}
+			create_fleet = {
+				name = "NAME_tc_boss_beam"
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:tc_primal_boss_country_target
+					set_location = prev
+					create_ship = {
+						name = "BEAM"
+						design = "NAME_tc_boss_perditio_beam"
+					}
+					set_event_locked = yes
+					fleet_event = {
+						id = tc_weapon.5 #通用删船事件
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+#线列冲击技能组
+system_event = {
+	id = tc_outer.1200
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		#定位器生成-圆心和300半径位置的36位点
+		tc_target_locator_circle_ang_10_spawn = yes
+		#额外三个随机位置
+		while = {
+			count = 3
+			create_ambient_object = {
+				type = "tc_target_locator"
+				location = this
+				entity_offset = 0
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				use_3d_location = yes
+				duration = 30
+			}
+		}
+		if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_1_flag
+			}
+			system_event = { id = tc_outer.1210 days = 0 }
+			system_event = { id = tc_outer.1210 days = 5 }
+			system_event = { id = tc_outer.1210 days = 10 }
+			system_event = { id = tc_outer.1210 days = 15 }
+			system_event = { id = tc_outer.1210 days = 20 }
+			system_event = { id = tc_outer.1210 days = 25 }
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_2_flag
+			}
+			system_event = { id = tc_outer.1210 days = 0 }
+			system_event = { id = tc_outer.1210 days = 5 }
+			system_event = { id = tc_outer.1210 days = 10 }
+			system_event = { id = tc_outer.1210 days = 15 }
+			system_event = { id = tc_outer.1210 days = 20 }
+			system_event = { id = tc_outer.1210 days = 25 }
+
+			system_event = { id = tc_outer.1210 days = 0 }
+			system_event = { id = tc_outer.1210 days = 5 }
+			system_event = { id = tc_outer.1210 days = 10 }
+			system_event = { id = tc_outer.1210 days = 15 }
+			system_event = { id = tc_outer.1210 days = 20 }
+			system_event = { id = tc_outer.1210 days = 25 }
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_3_flag
+			}
+			system_event = { id = tc_outer.1210 days = 0 }
+			system_event = { id = tc_outer.1210 days = 3 }
+			system_event = { id = tc_outer.1210 days = 6 }
+			system_event = { id = tc_outer.1210 days = 9 }
+			system_event = { id = tc_outer.1210 days = 12 }
+			system_event = { id = tc_outer.1210 days = 15 }
+			system_event = { id = tc_outer.1210 days = 18 }
+			system_event = { id = tc_outer.1210 days = 21 }
+			system_event = { id = tc_outer.1210 days = 24 }
+			system_event = { id = tc_outer.1210 days = 27 }
+
+			system_event = { id = tc_outer.1210 days = 0 }
+			system_event = { id = tc_outer.1210 days = 3 }
+			system_event = { id = tc_outer.1210 days = 6 }
+			system_event = { id = tc_outer.1210 days = 9 }
+			system_event = { id = tc_outer.1210 days = 12 }
+			system_event = { id = tc_outer.1210 days = 15 }
+			system_event = { id = tc_outer.1210 days = 18 }
+			system_event = { id = tc_outer.1210 days = 21 }
+			system_event = { id = tc_outer.1210 days = 24 }
+			system_event = { id = tc_outer.1210 days = 27 }
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_4_flag
+			}
+			system_event = { id = tc_outer.1210 days = 0 }
+			system_event = { id = tc_outer.1210 days = 2 }
+			system_event = { id = tc_outer.1210 days = 4 }
+			system_event = { id = tc_outer.1210 days = 6 }
+			system_event = { id = tc_outer.1210 days = 8 }
+			system_event = { id = tc_outer.1210 days = 10 }
+			system_event = { id = tc_outer.1210 days = 12 }
+			system_event = { id = tc_outer.1210 days = 14 }
+			system_event = { id = tc_outer.1210 days = 16 }
+			system_event = { id = tc_outer.1210 days = 18 }
+			system_event = { id = tc_outer.1210 days = 20 }
+			system_event = { id = tc_outer.1210 days = 22 }
+			system_event = { id = tc_outer.1210 days = 24 }
+			system_event = { id = tc_outer.1210 days = 26 }
+			system_event = { id = tc_outer.1210 days = 28 }
+
+			system_event = { id = tc_outer.1210 days = 0 }
+			system_event = { id = tc_outer.1210 days = 2 }
+			system_event = { id = tc_outer.1210 days = 4 }
+			system_event = { id = tc_outer.1210 days = 6 }
+			system_event = { id = tc_outer.1210 days = 8 }
+			system_event = { id = tc_outer.1210 days = 10 }
+			system_event = { id = tc_outer.1210 days = 12 }
+			system_event = { id = tc_outer.1210 days = 14 }
+			system_event = { id = tc_outer.1210 days = 16 }
+			system_event = { id = tc_outer.1210 days = 18 }
+			system_event = { id = tc_outer.1210 days = 20 }
+			system_event = { id = tc_outer.1210 days = 22 }
+			system_event = { id = tc_outer.1210 days = 24 }
+			system_event = { id = tc_outer.1210 days = 26 }
+			system_event = { id = tc_outer.1210 days = 28 }
+		}
+		system_event = {
+			id = tc_outer.1000
+			days = 30
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1210
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_target_locator
+			}
+			save_event_target_as = tc_spawn_target
+		}
+		random_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_target_locator
+				NOT = { is_same_value = event_target:tc_spawn_target }
+			}
+			save_event_target_as = tc_move_target
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_line_orb"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = event_target:tc_spawn_target
+				create_ship = {
+					name = "ORB"
+					design = "NAME_tc_boss_line_orb"
+				}
+				queue_actions = {
+					move_to = event_target:tc_move_target
+				}
+				fleet_event = {
+					id = tc_weapon.6 #通用锁船事件
+					days = 1
+				}
+				fleet_event = {
+					id = tc_weapon.5 #通用删船事件
+					days = 30
+				}
+			}
+		}
+	}
+}
+
+#爆破光球技能组 #放弃
+system_event = {
+	id = tc_outer.1300
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { }
+			system_event = {
+				id = tc_outer.1310
+				days = 0
+			}
+		}
+		else_if = {
+			limit = { }
+		} 
+		system_event = {
+			id = tc_outer.1000
+			days = 30
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1310
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = this
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		spawn_megastructure = {
+			type = tc_primal_charm_target
+			owner = event_target:tc_primal_boss_country_target
+			coords_from = last_created_ambient_object
+			orbit_distance = 0
+			orbit_angle = 0
+			init_effect = {
+				save_event_target_as = tc_primal_orb_move_target
+			}
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_primal_orb"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = event_target:tc_boss_primal_fleet_target
+				create_ship = {
+					name = "ORB"
+					design = "NAME_tc_boss_primal_orb"
+				}
+				queue_actions = {
+					move_to = event_target:tc_primal_orb_move_target
+					orbit_planet = event_target:tc_primal_orb_move_target
+				}
+			}
+		}
+		system_event = {
+			id = tc_outer.1311
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1311
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_system_megastructure = {
+			if = {
+				limit = {
+					is_megastructure_type = tc_primal_charm_target
+					any_fleet_in_orbit = {
+						#exists = this
+						any_owned_ship = {
+							is_ship_size = tc_boss_primal_orb_ship
+						}
+					}
+				}
+				create_fleet = {
+					name = "NAME_tc_boss_primal_blast"
+					settings = {
+						is_boss = yes
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = event_target:tc_primal_boss_country_target
+						set_location = PREV
+						create_ship = {
+							name = "BLAST"
+							design = "NAME_tc_boss_primal_blast_aura"
+						}
+						fleet_event = {
+							id = tc_weapon.5 #通用删船事件
+							days = 3
+						}
+					}
+				}
+				every_fleet_in_orbit = {
+					fleet_event = {
+						id = tc_weapon.5 #通用删船事件
+					}
+				}
+				remove_megastructure = this
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = tc_timer_var
+						value >= 30
+					}
+				}
+				remove_megastructure = this
+			}
+			else = {
+				change_variable = {
+					which = tc_timer_var
+					value = 1
+				}
+				solar_system = { #循环
+					system_event = {
+						id = tc_outer.1311
+						days = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+#元始棱镜
+system_event = {
+	id = tc_outer.1400
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { 
+				has_star_flag = tc_boss_primal_stage_1_flag
+			}
+			system_event = { id = tc_outer.1410 days = 0 }
+		}
+		else_if = {
+			limit = { 
+				has_star_flag = tc_boss_primal_stage_2_flag
+			}
+			system_event = { id = tc_outer.1410 days = 0 }
+			system_event = { id = tc_outer.1410 days = 5 }
+			system_event = { id = tc_outer.1410 days = 10 }
+		} 
+		else_if = {
+			limit = { 
+				has_star_flag = tc_boss_primal_stage_3_flag
+			}
+			system_event = { id = tc_outer.1410 days = 0 }
+			system_event = { id = tc_outer.1410 days = 5 }
+			system_event = { id = tc_outer.1410 days = 10 }
+		} 
+		else_if = {
+			limit = { 
+				has_star_flag = tc_boss_primal_stage_4_flag
+			}
+			system_event = { id = tc_outer.1410 days = 0 }
+			system_event = { id = tc_outer.1410 days = 5 }
+			system_event = { id = tc_outer.1410 days = 10 }
+			system_event = { id = tc_outer.1410 days = 15 }
+			system_event = { id = tc_outer.1410 days = 20 }
+			system_event = { id = tc_outer.1410 days = 25 }
+		} 
+		system_event = {
+			id = tc_outer.1000
+			days = 30
+		}
+	}
+}
+
+system_event = {
+	id = tc_outer.1410
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = this
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		spawn_megastructure = {
+			type = tc_primal_prism_mega_unit_00
+			owner = event_target:tc_primal_boss_country_target
+			coords_from = last_created_ambient_object
+			orbit_distance = 0
+			orbit_angle = 0
+		}
+	}
+}
+
+#随机光束
+system_event = {
+	id = tc_outer.1500
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_1_flag
+			}
+			system_event = { id = tc_outer.1511 days = 0 }
+			system_event = { id = tc_outer.1512 days = 5 }
+			system_event = { id = tc_outer.1513 days = 10 }
+			system_event = { id = tc_outer.1514 days = 15 }
+			system_event = { id = tc_outer.1515 days = 20 }
+			system_event = { id = tc_outer.1516 days = 25 }
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_2_flag
+			}
+			system_event = { id = tc_outer.1511 days = 0 }
+			system_event = { id = tc_outer.1512 days = 5 }
+			system_event = { id = tc_outer.1513 days = 10 }
+			system_event = { id = tc_outer.1514 days = 15 }
+			system_event = { id = tc_outer.1515 days = 20 }
+			system_event = { id = tc_outer.1516 days = 25 }
+
+			system_event = { id = tc_outer.1511 days = 2 }
+			system_event = { id = tc_outer.1512 days = 7 }
+			system_event = { id = tc_outer.1513 days = 12 }
+			system_event = { id = tc_outer.1514 days = 17 }
+			system_event = { id = tc_outer.1515 days = 22 }
+			system_event = { id = tc_outer.1516 days = 27 }
+		} 
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_3_flag
+			}
+			system_event = { id = tc_outer.1511 days = 0 }
+			system_event = { id = tc_outer.1512 days = 5 }
+			system_event = { id = tc_outer.1513 days = 10 }
+			system_event = { id = tc_outer.1514 days = 15 }
+			system_event = { id = tc_outer.1515 days = 20 }
+			system_event = { id = tc_outer.1516 days = 25 }
+
+			system_event = { id = tc_outer.1511 days = 2 }
+			system_event = { id = tc_outer.1512 days = 7 }
+			system_event = { id = tc_outer.1513 days = 12 }
+			system_event = { id = tc_outer.1514 days = 17 }
+			system_event = { id = tc_outer.1515 days = 22 }
+			system_event = { id = tc_outer.1516 days = 27 }
+
+			system_event = { id = tc_outer.1511 days = 4 }
+			system_event = { id = tc_outer.1512 days = 9 }
+			system_event = { id = tc_outer.1513 days = 14 }
+			system_event = { id = tc_outer.1514 days = 19 }
+			system_event = { id = tc_outer.1515 days = 24 }
+			system_event = { id = tc_outer.1516 days = 29 }
+		}
+		else_if = {
+			limit = {
+				has_star_flag = tc_boss_primal_stage_4_flag
+			}
+			system_event = { id = tc_outer.1511 days = 0 }
+			system_event = { id = tc_outer.1512 days = 1 }
+			system_event = { id = tc_outer.1513 days = 2 }
+			system_event = { id = tc_outer.1514 days = 3 }
+			system_event = { id = tc_outer.1515 days = 4 }
+			system_event = { id = tc_outer.1516 days = 5 }
+
+			system_event = { id = tc_outer.1511 days = 6 }
+			system_event = { id = tc_outer.1512 days = 7 }
+			system_event = { id = tc_outer.1513 days = 8 }
+			system_event = { id = tc_outer.1514 days = 9 }
+			system_event = { id = tc_outer.1515 days = 10 }
+			system_event = { id = tc_outer.1516 days = 11 }
+
+			system_event = { id = tc_outer.1511 days = 12 }
+			system_event = { id = tc_outer.1512 days = 13 }
+			system_event = { id = tc_outer.1513 days = 14 }
+			system_event = { id = tc_outer.1514 days = 15 }
+			system_event = { id = tc_outer.1515 days = 16 }
+			system_event = { id = tc_outer.1516 days = 17 }
+
+			system_event = { id = tc_outer.1511 days = 18 }
+			system_event = { id = tc_outer.1512 days = 19 }
+			system_event = { id = tc_outer.1513 days = 20 }
+			system_event = { id = tc_outer.1514 days = 21 }
+			system_event = { id = tc_outer.1515 days = 22 }
+			system_event = { id = tc_outer.1516 days = 23 }
+
+			system_event = { id = tc_outer.1511 days = 24 }
+			system_event = { id = tc_outer.1512 days = 25 }
+			system_event = { id = tc_outer.1513 days = 26 }
+			system_event = { id = tc_outer.1514 days = 27 }
+			system_event = { id = tc_outer.1515 days = 28 }
+			system_event = { id = tc_outer.1516 days = 29 }
+		}
+		system_event = {
+			id = tc_outer.1000
+			days = 30
+		}
+	}
+}
+
+#system_event = {
+	# id = tc_outer.1510
+	# hide_window = yes
+	# is_triggered_only = yes
+
+	# immediate = {
+	#	
+	# }
+#}
+
+system_event = {
+	id = tc_outer.1511
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = this
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_primal_laser"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = last_created_ambient_object
+				create_ship = {
+					name = "LASER"
+					design = "NAME_tc_boss_primal_aer_laser"
+				}
+				fleet_event = {
+					id = tc_weapon.5 #通用删船事件
+					days = 10
+				}
+			}
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1512
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = this
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_primal_laser"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = last_created_ambient_object
+				create_ship = {
+					name = "LASER"
+					design = "NAME_tc_boss_primal_ignis_laser"
+				}
+				fleet_event = {
+					id = tc_weapon.5 #通用删船事件
+					days = 10
+				}
+			}
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1513
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = this
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_primal_laser"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = last_created_ambient_object
+				create_ship = {
+					name = "LASER"
+					design = "NAME_tc_boss_primal_aqua_laser"
+				}
+				fleet_event = {
+					id = tc_weapon.5 #通用删船事件
+					days = 10
+				}
+			}
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1514
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = this
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_primal_laser"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = last_created_ambient_object
+				create_ship = {
+					name = "LASER"
+					design = "NAME_tc_boss_primal_terra_laser"
+				}
+				fleet_event = {
+					id = tc_weapon.5 #通用删船事件
+					days = 10
+				}
+			}
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1515
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = this
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_primal_laser"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = last_created_ambient_object
+				create_ship = {
+					name = "LASER"
+					design = "NAME_tc_boss_primal_ordo_laser"
+				}
+				fleet_event = {
+					id = tc_weapon.5 #通用删船事件
+					days = 10
+				}
+			}
+		}
+	}
+}
+system_event = {
+	id = tc_outer.1516
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_target_locator"
+			location = this
+			entity_offset = 0
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			use_3d_location = yes
+			duration = 2
+		}
+		create_fleet = {
+			name = "NAME_tc_boss_primal_laser"
+			settings = {
+				is_boss = yes
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:tc_primal_boss_country_target
+				set_location = last_created_ambient_object
+				create_ship = {
+					name = "LASER"
+					design = "NAME_tc_boss_primal_perditio_laser"
+				}
+				fleet_event = {
+					id = tc_weapon.5 #通用删船事件
+					days = 10
+				}
+			}
+		}
+	}
+}

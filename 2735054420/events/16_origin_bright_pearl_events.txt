@@ -1,0 +1,171 @@
+
+namespace = origin_bright_pearl
+
+country_event = {
+	id = origin_bright_pearl.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_bright_pearl
+	}
+
+	immediate = {
+		add_research_option = tech_mega_engineering
+		capital_scope = {
+			solar_system = {
+				save_global_event_target_as = bright_pearl_system
+				set_name = "NAME_origin_bright_pearl_star"
+			}
+			set_name = "NAME_origin_bright_pearl_planet"
+			
+			add_deposit = d_relic_dense_ruins
+			
+			# 5 blockers
+			add_deposit = d_collapsed_spire
+			add_deposit = d_massive_crevice
+			add_deposit = d_shattered_solar_array
+			add_deposit = d_flooded_reactor_pits
+			add_deposit = d_crumbling_mining_tunnels
+			
+			# 3 + 3 energy
+			add_deposit = d_arid_highlands
+			add_deposit = d_searing_desert
+			add_deposit = d_geothermal_vent
+			if = {
+				limit = { owner = { is_machine_empire = yes } }
+				add_deposit = d_searing_desert
+			}
+			if = {
+				limit = { owner = { has_valid_civic = civic_machine_servitor } }
+				add_deposit = d_arid_highlands
+			}
+			
+			# 3 + 3 mining
+			add_deposit = d_mineral_fields
+			add_deposit = d_prosperous_mesa
+			add_deposit = d_submerged_ore_veins
+			
+			# 4 + 3 farming
+			add_deposit = d_bountiful_plains
+			add_deposit = d_fertile_lands
+			if = {
+				limit = { owner = { is_machine_empire = no } }
+				add_deposit = d_bountiful_plains
+				add_deposit = d_black_soil
+			}
+		}
+		every_playable_country = {
+			limit = {
+				NOT = { has_origin = origin_bright_pearl }
+			}
+			begin_event_chain = {
+				event_chain = ORIGIN_BRIGHT_PEARL_CHAIN
+				target = this
+			}
+			create_point_of_interest = {
+				id = bright_pearl_point
+				name = bright_pearl_point
+				desc = bright_pearl_point_desc
+				event_chain = ORIGIN_BRIGHT_PEARL_CHAIN
+				location = event_target:bright_pearl_system
+			}
+			set_visited = event_target:bright_pearl_system
+		}
+	}
+}
+
+ship_event = {
+	id = origin_bright_pearl.2
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		solar_system = {
+			is_same_value = event_target:bright_pearl_system
+		}
+	}
+	
+	immediate = {
+		owner = {
+			remove_point_of_interest = bright_pearl_point
+			end_event_chain = ORIGIN_BRIGHT_PEARL_CHAIN
+		}
+		FROM = {
+			if = {
+				limit = {
+					OR = {
+						is_ai = no
+						is_country_type = default
+					}
+				}
+				begin_event_chain = {
+					event_chain = ORIGIN_BRIGHT_PEARL_CHAIN
+					target = this
+				}
+				create_point_of_interest = {
+					id = bright_pearl_point
+					name = bright_pearl_point
+					desc = bright_pearl_point_desc
+					event_chain = ORIGIN_BRIGHT_PEARL_CHAIN
+					location = event_target:bright_pearl_system
+				}
+				set_visited = event_target:bright_pearl_system
+			}
+		}
+	}
+}
+
+starbase_event = {
+	id = origin_bright_pearl.3
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		solar_system = {
+			is_same_value = event_target:bright_pearl_system
+		}
+		owner = {
+			OR = {
+				is_ai = no
+				is_country_type = default
+			}
+		}
+	}
+	
+	immediate = {
+		owner = {
+			begin_event_chain = {
+				event_chain = ORIGIN_BRIGHT_PEARL_CHAIN
+				target = this
+			}
+			create_point_of_interest = {
+				id = bright_pearl_point
+				name = bright_pearl_point
+				desc = bright_pearl_point_desc
+				event_chain = ORIGIN_BRIGHT_PEARL_CHAIN
+				location = event_target:bright_pearl_system
+			}
+			set_visited = event_target:bright_pearl_system
+		}
+	}
+}
+
+ship_event = {
+	id = origin_bright_pearl.4
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		solar_system = {
+			is_same_value = event_target:bright_pearl_system
+		}
+	}
+	
+	immediate = {
+		From = {
+			remove_point_of_interest = bright_pearl_point
+			end_event_chain = ORIGIN_BRIGHT_PEARL_CHAIN
+		}
+	}
+}

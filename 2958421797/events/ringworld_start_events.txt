@@ -1,0 +1,433 @@
+###########################################
+#      		ZoFE Ringworld Empire Events
+#		  		  By Kolyn
+###########################################
+
+namespace = ringworld_empire
+
+
+#Starting FE ships
+planet_event = {
+	id = ringworld_empire.1
+	title = ringworld_empire.1.name
+	
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { 
+			owner = { is_gestalt = no }
+		}
+		text = "ringworld_empire.1.desc"
+	}
+	desc = { 
+		trigger = { 
+			owner = { has_authority = auth_hive_mind }
+		}
+		text = "ringworld_empire.1.desc.hive"
+	}
+	desc = { 
+		trigger = { 
+			owner = { has_authority = auth_machine_intelligence }
+		}
+		text = "ringworld_empire.1.desc.machine"
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = ringworld_empire_start
+		}
+	}
+	
+	option = {
+		name = ringworld_empire.1.a
+		enable_special_project = {
+			name = "RINGWORLD_FLEET"
+			location = this
+			owner = root.owner
+		}
+
+		ai_chance = {
+			factor = 10
+		}
+	}
+	
+	option = {
+		name = ringworld_empire.1.b
+		root.owner = { 
+			add_resource = { alloys = 10000 }
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	
+	option = {
+		name = ringworld_empire.1.c
+		root.owner = { 
+			add_resource = { engineering_research = 5000 }
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	
+	option = {
+		name = ringworld_empire.1.d
+		root.owner = { 
+			add_resource = { influence = 1000 }
+		}
+		ai_chance = {
+			factor = 0
+		}		
+	}
+}
+
+#Starting FE ships
+planet_event = {
+	id = ringworld_empire.2
+	title = ringworld_empire.2.name
+
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	
+	desc = {
+		trigger = { 
+			owner = { is_gestalt = no }
+		}
+		text = "ringworld_empire.2.desc"
+	}
+	desc = { 
+		trigger = { 
+			owner = { has_authority = auth_hive_mind }
+		}
+		text = "ringworld_empire.2.desc.hive"
+	}
+	desc = { 
+		trigger = { 
+			owner = { has_authority = auth_machine_intelligence }
+		}
+		text = "ringworld_empire.2.desc.machine"
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ringworld_empire.2.a
+		hidden_effect = {
+			create_ringworld_empire_fleet = yes
+			owner = {
+				set_country_flag = ringworld_empire_fleet_spawned
+			}
+		}
+	}
+}
+
+#Titan
+planet_event = {
+	id = ringworld_empire.3
+	title = ringworld_empire.3.name
+	
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	
+	desc = {
+		trigger = { 
+			owner = { is_gestalt = no }
+		}
+		text = "ringworld_empire.3.desc"
+	}
+	desc = { 
+		trigger = { 
+			owner = { has_authority = auth_hive_mind }
+		}
+		text = "ringworld_empire.3.desc.hive"
+	}
+	desc = { 
+		trigger = { 
+			owner = { has_authority = auth_machine_intelligence }
+		}
+		text = "ringworld_empire.3.desc.machine"
+	}
+	
+	trigger = {
+		mid_game_years_passed >= 0
+#		is_original_owner = root.owner
+		has_planet_flag = ringworld_start
+		owner = {
+			has_country_flag = ringworld_empire_fleet_spawned
+			NOT = { has_country_flag = ringworld_empire_titan }
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 25
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = ringworld_empire_titan
+		}
+	}
+	
+	option = {
+		name = ringworld_empire.3.a
+		enable_special_project = {
+			name = "RINGWORLD_TITAN"
+			location = this
+			owner = root.owner
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+	
+	option = {
+		name = ringworld_empire.3.b
+		root.owner = { 
+			add_resource = { alloys = 10000 }
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	
+	option = {
+		name = ringworld_empire.3.c
+		root.owner = { 
+			add_resource = { engineering_research = 5000 }
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	
+	option = {
+		name = ringworld_empire.3.d
+		root.owner = { 
+			add_resource = { influence = 1000 }
+		}
+		ai_chance = {
+			factor = 0
+		}		
+	}
+}
+
+#Titan spawn
+planet_event = {
+	id = ringworld_empire.4
+	title = ringworld_empire.4.name
+
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { owner = { is_gestalt = no } }
+		text = "ringworld_empire.4.desc"
+	}
+	desc = { 
+		trigger = { 
+			owner = { has_authority = auth_hive_mind }
+		}
+		text = "ringworld_empire.4.desc.hive"
+	}
+	desc = { 
+		trigger = { 
+			owner = { has_authority = auth_machine_intelligence }
+		}
+		text = "ringworld_empire.4.desc.machine"
+	}
+	
+	option = {
+		name = ringworld_empire.4.a
+		hidden_effect = {
+			create_ringworld_empire_titan_fleet = yes
+			owner = {
+				set_country_flag = ringworld_empire_titan_spawned
+			}
+		}
+	}
+}
+
+#Ringworld Graphics Change - Move to Ascendancy Affairs Office
+
+#country_event = {
+#	id = ringworld_empire.5
+#	title = ringworld_empire.5.name
+#	desc = ringworld_empire.5.desc
+#	picture = GFX_evt_fallen_empire
+#	show_sound = event_alien_signal
+#	
+#	trigger = {
+#		is_ascended_empire = yes
+#		has_country_flag = fallen_technologies_3_completed
+#		OR = {
+#			graphical_culture = fallen_spiritualist
+#			graphical_culture = fallen_spiritualist_02
+#			#graphical_culture = fallen_materialist
+#			graphical_culture = fallen_materialist_02
+#			graphical_culture = fallen_xenophile
+#			graphical_culture = fallen_xenophobe
+#			graphical_culture = fallen_xenophobe_02
+#			graphical_culture = fallen_militarist
+#			graphical_culture = fallen_militarist_02
+#			graphical_culture = fallen_pacifist
+#			graphical_culture = fallen_authoritarian
+#			graphical_culture = fallen_egalitarian_02
+#			graphical_culture = fallen_hive_mind
+#			graphical_culture = fallen_hive_mind_02
+#			graphical_culture = fallen_machine
+#			graphical_culture = fallen_machine_02
+#			graphical_culture = original_empire_01
+#		}
+#		any_planet_within_border = {
+#			OR = {
+#				is_planet_class = pc_ringworld_habitable
+#				is_planet_class = pc_utopian_ringworld
+#			}
+#		}
+#		NOT = { has_country_flag = ringworld_updated }
+#	}
+#	
+#	mean_time_to_happen = {
+#		years = 15
+#	}
+#	
+#	option = {
+#		name = ringworld_empire.5.a
+#		hidden_effect = {
+#			owner = {
+#				set_country_flag = ringworld_updated
+#			}
+#		}
+#		every_planet_within_border = {
+#			limit = { 
+#				OR = {
+#					is_planet_class = pc_ringworld_habitable
+#					is_planet_class =  pc_ringworld_seam 
+#					is_planet_class =  pc_ringworld_tech 
+#					is_planet_class = pc_utopian_ringworld
+#				}
+#			}
+#			if = {
+#				limit = { 
+#					OR = {
+#						is_planet_class =  pc_ringworld_habitable
+#						is_planet_class = pc_utopian_ringworld
+#					}
+#				}
+#				set_planet_entity = {
+#					entity = "ringworld_habitable_entity_01_entity"
+#					graphical_culture = root
+#				}
+#			}
+#			if = {
+#				limit = { 
+#					is_planet_class =  pc_ringworld_seam 
+#				}
+#				set_planet_entity = {
+#					entity = "ringworld_seam_entity_01_entity"
+#					graphical_culture = root
+#				}
+#			}
+#			if = {
+#				limit = { 
+#					is_planet_class =  pc_ringworld_tech 
+#				}
+#				set_planet_entity = {
+#					entity = "ringworld_tech_entity_01_entity"
+#					graphical_culture = root
+#				}
+#			}
+#		}
+#		
+#		ai_chance = {
+#			factor = 10
+#		}
+#	}
+#	
+#	option = {
+#		name = ringworld_empire.5.b
+#		hidden_effect = {
+#			owner = {
+#				set_country_flag = ringworld_updated
+#			}
+#		}
+#		ai_chance = {
+#			factor = 0
+#		}
+#	}
+#}
+
+#Dark Matter Power Core
+#planet_event = {
+#	id = ringworld_empire.6
+#	title = ringworld_empire.6.name
+#	desc = ringworld_empire.6.desc
+#	picture = GFX_evt_fallen_empire
+#	show_sound = event_alien_signal
+#	
+#	trigger = {
+#		end_game_years_passed >= 0
+#		is_original_owner = root.owner
+#		has_planet_flag = ringworld_start
+#		owner = {
+#			NOT = { has_country_flag = dark_matter_power_given }
+#			NOT = { has_technology = tech_dark_matter_power_core }
+#		}
+#	}
+#	
+#	mean_time_to_happen = {
+#		years = 10
+#	}
+#	
+#	immediate = {
+#		owner = {
+#			set_country_flag = dark_matter_power_given
+#		}
+#	}
+#	
+#	option = {
+#		name = ringworld_empire.6.a
+#		root.owner = {
+#			add_research_option = tech_dark_matter_power_core
+#		}
+#		ai_chance = {
+#			factor = 10
+#		}
+#	}
+#	
+#	option = {
+#		name = ringworld_empire.6.b
+#		root.owner = { 
+#			add_resource = { minerals = 10000 }
+#		}
+#		ai_chance = {
+#			factor = 0
+#		}
+#	}
+#	
+#	option = {
+#		name = ringworld_empire.6.c
+#		root.owner = { 
+#			add_resource = { engineering_research = 5000 }
+#		}
+#		ai_chance = {
+#			factor = 0
+#		}
+#	}
+#	
+#	option = {
+#		name = ringworld_empire.6.d
+#		root.owner = { 
+#			add_resource = { influence = 1000 }
+#		}	
+#		ai_chance = {
+#			factor = 0
+#		}
+#	}
+#}

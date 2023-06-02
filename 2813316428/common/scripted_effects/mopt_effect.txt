@@ -1,0 +1,74 @@
+mopt_remove_turce_country_mark = {
+	every_country = {
+		limit = { mopt_is_truce_country_marked = yes }
+		remove_country_flag = flag_mopt_truce_country_mark_1
+		remove_country_flag = flag_mopt_truce_country_mark_2
+		remove_country_flag = flag_mopt_truce_country_mark_3
+		remove_country_flag = flag_mopt_truce_country_mark_4
+		remove_country_flag = flag_mopt_truce_country_mark_5
+		remove_country_flag = flag_mopt_truce_country_mark_6
+	}
+}
+
+# 为没有被撕毁停战协议的国家添加关系修正
+mopt_add_opinion_for_none_terminate_truce_country = {
+	every_country = {
+		limit = {
+			OR = {
+				NOT = { has_truce = root }
+				OR = {
+					has_truce = root
+					mopt_is_truce_country_marked = no
+				}
+				OR = {
+					has_truce = root
+					NOT = { has_country_flag = $FLAG$ }
+				}
+			}
+			is_country_type = default
+		}
+		add_opinion_modifier = {
+			who = root
+			modifier = mopt_opinion_end_truce
+		}
+	}
+}
+
+# 设置所有星系的先驱者标识
+mopt_set_precursor_flag = {
+	every_system = {
+		limit = {
+			distance = {
+				source = root.capital_star
+				max_jumps = 5
+				min_jumps = 1
+			}
+			NOT = { has_star_flag = $precursor_flag$ }
+		}
+		set_star_flag = $precursor_flag$
+	}
+}
+
+
+mopt_mark_judgement_target_country = {
+	save_event_target_as = mopt_judgement_target_country_$index$
+}
+
+mopt_set_judgement_target = {
+	event_target:mopt_judgement_target_country_$index$ = {
+		save_event_target_as = mopt_judgement_target
+	}
+	save_event_target_as = mopt_judgement_initiator
+	country_event = {
+		id = mopt_judgement.1
+	}
+}
+
+mopt_cleanup_judgement_evt = {
+	remove_global_flag = g_flag_mopt_ongoing_judgement
+	every_country = {
+		limit = { is_country_type = default }
+		remove_country_flag = flag_mopt_judgement_participant
+		remove_country_flag = flag_mopt_judgement_agreed
+	}
+}

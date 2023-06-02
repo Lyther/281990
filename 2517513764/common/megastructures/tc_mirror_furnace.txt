@@ -1,0 +1,272 @@
+#镜面熔炉
+tc_mirror_furnace_00 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	place_entity_on_planet_plane = no
+	portrait = "GFX_megastructure_tc_mirror_furnace"
+
+	prerequisites = { tech_mega_engineering tc_tech_alchemical_t2 }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			unity = 1024
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "tc_need_cold"
+				is_planet_class = pc_frozen
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						has_star_flag = ring_world_built
+					}
+					is_artificial = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_black_hole_neutron_star_pulsar"
+				NOT = {
+					is_star_class = sc_black_hole
+					is_star_class = sc_neutron_star
+					is_star_class = sc_pulsar
+					is_star_class = sc_tc_planar_vortex
+					is_star_class = sc_tc_void
+				}
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			set_planet_flag = has_megastructure 
+			if = {
+				limit = { has_modifier = terraforming_candidate }
+				remove_modifier = terraforming_candidate
+			}
+		}
+	}
+}
+
+tc_mirror_furnace_01 = {
+	entity = "tc_mirror_furnace_01_entity"
+	construction_entity = "tc_mirror_array_s_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mirror_furnace"
+
+	upgrade_from = { tc_mirror_furnace_00 }
+
+	prerequisites = { tech_mega_engineering tc_tech_alchemical_t2 }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 3840
+			unity = 1024
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_mirror_furnace_02 = {
+	entity = "tc_mirror_furnace_02_entity"
+	construction_entity = "tc_essence_mirror_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mirror_furnace"
+
+	upgrade_from = { tc_mirror_furnace_01 }
+
+	prerequisites = { tech_mega_engineering tc_tech_alchemical_t2 }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 3840
+			tc_element_shard = 256
+			unity = 1024
+		}
+		upkeep = {
+			alloys = 32
+			tc_essences = 24
+		}
+		produces = {
+			tc_thaumium = 64
+		}
+		produces = {
+			trigger = {
+				exists = owner
+				owner = {
+					has_technology = "tc_tech_void_metal"
+				}
+			}
+			tc_void_metal = 16
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = {
+			change_pc = pc_tc_baidu
+			change_planet_size = 2
+		}
+	}
+}
+
+tc_mirror_furnace_03 = {
+	entity = "tc_mirror_furnace_03_entity"
+	construction_entity = "tc_mirror_array_l_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mirror_furnace"
+
+	upgrade_from = { tc_mirror_furnace_02 }
+
+	prerequisites = { tech_mega_engineering tc_tech_alchemical_t2 }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 3840
+			unity = 1024
+		}
+		upkeep = {
+			alloys = 64
+			tc_essences = 48
+		}
+		produces = {
+			tc_thaumium = 128
+		}
+		produces = {
+			trigger = {
+				exists = owner
+				owner = {
+					has_technology = "tc_tech_void_metal"
+				}
+			}
+			tc_void_metal = 32
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_mirror_furnace_04 = {
+	entity = "tc_mirror_furnace_04_entity"
+	construction_entity = "tc_core_heating_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mirror_furnace"
+	show_galactic_map_icon = no
+	show_in_outliner = no
+
+	upgrade_from = { tc_mirror_furnace_03 }
+
+	prerequisites = { tech_mega_engineering tc_tech_alchemical_t2 }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			tc_element_shard = 512
+			unity = 1024
+		}
+		upkeep = {
+			alloys = 128
+			tc_essences = 96
+		}
+		produces = {
+			tc_thaumium = 256
+		}
+		produces = {
+			trigger = {
+				exists = owner
+				owner = {
+					has_technology = "tc_tech_void_metal"
+				}
+			}
+			tc_void_metal = 64
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}

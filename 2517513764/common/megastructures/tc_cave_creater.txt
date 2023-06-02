@@ -1,0 +1,76 @@
+#空间钻孔仪
+tc_cave_creater_mega = {
+	entity = "tc_cave_creater_mega_frame_entity"
+	construction_entity = ""
+	place_entity_on_planet_plane = no
+	portrait = "GFX_megastructure_tc_cave_creater"
+
+	construction_blocks_and_blocked_by = self_type
+
+	possible = {
+		always = no
+	}
+	potential = {
+		always = no
+	}
+
+	bypass_type = quantum_catapult
+
+	station_modifier = {
+		catapult_spread_base = 0
+		catapult_range_base = 200
+		quantum_catapult_megastructure_bypass_windup_mult = -0.75
+	}
+
+	on_build_start = { }
+	on_build_cancel = { }
+	on_build_complete = { }
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+tc_cave_creater_mega_ship = {
+	entity = "tc_cave_creater_mega_frame_entity"
+	construction_entity = ""
+	place_entity_on_planet_plane = no
+	portrait = "GFX_megastructure_tc_cave_creater"
+	upgrade_from = { tc_cave_creater_mega }
+	show_galactic_map_icon = no
+
+	construction_blocks_and_blocked_by = self_type
+
+	potential = {
+		is_ai = no
+	}
+
+	on_build_start = {
+		FROMFROM.owner = {
+			set_timed_country_flag = {
+				flag = tc_cave_creater_convert
+				days = 11
+			}
+		}
+	}
+	on_build_cancel = { }
+	on_build_complete = { 
+		create_ambient_object = {
+			type = tc_cave_creater_mega_ship
+			location = FROMFROM
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			entity_offset = 0
+			use_3d_location = yes
+			duration = 10
+		}
+		last_created_ambient_object = {
+			save_global_event_target_as = tc_cave_creater_mega_ship_target
+		}
+		system_event = {
+			id = tc_mega.32
+			days = 10
+		}
+		remove_megastructure = FROMFROM
+	}
+}

@@ -1,0 +1,42 @@
+#Derelict Ship
+special_project = {
+	key = "DERELICT_SHIP_PROJECT"
+	#cost = 0
+	days_to_research = 20
+	tech_department = society_technology #DOES NOTHING OTHER THAN SHOWING AN ICON
+	timelimit = -1
+	picture = GFX_evt_ship_in_orbit
+	icon = "gfx/interface/icons/situation_log/situation_log_debris.dds"
+
+	event_scope = ship_event
+
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		#skill = 2
+	}
+	
+	on_success = {
+		random_list = {
+			20 = {
+				ship_event = { id = anomaly.4012 }
+				modifier = {
+					factor = 0
+					exists = owner
+					owner = {
+						count_playable_country = {
+							count = 0
+							limit = {
+								is_zofe_compatible = yes
+								NOT = { has_established_contact = prev }
+								NOT = { is_same_value = prev }
+							}
+						}
+					}
+				}
+			}
+			50 = { ship_event = { id = anomaly.4011 } }
+			30 = { ship_event = { id = anomaly_failure.4011 } }
+		}
+	}
+}

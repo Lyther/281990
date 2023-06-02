@@ -1,0 +1,577 @@
+
+namespace = origin_noah_ark
+
+country_event = {
+	id = origin_noah_ark.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_noah_ark
+	}
+	
+	immediate = {
+		capital_scope = {
+			solar_system = {
+				random_system_planet = {
+					limit = {
+						has_planet_flag = noah_ark_home_planet
+					}
+					save_event_target_as = noah_ark_home_planet
+				}
+				if = {
+					limit = {
+						count_neighbor_system = {
+							count > 0
+						}
+					}
+					system_event = { id = origin_noah_ark.2 }
+				}
+			}
+			add_deposit = d_noah_ark
+			create_archaeological_site = noah_ark_1_digsite
+		}
+		owner_species = {
+			set_species_homeworld = event_target:noah_ark_home_planet
+		}
+	}
+}
+
+system_event = {
+	id = origin_noah_ark.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		every_neighbor_system = {
+			remove_hyperlane = {
+				from = root
+				to = this
+			}
+		}
+	}
+}
+
+# 盖亚播种/环境改造（已殖民）
+planet_event = {
+	id = origin_noah_ark.10
+	title = origin_noah_ark.10.name
+	desc = {
+		text = origin_noah_ark.10.desc_1
+		trigger = {
+			owner = {
+				has_origin = origin_noah_ark
+			}
+		}
+	}
+	desc = {
+		text = origin_noah_ark.10.desc_2
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_noah_ark }
+			}
+		}
+	}
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = root
+	
+	is_triggered_only = yes
+
+	trigger = {
+		exists = owner
+		has_planet_flag = noah_ark_home_planet
+		NOT = {
+			has_modifier = noah_ark_home_planet_modifier
+			has_modifier = noah_ark_home_planet_end_modifier
+		}
+		is_planet_class = pc_gaia
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		add_modifier = {
+			modifier = noah_ark_home_planet_modifier
+			days = -1
+		}
+		create_archaeological_site = noah_ark_2_digsite
+	}
+	
+	option = {
+		name = origin_noah_ark.10.a
+		trigger = {
+			owner = {
+				has_origin = origin_noah_ark
+			}
+		}
+	}
+	
+	option = {
+		name = origin_noah_ark.10.b
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_noah_ark }
+			}
+		}
+	}
+}
+
+# 环境改造（未殖民）
+planet_event = {
+	id = origin_noah_ark.11
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = { exists = owner }
+		has_planet_flag = noah_ark_home_planet
+		NOT = {
+			has_modifier = noah_ark_home_planet_modifier
+			has_modifier = noah_ark_home_planet_end_modifier
+		}
+		is_planet_class = pc_gaia
+	}
+	
+	immediate = {
+		From = {
+			country_event = { id = origin_noah_ark.12 }
+		}
+	}
+}
+
+country_event = {
+	id = origin_noah_ark.12
+	title = origin_noah_ark.10.name
+	desc = {
+		text = origin_noah_ark.10.desc_1
+		trigger = {
+			has_origin = origin_noah_ark
+		}
+	}
+	desc = {
+		text = origin_noah_ark.10.desc_2
+		trigger = {
+			NOT = { has_origin = origin_noah_ark }
+		}
+	}
+	picture = GFX_evt_alien_nature
+	show_sound = event_alien_nature
+	location = root
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		from = {
+			add_modifier = {
+				modifier = noah_ark_home_planet_modifier
+				days = -1
+			}
+			create_archaeological_site = noah_ark_2_digsite
+		}
+	}
+	
+	option = {
+		name = origin_noah_ark.10.a
+		trigger = {
+			has_origin = origin_noah_ark
+		}
+	}
+	
+	option = {
+		name = origin_noah_ark.10.b
+		trigger = {
+			NOT = { has_origin = origin_noah_ark }
+		}
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.21
+	title = origin_noah_ark.21.name
+	desc = origin_noah_ark.21.desc
+	picture = GFX_evt_decryption
+	show_sound = event_wind_ruins
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = origin_noah_ark.21.a
+		small_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.22
+	title = origin_noah_ark.22.name
+	desc = origin_noah_ark.22.desc
+	picture = GFX_evt_clones
+	show_sound = event_big_door_opening
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = origin_noah_ark.22.a
+		small_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.23
+	title = origin_noah_ark.23.name
+	desc = origin_noah_ark.23.desc
+	picture = GFX_evt_ancient_databank
+	show_sound = event_finding_loot
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = origin_noah_ark.23.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.24
+	title = origin_noah_ark.24.name
+	desc = origin_noah_ark.24.desc
+	picture = GFX_evt_death_from_above
+	show_sound = event_alien_nature
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					has_planet_flag = noah_ark_home_planet
+				}
+				save_event_target_as = noah_ark_home_planet
+			}
+		}
+	}
+
+	after = {
+		from = {
+			planet = {
+				random_deposit = {
+					limit = { is_deposit_type = d_noah_ark }
+					clear_blocker = yes
+				}
+			}
+		}
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = origin_noah_ark.24.a
+		medium_artifact_reward = yes
+		owner = {
+			add_modifier = {
+				modifier = origin_noah_ark_modifier
+				days = -1
+			}
+			add_tech_option_or_research_effect = {
+				TECH = tech_terrestrial_sculpting
+				PROGRESS = 0.5
+				CATEGORY = society_research
+			}
+			add_tech_option_or_research_effect = {
+				TECH = tech_climate_restoration
+				PROGRESS = 0.5
+				CATEGORY = society_research
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.31
+	title = origin_noah_ark.31.name
+	desc = origin_noah_ark.31.desc
+	picture = GFX_evt_ancient_records
+	show_sound = event_dig_site
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = origin_noah_ark.31.a
+		trigger = {
+			owner = {
+				has_origin = origin_noah_ark
+			}
+		}
+		small_artifact_reward = yes
+	}
+	
+	option = {
+		name = origin_noah_ark.31.b
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_noah_ark }
+			}
+		}
+		small_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.32
+	title = origin_noah_ark.32.name
+	desc = origin_noah_ark.32.desc
+	picture = GFX_evt_bone_building
+	show_sound = event_wind_ruins
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = origin_noah_ark.32.a
+		small_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.33
+	title = origin_noah_ark.33.name
+	desc = origin_noah_ark.33.desc
+	picture = GFX_evt_busy_spaceport
+	show_sound = event_space_battle
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = origin_noah_ark.33.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.34
+	title = origin_noah_ark.34.name
+	desc = origin_noah_ark.34.desc
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = origin_noah_ark.34.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = {
+	id = origin_noah_ark.35
+	title = origin_noah_ark.35.name
+	desc = origin_noah_ark.35.desc
+	picture = GFX_evt_ship_travel
+	show_sound = event_cityscape
+	location = from
+	
+	archaeology = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		owner = {
+			add_research_option = tech_noah_ark
+		}
+		from = {
+			planet = {
+				remove_modifier = noah_ark_home_planet_modifier
+				add_modifier = {
+					modifier = noah_ark_home_planet_end_modifier
+					days = -1
+				}
+			}
+		}
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = {
+			text = origin_noah_ark.35.a
+			trigger = {
+				owner = {
+					has_origin = origin_noah_ark
+				}
+			}
+		}
+		name = {
+			text = origin_noah_ark.35.b
+			trigger = {
+				owner = {
+					NOT = { has_origin = origin_noah_ark }
+				}
+			}
+		}
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		large_artifact_reward = yes
+		owner = {
+			if = {
+				limit = {
+					has_origin = origin_noah_ark
+				}
+				add_tech_option_or_research_effect = {
+					TECH = tech_psi_jump_drive_1
+					PROGRESS = 0.5
+					CATEGORY = society_research
+				}
+			}
+			else = {
+				add_monthly_resource_mult = {
+					resource = society_research
+					value = 36
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = {
+			text = origin_noah_ark.35.c
+			trigger = {
+				owner = {
+					has_origin = origin_noah_ark
+				}
+			}
+		}
+		name = {
+			text = origin_noah_ark.35.d
+			trigger = {
+				owner = {
+					NOT = { has_origin = origin_noah_ark }
+				}
+			}
+		}
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		large_artifact_reward = yes
+		owner = {
+			if = {
+				limit = {
+					has_origin = origin_noah_ark
+				}
+				add_tech_option_or_research_effect = {
+					TECH = tech_jump_drive_1
+					PROGRESS = 0.5
+					CATEGORY = physics_research
+				}
+			}
+			else = {
+				add_monthly_resource_mult = {
+					resource = physics_research
+					value = 36
+				}
+			}
+		}
+	}
+}

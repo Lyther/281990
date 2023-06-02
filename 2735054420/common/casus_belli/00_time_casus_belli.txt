@@ -1,0 +1,249 @@
+cb_dark_forest = {
+	show_in_diplomacy = no
+	show_notification = no
+	potential = {
+		has_global_flag = dark_forest
+	}
+	is_valid = {
+		NOT = { is_overlord_to = FROM }
+		OR = {
+			is_subject = no
+			overlord = { NOT = { is_same_value = from } }
+		}
+	}
+}
+
+cb_bright_pearl = {
+	show_in_diplomacy = yes
+	show_notification = yes
+	potential = {
+		OR = {
+			is_ai = no
+			is_country_type = default
+		}
+		NOT = { is_in_federation_with = from }
+		exists = event_target:bright_pearl_system
+	}
+	is_valid = {
+		if = {
+			limit = {
+				exists = event_target:bright_pearl_system
+			}
+			event_target:bright_pearl_system = {
+				owner = {
+					OR = {
+						is_same_value = FROM
+						has_overlord = FROM
+					}
+				}
+			}
+			has_total_war_cb = no
+			NOT = { is_overlord_to = FROM }
+			OR = {
+				is_subject = no
+				overlord = { NOT = { is_same_value = from } }
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+}
+
+cb_time_imposed_inclusion = {
+	show_in_diplomacy = yes
+	show_notification = yes
+	potential = {
+		has_country_flag = time_crisis_country
+		NOT = { has_ascension_perk = ap_become_the_crisis }
+		is_homicidal = no
+	}
+	is_valid = {
+		always = yes
+	}
+}
+
+cb_time_existential_expulsion = {
+	show_in_diplomacy = yes
+	show_notification = yes
+	potential = {
+		has_country_flag = time_crisis_country
+		NOT = { has_ascension_perk = ap_become_the_crisis }
+	}
+	is_valid = {
+		always = yes
+	}
+}
+
+cb_time_colossus = {
+	show_in_diplomacy = no
+	show_notification = no
+	potential = {
+		if = {
+			limit = {
+				exists = event_target:origin_colossus_fleet
+			}
+			is_country_type = default
+			has_policy_flag = unrestricted_wars
+			NOT = { is_in_federation_with = from }
+		}
+		else = {
+			always = no
+		}
+	}
+	is_valid = {
+		has_total_war_cb = no
+		NOT = { is_overlord_to = FROM }
+		OR = {
+			is_subject = no
+			overlord = { NOT = { is_same_value = from } }
+		}
+		event_target:origin_colossus_fleet = {
+			is_controlled_by = prev
+		}
+	}
+}
+
+cb_time_stop_colossus = {
+	show_in_diplomacy = no
+	show_notification = no
+	potential = {
+		if = {
+			limit = {
+				exists = event_target:origin_colossus_fleet
+			}
+			is_country_type = default
+			NOT = { is_in_federation_with = from }
+		}
+		else = {
+			always = no
+		}
+	}
+	is_valid = {
+		has_total_war_cb = no
+		from = { is_country_type = default }
+		NOT = { is_overlord_to = FROM }
+		OR = {
+			is_subject = no
+			overlord = { NOT = { is_same_value = from } }
+		}
+		from = {
+			event_target:origin_colossus_fleet = {
+				is_ship_size = star_eater
+				is_controlled_by = prev
+			}
+		}
+		NOT = {
+			any_controlled_fleet = {
+				is_ship_class = shipclass_military_special
+				any_controlled_ship = { is_ship_size = colossus }
+			}
+		}
+	}
+}
+
+cb_time_name_of_hope = {
+	show_in_diplomacy = yes
+	show_notification = no
+	potential = {
+		if = {
+			limit = {
+				has_country_flag = upgrade_to_time_titan_finished
+			}
+			# 亲外、平等、唯物、和平
+			OR = {
+				is_xenophile = yes
+				is_egalitarian = yes
+				is_materialist = yes
+				is_pacifist = yes
+			}
+			# 拥有希望使者
+			event_target:time_titan_fleet = { is_controlled_by = prev }
+			# 非附庸
+			is_subject = no
+			# 非格式塔
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+			# 非同联邦
+			exists = from
+			NOT = { is_in_federation_with = from }
+		}
+		else = {
+			always = no
+		}
+	}
+	is_valid = {
+		from = { is_country_type = default }
+		# 非格式塔
+		from = { NOT = { has_ethic = ethic_gestalt_consciousness } }
+		has_total_war_cb = no
+		OR = {
+			AND = {
+				is_xenophile = yes
+				from = { is_xenophile = no }
+			}
+			AND = {
+				is_xenophobe = yes
+				from = { is_xenophobe = no }
+			}
+			AND = {
+				is_authoritarian = yes
+				from = { is_authoritarian = no }
+			}
+			AND = {
+				is_egalitarian = yes
+				from = { is_egalitarian = no }
+			}
+			AND = {
+				is_spiritualist = yes
+				from = { is_spiritualist = no }
+			}
+			AND = {
+				is_materialist = yes
+				from = { is_materialist = no }
+			}
+			AND = {
+				is_militarist = yes
+				from = { is_militarist = no }
+			}
+			AND = {
+				is_pacifist = yes
+				from = { is_pacifist = no }
+			}
+		}
+		NOT = { is_overlord_to = FROM }
+	}
+}
+
+cb_time_order_of_end = {
+	show_in_diplomacy = yes
+	show_notification = no
+	potential = {
+		if = {
+			limit = {
+				has_country_flag = upgrade_to_end_titan_finished
+			}
+			# 排外、威权、唯心、军国、格式塔
+			OR = {
+				is_xenophobe = yes
+				is_authoritarian = yes
+				is_spiritualist = yes
+				is_militarist = yes
+				has_ethic = ethic_gestalt_consciousness
+			}
+			# 拥有终末使者
+			event_target:time_titan_fleet = { is_controlled_by = prev }
+			# 非附庸
+			is_subject = no
+			# 非同联邦
+			exists = from
+			NOT = { is_in_federation_with = from }
+		}
+		else = {
+			always = no
+		}
+	}
+	is_valid = {
+		has_total_war_cb = no
+		NOT = { is_overlord_to = FROM }
+	}
+}

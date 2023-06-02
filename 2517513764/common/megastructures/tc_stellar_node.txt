@@ -1,0 +1,406 @@
+#恒星节点装置
+tc_stellar_node_generator_00 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_tc_stellar_node_generator"
+	place_entity_on_planet_plane = no
+
+	build_time = 900
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 5000
+			unity = 5120
+		}
+
+		upkeep = {
+		}
+	}
+
+	prerequisites = { tc_tech_node_stabilizer tech_mega_engineering }
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_habitable_planets"
+			NOT = {
+				any_system_planet = {
+					AND = {
+						colonizable_planet = yes
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_black_hole_neutron_star_pulsar"
+			NOT = {
+				is_star_class = sc_black_hole
+				is_star_class = sc_neutron_star
+				is_star_class = sc_pulsar
+				star = {
+					is_planet_class = pc_tc_minecraft_sol
+					is_planet_class = pc_black_hole
+					is_planet_class = pc_neutron_star
+					is_planet_class = pc_pulsar
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_binary_trinary"
+			NOR = {
+				is_star_class = sc_binary_1
+				is_star_class = sc_binary_2
+				is_star_class = sc_binary_3
+				is_star_class = sc_binary_4
+				is_star_class = sc_binary_5
+				is_star_class = sc_binary_6
+				is_star_class = sc_binary_7
+				is_star_class = sc_binary_8
+				is_star_class = sc_binary_9
+				is_star_class = sc_binary_10
+				is_star_class = sc_trinary_1
+				is_star_class = sc_trinary_2
+				is_star_class = sc_trinary_3
+				is_star_class = sc_trinary_4
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			has_no_non_gate_megastructure = yes
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "must_build_around_star"
+				is_star = yes
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOT = { has_any_megastructure = yes }
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { set_planet_flag = has_megastructure }
+	}
+}
+
+tc_stellar_node_generator_01 = {
+	entity = "tc_stellar_node_01_entity"
+	construction_entity = "tc_stellar_node_01_construction_entity"
+	portrait = "GFX_megastructure_tc_stellar_node_generator"
+	place_entity_on_planet_plane = yes
+	upgrade_from = {
+		tc_stellar_node_generator_00
+	}
+
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 10000
+			tc_element_shard = 1280
+			unity = 3840
+		}
+
+		upkeep = {
+			tc_essences = 16
+		}
+	}
+
+	prerequisites = { tc_tech_node_stabilizer tech_mega_engineering }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = {
+			if = {
+				limit = { 
+					planet_size >= 20
+				}
+				set_planet_size = 20
+			}
+		}
+	}
+}
+
+tc_stellar_node_generator_02 = {
+	entity = "tc_stellar_node_02_entity"
+	construction_entity = "tc_stellar_node_02_construction_entity"
+	portrait = "GFX_megastructure_tc_stellar_node_generator"
+	place_entity_on_planet_plane = yes
+	upgrade_from = {
+		tc_stellar_node_generator_01
+	}
+
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 10000
+			tc_element_shard = 1280
+			unity = 3840
+		}
+
+		upkeep = { }
+
+		produces = {
+			energy = 1280
+		}
+	}
+
+	prerequisites = { tc_tech_node_transducer tech_mega_engineering }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = {
+			random_list = {
+				60 = { 
+					change_pc = pc_tc_aura_node_normal
+				}
+				10 = {
+					change_pc = pc_tc_aura_node_purify
+				}
+				10 = {
+					change_pc = pc_tc_aura_node_danger
+				}
+				10 = {
+					change_pc = pc_tc_aura_node_unstable
+				}
+				5 = {
+					change_pc = pc_tc_aura_node_taint
+				}
+				5 = {
+					change_pc = pc_tc_aura_node_hunger
+				}
+			}
+		}
+		set_star_class = sc_tc_aura_node
+	}
+}
+
+tc_stellar_node_generator_03 = {
+	entity = "tc_stellar_node_03_entity"
+	construction_entity = "tc_stellar_node_03_construction_entity"
+	portrait = "GFX_megastructure_tc_stellar_node_generator"
+	place_entity_on_planet_plane = yes
+	upgrade_from = {
+		tc_stellar_node_generator_02
+	}
+
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 20000
+			tc_element_shard = 2560
+			unity = 5120
+		}
+
+		upkeep = { }
+		produces = {
+			energy = 2560
+		}
+	}
+
+	prerequisites = { tc_tech_transduction_amplifier tech_mega_engineering }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_stellar_node_generator_04 = {
+	entity = "tc_stellar_node_04_entity"
+	construction_entity = "tc_stellar_node_04_construction_entity"
+	portrait = "GFX_megastructure_tc_stellar_node_generator"
+	place_entity_on_planet_plane = yes
+	upgrade_from = {
+		tc_stellar_node_generator_03
+	}
+
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 20000
+			tc_element_shard = 2560
+			unity = 5120
+		}
+		upkeep = { }
+		produces = {
+			energy = 3840
+		}
+	}
+
+	prerequisites = { tc_tech_transduction_amplifier tech_mega_engineering }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_stellar_node_generator_05 = {
+	entity = "tc_stellar_node_05_entity"
+	construction_entity = "tc_stellar_node_05_construction_entity"
+	portrait = "GFX_megastructure_tc_stellar_node_generator"
+	place_entity_on_planet_plane = yes
+	upgrade_from = {
+		tc_stellar_node_generator_04
+	}
+
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 20000
+			tc_element_shard = 2560
+			unity = 5120
+		}
+		upkeep = {
+			tc_essences = 64
+		}
+		produces = {
+			energy = 3840
+		}
+	}
+
+	prerequisites = { tc_tech_vortex_attenuator tech_mega_engineering }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		every_system_planet = { 
+			limit = { is_star = no }
+			remove_planet = yes 
+		}
+	}
+}
+
+tc_stellar_node_generator_06 = {
+	entity = "tc_stellar_node_06_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_planar_vortex"
+	place_entity_on_planet_plane = yes
+	upgrade_from = {
+		tc_stellar_node_generator_05
+	}
+
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			tc_essences = 2560
+		}
+		upkeep = {
+			tc_essences = 96
+		}
+		produces = {
+			energy = 2560
+			minerals = 1280
+			tc_element_shard = 240
+			tc_essences = 512
+		}
+	}
+
+	prerequisites = { tc_tech_planar_vortex tech_mega_engineering }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = {
+			change_pc = pc_tc_planar_vortex
+			set_planet_size = 10
+			clear_deposits = yes
+		}
+		set_star_class = sc_tc_planar_vortex
+	}
+}
+
+tc_stellar_node_generator_07 = {
+	entity = "tc_stellar_node_06_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_planar_vortex"
+	place_entity_on_planet_plane = yes
+	upgrade_from = {
+		tc_stellar_node_generator_06
+	}
+
+	build_time = 10
+
+	potential = {
+		exists = owner
+		owner = {
+			has_relic = tc_ex_primordial_pearl
+		}
+	}
+	possible = {
+		exists = owner
+		owner = {
+			has_relic = tc_ex_primordial_pearl
+		}
+	}
+
+	resources = {
+		category = megastructures
+		cost = { }
+		upkeep = {
+			trigger = {
+				NOT = { has_megastructure_flag = tc_origin_megastructure }
+			}
+			tc_essences = 96
+		}
+	}
+
+	prerequisites = { tc_tech_pocket_planar tech_mega_engineering tc_tech_primordial_pearl }
+
+	on_build_start = {
+		FROMFROM.owner = {
+			remove_relic = tc_ex_primordial_pearl
+		}
+	}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		star = {
+			change_pc = pc_tc_pocket_planar
+			set_planet_size = 10
+			clear_deposits = yes
+			tc_pocket_planar_initialization = yes
+		}
+	}
+}

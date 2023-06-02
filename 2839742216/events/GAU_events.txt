@@ -1,0 +1,1517 @@
+namespace = GNKI_event
+#这组事件是制作飞地的核心事件，各位也是从这里延申出各自的内容的
+#为了参考这个制作出新的飞地，建议是复制该文件，更改*文件名*及*namespace*，然后在*on_action*内添加对应的事件。
+#请无比测试确保内容成功运行再投稿，因为......不想坑害新管理（）
+####################################################################################
+#飞地的生成：开局随机在整个银河生成
+####################################################################################
+event = {
+	id = GNKI_event.1
+	hide_window = yes
+	is_triggered_only = yes	#在开局事件的*触发器*触发，即on_game_start
+	immediate = {
+		##################################################
+		#在创建国家前需要先创建种族
+		##################################################
+		create_species = {
+			name = "NAME_QQE_species"			#种族名字
+			plural = NAME_QQE_species_plural			#种族复数
+			class = random_non_machine			#种族小类：即爬行，鸟类，软体...
+			portrait = random			#肖像
+			traits = {
+				#特质
+				ideal_planet_class = pc_habitat
+			}
+		}
+		##################################################
+		#创建国家
+		##################################################
+		create_country = {
+			name = "NAME_GAU_country"			#国家名称，很重要
+			type = GNKI_enclave			#指定country_type，不会的就不要动了
+			authority = "auth_oligarchic"			#政体
+			civics = {
+				#民政
+			}
+			origin = "origin_default"			#默认起源，这个不用管，玩家根本看不到飞地起源是啥
+			species = last_created_species			#设定种族，上面已经写好了，这一行不要动。
+			flag = {
+				#设定飞地旗帜，下边的自己搞吧
+				icon = {
+					category = "enclaves"
+					file = "enclaves_flag_trader.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "double_hemispheres.dds"
+				}
+				colors = {
+					"black"
+					"blue"
+					"null"
+					"null"
+				}
+			}
+			ethos = {
+				#思潮
+				ethic = ethic_xenophile
+				ethic = ethic_materialist
+				ethic = ethic_egalitarian
+			}
+			ignore_initial_colony_error = yes
+			effect = {
+				set_global_flag = GNKI_enclave_avtivited
+				############################################################################
+				#重要！！！！这个flag⭐国家标签⭐决定了你这个国家到底是谁，一定要改！
+				set_country_flag = GNKI_enclave_country
+				############################################################################
+				set_graphical_culture = npf_01				#默认的graphical_culture，不太需要动
+				save_global_event_target_as = GNKI_enclave_country_target
+			}
+		}
+		##################################################
+		#生成所有的空间站
+		##################################################
+		while = {
+			count = 3			#总生成的个数
+			random_system = {
+				#随机某个星系
+				limit = {
+					#要求
+					NOR = {
+						exists = owner						#未被占据
+						has_star_flag = hostile_system						#避免原版的利维坦
+						has_star_flag = gau_gnki_system						#避免多个空间站生成在同一个星系
+					}
+				}
+				set_star_flag = gau_gnki_system
+				save_event_target_as = gnki_system
+				random_system_planet = {
+					#星系内随机星球
+					set_planet_flag = gau_gnki_planet					#一个标记，暂时没有实际作用，但别删
+					##################################################
+					#生成空间站
+					##################################################
+					last_created_country = {
+						#以下为生成空间站
+						create_fleet = {
+							name = "NAME_gau_gnki_Station"							#空间站舰队名称
+							settings = {
+								spawn_debris = no								#舰船是否生成残骸可供逆向
+							}
+							effect = {
+								set_owner = prev
+								create_ship = {
+									name = random
+									############################################################################
+									design = NAME_gau_gnki_Station								#空间站舰船设计，这里为默认，如果你想添加新的，自己参考着写。
+									############################################################################
+									graphical_culture = npf_01
+								}
+								set_location = {
+									#设定空间站位置，不要改
+									target = prevprev
+									distance = 90
+								}
+								save_event_target_as = CustomCapital
+								prev = {
+									set_custom_capital_location = event_target:CustomCapital
+								}
+								set_fleet_flag = gau_gnki_station								#通用标记，不要改
+								############################################################################
+								set_fleet_flag = GNKI_GAU_enclave_station								#标记出这是你的策展人空间站，你可以更改标记来方便调用
+								############################################################################
+							}
+						}
+					}
+				}
+			}
+		}
+		####计数
+		# set_variable = {
+		# 	which = gnki_databank_count_glo
+		# 	value = 0
+		# }
+		#总部
+		# while = {
+		# 	count = 1	#总生成的个数
+		# 	random_system = {
+		# 		#随机某个星系
+		# 		limit = {
+		# 			#要求
+		# 			NOR = {
+		# 				exists = owner					#未被占据
+		# 				has_star_flag = hostile_system					#避免原版的利维坦
+		# 				has_star_flag = gau_gnki_system			#避免多个空间站生成在同一个星系
+		# 			}
+		# 		}
+		# 		set_star_flag = gau_gnki_system
+		# 		random_system_planet = {
+		# 			#星系内随机星球
+		# 			set_planet_flag = gau_gnki_planet				#一个标记，暂时没有实际作用，但别删
+		# 			##################################################
+		# 			#生成空间站
+		# 			##################################################
+		# 			last_created_country = {
+		# 				#以下为生成空间站
+		# 				create_fleet = {
+		# 					name = "NAME_gau_gnki_Station"						#空间站舰队名称
+		# 					settings = {
+		# 						spawn_debris = no							#舰船是否生成残骸可供逆向
+		# 					}
+		# 					effect = {
+		# 						set_owner = prev
+		# 						create_ship = {
+		# 							name = random
+		# 							############################################################################
+		# 							design = NAME_QQMGE_GAU_enclave_station								#空间站舰船设计，这里为默认，如果你想添加新的，自己参考着写。
+		# 							############################################################################
+		# 							graphical_culture = npf_01
+		# 						}
+		# 						set_location = {
+		# 							#设定空间站位置，不要改
+		# 							target = prevprev
+		# 							distance = 10
+		# 						}
+		# 						save_event_target_as = CustomCapital
+		# 						prev = {
+		# 							set_custom_capital_location = event_target:CustomCapital
+		# 						}
+		# 						set_fleet_flag = gau_gnki_capital							#通用标记，不要改
+		# 						############################################################################
+		# 						set_fleet_flag = GNKI_enclave_capital							#标记出这是你的策展人空间站，你可以更改标记来方便调用
+		# 						############################################################################
+		# 					}
+		# 				}
+		# 			}
+		# 		}
+		# 	}
+		# }
+		##################################################
+		#创建领袖，ruler
+		##################################################
+		last_created_country = {
+			create_leader = {
+				#生成领袖
+				class = ruler
+				species = this				#领袖种族
+				name = random				#领袖名字（当前为随机）
+				skill = 5
+			}
+			set_leader = last_created_leader			#使刚刚创建的领袖成为统治者
+			save_event_target_as = GNKI_ruler
+		}
+	}
+}
+
+####################################################################################
+#飞地和我们建立通讯————在飞地进入我方探测器范围内时
+####################################################################################
+country_event = {
+	id = GNKI_event.2
+	title = GNKI_event.2.title	#事件标题
+	desc = GNKI_event.2.desc	#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = from.owner
+		room = enclave_curator_room
+	}
+	is_triggered_only = yes	#在舰队被探测到的*触发器*触发，即on_fleet_detected，from即探测到的舰队
+	trigger = {
+		from = {
+			owner = {
+				has_country_flag = GNKI_enclave_country				#判断探测到的舰队所属国家，通过之前设立的country_flag
+				NOT = {
+					has_communications = root					#尚未和我方建立联系
+				}
+			}
+		}
+	}
+	immediate = {
+		establish_communications_no_message = from.owner		#与探测到的舰队所有者建交
+		from = {
+			add_modifier = {
+				modifier = gnki_databank_modifier_sci0
+			}
+		}
+		#effect = {every_country = {limit = {has_country_flag = GNKI_enclave_country	NOT = {has_communications = root}}establish_communications_no_message = root}}
+		
+	}
+	option = {
+		name = GNKI_event.2.a		#选项
+	}
+}
+
+event = {
+	id = GNKI_event.21
+	title = GNKI_event.2.title	#事件标题
+	desc = GNKI_event.2.desc	#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GNKI_ruler
+		room = enclave_curator_room
+	}
+	is_triggered_only = yes	
+	immediate = {
+		every_country = {
+			establish_communications_no_message = event_target:GNKI_enclave_country_target
+			if = {
+				limit = { 
+					NOT = {
+						has_modifier = gnki_databank_modifier_sci0
+					}
+				}
+				add_modifier = {
+					modifier = gnki_databank_modifier_sci0
+				}
+			}
+		}
+		
+			
+	}
+	option = {
+		name = GNKI_event.2.a		#选项
+	}
+}
+
+####################################################################################
+#在通讯界面打开飞地菜单
+####################################################################################
+#引入事件：在点击国家图标时触发
+country_event = {
+	id = GNKI_event.3
+	is_triggered_only = yes	#在点击国家图标的*触发器*触发，即on_custom_diplomacy，from即图标对应国家
+	hide_window = yes
+	trigger = {
+		from = {
+			has_country_flag = GNKI_enclave_country			#判断对应国家，通过之前设立的country_flag⭐国家标签⭐
+		}
+	}
+	immediate = {
+		from = {
+			save_event_target_as = GAU_contacting_country			#将from存为event_target
+		}
+		country_event = {
+			id = GNKI_event.300			#触发正式的菜单事件
+		}
+	}
+}
+
+##################################################
+#飞地菜单
+#算是核心事件，通过该事件开始，实现你想要实现的各种乱七八糟的功能
+##################################################
+country_event = {
+	id = GNKI_event.300
+	title = GNKI_event.300.title	#事件标题
+	#多个desc可以是该事件文本随机挑一个显示，更生动（可选）
+	desc = GNKI_event.300.desc	#事件文本
+	desc = GNKI_event.300.desc2	#事件文本2
+	desc = GNKI_event.300.desc3	#事件文本3
+	desc = GNKI_event.300c.desc
+	desc = GNKI_event.300d.desc
+	desc = GNKI_event.300g.desc
+	desc = GNKI_event.300h.desc
+	desc = GNKI_event.300j.desc
+	desc = GNKI_event.300l.desc
+
+	is_triggered_only = yes	#通过引入事件触发
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country
+		room = enclave_curator_room
+	}
+	immediate = {
+	}
+	option = {
+		name = GNKI_event.300.a		#订阅银河知网
+		trigger = {
+			NOT = {
+				has_country_flag = gnki_databank_time_flag
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.310
+			}
+		}
+		
+	}
+	
+	option = {
+		name = GNKI_event.300.c		#银河太学
+		trigger = {
+			NOT = {
+				has_country_flag = GNKI_university_enable_flag
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.400
+			}
+		}
+		
+	}
+	# option = {
+	# 	name = GNKI_event.300.e 	#介绍
+	# 	is_dialog_only = yes
+	# 	response_text = "GNKI_event.300.e.res"
+	# }
+	option = {
+		name = GNKI_event.300.d 	#和策展人
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.301
+			}
+		}
+		
+	}
+	option = {
+		name = GNKI_event.300.b		#关于SCI
+		is_dialog_only = yes
+		response_text = "GNKI_event.300.b.res"
+		#关于提升好感
+		#对于country_type中定义custom_opinion = yes的国家，可以用add_trust来调整国家好感。
+		# hidden_effect = {
+		# 	event_target:GAU_contacting_country = {
+		# 		#刚刚存的target
+		# 		add_trust = {
+		# 			#提高信任（在此处则代表好感）
+		# 			amount = 5					#提高数值
+		# 			who = root					#目标：root即查看菜单中的国家，即玩家。
+		# 		}
+		# 	}
+		# }
+	}	
+	option = {
+		name = GNKI_event.300.f 	#贵
+		is_dialog_only = yes
+		response_text = "GNKI_event.300.f.res"
+		trigger = {
+			check_variable = {
+				which = gnki_databank_count
+				value > 4
+			}
+		}
+	}
+	option = {
+		name = GNKI_event.300.g 	#run
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#与策展人的渊源
+	id = GNKI_event.301
+	title = GNKI_event.301.title	
+	desc = GNKI_event.301.desc	
+	is_triggered_only = yes	#通过引入事件触发
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country
+		room = enclave_curator_room
+	}
+	option = {
+		name = GNKI_event.301.aa
+		is_dialog_only = yes
+		response_text = GNKI_event.301.res1
+	}
+	option = {
+		name = GNKI_event.301.bb
+		is_dialog_only = yes
+		response_text = GNKI_event.301.res2
+	}
+	option = {
+		name = GNKI_event.301.cc
+		is_dialog_only = yes
+		response_text = GNKI_event.301.res3
+	}
+	option = {
+		name = GNKI_event.301.dd
+		response_text = GNKI_event.301.res4
+	}
+}
+
+country_event = {	#订阅数据库
+	id = GNKI_event.310
+	title = GNKI_event.310.title	
+	desc = GNKI_event.310.desc	
+	is_triggered_only = yes	#通过引入事件触发
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country
+		room = enclave_curator_room
+	}
+	trigger = {
+		NOT = {
+			has_country_flag = gnki_databank_time_flag
+		}
+	}
+	immediate = {
+		
+	}
+	option = {
+		name = GNKI_event.310.a		#订阅银河知网
+		allow = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 1000
+				mult = gnki_databank_count
+			}
+		}
+		add_resource = {
+			energy = -1000
+			mult = gnki_databank_count
+		}
+		hidden_effect = {
+			add_modifier = {
+				modifier = gnki_databank_modifier_1
+				days = 1080
+			}
+			event_target:GAU_contacting_country = {
+				add_trust = {
+					who = root
+					amount = 10
+				}
+			}			
+			change_variable = {
+				which = gnki_databank_count
+				value = 1
+			}
+			country_event = {
+				id = GNKI_event.311
+				days = 1081
+			}
+			if = {
+				limit = { 
+					has_modifier = gnki_databank_modifier_sci0
+				}
+				remove_modifier = gnki_databank_modifier_sci0
+			}
+			if = {
+				limit = { 
+					has_modifier = gnki_databank_modifier_sci3
+				}
+				remove_modifier = gnki_databank_modifier_sci3
+			}
+			if = {
+				limit = { 
+					NOT = {
+						has_modifier = gnki_databank_modifier_sci2
+					}
+				}
+				add_modifier = {
+					modifier = gnki_databank_modifier_sci2
+				}
+			}
+			
+			set_timed_country_flag = {
+				flag = gnki_databank_time_flag
+				days = 1080
+			}
+			
+		}
+		
+		response_text = GNKI_event.310.a.res
+	}
+	option = {
+		name = GNKI_event.310.b 	
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.300
+			}
+		}
+		
+	}
+}
+
+country_event = {	#续费
+	id = GNKI_event.311
+	title = GNKI_event.311.title	
+	desc = GNKI_event.311.desc	
+	is_triggered_only = yes	#通过引入事件触发
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country
+		room = enclave_curator_room
+	}
+	trigger = {
+		NOT = {
+			has_country_flag = gnki_databank_time_flag
+		}
+	}
+	immediate = {
+		
+	}
+	option = {
+		name = "GNKI_event.311.a"		#订阅银河知网
+		allow = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 1000
+				mult = gnki_databank_count
+			}
+		}
+		add_resource = {
+			energy = -1000
+			mult = gnki_databank_count
+		}
+		hidden_effect = {
+			add_modifier = {
+				modifier = gnki_databank_modifier_1
+				days = 1080
+			}
+			event_target:GAU_contacting_country = {
+				add_trust = {
+					who = root
+					amount = 5
+				}
+			}	
+			if = {
+				limit = { 
+					check_variable = {
+						which = gnki_databank_count
+						value < 10
+					}
+				}
+				change_variable = {
+					which = gnki_databank_count
+					value = 1
+				}
+			}	
+			else_if = {
+				limit = { 
+					check_variable = {
+						which = gnki_databank_count
+						value >= 10
+					}
+				}
+				change_variable = {
+					which = gnki_databank_count
+					value = 0
+				}
+			}
+			
+			
+			country_event = {
+				id = GNKI_event.311
+				days = 1081
+			}
+			if = {	#SCI正向buff
+				limit = { 
+					NOT = {
+						has_modifier = gnki_databank_modifier_sci2
+					}
+				}
+				add_modifier = {
+					modifier = gnki_databank_modifier_sci2
+				}
+			}
+			
+			set_timed_country_flag = {
+				flag = gnki_databank_time_flag
+				days = 1080
+			}
+			
+		}
+		
+		response_text = "GNKI_event.311.a.res"
+	}
+	option = {
+		name = GNKI_event.310.b 
+		response_text = "GNKI_event.310.b.res"	
+		hidden_effect = {
+			if = {
+				limit = { 
+					has_modifier = gnki_databank_modifier_sci2
+				}
+				remove_modifier = gnki_databank_modifier_sci2
+			}
+			if = {	#不太妙的buff
+				limit = { 
+					NOT = {
+						has_modifier = gnki_databank_modifier_sci3
+					}					
+				}
+				add_modifier = {
+					modifier = gnki_databank_modifier_sci3
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+country_event = {	#银河太学院
+	id = GNKI_event.400
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country
+		room = enclave_curator_room
+	}
+	title = "GNKI_event.400.title"
+	desc = "GNKI_event.400.desc"
+	immediate = {
+		set_country_flag = GNKI_university_enable_flag
+	}
+	option = {
+		name = GNKI_event.400.aa
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.401
+			}
+		}
+		
+	}
+	option = {
+		name = GNKI_event.400.bb
+		is_dialog_only = yes
+		response_text = "GNKI_event.400.bb.res"
+	}
+	
+	option = {
+		name = GNKI_event.400.cc
+		hidden_effect = {
+			remove_country_flag = GNKI_university_enable_flag
+		}
+	}
+}
+
+country_event = {
+	id = GNKI_event.401
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country
+		room = enclave_curator_room
+	}
+	title = "GNKI_event.401.title"
+	desc = "GNKI_event.401.desc"
+	option = {
+		name = GNKI_event.401.aa
+		hidden_effect = {
+			country_event = {
+				id = GNKI_leader_event.1
+			}
+		}
+		
+	}
+	option = {
+		name = GNKI_event.401.bb
+		hidden_effect = {
+			remove_country_flag = GNKI_university_enable_flag
+		}
+	}
+}
+
+####################################################################################
+#飞地空间站被消灭
+#这个事件并没有做什么敌对减少信任的事件，所以，嗯，你们自学罢
+#这个事件在飞地空间站被消灭时触发
+####################################################################################
+country_event = {
+	id = GNKI_event.4
+	title = GNKI_event.4.title	#事件标题
+	desc = GNKI_event.4.desc	#事件文本
+	picture = GFX_evt_small_space_battle	#事件插图
+	is_triggered_only = yes	#通过舰队被摧毁的*触发器*触发，即on_fleet_destroyed_perp，from即被摧毁舰队的所有者，fromfromfrom即被摧毁舰队
+	trigger = {
+		from = {
+			#遇害舰队的所有者
+			has_country_flag = GNKI_enclave_country			#拥有你的⭐国家标签⭐
+		}
+		fromfromfrom = {
+			#遇害舰队
+			has_fleet_flag = GNKI_GAU_enclave_station			#拥有你的飞地空间站标签
+		}
+	}
+	immediate = {
+		save_event_target_as = GNKI_destroyer
+		every_country = {
+			country_event = {
+				id = GNKI_event.10
+			}
+		}
+		
+	}
+	option = {
+		name = GNKI_event.4.a		#事件选项
+	}
+}
+
+country_event = {
+	id = GNKI_event.10
+	title = "GNKI_event.10.title"
+	# desc = {
+	# 	text = GNKI_event.10.a.desc
+	# 	trigger = {
+	# 		has_modifier = gnki_databank_modifier_sci2
+	# 		has_communications = event_target:GNKI_destroyer
+	# 	}
+	# }
+	desc = {
+		text = GNKI_event.10.b.desc
+		trigger = {
+			NOT = {
+				has_modifier = gnki_databank_modifier_sci2
+			}
+			NOT = { has_communications = event_target:GNKI_destroyer }
+		}
+	}
+	desc = {
+		text = GNKI_event.10.c.desc
+		trigger = {
+			has_modifier = gnki_databank_modifier_sci2
+			FROM = {
+				count_owned_ship = {
+					limit = { is_ship_size = GAU_enclave_station }
+					count < 1
+				}
+			}
+			has_communications = event_target:GNKI_destroyer
+		}
+	}
+	desc = {
+		text = GNKI_event.10.d.desc
+		trigger = {
+			has_modifier = gnki_databank_modifier_sci2
+			FROM = {
+				count_owned_ship = {
+					limit = { is_ship_size = GAU_enclave_station }
+					count < 1
+				}
+			}
+			NOT = { has_communications = event_target:GNKI_destroyer }
+			
+		}
+	}
+	picture = GFX_evt_exploding_ship
+	location = event_target:gnki_system
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+	trigger = {
+		NOT = { has_communications = event_target:GNKI_destroyer }
+		
+		}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = GNKI_enclave_avtivited
+				FROM = {
+					count_owned_ship = {
+						limit = { is_ship_size = GAU_enclave_station }
+						count < 1
+					}
+				}
+			}
+			remove_global_flag = GNKI_enclave_avtivited
+		}
+		if = {
+			limit = {
+				has_modifier = gnki_databank_modifier_sci2
+				FROM = {
+					count_owned_ship = {
+						limit = { is_ship_size = GAU_enclave_station }
+						count < 1
+					}
+				}
+			}
+			remove_modifier = gnki_databank_modifier_sci2
+		}
+		if = {	#减好感
+			limit = {
+				has_modifier = gnki_databank_modifier_sci2
+				FROM = {
+					count_owned_ship = {
+						limit = { is_ship_size = GAU_enclave_station }
+						count < 1
+					}
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:GNKI_destroyer
+				modifier = opinion_destroyed_curator_insight
+			}
+		}
+		if = {	#好死不送
+			limit = {
+				has_modifier = gnki_databank_modifier_sci3
+				FROM = {
+					count_owned_ship = {
+						limit = { is_ship_size = GAU_enclave_station }
+						count < 1
+					}
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:GNKI_destroyer
+				modifier = opinion_destroyed_curator_insight
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_relation_flag = {
+						who = FROM
+						flag = curator_trade
+					}
+				}
+				is_ai = yes
+			}
+			add_opinion_modifier = {
+				who = event_target:GNKI_destroyer
+				modifier = opinion_destroyed_curator
+			}
+		}
+	}
+
+	option = {
+		name = "GNKI_event.10.a"
+		trigger = {
+			NOT = {
+				has_relation_flag = {
+					who = FROM
+					flag = curator_trade
+				}
+			}
+			FROM = {
+				count_owned_ship = {
+					limit = { is_ship_size = GAU_enclave_station }
+					count > 1
+				}
+			}
+		}
+	}
+	option = {
+		name = "GNKI_event.10.a2"
+		trigger = {
+			FROM = {
+				count_owned_ship = {
+					limit = { is_ship_size = GAU_enclave_station }
+					count > 1
+				}
+			}
+		}
+	}
+	option = {
+		name = "GNKI_event.10.b"
+		trigger = {
+			has_relation_flag = {
+				who = FROM
+				flag = curator_trade
+			}
+			FROM = {
+				count_owned_ship = {
+					limit = { is_ship_size = GAU_enclave_station }
+					count < 1
+				}
+			}
+		}
+		hidden_effect = {
+			remove_relation_flag = {
+				who = FROM
+				flag = curator_trade
+			}
+			every_country = {
+				add_modifier = {
+					modifier = gnki_databank_modifier_sci_end
+					days = 180
+				}
+				if = {
+					limit = { 
+						is_country_type = default
+						any_country = {
+							has_country_flag = curator_enclave_country
+						}
+					}
+					country_event = {
+						id = GNKI_event.11
+					}
+				}
+				
+			}
+			set_timed_global_flag = {
+				flag = gnki_destroyed_CD
+				days = 1800
+			}
+		}
+	}
+}
+
+country_event = {
+	id = GNKI_event.11
+	is_triggered_only = yes
+	title = "GNKI_event.11.title"
+	desc = "GNKI_event.11.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:curators
+		room = enclave_curator_room
+	}
+	immediate = {
+		
+	}
+	option = {
+		name = GNKI_event.11.aa
+		default_hide_option = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 500
+				OR = {
+					is_militarist = yes
+					has_modifier = gnki_databank_modifier_sci3
+				}
+			}
+		}
+	}
+}
+
+########################共同体决策效果
+country_event = {
+	id = GNKI_event.100
+	is_triggered_only = yes
+	title = "GNKI_event.100.title"
+	desc = "GNKI_event.100.desc"
+	
+	immediate = {
+		
+	}
+	option = {
+		name = GNKI_event.100.aa
+		default_hide_option = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 500
+				OR = {
+					is_militarist = yes
+					has_modifier = gnki_databank_modifier_sci3
+				}
+			}
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_country_type = GNKI_enclave
+				}
+				set_faction_hostility = {
+					set_hostile = yes
+					set_neutral = no
+					target = root
+				}
+			}
+		}
+	}
+	option = {
+		name = GNKI_event.100.bb
+	}
+}
+
+country_event = {
+	id = GNKI_event.101
+	is_triggered_only = yes
+	title = "GNKI_event.101.title"
+	desc = "GNKI_event.101.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = fromfrom.ruler
+		room = enclave_curator_room
+	}
+	immediate = {
+		
+	}
+	option = {
+		name = GNKI_event.101.aa
+		default_hide_option = yes
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 500
+				OR = {
+					is_militarist = yes
+					has_modifier = gnki_databank_modifier_sci3
+				}
+			}
+		}
+	}
+}
+
+#####################################
+
+country_event = {
+	id = GNKI_event.1000
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		##################################################
+		#在创建国家前需要先创建种族
+		##################################################
+		create_species = {
+			name = "NAME_gnki_species"			#种族名字
+			plural = NAME_gnki_species_plural			#种族复数
+			class = random_non_machine			#种族小类：即爬行，鸟类，软体...
+			portrait = random			#肖像
+			traits = {
+				#特质
+				ideal_planet_class = pc_habitat
+			}
+		}
+		##################################################
+		#创建国家
+		##################################################
+		create_country = {
+			name = "NAME_GAU_country2"			#国家名称，很重要
+			type = GNKI_enclave			#指定country_type，不会的就不要动了
+			authority = "auth_oligarchic"			#政体
+			civics = {
+				#民政
+			}
+			origin = "origin_default"			#默认起源，这个不用管，玩家根本看不到飞地起源是啥
+			species = last_created_species			#设定种族，上面已经写好了，这一行不要动。
+			flag = {
+				#设定飞地旗帜，下边的自己搞吧
+				icon = {
+					category = "enclaves"
+					file = "enclaves_flag_trader.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "double_hemispheres.dds"
+				}
+				colors = {
+					"black"
+					"blue"
+					"null"
+					"null"
+				}
+			}
+			ethos = {
+				#思潮
+				ethic = ethic_xenophile
+				ethic = ethic_materialist
+				ethic = ethic_egalitarian
+			}
+			ignore_initial_colony_error = yes
+			effect = {
+				set_global_flag = GNKI_enclave2_avtivited
+				############################################################################
+				#重要！！！！这个flag⭐国家标签⭐决定了你这个国家到底是谁，一定要改！
+				set_country_flag = GNKI_enclave2_country
+				############################################################################
+				set_graphical_culture = npf_01				#默认的graphical_culture，不太需要动
+			}
+		}
+		##################################################
+		#生成所有的空间站
+		##################################################
+		while = {
+			count = 3			#总生成的个数
+			random_system = {
+				#随机某个星系
+				limit = {
+					#要求
+					NOR = {
+						#exists = owner						#未被占据
+						has_star_flag = hostile_system						#避免原版的利维坦
+						has_star_flag = gau_gnki_system						#避免多个空间站生成在同一个星系
+					}
+				}
+				set_star_flag = gau_gnki2_system
+				save_event_target_as = gnki2_system
+				random_system_planet = {
+					#星系内随机星球
+					set_planet_flag = gau_gnki2_planet					#一个标记，暂时没有实际作用，但别删
+					##################################################
+					#生成空间站
+					##################################################
+					last_created_country = {
+						#以下为生成空间站
+						create_fleet = {
+							name = "NAME_gau_gnki_Station"							#空间站舰队名称
+							settings = {
+								spawn_debris = no								#舰船是否生成残骸可供逆向
+							}
+							effect = {
+								set_owner = prev
+								create_ship = {
+									name = random
+									############################################################################
+									design = NAME_gau_gnki_Station								#空间站舰船设计，这里为默认，如果你想添加新的，自己参考着写。
+									############################################################################
+									graphical_culture = npf_01
+								}
+								set_location = {
+									#设定空间站位置，不要改
+									target = prevprev
+									distance = 90
+								}
+								save_event_target_as = CustomCapital
+								prev = {
+									set_custom_capital_location = event_target:CustomCapital
+								}
+								set_fleet_flag = gau_gnki2_station								#通用标记，不要改
+								############################################################################
+								set_fleet_flag = GNKI_GAU_enclave2_station								#标记出这是你的策展人空间站，你可以更改标记来方便调用
+								############################################################################
+							}
+						}
+					}
+				}
+			}
+		}
+		last_created_country = {
+			create_leader = {
+				#生成领袖
+				class = ruler
+				species = event_target:curator_species			#领袖种族
+				name = random				#领袖名字（当前为随机）
+				skill = 5
+			}
+			set_leader = last_created_leader			#使刚刚创建的领袖成为统治者
+		}
+		every_country = {
+			country_event = {
+				id = GNKI_event.1002
+			}
+		}
+	}
+}
+
+country_event = {
+	id = GNKI_event.1002
+	title = GNKI_event.1002.title	#事件标题
+	desc = GNKI_event.1002.desc	#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:curators
+		room = enclave_curator_room
+	}
+	is_triggered_only = yes	#在舰队被探测到的*触发器*触发，即on_fleet_detected，from即探测到的舰队
+	trigger = {
+	}
+	immediate = {
+		establish_communications_no_message = last_created_country		#与探测到的舰队所有者建交
+	}
+	option = {
+		name = GNKI_event.1002.a		#选项
+	}
+}
+
+country_event = {
+	id = GNKI_event.1003
+	is_triggered_only = yes	#在点击国家图标的*触发器*触发，即on_custom_diplomacy，from即图标对应国家
+	hide_window = yes
+	trigger = {
+		from = {
+			has_country_flag = GNKI_enclave2_country			#判断对应国家，通过之前设立的country_flag⭐国家标签⭐
+		}
+	}
+	immediate = {
+		from = {
+			save_event_target_as = GAU_contacting_country2			#将from存为event_target
+		}
+		country_event = {
+			id = GNKI_event.10300			#触发正式的菜单事件
+		}
+	}
+}
+
+country_event = {
+	id = GNKI_event.10300
+	title = GNKI_event.10300.title	#事件标题
+	#多个desc可以是该事件文本随机挑一个显示，更生动（可选）
+	desc = GNKI_event.10300.desc	#事件文本
+	desc = GNKI_event.10300.desc3	#事件文本3
+	desc = GNKI_event.10300c.desc
+	desc = GNKI_event.10300d.desc
+	desc = GNKI_event.10300g.desc
+	desc = GNKI_event.10300h.desc
+	desc = GNKI_event.10300j.desc
+	desc = GNKI_event.10300l.desc
+
+	is_triggered_only = yes	#通过引入事件触发
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country2
+		room = enclave_curator_room
+	}
+	immediate = {
+	}
+	option = {
+		name = GNKI_event.10300.a		#订阅银河知网
+		trigger = {
+			NOT = {
+				has_country_flag = gnki_databank_time_flag
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.310
+			}
+		}
+		
+	}
+	
+	option = {
+		name = GNKI_event.10300.c		#银河太学
+		is_dialog_only = yes
+		#response_text = "GNKI_event.10300.c.res"
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.10301
+			}
+		}
+		
+	}
+	# option = {
+	# 	name = GNKI_event.10300.e 	#介绍
+	# 	is_dialog_only = yes
+	# 	response_text = "GNKI_event.10300.e.res"
+	# }
+	option = {
+		name = GNKI_event.10300.b		#关于SCI
+		is_dialog_only = yes
+		response_text = "GNKI_event.10300.b.res"
+	}	
+	option = {
+		name = GNKI_event.10300.g 	#run
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#太学关闭
+	id = GNKI_event.10301
+	title = GNKI_event.10301.title	
+	#desc = GNKI_event.10301.desc	
+	desc = {
+		trigger = {
+			any_country = {
+				has_country_flag = curator_enclave_country
+			}
+		}
+		text = GNKI_event.10301.1.desc
+	}
+	desc = {
+		trigger = {
+			any_country = {
+				NOT = {
+					has_country_flag = curator_enclave_country
+				}				
+			}
+		}
+		text = GNKI_event.10301.2.desc
+	}
+	is_triggered_only = yes	#通过引入事件触发
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country2
+		room = enclave_curator_room
+	}
+	option = {
+		name = GNKI_event.10301.aa
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.10300
+			}
+		}
+		
+	}
+}
+country_event = {	#订阅数据库
+	id = GNKI_event.10310
+	title = GNKI_event.10310.title	
+	desc = GNKI_event.10310.desc	
+	is_triggered_only = yes	#通过引入事件触发
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country2
+		room = enclave_curator_room
+	}
+	trigger = {
+		NOT = {
+			has_country_flag = gnki_databank_time_flag
+		}
+	}
+	immediate = {
+		
+	}
+	option = {
+		name = GNKI_event.310.a		#订阅银河知网
+		hidden_effect = {
+			add_modifier = {
+				modifier = gnki_databank_modifier_1
+				days = 1080
+			}
+			event_target:GAU_contacting_country = {
+				add_trust = {
+					who = root
+					amount = 10
+				}
+			}			
+			country_event = {
+				id = GNKI_event.10311
+				days = 1081
+			}
+			if = {
+				limit = { 
+					has_modifier = gnki_databank_modifier_sci0
+				}
+				remove_modifier = gnki_databank_modifier_sci0
+			}
+			if = {
+				limit = { 
+					has_modifier = gnki_databank_modifier_sci3
+				}
+				remove_modifier = gnki_databank_modifier_sci3
+			}
+			if = {
+				limit = { 
+					NOT = {
+						has_modifier = gnki_databank_modifier_sci2
+					}
+				}
+				add_modifier = {
+					modifier = gnki_databank_modifier_sci2
+				}
+			}
+			
+			set_timed_country_flag = {
+				flag = gnki_databank_time_flag
+				days = 1080
+			}
+			
+		}
+		add_resource = {
+			energy = -1000
+			mult = 3
+		}
+		response_text = GNKI_event.10310.a.res
+	}
+	option = {
+		name = GNKI_event.10310.b 	
+		hidden_effect = {
+			country_event = {
+				id = GNKI_event.10300
+			}
+		}
+		
+	}
+}
+
+country_event = {	#续费
+	id = GNKI_event.10311
+	title = GNKI_event.10311.title	
+	desc = GNKI_event.10311.desc	
+	is_triggered_only = yes	#通过引入事件触发
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GAU_contacting_country2
+		room = enclave_curator_room
+	}
+	trigger = {
+		NOT = {
+			has_country_flag = gnki_databank_time_flag
+		}
+	}
+	immediate = {
+		
+	}
+	option = {
+		name = "GNKI_event.10311.a"		#订阅银河知网
+		hidden_effect = {
+			add_modifier = {
+				modifier = gnki_databank_modifier_2
+				days = 1080
+			}
+			event_target:GAU_contacting_country = {
+				add_trust = {
+					who = root
+					amount = 5
+				}
+			}			
+			country_event = {
+				id = GNKI_event.10311
+				days = 1081
+			}
+			if = {	#SCI正向buff
+				limit = { 
+					NOT = {
+						has_modifier = gnki_databank2_modifier_sci
+					}
+				}
+				add_modifier = {
+					modifier = gnki_databank2_modifier_sci
+				}
+			}
+			
+			set_timed_country_flag = {
+				flag = gnki_databank_time_flag
+				days = 1080
+			}
+			
+		}
+		add_resource = {
+			energy = -1000
+			mult = 3
+		}
+		response_text = "GNKI_event.10311.a.res"
+	}
+	option = {
+		name = GNKI_event.10310.b 	
+		hidden_effect = {
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+##################################################################################################################
+#重点参数
+#这里陈列一些重点参数，你可以直接全文替换来达到新建飞地的目的
+#####文件的namespace（也改变了本地化条目）
+#GNKI_event
+#####国家名称
+#NAME_QQE_country
+#####种族名称
+#NAME_QQE_species
+#NAME_QQE_species_plural（复数）
+#####空间站名称
+#NAME_gau_gnki_Station
+#####⭐国家标签⭐country_flag
+#GNKI_enclave_country
+#####⭐空间站标签⭐fleet_flag
+#QQE_default_GAU_enclave_station
+##################################################################################################################
+#其它小贴士
+#政府（government）可以随着⭐国家标签⭐改变，这一点请参考common的government文件夹
+#乱七八糟的政体，民政都对这个政府没啥影响，而特质完全就是做着好看，除非你需要刷出人口
+#建立联系也可以使用别的方式————比如使用进入星系的触发器，自己改罢
+#没了。
+
+# effect = {
+# 		every_country = {
+# 			limit = {
+# 				is_galactic_community_member = yes
+# 			}
+# 			country_event = { id = GNKI_event.100 }
+# 		}
+# }

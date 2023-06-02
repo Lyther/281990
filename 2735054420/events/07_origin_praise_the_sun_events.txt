@@ -1,0 +1,72 @@
+
+namespace = praise_the_sun
+
+country_event = {
+	id = praise_the_sun.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_praise_the_sun
+		NOT = { has_country_flag = praise_the_sun.1.finished }
+	}
+
+	immediate = {
+		set_country_flag = praise_the_sun.1.finished
+		every_owned_planet = {
+			while = {
+				limit = {
+					has_district = district_generator
+				}
+				remove_district = district_generator
+				add_district = district_generator_uncapped
+			}
+		}
+	}
+}
+
+country_event = {
+	id = praise_the_sun.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_praise_the_sun
+	}
+
+	immediate = {
+		set_country_flag = praise_the_sun.1.finished
+		every_owned_planet = {
+			while = {
+				limit = {
+					has_district = district_generator
+				}
+				remove_district = district_generator
+				add_district = district_generator_uncapped
+			}
+			remove_modifier = "prosp_uni_mod"
+		}
+	}
+}
+
+planet_event = {
+	id = praise_the_sun.3
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		From = {
+			has_origin = praise_the_sun
+		}
+	}
+	
+	immediate = {
+		while = {
+			limit = {
+				has_district = district_generator
+			}
+			remove_district = district_generator
+			add_district = district_generator_uncapped
+		}
+	}
+}

@@ -1,0 +1,68 @@
+###########################################
+#
+# Nemesis Espionage Events
+# Written by Henrik Thyrwall
+#
+###########################################
+
+namespace = operation
+
+### Extort Favors - Stage 3
+espionage_operation_event = {
+	id = operation.6252
+	title = operation.6252.name
+	desc = {
+		text = operation.6252.1.desc
+		text = operation.6252.3.desc
+		text = operation.6252.4.desc
+		text = operation.6252.5.desc
+		trigger = {
+			target = { is_gestalt = no }
+		}
+	}
+	desc = {
+		text = operation.6252.6.desc
+		text = operation.6252.7.desc
+		trigger = {
+			target = { is_machine_empire = yes }
+		}
+	}
+	desc = {
+		text = operation.6252.8.desc
+		text = operation.6252.9.desc
+		trigger = {
+			target = { is_hive_empire = yes }
+		}
+	}
+	desc = operation.6252.2.desc
+	picture = GFX_evt_intelligence_report
+	show_sound = event_spymaster
+	espionage_operation = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		target = {
+			save_event_target_as = target_country
+			random_relation = {
+				limit = {
+					is_zofe_compatible = yes
+					is_gestalt = no
+					NOT = { is_country = root.target }
+					has_communications = root.target
+					NOT = { is_same_species = root.target }
+				}
+				save_event_target_as = scandal_species
+			}
+		}
+	}
+
+	option = {
+		name = LAUNCH_OPERATION
+		hidden_effect = {
+			owner = {
+				country_event = { id = operation.6255 }
+			}
+		}
+	}
+}

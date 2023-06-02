@@ -1,0 +1,149 @@
+namespace = distar
+
+#################################
+#
+# Distant Stars Events
+# by Miranda van den Brink
+#
+#################################
+
+# Informed about AI being close to opening L-Gate (HIDDEN)
+event = {
+	id = distar.10955
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			is_ai = no
+			OR = {
+				has_event_chain = l_cluster_chain
+				has_special_project = LCLUSTER_PROJECT
+			}
+			any_relation = {
+				is_zofe_compatible = yes
+				has_communications = prev
+				has_event_chain = l_cluster_chain
+				NOT = { has_country_flag = lgate_warned@prev }
+				check_variable = {
+					which = num_lcluster_clues
+					value > 5
+				}
+				any_owned_megastructure = { is_megastructure_type = lgate_base }
+			}
+		}
+	}
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				is_ai = no
+				OR = {
+					has_event_chain = l_cluster_chain
+					has_special_project = LCLUSTER_PROJECT
+				}
+				any_relation = {
+					is_zofe_compatible = yes
+					has_communications = prev
+					has_event_chain = l_cluster_chain
+					NOT = { has_country_flag = lgate_warned@prev }
+					check_variable = {
+						which = num_lcluster_clues
+						value > 5
+					}
+					any_owned_megastructure = { is_megastructure_type = lgate_base }
+				}
+			}
+			random_relation = {
+				limit = {
+					is_zofe_compatible = yes
+					has_communications = prev
+					has_event_chain = l_cluster_chain
+					NOT = { has_country_flag = lgate_warned@prev }
+					check_variable = {
+						which = num_lcluster_clues
+						value > 5
+					}
+					any_owned_megastructure = { is_megastructure_type = lgate_base }
+				}
+				save_event_target_as = lgate_warning_country
+				set_country_flag = lgate_warned@prev
+			}
+			country_event = { id = distar.10956 }
+		}
+	}
+}
+
+# Killed dragon
+country_event = {
+	id = distar.13020
+	title = distar.13020.name
+	desc = {
+		text = distar.13020.desc.LDragonKnown
+		trigger = { has_country_flag = ldragon_known }
+	}
+	desc = {
+		text = distar.13020.desc.LDragonUnknown
+		trigger = { NOT = { has_country_flag = ldragon_known } }
+	}
+	picture = GFX_evt_space_dragon
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_zofe_compatible = yes
+		from = { is_country_type = ldragon_country }
+	}
+
+	option = {
+		name = distar.13020.a
+		trigger = {
+			NOT = { has_country_flag = ldragon_known }
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = @tier4materialreward
+			min = @tier4materialmin
+			max = @tier4materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier4materialreward
+			min = @tier4materialmin
+			max = @tier4materialmax
+		}
+	}
+
+	option = {
+		name = distar.13020.a
+		trigger = {
+			has_country_flag = ldragon_known
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = @tier4materialreward
+			min = @tier4materialmin
+			max = @tier4materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier4materialreward
+			min = @tier4materialmin
+			max = @tier4materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+	}
+}

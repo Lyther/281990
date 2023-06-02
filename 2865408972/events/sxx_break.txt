@@ -1,0 +1,364 @@
+namespace = sxx_break
+
+country_event = {
+	id = sxx_break.1
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+	}
+
+	immediate = {
+		country_event = { id = sxx_break.2 }
+
+		if = {
+			limit = {
+				is_sxx_heaven_country = yes
+			}
+			country_event = { id = sxx_break.10 }
+		}
+	}
+}
+
+country_event = {
+	id = sxx_break.2
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					has_ascension_perk = ap_sxx_ascend_to_fairyland
+					has_ascension_perk = ap_sxx_build_heaven
+				}
+			}
+			every_owned_planet = {
+				sxx_planet_cultivate_effect = yes
+	
+				if = {
+					limit = {
+						root = { has_policy_flag = sxx_luding_not_cultivable }
+						any_owned_pop = { has_job = sxx_luding }
+					}
+					every_owned_pop = { # 炉鼎跌落境界
+						limit = {
+							has_job = sxx_luding
+						}
+						random_list = {
+							5 = {
+								if = {
+									limit = {
+										is_sxx_potential_depletion = yes
+									}
+									sxx_pop_down_state = yes
+								}
+								else = {
+									sxx_pop_set_potential_depletion = yes
+								}
+							}
+							95 = {}
+						}
+					}
+				}
+			}
+		}
+		else = {
+			every_owned_planet = {
+				sxx_planet_cultivate_except_dujie_effect = yes
+	
+				if = {
+					limit = {
+						root = { has_policy_flag = sxx_luding_not_cultivable }
+						any_owned_pop = { has_job = sxx_luding }
+					}
+					every_owned_pop = { # 炉鼎跌落境界
+						limit = {
+							has_job = sxx_luding
+						}
+						random_list = {
+							5 = {
+								if = {
+									limit = {
+										is_sxx_potential_depletion = yes
+									}
+									sxx_pop_down_state = yes
+								}
+								else = {
+									sxx_pop_set_potential_depletion = yes
+								}
+							}
+							95 = {}
+						}
+					}
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				has_edict = sxx_country_pop_reborn
+			}
+			sxx_owned_pop_reborn_effect = yes
+		}
+
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = sxx_country_break_to_heaven
+					has_country_flag = sxx_country_break_to_fairy
+					has_country_flag = sxx_country_break_to_dujie
+					has_country_flag = sxx_country_break_to_dacheng
+					has_country_flag = sxx_country_break_to_heti
+					has_country_flag = sxx_country_break_to_lianxu
+					has_country_flag = sxx_country_break_to_huashen
+					has_country_flag = sxx_country_break_to_yuanying
+					has_country_flag = sxx_country_break_to_jindan
+					has_country_flag = sxx_country_break_to_zhuji
+				#	has_country_flag = sxx_country_break_to_lianqi
+				}
+			}
+			country_event = { id = sxx_event.11 }
+		}
+	}
+}
+
+# 天庭修炼
+country_event = {
+	id = sxx_break.10
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+	}
+
+	immediate = {
+		export_trigger_value_to_variable = {
+			trigger = count_owned_pop
+			parameters = {
+				limit = {
+					has_pop_flag = sxx_xianwang
+				}
+			}
+			variable = num_sxx_xianwang
+		}
+		export_trigger_value_to_variable = {
+			trigger = count_owned_pop
+			parameters = {
+				limit = {
+					has_pop_flag = sxx_xiandi
+				}
+			}
+			variable = num_sxx_xiandi
+		}
+		every_owned_planet = {
+			limit = {
+				is_planet_class = pc_sxx_heaven
+			}
+			sxx_planet_fairy_cultivate_effect = yes
+		}
+	}
+}
+
+# 每年检测资质
+country_event = {
+	id = sxx_break.100
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+	}
+
+	immediate = {
+		switch = {
+			trigger = has_policy_flag
+			sxx_test_all = {
+				every_owned_planet = {
+					limit = {
+						has_active_building = building_sxx_shengxiantai
+					}
+					every_owned_pop = {
+						limit = {
+							NOT = { has_pop_flag = sxx_cultivator }
+							is_sxx_cultivable = yes
+							is_being_purged = no
+							is_being_assimilated = no
+						}
+						random_list = {
+							25 = {
+								sxx_chance_happen_effect = { EFFECT = sxx_pop_may_spawn_cultivator CHANCE1 = 100 CHANCE2 = 900 MODIFIER = sxx_cultivator_spawn_chance_produces_mult }
+							}
+							25 = {
+								modifier = {
+									factor = 0
+									has_global_flag = sxx_break_level_1
+								}
+								modifier = {
+									factor = 2
+									has_global_flag = sxx_break_level_3
+								}
+								modifier = {
+									factor = 3
+									has_global_flag = sxx_break_level_4
+								}
+							}
+						}
+					}
+				}
+			}
+			sxx_test_not_slave = {
+				every_owned_planet = {
+					limit = {
+						has_active_building = building_sxx_shengxiantai
+					}
+					every_owned_pop = {
+						limit = {
+							NOT = { has_pop_flag = sxx_cultivator }
+							is_sxx_cultivable = yes
+							is_being_purged = no
+							is_being_assimilated = no
+							is_enslaved = no
+						}
+						random_list = {
+							25 = {
+								sxx_chance_happen_effect = { EFFECT = sxx_pop_may_spawn_cultivator CHANCE1 = 100 CHANCE2 = 900 MODIFIER = sxx_cultivator_spawn_chance_produces_mult }
+							}
+							25 = {
+								modifier = {
+									factor = 0
+									has_global_flag = sxx_break_level_1
+								}
+								modifier = {
+									factor = 2
+									has_global_flag = sxx_break_level_3
+								}
+								modifier = {
+									factor = 3
+									has_global_flag = sxx_break_level_4
+								}
+							}
+						}
+					}
+				}
+			}
+			sxx_test_full = {
+				every_owned_planet = {
+					limit = {
+						has_active_building = building_sxx_shengxiantai
+					}
+					every_owned_pop = {
+						limit = {
+							NOT = { has_pop_flag = sxx_cultivator }
+							is_sxx_cultivable = yes
+							is_being_purged = no
+							is_being_assimilated = no
+							has_citizenship_rights = yes
+						}
+						random_list = {
+							25 = {
+								sxx_chance_happen_effect = { EFFECT = sxx_pop_may_spawn_cultivator CHANCE1 = 100 CHANCE2 = 900 MODIFIER = sxx_cultivator_spawn_chance_produces_mult }
+							}
+							25 = {
+								modifier = {
+									factor = 0
+									has_global_flag = sxx_break_level_1
+								}
+								modifier = {
+									factor = 2
+									has_global_flag = sxx_break_level_3
+								}
+								modifier = {
+									factor = 3
+									has_global_flag = sxx_break_level_4
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				has_country_flag = sxx_country_break_to_lianqi
+			}
+			country_event = { id = sxx_event.11 }
+		}
+	}
+}
+
+# 每年检测资质（附庸）
+country_event = {
+	id = sxx_break.105
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_sxx_sect = no
+		exists = overlord
+		overlord = { is_sxx_sect = yes }
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_holding = {
+					holding = holding_sxx_shengxiantai
+					owner = owner.overlord
+				}
+			}
+			every_owned_pop = {
+				limit = {
+					NOT = { has_pop_flag = sxx_cultivator }
+					is_sxx_cultivable = yes
+					is_being_purged = no
+					is_being_assimilated = no
+				}
+				random_list = {
+					25 = {
+						sxx_chance_happen_effect = { EFFECT = sxx_vassal_pop_may_spawn_cultivator CHANCE1 = 100 CHANCE2 = 900 MODIFIER = sxx_cultivator_spawn_chance_produces_mult }
+					}
+					25 = {
+						modifier = {
+							factor = 0
+							has_global_flag = sxx_break_level_1
+						}
+						modifier = {
+							factor = 2
+							has_global_flag = sxx_break_level_3
+						}
+						modifier = {
+							factor = 3
+							has_global_flag = sxx_break_level_4
+						}
+					}
+				}
+			}
+		}
+
+		overlord = {
+			if = {
+				limit = {
+					has_country_flag = sxx_country_break_to_lianqi
+				}
+				country_event = { id = sxx_event.11 }
+			}
+		}
+	}
+}

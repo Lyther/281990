@@ -1,0 +1,287 @@
+namespace = ancrel
+
+### On Dragon destroyed
+# If destroyed by a default empire, give Rubricator to Shard's destroyer in ancrel.4020
+# Else keep Rubricator in a special project in ancrel.4122
+country_event = {
+	id = ancrel.4120
+	hide_window = yes
+	location = FromFromFrom
+	is_triggered_only = yes
+
+	trigger = {
+		from = { has_country_flag = rubricator_dragon_country }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_zofe_compatible = yes
+			}
+			country_event = { id = ancrel.4020 } # Give killer the Rubricator
+			if = {
+				limit = {
+					any_country = {
+						OR = {
+							has_event_chain = rubricator_chain
+							has_event_chain = rubricator_chain_2
+						}
+					}
+				}
+				every_playable_country = {
+					limit = {
+						OR = {
+							has_event_chain = rubricator_chain
+							has_event_chain = rubricator_chain_2
+						}
+						NOT = {
+							is_same_value = root
+						}
+					}
+					country_event = { id = ancrel.4121 } # Inform chain owner
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					any_country = {
+						OR = {
+							has_event_chain = rubricator_chain
+							has_event_chain = rubricator_chain_2
+						}
+					}
+				}
+				every_playable_country = {
+					limit = {
+						OR = {
+							has_event_chain = rubricator_chain
+							has_event_chain = rubricator_chain_2
+						}
+					}
+					country_event = { id = ancrel.4122 } # Keep Rubricator in special project
+				}
+			}
+		}
+
+		# Remove rubricator chains and pois
+		if = {
+			limit = {
+				any_country = {
+					has_event_chain = rubricator_chain_2
+				}
+			}
+			every_playable_country = {
+				limit = {
+					has_event_chain = rubricator_chain_2
+				}
+				end_event_chain = rubricator_chain_2
+				remove_point_of_interest = rubricator_dragon_poi
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					has_event_chain = rubricator_chain
+				}
+			}
+			every_playable_country = {
+				limit = {
+					has_event_chain = rubricator_chain
+				}
+				end_event_chain = rubricator_chain
+				remove_point_of_interest = rubricator_coordinates_poi
+			}
+		}
+	}
+}
+
+### RELIC THEFT
+
+# Relic Acquired (HIDDEN)
+country_event = {
+	id = ancrel.6499
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		From = {
+			is_zofe_compatible = yes
+			num_owned_relics > 0
+		}
+		FromFrom = { is_capital = yes }
+		any_war = {
+			any_attacker = { is_same_value = root }
+			any_defender = { is_same_value = from }
+			NOT = {
+				using_war_goal = {
+					type = wg_take_galatron
+					owner = attacker
+				}
+			}
+		}
+	}
+
+	immediate = {
+		FromFrom = { save_event_target_as = planet }
+		From = { save_event_target_as = victim }
+		random_list = {
+			100 = {}
+			10 = {
+				modifier = {
+					factor = 15
+					has_valid_civic = civic_barbaric_despoilers
+				}
+				modifier = {
+					factor = 6.67 # 50% chance of success
+					any_war = {
+						any_attacker = { is_same_value = root }
+						any_defender = { is_same_value = from }
+						using_war_goal = {
+							type = wg_plunder
+							owner = attacker
+						}
+					}
+				}
+				country_event = { id = ancrel.6500 }
+			}
+		}
+	}
+}
+
+# To explode the system, or to not explode the system
+country_event = {
+	id = ancrel.11020
+	title = ancrel.11020.name
+	desc = ancrel.11020.desc
+	picture = GFX_evt_black_hole
+
+	is_triggered_only = yes
+
+	option = {
+		name = ancrel.11020.a
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier2researchreward
+			min = @tier2researchmin
+			max = @tier2researchmax
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+
+	option = {
+		name = ancrel.11020.b
+		custom_tooltip = ancrel.11020.tt
+		hidden_effect = {
+			event_target:eldritch_location = {
+				if = {
+					limit = {
+						NOT = {
+							any_system_planet = {
+								is_star_class = sc_black_hole
+							}
+						}
+					}
+					if = {
+						limit = {
+							any_fleet_in_system = {
+								exists = owner
+								NOT = { is_owned_by = root }
+							}
+						}
+						every_fleet_in_system = {
+							limit = {
+								exists = owner
+								NOT = { is_owned_by = root }
+							}
+							owner = {
+								if = {
+									limit = {
+										is_zofe_compatible = yes
+									}
+									country_event = {
+										id = ancrel.11035
+									}
+								}
+							}
+						}
+					}
+					destroy_star_system = yes
+				}
+				random_system_planet = {
+					limit = { is_planet_class = pc_black_hole }
+					create_country = {
+						name = "NAME_Eldritch_Horror"
+						type = guardian_horror
+						flag = {
+							icon = {
+								category = "zoological"
+								file = "flag_zoological_18.dds"
+							}
+							background = {
+								category = "backgrounds"
+								file = "00_solid.dds"
+							}
+							colors={
+								"black"
+								"black"
+								"null"
+								"null"
+							}
+						}
+					}
+					last_created_country = {
+						save_global_event_target_as = eldritch_horror_country
+						set_country_flag = eldritch_horror_country
+					}
+					create_fleet = {
+						name = "NAME_Eldritch_Horror"
+						settings = {
+							spawn_debris = no
+							is_boss = yes
+						}
+						effect = {
+							set_owner = event_target:eldritch_horror_country
+							create_ship = {
+								name = "NAME_Eldritch_Horror"
+								design = "NAME_Dimensional_Horror"
+								effect = { set_disabled = yes }
+							}
+							set_location = {
+								target = PREV
+								distance = 5
+								angle = 270
+							}
+						}
+					}
+					last_created_fleet = {
+						create_ambient_object = {
+							type = "horror_spawn_object"
+							location = THIS
+							use_3d_location = yes
+							duration = 10
+						}
+						fleet_event = { id = leviathans.3220 days = 8 }
+					}
+				}
+			}
+		}
+		country_event = {
+			id = ancrel.11025
+			days = 10
+		}
+		event_target:eldritch_horror_country = {
+			set_faction_hostility = {
+				target = root
+				set_hostile = no
+				set_neutral = yes
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}

@@ -1,0 +1,202 @@
+#组合体
+#阶段1
+entity = {
+	name = "tc_mirror_furnace_01_entity"
+	scale = 1
+
+	locator = { name = root position = { 0 0 0 } }
+	attach = {
+		root = "tc_mirror_array_s_light_entity"
+	}
+}
+
+#阶段2
+entity = {
+	name = "tc_mirror_furnace_02_entity"
+	scale = 1
+
+	locator = { name = root position = { 0 0 0 } }
+	attach = {
+		root = "tc_mirror_array_s_light_entity"
+		root = "tc_essence_mirror_entity"
+	}
+}
+
+#阶段3
+entity = {
+	name = "tc_mirror_furnace_03_entity"
+	scale = 1
+
+	locator = { name = root position = { 0 0 0 } }
+	attach = {
+		root = "tc_mirror_array_s_light_entity"
+		root = "tc_essence_mirror_entity"
+		root = "tc_mirror_array_l_light_entity"
+	}
+}
+
+#阶段4
+entity = {
+	name = "tc_mirror_furnace_04_entity"
+	scale = 1
+
+	locator = { name = root position = { 0 0 0 } }
+	attach = {
+		root = "tc_mirror_array_s_light_entity"
+		root = "tc_essence_mirror_entity"
+		root = "tc_mirror_array_l_light_entity"
+		root = "tc_core_heating_light_entity"
+	}
+}
+
+#组件
+entity = { #小圈镜环 
+	name = "tc_mirror_array_s_entity"
+	pdxmesh = "tc_mirror_array_s_mesh"
+
+	scale = 5
+}
+
+entity = { #小圈镜环-带光
+	name = "tc_mirror_array_s_light_entity"
+	pdxmesh = "tc_mirror_array_s_mesh"
+
+	scale = 5
+	attach = {
+		light_60_01 = "tc_mirror_light_entity"
+		light_60_02 = "tc_mirror_light_entity"
+		light_60_03 = "tc_mirror_light_entity"
+		light_60_04 = "tc_mirror_light_entity"
+		light_60_05 = "tc_mirror_light_entity"
+		light_60_06 = "tc_mirror_light_entity"
+		light_60_07 = "tc_mirror_light_entity"
+		light_60_08 = "tc_mirror_light_entity"
+		light_60_09 = "tc_mirror_light_entity"
+		light_60_10 = "tc_mirror_light_entity"
+		light_60_11 = "tc_mirror_light_entity"
+		light_60_12 = "tc_mirror_light_entity"
+	}
+}
+
+entity = { #源质之镜
+	name = "tc_essence_mirror_entity"
+	pdxmesh = "tc_essence_mirror_mesh"
+
+	scale = 5
+	locator = { name = root position = { 0 0 0 } }
+	attach = { root = "tc_mirror_portal_entity" }
+	attach = {
+		portal_effect = "tc_essence_mirror_effect_entity"
+	}
+}
+
+entity = { #大圈镜环
+	name = "tc_mirror_array_l_entity"
+	pdxmesh = "tc_mirror_array_l_mesh"
+
+	scale = 5
+}
+
+entity = { #大圈镜环-带光
+	name = "tc_mirror_array_l_light_entity"
+	pdxmesh = "tc_mirror_array_l_mesh"
+
+	scale = 5
+	attach = {
+		light_75_01 = "tc_mirror_light_entity"
+		light_75_02 = "tc_mirror_light_entity"
+		light_75_03 = "tc_mirror_light_entity"
+		light_75_04 = "tc_mirror_light_entity"
+		light_75_05 = "tc_mirror_light_entity"
+		light_75_06 = "tc_mirror_light_entity"
+		light_75_07 = "tc_mirror_light_entity"
+		light_75_08 = "tc_mirror_light_entity"
+		light_75_09 = "tc_mirror_light_entity"
+		light_75_10 = "tc_mirror_light_entity"
+		light_75_11 = "tc_mirror_light_entity"
+		light_75_12 = "tc_mirror_light_entity"
+	}
+}
+
+entity = { #核心加热
+	name = "tc_core_heating_entity"
+	pdxmesh = "tc_core_heating_mesh"
+
+	scale = 5
+
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+}
+
+entity = { #核心加热-带光
+	name = "tc_core_heating_light_entity"
+	pdxmesh = "tc_core_heating_mesh"
+
+	scale = 5
+
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+	attach = {
+		ignis_rune_1 = "tc_mirror_ignis_rune_entity"
+		ignis_rune_2 = "tc_mirror_ignis_rune_entity"
+		ignis_rune_3 = "tc_mirror_ignis_rune_entity"
+		ignis_rune_4 = "tc_mirror_ignis_rune_entity"
+
+		ignis_beam_1 = "tc_mirror_ignis_beam_entity"
+		ignis_beam_2 = "tc_mirror_ignis_beam_entity"
+		ignis_beam_3 = "tc_mirror_ignis_beam_entity"
+		ignis_beam_4 = "tc_mirror_ignis_beam_entity"
+	}
+}
+
+entity = { #光线
+	name = "tc_mirror_light_entity"
+	pdxmesh = "tc_mirror_light_mesh"
+
+	scale = 1
+}
+
+entity = { #ignis符文
+	name = "tc_mirror_ignis_rune_entity"
+	scale = 1
+
+	locator = { name = root position = { 0 0 2 } }
+	default_state = idle
+	state = {
+		name = idle looping = yes
+		start_event = { time = 0.0 node = root particle = "tc_arcane_ignis_beam_muzzle_particle" trigger_once = yes keep_particle = yes }
+	}
+}
+
+entity = { #ignis射线
+	name = "tc_mirror_ignis_beam_entity"
+	scale = 0.5
+
+	locator = { name = root position = { 0 0 0 } rotation = { 0 -90 0 } }
+	default_state = idle
+	state = {
+		name = idle looping = yes
+		start_event = { time = 0.0 node = root particle = "tc_mirror_ignis_beam_particle" trigger_once = yes keep_particle = yes }
+	}
+}
+
+entity = { #源质镜效果
+	name = "tc_essence_mirror_effect_entity"
+	pdxmesh = "tc_gate_core_effect_mesh"
+	scale = 0.15
+
+	get_state_from_parent = no
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 
+		start_event = { }
+	}
+	
+	game_data = {
+		uv_animation_speed 		= -0.05
+		uv_animation_direction 	= { 0.5 0.0 }
+		bloom_factor = 0.8
+	}
+}

@@ -1,0 +1,205 @@
+# from = country
+# this = species
+#triggered_pop_modifier = {
+#	potential = { is_pop_category = ruler }
+#	pop_happiness = 0.15
+#}
+###乌托邦式富足
+living_standard_utopian = {
+	triggered_pop_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_ascension_perk = ap_bd_great_harmony
+			}
+		}
+		pop_housing_usage_mult = -0.5
+		pop_amenities_usage_add = -0.5
+		unemployment_resources_society_research_produces_add = 6
+		unemployment_resources_physics_research_produces_add = 6
+		unemployment_resources_engineering_research_produces_add = 6
+		unemployment_resources_unity_produces_add = 3
+		
+	}
+	triggered_pop_modifier = {
+		potential = {
+			NAND = {
+				exists = owner
+				owner = {
+					has_deficit = consumer_goods
+				}
+			}
+		}
+		pop_cat_ruler_happiness = 0.2
+		pop_cat_specialist_happiness = 0.2
+		pop_cat_worker_happiness = 0.2
+	}
+	triggered_pop_modifier = {
+		potential = {
+			OR = {
+				is_pop_category = ruler
+				is_pop_category = specialist
+				is_pop_category = worker
+			}
+		}
+		unemployment_resources_society_research_produces_add = 2
+		unemployment_resources_physics_research_produces_add = 2
+		unemployment_resources_engineering_research_produces_add = 2
+	}
+	triggered_pop_modifier = {
+		potential = {
+			OR = {
+				is_pop_category = ruler
+				is_pop_category = specialist
+				is_pop_category = worker
+				is_pop_category = criminal
+			}
+		}
+		unemployment_resources_unity_produces_add = 1
+	}
+	pop_modifier = {
+		pop_category_rulers_consumer_goods_upkeep_add = @living_standard_luxuries_very_high
+		pop_category_specialists_consumer_goods_upkeep_add = @living_standard_luxuries_very_high
+		pop_category_workers_consumer_goods_upkeep_add = @living_standard_luxuries_very_high
+	}
+	potential = {
+		exists = from
+		from = {
+			is_gestalt = no
+		}
+		NOR = {
+			has_trait = trait_hive_mind
+			has_trait = trait_machine_unit
+			is_shackled_robot_species_rights = yes
+		}
+	}
+	allow = {
+		hidden_trigger = {
+			exists = from
+		}
+		custom_tooltip = {
+			fail_text = empire_not_egalitarian
+			from = {
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+					has_ascension_perk = ap_bd_great_harmony
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = is_slaves_tooltip
+			NOT = {
+				has_citizenship_type = {
+					country = from
+					type = citizenship_slavery
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = is_purged_not_neutered
+			if = {
+				limit = {
+					OR = {
+						has_citizenship_type = {
+							country = from
+							type = citizenship_purge_machine
+						}
+						has_citizenship_type = {
+							country = from
+							type = citizenship_purge
+						}
+					}
+				}
+				has_purge_type = {
+					country = from
+					type = purge_neutering
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = SPECIES_MUST_NOT_BE_ASSIMILATING
+			NOT = {
+				has_citizenship_type = {
+					type = citizenship_assimilation
+					country = from
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		factor = 15
+		modifier = {
+			factor = 0
+			NOT = {
+				has_citizenship_type = {
+					country = from
+					type = citizenship_full
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			NOT = {
+				has_living_standard = {
+					country = from
+					type = living_standard_utopian
+				}
+			}
+			NOT = {
+				from = {
+					has_monthly_income = {
+						resource = minerals
+						value > 300
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			has_living_standard = {
+				country = from
+				type = living_standard_utopian
+			}
+			NOT = {
+				from = {
+					has_monthly_income = {
+						resource = minerals
+						value > 200
+					}
+				}
+			}
+		}
+	}
+}
+
+###物种转化
+bd_living_standard_tech_assimilation = {
+	pop_modifier = {
+		pop_happiness = -0.1
+	}
+	potential = {
+		host_has_dlc = "Utopia"
+		exists = from
+		from = {
+			OR = {
+				has_ascension_perk = ap_bd_great_harmony
+			}
+		}
+	}
+	allow = {
+		hidden_trigger = {
+			exists = from
+		}
+		custom_tooltip = {
+			fail_text = SPECIES_MUST_BE_ASSIMILATING
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = from
+			}
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+}

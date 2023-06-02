@@ -1,0 +1,428 @@
+namespace = mopt_precursors
+
+country_event = {
+	id = mopt_precursors.0
+	title = BLANK_STRING
+	desc = mopt_precursors.0.desc
+
+	# picture = GFX_evt_archaeological_dig
+	diplomatic_title = mopt_precursors.0.name
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = shroud1
+		room = shroud_room
+	}
+
+	is_triggered_only = yes
+	trigger = {
+		# always = no ############################
+		is_ai = no
+		NOR = {
+			has_country_flag = vultaum_intro		# 沃陶姆
+			has_country_flag = yuht_intro			# 尤特
+			has_country_flag = first_league_intro	# 第一联盟
+			has_country_flag = irassian_intro		# 伊拉斯人
+			has_country_flag = cybrex_intro			# 赛博勒克斯
+			has_country_flag = zroni_intro			# 泽洛
+			has_country_flag = baol_intro			# 巴奥
+		}
+	}
+
+	option = {
+		name = mopt_precursors.0.vultaum
+		custom_tooltip = mopt_precursors.0.vultaum.tooltip
+		hidden_effect = {
+			set_country_flag = flag_mopt_fixed_vultaum_intro
+			set_country_flag = vultaum_intro
+			mopt_set_precursor_flag = { precursor_flag = precursor_1 }
+		}
+	}
+	option = {
+		name = mopt_precursors.0.yuht
+		custom_tooltip = mopt_precursors.0.yuht.tooltip
+		hidden_effect = {
+			set_country_flag = flag_mopt_fixed_yuht_intro
+			set_country_flag = yuht_intro
+			mopt_set_precursor_flag = { precursor_flag = precursor_2 }
+		}
+	}
+	option = {
+		name = mopt_precursors.0.first_league
+		custom_tooltip = mopt_precursors.0.first_league.tooltip
+		hidden_effect = {
+			set_country_flag = flag_mopt_fixed_first_league_intro
+			set_country_flag = first_league_intro
+			mopt_set_precursor_flag = { precursor_flag = precursor_3 }
+		}
+	}
+	option = {
+		name = mopt_precursors.0.irassian
+		custom_tooltip = mopt_precursors.0.irassian.tooltip
+		hidden_effect = {
+			set_country_flag = flag_mopt_fixed_irassian_intro
+			set_country_flag = irassian_intro
+			mopt_set_precursor_flag = { precursor_flag = precursor_4 }
+		}
+	}
+	option = {
+		name = mopt_precursors.0.cybrex
+		custom_tooltip = mopt_precursors.0.cybrex.tooltip
+		hidden_effect = {
+			set_country_flag = flag_mopt_fixed_cybrex_intro
+			set_country_flag = cybrex_intro
+			mopt_set_precursor_flag = { precursor_flag = precursor_5 }
+		}
+	}
+	option = {
+		name = mopt_precursors.0.baol
+		custom_tooltip = mopt_precursors.0.baol.tooltip
+		allow = { has_ancrel = yes }
+		hidden_effect = {
+			set_country_flag = flag_mopt_fixed_baol_intro
+			set_country_flag = baol_intro
+			mopt_set_precursor_flag = { precursor_flag = precursor_baol_1 }
+		}
+	}
+	option = {
+		name = mopt_precursors.0.zroni
+		custom_tooltip = mopt_precursors.0.zroni.tooltip
+		allow = { has_ancrel = yes }
+		hidden_effect = {
+			set_country_flag = flag_mopt_fixed_zroni_intro
+			set_country_flag = zroni_intro
+			mopt_set_precursor_flag = { precursor_flag = precursor_zroni_1 }
+		}
+	}
+	option = {
+		name = mopt_precursors.0.cancel
+		custom_tooltip = mopt_precursors.0.cancel.tooltip
+	}
+}
+
+# Vultaum Introduction
+ship_event = {
+	id = mopt_precursors.100
+	title = "precursor.1.name"
+	desc = "precursor.1.desc"
+	picture = GFX_evt_archaeological_dig
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = flag_mopt_fixed_vultaum_intro
+		}
+		# solar_system = { has_star_flag = precursor_1 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		FROM = {
+			has_anomaly = no
+			is_star = no
+		}
+	}
+
+	immediate = {
+		owner = { remove_country_flag = flag_mopt_fixed_vultaum_intro }
+	}
+
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "vultaum_chain"
+				target = THIS
+			}
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+		}
+	}
+}
+
+# Yuht Intro
+ship_event = {
+	id = mopt_precursors.200
+	title = "precursor.500.name"
+	desc = "precursor.500.desc"
+	picture = GFX_evt_archaeological_dig
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		# solar_system = { has_star_flag = precursor_2 }
+		owner = {
+			is_ai = no
+			has_country_flag = flag_mopt_fixed_yuht_intro
+		}
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		FROM = {
+			has_anomaly = no
+			is_star = no
+		}
+	}
+
+	immediate = {
+		owner = { remove_country_flag = flag_mopt_fixed_yuht_intro }
+	}
+
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "yuht_chain"
+				target = THIS
+			}
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+		}
+	}
+}
+
+# First League Notification Event
+ship_event = {
+	id = mopt_precursors.300
+	title = "precursor.1000.name"
+	desc = "precursor.1000.desc"
+	picture = GFX_evt_archaeological_dig
+
+	is_triggered_only = yes
+
+	trigger = {
+		# solar_system = { has_star_flag = precursor_3 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		owner = { is_ai = no }
+		FROM = {
+			has_anomaly = no
+			is_star = no
+		}
+		owner = {
+			has_country_flag = flag_mopt_fixed_first_league_intro
+		}
+	}
+
+	immediate = {
+		owner = { remove_country_flag = flag_mopt_fixed_first_league_intro }
+	}
+
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "first_league_chain"
+				target = THIS
+			}
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+		}
+	}
+}
+
+# Irassian Notification Event
+ship_event = {
+	id = mopt_precursors.400
+	title = "precursor.1500.name"
+	desc = "precursor.1500.desc"
+	picture = GFX_evt_archaeological_dig
+
+	is_triggered_only = yes
+
+	trigger = {
+		# solar_system = { has_star_flag = precursor_4 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		owner = { is_ai = no }
+		FROM = {
+			has_anomaly = no
+			is_star = no
+		}
+		owner = {
+			has_country_flag = flag_mopt_fixed_irassian_intro
+		}
+	}
+
+	immediate = {
+		owner = { remove_country_flag = flag_mopt_fixed_irassian_intro }
+	}
+
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "irassian_chain"
+				target = ROOT
+			}
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+		}
+	}
+}
+
+# Cybrex Notification Event
+ship_event = {
+	id = mopt_precursors.500
+	title = "precursor.2000.name"
+	desc = "precursor.2000.desc"
+	picture = GFX_evt_archaeological_dig
+
+	is_triggered_only = yes
+
+	trigger = {
+		# solar_system = { has_star_flag = precursor_5 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		owner = { is_ai = no }
+		FROM = {
+			has_anomaly = no
+			is_star = no
+		}
+		owner = {
+			has_country_flag = flag_mopt_fixed_cybrex_intro
+		}
+	}
+
+	immediate = {
+		owner = { remove_country_flag = flag_mopt_fixed_cybrex_intro }
+	}
+
+	option = {
+		name = INTERESTING
+		hidden_effect = { owner = { country_event = { id = story.5 days = 30 } } }
+		owner = {
+			begin_event_chain = {
+				event_chain = "cybrex_chain"
+				target = ROOT
+			}
+			if = {
+				limit = { has_ancrel = yes }
+				small_artifact_reward = yes
+			}
+		}
+	}
+}
+
+# Baol Introduction
+ship_event = {
+	id = mopt_precursors.600
+	title = "ancrel.2000.name"
+	desc = "ancrel.2000.desc"
+	picture = GFX_evt_baol_grunur
+	show_sound = event_default
+	location = from
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		host_has_dlc = "Ancient Relics Story Pack"
+		owner = { is_ai = no }
+		solar_system = {
+			# has_star_flag = precursor_baol_1
+			NOR = {
+				is_same_value = root.owner.capital_scope.solar_system
+				has_star_flag = sol_system
+			}
+		}
+		# NOT = { has_global_flag = baol_started }
+		FROM = {
+			has_anomaly = no
+			is_star = no
+			NOT = { exists = archaeological_site }
+			NOT = { has_planet_flag = suppress_archaeological_sites }
+			NOR = {
+				is_planet_class = pc_gas_giant
+				is_planet_class = pc_molten
+			}
+		}
+		owner = {
+			has_country_flag = flag_mopt_fixed_baol_intro
+		}
+	}
+
+	immediate = {
+		set_global_flag = baol_started
+		owner = { remove_country_flag = flag_mopt_fixed_baol_intro }
+		solar_system = { set_star_flag = first_grunur_site@root.owner }
+	}
+
+	option = {
+		name = CURIOUS
+		hidden_effect = {
+			owner = { country_event = { id = story.5 days = 30 } }
+			from = { create_archaeological_site = grunur_digsite_1 }
+		}
+	}
+}
+
+# Zroni Introduction
+ship_event = {
+	id = mopt_precursors.700
+	title = "ancrel.1.name"
+	desc = "ancrel.1.desc"
+	picture = GFX_evt_overgrown_city
+	location = from
+	show_sound = event_wind_ruins
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		
+		host_has_dlc = "Ancient Relics Story Pack"
+		owner = { is_ai = no }
+		# solar_system = { has_star_flag = precursor_zroni_1 }
+		solar_system = { NOT = { is_same_value = root.owner.capital_scope.solar_system } }
+		# NOT = { has_global_flag = zroni_started }
+		FROM = {
+			has_anomaly = no
+			NOT = { exists = archaeological_site }
+			NOT = { has_planet_flag = suppress_archaeological_sites }
+			habitable_planet = yes
+		}
+		owner = {
+			has_country_flag = flag_mopt_fixed_zroni_intro
+		}
+	}
+
+	immediate = {
+		owner = { remove_country_flag = flag_mopt_fixed_zroni_intro }
+		set_global_flag = zroni_started
+		solar_system = { set_star_flag = first_zoroni_site@root.owner }
+		from = { prevent_anomaly = yes }
+	}
+
+	option = {
+		name = CURIOUS
+		hidden_effect = {
+			owner = { country_event = { id = story.5 days = 30 } }
+		}
+		from = {
+			create_archaeological_site = zroni_digsite_1
+			root.owner = {
+				set_country_flag = zroni_arc_chain_@prev
+			}
+			add_deposit = d_zro_deposit_2
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}

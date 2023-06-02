@@ -1,0 +1,250 @@
+situation_utopian_paradise = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_meh
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_desert }
+		}
+		picture = GFX_evt_desert
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_tropical }
+		}
+		picture = GFX_evt_tropical
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_arid }
+		}
+		picture = GFX_evt_arid
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_continental }
+		}
+		picture = GFX_evt_continental
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_alpine }
+		}
+		picture = GFX_evt_alpine_city
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_savannah }
+		}
+		picture = GFX_evt_savannah
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_ocean }
+		}
+		picture = GFX_evt_ocean
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_tundra }
+		}
+		picture = GFX_evt_tundra
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_arctic }
+		}
+		picture = GFX_evt_arctic
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_gaia }
+		}
+		picture = GFX_evt_gaia
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_nuked }
+		}
+		picture = GFX_evt_tomb_world
+	}
+	picture = {
+		trigger = {
+			target = {
+				OR = {
+					is_planet_class = pc_ringworld_habitable
+					is_planet_class = pc_ringworld_habitable_damaged
+					is_planet_class = pc_cybrex
+				}
+			}
+		}
+		picture = GFX_evt_ringworld
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_habitat }
+		}
+		picture = GFX_evt_habitat
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_hive }
+		}
+		picture = GFX_evt_infested
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_machine }
+		}
+		picture = GFX_evt_ai_planet
+	}
+	picture = {
+		trigger = {
+			target = { is_planet_class = pc_city }
+		}
+		picture = GFX_evt_city_planet
+	}
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = utopian_paradise_stage_1_tooltip
+			end = 50
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = utopian_paradise_stage_2_tooltip
+			on_first_enter = {
+				situation_event = { id = utopian_paradise.2 }
+			}
+			end = 100
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = utopian_paradise_stage_3_tooltip
+			on_first_enter = {
+				situation_event = { id = utopian_paradise.3 }
+			}
+			end = 200
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = utopian_paradise_stage_4_tooltip
+			on_first_enter = {
+				situation_event = { id = utopian_paradise.4 }
+			}
+			end = 300
+		}
+	}
+
+	category = positive
+
+	on_progress_complete = {
+		custom_tooltip = utopian_paradise_finish_tooltip
+		hidden_effect = {
+			situation_event = { id = utopian_paradise.5 }
+		}
+	}
+	on_start = { }
+	on_fail = {
+		custom_tooltip = utopian_paradise_fail_tooltip
+		hidden_effect = { situation_event = { id = situation.1180 } }
+	}
+
+	modifier = {
+	}
+	on_monthly = {
+	}
+	approach = {#Low Priority
+		name = approach_utopian_low_priority
+		on_select = {
+			custom_tooltip = utopian_paradise_low_priority_effect
+		}
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		default = yes
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 100
+				sr_dark_matter = 10
+				sr_living_metal = 10
+			}
+		}
+	}
+	approach = {#Moderate Priority
+		name = approach_utopian_moderate_priority
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		
+		on_select = {
+			custom_tooltip = utopian_paradise_moderate_priority_effect
+		}
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 500
+				sr_dark_matter = 50
+				sr_living_metal = 50
+			}
+		}
+	}
+	approach = {#High Priority
+		name = approach_utopian_high_priority
+		on_select = {
+			custom_tooltip = utopian_paradise_high_priority_effect
+		}
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 1000
+				sr_dark_matter = 100
+				sr_living_metal = 100
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 4
+		modifier = {
+			add = 2
+			desc = string_current_approach
+			current_situation_approach = approach_utopian_high_priority
+		}
+		modifier = {
+			add = -2
+			desc = string_current_approach
+			current_situation_approach = approach_utopian_moderate_priority
+			
+		}
+		 modifier = {
+			factor = 0
+			desc = string_current_approach
+			current_situation_approach = approach_utopian_low_priority
+		}
+		
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+}

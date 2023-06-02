@@ -1,0 +1,1147 @@
+namespace = sxx_origin
+
+# 起源开局效果
+country_event = {
+	id = sxx_origin.1
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_sxx_fallen_1 = no
+	}
+
+	immediate = {
+		### 魔怔 ###
+		if = {
+			limit = {
+				has_valid_civic = civic_sxx_mozheng
+			}
+			set_country_flag = sxx_test_break_2
+			country_event = { id = sxx_test.6 days = 10 }
+			add_resource = {
+				sxx_stones = 50000
+				sxx_pills = 15000
+				sxx_gongfa = 500000000
+			}
+		}
+		############
+
+		begin_event_chain = {
+			event_chain = sxx_cultivation_data_chain
+			target = ROOT
+		}
+		add_resource = {
+			sxx_stones = 200
+		}
+		add_sxx_kuilei_techs = yes
+
+		switch = {
+			trigger = has_origin
+			origin_sxx_cultivator_family = {
+				add_resource = {
+					sxx_stones = 800
+					sxx_pills = 100
+					sxx_gongfa = 300
+				}
+				
+				random_owned_leader = {
+					limit = {
+						is_ruler = yes
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_sxx_jindan
+					}
+				}
+				every_owned_leader = {
+					limit = {
+						NOT = { is_ruler = yes }
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_sxx_zhuji
+					}
+				}
+				add_modifier = { modifier = sxx_jindan_country }
+				give_technology = { message = no tech = tech_sxx_liandanfang_1 }
+				give_technology = { message = no tech = tech_sxx_lianqishi_1 }
+				capital_scope = {
+					add_deposit = d_sxx_lingmai_3
+
+					add_district = district_city
+
+					add_building = building_sxx_zongmen_3
+					add_building = building_sxx_stones_mine_3
+					add_building = building_sxx_liandanfang_1
+					add_building = building_sxx_lianqishi_1
+
+					sxx_planet_add_main_species_state_pop = { COUNT = 10 STATE = lianqi }
+					sxx_planet_add_main_species_state_pop = { COUNT = 3 STATE = zhuji }
+					sxx_planet_add_main_species_state_pop = { COUNT = 1 STATE = jindan }
+				}
+			}
+			origin_sxx_yuanying = {
+				every_owned_leader = {
+					modify_species = {
+						species = this
+						add_trait = trait_sxx_lianqi
+					}
+				}
+				add_modifier = { modifier = sxx_lianqi_country }
+				capital_scope = {
+					set_planet_size = 18
+					clear_deposits = yes
+					
+					add_deposit = d_sxx_lingmai_4	
+					add_building = building_sxx_zongmen_1
+					add_building = building_sxx_stones_mine_4
+					
+					while = {
+						count = 10
+						random_owned_pop = {
+							limit = { is_same_species = owner_main_species }
+							kill_pop = yes
+						}
+					}
+					sxx_planet_add_main_species_state_pop = { COUNT = 10 STATE = lianqi }
+					sxx_planet_add_main_species_state_pop = { COUNT = 1 STATE = yuanying }
+					last_created_pop = {
+						sxx_pop_set_potential_depletion = yes
+						add_modifier = { modifier = sxx_pop_yuanyinglaiguai }
+						set_pop_flag = origin_sxx_yuanying_pop_of@root
+					}
+				}
+			}
+			origin_sxx_yuhua = {
+				random_owned_species = {
+					limit = {
+						has_trait = trait_sxx_yuhua
+					}
+					set_species_flag = yuhua_species_of@root
+					event_target:sxx_pool_planet = {
+						create_pop = { species = prev }
+					}
+					last_created_pop = {
+						set_pop_flag = sxx_pool_pop_alive
+					}
+				}
+				capital_scope = {
+					add_deposit = d_sxx_lingmai_2
+
+					add_building = building_sxx_zongmen_1
+					add_building = building_sxx_stones_mine_2
+					
+					sxx_planet_add_main_species_state_pop = { COUNT = 3 STATE = lianqi }
+					every_owned_pop = {
+						limit = {
+							has_pop_flag = sxx_cultivator
+						}
+						modify_species = {
+							species = this
+							add_trait = trait_sxx_linggen
+						}
+					}
+				}
+				random_owned_leader = {
+					limit = {
+						is_ruler = yes
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_sxx_lianqi
+					}
+				}
+				every_owned_leader = {
+					modify_species = {
+						species = this
+						add_trait = trait_sxx_linggen
+					}
+				}
+				every_pool_leader = {
+					modify_species = {
+						species = this
+						add_trait = trait_sxx_linggen
+					}
+				}
+				add_modifier = { modifier = sxx_lianqi_country }
+			}
+			origin_sxx_evil_invasion = {
+				add_resource = {
+					sxx_stones = 99800
+					sxx_pills = 10000
+					#sxx_gongfa = 10000
+				}
+				capital_scope = {
+					add_deposit = d_sxx_lingmai_4
+					add_building = building_sxx_stones_mine_4
+					add_building = building_sxx_xuemingbei_0
+				}
+				every_owned_leader = {
+					sxx_remove_xiuxian_trait = yes
+					modify_species = {
+						species = this
+						add_trait = trait_sxx_yuanying
+					}
+				}
+			}
+			default = {
+				capital_scope = {
+					add_deposit = d_sxx_lingmai_2
+
+					add_building = building_sxx_zongmen_1
+					add_building = building_sxx_stones_mine_2
+					
+					sxx_planet_add_main_species_state_pop = { COUNT = 3 STATE = lianqi }
+				}
+				random_owned_leader = {
+					limit = {
+						is_ruler = yes
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_sxx_lianqi
+					}
+				}
+				add_modifier = { modifier = sxx_lianqi_country }
+			}
+		}
+
+		capital_scope = {
+			add_deposit = d_sxx_lingtian
+			add_deposit = d_sxx_mijing
+
+			add_building = building_sxx_shengxiantai
+		}
+
+		# 默认初始经验
+		every_owned_pop = {
+			limit = {
+				has_pop_flag = sxx_cultivator
+			}
+			if = {
+				limit = {
+					is_sxx_top_1_state = yes
+				}
+				set_variable = { which = sxx_pop_xp value = value:sxx_pop_xp_max }
+				random_list = {
+					1 = { multiply_variable = { which = sxx_pop_xp value = 0.3 } }
+					2 = { multiply_variable = { which = sxx_pop_xp value = 0.2 } }
+					4 = { multiply_variable = { which = sxx_pop_xp value = 0.1 } }
+					8 = { multiply_variable = { which = sxx_pop_xp value = 0 } }
+				}
+			}
+			else = {
+				set_variable = { which = sxx_pop_xp value = value:sxx_pop_xp_max }
+				random_list = {
+					1 = {}
+					2 = { multiply_variable = { which = sxx_pop_xp value = 0.9 } }
+					3 = { multiply_variable = { which = sxx_pop_xp value = 0.8 } }
+					4 = { multiply_variable = { which = sxx_pop_xp value = 0.7 } }
+					5 = { multiply_variable = { which = sxx_pop_xp value = 0.6 } }
+					6 = { multiply_variable = { which = sxx_pop_xp value = 0.5 } }
+					7 = { multiply_variable = { which = sxx_pop_xp value = 0.4 } }
+					8 = { multiply_variable = { which = sxx_pop_xp value = 0.3 } }
+					9 = { multiply_variable = { which = sxx_pop_xp value = 0.2 } }
+					10 = { multiply_variable = { which = sxx_pop_xp value = 0.1 } }
+					11 = { multiply_variable = { which = sxx_pop_xp value = 0 } }
+				}
+			}
+		}
+
+		country_event = { id = sxx_event.200 } # 更新领袖特质
+	}
+}
+
+################################ 羽化登仙 ####################################
+
+# 羽化登仙：终成化神
+country_event = {
+	id = sxx_origin.6
+	title = sxx_origin.6.name
+	desc = sxx_origin.6.desc
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	trigger = {
+		NOT = { has_country_flag = sxx_yuhua_awake }
+	}
+
+	immediate = {
+		set_country_flag = sxx_yuhua_awake
+		every_galaxy_species = {
+			limit = {
+				is_same_species = owner_main_species
+			}
+			set_species_flag = pre_main_species_of@root
+		}
+		random_galaxy_species = {
+			limit = {
+				has_species_flag = yuhua_species_of@root
+			}
+			root = {
+				change_dominant_species = {
+					species = prev
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_xenophobe = yes
+			}
+			every_galaxy_species = {
+				limit = {
+					has_species_flag = pre_main_species_of@root
+				}
+				set_citizenship_type = {
+					type = citizenship_limited
+					country = root
+				}
+			}
+		}
+	}
+
+	option = {
+		name = sxx_origin.6.a
+		custom_tooltip = sxx_yuhua_awake_tooltip
+	}
+}
+
+# 首次羽化
+country_event = {
+	id = sxx_origin.7
+	title = sxx_origin.7.name
+	desc = sxx_origin.7.desc
+	is_triggered_only = yes
+	picture = GFX_evt_disease_outbreak
+	show_sound = event_screams
+
+	trigger = {
+		NOT = { has_country_flag = sxx_yuhua_broke }
+	}
+
+	immediate = {
+		set_country_flag = sxx_yuhua_broke
+	}
+
+	option = {
+		name = sxx_origin.7.a
+	}
+	option = {
+		name = sxx_origin.7.b
+	}
+}
+
+################################ 元婴老怪 ####################################
+
+# 元婴老怪爆功法
+country_event = {
+	id = sxx_origin.10
+	title = TRANSMISSION
+	desc = sxx_origin.10.desc
+	is_triggered_only = yes
+
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	trigger = {
+		has_origin = origin_sxx_yuanying
+		any_owned_pop = { has_pop_flag = origin_sxx_yuanying_pop_of@root }
+	}
+
+	after = {
+		hidden_effect = {
+			remove_modifier = sxx_lianqi_country
+			remove_modifier = sxx_zhuji_country
+			remove_modifier = sxx_jindan_country
+			random_owned_pop = {
+				limit = {
+					has_pop_flag = origin_sxx_yuanying_pop_of@root
+				}
+				remove_modifier = sxx_pop_yuanyinglaiguai
+			}
+		}
+		add_modifier = { modifier = sxx_yuanying_country }
+		add_modifier = { modifier = sxx_freedom days = 3600 }
+		add_resource = {
+			influence = 200
+			sxx_gongfa = 1000
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier3unityreward
+		}
+	}
+
+	option = {
+		name = sxx_origin.10.a
+	}
+	option = {
+		name = sxx_origin.10.b
+	}
+}
+
+################################ 神弃一族 ####################################
+
+# 神弃人口死亡判定
+event = {
+	id = sxx_origin.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_galaxy_pop = {
+			limit = {
+				has_pop_flag = sxx_cultivator
+				has_trait = trait_sxx_abg
+			}
+			change_variable = { which = sxx_abg_pop_years value = 1 }
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 5 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 10 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 15 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 20 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 10 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+				sxx_zhuji = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 10 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 20 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 30 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 40 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 20 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+				sxx_jindan = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 15 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 30 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 45 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 60 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 30 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+				sxx_yuanying = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 20 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 40 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 60 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 80 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 40 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+				sxx_huashen = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 25 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 50 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 75 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 100 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 50 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+				sxx_lianxu = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 30 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 60 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 90 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 120 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 60 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+				sxx_heti = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 35 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 70 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 105 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 140 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 70 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+				sxx_dacheng = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 40 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 80 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 120 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 160 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 80 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+				sxx_dujie = {
+					if = {
+						limit = {
+							switch = {
+								trigger = has_global_flag
+								sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 45 } }
+								sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 90 } }
+								sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 135 } }
+								sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 180 } }
+								default = { check_variable = { which = sxx_abg_pop_years value >= 90 } }
+							}
+						}
+						pop_event = { id = sxx_origin.25 days = 1 random = 359 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# 神弃人口死亡
+pop_event = {
+	id = sxx_origin.25
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_pop_flag = sxx_cultivator
+		has_trait = trait_sxx_abg
+		switch = {
+			trigger = has_pop_flag
+			sxx_lianqi = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 5 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 10 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 15 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 20 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 10 } }
+				}
+			}
+			sxx_zhuji = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 10 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 20 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 30 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 40 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 20 } }
+				}
+			}
+			sxx_jindan = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 15 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 30 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 45 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 60 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 30 } }
+				}
+			}
+			sxx_yuanying = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 20 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 40 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 60 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 80 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 40 } }
+				}
+			}
+			sxx_huashen = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 25 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 50 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 75 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 100 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 50 } }
+				}
+			}
+			sxx_lianxu = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 30 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 60 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 90 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 120 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 60 } }
+				}
+			}
+			sxx_heti = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 35 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 70 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 105 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 140 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 70 } }
+				}
+			}
+			sxx_dacheng = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 40 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 80 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 120 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 160 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 80 } }
+				}
+			}
+			sxx_dujie = {
+				switch = {
+					trigger = has_global_flag
+					sxx_break_level_1 = { check_variable = { which = sxx_abg_pop_years value >= 45 } }
+					sxx_break_level_2 = { check_variable = { which = sxx_abg_pop_years value >= 90 } }
+					sxx_break_level_3 = { check_variable = { which = sxx_abg_pop_years value >= 135 } }
+					sxx_break_level_4 = { check_variable = { which = sxx_abg_pop_years value >= 180 } }
+					default = { check_variable = { which = sxx_abg_pop_years value >= 90 } }
+				}
+			}
+		}
+	}
+
+	immediate = {
+		every_galaxy_fleet = {
+			limit = {
+				any_owned_ship = { is_ship_size = sxx_cultivator }
+			}
+			every_owned_ship = {
+				limit = {
+					is_ship_size = sxx_cultivator
+				}
+				root = {
+					if = {
+						limit = { has_pop_flag = sxx_cultivator_of@prev }
+						prev = {
+							sxx_ship_unassign_one_ship_fleet_leader = yes
+							destroy_ship = this
+						}
+					}
+				}
+			}
+		}
+		sxx_pop_die_and_become_yuhuaxian_if_possible = yes # 变船的人口不会变僵尸
+	}
+}
+
+# 神弃领袖死亡判定
+event = {
+	id = sxx_origin.30
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			every_owned_leader = {
+				limit = {
+					species = { has_trait = trait_sxx_abg }
+				}
+				change_variable = { which = sxx_abg_leader_years value = 1 }
+				species = {
+					switch = {
+						trigger = has_trait
+						trait_sxx_lianqi = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 5 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 10 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 15 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 20 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 10 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+						trait_sxx_zhuji = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 10 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 20 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 30 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 40 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 20 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+						trait_sxx_jindan = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 15 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 30 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 45 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 60 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 30 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+						trait_sxx_yuanying = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 20 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 40 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 60 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 80 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 40 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+						trait_sxx_huashen = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 25 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 50 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 75 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 100 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 50 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+						trait_sxx_lianxu = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 30 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 60 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 90 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 120 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 60 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+						trait_sxx_heti = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 35 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 70 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 105 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 140 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 70 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+						trait_sxx_dacheng = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 40 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 80 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 120 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 160 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 80 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+						trait_sxx_dujie = {
+							prev = {
+								if = {
+									limit = {
+										switch = {
+											trigger = has_global_flag
+											sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 45 } }
+											sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 90 } }
+											sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 135 } }
+											sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 180 } }
+											default = { check_variable = { which = sxx_abg_leader_years value >= 90 } }
+										}
+									}
+									leader_event = { id = sxx_origin.35 days = 1 random = 359 }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# 神弃领袖死亡
+leader_event = {
+	id = sxx_origin.35
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		species = {
+			has_trait = trait_sxx_abg
+			switch = {
+				trigger = has_trait
+				trait_sxx_lianqi = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 5 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 10 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 15 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 20 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 10 } }
+						}
+					}
+				}
+				trait_sxx_zhuji = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 10 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 20 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 30 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 40 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 20 } }
+						}
+					}
+				}
+				trait_sxx_jindan = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 15 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 30 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 45 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 60 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 30 } }
+						}
+					}
+				}
+				trait_sxx_yuanying = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 20 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 40 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 60 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 80 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 40 } }
+						}
+					}
+				}
+				trait_sxx_huashen = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 25 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 50 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 75 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 100 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 50 } }
+						}
+					}
+				}
+				trait_sxx_lianxu = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 30 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 60 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 90 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 120 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 60 } }
+						}
+					}
+				}
+				trait_sxx_heti = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 35 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 70 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 105 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 140 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 70 } }
+						}
+					}
+				}
+				trait_sxx_dacheng = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 40 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 80 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 120 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 160 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 80 } }
+						}
+					}
+				}
+				trait_sxx_dujie = {
+					prev = {
+						switch = {
+							trigger = has_global_flag
+							sxx_break_level_1 = { check_variable = { which = sxx_abg_leader_years value >= 45 } }
+							sxx_break_level_2 = { check_variable = { which = sxx_abg_leader_years value >= 90 } }
+							sxx_break_level_3 = { check_variable = { which = sxx_abg_leader_years value >= 135 } }
+							sxx_break_level_4 = { check_variable = { which = sxx_abg_leader_years value >= 180 } }
+							default = { check_variable = { which = sxx_abg_leader_years value >= 90 } }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					has_origin = origin_sxx_yuhua
+					NOT = { has_country_flag = synthetic_empire }
+				}
+				species = { has_trait = trait_sxx_linggen }
+			}
+			species = {
+				switch = {
+					trigger = has_trait
+					trait_sxx_huashen = {
+						prev = {
+							owner = { country_event = { id = sxx_origin.6 } }
+							change_species = owner_main_species
+							change_leader_portrait = species
+							owner = { country_event = { id = sxx_origin.7 } }
+						}
+					}
+					trait_sxx_lianxu = {
+						prev = {
+							owner = { country_event = { id = sxx_origin.6 } }
+							change_species = owner_main_species
+							change_leader_portrait = species
+							owner = { country_event = { id = sxx_origin.7 } }
+						}
+					}
+					trait_sxx_heti = {
+						prev = {
+							owner = { country_event = { id = sxx_origin.6 } }
+							change_species = owner_main_species
+							change_leader_portrait = species
+							owner = { country_event = { id = sxx_origin.7 } }
+						}
+					}
+					trait_sxx_dacheng = {
+						prev = {
+							owner = { country_event = { id = sxx_origin.6 } }
+							change_species = owner_main_species
+							change_leader_portrait = species
+							owner = { country_event = { id = sxx_origin.7 } }
+						}
+					}
+					default = { prev = { kill_leader = { show_notification = yes } } }
+				}
+			}
+		}
+		else = {
+			kill_leader = { show_notification = yes }
+		}
+	}
+}
+
+# 神弃之终
+country_event = {
+	id = sxx_origin.40
+	title = sxx_origin.40.name
+	desc = sxx_origin.40.desc
+	picture = GFX_evt_vortex
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = sxx_abg_curse_released }
+	}
+
+	immediate = {
+		set_country_flag = sxx_abg_curse_released
+	}
+
+	after = {
+		add_modifier = { modifier = sxx_abg_curse_released_modifier days = 3600 }
+		hidden_effect = {
+			every_galaxy_pop = {
+				limit = {
+					is_same_species = root.owner_main_species
+					has_trait = trait_sxx_abg
+				}
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_abg
+					add_trait = trait_sxx_abg_released
+				}
+			}
+			every_country = {
+				every_owned_leader = {
+					limit = {
+						species = {
+							is_same_species = root.owner_main_species
+							has_trait = trait_sxx_abg
+						}
+					}
+					modify_species = {
+						species = this
+						remove_trait = trait_sxx_abg
+						add_trait = trait_sxx_abg_released
+					}
+				}
+				every_pool_leader = {
+					limit = {
+						species = {
+							is_same_species = root.owner_main_species
+							has_trait = trait_sxx_abg
+						}
+					}
+					modify_species = {
+						species = this
+						remove_trait = trait_sxx_abg
+						add_trait = trait_sxx_abg_released
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = sxx_origin.40.a
+	}
+	option = {
+		name = sxx_origin.40.b
+	}
+}
+
+# 无敌世间
+country_event = {
+	id = sxx_origin.50
+	hide_window = yes
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = {
+				has_origin = origin_sxx_invincible
+			}
+			country_event = { id = sxx_origin.51 }
+		}
+	}
+}
+
+# 无敌世间
+country_event = {
+	id = sxx_origin.51
+	title = sxx_origin.51.name
+	desc = sxx_origin.51.desc
+	picture = GFX_evt_vortex
+	show_sound = event_super_explosion
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_sxx_invincible
+	}
+
+	immediate = {
+		set_update_modifiers_batch = begin
+		every_system = { destroy_star_system = yes }
+		set_update_modifiers_batch = end
+		win = yes
+	}
+
+	option = {
+		name = OK
+	}
+}

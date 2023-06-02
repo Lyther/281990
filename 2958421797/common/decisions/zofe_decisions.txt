@@ -1,0 +1,863 @@
+##########################################################################
+# Decisions
+##########################################################################
+
+# Arcology Project for Ascended Empires
+# Arcology Project
+decision_ae_arcology_project = {
+	owned_planets_only = yes
+	icon = decision_arcology_project
+
+	enactment_time = 3600
+	resources = {
+		category = decisions
+		cost = {
+			influence = 200
+			minerals = 20000
+		}
+	}
+	
+	prerequisites = {
+		"tech_arcology_project"
+	}
+
+	potential = {
+		NOR = {
+			is_planet_class = pc_city
+			is_planet_class = pc_relic
+			has_modifier = resort_colony
+			has_modifier = penal_colony
+			has_modifier = slave_colony
+			has_modifier = pm_wenkwort_custodian
+			is_zofe_utopian_world = yes
+		}
+		is_artificial = no
+		exists = owner
+		owner = { 
+			is_ascended_empire = yes
+			NOT = { has_ascension_perk = ap_arcology_project }
+		}
+	}
+
+	allow = {
+		if = {
+			limit = { owner = { is_ai = no } }
+			custom_tooltip = {
+				fail_text = decision_arcology_project_requirements
+				free_district_slots < 1
+				num_districts = { type = district_farming value < 1 }
+				num_districts = { type = district_mining value < 1 }
+				num_districts = { type = district_generator value < 1 }
+				num_districts = { type = district_farming_uncapped value < 1 }
+				num_districts = { type = district_mining_uncapped value < 1 }
+				num_districts = { type = district_generator_uncapped value < 1 }
+			}
+		}
+		num_uncleared_blockers < 1
+	}
+
+	effect = {
+		# Make city-planet
+		custom_tooltip = decision_arcology_project_effects
+		hidden_effect = {
+			clear_deposits = yes
+			set_industrial_focus_flags = yes
+			change_pc = pc_city
+			relic_world_conversion_effect = {
+				DISTRICT = district_arcology_housing
+				VARIABLE = num_housing_districts
+			}
+			relic_world_conversion_effect = {
+				DISTRICT = district_arcology_arms_industry
+				VARIABLE = num_industrial_districts
+			}
+			set_ecu_industrial_districts_effect = yes
+			set_planet_entity = {
+				entity = "city_planet_entity"
+				graphical_culture = owner
+			}
+			owner = {
+				country_event = { id = distar.201 } # port for living planet distar.197, triggers in event
+			}
+			planet_event = { id = mega.200 }
+			if = {
+				limit = {
+					OR = {
+						is_active_resolution = "resolution_ecology_environmental_control_board"
+						is_active_resolution = "resolution_ecology_paradise_initiative"
+					}
+				}
+				owner = {
+					set_timed_country_flag = { flag = resolution_breached_terraformed days = 3600 }
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 1
+		modifier = {
+			factor = 100
+			exists = owner
+			OR = {
+				num_pops >= 70
+				is_capital = yes
+			}
+		}
+	}
+}
+
+# Create FE Preserve
+decision_make_xeno_preserve = {
+	owned_planets_only = yes
+	icon = decision_slave_colony
+	
+	prerequisites = {
+		"tech_fe_xeno_preserve"
+	}
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 100
+		}
+	}
+	
+	potential = {
+		is_capital = no
+		NOT = { has_modifier = penal_colony }
+		NOT = { has_modifier = slave_colony }
+		NOT = { has_modifier = resort_colony }
+		is_planet_class = pc_gaia
+		owner = { 
+			is_regular_empire = yes 
+			is_xenophile = yes
+		}
+		has_upgraded_capital = no
+		NOT = { 
+			owner = { 
+				any_owned_planet = { has_modifier = fe_xeno_preserve }
+			}
+		}
+	}
+	
+	allow = {
+		planet_size >= 20
+		custom_tooltip = {
+			fail_text = decision_fe_xeno_preserve_no_districts
+			num_districts = { type = any value < 1 }
+			num_buildings = { type = any value < 2 }
+		}
+	}
+	
+	effect = {
+		set_planet_name = "The Preserve"
+		add_modifier = {
+			modifier = fe_xeno_preserve
+			days = -1
+		}	
+		hidden_effect = {
+			remove_building = building_colony_shelter
+			add_building = building_fe_xeno_preserve
+		}
+		hidden_effect = { validate_planet_buildings_and_districts = yes }
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_abolish_xeno_preserve = {
+	owned_planets_only = yes
+	icon = decision_slave_colony
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 250
+		}
+	}
+	
+	potential = {
+		has_modifier = fe_xeno_preserve
+	}
+	
+	effect = {
+		remove_modifier = fe_xeno_preserve	
+		hidden_effect = { validate_planet_buildings_and_districts = yes }
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_artifact_search = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_archaeological_dig
+
+	enactment_time = 90
+	potential = {
+		host_has_dlc = "Ancient Relics Story Pack"
+		has_planet_flag = fallen_empire_world
+		NOT = { has_planet_flag = artifacts_looted }
+		owner = { 
+			is_ascended_empire = yes
+		}
+	}
+
+	allow = {
+		OR = {
+			num_assigned_jobs = {
+				job = enforcer
+				value >= 1
+			}
+			num_assigned_jobs = {
+				job = patrol_drone
+				value >= 1
+			}
+		}
+	}
+
+	resources = {
+		category = decisions
+		cost = {
+			influence = 100
+		}
+	}
+	
+	effect = {
+		set_planet_flag = artifacts_looted
+		owner = {
+			add_resource = { minor_artifacts = 100 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 10
+	}
+}
+
+decision_living_metal_apprenticeship = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_engineering_research
+
+	resources = {
+		category = decisions
+		cost = {
+			energy = 10000
+			unity = 500
+		}
+	}
+
+	potential = {
+		exists = owner
+		owner = { 
+			is_zofe_country = yes
+			has_technology = tech_synthetic_living_metal
+		}
+		has_active_building = building_synthetic_living_metal
+		NOT = { has_modifier = pm_living_metal_apprenticeship }
+	}
+	
+	allow = {
+		OR = {
+			num_assigned_jobs = {
+				job = ae_living_metal_smith
+				value >= 1
+			}
+			num_assigned_jobs = {
+				job = ae_living_metal_drone
+				value >= 1
+			}
+		}
+
+		OR = {
+			num_assigned_jobs = {
+				job = foundry
+				value >= 1
+			}
+			num_assigned_jobs = {
+				job = catalytic_technician
+				value >= 1
+			}
+			num_assigned_jobs = {
+				job = fabricator
+				value >= 1
+			}
+			num_assigned_jobs = {
+				job = alloy_drone
+				value >= 1
+			}
+			num_assigned_jobs = {
+				job = catalytic_drone
+				value >= 1
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_living_metal_apprenticeship_effects
+		add_modifier = { modifier = "pm_living_metal_apprenticeship" days = -1 }
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_end_living_metal_apprenticeship = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_engineering_research
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		has_modifier = pm_living_metal_apprenticeship
+	}
+
+	effect = {
+		custom_tooltip = decision_end_living_metal_apprenticeship_effects
+		hidden_effect = {
+			remove_modifier = pm_living_metal_apprenticeship
+		}
+	}
+
+	ai_weight = {
+		weight = 1
+	}
+}
+
+decision_decadence = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_luxuries
+	
+	enactment_time = 360
+
+	resources = {
+		category = decisions
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count < 10
+				}
+			}
+			energy = 100
+			consumer_goods = 100
+			unity = 100
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 10
+					count < 20
+				}
+			}
+			energy = 200
+			consumer_goods = 200
+			unity = 200
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 20
+					count < 30
+				}
+			}
+			energy = 300
+			consumer_goods = 300
+			unity = 300
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 30
+					count < 40
+				}
+			}
+			energy = 400
+			consumer_goods = 400
+			unity = 400
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 40
+					count < 50
+				}
+			}
+			energy = 500
+			consumer_goods = 500
+			unity = 500
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 50
+					count < 60
+				}
+			}
+			energy = 600
+			consumer_goods = 600
+			unity = 600
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 60
+					count < 70
+				}
+			}
+			energy = 700
+			consumer_goods = 700
+			unity = 700
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 70
+					count < 85
+				}
+			}
+			energy = 800
+			consumer_goods = 800
+			unity = 800
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 85
+					count < 100
+				}
+			}
+			energy = 900
+			consumer_goods = 900
+			unity = 900
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 100
+				}
+			}
+			energy = 1000
+			consumer_goods = 1000
+			unity = 1000
+		}
+	}
+
+	potential = {
+		exists = owner
+		owner = { 
+			is_country_type = ascended_empire
+			is_gestalt = no
+		}
+		has_planet_flag = decadence_decision_enabled
+	}
+	
+	allow = {
+		num_assigned_jobs = {
+			job = ae_hedonist
+			value >= 1
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_decadence_effects
+		remove_planet_flag = decadence_decision_enabled
+		hidden_effect = {
+			random_list = {
+				40 = { planet_event = { id = zofe.3001 } }
+				30 = { planet_event = { id = zofe.3002 } }
+				20 = { planet_event = { id = zofe.3003 } }
+				10 = { planet_event = { id = zofe.3004 } }
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_decadence_hive = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_resources
+	
+	enactment_time = 360
+
+	resources = {
+		category = decisions
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count < 10
+				}
+			}
+			energy = 100
+			food = 100
+			unity = 100
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 10
+					count < 20
+				}
+			}
+			energy = 200
+			food = 200
+			unity = 200
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 20
+					count < 30
+				}
+			}
+			energy = 300
+			food = 300
+			unity = 300
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 30
+					count < 40
+				}
+			}
+			energy = 400
+			food = 400
+			unity = 400
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 40
+					count < 50
+				}
+			}
+			energy = 500
+			food = 500
+			unity = 500
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 50
+					count < 60
+				}
+			}
+			energy = 600
+			food = 600
+			unity = 600
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 60
+					count < 70
+				}
+			}
+			energy = 700
+			food = 700
+			unity = 700
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 70
+					count < 85
+				}
+			}
+			energy = 800
+			food = 800
+			unity = 800
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 85
+					count < 100
+				}
+			}
+			energy = 900
+			food = 900
+			unity = 900
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 100
+				}
+			}
+			energy = 1000
+			food = 1000
+			unity = 1000
+		}
+	}
+
+	potential = {
+		exists = owner
+		owner = { 
+			is_country_type = ascended_empire
+			has_authority = auth_hive_mind
+		}
+		has_planet_flag = decadence_decision_enabled
+	}
+	
+	allow = {
+		num_assigned_jobs = {
+			job = ae_confused_drone
+			value >= 1
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_decadence_hive_effects
+		remove_planet_flag = decadence_decision_enabled
+		hidden_effect = {
+			random_list = {
+				70 = { planet_event = { id = zofe.3011 } }
+				20 = { planet_event = { id = zofe.3012 } }
+				10 = { planet_event = { id = zofe.3013 } }
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_decadence_machine = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_resources
+	
+	enactment_time = 360
+
+	resources = {
+		category = decisions
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count < 10
+				}
+			}
+			energy = 100
+			alloys = 100
+			unity = 100
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 10
+					count < 20
+				}
+			}
+			energy = 200
+			alloys = 200
+			unity = 200
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 20
+					count < 30
+				}
+			}
+			energy = 300
+			alloys = 300
+			unity = 300
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 30
+					count < 40
+				}
+			}
+			energy = 400
+			alloys = 400
+			unity = 400
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 40
+					count < 50
+				}
+			}
+			energy = 500
+			alloys = 500
+			unity = 500
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 50
+					count < 60
+				}
+			}
+			energy = 600
+			alloys = 600
+			unity = 600
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 60
+					count < 70
+				}
+			}
+			energy = 700
+			alloys = 700
+			unity = 700
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 70
+					count < 85
+				}
+			}
+			energy = 800
+			alloys = 800
+			unity = 800
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 85
+					count < 100
+				}
+			}
+			energy = 900
+			alloys = 900
+			unity = 900
+		}
+		cost = {
+			trigger = {
+				count_owned_pop = {
+					limit = { has_pop_flag = decadent_pop }
+					count >= 100
+				}
+			}
+			energy = 1000
+			alloys = 1000
+			unity = 1000
+		}
+	}
+
+	potential = {
+		exists = owner
+		owner = { 
+			is_country_type = ascended_empire
+			has_authority = auth_machine_intelligence
+		}
+		has_planet_flag = decadence_decision_enabled
+	}
+	
+	allow = {
+		num_assigned_jobs = {
+			job = ae_maintenance_bot
+			value >= 1
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_decadence_machine_effects
+		remove_planet_flag = decadence_decision_enabled
+		hidden_effect = {
+			random_list = {
+				70 = { planet_event = { id = zofe.3021 } }
+				20 = { planet_event = { id = zofe.3022 } }
+				10 = { planet_event = { id = zofe.3023 } }
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_cryo_chamber = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_politics
+	
+	enactment_time = 360
+
+	resources = {
+		category = decisions
+		cost = {
+			unity = 500
+		}
+	}
+
+	potential = {
+		zofe_sandbox = yes
+		exists = owner
+		owner = { is_zofe_country = yes }
+		has_active_building = building_fe_ancient_cryo_chamber
+	}
+	
+	allow = {
+		num_pops > 5
+	}
+
+	effect = {
+		custom_tooltip = decision_cryo_chamber_effects
+		hidden_effect = {
+			random_owned_pop = { kill_pop = yes }
+			random_owned_pop = { kill_pop = yes }
+			random_owned_pop = { kill_pop = yes }
+			random_owned_pop = { kill_pop = yes }
+			random_owned_pop = { kill_pop = yes }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}

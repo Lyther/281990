@@ -1,0 +1,122 @@
+
+namespace = aquatics
+
+
+# Notification that Dragon goes Vrrrawr! - vrrrawred empire
+# on_entering_system_fleet
+# from = system
+fleet_event = {
+	id = aquatics.180
+	title = aquatics.180.name
+	desc = aquatics.180.desc
+	picture = GFX_evt_here_be_dragons
+	show_sound = event_aqu_dragon
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_star_flag = here_be_dragons_system
+			NOT = { has_star_flag = dragon_attack@root.owner }
+			exists = owner
+			owner = {
+				is_hostile = root.owner
+				has_origin = origin_here_be_dragons
+			}
+			OR = {
+				any_fleet_in_system = {
+					is_ship_size = space_dragon_origin
+					NOT = { owner = { is_zofe_compatible = yes } }
+				}
+				any_system_planet = {
+					has_deposit = d_landed_dragon
+				}
+			}
+		}
+		fleet_power > from.starbase.fleet.trigger:fleet_power #there are some pathetic early game mobs that show up, don't really wanna fire the event for those
+		NOT = { is_ship_size = space_dragon_origin }
+	}
+
+	immediate = {
+		from = { #first time notification for owner
+			set_star_flag = dragon_attack@root.owner
+
+			if = {
+				limit = {
+					any_system_planet = {
+						has_deposit = d_landed_dragon
+					}
+				}
+				random_system_planet = {
+					limit = {
+						has_deposit = d_landed_dragon
+					}
+					save_event_target_as = here_be_dragons_planet
+				}
+				set_star_flag = dragon_attack
+				owner = {
+					country_event = { id = aquatics.185 }
+				}
+			}
+			else = {
+				random_system_planet = {
+					limit = {
+						is_colony = yes
+						is_artificial = no
+					}
+					save_event_target_as = here_be_dragons_planet
+				}
+				if = {
+					limit = { NOT = { has_star_flag = dragon_attack } }
+					set_star_flag = dragon_attack
+					owner = {
+						country_event = { id = aquatics.185 }
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = BATTLESTATIONS
+	}
+}
+
+# This event tells the player if they entered the dragon system before establishing comms
+# on_entering_system_first_time
+# Scope = Ship
+# From = System
+# FromFrom = Country
+ship_event = {
+	id = aquatics.305
+	title = aquatics.305.name
+	desc = aquatics.305.desc
+	picture = GFX_evt_here_be_dragons
+	show_sound = event_aqu_dragon
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_star_flag = here_be_dragons_system
+			owner = {
+				has_origin = origin_here_be_dragons
+				NOT = { has_communications = root.owner }
+			}
+			any_fleet_in_system = {
+				is_ship_size = space_dragon_origin
+				NOT = {
+					owner = {
+						OR = {
+							is_zofe_compatible = yes
+							is_hostile = root.space_owner
+						}
+					}
+				}
+			}
+		}
+		NOT = { is_ship_size = space_dragon_origin }
+	}
+
+	option = {
+		name = CURIOUS
+	}
+}

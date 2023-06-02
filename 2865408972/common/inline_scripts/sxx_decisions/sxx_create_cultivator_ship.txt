@@ -1,0 +1,55 @@
+icon = decision_sxx_cultivator_ship
+owned_planets_only = yes
+
+resources = {
+	category = decisions
+	cost = {
+		unity = $UNITY$
+	}
+}
+
+potential = {
+	owner = { is_$STATE$_country = yes }
+}
+
+allow = {
+	custom_tooltip = {
+		fail_text = decision_sxx_cultivator_ship_no_$STATE$
+		any_owned_pop = {
+			has_pop_flag = sxx_$STATE$
+			#NOT = { has_job = criminal }
+			is_being_purged = no
+			is_being_assimilated = no
+			is_sapient = yes
+		}
+	}
+	custom_tooltip = {
+		fail_text = decision_sxx_cultivator_ship_controlled
+		controller = {
+			is_same_value = prev.owner
+		}
+	}
+}
+
+effect = {
+	custom_tooltip = decision_sxx_create_cultivator_ship_$LEVEL$
+	hidden_effect = {
+		random_owned_pop = {
+			limit = {
+				has_pop_flag = sxx_$STATE$
+			}
+			weights = {
+				inline_script = sxx_call_cultivator_ship_weights
+			}
+			create_sxx_cultivator_ship_$LEVEL$ = yes
+			resettle_pop = {
+				pop = this
+				planet = event_target:sxx_pool_planet
+			}
+		}
+	}
+}
+
+ai_weight = {
+	weight = 0
+}

@@ -1,0 +1,97 @@
+namespace = mopt_start
+
+event = {
+	id = mopt_start.0
+
+	is_triggered_only = yes
+
+	hide_window = yes
+
+	trigger = { always = yes }
+
+	immediate = {
+		every_country = {
+			limit = { is_ai = no }
+			country_event = { id = mopt_start.1000					} # spawn L-Gate
+		 	country_event = { id = mopt_starbase.0		days = 7200	} # give tech_starbase_2
+			country_event = { id = mopt_precursors.0	days = 15	}
+		}
+		if = {	# 视界信号全局标识
+			limit = { any_system = { has_star_flag = horizonsignal_spawn } }
+			set_global_flag = g_flag_mopt_horizonsignal_spawned
+		}
+	}
+}
+
+# 如果家附近没有L星门，就刷一个
+country_event = {
+	id = mopt_start.1000
+
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = { is_ai = no }
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					capital_scope.solar_system = {
+						any_system = {
+							distance = {
+								source = prev
+								min_jumps = 1
+								max_jumps = 5
+							}
+							has_star_flag = lgate
+						}
+					}
+				}
+			}
+
+			capital_scope.solar_system = {
+				random_system = {
+					limit = {
+						distance = {
+							source = prev
+							min_jumps = 2
+							max_jumps = 3
+						}
+					}
+					spawn_system = {
+						initializer = "Near_Home_L_Gate_System"
+						min_distance = 10
+						max_distance = 30
+						max_jumps = 0
+					}
+					if = {
+						limit = { last_created_system = { NOT = { has_hyperlane_to = prev } } }
+						add_hyperlane = {
+							from = this
+							to = last_created_system
+						}
+					}
+					else = { add_extra_hyperlane_to_spawned_system_effect = yes }
+				}
+			}
+		}
+		else = {
+			capital_scope.solar_system = {
+				every_system = {
+					limit = {
+						distance = {
+							source = prev
+							min_jumps = 1
+							max_jumps = 5
+						}
+						has_star_flag = lgate
+					}
+					star = {
+						clear_deposits = yes
+						set_deposit = d_dark_matter_deposit_3
+					}
+				}
+			}
+		}
+	}
+}

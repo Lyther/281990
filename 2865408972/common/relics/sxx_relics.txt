@@ -1,0 +1,331 @@
+@activation_cost = 3000
+@triumph_duration = 3600
+@triumph_duration_short = 1800
+@triumph_duration_veryshort = 900
+
+r_sxx_sword_fragment = {
+	activation_duration = @triumph_duration_veryshort
+	portrait = "GFX_relic_sxx_sword_fragment"
+	sound = "relic_activation_blade_of_the_huntress"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = @activation_cost
+		}
+		produces = {
+			sxx_stones = 100
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			add = 1000
+			has_global_flag = sxx_crisis_god_appeared
+			NOT = { has_global_flag = sxx_crisis_god_died }
+		}
+	}
+
+	score = 5000
+
+	active_effect = {
+		custom_tooltip = relic_sxx_sword_fragment_active
+		custom_tooltip = relic_triumph_cooldown_veryshort
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration_veryshort
+			}
+			country_event = { id = sxx_crisis.2050 days = 30 random = 330 }
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_sxx_zhumo_sword = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_relic_sxx_zhumo_sword"
+	sound = "relic_activation_blade_of_the_huntress"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = @activation_cost
+		}
+		produces = {
+		#	sxx_stones = 100
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			add = 500
+			is_sxx_sect = yes
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		ship_archaeological_site_clues_add = 1
+	}
+
+	score = 5000
+
+	active_effect = {
+		custom_tooltip = relic_sxx_zhumo_sword_active
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+			country_event = { id = sxx_other_event.150 }
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_sxx_zhumo_sword_no_soul = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_relic_sxx_zhumo_sword"
+	sound = "relic_activation_blade_of_the_huntress"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = @activation_cost
+		}
+		produces = {
+		#	sxx_stones = 100
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+
+	score = 5000
+
+	active_effect = {
+		custom_tooltip = relic_sxx_zhumo_sword_no_soul_active
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+}
+
+r_sxx_hunyuan_pot = {
+	activation_duration = @triumph_duration_veryshort
+	portrait = "GFX_relic_sxx_hunyuan_pot"
+	sound = "relic_activation_generic"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = @activation_cost
+		}
+		cost = {
+			trigger = {
+				check_variable = { which = sxx_hunyuan_pot_count value = 0 }
+			}
+			food = 1000
+		}
+		cost = {
+			trigger = {
+				check_variable = { which = sxx_hunyuan_pot_count value >= 1 }
+			}
+			food = 1000
+			multiplier = sxx_hunyuan_pot_count
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		sxx_heaven_stability_add = 100
+	}
+
+	score = 5000
+
+	active_effect = {
+		if = {
+			limit = {
+				check_variable = { which = sxx_hunyuan_pot_count value = 0 }
+			}
+			add_resource = {
+				sxx_pills = 200
+			}
+			hidden_effect = {
+				set_variable = { which = sxx_hunyuan_pot_count value = 1 }
+			}
+		}
+		else = {
+			add_resource = {
+				sxx_pills = 200
+				mult = sxx_hunyuan_pot_count
+			}
+		}
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration_veryshort
+			}
+		}
+		custom_tooltip = "relic_triumph_cooldown_veryshort"
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = {
+						which = sxx_hunyuan_pot_count
+						value <= 49
+					}
+				}
+				change_variable = {
+					which = sxx_hunyuan_pot_count
+					value = 1
+				}
+			}
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+		is_sxx_sect = yes
+	}
+}
+
+r_sxx_sword_tomb = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_relic_sxx_sword_tomb"
+	sound = "relic_activation_blade_of_the_huntress"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = @activation_cost
+		}
+		produces = {
+			sxx_gongfa = 50
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+
+	score = 5000
+
+	active_effect = {
+		custom_tooltip = relic_sxx_sword_tomb_active
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration
+			}
+			every_owned_pop = {
+				limit = {
+					is_sxx_potential_depletion = yes
+				}
+				random_list = {
+					20 = { sxx_pop_remove_potential_depletion = yes }
+					80 = {}
+				}
+			}
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+		is_sxx_sect = yes
+	}
+}
+
+r_sxx_array_disk = {
+	activation_duration = @triumph_duration_short
+	portrait = "GFX_relic_sxx_array_disk"
+	sound = "relic_activation_extradimensional_warlock"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			unity = @activation_cost
+		}
+		produces = {
+			sxx_gongfa = 50
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+
+	score = 5000
+
+	active_effect = {
+		custom_tooltip = relic_sxx_array_disk_active_tooltip
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = @triumph_duration_short
+			}
+			change_variable = {
+				which = sxx_array_disk_count
+				value = 1
+			}
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+		is_sxx_sect = yes
+	}
+}

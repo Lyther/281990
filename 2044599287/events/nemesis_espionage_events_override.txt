@@ -1,0 +1,573 @@
+################################
+#
+# Nemesis Espionage Events
+# Written by Gemma Thomson
+#
+###############################
+
+namespace = espionage
+
+@AssetReceivedTimer = 250 #Days until an empire which has randomly received an Asset is eligible to receive one again
+
+########################
+# HIDING IN VIVID SIGHT
+########################
+
+# Triggered randomly by on_five_year_pulse_country / action.221
+country_event = {
+	id = espionage.1030
+	title = espionage.1030.name
+	desc = espionage.1030.desc
+	picture = GFX_evt_spy_network
+	show_sound = event_default
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		NOT = { has_country_flag = vividsight_recent }
+		is_gestalt = yes
+		has_spynetwork = yes
+		any_spynetwork = {
+			owner = { is_same_value = root }
+			is_spynetwork_level > 0
+			target = {
+				is_zofe_compatible = yes
+				is_gestalt = no
+			}
+		}
+	}
+
+	immediate = {
+		random_spynetwork = {
+			limit = {
+				owner = { is_same_value = root }
+				is_spynetwork_level > 0
+				target = {
+					is_zofe_compatible = yes
+					is_gestalt = no
+				}
+			}
+			target = { save_event_target_as = vividsight_country }
+		}
+		set_timed_country_flag = { flag = vividsight_recent days = 28800 } #80 years
+		random_list = {
+			1 = { set_country_flag = vividsight_10yr }
+			1 = { set_country_flag = vividsight_9yr }
+			1 = { set_country_flag = vividsight_7yr }
+			2 = { set_country_flag = vividsight_4yr } #Redundant flag as far as event script is concerned, but useful for debugging
+		}
+	}
+
+	option = { #Embrace notoriety
+		name = espionage.1030.a
+		random_spynetwork = {
+			limit = {
+				owner = { is_same_value = root }
+				target = { is_same_value = event_target:vividsight_country }
+			}
+			if = {
+				limit = {
+					root = { has_country_flag = vividsight_10yr }
+				}
+				add_spy_network_level = -5
+				add_modifier = {
+					modifier = spynetwork_vividsight
+					days = 3460
+				}
+			}
+			else_if = {
+				limit = {
+					root = { has_country_flag = vividsight_9yr }
+				}
+				add_spy_network_level = -5
+				add_modifier = {
+					modifier = spynetwork_vividsight
+					days = 3210
+				}
+			}
+			else_if = {
+				limit = {
+					root = { has_country_flag = vividsight_7yr }
+				}
+				add_spy_network_level = -5
+				add_modifier = {
+					modifier = spynetwork_vividsight
+					days = 2490
+				}
+			}
+			else = {
+				add_spy_network_level = -5
+				add_modifier = {
+					modifier = spynetwork_vividsight
+					days = 1480
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = { #Make adjustments to the operatives
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 600 }
+		}
+		name = {
+			text = espionage.1030.b.hive
+			trigger = { has_authority = auth_hive_mind }
+		}
+		name = {
+			text = espionage.1030.b.machine
+			trigger = { has_authority = auth_machine_intelligence }
+		}
+		root = {
+			add_resource = { energy = -600 }
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+}
+
+#########################################
+# A SURPRISE CATCH (an Asset is granted)
+#########################################
+# from = instigating country
+
+country_event = {
+	id = espionage.1040
+	title = espionage.1040.name
+	desc = {
+		text = espionage.1040.desc.regular
+		trigger = {
+			NOR = {
+				has_country_flag = espionage_caught_spies
+				has_country_flag = espionage_caught_saboteurs
+			}
+			event_target:luckycatch_country = { is_gestalt = no }
+		}
+	}
+	desc = {
+		text = espionage.1040.desc.gestalt
+		trigger = {
+			NOR = {
+				has_country_flag = espionage_caught_spies
+				has_country_flag = espionage_caught_saboteurs
+			}
+			event_target:luckycatch_country = { is_gestalt = yes }
+		}
+	}
+	desc = {
+		text = espionage.1040.desc.caughtspies
+		trigger = { has_country_flag = espionage_caught_spies }
+	}
+	desc = {
+		text = espionage.1040.desc.caught
+		trigger = { has_country_flag = espionage_caught_saboteurs }
+	}
+	picture = GFX_evt_acquire_asset
+	show_sound = event_nem_asset_acquired_positive
+	is_triggered_only = yes
+
+	trigger = {
+		has_nemesis = yes
+		has_active_spynetwork = yes
+		OR = {
+			AND = { #If this is a random event, there's no need for a specific spy network to be present, but a spy network somewhere is still needed
+				NOR = {
+					has_country_flag = espionage_caught_spies
+					has_country_flag = espionage_caught_saboteurs
+				}
+				any_spynetwork = {
+					owner = { is_same_value = root }
+					is_spynetwork_level > 0
+					target = { is_zofe_compatible = yes }
+				}
+			}
+			AND = { #If this event has been forced by another, ROOT must also still be running a spy network there
+				OR = {
+					has_country_flag = espionage_caught_spies
+					has_country_flag = espionage_caught_saboteurs
+				}
+				exists = from #Instigating country
+				any_spynetwork = {
+					owner = { is_same_value = root }
+					is_spynetwork_level > 0
+					target = { is_same_value = from }
+				}
+			}
+		}
+		NOT = { has_country_flag = recently_received_espionage_asset }
+	}
+
+	immediate = {
+		country_event = { id = tutorial.2010 } #Tutorial: Assigning Assets
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = espionage_caught_spies
+					has_country_flag = espionage_caught_saboteurs
+				}
+			}
+			from = {
+				save_event_target_as = luckycatch_country
+			}
+		}
+		else = {
+			random_spynetwork = {
+				limit = {
+					owner = { is_same_value = root }
+					is_spynetwork_level > 0
+					target = { is_zofe_compatible = yes }
+				}
+				target = {
+					save_event_target_as = luckycatch_country
+				}
+			}
+		}
+	}
+
+	option = { #as random event
+		name = EXCELLENT
+		trigger = {
+			root = {
+				NOR = {
+					has_country_flag = espionage_caught_spies
+					has_country_flag = espionage_caught_saboteurs
+				}
+			}
+		}
+		custom_tooltip = espionage.1040.a.tooltip
+		hidden_effect = {
+			random_spynetwork = {
+				limit = {
+					owner = { is_same_value = root }
+					target = { is_same_value = event_target:luckycatch_country }
+				}
+				if = {
+					limit = { target = { has_authority = auth_hive_mind } }
+					espionage_create_asset_hive = yes
+				}
+				else_if = {
+					limit = { target = { has_authority = auth_machine_intelligence } }
+					espionage_create_asset_machine = yes
+				}
+				else = {
+					espionage_create_asset_regular = yes
+				}
+			}
+		}
+	}
+	option = { #as triggered elsewhere
+		name = GOOD
+		trigger = {
+			root = {
+				OR = {
+					has_country_flag = espionage_caught_spies
+					has_country_flag = espionage_caught_saboteurs
+				}
+			}
+		}
+		add_intel = {
+			who = event_target:luckycatch_country
+			amount = 10
+		}
+		custom_tooltip = espionage.1040.a.tooltip
+		hidden_effect = {
+			random_spynetwork = {
+				limit = {
+					owner = { is_same_value = root }
+					target = { is_same_value = event_target:luckycatch_country }
+				}
+				if = {
+					limit = { target = { has_authority = auth_hive_mind } }
+					espionage_create_asset_hive = yes
+				}
+				else_if = {
+					limit = { target = { has_authority = auth_machine_intelligence } }
+					espionage_create_asset_machine = yes
+				}
+				else = {
+					espionage_create_asset_regular = yes
+				}
+			}
+		}
+	}
+
+	after = {
+		remove_country_flag = espionage_caught_spies
+		remove_country_flag = espionage_caught_saboteurs
+		set_timed_country_flag = { flag = recently_received_espionage_asset days = @AssetReceivedTimer }
+	}
+}
+
+####################################
+# FINDERS KEEPERS (decryption boon)
+####################################
+
+country_event = {
+	id = espionage.1050
+	title = espionage.1050.name
+	desc = espionage.1050.desc
+	picture = GFX_evt_intelligence_report
+	show_sound = event_encrypted_comms
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = recently_received_finderskeepers }
+		has_active_spynetwork = yes
+		OR = {
+			exists = event_target:finderskeepers_country
+			any_spynetwork = {
+				owner = { is_same_value = root }
+				is_spynetwork_level > 0
+				target = {
+					is_zofe_compatible = yes
+					is_regular_empire = yes
+					NOT = { is_same_value = root }
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { exists = event_target:finderskeepers_country } #May be set in espionage.1060
+			}
+			random_spynetwork = {
+				limit = {
+					owner = { is_same_value = root }
+					is_spynetwork_level > 0
+					target = {
+						is_zofe_compatible = yes
+						is_regular_empire = yes
+						NOT = { is_same_value = root }
+					}
+				}
+				target = { save_event_target_as = finderskeepers_country }
+			}
+		}
+		set_timed_country_flag = {
+			flag = recently_received_finderskeepers
+			days = 2520 #7 years
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		root = {
+			add_modifier = {
+				modifier = espionage_finderskeepers
+				days = 720
+			}
+		}
+	}
+}
+
+#######################################
+# INSIDIOUS PLOT EXPOSED
+#######################################
+# Triggered as a random Spy Network event, but the plot which is being exposed may come from any other empire - not necessarily the one being spied upon.
+# May be triggered by Espionage Operations including Smear Campaign, in which case event_target:insidious_plot_country is pre-determined.
+
+#Insidious Plot Exposed (setup; mirrors operation.3012)
+#The following script is mostly concerned with setting up the localisation.
+country_event = {
+	id = espionage.1080
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_active_spynetwork = yes
+		NAND = { #shouldn't appear in endgame, unless triggered by Smear Campaign
+			end_game_years_passed > 0
+			NOT = { exists = event_target:insidious_plot_country }
+		}
+	}
+
+	immediate = {
+		#Triggered by Smear Campaign
+		if = {
+			limit = { exists = event_target:insidious_plot_country }
+			if = { #we've any spy network other than the one this alleged plot comes from
+				limit = {
+					any_spynetwork = {
+						owner = { is_same_value = root }
+						is_spynetwork_level > 0
+						target = {
+							is_zofe_compatible = yes
+							NOT = { is_same_value = event_target:insidious_plot_country }
+						}
+					}
+				}
+				random_spynetwork = {
+					limit = {
+						owner = { is_same_value = root }
+						is_spynetwork_level > 0
+						target = {
+							is_zofe_compatible = yes
+							NOT = { is_same_value = event_target:insidious_plot_country }
+						}
+					}
+					target = { save_event_target_as = insidious_plot_spynetwork }
+				}
+			}
+			else = { set_country_flag = insidious_plot_samecountry } #No need for 'insidious_plot_spynetwork'
+		}
+		#NOT triggered by Smear Campaign
+		else = {
+			if = { #there are any 'immature' spy networks
+				limit = {
+					any_spynetwork = {
+						owner = { is_same_value = root }
+						is_spynetwork_level < 20
+						is_spynetwork_level > 0
+					}
+				}
+				random_spynetwork = {
+					limit = {
+						owner = { is_same_value = root }
+						is_spynetwork_level < 20
+						is_spynetwork_level > 0
+					}
+					target = { save_event_target_as = insidious_plot_spynetwork }
+				}
+			}
+			else = { #pick any spy network
+				random_spynetwork = {
+					limit = {
+						owner = { is_same_value = root }
+						is_spynetwork_level > 0
+					}
+					target = { save_event_target_as = insidious_plot_spynetwork }
+				}
+			}
+			if = { #there are federation allies to choose from, which aren't also in a federation with us
+				limit = {
+					event_target:insidious_plot_spynetwork = {
+						has_federation = yes
+						NOT = {
+							root = {
+								has_federation = yes
+								federation = { is_same_value = event_target:insidious_plot_spynetwork.federation }
+							}
+						}
+						federation = {
+							any_member = {
+								NOT = { is_same_value = prevprev }
+								has_communications = root
+							}
+						}
+					}
+				}
+				event_target:insidious_plot_spynetwork = {
+					federation = {
+						random_member = {
+							limit = {
+								has_communications = root
+								NOT = { is_same_value = prevprev }
+							}
+							save_event_target_as = insidious_plot_country
+						}
+					}
+				}
+			}
+			else_if = { #there are empires friendly to the spy network country
+				limit = {
+					any_playable_country = {
+						NOT = { is_same_value = root }
+						has_communications = root
+						OR = {
+							is_friendly_to = event_target:insidious_plot_spynetwork
+							is_protective_to = event_target:insidious_plot_spynetwork
+						}
+					}
+				}
+				random_playable_country = {
+					limit = {
+						NOT = { is_same_value = root }
+						has_communications = root
+						OR = {
+							is_friendly_to = event_target:insidious_plot_spynetwork
+							is_protective_to = event_target:insidious_plot_spynetwork
+						}
+					}
+					save_event_target_as = insidious_plot_country
+				}
+			}
+			else_if = { #there are empires we've previously spied upon
+				limit = {
+					any_playable_country = {
+						has_country_flag = espionage_operation_targeted_by@root #Set by certain operations
+					}
+				}
+				random_playable_country = {
+					limit = { has_country_flag = espionage_operation_targeted_by@root }
+					save_event_target_as = insidious_plot_country
+				}
+			}
+			else = {
+				random_playable_country = {
+					limit = { has_communications = root }
+					save_event_target_as = insidious_plot_country
+				}
+			}
+			if = {
+				limit = {
+					event_target:insidious_plot_country = {
+						is_same_value = event_target:insidious_plot_spynetwork
+					}
+				}
+				set_country_flag = insidious_plot_samecountry
+			}
+		}
+		random_list = {
+			9 = { #"Insidious Plot Uncovered"
+				modifier = {
+					factor = 1.2
+					has_country_flag = espionage_operation_targeted_by@event_target:insidious_plot_country
+				}
+				country_event = { id = espionage.1081 }
+			}
+			1 = { #"Suspect Plot Uncovered"
+				modifier = {
+					factor = 9
+					root = {
+						relative_encryption_decryption = {
+							target = event_target:insidious_plot_spynetwork
+							value > 1.3
+						}
+					}
+					root = {
+						relative_encryption_decryption = {
+							target = event_target:insidious_plot_spynetwork
+							value < 1.5
+						}
+					}
+				}
+				modifier = {
+					factor = 18
+					root = {
+						relative_encryption_decryption = {
+							target = event_target:insidious_plot_spynetwork
+							value >= 1.5
+						}
+					}
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						root = {
+							any_spynetwork = {
+								target = { is_same_value = event_target:insidious_plot_spynetwork }
+								is_spynetwork_level > 0
+								exists = leader
+							}
+						}
+					}
+				}
+				country_event = { id = espionage.1082 }
+			}
+		}
+	}
+}

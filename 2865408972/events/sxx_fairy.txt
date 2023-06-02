@@ -1,0 +1,1435 @@
+namespace = sxx_fairy
+
+# 立地成仙飞升选择
+country_event = {
+	id = sxx_fairy.100
+	title = sxx_fairy.100.name
+	desc = sxx_fairy.100.desc
+	picture = GFX_evt_sxx_lidichengxian
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_fairy.100.a
+	}
+}
+
+# 新晋真仙（非第一）
+country_event = {
+	id = sxx_fairy.110
+	title = sxx_fairy.110.name
+	desc = sxx_fairy.110.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	trigger = {
+		count_owned_pop = {
+			limit = {
+				has_pop_flag = sxx_zhenxian
+			}
+			count < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.210.a
+	}
+}
+
+# 晋升仙王
+country_event = {
+	id = sxx_fairy.120
+	title = sxx_fairy.120.name
+	desc = {
+		text = sxx_fairy.120.desc.1
+		trigger = {
+			NOT = { has_country_flag = sxx_xianwang_appeared }
+		}
+	}
+	desc = {
+		text = sxx_fairy.120.desc.2
+		trigger = {
+			has_country_flag = sxx_xianwang_appeared
+		}
+	}
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	after = {
+		hidden_effect = {
+			set_country_flag = sxx_xianwang_appeared
+		}
+	}
+
+	option = {
+		name = sxx_fairy.120.a
+	}
+	option = {
+		name = sxx_fairy.120.b
+	}
+}
+
+# 晋升仙帝
+country_event = {
+	id = sxx_fairy.130
+	title = sxx_fairy.130.name
+	desc = sxx_fairy.130.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_fairy.130.a
+	}
+}
+
+# 更新天庭稳固度 & 恢复凌霄宝殿
+country_event = {
+	id = sxx_fairy.150
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_sxx_heaven_country = yes
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				is_planet_class = pc_sxx_heaven
+			}
+			set_variable = {
+				which = sxx_heaven_stability_value
+				value = value:sxx_get_heaven_stability_value
+			}
+
+			if = {
+				limit = {
+					NOT = {
+						has_building = building_sxx_lingxiao
+					}
+				}
+				add_building = building_sxx_lingxiao
+			}
+		}
+	}
+}
+
+# 天庭建立
+country_event = {
+	id = sxx_fairy.160
+	title = sxx_fairy.160.name
+	desc = sxx_fairy.160.desc
+	picture = GFX_evt_sxx_heaven
+	show_sound = event_coronation
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_fairy.160.a
+		custom_tooltip = sxx_fairy.160.tooltip
+	}
+}
+
+# 每年迁移散仙
+country_event = {
+	id = sxx_fairy.170
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_sxx_heaven_country = yes
+		has_edict = sxx_heaven_pop_resettle
+		any_owned_planet = {
+			is_planet_class = pc_sxx_heaven
+			is_under_colonization = no
+			is_occupied_flag = no
+		}
+	}
+
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				is_planet_class = pc_sxx_heaven
+				is_under_colonization = no
+				is_occupied_flag = no
+			}
+			save_event_target_as = sxx_heaven
+		}
+		every_owned_planet = {
+			limit = {
+				NOT = { is_planet_class = pc_sxx_heaven }
+			}
+			every_owned_pop = {
+				limit = {
+					has_job = sxx_other_fairy
+				}
+				resettle_pop = {
+					pop = this
+					planet = event_target:sxx_heaven
+				}
+			}
+		}
+	}
+}
+
+# 飞升仙界飞升选择
+country_event = {
+	id = sxx_fairy.200
+	title = sxx_fairy.200.name
+	desc = sxx_fairy.200.desc
+	picture = GFX_evt_sxx_feishengchengxian
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_fairy.200.a
+	}
+}
+
+# 飞升仙界（非第一）
+country_event = {
+	id = sxx_fairy.210
+	title = sxx_fairy.210.name
+	desc = sxx_fairy.210.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_1
+			value < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.210.a
+	}
+}
+
+# 人仙陨落
+country_event = {
+	id = sxx_fairy.220
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 20
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_1|
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = sxx_indescribable
+		}
+	}
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_1
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_1
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_1 value = 1 }
+		add_resource = { sxx_qiyun = -50 }
+		country_event = { id = sxx_fairy.225 }
+	}
+}
+
+# 人仙陨落弹窗
+country_event = {
+	id = sxx_fairy.225
+	title = sxx_fairy.220.name
+	desc = sxx_fairy.220.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_1
+			value < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.220.a
+	}
+	option = {
+		name = sxx_fairy.220.b
+	}
+}
+
+# 晋升地仙
+country_event = {
+	id = sxx_fairy.230
+
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 20
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_1|
+		}
+		modifier = {
+			factor = 0.75
+			has_global_flag = sxx_break_level_1
+		}
+		modifier = {
+			factor = 1.25
+			has_global_flag = sxx_break_level_3
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = sxx_break_level_4
+		}
+	}
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_1
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_1
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_1 value = 1 }
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_2
+			amount = 1
+		}
+		change_variable = { which = value_sxx_fairy_2 value = 1 }
+		add_resource = { sxx_qiyun = 1000 }
+		country_event = { id = sxx_fairy.235 }
+	}
+}
+
+# 晋升地仙弹窗
+country_event = {
+	id = sxx_fairy.235
+	title = sxx_fairy.230.name
+	desc = sxx_fairy.230.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_2
+			value < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.230.a
+	}
+}
+
+# 地仙陨落
+country_event = {
+	id = sxx_fairy.240
+
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 30
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_2|
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = sxx_indescribable
+		}
+	}
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_2
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_2
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_2 value = 1 }
+		add_resource = { sxx_qiyun = -500 }
+		country_event = { id = sxx_fairy.245 }
+	}
+}
+
+# 地仙陨落弹窗
+country_event = {
+	id = sxx_fairy.245
+	title = sxx_fairy.240.name
+	desc = sxx_fairy.240.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_2
+			value < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.220.a
+	}
+	option = {
+		name = sxx_fairy.220.b
+	}
+}
+
+# 晋升天仙
+country_event = {
+	id = sxx_fairy.250
+	
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 30
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_2|
+		}
+		modifier = {
+			factor = 0.75
+			has_global_flag = sxx_break_level_1
+		}
+		modifier = {
+			factor = 1.25
+			has_global_flag = sxx_break_level_3
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = sxx_break_level_4
+		}
+	}
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_2
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_2
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_2 value = 1 }
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_3
+			amount = 1
+		}
+		change_variable = { which = value_sxx_fairy_3 value = 1 }
+		add_resource = { sxx_qiyun = 10000 }
+		country_event = { id = sxx_fairy.255 }
+	}
+}
+
+# 晋升天仙弹窗
+country_event = {
+	id = sxx_fairy.255
+	title = sxx_fairy.250.name
+	desc = sxx_fairy.250.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_3
+			value < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.230.a
+	}
+	option = {
+		name = sxx_fairy.250.a
+	}
+}
+
+# 天仙陨落
+country_event = {
+	id = sxx_fairy.260
+
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 40
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_3|
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = sxx_indescribable
+		}
+	}
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_3
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_3
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_3 value = 1 }
+		add_resource = { sxx_qiyun = -5000 }
+		country_event = { id = sxx_fairy.265 }
+	}
+}
+
+# 天仙陨落弹窗
+country_event = {
+	id = sxx_fairy.265
+	title = sxx_fairy.260.name
+	desc = sxx_fairy.260.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_3
+			value < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.220.a
+	}
+	option = {
+		name = sxx_fairy.220.b
+	}
+	option = {
+		name = sxx_fairy.260.a
+	}
+}
+
+# 晋升金仙
+country_event = {
+	id = sxx_fairy.270
+
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 40
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_3|
+		}
+		modifier = {
+			factor = 0.75
+			has_global_flag = sxx_break_level_1
+		}
+		modifier = {
+			factor = 1.25
+			has_global_flag = sxx_break_level_3
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = sxx_break_level_4
+		}
+	}
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_3
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_3
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_3 value = 1 }
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_4
+			amount = 1
+		}
+		change_variable = { which = value_sxx_fairy_4 value = 1 }
+		add_resource = { sxx_qiyun = 100000 }
+		country_event = { id = sxx_fairy.275 }
+	}
+}
+
+# 晋升金仙弹窗
+country_event = {
+	id = sxx_fairy.275
+	title = sxx_fairy.270.name
+	desc = sxx_fairy.270.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_4
+			value < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.230.a
+	}
+	option = {
+		name = sxx_fairy.270.a
+	}
+}
+
+# 金仙陨落
+country_event = {
+	id = sxx_fairy.280
+	
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_4|
+		}
+		modifier = {
+			factor = 10
+			has_country_flag = sxx_indescribable
+		}
+	}
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_4
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_4
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_4 value = 1 }
+		add_resource = { sxx_qiyun = -50000 }
+		country_event = { id = sxx_fairy.285 }
+	}
+}
+
+# 金仙陨落弹窗
+country_event = {
+	id = sxx_fairy.285
+	title = sxx_fairy.280.name
+	desc = sxx_fairy.280.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_4
+			value < 10
+		}
+	}
+
+	option = {
+		name = sxx_fairy.220.a
+	}
+	option = {
+		name = sxx_fairy.220.b
+	}
+	option = {
+		name = sxx_fairy.280.a
+	}
+}
+
+# 晋升大罗
+country_event = {
+	id = sxx_fairy.290
+	title = sxx_fairy.290.name
+	desc = sxx_fairy.290.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_4|
+		}
+		modifier = {
+			factor = 0.75
+			has_global_flag = sxx_break_level_1
+		}
+		modifier = {
+			factor = 1.25
+			has_global_flag = sxx_break_level_3
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = sxx_break_level_4
+		}
+	}
+
+	trigger = {
+		check_variable = {
+			which = value_sxx_fairy_4
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_4
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_4 value = 1 }
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_5
+			amount = 1
+		}
+		change_variable = { which = value_sxx_fairy_5 value = 1 }
+		add_resource = { sxx_qiyun = 1000000 }
+
+		if = {
+			limit = {
+				has_origin = origin_sxx_abandoned_by_god
+				NOT = { has_country_flag = sxx_abg_curse_released }
+			}
+			country_event = { id = sxx_origin.40 days = 30 random = 720 }
+		}
+	}
+
+	option = {
+		name = sxx_fairy.230.a
+	}
+	option = {
+		name = sxx_fairy.290.a
+	}
+}
+
+# 不可名状
+country_event = {
+	id = sxx_fairy.300
+	title = sxx_fairy.300.name
+	desc = sxx_fairy.300.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mind_over_matter
+
+	mean_time_to_happen = {
+		years = 1000
+		modifier = {
+			factor = value:sxx_fairy_factor|VARIABLE|value_sxx_fairy_5|
+		}
+		modifier = {
+			factor = 0.75
+			has_global_flag = sxx_break_level_1
+		}
+		modifier = {
+			factor = 1.25
+			has_global_flag = sxx_break_level_3
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = sxx_break_level_4
+		}
+	}
+
+	trigger = {
+		NOT = { has_country_flag = sxx_indescribable }
+		check_variable = {
+			which = value_sxx_fairy_5
+			value > 0
+		}
+	}
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = sxx_ascend_chain
+			counter = sxx_fairy_5
+			amount = -1
+		}
+		subtract_variable = { which = value_sxx_fairy_5 value = 1 }
+		set_country_flag = sxx_indescribable
+		add_modifier = { modifier = sxx_indescribable_modifier }
+		add_resource = { sxx_qiyun = 100000000 }
+	}
+
+	option = {
+		name = sxx_fairy.300.a
+	}
+}
+
+
+##### 气运事件 #####
+
+# 召唤仙人
+country_event = {
+	id = sxx_fairy.1000
+	title = sxx_fairy.1000.name
+	desc = sxx_fairy.1000.desc
+	picture = GFX_evt_sxx_blessed_spot
+	show_sound = event_mind_over_matter
+	is_triggered_only = yes
+
+	immediate = {
+		export_trigger_value_to_variable = {
+			trigger = count_owned_ship
+			parameters = {
+				limit = {
+					has_modifier = sxx_fairy_ship_modifier_1
+				}
+			}
+			variable = num_sxx_fairy_ship_1
+		}
+		set_variable = { which = num_sxx_fairy_1_ship_can_summon value = value_sxx_fairy_1 }
+		subtract_variable = { which = num_sxx_fairy_1_ship_can_summon value = num_sxx_fairy_ship_1 }
+		export_trigger_value_to_variable = {
+			trigger = count_owned_ship
+			parameters = {
+				limit = {
+					has_modifier = sxx_fairy_ship_modifier_2
+				}
+			}
+			variable = num_sxx_fairy_ship_2
+		}
+		set_variable = { which = num_sxx_fairy_2_ship_can_summon value = value_sxx_fairy_2 }
+		subtract_variable = { which = num_sxx_fairy_2_ship_can_summon value = num_sxx_fairy_ship_2 }
+		export_trigger_value_to_variable = {
+			trigger = count_owned_ship
+			parameters = {
+				limit = {
+					has_modifier = sxx_fairy_ship_modifier_3
+				}
+			}
+			variable = num_sxx_fairy_ship_3
+		}
+		set_variable = { which = num_sxx_fairy_3_ship_can_summon value = value_sxx_fairy_3 }
+		subtract_variable = { which = num_sxx_fairy_3_ship_can_summon value = num_sxx_fairy_ship_3 }
+		export_trigger_value_to_variable = {
+			trigger = count_owned_ship
+			parameters = {
+				limit = {
+					has_modifier = sxx_fairy_ship_modifier_4
+				}
+			}
+			variable = num_sxx_fairy_ship_4
+		}
+		set_variable = { which = num_sxx_fairy_4_ship_can_summon value = value_sxx_fairy_4 }
+		subtract_variable = { which = num_sxx_fairy_4_ship_can_summon value = num_sxx_fairy_ship_4 }
+		export_trigger_value_to_variable = {
+			trigger = count_owned_ship
+			parameters = {
+				limit = {
+					has_modifier = sxx_fairy_ship_modifier_5
+				}
+			}
+			variable = num_sxx_fairy_ship_5
+		}
+		set_variable = { which = num_sxx_fairy_5_ship_can_summon value = value_sxx_fairy_5 }
+		subtract_variable = { which = num_sxx_fairy_5_ship_can_summon value = num_sxx_fairy_ship_5 }
+	}
+
+	option = {
+		name = sxx_fairy.1000.a
+		trigger = {
+			check_variable = { which = num_sxx_fairy_1_ship_can_summon value >= 1 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 100 }
+		}
+		custom_tooltip = sxx_fairy.1000.a.tooltip
+		hidden_effect = {
+			capital_star = { create_sxx_fairy_ship_1 = yes }
+		}
+		add_resource = { sxx_qiyun = -100 }
+
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.a.all
+		trigger = {
+			check_variable = { which = num_sxx_fairy_1_ship_can_summon value >= 2 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 100 mult = num_sxx_fairy_1_ship_can_summon }
+		}
+		custom_tooltip = sxx_fairy.1000.a.all.tooltip
+		hidden_effect = {
+			while = {
+				count = root.num_sxx_fairy_1_ship_can_summon
+				capital_star = { create_sxx_fairy_ship_1 = yes }
+			}
+		}
+		add_resource = { sxx_qiyun = -100 mult = num_sxx_fairy_1_ship_can_summon }
+
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.b
+		trigger = {
+			check_variable = { which = num_sxx_fairy_2_ship_can_summon value >= 1 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 1000 }
+		}
+		custom_tooltip = sxx_fairy.1000.b.tooltip
+		hidden_effect = {
+			capital_star = { create_sxx_fairy_ship_2 = yes }
+		}
+		add_resource = { sxx_qiyun = -1000 }
+
+		ai_chance = {
+			factor = 10
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.b.all
+		trigger = {
+			check_variable = { which = num_sxx_fairy_2_ship_can_summon value >= 2 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 1000 mult = num_sxx_fairy_2_ship_can_summon }
+		}
+		custom_tooltip = sxx_fairy.1000.b.all.tooltip
+		hidden_effect = {
+			while = {
+				count = root.num_sxx_fairy_2_ship_can_summon
+				capital_star = { create_sxx_fairy_ship_2 = yes }
+			}
+		}
+		add_resource = { sxx_qiyun = -1000 mult = num_sxx_fairy_2_ship_can_summon }
+
+		ai_chance = {
+			factor = 30
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.c
+		trigger = {
+			check_variable = { which = num_sxx_fairy_3_ship_can_summon value >= 1 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 10000 }
+		}
+		custom_tooltip = sxx_fairy.1000.c.tooltip
+		hidden_effect = {
+			capital_star = { create_sxx_fairy_ship_3 = yes }
+		}
+		add_resource = { sxx_qiyun = -10000 }
+
+		ai_chance = {
+			factor = 100
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.c.all
+		trigger = {
+			check_variable = { which = num_sxx_fairy_3_ship_can_summon value >= 2 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 10000 mult = num_sxx_fairy_3_ship_can_summon }
+		}
+		custom_tooltip = sxx_fairy.1000.c.all.tooltip
+		hidden_effect = {
+			while = {
+				count = root.num_sxx_fairy_3_ship_can_summon
+				capital_star = { create_sxx_fairy_ship_3 = yes }
+			}
+		}
+		add_resource = { sxx_qiyun = -10000 mult = num_sxx_fairy_3_ship_can_summon }
+
+		ai_chance = {
+			factor = 300
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.d
+		trigger = {
+			check_variable = { which = num_sxx_fairy_4_ship_can_summon value >= 1 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 100000 }
+		}
+		custom_tooltip = sxx_fairy.1000.d.tooltip
+		hidden_effect = {
+			capital_star = { create_sxx_fairy_ship_4 = yes }
+		}
+		add_resource = { sxx_qiyun = -100000 }
+
+		ai_chance = {
+			factor = 1000
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.d.all
+		trigger = {
+			check_variable = { which = num_sxx_fairy_4_ship_can_summon value >= 2 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 100000 mult = num_sxx_fairy_4_ship_can_summon }
+		}
+		custom_tooltip = sxx_fairy.1000.d.all.tooltip
+		hidden_effect = {
+			while = {
+				count = root.num_sxx_fairy_4_ship_can_summon
+				capital_star = { create_sxx_fairy_ship_4 = yes }
+			}
+		}
+		add_resource = { sxx_qiyun = -100000 mult = num_sxx_fairy_4_ship_can_summon }
+
+		ai_chance = {
+			factor = 3000
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.e
+		trigger = {
+			check_variable = { which = num_sxx_fairy_5_ship_can_summon value >= 1 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 1000000 }
+		}
+		custom_tooltip = sxx_fairy.1000.e.tooltip
+		hidden_effect = {
+			capital_star = { create_sxx_fairy_ship_5 = yes }
+		}
+		add_resource = { sxx_qiyun = -1000000 }
+
+		ai_chance = {
+			factor = 10000
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.e.all
+		trigger = {
+			check_variable = { which = num_sxx_fairy_5_ship_can_summon value >= 2 }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 1000000 mult = num_sxx_fairy_5_ship_can_summon }
+		}
+		custom_tooltip = sxx_fairy.1000.e.all.tooltip
+		hidden_effect = {
+			while = {
+				count = root.num_sxx_fairy_5_ship_can_summon
+				capital_star = { create_sxx_fairy_ship_5 = yes }
+			}
+		}
+		add_resource = { sxx_qiyun = -1000000 mult = num_sxx_fairy_5_ship_can_summon }
+
+		ai_chance = {
+			factor = 30000
+		}
+	}
+	option = {
+		name = sxx_fairy.1000.g
+
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# 化身消散
+ship_event = {
+	id = sxx_fairy.1005
+	title = sxx_fairy.1005.name
+	desc = sxx_fairy.1005.desc
+	picture = GFX_evt_zro_4
+	show_sound = event_mystic_reveal_light
+	location = root
+
+	is_triggered_only = yes
+
+	after = {
+		destroy_ship = root
+	}
+
+	option = {
+		name = sxx_fairy.1005.a
+	}
+	option = {
+		name = sxx_fairy.1005.b
+	}
+}
+
+# 突破瓶颈
+country_event = {
+	id = sxx_fairy.1010
+	title = sxx_fairy.1010.name
+	desc = sxx_fairy.1010.desc
+	picture = GFX_evt_sxx_blessed_spot
+	show_sound = event_mind_over_matter
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_fairy.1010.a
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 10 }
+			count_owned_pop = {
+				limit = { is_sxx_potential_depletion = yes }
+				count >= 10
+			}
+		}
+		add_resource = { sxx_qiyun = -10 }
+		custom_tooltip = sxx_fairy.1010.a.tooltip
+		hidden_effect = {
+			while = {
+				count = 10
+				random_owned_pop = {
+					limit = {
+						is_sxx_potential_depletion = yes
+					}
+					sxx_pop_remove_potential_depletion = yes
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = sxx_fairy.1010.b
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 100 }
+			count_owned_pop = {
+				limit = { is_sxx_potential_depletion = yes }
+				count >= 30
+			}
+		}
+		add_resource = { sxx_qiyun = -100 }
+		custom_tooltip = sxx_fairy.1010.b.tooltip
+		hidden_effect = {
+			while = {
+				count = 30
+				random_owned_pop = {
+					limit = {
+						is_sxx_potential_depletion = yes
+					}
+					sxx_pop_remove_potential_depletion = yes
+				}
+			}
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = sxx_fairy.1010.c
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 1000 }
+			count_owned_pop = {
+				limit = { is_sxx_potential_depletion = yes }
+				count >= 100
+			}
+		}
+		add_resource = { sxx_qiyun = -1000 }
+		custom_tooltip = sxx_fairy.1010.c.tooltip
+		hidden_effect = {
+			while = {
+				count = 100
+				random_owned_pop = {
+					limit = {
+						is_sxx_potential_depletion = yes
+					}
+					sxx_pop_remove_potential_depletion = yes
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+	option = {
+		name = sxx_fairy.1010.d
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 10000 }
+			count_owned_pop = {
+				limit = { is_sxx_potential_depletion = yes }
+				count >= 300
+			}
+		}
+		add_resource = { sxx_qiyun = -10000 }
+		custom_tooltip = sxx_fairy.1010.d.tooltip
+		hidden_effect = {
+			while = {
+				count = 300
+				random_owned_pop = {
+					limit = {
+						is_sxx_potential_depletion = yes
+					}
+					sxx_pop_remove_potential_depletion = yes
+				}
+			}
+		}
+		ai_chance = {
+			factor = 30
+		}
+	}
+	option = {
+		name = sxx_fairy.1010.e
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 100000 }
+			count_owned_pop = {
+				limit = { is_sxx_potential_depletion = yes }
+				count > 300
+			}
+		}
+		add_resource = { sxx_qiyun = -100000 }
+		custom_tooltip = sxx_fairy.1010.e.tooltip
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					is_sxx_potential_depletion = yes
+				}
+				sxx_pop_remove_potential_depletion = yes
+			}
+		}
+		ai_chance = {
+			factor = 100
+		}
+	}
+	option = {
+		name = sxx_fairy.1010.f
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# 灵脉显现
+country_event = {
+	id = sxx_fairy.1020
+	title = sxx_fairy.1020.name
+	desc = sxx_fairy.1020.desc
+	picture = GFX_evt_sxx_blessed_spot
+	show_sound = event_mind_over_matter
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_fairy.1020.a
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 100 }
+		}
+		add_resource = { sxx_qiyun = -100 }
+		hidden_effect = {
+			random_owned_planet = {
+				limit = {
+					is_artificial = no
+					NOR = {
+						is_planet_class = pc_relic
+						is_planet_class = pc_city
+						is_planet_class = pc_sxx_heaven
+					}
+				}
+				planet_event = { id = sxx_fairy.1021 }
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = sxx_fairy.1020.b
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 300 }
+		}
+		add_resource = { sxx_qiyun = -300 }
+		hidden_effect = {
+			random_owned_planet = {
+				limit = {
+					is_artificial = no
+					NOR = {
+						is_planet_class = pc_relic
+						is_planet_class = pc_city
+						is_planet_class = pc_sxx_heaven
+					}
+				}
+				planet_event = { id = sxx_fairy.1022 }
+			}
+		}
+		ai_chance = {
+			factor = 3
+		}
+	}
+	option = {
+		name = sxx_fairy.1020.c
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 1000 }
+		}
+		add_resource = { sxx_qiyun = -1000 }
+		hidden_effect = {
+			random_owned_planet = {
+				limit = {
+					is_artificial = no
+					NOR = {
+						is_planet_class = pc_relic
+						is_planet_class = pc_city
+						is_planet_class = pc_sxx_heaven
+					}
+				}
+				planet_event = { id = sxx_fairy.1023 }
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+	option = {
+		name = sxx_fairy.1020.d
+		trigger = {
+			resource_stockpile_compare = { resource = sxx_qiyun value >= 10000 }
+		}
+		add_resource = { sxx_qiyun = -10000 }
+		hidden_effect = {
+			random_owned_planet = {
+				limit = {
+					is_artificial = no
+					NOR = {
+						is_planet_class = pc_relic
+						is_planet_class = pc_city
+						is_planet_class = pc_sxx_heaven
+					}
+				}
+				planet_event = { id = sxx_fairy.1024 }
+			}
+		}
+		ai_chance = {
+			factor = 30
+		}
+	}
+	option = {
+		name = sxx_fairy.1020.e
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# 灵脉显现1
+planet_event = {
+	id = sxx_fairy.1021
+	title = sxx_fairy.1020.name
+	desc = sxx_fairy.1021.desc
+	picture = GFX_evt_underground_civilization
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_deposit = d_sxx_lingmai_1
+	}
+
+	option = {
+		name = sxx_fairy.1021.a
+	}
+}
+
+# 灵脉显现2
+planet_event = {
+	id = sxx_fairy.1022
+	title = sxx_fairy.1020.name
+	desc = sxx_fairy.1022.desc
+	picture = GFX_evt_planet_beam
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_deposit = d_sxx_lingmai_2
+	}
+
+	option = {
+		name = sxx_fairy.1021.a
+	}
+}
+
+# 灵脉显现3
+planet_event = {
+	id = sxx_fairy.1023
+	title = sxx_fairy.1020.name
+	desc = sxx_fairy.1023.desc
+	picture = GFX_evt_asteroid_approaching_planet
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_deposit = d_sxx_lingmai_3
+	}
+
+	option = {
+		name = sxx_fairy.1021.a
+	}
+}
+
+# 灵脉显现4
+planet_event = {
+	id = sxx_fairy.1024
+	title = sxx_fairy.1020.name
+	desc = sxx_fairy.1024.desc
+	picture = GFX_evt_overgrown_city
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		add_deposit = d_sxx_lingmai_4
+	}
+
+	option = {
+		name = sxx_fairy.1021.a
+	}
+}

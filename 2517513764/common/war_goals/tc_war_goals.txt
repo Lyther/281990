@@ -1,0 +1,63 @@
+#战争目标 得到知识
+wg_tc_knowledge_sharing = {
+	casus_belli = cb_tc_knowledge_sharing
+	hide_if_no_cb = yes
+	total_war = no
+	defender_default = wg_humiliation
+	threat_multiplier = 0.25
+	cede_claims = occupied_only
+	show_claims_in_description = yes
+	release_occupied_systems_on_status_quo = no
+	war_exhaustion = 0.5
+
+	allowed_peace_offers = {
+		status_quo
+		surrender
+		demand_surrender
+	}
+
+	surrender_acceptance = -50
+	potential = {
+		FROM = {
+			has_relic = tc_research_book
+		}
+		NOT = { is_in_federation_with = FROM }
+	}
+	possible = {
+		custom_tooltip = {
+			fail_text = "tc_target_not_has_book"
+			FROM = {
+				has_relic = tc_research_book
+			}
+			NOT = { is_in_federation_with = FROM }
+		}
+	}
+
+	on_accept = {
+		custom_tooltip = tc_wg_gain_knowledge
+		add_relic = tc_research_book
+		hidden_effect = {
+			add_resource = {
+				tc_knowledge_fragment = 512
+			}
+			from = {
+				add_modifier = { modifier = humiliated days = 3600 }
+				if = {
+					limit = { has_policy_flag = diplo_stance_supremacist }
+					set_policy = {
+						policy = diplomatic_stance
+						option = diplo_stance_belligerent
+						cooldown = yes
+					}
+					prev = {
+						set_country_flag = humble_pie_achievement
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}

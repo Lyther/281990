@@ -1,0 +1,1187 @@
+#################################
+# 成屎山了，将就着看看吧（）
+#################################
+
+namespace = GHCO_basic
+####################################################################################
+#飞地的生成：生成飞地（星系，种族，领袖，国家，舰队）
+####################################################################################
+#用到的一些event_target写在system_initializer里
+event = {
+	id = GHCO_basic.1
+	hide_window = yes
+	is_triggered_only = yes	# on_game_start
+
+	immediate = {
+		set_global_flag = game_has_GHCO
+
+		#创建种族，GHCO专属种族
+		create_species = {
+			name = "NAME_GHCO_species"
+			plural = "NAME_GHCO_plural"
+			class = random_non_machine
+			portrait = random
+			traits = {
+				ideal_planet_class = pc_habitat
+				trait = "trait_GHCO_keeper"
+			}
+		}
+
+		#创建国家，GHCO
+		create_country = {
+			name = "NAME_GHCO_country"
+			type = GHCO_enclave
+			authority = "auth_oligarchic"
+			civics = {}
+			origin = "origin_default"
+			species = last_created_species
+			flag = {
+				icon = {
+					category = "legion"
+					file = "flag_mp_beta_03.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors = {
+					"blue"
+					"black"
+					"null"
+					"null"
+				}
+			}
+			ethos = {
+				ethic = ethic_xenophile
+				ethic = ethic_materialist
+				ethic = ethic_egalitarian
+			}
+			ignore_initial_colony_error = yes
+			effect = {
+				set_country_flag = GHCO
+				set_graphical_culture = "fallen_empire_03"
+				save_global_event_target_as = GHCO
+			}
+		}
+
+		#创建飞地领袖，并给GHCO配置这名领袖
+		last_created_country = {
+			create_leader = {
+				class = ruler
+				species = this
+				name = random
+				skill = 10
+				traits = {
+					trait = random_trait
+					trait = random_trait
+				}
+			}
+			set_leader = last_created_leader
+		}
+
+		#创建星系，并将GHCO生成在星系中
+		#其中甚是奇妙，我也不知道为什么是这个样子
+		random_system = {	# 这个是有通讯节点的另一个星系，不是首都星系
+			limit = {
+				NOR = {
+					exists = owner								#未被占据
+					has_star_flag = hostile_system				#避免原版的利维坦
+					has_star_flag = QQE_enclave_system			#避免多个QQE空间站生成在同一个星系
+				}
+			}
+
+			# 此处spawn的system才是GHCO的首都恒星系，外面那个是有通讯节点的另一个星系
+			spawn_system = {
+				min_distance >= 40
+				max_distance <= 60
+				min_orientation_angle = 0
+				max_orientation_angle = 360
+				initializer = GHCO_initializer
+
+				effect = {
+					set_star_flag = GHCO_system
+
+					random_system_planet = {
+						# 饼静的标记
+						set_planet_flag = QQE_enclave_planet			#一个标记，暂时没有实际作用，但别删
+						# 然而这里并不是主星系，主星系也会放一次的
+					}
+				}
+			}
+
+			set_star_flag = GHCO_system
+
+			#生成GHCO空间站（奇点通讯节点，没有模型的那个，不是擎天堡）
+			random_system_planet = {
+				last_created_country = {
+					#生成GHCO空间站（奇点通讯节点，没有模型的那个）
+					create_fleet = {
+						name = "NAME_GHCO_communication_singularity"	#空间站舰队名称
+						settings = {
+							spawn_debris = no							#舰船是否生成残骸可供逆向
+						}
+						effect = {
+							set_owner = prev
+							create_ship = {				# 别动，虽然有bug，但是效果因此很好
+								name = random
+								design = "NAME_FE_Starbase"
+								graphical_culture = "fallen_empire_03"
+								effect = {
+									save_global_event_target_as = GHCO_singularity_ship
+								}
+							}
+							set_location = {	#其实也可以把这个挪到GHCO首都星系里，但是现在这样感觉不错就不弄了
+								#设定空间站位置，不要改（饼静写的）
+								target = prevprev
+								distance = 90
+							}
+							set_fleet_flag = QQE_enclave_station		#通用标记，不要改
+							set_fleet_flag = GHCO_singularity_fleet
+						}
+					}
+				}
+			}
+			last_created_country = {
+				# 之后的这些因为set_location选的对已经在GHCO首都星系了
+				create_fleet = {
+					name = "NAME_GHCO_platforms"
+					settings = { spawn_debris = no }
+					effect = {
+						set_location = {
+							target = event_target:GHCO_main_system_star
+							distance = 0		#别动，故意的，在黑洞里
+							angle = random
+						}
+						set_owner = event_target:GHCO
+						# 防御平台
+						while = {
+							count = 20
+							create_ship = {
+								name = random
+								design = "NAME_Watcher"
+								graphical_culture = "fallen_empire_03"
+								effect = {
+									add_modifier = { modifier = GHCO_no_ship_speed_modifier }	#让它们不从黑洞里出来
+								}
+							}
+							create_ship = {
+								name = random
+								design = "NAME_Cloaker"
+								graphical_culture = "fallen_empire_02"
+								effect = {
+									add_modifier = { modifier = GHCO_no_ship_speed_modifier }	#让它们不从黑洞里出来
+								}
+							}
+						}
+						save_global_event_target_as = GHCO_platforms_fleet
+						#add_modifier = { modifier = GHCO_no_ship_speed_modifier }	#让它们不从黑洞里出来
+					}
+
+				}
+				# 创建舰队和舰队领袖
+				while = {
+					count = 2
+					# GHCO蜜罐舰队
+					create_leader = {
+						class = admiral
+						species = last_created_species
+						name = random
+						skill = 10
+						leader_age_min = 25
+						leader_age_max = 45
+						traits = {
+							trait = random_trait
+							trait = random_trait
+							trait = random_trait
+						}
+					}
+					create_fleet = {
+						name = "神秘观察守护者"
+						settings = { spawn_debris = no }
+						effect = {
+							set_owner = last_created_country
+							create_ship = {
+								name = random
+								design = "NAME_Keeper"
+								graphical_culture = "fallen_empire_03"
+							}
+							while = {
+								count = 10
+								create_ship = {
+									name = random
+									design = "NAME_Custodian"
+									graphical_culture = "fallen_empire_03"
+								}
+							}
+							while = {
+								count = 20
+								create_ship = {
+									name = random
+									design = "NAME_Warden"
+									graphical_culture = "fallen_empire_03"
+								}
+							}
+							set_location = {
+								target = event_target:GHCO_platforms_fleet
+								distance = 90
+								angle = random
+							}
+							set_fleet_flag = GHCO_EO_fleet
+						}
+					}
+					last_created_fleet = { assign_leader = last_created_leader }
+					# GHCO知管舰队
+					create_leader = {
+						class = admiral
+						species = last_created_species
+						name = random
+						skill = 10
+						leader_age_min = 25
+						leader_age_max = 45
+						traits = {
+							trait = random_trait
+							trait = random_trait
+							trait = random_trait
+						}
+					}
+					create_fleet = {
+						name = "知识管理守护者"
+						settings = { spawn_debris = no }
+						effect = {
+							set_owner = last_created_country
+							create_ship = {
+								name = random
+								design = "NAME_Savant"
+								graphical_culture = "fallen_empire_02"
+							}
+							while = {
+								count = 10
+								create_ship = {
+									name = random
+									design = "NAME_Scholar"
+									graphical_culture = "fallen_empire_02"
+								}
+							}
+								while = {
+								count = 20
+								create_ship = {
+									name = random
+									design = "NAME_Sage"
+									graphical_culture = "fallen_empire_02"
+								}
+							}
+							set_location = {
+								target = event_target:GHCO_platforms_fleet
+								distance = 90
+								angle = random
+							}
+							set_fleet_flag = GHCO_KOK_fleet
+						}
+					}
+					last_created_fleet = { assign_leader = last_created_leader }
+				}
+			}
+		}
+
+		#保存一些后面要用的event_target
+		every_country = {
+			limit = { is_fallen_empire_xenophile = yes }
+			save_global_event_target_as = GHCO_EO
+		}
+		every_country = {
+			limit = { is_fallen_empire_materialist = yes }
+			save_global_event_target_as = GHCO_KOK
+		}
+		
+	}
+}
+
+####################################################################################
+#初始化GHCO外部相关
+####################################################################################
+event = {
+	id = GHCO_basic.10
+	hide_window = yes
+	is_triggered_only = yes	# on_game_start
+
+	immediate = {
+		set_global_flag = game_has_GHCO
+		#设置信任等级，建立应有的联系
+		event_target:GHCO = {	#GHCO自己设置成5级
+			GHCO_set_trust_level_5 = yes
+			set_country_flag = GHCO_init_set_flag
+		}
+		every_country = {		#知管蜜罐设置成4级（详见设定）
+			limit = { 
+				or = {
+					is_fallen_empire_xenophile = yes 
+					is_fallen_empire_materialist = yes
+				}
+			}
+			GHCO_set_trust_level_4 = yes
+			set_country_flag = GHCO_init_set_flag
+			establish_communications_no_message = event_target:GHCO
+		}
+		every_country = {		#其它国家0级
+			limit = { not = { has_country_flag = GHCO_init_set_flag } }
+			GHCO_set_trust_level_0 = yes
+			set_country_flag = no_comm_with_GHCO
+		}
+		every_country = {
+			remove_country_flag = GHCO_init_set_flag
+		}
+	}
+}
+
+####################################################################################
+#与GHCO建立联系
+####################################################################################
+#	其实这个建立联系我也没完全搞明白，但功能应该是对的
+######################################
+
+#发现GHCO（我方探测到GHCO）  
+country_event = {
+	id = GHCO_basic.2
+	title = "GHCO_event.1.title"
+	desc = "GHCO_event.1.desc"
+	picture = "GFX_evt_strategic_coordination_center"
+	show_sound = "event_mystic_reveal"
+	
+	is_triggered_only = yes		# on_fleet_detected
+
+	trigger = {
+		has_global_flag = game_has_GHCO
+		has_country_flag = no_comm_with_GHCO
+		not = { has_country_flag = has_comm_with_GHCO }
+		from = {		#GHCO舰队
+			owner = {	#GHCO
+				is_same_value = event_target:GHCO		#判断探测到的舰队所属是否GHCO
+				NOT = { has_communications = root }		#尚未与我方建立联系
+			}
+		}
+	}
+
+	immediate = {
+		remove_country_flag = no_comm_with_GHCO
+		set_country_flag = has_comm_with_GHCO
+	}
+
+	option = {
+		name = GHCO_event.1.option
+		country_event = { id = GHCO_basic.3 }
+	}
+}
+
+#与GHCO建立联系时的通讯
+country_event = {
+	id = GHCO_basic.3
+	title = "GHCO_event.2.title"	
+	desc = "GHCO_event.2.desc"	
+	is_triggered_only = yes	# GHCO_basic.2
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+	
+	trigger = {}
+
+	immediate = { 
+		# 启动两年观察期
+		set_timed_country_flag = {
+			flag = GHCO_two_years_observation
+			days = 720
+		}
+		if = {
+			limit = { root = { is_homicidal = yes } }
+			country_event = {
+				id = GHCO_two_years_observation.2	#GHCO发现被观察者不是服务对象
+				days = 10
+			}
+		}
+		else = {
+			country_event = {
+				id = GHCO_two_years_observation.1	#试图通过两年观察期
+				days = 721
+			}
+		}
+	}
+
+	after = {
+		establish_communications_no_message = event_target:GHCO
+		event_target:GHCO = {
+			set_closed_borders = {
+				who = root
+				status = no
+				forced = 2146483647
+			}
+		}
+	}
+		
+ 
+	option = {
+		name = "GHCO_event.2.a"	
+	}
+	option = {
+		name = "GHCO_event.2.b"	
+	}
+}
+
+#舰船进入GHCO星系或者进入含有GHC设施的星系时
+ship_event = {
+	id = GHCO_basic.5
+	title = "GHCO_event.6.title"
+	picture = GFX_evt_spy_orb
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes	# on_entering_system_first_time
+
+	trigger = {
+		from = {	#这个星系
+			or = {
+				has_star_flag = GHCO_system
+				has_star_flag = GHCO_system_has_ruined_GHC_ficility
+			}
+		}
+	}
+	
+
+	desc = {
+		trigger = {
+			from = { has_star_flag = GHCO_system_has_ruined_GHC_ficility }	#GHC设施星系
+		}
+		text = "GHCO_event.6.1.desc"
+	}
+	desc = {
+		trigger = {
+			from = { has_star_flag = GHCO_system }	#GHCO所在星系
+			owner = { has_country_flag = no_comm_with_GHCO }
+		}
+		text = "GHCO_event.6.2.desc"
+	}
+	
+
+	option = {
+		trigger = {
+			from  = { has_star_flag = GHCO_system_has_ruined_GHC_ficility }	#GHC设施星系
+		}
+		owner = {
+			set_country_flag = has_visited_GHC_ficility_system
+		}
+		name = "GHCO_event.6.1.option"
+	}
+	option = {
+		trigger = {
+			from  = { has_star_flag = GHCO_system }	#GHCO奇点星系
+		}
+		name = "GHCO_event.6.2.option"
+		owner = {
+			country_event = { id = GHCO_basic.3 }
+		}
+	}
+}
+
+####################################################################################
+#好感度相关
+####################################################################################
+country_event = {
+	id = GHCO_basic.100
+	hide_window = yes
+	is_triggered_only = yes	# on_yearly_pulse_country
+
+	trigger = {
+		is_same_value = event_target:GHCO	#由GHCO触发这个事件
+	}
+
+	immediate = {
+		every_country = {
+			limit = { not = { has_country_flag = GHCO } }
+			event_target:GHCO = {
+				add_trust = {
+					who = prev
+					amount = 3
+				}
+			}
+			if = {
+				limit = {
+					their_opinion = {
+						who = root
+						value >= 25
+					}
+				}
+				GHCO_set_trust_level_2 = yes
+			}
+			if = {
+				limit = {
+					their_opinion = {
+						who = root
+						value >= 200
+					}
+				}
+				GHCO_set_trust_level_3 = yes
+				country_event = { id = GHCO_basic.101 days = 3600 }		#信任等级3保持十年，成为full信任等级
+			}
+			if = {
+				limit = {
+					their_opinion = {
+						who = root
+						value < 0
+					}
+				}
+				set_country_flag = GHCO_cancel_service_by_opinion
+				country_event = { id = GHCO_basic.102 }					#停止基本GHC服务
+				country_event = { id = GHCO_basic.103 days = 3600 }		#每十年出现一次询问是否恢复原状态
+			}
+			if = {
+				limit = {
+					their_opinion = {
+						who = root
+						value <= 30
+					}
+				} 
+				GHCO_set_trust_level_0 = yes
+				country_event = { id = GHCO_external.11 }				#常规制裁
+				country_event = { id = GHCO_basic.104 days = 7200 }		#每二十年出现一次询问是否恢复原状态
+			}
+		}
+		if = {
+			limit = { has_global_flag = GHCO_special_period }
+			every_country = {
+				country_event = { id = GHCO_external.15 }					#宣布提供特殊服务
+			}
+		}
+		if = {
+			limit = {
+				not = { has_global_flag = GHCO_special_period }
+			}
+			every_country = {
+				limit = { has_country_flag = has_GHC_service_special }
+				country_event = { id = GHCO_external.16 }					#宣布取消特殊服务 
+			}
+		}
+	}
+}
+ 
+# 成为full信任等级，作用是后续更新留的一手
+country_event = {
+	id = GHCO_basic.101
+	title = "GHCO_basic.101.title"
+	desc = "GHCO_basic.101.desc"
+	is_triggered_only = yes	# GHCO_basic.100
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		has_country_flag = GHCO_trust_level_3
+	}
+
+	immediate = {
+		set_country_flag = GHCO_trust_level_full
+	}
+
+	option = {
+		name = "GHCO_basic.101.name"
+	}
+}
+ 
+# 停止基础GHC服务
+country_event = {
+	id = GHCO_basic.102
+	title = "GHCO_basic.102.title"
+	desc = "GHCO_basic.102.desc"
+	is_triggered_only = yes	# GHCO_basic.100
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {}
+
+	immediate = {
+		remove_modifier = GHC_standard_service
+		remove_country_flag = has_GHC_service_standard
+		remove_modifier = GHC_civil_service
+		remove_country_flag = has_GHC_service_civil
+		remove_modifier = GHC_military_service
+		remove_country_flag = has_GHC_service_military
+		remove_modifier = GHC_tech_service
+		remove_country_flag = has_GHC_service_tech
+		if = {
+			limit = { not = { has_country_flag = has_GHC_service_special } }
+			remove_country_flag = has_GHC_service
+		}
+	}
+
+	option = {
+		name = "GHCO_basic.102.name"
+	}
+}
+
+# 每十年出现一次询问是否恢复原状态
+country_event = {
+	id = GHCO_basic.103
+	title = "GHCO_basic.103.title"
+	desc = "GHCO_basic.103.desc"
+	is_triggered_only = yes	# GHCO_basic.100
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {}
+
+	immediate = {}
+
+	option = {
+		name = "GHCO_basic.103.a"
+		remove_country_flag = GHCO_cancel_service_by_opinion
+	}
+	option = {
+		name = "GHCO_basic.103.b"
+		country_event = { id = GHCO_basic.103 days = 3600 }		#每十年出现一次询问是否恢复原状态
+	}
+}
+
+# 每二十年出现一次询问是否恢复原状态（常规制裁）
+country_event = {
+	id = GHCO_basic.104
+	title = "GHCO_basic.104.title"
+	desc = "GHCO_basic.104.desc"
+	is_triggered_only = yes	# GHCO_basic.100
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {}
+
+	immediate = {}
+
+	option = {
+		name = "GHCO_basic.104.a"
+		remove_modifier = GHCO_standard_sanction
+	}
+	option = {
+		name = "GHCO_basic.104.b"
+		country_event = { id = GHCO_basic.103 days = 7200 }		#每二十年出现一次询问是否恢复原状态
+	}
+}
+
+
+####################################################################################
+#纯功能events
+####################################################################################
+#年检debug并且提供一些机制
+country_event = {
+	id = GHCO_basic.200
+	hide_window = yes
+	is_triggered_only = yes	# on_yearly_pulse_country
+
+	trigger = {
+		is_same_value = event_target:GHCO	#由GHCO触发这个事件
+	}
+
+	immediate = {
+		#在特殊时期提供特殊服务
+		if = {
+			limit = { has_global_flag = GHCO_special_period }
+			every_country = {
+				country_event = { id = GHCO_external.15 }					#宣布提供特殊服务 
+			}
+		}
+		if = {
+			limit = {
+				not = { has_global_flag = GHCO_special_period }
+			}
+			every_country = {
+				limit = { has_country_flag = has_GHC_service_special }
+				country_event = { id = GHCO_external.16 }					#宣布取消特殊服务
+			}
+		}
+		#防止已经与GHCO建立联系的国家没有进入两年观察期
+		every_country = {
+			limit = { 
+				has_communications = event_target:GHCO 
+				has_country_flag = GHCO_trust_level_0
+			}
+			# 启动两年观察期
+			set_timed_country_flag = {
+				flag = GHCO_two_years_observation
+				days = 720
+			}
+			if = {
+				limit = { is_homicidal = yes }
+				country_event = {
+					id = GHCO_two_years_observation.2	#GHCO发现被观察者不是服务对象
+					days = 10
+				}
+			}
+			else = {
+				country_event = {
+					id = GHCO_two_years_observation.1	#试图通过两年观察期
+					days = 721
+				}
+			}
+		}
+	}
+}
+
+####################################################################################
+#摧毁了GHCO的空间站/舰队
+####################################################################################
+
+#进入了关于GHCO的舰队战 HIDDEN
+country_event = {
+	id = GHCO_basic.150
+	hide_window = yes
+	is_triggered_only = yes	# on_entering_battle
+
+	trigger = {
+		from = { has_country_flag = GHCO }
+	}
+	fire_only_once = yes
+
+	immediate = {
+		#宣布取消提供基础GHC服务
+		country_event = { id = GHCO_basic.102 }
+		#宣布制裁
+		country_event = { id = GHCO_external.11 days = 5 }
+		#警告和减好感事件
+		country_event = { id = GHCO_basic.151 }
+	}
+}
+
+#警告和减好感事件
+country_event = {
+	id = GHCO_basic.151
+	title = "GHCO_basic.151.title"
+	desc = "GHCO_basic.151.desc"
+	is_triggered_only = yes	# GHCO_basic.150
+	fire_only_once = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	option = {
+		name = "GHCO_basic.151.a"
+	}
+	option = {
+		name = "GHCO_basic.151.b"
+	}
+
+	after = {
+		event_target:GHCO = {
+			add_trust = {
+				who = root
+				amount = -15
+			}
+		}
+	}
+}
+
+#摧毁了GHCO的舰队 HIDDEN
+country_event = {
+	id = GHCO_basic.152
+	hide_window = yes
+	is_triggered_only = yes	# on_fleet_destroyed_perp
+
+	trigger = {
+		from = { is_same_value = event_target:GHCO }
+	}
+
+	immediate = {
+		fromfromfrom = {
+			if = {
+				limit = { has_fleet_flag = GHCO_EO_fleet }
+				root = {
+					country_event = { id = GHCO_basic.153 days = 2 }
+				}
+			}
+			if = {
+				limit = { has_fleet_flag = GHCO_KOK_fleet }
+				root = {
+					country_event = { id = GHCO_basic.154 days = 2 }
+				}
+			}
+			if = {
+				limit = { has_fleet_flag = GHCO_singularity_fleet }
+				root = {
+					country_event = { id = GHCO_basic.155 }
+				}
+			}
+		}
+	}
+}
+#摧毁了GHCO的蜜罐舰队
+country_event = {
+	id = GHCO_basic.153
+	title = "GHCO_basic.153.title"
+	desc = "GHCO_basic.153.desc"
+	is_triggered_only = yes	# GHCO_basic.152
+
+	diplomatic = yes
+	location = root.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO_EO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		any_country = { is_same_value = event_target:GHCO_EO }
+	}
+
+	option = {
+		name = "GHCO_basic.153.name"
+		event_target:GHCO_EO = {
+			add_trust = {
+				who = root 
+				amount = -25
+			}
+		}
+	}
+
+	immediate = {
+		#判断GHCO是否灭亡
+		event_target:GHCO_system = {
+			every_fleet_in_system = {
+				limit = {
+					exists = owner
+					owner = { is_same_value = event_target:GHCO }
+				}
+				set_fleet_flag = if_GHCO_destroyed
+			}
+		}
+		if = {
+			limit = {
+				not = {
+					event_target:GHCO_system = {
+						any_fleet_in_system = {
+							has_fleet_flag = if_GHCO_destroyed
+						}
+					}
+				}
+			}
+			save_event_target_as = GHCO_destroyer		# this，攻击舰队的所有者
+			country_event = { id = GHCO_basic.157 days = 10 }
+		}
+		event_target:GHCO_system = {
+			every_fleet_in_system = {
+				limit = {
+					has_fleet_flag = if_GHCO_destroyed
+				}
+				remove_fleet_flag = if_GHCO_destroyed
+			}
+		}
+	}
+}
+#摧毁了GHCO的知管舰队
+country_event = {
+	id = GHCO_basic.154
+	title = "GHCO_basic.154.title"
+	desc = "GHCO_basic.154.desc"
+	is_triggered_only = yes	# GHCO_basic.152
+
+	diplomatic = yes
+	location = root.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO_KOK
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		any_country = { is_same_value = event_target:GHCO_KOK }
+	}
+
+	option = {
+		name = "GHCO_basic.154.name"
+		event_target:GHCO_KOK = {
+			add_trust = {
+				who = root 
+				amount = -25
+			}
+		}
+	}
+
+	immediate = {
+		#判断GHCO是否灭亡
+		event_target:GHCO_system = {
+			every_fleet_in_system = {
+				limit = {
+					exists = owner
+					owner = { is_same_value = event_target:GHCO }
+				}
+				set_fleet_flag = if_GHCO_destroyed
+			}
+		}
+		if = {
+			limit = {
+				not = {
+					event_target:GHCO_system = {
+						any_fleet_in_system = {
+							has_fleet_flag = if_GHCO_destroyed
+						}
+					}
+				}
+			}
+			save_event_target_as = GHCO_destroyer		# this，攻击舰队的所有者
+			country_event = { id = GHCO_basic.157 days = 10 }
+		}
+		event_target:GHCO_system = {
+			every_fleet_in_system = {
+				limit = {
+					has_fleet_flag = if_GHCO_destroyed
+				}
+				remove_fleet_flag = if_GHCO_destroyed
+			}
+		}
+	}
+}
+#摧毁了GHCO的奇点核心组
+country_event = {
+	id = GHCO_basic.155
+	title = "GHCO_basic.155.title"
+	desc = "GHCO_basic.155.desc"
+	is_triggered_only = yes	# GHCO_basic.152
+
+	diplomatic = yes
+	location = root.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO_KOK
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	option = {
+		name = "GHCO_basic.154.name"
+		event_target:GHCO = {
+			add_trust = {
+				who = root 
+				amount = -50
+			}
+		}
+		event_target:GHCO = {
+			country_event = { id = GHCO_basic.156 days = 3600 }
+		}
+	}
+
+	immediate = {
+		#判断GHCO是否灭亡
+		event_target:GHCO_system = {
+			every_fleet_in_system = {
+				limit = {
+					exists = owner
+					owner = { is_same_value = event_target:GHCO }
+				}
+				set_fleet_flag = if_GHCO_destroyed
+			}
+		}
+		if = {
+			limit = {
+				not = {
+					event_target:GHCO_system = {
+						any_fleet_in_system = {
+							has_fleet_flag = if_GHCO_destroyed
+						}
+					}
+				}
+			}
+			save_event_target_as = GHCO_destroyer		# this，攻击舰队的所有者
+			country_event = { id = GHCO_basic.157 days = 10 }
+		}
+		event_target:GHCO_system = {
+			every_fleet_in_system = {
+				limit = {
+					has_fleet_flag = if_GHCO_destroyed
+				}
+				remove_fleet_flag = if_GHCO_destroyed
+			}
+		}
+	}
+}
+
+#GHCO重建奇点核心组
+country_event = {
+	id = GHCO_basic.156
+	title = "GHCO_basic.156.title"
+	desc = "GHCO_basic.156.desc"
+	picture = GFX_evt_black_hole
+	is_triggered_only = yes	# GHCO_basic.155
+
+	trigger = { exists = event_target:GHCO }
+
+	option = {
+		name = "GHCO_basic.156.option"
+	}
+
+	immediate = {
+		event_target:GHCO_main_system_star = {
+			create_fleet = {
+				name = "NAME_GHCO_platforms"
+				settings = { spawn_debris = no }
+				effect = {
+					set_location = {
+						target = event_target:GHCO_main_system_star
+						distance = 0		#别动，故意的，在黑洞里
+						angle = random
+					}
+					set_owner = event_target:GHCO
+					# 防御平台
+					while = {
+						count = 20
+						create_ship = {
+							name = random
+							design = "NAME_Watcher"
+							graphical_culture = "fallen_empire_03"
+							effect = {
+								add_modifier = { modifier = GHCO_no_ship_speed_modifier }	#让它们不从黑洞里出来
+							}
+						}
+						create_ship = {
+							name = random
+							design = "NAME_Cloaker"
+							graphical_culture = "fallen_empire_02"
+							effect = {
+								add_modifier = { modifier = GHCO_no_ship_speed_modifier }	#让它们不从黑洞里出来
+							}
+						}
+					}
+					save_global_event_target_as = GHCO_platforms_fleet
+					add_modifier = { modifier = GHCO_no_ship_speed_modifier }	#让它们不从黑洞里出来
+				}
+
+			}
+		}
+	}
+}
+
+#GHCO灭亡（灭亡国）
+country_event = {
+	id = GHCO_basic.157
+	title = "GHCO_basic.157.title"
+	desc = "GHCO_basic.157.desc"
+	picture = GFX_evt_large_explosion
+	is_triggered_only = yes	# GHCO_basic.153/154/155
+
+	option = { name = "GHCO_basic.157.a" }
+	option = { name = "GHCO_basic.157.b" }
+
+	after = {
+		if = {
+			limit = {
+				exists = event_target:GHCO_EO
+			}
+			country_event = { id = GHCO_basic.159 days = 5 }
+		}
+		if = {
+			limit = {
+				exists = event_target:GHCO_KOK
+			}
+			country_event = { id = GHCO_basic.160 days = 10 }
+		}
+		every_country = {
+			limit = { not = { is_homicidal = yes } }
+			country_event = { id = GHCO_basic.161 }
+			add_trust = {
+				who = event_target:GHCO_destroyer
+				amount = -15
+			}
+		}
+	}
+}
+
+#GHCO灭亡（蜜罐谴责通信）
+country_event = {
+	id = GHCO_basic.159
+	title = "GHCO_basic.159.title"
+	desc = "GHCO_basic.159.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_EO
+		portrait = event_target:GHCO_EO
+	}
+
+	is_triggered_only = yes	# GHCO_basic.158
+
+	option = { name = "GHCO_basic.159.a" }
+	option = { name = "GHCO_basic.159.b" }
+
+	after = {
+		event_target:GHCO_EO = {
+			add_trust = {
+				who = root
+				amount = -25
+			}
+		}
+	}
+} 
+
+#GHCO灭亡（知管谴责通信）
+country_event = {
+	id = GHCO_basic.160
+	title = "GHCO_basic.160.title"
+	desc = "GHCO_basic.160.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_KOK
+		portrait = event_target:GHCO_KOK
+	}
+
+	is_triggered_only = yes	# GHCO_basic.158
+
+	option = { name = "GHCO_basic.160.a" }
+	option = { name = "GHCO_basic.160.b" }
+
+	after = {
+		event_target:GHCO_KOK = {
+			add_trust = {
+				who = root
+				amount = -25
+			}
+		}
+	}
+}
+
+#GHCO灭亡（他国视角）
+country_event = {
+	id = GHCO_basic.161
+	title = "GHCO_basic.161.title"
+	desc = "GHCO_basic.161.desc"
+	picture = GFX_evt_large_explosion
+
+	is_triggered_only = yes	# GHCO_basic.158
+
+	option = { name = "GHCO_basic.161.a" }
+	option = { name = "GHCO_basic.161.b" }
+	option = { name = "GHCO_basic.161.c" }
+
+}

@@ -1,0 +1,394 @@
+#炼金理想城
+tc_decision_alchemical_arcology_project = {
+	owned_planets_only = yes
+	icon = decision_arcology_project
+
+	enactment_time = 3600
+	resources = {
+		category = decisions
+		cost = {
+			influence = 200
+			tc_thaumium = 10000
+		}
+	}
+
+	potential = {
+		NOR = {
+			is_planet_class = pc_city
+			is_planet_class = pc_relic
+			has_modifier = resort_colony
+			has_modifier = penal_colony
+			has_modifier = slave_colony
+			has_modifier = pm_wenkwort_custodian
+		}
+		is_artificial = no
+		exists = owner
+		owner = { 
+			has_ascension_perk = ap_arcology_project
+			has_technology = tc_tech_alchemical_t2
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = decision_arcology_project_requirements
+			free_district_slots < 1
+			num_districts = { type = district_farming value < 1 }
+			num_districts = { type = district_mining value < 1 }
+			num_districts = { type = district_generator value < 1 }
+		}
+		num_uncleared_blockers < 1
+	}
+
+	effect = {
+		custom_tooltip = tc_decision_alchemical_arcology_project_effects
+		hidden_effect = {
+			clear_deposits = yes
+			change_pc = pc_tc_alchemical_planet
+			while = {
+				count = 3
+				add_district = tc_city_arcology_district
+				add_district = tc_alchemical_arcology_district
+				add_district = tc_essence_arcology_district
+			}
+			owner = {
+				country_event = { id = distar.201 } # port for living planet distar.197, triggers in event
+			}
+			planet_event = { id = tc_planet.100 }
+			if = {
+				limit = {
+					OR = {
+						is_active_resolution = "resolution_ecology_environmental_control_board"
+						is_active_resolution = "resolution_ecology_paradise_initiative"
+					}
+				}
+				owner = {
+					set_timed_country_flag = { flag = resolution_breached_terraformed days = 3600 }
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#炼金理想城-遗迹世界
+tc_decision_alchemical_arcology_project_relic = {
+	owned_planets_only = yes
+	icon = decision_arcology_project
+
+	enactment_time = 3600
+	resources = {
+		category = decisions
+		cost = {
+			influence = 200
+			tc_thaumium = 10000
+		}
+	}
+
+	potential = {
+		is_planet_class = pc_relic
+		is_artificial = no
+		exists = owner
+		owner = { is_regular_empire = yes }
+	}
+
+	allow = {
+		num_uncleared_blockers < 1
+		owner = { 
+			has_technology = tech_housing_2 
+			has_technology = tc_tech_alchemical_t2
+		}
+	}
+
+	effect = {
+		custom_tooltip = tc_decision_alchemical_arcology_project_effects
+		hidden_effect = {
+			clear_deposits = yes
+			change_pc = pc_tc_alchemical_planet
+			add_deposit = d_former_relic_world
+			while = {
+				count = 3
+				add_district = tc_city_arcology_district
+				add_district = tc_alchemical_arcology_district
+				add_district = tc_essence_arcology_district
+			}
+			planet_event = { id =  tc_planet.100 }
+			while = {
+				count = 4
+				solar_system = {
+					random_system_ambient_object = {
+						limit = { has_ambient_object_flag = relic_world_debris }
+						destroy_ambient_object = this
+					}
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						is_active_resolution = "resolution_ecology_environmental_control_board"
+						is_active_resolution = "resolution_ecology_paradise_initiative"
+					}
+				}
+				owner = {
+					set_timed_country_flag = { flag = resolution_breached_terraformed days = 3600 }
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#高级世界
+tc_decision_advanced_alchemical_arcology_project = {
+	owned_planets_only = yes
+	icon = tc_decision_advanced_alchemical
+
+	enactment_time = 1800
+	resources = {
+		category = decisions
+		cost = {
+			tc_void_metal = 10000
+		}
+	}
+
+	potential = {
+		is_planet_class = pc_tc_alchemical_planet
+		exists = owner
+		owner = { 
+			has_technology = tc_tech_advanced_alchemical
+		}
+	}
+
+	allow = {
+		is_planet_class = pc_tc_alchemical_planet
+		exists = owner
+		owner = { 
+			has_technology = tc_tech_advanced_alchemical
+		}
+	}
+
+	effect = {
+		custom_tooltip = tc_decision_advanced_alchemical_project_effects
+		hidden_effect = {
+			change_pc = pc_tc_advanced_alchemical_planet
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#炼金环形世界
+tc_decision_alchemical_ringworld_project = {
+	owned_planets_only = yes
+	icon = decision_arcology_project
+
+	enactment_time = 1800
+	resources = {
+		category = decisions
+		cost = {
+			influence = 200
+			tc_thaumium = 10000
+		}
+	}
+
+	potential = {
+		OR = {
+			AND = {
+				is_ringworld = yes
+				NOT = { is_planet_class = pc_tc_alchemical_ringworld_habitable }
+				NOT = { is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable }
+			}
+			is_planet_class = pc_ringworld_habitable
+		}
+		exists = owner
+		owner = { 
+			has_technology = tech_housing_2
+			has_technology = tc_tech_alchemical_t2
+		}
+	}
+
+	allow = {
+		num_uncleared_blockers < 1
+		owner = { 
+			has_technology = tech_housing_2 
+			has_technology = tc_tech_alchemical_t2
+		}
+	}
+
+	effect = {
+		custom_tooltip = tc_decision_alchemical_ringworld_project_effects
+		hidden_effect = {
+			change_pc = pc_tc_alchemical_ringworld_habitable
+			while = {
+				count = 1
+				add_district = tc_rw_alchemical_district
+				add_district = tc_rw_essence_district
+				add_district = tc_rw_crystallizer_district
+			}
+			planet_event = { id =  tc_planet.101 }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#高级世界
+tc_decision_advanced_alchemical_ringworld_project = {
+	owned_planets_only = yes
+	icon = tc_decision_advanced_alchemical
+
+	enactment_time = 1800
+	resources = {
+		category = decisions
+		cost = {
+			tc_void_metal = 10000
+		}
+	}
+
+	potential = {
+		is_planet_class = pc_tc_alchemical_ringworld_habitable
+		exists = owner
+		owner = { 
+			has_technology = tc_tech_advanced_alchemical
+		}
+	}
+
+	allow = {
+		is_planet_class = pc_tc_alchemical_ringworld_habitable
+		exists = owner
+		owner = { 
+			has_technology = tc_tech_advanced_alchemical
+		}
+	}
+
+	effect = {
+		custom_tooltip = tc_decision_advanced_alchemical_project_effects
+		hidden_effect = {
+			change_pc = pc_tc_advanced_alchemical_ringworld_habitable
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#天域花
+tc_planting_ethereal_bloom = {
+	owned_planets_only = yes
+	icon = tc_decision_ethereal_bloom
+
+	enactment_time = 0
+	resources = {
+		category = decisions
+		cost = {
+			tc_element_shard = 500
+
+		}
+	}
+
+	potential = {
+		has_deposit = tc_taint_land
+		NOT = { has_deposit = tc_ethereal_bloom }
+		exists = owner
+		owner = {
+			has_technology = tc_tech_ethereal_bloom
+		}
+	}
+
+	allow = {
+		has_deposit = tc_taint_land
+		NOT = { has_deposit = tc_ethereal_bloom }
+		exists = owner
+		owner = {
+			has_technology = tc_tech_ethereal_bloom
+		}
+	}
+
+	effect = {
+		add_deposit = tc_ethereal_bloom
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#扩展口袋维度
+tc_expand_pocket_dimensions = {
+	owned_planets_only = yes
+	icon = tc_expand_pocket_dimensions
+
+	enactment_time = 0
+	resources = {
+		category = decisions
+		cost = {
+			tc_essences = 10000
+		}
+	}
+	
+	potential = {
+		is_planet_class = pc_tc_pocket_planar
+	}
+
+	allow = {
+		
+	}
+
+	effect = {
+		custom_tooltip = "tc_expand_pocket_dimensions_effect_tip"
+		hidden_effect = {
+			tc_pocket_planar_deposits_spawn = yes
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#刷新行星护盾效果
+tc_rune_planet_shield_change = {
+	owned_planets_only = yes
+	icon = tc_expand_pocket_dimensions
+
+	enactment_time = 0
+	resources = {
+		category = decisions
+		cost = { }
+	}
+	
+	potential = {
+		OR = {
+			has_building = building_tc_rune_shield_t1
+			has_building = building_tc_rune_shield_t2
+			has_building = building_tc_rune_shield_t3
+		}
+		is_artificial = no
+	}
+
+	allow = {
+		NOT = { has_orbital_bombardment = yes }
+	}
+
+	effect = {
+		custom_tooltip = "tc_rune_planet_shield_change_tip"
+		hidden_effect = {
+			tc_rune_planet_shield_change_effect = yes
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}

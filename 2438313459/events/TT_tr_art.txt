@@ -1,0 +1,64 @@
+namespace = TT_tr_art
+
+#进入战争状态war
+country_event = {
+	id = TT_tr_art.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		root = { has_tradition = tr_tt_art_4 }
+	}
+	immediate = {
+		from = {
+			root = {
+				add_modifier = { modifier = mod_tr_tt_art_war days = -1 }
+				remove_modifier = mod_tr_tt_art_peace
+			}
+		}
+	}
+}
+#进入和平状态peace
+country_event = {
+	id = TT_tr_art.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {}
+	immediate = {
+		root = {
+			if = {
+				limit = {
+					has_tradition = tr_tt_art_5
+					has_modifier = mod_tr_tt_art_war
+				}
+				add_modifier = { modifier = mod_tr_tt_art_peace days = -1 }
+			}
+			country_event = { id = TT_tr_art.3 days = 1 }
+		}
+		from = {
+			if = {
+				limit = {
+					has_tradition = tr_tt_art_5
+					has_modifier = mod_tr_tt_art_war
+				}
+				add_modifier = { modifier = mod_tr_tt_art_peace days = -1 }
+			}
+			country_event = { id = TT_tr_art.3 days = 1 }
+		}
+	}
+}
+country_event = {
+	id = TT_tr_art.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				is_at_war = no
+				has_modifier = mod_tr_tt_art_war
+			}
+			remove_modifier = mod_tr_tt_art_war
+		}
+	}
+}

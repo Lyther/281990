@@ -1,0 +1,2501 @@
+###########################################
+#     		 ZoFE Menu Events
+#		  	     By Kolyn
+###########################################
+
+namespace = zofe_menu
+
+#Game Start Trigger
+
+country_event = {
+	id = zofe_menu.0
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_ai = no
+		NOT = { has_global_flag = zofe_menu_fired }
+	}
+	
+	immediate = {
+		set_global_flag = zofe_menu_fired
+		set_country_flag = zofe_host_country
+		country_event = { id = zofe_menu.1 }
+	}
+}
+
+# Game Start Message
+country_event = {
+	id = zofe_menu.1
+	title = zofe_menu.1.name
+	desc = zofe_menu.1.desc
+	picture = GFX_evt_fallen_empire
+	show_sound = event_mystic_reveal
+	location = from
+	
+	is_triggered_only = yes
+	
+	#Generate all recommended settings based on either vanilla or sandbox mode or zofe origins. Sandbox mode is determined by the installation of Sandbox overrides submod and or other compatibility considerations.
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = zofe_settings_generated }
+			}
+	
+			#Generate Game Modes First
+			
+			#If sandbox overrides submod (or other sandbox mode submods) not installed, it is automatically assumed one would play on vanilla mode.
+			if = {
+				limit = {
+					has_zofe = yes
+					NOT = { has_zofe_sandbox = yes }
+					
+					#Add any mod flags here that simply need sandbox mode to enjoy.
+	#				NOR = {
+	#				
+	#				}
+				}
+				set_global_flag = zofe_vanilla_mode
+			}
+			#If sandbox overrides submod (or other sandbox mode submods) are installed, it is automatically assumed one would play on sandbox mode.
+			if = {
+				limit = {
+					has_zofe = yes
+					has_zofe_sandbox = yes
+					
+					#Add any mod flags here that is incompatible or not recommended with sandbox mode.
+	#				NOR = {
+	#				
+	#				}
+				}
+				set_global_flag = zofe_sandbox_mode
+			}
+			
+			#People are automatically assumed to enable all ZoFE base mod content.
+			
+			set_global_flag = zofe_automated_industries_enabled
+			set_global_flag = zofe_societal_ascendance_enabled
+			set_global_flag = zofe_question_of_style_enabled
+			set_global_flag = zofe_masters_of_warfare_enabled
+			set_global_flag = zofe_ambitions_of_power_enabled
+			set_global_flag = zofe_engineering_perfection_enabled
+			
+			#Generate recommended game settings based on modes, vanilla game settings, difficulty, origins.
+
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+				}
+				set_global_flag = ai_ascension_enabled_3
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+				}
+				set_global_flag = ai_ascension_enabled
+			}
+			
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+				}
+				set_global_flag = galactic_ascendancy_ap_enabled_4
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+				}
+				set_global_flag = galactic_ascendancy_ap_enabled_5
+			}
+
+			set_global_flag = subject_ascension_disabled	#Default is not allowed.
+			
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+				}
+				set_global_flag = ascended_empire_decadence_disabled
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+				}
+				set_global_flag = ascended_empire_decadence_enabled_2
+			}
+
+			set_global_flag = zofe_return_of_the_original_empire_enabled	#Default is Enabled.
+			
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+				}
+				set_global_flag = ascended_empire_min_navy_disabled
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+				}
+				set_global_flag = ascended_empire_min_navy_enabled_2
+			}
+			
+			#Generate difficulty settings based on game modes, grand admiral difficulty, origins, and other mods.
+			
+			#Leviathans
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+					#Add other conditions to make vanilla difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = leviathans_vanilla_difficulty
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+					#Add other conditions to make normal difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = leviathans_normal_difficulty
+			}
+			if = {
+				limit = {
+					is_difficulty = 6
+					#Add other conditions to make hard difficulty undesirable
+					NOR = {
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = leviathans_hard_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_ringworld_empire
+					}
+					#Add other conditions to make veteran difficulty undesirable
+	#				NOR = {
+	#					has_origin = origin_original_people
+	#				}
+				}
+				set_global_flag = leviathans_veteran_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_original_people
+					}
+					#Add other conditions to make nightmare difficulty undesirable
+	#				NOR = {
+	#					
+	#				}
+				}
+				set_global_flag = leviathans_nightmare_difficulty
+			}
+		
+			
+			#Marauders
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+					#Add other conditions to make vanilla difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = marauders_vanilla_difficulty
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+					#Add other conditions to make normal difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = marauders_normal_difficulty
+			}
+			if = {
+				limit = {
+					is_difficulty = 6
+					#Add other conditions to make hard difficulty undesirable
+					NOR = {
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = marauders_hard_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_ringworld_empire
+					}
+					#Add other conditions to make veteran difficulty undesirable
+					NOR = {
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = marauders_veteran_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_original_people
+					}
+					#Add other conditions to make nightmare difficulty undesirable
+#					NOR = {
+#						
+#					}
+				}
+				set_global_flag = marauders_nightmare_difficulty
+			}
+			
+			#Crises
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+					#Add other conditions to make vanilla difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = crises_vanilla_difficulty
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+					#Add other conditions to make normal difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = crises_normal_difficulty
+			}
+			
+			if = {
+				limit = {
+					is_difficulty = 6
+					#Add other conditions to make hard difficulty undesirable
+					NOR = {
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = crises_hard_difficulty
+			}
+			
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_ringworld_empire
+					}
+					#Add other conditions to make veteran difficulty undesirable
+	#				NOR = {
+	#					has_origin = origin_original_people
+	#				}
+				}
+				set_global_flag = crises_veteran_difficulty
+			}
+			
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_original_people
+					}
+					#Add other conditions to make nightmare difficulty undesirable
+	#				NOR = {
+	#					
+	#				}
+				}
+				set_global_flag = crises_nightmare_difficulty
+			}
+			
+			#AI Ascended Empire
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+					#Add other conditions to make vanilla difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = ai_ascended_empire_vanilla_difficulty
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+					#Add other conditions to make normal difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = ai_ascended_empire_normal_difficulty
+			}
+			if = {
+				limit = {
+					is_difficulty = 6
+					#Add other conditions to make hard difficulty undesirable
+					NOR = {
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = ai_ascended_empire_hard_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_ringworld_empire
+					}
+					#Add other conditions to make veteran difficulty undesirable
+					NOR = {
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = ai_ascended_empire_veteran_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_original_people
+					}
+					#Add other conditions to make nightmare difficulty undesirable
+#					NOR = {
+#						
+#					}
+				}
+				set_global_flag = ai_ascended_empire_nightmare_difficulty
+			}
+
+			
+			#Fallen Empire
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+					#Add other conditions to make vanilla difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = fallen_empire_vanilla_difficulty
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+					#Add other conditions to make normal difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = fallen_empire_normal_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+					}
+					#Add other conditions to make hard difficulty undesirable
+					NOR = {
+						has_origin = origin_original_people
+					}
+				}
+				set_global_flag = fallen_empire_hard_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_original_people
+					}
+					#Add other conditions to make veteran difficulty undesirable
+	#				NOR = {
+	#					
+	#				}
+				}
+				set_global_flag = fallen_empire_veteran_difficulty
+			}
+		
+			
+			#Original Empire
+			
+			if = {
+				limit = {
+					has_global_flag = zofe_vanilla_mode
+					#Add other conditions to make vanilla difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						is_crises_allowed = no
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+						has_global_flag = acot_full_activated
+						has_global_flag = has_aot_mod
+						has_global_flag = has_sots_mod
+					}
+				}
+				set_global_flag = original_empire_vanilla_difficulty
+			}
+			if = {
+				limit = {
+					has_global_flag = zofe_sandbox_mode
+					#Add other conditions to make normal difficulty undesirable
+					NOR = {
+						is_difficulty = 6
+						is_crises_allowed = no
+						has_origin = origin_ringworld_empire
+						has_origin = origin_original_people
+						has_global_flag = acot_full_activated
+						has_global_flag = has_aot_mod
+						has_global_flag = has_sots_mod
+					}
+				}
+				set_global_flag = original_empire_normal_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						is_difficulty = 6
+						has_origin = origin_ringworld_empire
+					}
+					#Add other conditions to make hard difficulty undesirable
+					NOR = {
+						is_crises_allowed = no
+						has_origin = origin_original_people
+						has_global_flag = acot_full_activated
+						has_global_flag = has_aot_mod
+						has_global_flag = has_sots_mod
+					}
+				}
+				set_global_flag = original_empire_hard_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_origin = origin_original_people
+					}
+					#Add other conditions to make veteran difficulty undesirable
+					NOR = {
+						is_crises_allowed = no
+						has_global_flag = acot_full_activated
+						has_global_flag = has_aot_mod
+						has_global_flag = has_sots_mod
+					}
+				}
+				set_global_flag = original_empire_veteran_difficulty
+			}
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = acot_full_activated
+						has_global_flag = has_aot_mod
+						has_global_flag = has_sots_mod
+					}
+					#Add other conditions to make nightmare difficulty undesirable
+					NOR = {
+						is_crises_allowed = no
+					}
+				}
+				set_global_flag = original_empire_nightmare_difficulty
+			}
+
+			if = {
+				limit = {
+					is_crises_allowed = no
+					#Add other conditions to make hard difficulty undesirable
+#					NOR = {
+#						
+#					}
+				}
+				set_global_flag = zofe_return_of_the_original_empire_disabled
+			}
+			set_global_flag = zofe_settings_generated
+		}
+		
+		
+		#Generate Event Chains
+		
+		if = {
+			limit = { has_origin = origin_ringworld_empire }
+			begin_event_chain = {
+				event_chain = "ringworld_empire_chain"
+				target = ROOT
+			}
+		}
+		if = {
+			limit = { has_origin = origin_original_people }
+			begin_event_chain = {
+				event_chain = "original_people_chain"
+				target = this
+			}
+		}
+	}
+	
+	#Triggers Mod Menu
+	option = {
+		name = zofe_menu.1.a
+		
+		custom_tooltip = zofe_game_start_1_tooltip
+	
+		hidden_effect = {
+			country_event = { id = zofe_menu.100 days = 0 }
+		}
+	}
+	
+	#Proceed with game based on generated recommended settings.
+	option = {
+		name = zofe_menu.1.b
+	
+		custom_tooltip = zofe_game_start_2_tooltip
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = zofe_settings_confirmed }
+				}
+				set_global_flag = zofe_settings_confirmed
+			}
+		}
+	}
+}
+
+
+# ZoFE Configuration Menu
+country_event = {
+	id = zofe_menu.100
+	title = zofe_menu.100.name
+
+	picture = GFX_evt_fallen_empire_awakes
+	
+	desc = {
+		trigger = { 
+			NOR = {
+				has_authority = "auth_hive_mind"
+				has_authority = "auth_machine_intelligence"
+			}
+		}
+		text = "zofe_menu.100.desc"
+	}
+	desc = { 
+		trigger = {
+			has_authority = "auth_hive_mind"
+		}
+		text = "zofe_menu.100.desc.hive"
+	}
+	desc = { 
+		trigger = { 
+			has_authority = "auth_machine_intelligence"
+		}
+		text = "zofe_menu.100.desc.machine"
+	}
+
+	is_triggered_only = yes
+
+	#ZoFE Vanilla Mode
+	option = {
+		name = "zofe_menu.100.vanilla"
+		trigger = { has_global_flag = zofe_vanilla_mode }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				has_global_flag = zofe_sandbox_activated		#Foolproof
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		if = {
+			limit = { has_global_flag = zofe_sandbox_activated }
+			custom_tooltip = zofe_vanilla_mode_tooltip
+		}
+		if = {
+			limit = { NOT = { has_global_flag = zofe_sandbox_activated } }
+			custom_tooltip = zofe_vanilla_mode_no_sandbox_tooltip
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_vanilla_mode }
+				remove_global_flag = zofe_vanilla_mode
+			}
+			set_global_flag = zofe_sandbox_mode
+			country_event = { id = zofe_menu.100 days = 0 }
+		}
+	}
+	#ZoFE Sandbox Mode
+	option = {
+		name = "zofe_menu.100.sandbox"
+		trigger = { has_global_flag = zofe_sandbox_mode }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_sandbox_mode_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_sandbox_mode }
+				remove_global_flag = zofe_sandbox_mode
+			}
+			set_global_flag = zofe_vanilla_mode
+			country_event = { id = zofe_menu.100 days = 0 }
+		}
+	}
+	#Content Menu
+	option = {
+		name = "zofe_menu.100.content"
+		custom_tooltip = zofe_content_menu_tooltip
+		hidden_effect = {
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	#Game Settings
+	option = {
+		name = "zofe_menu.100.game"
+		custom_tooltip = zofe_game_settings_tooltip
+		hidden_effect = {
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	#Difficulty
+	option = {
+		name = "zofe_menu.100.difficulty"
+		custom_tooltip = zofe_difficulty_menu_tooltip
+		hidden_effect = {
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	#Presets for Developers + Patreons so they don't have to click more than twice. Custom Tooltips describe what the preset is designed for. Can make it during beta stage when other devs can test.
+	option = {
+		name = "zofe_menu.100.presets"
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				has_zofe_sandbox = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		if = {
+			limit = { has_global_flag = zofe_sandbox_activated }
+			custom_tooltip = zofe_presets_tooltip
+		}
+		if = {
+			limit = { NOT = { has_global_flag = zofe_sandbox_activated } }
+			custom_tooltip = zofe_no_sandbox_tooltip
+		}
+		hidden_effect = {
+			country_event = { id = zofe_menu.104 days = 0 }
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.100.exit"		
+		custom_tooltip = zofe_settings_confirmed_tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = zofe_settings_confirmed }
+				}
+				set_global_flag = zofe_settings_confirmed
+			}
+		}
+	}
+}
+
+# Content Menu
+country_event = {
+	id = zofe_menu.101
+	title = zofe_menu.101.name
+	desc = zofe_menu.101.desc
+	picture = GFX_evt_fallen_empire_awakes
+
+	is_triggered_only = yes
+
+	#Automated Industries
+	option = {
+		name = "zofe_menu.101.automated_industries.a"
+		trigger = { automated_industries = yes }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_automated_industries_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_automated_industries_enabled }
+				remove_global_flag = zofe_automated_industries_enabled
+			}
+			set_global_flag = zofe_automated_industries_disabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.101.automated_industries.b"
+		trigger = { has_global_flag = zofe_automated_industries_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_automated_industries_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_automated_industries_disabled }
+				remove_global_flag = zofe_automated_industries_disabled
+			}
+			set_global_flag = zofe_automated_industries_enabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	#Societal Ascendance
+	option = {
+		name = "zofe_menu.101.societal_ascendance.a"
+		trigger = { societal_ascendance = yes }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_societal_ascendance_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_societal_ascendance_enabled }
+				remove_global_flag = zofe_societal_ascendance_enabled
+			}
+			set_global_flag = zofe_societal_ascendance_disabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.101.societal_ascendance.b"
+		trigger = { has_global_flag = zofe_societal_ascendance_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_societal_ascendance_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_societal_ascendance_disabled }
+				remove_global_flag = zofe_societal_ascendance_disabled
+			}
+			set_global_flag = zofe_societal_ascendance_enabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	#A Question of Style
+	option = {
+		name = "zofe_menu.101.question_of_style.a"
+		trigger = { question_of_style = yes }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_question_of_style_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_question_of_style_enabled }
+				remove_global_flag = zofe_question_of_style_enabled
+			}
+			set_global_flag = zofe_question_of_style_disabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.101.question_of_style.b"
+		trigger = { has_global_flag = zofe_question_of_style_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_question_of_style_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_question_of_style_disabled }
+				remove_global_flag = zofe_question_of_style_disabled
+			}
+			set_global_flag = zofe_question_of_style_enabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	#Masters of Warfare
+	option = {
+		name = "zofe_menu.101.masters_of_warfare.a"
+		trigger = { masters_of_warfare = yes }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_masters_of_warfare_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_masters_of_warfare_enabled }
+				remove_global_flag = zofe_masters_of_warfare_enabled
+			}
+			set_global_flag = zofe_masters_of_warfare_disabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.101.masters_of_warfare.b"
+		trigger = { has_global_flag = zofe_masters_of_warfare_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_masters_of_warfare_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_masters_of_warfare_disabled }
+				remove_global_flag = zofe_masters_of_warfare_disabled
+			}
+			set_global_flag = zofe_masters_of_warfare_enabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	#Ambitions of Power
+	option = {
+		name = "zofe_menu.101.ambitions_of_power.a"
+		trigger = { ambitions_of_power = yes }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_ambitions_of_power_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_ambitions_of_power_enabled }
+				remove_global_flag = zofe_ambitions_of_power_enabled
+			}
+			set_global_flag = zofe_ambitions_of_power_disabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.101.ambitions_of_power.b"
+		trigger = { has_global_flag = zofe_ambitions_of_power_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_ambitions_of_power_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_ambitions_of_power_disabled }
+				remove_global_flag = zofe_ambitions_of_power_disabled
+			}
+			set_global_flag = zofe_ambitions_of_power_enabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	#Engineering Perfection
+	option = {
+		name = "zofe_menu.101.engineering_perfection.a"
+		trigger = { engineering_perfection = yes }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_engineering_perfection_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_engineering_perfection_enabled }
+				remove_global_flag = zofe_engineering_perfection_enabled
+			}
+			set_global_flag = zofe_engineering_perfection_disabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.101.engineering_perfection.b"
+		trigger = { has_global_flag = zofe_engineering_perfection_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = zofe_engineering_perfection_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_engineering_perfection_disabled }
+				remove_global_flag = zofe_engineering_perfection_disabled
+			}
+			set_global_flag = zofe_engineering_perfection_enabled
+			country_event = { id = zofe_menu.101 days = 0 }
+		}
+	}
+	
+	#Goes back to main menu
+	option = {
+		name = "zofe_menu.101.exit"
+		hidden_effect = {
+			country_event = { id = zofe_menu.100 days = 0 }
+		}
+	}
+}
+
+
+# Game Settings
+country_event = {
+	id = zofe_menu.102
+	title = zofe_menu.102.name
+	desc = zofe_menu.102.desc
+	picture = GFX_evt_fallen_empire_awakes
+
+	is_triggered_only = yes
+	
+	#Galactic Ascendancy Perk
+	option = {
+		name = "zofe_menu.102.galactic_ascendancy_ap.a"
+		trigger = { has_global_flag = galactic_ascendancy_ap_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = galactic_ascendancy_ap_disabled_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = galactic_ascendancy_ap_disabled }
+				remove_global_flag = galactic_ascendancy_ap_disabled
+			}
+			set_global_flag = galactic_ascendancy_ap_enabled_1
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.galactic_ascendancy_ap.b"
+		trigger = { has_global_flag = galactic_ascendancy_ap_enabled_1 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = galactic_ascendancy_ap_enabled_1_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = galactic_ascendancy_ap_enabled_1 }
+				remove_global_flag = galactic_ascendancy_ap_enabled_1
+			}
+			set_global_flag = galactic_ascendancy_ap_enabled_2
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.galactic_ascendancy_ap.c"
+		trigger = { has_global_flag = galactic_ascendancy_ap_enabled_2 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = galactic_ascendancy_ap_enabled_2_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = galactic_ascendancy_ap_enabled_2 }
+				remove_global_flag = galactic_ascendancy_ap_enabled_2
+			}
+			set_global_flag = galactic_ascendancy_ap_enabled_3
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.galactic_ascendancy_ap.d"
+		trigger = { has_global_flag = galactic_ascendancy_ap_enabled_3 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = galactic_ascendancy_ap_enabled_3_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = galactic_ascendancy_ap_enabled_3 }
+				remove_global_flag = galactic_ascendancy_ap_enabled_3
+			}
+			set_global_flag = galactic_ascendancy_ap_enabled_4
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.galactic_ascendancy_ap.e"
+		trigger = { has_global_flag = galactic_ascendancy_ap_enabled_4 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = galactic_ascendancy_ap_enabled_4_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = galactic_ascendancy_ap_enabled_4 }
+				remove_global_flag = galactic_ascendancy_ap_enabled_4
+			}
+			set_global_flag = galactic_ascendancy_ap_enabled_5
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.galactic_ascendancy_ap.f"
+		trigger = { has_global_flag = galactic_ascendancy_ap_enabled_5 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = galactic_ascendancy_ap_enabled_5_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = galactic_ascendancy_ap_enabled_5 }
+				remove_global_flag = galactic_ascendancy_ap_enabled_5
+			}
+			set_global_flag = galactic_ascendancy_ap_disabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	
+	#AI Ascension Toggle
+	option = {
+		name = "zofe_menu.102.ai_ascension.a"
+		trigger = { has_global_flag = ai_ascension_enabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascension_enabled_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascension_enabled }
+				remove_global_flag = ai_ascension_enabled
+			}
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_vanilla_difficulty }
+				remove_global_flag = ai_ascended_empire_vanilla_difficulty
+			}
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_normal_difficulty }
+				remove_global_flag = ai_ascended_empire_normal_difficulty
+			}
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_hard_difficulty }
+				remove_global_flag = ai_ascended_empire_hard_difficulty
+			}
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_veteran_difficulty }
+				remove_global_flag = ai_ascended_empire_veteran_difficulty
+			}
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_nightmare_difficulty }
+				remove_global_flag = ai_ascended_empire_nightmare_difficulty
+			}
+			set_global_flag = ai_ascension_disabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ai_ascension.b"
+		trigger = { has_global_flag = ai_ascension_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascension_disabled_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascension_disabled }
+				remove_global_flag = ai_ascension_disabled
+			}
+			set_global_flag = ai_ascended_empire_normal_difficulty
+			set_global_flag = ai_ascension_enabled_1
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ai_ascension.c"
+		trigger = { has_global_flag = ai_ascension_enabled_1 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascension_enabled_1_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascension_enabled_1 }
+				remove_global_flag = ai_ascension_enabled_1
+			}
+			set_global_flag = ai_ascension_enabled_2
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ai_ascension.d"
+		trigger = { has_global_flag = ai_ascension_enabled_2 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascension_enabled_2_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascension_enabled_2 }
+				remove_global_flag = ai_ascension_enabled_2
+			}
+			set_global_flag = ai_ascension_enabled_3
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ai_ascension.e"
+		trigger = { has_global_flag = ai_ascension_enabled_3 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascension_enabled_3_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascension_enabled_3 }
+				remove_global_flag = ai_ascension_enabled_3
+			}
+			set_global_flag = ai_ascension_enabled_4
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ai_ascension.f"
+		trigger = { has_global_flag = ai_ascension_enabled_4 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascension_enabled_4_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascension_enabled_4 }
+				remove_global_flag = ai_ascension_enabled_4
+			}
+			set_global_flag = ai_ascension_enabled_5
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ai_ascension.g"
+		trigger = { has_global_flag = ai_ascension_enabled_5 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascension_enabled_5_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascension_enabled_5 }
+				remove_global_flag = ai_ascension_enabled_5
+			}
+			set_global_flag = ai_ascension_enabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	
+	#Subjects Ascension
+	option = {
+		name = "zofe_menu.102.subject_ascension.a"
+		trigger = { subject_ascension = yes }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = subject_ascension_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = subject_ascension_enabled }
+				remove_global_flag = subject_ascension_enabled
+			}
+			set_global_flag = subject_ascension_disabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.subject_ascension.b"
+		trigger = { has_global_flag = subject_ascension_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = subject_ascension_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = subject_ascension_disabled }
+				remove_global_flag = subject_ascension_disabled
+			}
+			set_global_flag = subject_ascension_enabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	
+	#Ascended Empire Decadence
+	option = {
+		name = "zofe_menu.102.ascended_empire_decadence.a"
+		trigger = { has_global_flag = ascended_empire_decadence_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				has_global_flag = zofe_sandbox_activated		#Foolproof
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_decadence_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_decadence_disabled }
+				remove_global_flag = ascended_empire_decadence_disabled
+			}
+			set_global_flag = ascended_empire_decadence_enabled_1
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_decadence.b"
+		trigger = { has_global_flag = ascended_empire_decadence_enabled_1 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_decadence_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_decadence_enabled_1 }
+				remove_global_flag = ascended_empire_decadence_enabled_1
+			}
+			set_global_flag = ascended_empire_decadence_enabled_2
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_decadence.c"
+		trigger = { has_global_flag = ascended_empire_decadence_enabled_2 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_decadence_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_decadence_enabled_2 }
+				remove_global_flag = ascended_empire_decadence_enabled_2
+			}
+			set_global_flag = ascended_empire_decadence_enabled_3
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_decadence.d"
+		trigger = { has_global_flag = ascended_empire_decadence_enabled_3 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_decadence_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_decadence_enabled_3 }
+				remove_global_flag = ascended_empire_decadence_enabled_3
+			}
+			set_global_flag = ascended_empire_decadence_enabled_4
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_decadence.e"
+		trigger = { has_global_flag = ascended_empire_decadence_enabled_4 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_decadence_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_decadence_enabled_4 }
+				remove_global_flag = ascended_empire_decadence_enabled_4
+			}
+			set_global_flag = ascended_empire_decadence_enabled_5
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_decadence.f"
+		trigger = { has_global_flag = ascended_empire_decadence_enabled_5 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_decadence_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_decadence_enabled_5 }
+				remove_global_flag = ascended_empire_decadence_enabled_5
+			}
+			set_global_flag = ascended_empire_decadence_disabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	
+	#Original Empire Returns
+	option = {
+		name = "zofe_menu.102.return_of_the_original_empire.a"
+		trigger = { original_empire_returns = yes }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = original_empire_returns_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_return_of_the_original_empire_enabled }
+				remove_global_flag = zofe_return_of_the_original_empire_enabled
+			}
+			if = {
+				limit = { has_global_flag = original_empire_vanilla_difficulty }
+				remove_global_flag = original_empire_vanilla_difficulty
+			}
+			if = {
+				limit = { has_global_flag = original_empire_normal_difficulty }
+				remove_global_flag = original_empire_normal_difficulty
+			}
+			if = {
+				limit = { has_global_flag = original_empire_hard_difficulty }
+				remove_global_flag = original_empire_hard_difficulty
+			}
+			if = {
+				limit = { has_global_flag = original_empire_veteran_difficulty }
+				remove_global_flag = original_empire_veteran_difficulty
+			}
+			if = {
+				limit = { has_global_flag = original_empire_nightmare_difficulty }
+				remove_global_flag = original_empire_nightmare_difficulty
+			}
+			set_global_flag = zofe_return_of_the_original_empire_disabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.return_of_the_original_empire.b"
+		trigger = { has_global_flag = zofe_return_of_the_original_empire_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = original_empire_returns_not_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_return_of_the_original_empire_disabled }
+				remove_global_flag = zofe_return_of_the_original_empire_disabled
+			}
+			set_global_flag = original_empire_normal_difficulty
+			set_global_flag = zofe_return_of_the_original_empire_enabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	
+	#Ascended Empire Min. Navy
+	option = {
+		name = "zofe_menu.102.ascended_empire_min_navy.a"
+		trigger = { has_global_flag = ascended_empire_min_navy_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_min_navy_disabled_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_min_navy_disabled }
+				remove_global_flag = ascended_empire_min_navy_disabled
+			}
+			set_global_flag = ascended_empire_min_navy_enabled_1
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_min_navy.b"
+		trigger = { has_global_flag = ascended_empire_min_navy_enabled_1 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_min_navy_enabled_1_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_min_navy_enabled_1 }
+				remove_global_flag = ascended_empire_min_navy_enabled_1
+			}
+			set_global_flag = ascended_empire_min_navy_enabled_2
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_min_navy.c"
+		trigger = { has_global_flag = ascended_empire_min_navy_enabled_2 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_min_navy_enabled_2_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_min_navy_enabled_2 }
+				remove_global_flag = ascended_empire_min_navy_enabled_2
+			}
+			set_global_flag = ascended_empire_min_navy_enabled_3
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_min_navy.d"
+		trigger = { has_global_flag = ascended_empire_min_navy_enabled_3 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_min_navy_enabled_3_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_min_navy_enabled_3 }
+				remove_global_flag = ascended_empire_min_navy_enabled_3
+			}
+			set_global_flag = ascended_empire_min_navy_enabled_4
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_min_navy.e"
+		trigger = { has_global_flag = ascended_empire_min_navy_enabled_4 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_min_navy_enabled_4_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_min_navy_enabled_4 }
+				remove_global_flag = ascended_empire_min_navy_enabled_4
+			}
+			set_global_flag = ascended_empire_min_navy_enabled_5
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_min_navy.f"
+		trigger = { has_global_flag = ascended_empire_min_navy_enabled_5 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_min_navy_enabled_5_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_min_navy_enabled_5 }
+				remove_global_flag = ascended_empire_min_navy_enabled_5
+			}
+			set_global_flag = ascended_empire_min_navy_enabled_6
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.102.ascended_empire_min_navy.g"
+		trigger = { has_global_flag = ascended_empire_min_navy_enabled_6 }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ascended_empire_min_navy_enabled_6_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ascended_empire_min_navy_enabled_6 }
+				remove_global_flag = ascended_empire_min_navy_enabled_6
+			}
+			set_global_flag = ascended_empire_min_navy_disabled
+			country_event = { id = zofe_menu.102 days = 0 }
+		}
+	}
+	
+	#Goes back to main menu
+	option = {
+		name = "zofe_menu.101.exit"
+		hidden_effect = {
+			country_event = { id = zofe_menu.100 days = 0 }
+		}
+	}
+}
+
+# Difficulty
+country_event = {
+	id = zofe_menu.103
+	title = zofe_menu.103.name
+	desc = zofe_menu.103.desc
+	picture = GFX_evt_fallen_empire_awakes
+
+	is_triggered_only = yes
+	
+	#Leviathans
+	option = {
+		name = "zofe_menu.103.leviathans.a"
+		trigger = { has_global_flag = leviathans_vanilla_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = leviathans_vanilla_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = leviathans_vanilla_difficulty }
+				remove_global_flag = leviathans_vanilla_difficulty
+			}
+			set_global_flag = leviathans_normal_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.leviathans.b"
+		trigger = { has_global_flag = leviathans_normal_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = leviathans_normal_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = leviathans_normal_difficulty }
+				remove_global_flag = leviathans_normal_difficulty
+			}
+			set_global_flag = leviathans_hard_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.leviathans.c"
+		trigger = { has_global_flag = leviathans_hard_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = leviathans_hard_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = leviathans_hard_difficulty }
+				remove_global_flag = leviathans_hard_difficulty
+			}
+			set_global_flag = leviathans_veteran_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.leviathans.d"
+		trigger = { has_global_flag = leviathans_veteran_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = leviathans_veteran_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = leviathans_veteran_difficulty }
+				remove_global_flag = leviathans_veteran_difficulty
+			}
+			set_global_flag = leviathans_nightmare_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.leviathans.e"
+		trigger = { has_global_flag = leviathans_nightmare_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = leviathans_nightmare_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = leviathans_nightmare_difficulty }
+				remove_global_flag = leviathans_nightmare_difficulty
+			}
+			set_global_flag = leviathans_vanilla_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	
+	#Marauders
+	option = {
+		name = "zofe_menu.103.marauders.a"
+		trigger = { has_global_flag = marauders_vanilla_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = marauders_vanilla_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = marauders_vanilla_difficulty }
+				remove_global_flag = marauders_vanilla_difficulty
+			}
+			set_global_flag = marauders_normal_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.marauders.b"
+		trigger = { has_global_flag = marauders_normal_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = marauders_normal_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = marauders_normal_difficulty }
+				remove_global_flag = marauders_normal_difficulty
+			}
+			set_global_flag = marauders_hard_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.marauders.c"
+		trigger = { has_global_flag = marauders_hard_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = marauders_hard_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = marauders_hard_difficulty }
+				remove_global_flag = marauders_hard_difficulty
+			}
+			set_global_flag = marauders_veteran_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.marauders.d"
+		trigger = { has_global_flag = marauders_veteran_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = marauders_veteran_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = marauders_veteran_difficulty }
+				remove_global_flag = marauders_veteran_difficulty
+			}
+			set_global_flag = marauders_nightmare_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.marauders.e"
+		trigger = { has_global_flag = marauders_nightmare_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = marauders_nightmare_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = marauders_nightmare_difficulty }
+				remove_global_flag = marauders_nightmare_difficulty
+			}
+			set_global_flag = marauders_vanilla_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	
+	#Vanilla Crises
+	option = {
+		name = "zofe_menu.103.crises.a"
+		trigger = { has_global_flag = crises_vanilla_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = crises_vanilla_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = crises_vanilla_difficulty }
+				remove_global_flag = crises_vanilla_difficulty
+			}
+			set_global_flag = crises_normal_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.crises.b"
+		trigger = { has_global_flag = crises_normal_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = crises_normal_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = crises_normal_difficulty }
+				remove_global_flag = crises_normal_difficulty
+			}
+			set_global_flag = crises_hard_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.crises.c"
+		trigger = { has_global_flag = crises_hard_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = crises_hard_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = crises_hard_difficulty }
+				remove_global_flag = crises_hard_difficulty
+			}
+			set_global_flag = crises_veteran_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.crises.d"
+		trigger = { has_global_flag = crises_veteran_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = crises_veteran_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = crises_veteran_difficulty }
+				remove_global_flag = crises_veteran_difficulty
+			}
+			set_global_flag = crises_nightmare_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.crises.e"
+		trigger = { has_global_flag = crises_nightmare_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = crises_nightmare_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = crises_nightmare_difficulty }
+				remove_global_flag = crises_nightmare_difficulty
+			}
+			set_global_flag = crises_vanilla_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	
+	#AI Ascended Empire
+	option = {
+		name = "zofe_menu.103.ai_ascended_empire.a"
+		trigger = { 
+			ai_ascension_possible = yes
+			has_global_flag = ai_ascended_empire_vanilla_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascended_empire_vanilla_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_vanilla_difficulty }
+				remove_global_flag = ai_ascended_empire_vanilla_difficulty
+			}
+			set_global_flag = ai_ascended_empire_normal_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.ai_ascended_empire.b"
+		trigger = { 
+			ai_ascension_possible = yes
+			has_global_flag = ai_ascended_empire_normal_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascended_empire_normal_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_normal_difficulty }
+				remove_global_flag = ai_ascended_empire_normal_difficulty
+			}
+			set_global_flag = ai_ascended_empire_hard_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.ai_ascended_empire.c"
+		trigger = { 
+			ai_ascension_possible = yes
+			has_global_flag = ai_ascended_empire_hard_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascended_empire_hard_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_hard_difficulty }
+				remove_global_flag = ai_ascended_empire_hard_difficulty
+			}
+			set_global_flag = ai_ascended_empire_veteran_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.ai_ascended_empire.d"
+		trigger = { 
+			ai_ascension_possible = yes
+			has_global_flag = ai_ascended_empire_veteran_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascended_empire_veteran_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_veteran_difficulty }
+				remove_global_flag = ai_ascended_empire_veteran_difficulty
+			}
+			set_global_flag = ai_ascended_empire_nightmare_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.ai_ascended_empire.e"
+		trigger = { 
+			ai_ascension_possible = yes
+			has_global_flag = ai_ascended_empire_nightmare_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = ai_ascended_empire_nightmare_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = ai_ascended_empire_nightmare_difficulty }
+				remove_global_flag = ai_ascended_empire_nightmare_difficulty
+			}
+			set_global_flag = ai_ascended_empire_vanilla_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.ai_ascended_empire.f"
+		trigger = { has_global_flag = ai_ascension_disabled }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+				NOT = { has_global_flag = ai_ascension_disabled }
+			}
+		}
+		custom_tooltip = ai_ascension_disabled_tooltip
+	}
+	
+	#Fallen Empire
+	option = {
+		name = "zofe_menu.103.fallen_empire.a"
+		trigger = { has_global_flag = fallen_empire_vanilla_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = fallen_empire_vanilla_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = fallen_empire_vanilla_difficulty }
+				remove_global_flag = fallen_empire_vanilla_difficulty
+			}
+			set_global_flag = fallen_empire_normal_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.fallen_empire.b"
+		trigger = { has_global_flag = fallen_empire_normal_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = fallen_empire_normal_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = fallen_empire_normal_difficulty }
+				remove_global_flag = fallen_empire_normal_difficulty
+			}
+			set_global_flag = fallen_empire_hard_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.fallen_empire.c"
+		trigger = { has_global_flag = fallen_empire_hard_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = fallen_empire_hard_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = fallen_empire_hard_difficulty }
+				remove_global_flag = fallen_empire_hard_difficulty
+			}
+			set_global_flag = fallen_empire_veteran_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.fallen_empire.d"
+		trigger = { has_global_flag = fallen_empire_veteran_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = fallen_empire_veteran_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = fallen_empire_veteran_difficulty }
+				remove_global_flag = fallen_empire_veteran_difficulty
+			}
+			set_global_flag = fallen_empire_nightmare_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.fallen_empire.e"
+		trigger = { has_global_flag = fallen_empire_nightmare_difficulty }
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = fallen_empire_nightmare_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = fallen_empire_nightmare_difficulty }
+				remove_global_flag = fallen_empire_nightmare_difficulty
+			}
+			set_global_flag = fallen_empire_vanilla_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	
+	#Original Empire
+	option = {
+		name = "zofe_menu.103.original_empire.a"
+		trigger = { 
+			original_empire_returns = yes
+			is_crises_allowed = yes
+			has_global_flag = original_empire_vanilla_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = original_empire_vanilla_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = original_empire_vanilla_difficulty }
+				remove_global_flag = original_empire_vanilla_difficulty
+			}
+			set_global_flag = original_empire_normal_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.original_empire.b"
+		trigger = { 
+			original_empire_returns = yes
+			is_crises_allowed = yes
+			has_global_flag = original_empire_normal_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = original_empire_normal_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = original_empire_normal_difficulty }
+				remove_global_flag = original_empire_normal_difficulty
+			}
+			set_global_flag = original_empire_hard_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.original_empire.c"
+		trigger = { 
+			original_empire_returns = yes
+			is_crises_allowed = yes
+			has_global_flag = original_empire_hard_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = original_empire_hard_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = original_empire_hard_difficulty }
+				remove_global_flag = original_empire_hard_difficulty
+			}
+			set_global_flag = original_empire_veteran_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.original_empire.d"
+		trigger = { 
+			original_empire_returns = yes
+			is_crises_allowed = yes
+			has_global_flag = original_empire_veteran_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = original_empire_veteran_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = original_empire_veteran_difficulty }
+				remove_global_flag = original_empire_veteran_difficulty
+			}
+			set_global_flag = original_empire_nightmare_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.original_empire.e"
+		trigger = { 
+			original_empire_returns = yes
+			is_crises_allowed = yes
+			has_global_flag = original_empire_nightmare_difficulty
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		custom_tooltip = original_empire_nightmare_difficulty_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = original_empire_nightmare_difficulty }
+				remove_global_flag = original_empire_nightmare_difficulty
+			}
+			set_global_flag = original_empire_vanilla_difficulty
+			country_event = { id = zofe_menu.103 days = 0 }
+		}
+	}
+	option = {
+		name = "zofe_menu.103.original_empire.f"
+		trigger = { 
+			OR = {
+				has_global_flag = zofe_return_of_the_original_empire_disabled
+				is_crises_allowed = no
+			}
+		}
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+				NOR = { 
+					has_global_flag = zofe_return_of_the_original_empire_disabled
+					is_crises_allowed = no
+				}
+			}
+		}
+		custom_tooltip = original_empire_cannot_return_tooltip
+	}
+	
+	
+	#Goes back to main menu
+	option = {
+		name = "zofe_menu.101.exit"
+		hidden_effect = {
+			country_event = { id = zofe_menu.100 days = 0 }
+		}
+	}
+}
+
+# ZoFE Presets Menu
+country_event = {
+	id = zofe_menu.104
+	title = zofe_menu.104.name
+	desc = zofe_menu.104.desc
+	picture = GFX_evt_fallen_empire_awakes
+
+	is_triggered_only = yes
+
+	#Kolyn's Preset
+	option = {
+		name = "zofe_menu.104.kolyn"
+		custom_tooltip = zofe_preset_kolyn_tooltip
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		hidden_effect = {			
+			clear_zofe_settings = yes
+		
+			set_global_flag = zofe_sandbox_mode
+			
+			set_global_flag = zofe_automated_industries_enabled
+			set_global_flag = zofe_societal_ascendance_enabled
+			set_global_flag = zofe_question_of_style_enabled
+			set_global_flag = zofe_masters_of_warfare_enabled
+			set_global_flag = zofe_ambitions_of_power_enabled
+			set_global_flag = zofe_engineering_perfection_enabled
+			
+			set_global_flag = galactic_ascendancy_ap_enabled_5
+			set_global_flag = ai_ascension_enabled
+			set_global_flag = subject_ascension_disabled
+			set_global_flag = ascended_empire_decadence_enabled_3
+			set_global_flag = zofe_return_of_the_original_empire_enabled
+			set_global_flag = ascended_empire_min_navy_enabled_2
+			
+			set_global_flag = leviathans_nightmare_difficulty
+			set_global_flag = marauders_nightmare_difficulty
+			set_global_flag = crises_nightmare_difficulty
+			set_global_flag = ai_ascended_empire_nightmare_difficulty
+			set_global_flag = fallen_empire_nightmare_difficulty
+			set_global_flag = original_empire_veteran_difficulty
+		
+			country_event = { id = zofe_menu.104 days = 0 }
+		}
+	}
+	
+	#Darky's Preset
+	option = {
+		name = "zofe_menu.104.darky"
+		custom_tooltip = zofe_preset_darky_tooltip
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		hidden_effect = {	
+			clear_zofe_settings = yes
+			
+			set_global_flag = zofe_sandbox_mode
+			
+			set_global_flag = zofe_automated_industries_enabled
+			set_global_flag = zofe_societal_ascendance_enabled
+			set_global_flag = zofe_question_of_style_enabled
+			set_global_flag = zofe_masters_of_warfare_enabled
+			set_global_flag = zofe_ambitions_of_power_enabled
+			set_global_flag = zofe_engineering_perfection_enabled
+			
+			set_global_flag = galactic_ascendancy_ap_enabled_5
+			set_global_flag = ai_ascension_enabled
+			set_global_flag = subject_ascension_enabled
+			set_global_flag = ascended_empire_decadence_enabled_3
+			set_global_flag = zofe_return_of_the_original_empire_enabled
+			set_global_flag = ascended_empire_min_navy_disabled
+			
+			set_global_flag = leviathans_nightmare_difficulty
+			set_global_flag = marauders_nightmare_difficulty
+			set_global_flag = crises_nightmare_difficulty
+			set_global_flag = ai_ascended_empire_nightmare_difficulty
+			set_global_flag = fallen_empire_nightmare_difficulty
+			set_global_flag = original_empire_nightmare_difficulty
+
+			country_event = { id = zofe_menu.104 days = 0 }
+		}
+	}
+	
+	#Savitar's Preset
+	option = {
+		name = "zofe_menu.104.savitar"
+		custom_tooltip = zofe_preset_savitar_tooltip
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		hidden_effect = {		
+			clear_zofe_settings = yes
+			
+			set_global_flag = zofe_sandbox_mode
+			
+			set_global_flag = zofe_automated_industries_enabled
+			set_global_flag = zofe_societal_ascendance_enabled
+			set_global_flag = zofe_question_of_style_enabled
+			set_global_flag = zofe_masters_of_warfare_enabled
+			set_global_flag = zofe_ambitions_of_power_enabled
+			set_global_flag = zofe_engineering_perfection_enabled
+			
+			set_global_flag = galactic_ascendancy_ap_enabled_3
+			set_global_flag = ai_ascension_enabled
+			set_global_flag = subject_ascension_disabled
+			set_global_flag = ascended_empire_decadence_enabled_2
+			set_global_flag = zofe_return_of_the_original_empire_enabled
+			set_global_flag = ascended_empire_min_navy_enabled_2
+			
+			set_global_flag = leviathans_hard_difficulty
+			set_global_flag = marauders_veteran_difficulty
+			set_global_flag = crises_nightmare_difficulty
+			set_global_flag = ai_ascended_empire_veteran_difficulty
+			set_global_flag = fallen_empire_nightmare_difficulty
+			set_global_flag = original_empire_veteran_difficulty
+
+			country_event = { id = zofe_menu.104 days = 0 }
+		}
+	}
+
+	#Alex's Preset
+	option = {
+		name = "zofe_menu.104.alex"
+		custom_tooltip = zofe_preset_alex_tooltip
+		allow = {
+			hidden_trigger = {
+				is_zofe_host = yes
+				NOT = { zofe_settings_confirmed = yes }
+			}
+		}
+		hidden_effect = {		
+			clear_zofe_settings = yes
+			
+			set_global_flag = zofe_sandbox_mode
+			
+			set_global_flag = zofe_automated_industries_enabled
+			set_global_flag = zofe_societal_ascendance_enabled
+			set_global_flag = zofe_question_of_style_enabled
+			set_global_flag = zofe_masters_of_warfare_enabled
+			set_global_flag = zofe_ambitions_of_power_enabled
+			set_global_flag = zofe_engineering_perfection_enabled
+			
+			set_global_flag = galactic_ascendancy_ap_enabled_3
+			set_global_flag = ai_ascension_enabled_1
+			set_global_flag = subject_ascension_disabled
+			set_global_flag = ascended_empire_decadence_enabled_2
+			set_global_flag = zofe_return_of_the_original_empire_enabled
+			set_global_flag = ascended_empire_min_navy_enabled_3
+			
+			set_global_flag = leviathans_hard_difficulty
+			set_global_flag = marauders_hard_difficulty
+			set_global_flag = crises_normal_difficulty
+			set_global_flag = ai_ascended_empire_hard_difficulty
+			set_global_flag = fallen_empire_hard_difficulty
+			set_global_flag = original_empire_normal_difficulty
+
+			country_event = { id = zofe_menu.104 days = 0 }
+		}
+	}
+	
+	#2 More
+	
+	option = {
+		name = "zofe_menu.101.exit"
+		hidden_effect = {
+			country_event = { id = zofe_menu.100 days = 0 }
+		}		
+	}
+}
+
+
+event = {
+	id = zofe_menu.2
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		#Restarts Menu for people using an ongoing save
+		if = {
+			limit = {
+				NOT = { has_global_flag = zofe_menu_fired }
+			}
+			every_playable_country = {
+				limit = { is_ai = no }
+				country_event = { id = zofe_menu.0 }
+			}
+		}
+	}
+}
+

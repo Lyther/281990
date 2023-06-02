@@ -1,0 +1,229 @@
+situation_origin_manifesti = {
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	fail_icon_frame = GFX_situation_outcome_frame_blue
+	fail_icon = GFX_situation_outcome_unknown
+	picture = GFX_evt_crisis_defeated
+	
+	start_value = 50
+	
+	stages = {
+		stage_manifesti = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 100
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value <= -5
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = -0.5
+					planet_jobs_produces_mult = 0.5
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value = -4
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = -0.4
+					planet_jobs_produces_mult = 0.4
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value = -3
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = -0.3
+					planet_jobs_produces_mult = 0.3
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value = -2
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = -0.2
+					planet_jobs_produces_mult = 0.2
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value = -1
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = -0.1
+					planet_jobs_produces_mult = 0.1
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value = 1
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = 0.1
+					planet_jobs_produces_mult = -0.1
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value = 2
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = 0.2
+					planet_jobs_produces_mult = -0.2
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value = 3
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = 0.3
+					planet_jobs_produces_mult = -0.3
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value = 4
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = 0.4
+					planet_jobs_produces_mult = -0.4
+				}
+			}
+			triggered_modifier = {
+				potential = {
+					owner = {
+						check_variable = {
+							which = origin_manifesti_count
+							value >= 5
+						}
+					}
+				}
+				modifier = {
+					country_produces_mult = 0.5
+					planet_jobs_produces_mult = -0.5
+				}
+			}
+		}
+	}
+	
+	on_progress_complete = {
+		custom_tooltip = situation_origin_manifesti_complete_effect
+		hidden_effect = {
+			situation_event = { id = origin_manifesti.2 }
+		}
+	}
+	
+	on_fail = {
+		custom_tooltip = situation_origin_manifesti_fail_effect
+		hidden_effect = {
+			situation_event = { id = origin_manifesti.3 }
+		}
+	}
+	
+	approach = {
+		name = approach_origin_manifesti_default
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = situation_origin_manifesti_default_effect
+		}
+	}
+	
+	monthly_progress = {
+		base = 0
+		modifier = {
+			subtract = 1
+			desc = string_living_standard
+			owner_main_species = {
+				NOR = {
+					has_living_standard = living_standard_decadent
+					has_living_standard = living_standard_chemical_bliss
+				}
+			}
+		}
+		modifier = {
+			add = 0
+			desc = string_living_standard
+			owner_main_species = {
+				has_living_standard = living_standard_decadent
+			}
+		}
+		modifier = {
+			add = 1
+			desc = string_living_standard
+			owner_main_species = {
+				has_living_standard = living_standard_chemical_bliss
+			}
+		}
+		modifier = {
+			desc = string_dream_broken
+			add = value:num_manifesti_years_passed_value
+			owner = {
+				check_variable = {
+					which = origin_manifesti_count
+					value >= 0
+				}
+			}
+		}
+		modifier = {
+			desc = string_dream_broken
+			subtract = value:num_manifesti_years_passed_value
+			owner = {
+				check_variable = {
+					which = origin_manifesti_count
+					value < 0
+				}
+			}
+		}
+	}
+}

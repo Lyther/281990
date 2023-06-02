@@ -1,0 +1,1545 @@
+namespace = ofe_origin_event
+
+country_event = {
+	id = ofe_origin_event.1
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_ofe_fallen_empire
+	}
+
+	immediate = {
+		set_country_flag = starting_event
+		set_country_flag = first_contact_event
+		set_country_flag = Story2
+		set_country_flag = Story5
+		set_country_flag = Story7
+		set_country_flag = Story8
+		set_country_type = fallen_empire
+		if = {
+			limit = { host_has_dlc = "Apocalypse" }
+			give_technology = {
+				tech = tech_colossus
+				message = no
+			}
+		}
+		if = {
+			limit = {
+				has_origin = origin_ofe_fallen_empire
+			    has_ethic = ethic_fanatic_spiritualist
+			}
+			set_graphical_culture = "fallen_empire_01"
+			set_city_graphical_culture = "fallen_empire_01"
+		}
+		if = {
+			limit = {
+				has_origin = origin_ofe_fallen_empire
+			    has_ethic = ethic_fanatic_materialist
+			}
+			set_graphical_culture = "fallen_empire_02"
+			set_city_graphical_culture = "fallen_empire_02"
+			create_fe_servant_robots = yes
+			last_created_species = { save_event_target_as = fe_servants }
+		}
+		if = {
+			limit = {
+				has_origin = origin_ofe_fallen_empire
+			    has_ethic = ethic_fanatic_xenophile
+			}
+			set_graphical_culture = "fallen_empire_03"
+			set_city_graphical_culture = "fallen_empire_03"
+			root = { create_fe_servant_robots = yes }
+			last_created_species = { save_event_target_as = fe_servants }
+		}
+		if = {
+			limit = {
+				has_origin = origin_ofe_fallen_empire
+			    has_ethic = ethic_fanatic_xenophobe
+			}
+			set_graphical_culture = "fallen_empire_04"
+			set_city_graphical_culture = "fallen_empire_04"
+			root = { create_fe_servant_species = yes }
+			last_created_species = { save_event_target_as = fe_servants }
+			owner_main_species = { save_global_event_target_as = fallen_4_species }
+		}
+		if = {
+			limit = {
+				has_origin = origin_ofe_fallen_empire
+			    has_ethic = ethic_gestalt_consciousness
+			}
+			set_graphical_culture = "fallen_machine_empire_01"
+			set_city_graphical_culture = "fallen_machine_empire_01"
+		}
+		
+		capital_scope.solar_system = {
+			every_system_planet = {
+				limit = {
+					OR = {
+						has_planet_flag = ofe_2_2
+						has_planet_flag = ofe_3_2
+						has_planet_flag = ofe_3_3
+						has_planet_flag = ofe_4_2
+						has_planet_flag = ofe_machine_planet_1
+						has_planet_flag = ofe_machine_planet_2
+					}
+				}
+				set_owner = root
+				set_controller = root
+			}
+			#####1#####
+			every_neighbor_system = {
+				limit = {
+					NOT = { exists = space_owner }
+				}
+				if = {
+					limit = {
+						has_star_flag = ofe_1_system
+					}
+					create_fe_citadel = yes
+					random_system_planet = {
+						limit = {
+							has_planet_flag = ofe_1_archives
+							NOT = { exists = owner }
+						}
+						set_owner = root
+						set_controller = root
+						add_building = building_ancient_palace
+						add_building = building_master_archive
+						add_building = building_fe_stronghold
+						add_building = building_fe_dome
+						add_building = building_class_4_singularity
+						add_building = building_class_4_singularity
+						add_building = building_affluence_center
+						add_building = building_nourishment_center
+						add_building = building_nourishment_center
+						add_building = building_dimensional_fabricator
+						add_building = building_nano_forge
+						add_building = building_nano_forge
+						while = {
+							count = 15
+							add_district = district_city
+						}
+						while = {
+							count = 35
+							create_pop = {
+								species = owner_main_species
+							}
+						}
+						while = {
+							count = 35
+							create_pop = {
+								species = event_target:fe_servants
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_star_flag = ofe_xeno_zoo
+					}
+					create_fe_citadel = yes
+					random_system_planet = {
+						limit = {
+							has_planet_flag = ofe_xeno_zoo_planet
+							NOT = { exists = owner }
+						}
+						set_owner = root
+						set_planet_flag = ofe_the_preserve
+						add_building = building_fe_xeno_zoo
+			
+						while = {
+							count = 2
+							create_pop = {
+								species = owner_main_species
+							}
+						}
+			
+						while = {
+							count = 5
+							create_species = {
+								name = random
+								class = random_non_machine
+								portrait = random
+								traits = random
+							}
+							create_pop = {
+								species = last_created_species
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_star_flag = ofe_col_system
+					}
+					create_fe_citadel = yes
+					every_system_planet = {
+						limit = {
+							has_planet_flag = ofe_col_planet
+							NOT = { exists = owner }
+						}
+						if = {
+							limit = { root = { NOT = { has_ethic = ethic_fanatic_spiritualist } } }
+							create_fe_fringe_colony = yes
+						}
+						else = { create_fe_spiritualist_fringe_colony = yes }
+					}
+				}
+				else_if = {
+					limit = {
+						has_star_flag = ofe_orbitals_system
+					}
+					random_system_planet = {
+						limit = {
+							is_ideal_planet_class = {
+								who = root
+								status = yes
+							}
+							is_colony = no
+						}
+						if = {
+							limit = { root = { NOT = { has_ethic = ethic_fanatic_spiritualist } } }
+							create_fe_fringe_colony = yes
+						}
+						else = { create_fe_spiritualist_fringe_colony = yes }
+					}
+					if = {
+						limit = {
+							any_system_planet = {
+								is_owned_by = root
+							}
+						}
+						create_fe_citadel = yes
+						else = {
+							create_fe_outpost = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						root = {
+							has_origin = origin_ofe_fallen_empire
+		                    has_ethic = ethic_fanatic_xenophobe
+						}
+						OR = {
+							has_star_flag = ofe_shielded_1
+							has_star_flag = ofe_shielded_2
+							has_star_flag = ofe_shielded_3
+						}
+					}
+					create_fe_outpost = yes
+				}
+				else_if = {
+					limit = {
+						root = {
+							has_origin = origin_ofe_fallen_empire
+		                    has_ethic = ethic_gestalt_consciousness
+						}
+						has_star_flag = ofe_machine_system
+					}
+					create_fe_outpost = yes
+				}
+				else = {
+					create_fe_outpost = yes
+				}
+
+				#####2#####
+				every_neighbor_system = {
+					limit = {
+						NOT = { exists = space_owner }
+					}
+					if = {
+						limit = {
+							has_star_flag = ofe_1_system
+						}
+						create_fe_citadel = yes
+						random_system_planet = {
+							limit = {
+								has_planet_flag = ofe_1_archives
+								NOT = { exists = owner }
+							}
+							set_owner = root
+							set_controller = root
+							add_building = building_ancient_palace
+							add_building = building_master_archive
+							add_building = building_fe_stronghold
+							add_building = building_fe_dome
+							add_building = building_class_4_singularity
+							add_building = building_class_4_singularity
+							add_building = building_affluence_center
+							add_building = building_nourishment_center
+							add_building = building_nourishment_center
+							add_building = building_dimensional_fabricator
+							add_building = building_nano_forge
+							add_building = building_nano_forge
+							while = {
+								count = 15
+								add_district = district_city
+							}
+							while = {
+								count = 35
+								create_pop = {
+									species = owner_main_species
+								}
+							}
+							while = {
+								count = 35
+								create_pop = {
+									species = event_target:fe_servants
+								}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							has_star_flag = ofe_xeno_zoo
+						}
+						create_fe_citadel = yes
+						random_system_planet = {
+							limit = {
+								has_planet_flag = ofe_xeno_zoo_planet
+								NOT = { exists = owner }
+							}
+							set_owner = root
+							set_planet_flag = ofe_the_preserve
+							add_building = building_fe_xeno_zoo
+				
+							while = {
+								count = 2
+								create_pop = {
+								species = owner_main_species
+								}
+							}
+				
+							while = {
+								count = 5
+								create_species = {
+									name = random
+									class = random_non_machine
+									portrait = random
+									traits = random
+								}
+								create_pop = {
+									species = last_created_species
+								}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							has_star_flag = ofe_col_system
+						}
+						create_fe_citadel = yes
+						every_system_planet = {
+							limit = {
+								has_planet_flag = ofe_col_planet
+								NOT = { exists = owner }
+							}
+							if = {
+								limit = { root = { NOT = { has_ethic = ethic_fanatic_spiritualist } } }
+								create_fe_fringe_colony = yes
+							}
+							else = { create_fe_spiritualist_fringe_colony = yes }
+						}
+					}
+					else_if = {
+						limit = {
+							has_star_flag = ofe_orbitals_system
+						}
+						random_system_planet = {
+							limit = {
+								is_ideal_planet_class = {
+									who = root
+									status = yes
+								}
+								is_colony = no
+							}
+							if = {
+								limit = { root = { NOT = { has_ethic = ethic_fanatic_spiritualist } } }
+								create_fe_fringe_colony = yes
+							}
+							else = { create_fe_spiritualist_fringe_colony = yes }
+						}
+				
+						if = {
+							limit = {
+								any_system_planet = {
+									is_owned_by = root
+								}
+							}
+							create_fe_citadel = yes
+							else = {
+								create_fe_outpost = yes
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							root = {
+								has_origin = origin_ofe_fallen_empire
+		                        has_ethic = ethic_fanatic_xenophobe
+							}
+							OR = {
+								has_star_flag = ofe_shielded_1
+								has_star_flag = ofe_shielded_2
+								has_star_flag = ofe_shielded_3
+							}
+						}
+						create_fe_outpost = yes
+					}
+					else_if = {
+						limit = {
+							root = {
+								has_origin = origin_ofe_fallen_empire
+		                        has_ethic = ethic_gestalt_consciousness
+							}
+							has_star_flag = ofe_machine_system
+						}
+						create_fe_outpost = yes
+					}
+					else = {
+						create_fe_outpost = yes
+					}
+					
+					#####3#####
+					every_neighbor_system = {
+						limit = {
+							NOT = { exists = space_owner }
+						}
+						if = {
+							limit = {
+								has_star_flag = ofe_1_system
+							}
+							create_fe_citadel = yes
+							random_system_planet = {
+								limit = {
+									has_planet_flag = ofe_1_archives
+									NOT = { exists = owner }
+								}
+								set_owner = root
+								set_controller = root
+								add_building = building_ancient_palace
+								add_building = building_master_archive
+								add_building = building_fe_stronghold
+								add_building = building_fe_dome
+								add_building = building_class_4_singularity
+								add_building = building_class_4_singularity
+								add_building = building_affluence_center
+								add_building = building_nourishment_center
+								add_building = building_nourishment_center
+								add_building = building_dimensional_fabricator
+								add_building = building_nano_forge
+								add_building = building_nano_forge
+								while = {
+									count = 15
+									add_district = district_city
+								}
+								while = {
+									count = 35
+									create_pop = {
+										species = owner_main_species
+									}
+								}
+								while = {
+									count = 35
+									create_pop = {
+										species = event_target:fe_servants
+									}
+								}
+							}
+						}
+						else_if = {
+							limit = {
+								has_star_flag = ofe_xeno_zoo
+							}
+							create_fe_citadel = yes
+							random_system_planet = {
+								limit = {
+									has_planet_flag = ofe_xeno_zoo_planet
+									NOT = { exists = owner }
+								}
+								set_owner = root
+								set_planet_flag = ofe_the_preserve
+								add_building = building_fe_xeno_zoo
+					
+								while = {
+									count = 2
+									create_pop = {
+									    species = owner_main_species
+									}
+								}
+					
+								while = {
+									count = 5
+									create_species = {
+										name = random
+										class = random_non_machine
+										portrait = random
+										traits = random
+									}
+									create_pop = {
+										species = last_created_species
+									}
+								}
+							}
+						}
+						else_if = {
+							limit = {
+								has_star_flag = ofe_col_system
+							}
+							create_fe_citadel = yes
+							every_system_planet = {
+								limit = {
+									has_planet_flag = ofe_col_planet
+									NOT = { exists = owner }
+								}
+								if = {
+									limit = { root = { NOT = { has_ethic = ethic_fanatic_spiritualist } } }
+									create_fe_fringe_colony = yes
+								}
+								else = { create_fe_spiritualist_fringe_colony = yes }
+							}
+						}
+						else_if = {
+							limit = {
+								has_star_flag = ofe_orbitals_system
+							}
+							random_system_planet = {
+								limit = {
+									is_ideal_planet_class = {
+										who = root
+										status = yes
+									}
+									is_colony = no
+								}
+								if = {
+									limit = { root = { NOT = { has_ethic = ethic_fanatic_spiritualist } } }
+									create_fe_fringe_colony = yes
+								}
+								else = { create_fe_spiritualist_fringe_colony = yes }
+							}
+					
+							if = {
+								limit = {
+									any_system_planet = {
+										is_owned_by = root
+									}
+								}
+								create_fe_citadel = yes
+								else = {
+									create_fe_outpost = yes
+								}
+							}
+						}
+						else_if = {
+							limit = {
+								root = {
+									has_origin = origin_ofe_fallen_empire
+		                            has_ethic = ethic_fanatic_xenophobe
+								}
+								OR = {
+									has_star_flag = ofe_shielded_1
+									has_star_flag = ofe_shielded_2
+									has_star_flag = ofe_shielded_3
+								}
+							}
+							create_fe_outpost = yes
+						}
+						else_if = {
+							limit = {
+								root = {
+									has_origin = origin_ofe_fallen_empire
+		                            has_ethic = ethic_gestalt_consciousness
+								}
+								has_star_flag = ofe_machine_system
+							}
+							create_fe_outpost = yes
+						}
+					}
+				}
+			}
+			owner = {
+				every_owned_leader = {
+					limit = {
+						leader_class = scientist
+					}
+					kill_leader = { show_notification = no }
+				}
+			}
+			every_fleet_in_system = {
+				delete_fleet = this
+			}
+			create_fe_home_citadel = yes
+		}
+	}
+}
+
+#知识管理者
+country_event = {
+	id = ofe_origin_event.2
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_ofe_fallen_empire
+		has_ethic = ethic_fanatic_materialist
+	}
+
+	immediate = {
+		set_country_flag = fallen_empire_1
+		set_ai_personality = awakened_fallen_empire_materialist
+		add_global_ship_design = "NAME_Enforcer"
+		add_global_ship_design = "NAME_Savant"
+		add_global_ship_design = "NAME_Scholar"
+		add_global_ship_design = "NAME_Sage"
+		add_global_ship_design = "NAME_Cloaker"
+		add_global_ship_design = "NAME_Librarian"
+		add_global_ship_design = "NAME_Seeker"
+		add_global_ship_design = "NAME_FE_Starbase"
+		add_global_ship_design = "NAME_OFE_Transport"
+		capital_scope.solar_system = {
+			every_system_planet = {
+				limit = {
+					has_planet_flag = ofe_1_capital
+				}
+				set_planet_size = 20
+				change_pc = pc_city
+				reroll_planet = yes
+				remove_all_buildings = yes
+				remove_all_districts = yes
+				clear_blockers = yes
+				add_building = building_ancient_palace
+				add_building = building_fe_stronghold
+				add_building = building_fe_stronghold
+				add_building = building_affluence_center
+				add_building = building_affluence_center
+				add_building = building_nourishment_center
+				add_building = building_nourishment_center
+				add_building = building_class_4_singularity
+				add_building = building_dimensional_fabricator
+				add_building = building_dimensional_fabricator
+				add_building = building_nano_forge
+				add_building = building_nano_forge
+				while = {
+					count = 20
+					add_district = district_arcology_housing
+				}
+				while = {
+					limit = {
+						num_pops < 94
+					}
+					create_pop = {
+						species = owner_main_species
+					}
+				}
+				root = {
+					set_policy = {
+						policy = artificial_intelligence_policy
+						option = ai_servitude
+						cooldown = no
+					}
+					set_policy = {
+						policy = robot_pop_policy
+						option = robot_pops_allowed
+						cooldown = no
+					}
+				}
+				random_owned_species = {
+					limit = {
+						is_robotic_species = yes
+					}
+					save_event_target_as = fe_servants
+				}
+				#root = { create_fe_servant_robots = yes }
+				#last_created_species = { save_event_target_as = fe_servants }
+				while = {
+					count = 94
+					create_pop = {
+						species = event_target:fe_servants
+					}
+				}
+				create_fallen_empire_starting_navy = yes
+				while = {
+					count = 20
+					create_army = {
+						name = random
+						owner = root
+						species = root
+						type = "robotic_army"
+					}
+				}
+			}
+		}
+	}
+}
+
+#圣地守护者
+country_event = {
+	id = ofe_origin_event.3
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_ofe_fallen_empire
+		has_ethic = ethic_fanatic_spiritualist
+	}
+
+	immediate = {
+		set_country_flag = fallen_empire_2
+		set_ai_personality = awakened_fallen_empire_spiritualist
+		add_global_ship_design = "NAME_Cleanser"
+		add_global_ship_design = "NAME_Eternal"
+		add_global_ship_design = "NAME_Avatar"
+		add_global_ship_design = "NAME_Zealot"
+		add_global_ship_design = "NAME_Penitent"
+		add_global_ship_design = "NAME_Faith"
+		add_global_ship_design = "NAME_Pilgrim"
+		add_global_ship_design = "NAME_FE_Starbase"
+		add_global_ship_design = "NAME_OFE_Transport"
+		capital_scope.solar_system = {
+			every_system_planet = {
+				if = {
+					limit = {
+						has_planet_flag = ofe_2_capital
+					}
+					set_planet_size = 30
+					reroll_deposits = yes
+					remove_all_buildings = yes
+				    remove_all_districts = yes
+				    clear_blockers = yes
+	
+					add_building = building_ancient_palace
+					add_building = building_fe_dome
+					add_building = building_fe_dome
+					add_building = building_fe_dome
+					add_building = building_fe_dome
+					add_building = building_fe_dome
+					add_building = building_fe_stronghold
+					add_building = building_fe_stronghold
+					add_building = building_dimensional_fabricator
+					add_building = building_class_4_singularity
+					add_building = building_nano_forge
+					add_building = building_nano_forge
+
+					add_deposit = d_tempestous_mountain
+					add_deposit = d_rich_mountain
+					add_deposit = d_teeming_reef
+
+					while = {
+						count = 14
+						add_district = district_city
+					}
+					while = {
+						count = 8
+						add_district_and_planet_size_if_needed_effect = {
+							district = district_mining
+						}
+					}
+					while = {
+						count = 8
+						add_district_and_planet_size_if_needed_effect = {
+							district = district_farming
+						}
+					}
+					while = {
+						limit = {
+							num_pops < 115
+						}
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+					create_fallen_empire_starting_navy = yes
+					while = {
+						count = 20
+						create_army = {
+							name = random
+							owner = root
+							species = root
+							type = "psionic_army"
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_planet_flag = ofe_2_2
+					}
+					add_building = building_ancient_palace
+			        add_building = building_empyrean_shrine
+			        add_building = building_fe_dome
+			        add_building = building_fe_dome
+			        add_building = building_fe_dome
+			        add_building = building_fe_stronghold
+			        add_building = building_fe_stronghold
+			        add_building = building_class_4_singularity
+			        add_building = building_class_4_singularity
+			        add_building = building_class_4_singularity
+			        add_building = building_nano_forge
+			        add_building = building_nano_forge
+
+					add_deposit = d_rushing_waterfalls
+					add_deposit = d_prosperous_mesa
+					add_deposit = d_fertile_lands
+
+			        while = {
+				        count = 12
+				        add_district = district_city
+			        }
+			        while = {
+				        count = 5
+				        add_district_and_planet_size_if_needed_effect = {
+					        district = district_mining
+				        }
+			        }
+			        while = {
+				        count = 5
+				        add_district_and_planet_size_if_needed_effect = {
+					        district = district_farming
+				        }
+			        }
+			        while = {
+				        count = 68
+				        create_pop = {
+					        species = owner_main_species
+				        }
+			        }
+				}
+			}
+		}
+	}
+}
+
+#神秘观察者
+country_event = {
+	id = ofe_origin_event.4
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_ofe_fallen_empire
+		has_ethic = ethic_fanatic_xenophile
+	}
+
+	immediate = {
+		set_ai_personality = awakened_fallen_empire_xenophile
+		add_global_ship_design = "NAME_Adjuster"
+		add_global_ship_design = "NAME_Keeper"
+		add_global_ship_design = "NAME_Custodian"
+		add_global_ship_design = "NAME_Warden"
+		add_global_ship_design = "NAME_Watcher"
+		add_global_ship_design = "NAME_Seeder"
+		add_global_ship_design = "NAME_Builder"
+		add_global_ship_design = "NAME_FE_Starbase"
+		add_global_ship_design = "NAME_OFE_Transport"
+		capital_scope.solar_system = {
+			every_system_planet = {
+				if = {
+					limit = {
+						has_planet_flag = ofe_3_capital
+					}
+					set_planet_size = 20
+					reroll_deposits = yes
+					remove_all_buildings = yes
+				    remove_all_districts = yes
+				    clear_blockers = yes
+					add_building = building_ancient_palace
+					add_building = building_fe_dome
+					add_building = building_fe_dome
+					add_building = building_fe_stronghold
+					add_building = building_fe_stronghold
+					add_building = building_affluence_center
+					add_building = building_nourishment_center
+					add_building = building_class_4_singularity
+					add_building = building_class_4_singularity
+					add_building = building_dimensional_fabricator
+					add_building = building_nano_forge
+					add_building = building_nano_forge
+					while = {
+						count = 20
+						add_district = district_city
+					}
+					while = {
+						limit = {
+							num_pops < 52
+						}
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+					root = {
+						set_policy = {
+							policy = artificial_intelligence_policy
+							option = ai_outlawed
+							cooldown = no
+						}
+						set_policy = {
+							policy = robot_pop_policy
+							option = robot_pops_allowed
+							cooldown = no
+						}
+					}
+					random_owned_species = {
+						limit = {
+							is_robotic_species = yes
+						}
+						save_event_target_as = fe_servants
+					}
+					#root = { create_fe_servant_robots = yes }
+					#last_created_species = { save_event_target_as = fe_servants }
+					while = {
+						count = 52
+						create_pop = {
+							species = event_target:fe_servants
+						}
+					}
+					create_fallen_empire_starting_navy = yes
+	
+					while = {
+						count = 20
+						create_army = {
+							name = random
+							owner = root
+							species = root
+							type = "gene_warrior_army"
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_planet_flag = ofe_3_2
+					}
+					set_planet_size = 10
+					add_building = building_ancient_palace
+				    add_building = building_fe_stronghold
+				    add_building = building_fe_dome
+				    add_building = building_dimensional_fabricator
+				    add_building = building_dimensional_fabricator
+				    add_building = building_nano_forge
+				    add_building = building_nano_forge
+				    add_building = building_nano_forge
+				    while = {
+					    count = 10
+					    add_district = district_city
+				    }
+					while = {
+						count = 18
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+					while = {
+						count = 18
+						create_pop = {
+							species = event_target:fe_servants
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_planet_flag = ofe_3_3
+					}
+					set_planet_size = 12
+					add_building = building_ancient_palace
+					add_building = building_fe_stronghold
+				    add_building = building_fe_dome
+				    add_building = building_fe_dome
+				    add_building = building_class_4_singularity
+				    add_building = building_class_4_singularity
+				    add_building = building_affluence_center
+				    add_building = building_affluence_center
+				    add_building = building_affluence_center
+				    add_building = building_nourishment_center
+				    add_building = building_nourishment_center
+					while = {
+						count = 12
+						add_district = district_city
+					}
+					while = {
+						count = 27
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+					while = {
+						count = 27
+						create_pop = {
+							species = event_target:fe_servants
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#军事孤立者
+country_event = {
+	id = ofe_origin_event.5
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_ofe_fallen_empire
+		has_ethic = ethic_fanatic_xenophobe
+	}
+
+	immediate = {
+		set_ai_personality = awakened_fallen_empire_xenophobe
+		add_global_ship_design = "NAME_Reaper"
+		add_global_ship_design = "NAME_Imperium"
+		add_global_ship_design = "NAME_Supremacy"
+		add_global_ship_design = "NAME_Glory"
+		add_global_ship_design = "NAME_Devastator"
+		add_global_ship_design = "NAME_Servitor"
+		add_global_ship_design = "NAME_Destiny"
+		add_global_ship_design = "NAME_FE_Starbase"
+		add_global_ship_design = "NAME_OFE_Transport"
+		capital_scope.solar_system = {
+			every_system_planet = {
+				if = {
+					limit = {
+						has_planet_flag = ofe_4_capital
+					}
+					set_planet_size = 25
+					reroll_deposits = yes
+					remove_all_buildings = yes
+				    remove_all_districts = yes
+				    clear_blockers = yes
+					add_building = building_ancient_palace
+					add_building = building_fe_stronghold
+			        add_building = building_fe_stronghold
+			        add_building = building_affluence_center
+			        add_building = building_affluence_center
+			        add_building = building_nourishment_center
+			        add_building = building_nourishment_center
+					add_building = building_class_4_singularity
+			        add_building = building_class_4_singularity
+			        add_building = building_dimensional_fabricator
+			        add_building = building_nano_forge
+			        add_building = building_nano_forge
+			        while = {
+				        count = 25
+				        add_district = district_city
+			        }
+					while = {
+						limit = {
+							num_pops < 62
+						}
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+					random_owned_species = {
+						limit = {
+							NOT = { is_same_value = owner_main_species }
+						}
+						save_event_target_as = fe_servants
+					}
+					#root = { create_fe_servant_species = yes }
+					#last_created_species = { save_event_target_as = fe_servants }
+					while = {
+						count = 62
+						create_pop = {
+							species = event_target:fe_servants
+						}
+					}
+			        create_fallen_empire_starting_navy = yes
+					while = {
+						count = 20
+						create_army = {
+							name = random
+							owner = root
+							species = root
+							type = "xenomorph_army"
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_planet_flag = ofe_4_2
+					}
+				    add_building = building_ancient_palace
+				    add_building = building_fe_stronghold
+				    add_building = building_fe_stronghold
+				    add_building = building_affluence_center
+				    add_building = building_nourishment_center
+				    add_building = building_nourishment_center
+				    add_building = building_class_4_singularity
+				    add_building = building_class_4_singularity
+				    add_building = building_dimensional_fabricator
+				    add_building = building_dimensional_fabricator
+				    add_building = building_nano_forge
+				    add_building = building_nano_forge
+					while = {
+						count = 12
+						add_district = district_city
+					}
+					while = {
+						count = 33
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+					while = {
+						count = 33
+						create_pop = {
+							species = event_target:fe_servants
+						}
+					}
+				}
+			}
+		}
+		every_owned_pop = {
+			limit = {
+				NOT = { has_citizenship_type = { type = citizenship_full } }
+			}
+			set_citizenship_type = { type = citizenship_slavery country = root }
+			set_slavery_type = { type = slavery_domestic country = root }
+		}
+	}
+}
+
+#上古看护者
+country_event = {
+	id = ofe_origin_event.6
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_ofe_fallen_empire
+		has_ethic = ethic_gestalt_consciousness
+	}
+
+	immediate = {
+		set_country_flag = fallen_empire_machine
+		random_list = {
+			66 = { set_country_flag = fallen_machine_empire_awaken_1 }	# Custodian
+			33 = { set_country_flag = fallen_machine_empire_awaken_2 }	# Berserker
+		}
+		set_ai_personality = awakened_fallen_empire_machine
+		add_global_ship_design = "NAME_Omega"
+		add_global_ship_design = "NAME_Alpha"
+		add_global_ship_design = "NAME_Beta"
+		add_global_ship_design = "NAME_Gamma"
+		add_global_ship_design = "NAME_Theta"
+		add_global_ship_design = "NAME_Tau"
+		add_global_ship_design = "NAME_Sigma"
+		add_global_ship_design = "NAME_FE_Starbase"
+		add_global_ship_design = "NAME_OFE_Transport"
+		capital_scope.solar_system = {
+			every_system_planet = {
+				if = {
+					limit = {
+						has_planet_flag = ofe_machine_capital
+					}
+					set_planet_size = 10
+					change_pc = pc_ringworld_habitable
+					reroll_planet = yes
+					remove_all_buildings = yes
+					remove_all_districts = yes
+					clear_blockers = yes
+					add_building = building_ancient_control_center
+					add_building = building_nourishment_center
+					add_building = building_nourishment_center
+					add_building = building_ancient_cryo_chamber
+					add_building = building_ancient_cryo_chamber
+					add_building = building_ancient_cryo_chamber
+					add_building = building_ancient_cryo_chamber
+					add_building = building_ancient_cryo_chamber
+					add_building = building_ancient_cryo_chamber
+					add_building = building_ancient_cryo_chamber
+					add_building = building_ancient_cryo_chamber
+					add_building = building_ancient_cryo_chamber
+		
+					while = {
+						count = 5
+						add_district = district_rw_science
+					}
+					while = {
+						count = 5
+						add_district = district_rw_nexus
+					}
+					while = {
+						limit = {
+							num_pops < 105
+						}
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+
+					create_fallen_empire_starting_navy = yes
+
+					while = {
+						count = 20
+						create_army = {
+							name = random
+							owner = root
+							species = root
+							type = "machine_assault_2"
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_planet_flag = ofe_machine_planet_1
+					}
+					add_building = building_ancient_control_center
+					add_building = building_dimensional_fabricator
+					add_building = building_dimensional_fabricator
+					add_building = building_dimensional_fabricator
+					add_building = building_dimensional_fabricator
+					add_building = building_dimensional_fabricator
+					add_building = building_nano_forge
+					add_building = building_nano_forge
+					add_building = building_nano_forge
+					add_building = building_nano_forge
+					add_building = building_nano_forge
+	
+					while = {
+						count = 5
+						add_district = district_rw_nexus
+					}
+					while = {
+						limit = {
+							num_pops < 50
+						}
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_planet_flag = ofe_machine_planet_2
+					}
+					add_building = building_ancient_control_center
+					add_building = building_class_4_singularity
+					add_building = building_class_4_singularity
+					add_building = building_class_4_singularity
+					add_building = building_class_4_singularity
+			
+					while = {
+						count = 5
+						add_district = district_rw_generator
+					}
+					while = {
+						limit = {
+							num_pops < 22
+						}
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ofe_origin_event.7
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_ofe_fallen_empire
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = scion_master
+			}
+			every_country = {
+				limit = {
+					is_subject = yes
+					overlord = { is_same_value = root }
+				}
+				country_event = { id = ofe_other.199 }
+			}
+		}
+		country_remove_ethic = ethic_materialist
+		country_remove_ethic = ethic_spiritualist
+		country_remove_ethic = ethic_xenophile
+		country_remove_ethic = ethic_xenophobe
+		country_remove_ethic = ethic_authoritarian
+		country_remove_ethic = ethic_egalitarian
+		country_remove_ethic = ethic_militarist
+		country_remove_ethic = ethic_pacifist
+
+		add_resource = {
+			minerals = 10000
+			energy = 10000
+			food = 10000
+			consumer_goods = 5000
+			alloys = 2500
+			unity = 10000
+			influence = 500
+			minor_artifacts = 10000
+		}
+
+		every_owned_planet = {
+			set_planet_flag = fallen_empire_world
+		}
+		add_modifier = {
+			modifier = fe_ship_cost_modifier
+			days = -1
+		}
+		if = {
+			limit = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+			change_government = {
+				civics = {
+					civic = civic_machine_remnants
+					civic = civic_custodian_directives
+				}
+			}
+			add_modifier = {
+				modifier = modifier_machine_remnants
+				days = -1
+			}
+			add_modifier = {
+				modifier = modifier_custodian_directives
+				days = -1
+			}
+		}
+		else = {
+			change_government = {
+				civics = {
+					civic = civic_lethargic_leadership
+					civic = civic_empire_in_decline
+				}
+			}
+			add_modifier = {
+				modifier = modifier_lethargic_leadership
+				days = -1
+			}
+			add_modifier = {
+				modifier = modifier_empire_in_decline
+				days = -1
+			}
+		}
+
+	#	while = {
+	#		count = 10
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_tile_mineral_output
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_military_station_damage
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_military_station_health
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_armor_output
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_weapon_type_explosive_damage
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_weapon_type_explosive_fire_rate
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_weapon_type_kinetic_damage
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_weapon_type_kinetic_fire_rate
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_weapon_type_strike_craft_fire_damage
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_weapon_type_strike_craft_fire_rate
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_reduced_building_time
+	#			message = no
+	#		}
+
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_tile_energy_output
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_shield_output
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_weapon_type_energy_damage
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_weapon_type_energy_fire_rate
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_reduced_building_cost
+	#			message = no
+	#		}
+
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_tile_food_output
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_core_system_cap
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_army_damage
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_army_health
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_leader_life_span
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_naval_cap
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_command_limit
+	#			message = no
+	#		}
+	#		give_technology = {
+	#			tech = tech_repeatable_improved_starbase_capacity
+	#			message = no
+	#		}
+	#	}
+
+		create_country = {
+			type = fallen_empire
+			effect = {
+				root = { copy_techs_from = { target = prev } }
+				set_country_type = global_event
+				destroy_country = yes
+			}
+		}
+
+		if = {
+			limit = { is_materialist = yes }
+			modify_species = {
+				species = this
+				add_trait = trait_cybernetic
+			}
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = ruler
+					}
+					add_trait = leader_trait_ruler_cyborg
+					set_skill = 2
+				}
+				if = {
+					limit = {
+						leader_class = governor
+					}
+					add_trait = leader_trait_governor_cyborg
+				}
+				if = {
+					limit = {
+						leader_class = admiral
+					}
+					add_trait = leader_trait_admiral_cyborg
+				}
+			}
+		}
+		if = {
+			limit = { is_spiritualist = yes }
+			give_technology = {
+				tech = tech_psionic_shield
+				message = no
+			}
+			modify_species = {
+				species = this
+				add_trait = trait_psionic
+			}
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = ruler
+					}
+					add_trait = leader_trait_ruler_psionic
+					set_skill = 2
+				}
+				if = {
+					limit = {
+						leader_class = governor
+					}
+					add_trait = leader_trait_governor_psionic
+				}
+				if = {
+					limit = {
+						leader_class = admiral
+					}
+					add_trait = leader_trait_admiral_psionic
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_authority = auth_machine_intelligence }
+			}
+			every_owned_pop = {
+				set_pop_flag = organic_fallen_empire_pop
+			}
+		}
+		# contact other fallen empires & marauders
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = dormant_marauders
+					is_country_type = fallen_empire
+					is_country_type = enclave
+				}
+				NOT = { has_communications = root }
+			}
+			establish_communications_no_message = root
+		}
+
+		# setup mining & research stations
+		every_planet_within_border = {
+			limit = {
+				has_deposit_for = shipclass_mining_station
+				has_mining_station = no
+			}
+			create_mining_station = {
+				owner = ROOT
+			}
+		}
+		every_planet_within_border = {
+			limit = {
+				has_deposit_for = shipclass_research_station
+				has_research_station = no
+			}
+			create_research_station = {
+				owner = ROOT
+			}
+		}
+	}
+}

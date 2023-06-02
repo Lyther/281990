@@ -1,0 +1,163 @@
+namespace = sxx_planet_destruction
+
+#摧毁星系
+planet_event = {
+	id = sxx_planet_destruction.1
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				is_star = yes
+			}
+			add_threat = { who = from.owner amount = 10 }
+			from = {
+				owner = {
+					save_event_target_as = crisis_country
+					add_victory_score = {
+						source = destroyed_stars_score
+						score = 10
+					}
+				#	switch = {
+				#		trigger = galaxy_size
+				#		huge = { add_resource = { sr_dark_matter = 1000 } }
+				#		large = { add_resource = { sr_dark_matter = 1500 } }
+				#		medium = { add_resource = { sr_dark_matter = 2000 } }
+				#		small = { add_resource = { sr_dark_matter = 2500 } }
+				#		tiny = { add_resource = { sr_dark_matter = 3000 } }
+				#	}
+				}
+			}
+			solar_system = { save_event_target_as = destroyed_system }
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					has_communications = event_target:crisis_country
+					NOR = {
+						is_same_value = event_target:crisis_country
+						has_country_flag = can_build_star_eaters
+						has_country_flag = star_eater_alert@event_target:crisis_country
+					}
+					intel_level = {
+						system = event_target:destroyed_system
+						level = none
+					}
+				}
+				country_event = { id = crisis.6180 }
+			}
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					has_communications = event_target:crisis_country
+					NOR = {
+						is_same_value = event_target:crisis_country
+						has_country_flag = can_build_star_eaters
+						has_country_flag = star_eater_alert@event_target:crisis_country
+					}
+					intel_level = {
+						system = event_target:destroyed_system
+						level > none
+					}
+				}
+				country_event = { id = crisis.6181 }
+			}
+			every_playable_country = {
+				limit = {
+					is_ai = no
+					has_communications = event_target:crisis_country
+					NOR = {
+						is_same_value = event_target:crisis_country
+						has_country_flag = star_eater_alert@event_target:crisis_country
+					}
+					has_country_flag = can_build_star_eaters
+				}
+				country_event = { id = crisis.6182 }
+			}
+			every_playable_country = {
+				limit = {
+					has_communications = event_target:crisis_country
+				}
+				add_opinion_modifier = {
+					who = event_target:crisis_country
+					modifier = opinion_sxx_destroyed_systems
+				}
+			}
+			solar_system = {
+				random_system_planet = {
+					limit = { has_modifier = holy_planet }
+					planet_event = { id = planet_destruction.605 }
+				}
+				set_update_modifiers_batch = begin
+				destroy_star_system = yes
+				set_update_modifiers_batch = end
+			}
+		}
+		else = {
+			fire_on_action = {
+				on_action = on_destroy_planet_with_PLANET_KILLER_CRACKER
+				scopes = { from = from }
+			}
+		#	from = {
+		#		fleet_event = { id = sxx_planet_destruction.2 }
+		#	}
+		}
+	}
+}
+
+planet_event = {
+	id = sxx_planet_destruction.5
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		fire_on_action = {
+			on_action = on_destroy_planet_with_PLANET_KILLER_CRACKER
+			scopes = { from = from }
+		}
+	}
+}
+
+planet_event = {
+	id = sxx_planet_destruction.10
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		fire_on_action = {
+			on_action = on_destroy_planet_with_PLANET_KILLER_NEUTRON
+			scopes = { from = from }
+		}
+		remove_all_districts = yes
+		remove_all_buildings = yes
+		if = {
+			limit = {
+				is_artificial = no
+			}
+			change_pc = pc_nuked
+			reroll_deposits = yes
+			remove_modifier = "natural_beauty"
+			remove_modifier = "atmospheric_aphrodisiac"
+			remove_modifier = "atmospheric_hallucinogen"
+			remove_modifier = "lush_planet"
+			remove_modifier = "dangerous_wildlife"
+		}
+	}
+}
+
+# 炼化星球
+planet_event = {
+	id = sxx_planet_destruction.100
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		every_owned_pop = { kill_pop = yes }
+		destroy_colony = yes
+		remove_planet = yes
+	}
+}

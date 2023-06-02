@@ -1,0 +1,888 @@
+namespace = origin_born_in_the_purple
+
+country_event = {
+	id = origin_born_in_the_purple.1
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_born_in_the_purple
+	}
+	
+	immediate = {
+		ruler = {
+			add_trait_no_notify = leader_trait_born_in_the_purple
+			set_variable_to_random_value = {
+				which = born_in_the_purple_value
+				min = 25
+				max = 175
+				rounded = yes
+			}
+		}
+		country_event = { id = origin_born_in_the_purple.3 days = 30 }
+		country_event = { id = origin_born_in_the_purple.10 days = 1080 random = 1440 }
+	}
+}
+
+country_event = {
+	id = origin_born_in_the_purple.2
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_born_in_the_purple
+		has_authority = auth_imperial
+		from = { is_heir = yes }
+	}
+	
+	immediate = {
+		from = {
+			add_trait_no_notify = leader_trait_born_in_the_purple
+		}
+		start_situation = {
+			type = situation_origin_born_in_the_purple
+			target = from
+			effect = {
+				set_situation_approach = approach_origin_born_in_the_purple_normal
+				save_global_event_target_as = situation_origin_born_in_the_purple_of@root
+				set_variable_to_random_value = {
+					which = born_in_the_purple_value
+					min = -25
+					max = 25
+					rounded = yes
+				}
+				add_situation_progress = born_in_the_purple_value
+				clear_variable = born_in_the_purple_value
+				refresh_born_in_the_purple_value = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = origin_born_in_the_purple.3
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_born_in_the_purple
+	}
+	
+	immediate = {
+		country_event = { id = origin_born_in_the_purple.3 days = 30 }
+		if = {
+			limit = {
+				has_authority = auth_imperial
+				exists = heir
+			}
+			event_target:situation_origin_born_in_the_purple_of@root = {
+				refresh_born_in_the_purple_value = yes
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.4
+	title = origin_born_in_the_purple.4.name
+	desc = origin_born_in_the_purple.4.desc
+	picture = GFX_evt_arguing_senate
+	show_sound = event_red_alert
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		target = {
+			set_variable = {
+				which = born_in_the_purple_value
+				value = 200
+			}
+		}
+		owner = {
+			ruler = {
+				kill_leader = { show_notification = no }
+			}
+			add_modifier = {
+				modifier = origin_born_in_the_purple_modifier_1
+				days = 720
+			}
+			set_leader = root.target
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.4.a
+		tooltip = {
+			owner = {
+				add_modifier = {
+					modifier = origin_born_in_the_purple_modifier_1
+					days = 720
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.5
+	title = origin_born_in_the_purple.5.name
+	desc = origin_born_in_the_purple.5.desc
+	picture = GFX_evt_crusher_droid
+	show_sound = event_red_alert
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		target = {
+			kill_leader = { show_notification = no }
+		}
+		owner = {
+			add_modifier = {
+				modifier = origin_born_in_the_purple_modifier_2
+				days = 720
+			}
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.5.a
+		tooltip = {
+			owner = {
+				add_modifier = {
+					modifier = origin_born_in_the_purple_modifier_2
+					days = 720
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = origin_born_in_the_purple.10
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_born_in_the_purple
+	}
+	
+	immediate = {
+		country_event = { id = origin_born_in_the_purple.10 days = 1080 random = 1440 }
+		if = {
+			limit = {
+				has_authority = auth_imperial
+				exists = heir
+			}
+			event_target:situation_origin_born_in_the_purple_of@root = {
+				random_list = {
+					10 = {
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_11_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.11 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_12_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.12 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_13_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.13 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_14_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.14 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_15_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.15 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_16_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.16 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_17_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.17 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_18_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.18 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_19_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.19 }
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							has_situation_flag = born_in_the_purple_20_triggered
+						}
+						situation_event = { id = origin_born_in_the_purple.20 }
+					}
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.11
+	title = origin_born_in_the_purple.11.name
+	desc = origin_born_in_the_purple.11.desc
+	picture = GFX_evt_alien_propaganda
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_timed_situation_flag = {
+			flag = born_in_the_purple_11_triggered
+			years = 20
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.11.a
+		add_situation_progress = 20
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.12
+	title = origin_born_in_the_purple.12.name
+	desc = origin_born_in_the_purple.12.desc
+	picture = GFX_evt_alien_segregation
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_timed_situation_flag = {
+			flag = born_in_the_purple_12_triggered
+			years = 20
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.12.a
+		add_situation_progress = 40
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.13
+	title = origin_born_in_the_purple.13.name
+	desc = origin_born_in_the_purple.13.desc
+	picture = GFX_evt_civil_action
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_timed_situation_flag = {
+			flag = born_in_the_purple_13_triggered
+			years = 20
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.13.a
+		add_situation_progress = 60
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.14
+	title = origin_born_in_the_purple.14.name
+	desc = origin_born_in_the_purple.14.desc
+	picture = GFX_evt_announcement
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_timed_situation_flag = {
+			flag = born_in_the_purple_14_triggered
+			years = 20
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.14.a
+		add_situation_progress = -20
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.15
+	title = origin_born_in_the_purple.15.name
+	desc = origin_born_in_the_purple.15.desc
+	picture = GFX_evt_crisis_declared
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_timed_situation_flag = {
+			flag = born_in_the_purple_15_triggered
+			years = 20
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.15.a
+		add_situation_progress = -40
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.16
+	title = origin_born_in_the_purple.16.name
+	desc = origin_born_in_the_purple.16.desc
+	picture = GFX_evt_infiltration_neutral
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_timed_situation_flag = {
+			flag = born_in_the_purple_16_triggered
+			years = 20
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.16.a
+		add_situation_progress = -60
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.17
+	title = origin_born_in_the_purple.17.name
+	desc = origin_born_in_the_purple.17.desc
+	picture = GFX_evt_friendly_enlightenment
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = born_in_the_purple_17_triggered
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.17.a
+		target = {
+			add_trait = leader_trait_born_in_the_purple_negative_a
+		}
+		add_situation_progress = -30
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.17.b
+		allow = {
+			owner = {
+				has_resource = {
+					type = energy
+					amount >= 10000
+				}
+			}
+		}
+		owner = {
+			add_resource = { energy = -10000 }
+		}
+		add_situation_progress = -40
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.18
+	title = origin_born_in_the_purple.18.name
+	desc = origin_born_in_the_purple.18.desc
+	picture = GFX_evt_machine_sapience
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = born_in_the_purple_18_triggered
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.18.a
+		target = {
+			add_trait = leader_trait_born_in_the_purple_negative_b
+		}
+		add_situation_progress = -30
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.18.b
+		allow = {
+			owner = {
+				has_resource = {
+					type = unity
+					amount >= 5000
+				}
+			}
+		}
+		owner = {
+			add_resource = { unity = -5000 }
+		}
+		add_situation_progress = -40
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.19
+	title = origin_born_in_the_purple.19.name
+	desc = origin_born_in_the_purple.19.desc
+	picture = GFX_evt_imperial_vassal
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = born_in_the_purple_19_triggered
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.19.a
+		target = {
+			add_trait = leader_trait_born_in_the_purple_negative_c
+		}
+		add_situation_progress = -30
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.19.b
+		allow = {
+			owner = {
+				has_resource = {
+					type = influence
+					amount >= 100
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = -100 }
+		}
+		add_situation_progress = -40
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.20
+	title = origin_born_in_the_purple.20.name
+	desc = origin_born_in_the_purple.20.desc
+	picture = GFX_evt_operative_chase
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = born_in_the_purple_20_triggered
+		set_situation_locked = yes
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.20.a
+		custom_tooltip = origin_born_in_the_purple.20.a.tooltip
+		hidden_effect = {
+			random_list = {
+				1 = {
+					situation_event = { id = origin_born_in_the_purple.21 days = 30 random = 60 }
+				}
+				3 = {
+					situation_event = { id = origin_born_in_the_purple.22 days = 30 random = 60 }
+				}
+				3 = {
+					situation_event = { id = origin_born_in_the_purple.23 days = 30 random = 60 }
+				}
+				3 = {
+					situation_event = { id = origin_born_in_the_purple.24 days = 30 random = 60 }
+				}
+				1 = {
+					situation_event = { id = origin_born_in_the_purple.25 days = 30 random = 60 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.20.b
+		add_situation_progress = -50
+		set_situation_locked = no
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.21
+	title = origin_born_in_the_purple.21.name
+	desc = origin_born_in_the_purple.21.desc
+	picture = GFX_evt_shroudwalker_teachers
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.21.a
+		target = {
+			add_trait = leader_trait_born_in_the_purple_positive_a
+		}
+		add_situation_progress = 25
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.22
+	title = origin_born_in_the_purple.22.name
+	desc = origin_born_in_the_purple.22.desc
+	picture = GFX_evt_victorious_army
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.22.a
+		target = {
+			add_trait = leader_trait_born_in_the_purple_positive_b
+		}
+		add_situation_progress = 25
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.23
+	title = origin_born_in_the_purple.23.name
+	desc = origin_born_in_the_purple.23.desc
+	picture = GFX_evt_towel
+	show_sound = event_celebration
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.23.a
+		target = {
+			add_trait = leader_trait_born_in_the_purple_positive_c
+		}
+		add_situation_progress = 50
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.24
+	title = origin_born_in_the_purple.24.name
+	desc = origin_born_in_the_purple.24.desc
+	picture = GFX_evt_archaeology_trap
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_born_in_the_purple_value = yes
+		}
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.24.a
+		add_situation_progress = -25
+	}
+}
+
+situation_event = {
+	id = origin_born_in_the_purple.25
+	title = origin_born_in_the_purple.25.name
+	desc = origin_born_in_the_purple.25.desc
+	picture = GFX_evt_disease_outbreak
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = target
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.25.a
+		target = {
+			kill_leader = { show_notification = no }
+		}
+	}
+	
+	option = {
+		name = origin_born_in_the_purple.25.b
+		target = {
+			kill_leader = { show_notification = no }
+		}
+	}
+}

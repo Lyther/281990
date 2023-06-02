@@ -1,0 +1,580 @@
+###################################################
+#
+# "Overlord" Enclave Events
+# By Gemma Thomson, Hadrien Buytaers & Chad Inglis
+#
+###################################################
+namespace = enclave
+
+# enclave.1xxx	general-purpose
+# enclave.2xxx	Mercenary enclave
+# enclave.3xxx	Salavager enclave
+# enclave.4xxx	Shroudwalker enclave
+# enclave.5xxx	Divination events
+# enclave.6xxx	Shroud Tunnel events
+
+
+# Merc Enclave Destroyed (HIDDEN)
+country_event = {
+	id = enclave.23
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = enclave_mercenary
+			FROMFROM = {
+				is_ship_size = enclave_mercenary_station
+			}
+		}
+	}
+
+	immediate = {
+		FROMFROM = {
+			solar_system = { save_event_target_as = merc_system }
+		}
+		FROM = {
+			country_event = { id = enclave.25 }
+			save_event_target_as = mercenary_destroyer
+		}
+		every_country = {
+			limit = {
+				has_communications = ROOT
+				NOT = { is_country = event_target:mercenary_destroyer }
+				is_zofe_compatible = yes
+			}
+			country_event = { id = enclave.26 }
+		}
+	}
+	after = {
+		destroy_country = yes
+		every_country = {
+			limit = {
+				has_modifier = country_enclave_capacity_decrease_modifier
+			}
+			country_event = { id = enclave.24 days = 2 }
+		}
+	}
+}
+
+# Salvager Enclave Destroyed (HIDDEN)
+country_event = {
+	id = enclave.370
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = enclave
+			has_country_flag = salvager_enclave_country
+			FROMFROM = {
+				is_ship_size = enclave_salvager_station
+			}
+		}
+	}
+
+	immediate = {
+		FROMFROM = {
+			solar_system = { save_event_target_as = salvager_system }
+		}
+		FROM = {
+			country_event = { id = enclave.375 }
+			save_event_target_as = salvager_destroyer
+		}
+		observer_event = { id = observer.90 }
+		every_country = {
+			limit = {
+				has_communications = ROOT
+				NOT = { is_country = event_target:salvager_destroyer }
+				is_zofe_compatible = yes
+			}
+			country_event = { id = enclave.380 }
+		}
+	}
+}
+
+# Shroudwalker Enclave: GREETINGS
+# This = player country; event_target:shroudwalker_enclave_country = enclave country
+country_event = {
+	id = enclave.405
+	title = enclave.405.name
+	location = event_target:shroudwalker_enclave_system
+	#First-time greetings
+	desc = {
+		trigger = {
+			NOR = {
+				has_country_flag = shroudwalker_enclave_diplomacy_engaged
+				is_hostile = event_target:shroudwalker_enclave_country
+				is_homicidal = yes
+				has_ascension_perk = ap_mind_over_matter
+				has_origin = origin_shroudwalker_apprentice
+			}
+		}
+		text = enclave.405.generic.a.desc
+	}
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = shroudwalker_enclave_diplomacy_engaged }
+			OR = {
+				has_ascension_perk = ap_mind_over_matter #and by extension, ap_transcendence
+				has_origin = origin_shroudwalker_apprentice
+			}
+		}
+		text = enclave.405.psionic.a.desc
+	}
+	#Return visit greetings
+	desc = {
+		trigger = {
+			has_country_flag = shroudwalker_enclave_diplomacy_engaged
+			NOR = {
+				is_homicidal = yes
+				is_hostile = event_target:shroudwalker_enclave_country
+				has_ascension_perk = ap_mind_over_matter
+				has_origin = origin_shroudwalker_apprentice
+			}
+		}
+		text = enclave.405.generic.n.desc
+		text = enclave.405.generic.o.desc
+		text = enclave.405.generic.p.desc
+	}
+	desc = {
+		trigger = {
+			has_country_flag = shroudwalker_enclave_diplomacy_engaged
+			OR = {
+				has_ascension_perk = ap_mind_over_matter #and by extension, ap_transcendence
+				has_origin = origin_shroudwalker_apprentice
+			}
+		}
+		text = enclave.405.psionic.n.desc
+		text = enclave.405.psionic.o.desc
+	}
+	#Hostile greeting
+	desc = {
+		trigger = {
+			OR = {
+				is_homicidal = yes
+				is_hostile = event_target:shroudwalker_enclave_country
+			}
+		}
+		text = enclave.405.hostile.a.desc
+	}
+	is_triggered_only = yes
+
+	diplomatic = yes
+	custom_gui = "enclave_artist_window"
+	custom_gui_option = "enclave_artist_option"
+	picture_event_data = {
+		portrait = event_target:shroudwalker_enclave_country
+		room = shroudwalkers_room
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = shroudwalker_enclave_diplomacy_engaged
+					is_homicidal = yes
+				}
+			}
+			every_system = {
+				limit = {
+					has_star_flag = shroudwalker_enclave_system
+				}
+				root = { set_visited = prev }
+			}
+		}
+	}
+
+	#Purchase Divination
+	option = {
+		name = enclave.405.a
+		trigger = {
+			NOR = {
+				is_hostile = event_target:shroudwalker_enclave_country
+				is_homicidal = yes
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = shroudwalker_divination_cooldown
+				has_active_shroudwalker_divination = no
+			}
+			custom_tooltip = {
+				fail_text = shroudwalker_divination_cooldown_two
+				NOT = {
+					has_country_flag = divination_purchase
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.410 }
+		}
+	}
+	# Purchase their aid
+	option = {
+		name = enclave.405.b
+		trigger = {
+			NOR = {
+				is_hostile = event_target:shroudwalker_enclave_country
+				is_homicidal = yes
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = shroudwalker_teacher_cooldown_tt
+				NOT = { has_country_flag = shroudwalker_teacher_cooldown }
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.7100 }
+		}
+	}
+	# Purchase information about enemies
+	option = {
+		name = enclave.405.c
+		trigger = {
+			has_nemesis = yes
+			NOR = {
+				is_hostile = event_target:shroudwalker_enclave_country
+				is_homicidal = yes
+			}
+			event_target:shroudwalker_enclave_country = {
+				trust = {
+					who = root
+					value >= 10
+				}
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = shroudwalker_insight_cooldown_tt
+				NOT = { has_country_flag = shroudwalker_insight_cooldown }
+			}
+			custom_tooltip = {
+				fail_text = enclave.405.c.tt
+				event_target:shroudwalker_enclave_country = {
+					trust = {
+						who = root
+						value >= 20
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = enclave.405.c.tt.2
+				has_active_spynetwork = yes
+				any_spynetwork = {
+					owner = { is_same_value = root }
+					target = { is_zofe_compatible = yes }
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.7050 }
+		}
+	}
+	#Purchase Shroud Beacon
+	option = {
+		name = enclave.405.d
+		trigger = {
+			NOR = {
+				has_country_flag = shroudwalker_enclave_bought_shroud_beacon
+				is_hostile = event_target:shroudwalker_enclave_country
+				is_homicidal = yes
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = enclave.405.d.tt
+				event_target:shroudwalker_enclave_country = {
+					trust = {
+						who = root
+						value >= 30
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.420 }
+		}
+	}
+	#Cease dialog
+	option = {
+		name = GOODBYE
+		trigger = {
+			NOR = {
+				is_hostile = event_target:shroudwalker_enclave_country
+				is_homicidal = yes
+			}
+		}
+		default_hide_option = yes
+	}
+
+	option = {
+		name = DOTDOTDOT
+		trigger = {
+			OR = {
+				is_hostile = event_target:shroudwalker_enclave_country
+				is_homicidal = yes
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			set_country_flag = shroudwalker_enclave_diplomacy_engaged
+		}
+	}
+}
+
+# Shroudwalker Enclave Destroyed (HIDDEN)
+country_event = {
+	id = enclave.430
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = enclave
+			has_country_flag = shroudwalker_enclave_country
+			FROMFROM = {
+				is_ship_size = enclave_shroudwalker_station
+			}
+		}
+	}
+
+	immediate = {
+		FROMFROM = {
+			solar_system = { save_event_target_as = shroudwalker_system }
+		}
+		FROM = {
+			country_event = { id = enclave.435 }
+			save_event_target_as = shroudwalker_destroyer
+		}
+		observer_event = { id = observer.95 }
+		every_country = {
+			limit = {
+				has_communications = ROOT
+				NOT = { is_country = event_target:shroudwalker_destroyer }
+				is_zofe_compatible = yes
+			}
+			country_event = { id = enclave.440 }
+		}
+	}
+}
+
+# Shroudwalkers Depart - Gatekeeper event
+country_event = {
+	id = enclave.4239
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_crisis = yes #Contingency, Extradimensionals or Prethoryn
+		NOR = {
+			has_global_flag = shroudwalkers_departed
+			has_global_flag = marauder_crisis_ongoing #Khan
+			has_global_flag = gray_goo_crisis_active #Gray Tempest
+			crisis_happened_and_defeated = yes #Contingency, Extradimensionals or Prethoryn
+		}
+		any_country = {
+			is_country_type = enclave
+			has_country_flag = shroudwalker_enclave_country
+		}
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				has_origin = origin_shroudwalker_apprentice
+				is_zofe_compatible = yes # probably there is a need in checking if country has "Teachers of the Shroud" origin
+			}
+			country_event = { id = enclave.4240 }
+		}
+	}
+
+	after = {
+		every_country = {
+			limit = {
+				is_country_type = enclave
+				has_country_flag = shroudwalker_enclave_country
+			}
+			destroy_country = yes
+		}
+
+		set_global_flag = shroudwalkers_departed
+	}
+}
+
+# Shroudwalkers Depart - You are the Crisis - Gatekeeper event
+
+country_event = {
+	id = enclave.4244
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_crisis_level = crisis_level_5
+		exists = event_target:shroudwalker_enclave_country
+		NOR = {
+			has_global_flag = shroudwalkers_departed
+			has_global_flag = marauder_crisis_ongoing #Khan
+			has_global_flag = gray_goo_crisis_active #Gray Tempest
+			crisis_happened_and_defeated = yes #Contingency, Extradimensionals or Prethoryn
+		}
+		any_country = {
+			is_country_type = enclave
+			has_country_flag = shroudwalker_enclave_country
+		}
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				has_origin = origin_shroudwalker_apprentice
+				is_zofe_compatible = yes
+			}
+			country_event = { id = enclave.4245 }
+		}
+	}
+
+	after = {
+		every_country = {
+			limit = {
+				is_country_type = enclave
+				has_country_flag = shroudwalker_enclave_country
+			}
+			destroy_country = yes
+		}
+
+		set_global_flag = shroudwalkers_departed
+	}
+}
+
+##################################
+# SHROUDWALKER ENCLAVE (APPENDIX)
+##################################
+
+# Shroudwalker Insight modifier
+country_event = { # Purchasing Insight
+	id = enclave.7050
+	base = enclave.405
+	desc_clear = yes
+	option_clear = yes
+
+	desc = enclave.7050.desc
+
+	trigger = {
+		any_spynetwork = {
+			owner = { is_same_value = root }
+			target = { is_zofe_compatible = yes }
+			exists = leader
+		}
+	}
+
+	immediate = {
+		every_spynetwork = {
+			limit = {
+				owner = { is_same_value = root }
+				target = { is_zofe_compatible = yes }
+				exists = leader
+			}
+			save_spynetwork_country = yes
+		}
+	}
+
+	#Back to menu
+	option = {
+		name = enclave.410.a
+		hidden_effect = {
+			country_event = { id = enclave.405 }
+		}
+	}
+	option = {
+		name = enclave.7050.a
+		trigger = {
+			exists = event_target:spynetwork_country_1
+		}
+		allow = {
+			shroudwalker_insight_purchasing_trigger = {
+				TARGET = event_target:spynetwork_country_1
+			}
+		}
+		shroudwalker_insight_purchasing_effect = {
+			TARGET = event_target:spynetwork_country_1
+		}
+	}
+	option = {
+		name = enclave.7050.b
+		trigger = {
+			exists = event_target:spynetwork_country_2
+		}
+		allow = {
+			shroudwalker_insight_purchasing_trigger = {
+				TARGET = event_target:spynetwork_country_2
+			}
+		}
+		shroudwalker_insight_purchasing_effect = {
+			TARGET = event_target:spynetwork_country_2
+		}
+	}
+	option = {
+		name = enclave.7050.c
+		trigger = {
+			exists = event_target:spynetwork_country_3
+		}
+		allow = {
+			shroudwalker_insight_purchasing_trigger = {
+				TARGET = event_target:spynetwork_country_3
+			}
+		}
+		shroudwalker_insight_purchasing_effect = {
+			TARGET = event_target:spynetwork_country_3
+		}
+	}
+	option = {
+		name = enclave.7050.d
+		trigger = {
+			exists = event_target:spynetwork_country_4
+		}
+		allow = {
+			shroudwalker_insight_purchasing_trigger = {
+				TARGET = event_target:spynetwork_country_4
+			}
+		}
+		shroudwalker_insight_purchasing_effect = {
+			TARGET = event_target:spynetwork_country_4
+		}
+	}
+	option = {
+		name = enclave.7050.e
+		trigger = {
+			exists = event_target:spynetwork_country_5
+		}
+		allow = {
+			shroudwalker_insight_purchasing_trigger = {
+				TARGET = event_target:spynetwork_country_5
+			}
+		}
+		shroudwalker_insight_purchasing_effect = {
+			TARGET = event_target:spynetwork_country_5
+		}
+	}
+	option = {
+		name = enclave.7050.f
+		trigger = {
+			exists = event_target:spynetwork_country_6
+		}
+		allow = {
+			shroudwalker_insight_purchasing_trigger = {
+				TARGET = event_target:spynetwork_country_6
+			}
+		}
+		shroudwalker_insight_purchasing_effect = {
+			TARGET = event_target:spynetwork_country_6
+		}
+	}
+	option = {
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}

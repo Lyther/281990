@@ -1,0 +1,359 @@
+namespace = crisis
+
+# 索林原虫
+country_event = {
+	id = crisis.20
+	title = "crisis.20.name"
+	desc = {
+		text = crisis.20.desc
+		trigger = {
+			NOT = { has_country_flag = wonder_country_38 }
+		}
+	}
+	desc = {
+		text = crisis.20.desc_time
+		trigger = {
+			has_country_flag = wonder_country_38
+		}
+	}
+	picture = GFX_evt_physics_research
+	show_sound = event_alien_nature
+	location = event_target:prethoryn_invasion_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_rim_system = {
+			limit = { has_star_flag = swarm_invasion_target_1 }
+			save_event_target_as = prethoryn_invasion_system
+		}
+		random_country = {
+			limit = {
+				is_country_type = swarm
+			}
+			save_event_target_as = prethoryn
+		}
+	}
+
+	option = {
+		name = crisis.20.a
+		trigger = {
+			NOT = { has_country_flag = wonder_country_38 }
+		}
+	}
+	
+	option = {
+		name = crisis.20.b
+		trigger = {
+			has_country_flag = wonder_country_38
+		}
+		custom_tooltip = "crisis.20.b.tooltip"
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = time_crisis_country
+					has_ascension_perk = ap_become_the_crisis
+				}
+			}
+			activate_crisis_progression = yes
+		}
+		hidden_effect = {
+			remove_opinion_modifier = {
+				modifier = opinion_swarm
+				who = event_target:prethoryn
+			}
+			set_ai_personality = time_became_the_crisis
+			set_country_flag = time_crisis_country
+			set_country_flag = join_prethoryn
+			every_country = {
+				limit = {
+					is_country_type = default
+				}
+				establish_communications_no_message = root
+				root = {
+					declare_war = {
+						target = prev
+						attacker_war_goal = wg_time_wipe_them_out
+					}
+				}
+			}
+			event_target:prethoryn = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = no
+					set_neutral = no
+					set_friendly = yes
+				}
+				remove_opinion_modifier = {
+					modifier = opinion_prey
+					who = root
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = crisis.20.c
+		trigger = {
+			has_country_flag = wonder_country_38
+			is_ai = no
+		}
+	}
+}
+
+# 哨兵
+country_event = {
+	id = crisis.52
+	title = "sentinel_title"
+	desc = {
+		text = crisis.52.desc
+		trigger = {
+			NOT = { has_country_flag = join_prethoryn }
+		}
+	}
+	desc = {
+		text = crisis.52.desc_time
+		trigger = {
+			has_country_flag = join_prethoryn
+		}
+	}
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:crisis_sentinels
+		room = "ethic_spaceship_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = crisis.52.a
+		trigger = {
+			exists = event_target:sentinel_fallen_empire
+			NOT = { has_country_flag = join_prethoryn }
+		}
+		response_text = crisis.52.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = crisis.52.a
+		trigger = {
+			NOT = { exists = event_target:sentinel_fallen_empire }
+			NOT = { has_country_flag = join_prethoryn }
+		}
+		response_text = crisis.52.2.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = crisis.52.b
+		trigger = {
+			exists = event_target:sentinel_fallen_empire
+			NOT = { has_country_flag = join_prethoryn }
+		}
+		response_text = crisis.52.new.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = crisis.52.b
+		trigger = {
+			NOT = { exists = event_target:sentinel_fallen_empire }
+			NOT = { has_country_flag = join_prethoryn }
+		}
+		response_text = crisis.52.2.new.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = crisis.52.c
+		trigger = {
+			NOT = { has_country_flag = join_prethoryn }
+		}
+		response_text = crisis.52.c.response
+	}
+	option = {
+		name = crisis.52.d
+		trigger = {
+			has_country_flag = join_prethoryn
+		}
+		response_text = crisis.52.d.response
+		hidden_effect = {
+			event_target:sentinel_fallen_empire = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = yes
+					set_neutral = no
+					set_friendly = no
+				}
+			}
+		}
+	}
+}
+
+# 狂热者
+country_event = {
+	id = crisis.1211
+	title = "TRANSMISSION"
+	desc = {
+		text = crisis.1211.desc
+		trigger = {
+			NOT = { has_country_flag = wonder_country_40 }
+		}
+	}
+	desc = {
+		text = crisis.1211.desc_time
+		trigger = {
+			has_country_flag = wonder_country_40
+		}
+	}
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = exd3
+		room = "extradimensional_green_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = crisis.1211.a
+		trigger = {
+			NOT = { has_country_flag = wonder_country_40 }
+		}
+	}
+	
+	option = {
+		name = crisis.1211.b
+		trigger = {
+			has_country_flag = wonder_country_40
+		}
+		custom_tooltip = "crisis.1211.b.tooltip"
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = time_crisis_country
+					has_ascension_perk = ap_become_the_crisis
+				}
+			}
+			activate_crisis_progression = yes
+		}
+		hidden_effect = {
+			set_ai_personality = time_became_the_crisis
+			set_country_flag = time_crisis_country
+			set_country_flag = join_extradimensional_3
+			every_country = {
+				limit = {
+					is_country_type = default
+				}
+				establish_communications_no_message = root
+				root = {
+					declare_war = {
+						target = prev
+						attacker_war_goal = wg_time_wipe_them_out
+					}
+				}
+			}
+			event_target:extradimensionals3 = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = no
+					set_neutral = no
+					set_friendly = yes
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = crisis.1211.c
+		trigger = {
+			has_country_flag = wonder_country_40
+			is_ai = no
+		}
+	}
+}
+
+# 领袖暗杀
+country_event = {
+	id = crisis.2094
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOR = { 
+			has_country_flag = synth_assassination_attempt
+			has_country_flag = time_0
+			has_country_flag = time_1
+			has_country_flag = time_2
+			has_country_flag = time_3
+			has_country_flag = wonder_country_35
+			has_country_flag = wonder_country_38
+			has_country_flag = wonder_country_39
+			has_country_flag = wonder_country_40
+			has_origin = origin_time
+			has_origin = origin_gas_colony
+			has_origin = origin_psionic
+			has_origin = origin_nanites
+		}
+	}
+
+	immediate = {
+		set_country_flag = synth_assassination_attempt
+		leader = { save_event_target_as = ruler }
+		random_list = {
+			70 = { country_event = { id = crisis.2095 } }
+			30 = { country_event = { id = crisis.2096 } }
+		}
+	}
+}
+
+# 赛博勒克斯
+country_event = {
+	id = crisis.2402
+	title = "TRANSMISSION"
+	desc = {
+		text = crisis.2402.desc
+		trigger = {
+			NOT = { has_country_flag = join_AI_crisis }
+		}
+	}
+	desc = {
+		text = crisis.2402.desc_time
+		trigger = {
+			has_country_flag = join_AI_crisis
+		}
+	}
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = ai_crisis_2
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = crisis.2402.a
+		trigger = {
+			NOT = { has_country_flag = join_AI_crisis }
+		}
+	}
+	
+	option = {
+		name = crisis.2402.b
+		trigger = {
+			has_country_flag = join_AI_crisis
+		}
+		hidden_effect = {
+			event_target:cybrex = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = yes
+					set_neutral = no
+					set_friendly = no
+				}
+			}
+		}
+	}
+}

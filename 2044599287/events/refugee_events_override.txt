@@ -1,0 +1,38 @@
+############################
+#
+# Refugee Events
+#
+# Written by Martin Anward
+#
+############################
+
+namespace = refugees
+
+
+# Pop escapes crisis, fleeing to another empire
+planet_event = {
+	id = refugees.5
+	title = OK
+	desc = OK
+
+	hide_window = yes
+
+	trigger = {
+		exists = owner
+		owner = { is_zofe_compatible = yes }
+		is_controlled_by = owner
+		is_under_crisis_bombardment = yes
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	immediate = {
+		random_owned_pop = {
+			limit = { is_valid_refugee_pop = yes }
+			save_event_target_as = refugee_pop #Must be saved for refugee_pop_effect to work
+			refugee_pop_effect = yes
+		}
+	}
+}

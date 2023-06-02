@@ -1,0 +1,269 @@
+#地狱熔炉
+tc_hell_furnace_00 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	place_entity_on_planet_plane = no
+	portrait = "GFX_megastructure_tc_hell_furnace"
+
+	prerequisites = { tech_mega_engineering tc_tech_infernal_furnace }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			unity = 1024
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "tc_need_molten"
+				is_planet_class = pc_molten
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						has_star_flag = ring_world_built
+					}
+					is_artificial = yes
+				}
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			set_planet_flag = has_megastructure 
+			if = {
+				limit = { has_modifier = terraforming_candidate }
+				remove_modifier = terraforming_candidate
+			}
+		}
+	}
+}
+
+tc_hell_furnace_01 = {
+	entity = "tc_hell_furnace_stage_1_entity"
+	construction_entity = "tc_hell_furnace_stage_1_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_hell_furnace"
+	scales_with_planet = yes
+
+	upgrade_from = { tc_hell_furnace_00 }
+
+	prerequisites = { tech_mega_engineering tc_tech_infernal_furnace }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 3840
+			unity = 1024
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_hell_furnace_02 = {
+	entity = "tc_hell_furnace_stage_2_entity"
+	construction_entity = "tc_hell_furnace_build_stage_2_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_hell_furnace"
+	scales_with_planet = yes
+
+	upgrade_from = { tc_hell_furnace_01 }
+
+	prerequisites = { tech_mega_engineering tc_tech_infernal_furnace }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 3840
+			unity = 1024
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_hell_furnace_03 = {
+	entity = "tc_hell_furnace_stage_3_entity"
+	construction_entity = ""
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_hell_furnace"
+	scales_with_planet = yes
+
+	upgrade_from = { tc_hell_furnace_02 }
+
+	prerequisites = { tech_mega_engineering tc_tech_infernal_furnace }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_element_shard = 240
+			unity = 512
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 80
+		}
+		produces = {
+			alloys = 16
+			mult = tc_lava_planet_size_mult
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = {
+			change_pc = pc_tc_lava
+			export_trigger_value_to_variable = {
+				trigger = planet_size
+				variable = tc_lava_planet_size_mult
+			}
+		}
+		FROMFROM = {
+			set_variable = { which = tc_lava_planet_size_mult value = planet.tc_lava_planet_size_mult }
+		}
+	}
+}
+
+tc_hell_furnace_04 = {
+	entity = "tc_hell_furnace_stage_4_entity"
+	construction_entity = "tc_hell_furnace_stage_4_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_hell_furnace"
+	show_galactic_map_icon = no
+	show_in_outliner = no
+	scales_with_planet = yes
+
+	upgrade_from = { tc_hell_furnace_03 }
+
+	prerequisites = { tech_mega_engineering tc_tech_infernal_furnace }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			tc_element_shard = 512
+			unity = 1024
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 120
+		}
+		produces = {
+			alloys = 24
+			mult = tc_lava_planet_size_mult
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}

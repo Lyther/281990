@@ -1,0 +1,61 @@
+namespace = megumin_dragon
+
+ship_event = {
+	id = megumin_dragon.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		is_ship_size = space_dragon_origin_baby
+	}
+	immediate = {
+		ship_event = {
+			id = megumin_dragon.2
+			days = 18000
+		}
+	}
+}
+
+ship_event = {
+	id = megumin_dragon.2
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {		
+		save_event_target_as = dragonname
+		owner = {
+			create_message = {
+				type = UPLIFT_COMPLETE
+				localization = "a dragon baby grows up"
+				days = 5
+				target = root
+			}
+		}
+		create_fleet = {
+			name = event_target:dragonname
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = root
+					design = "NAME_Sky_Dragon"
+					prefix = no
+					upgradable = no
+					effect = {
+						set_disable_at_health = 0.001
+					}
+				}
+				set_location = {
+					target = root
+				}
+				set_fleet_stance = passive
+
+				add_modifier = { modifier = "amoeba_speed_boost" days = -1 }
+				add_modifier = { modifier = "evolved_weapon_boost_2" days = -1 }
+				add_modifier = { modifier = "evolved_firing_rate" days = -1 }
+				add_modifier = { modifier = "evolved_evasion" days = -1 }
+			}
+			settings = {
+				can_upgrade = no
+			}
+		}
+		delete_ship = root
+	}
+}

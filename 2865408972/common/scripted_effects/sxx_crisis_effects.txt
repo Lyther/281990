@@ -1,0 +1,881 @@
+sxx_create_fallen_1_country = {
+	create_species = {
+		name = random
+		class = random_non_machine
+		portrait = random
+		traits = random
+		extra_trait_points = 9
+		allow_negative_traits = no
+	}
+	create_country = {
+		name = random
+		name_list = "SXX1"
+		type = sxx_fallen_guardian
+		ignore_initial_colony_error = yes
+		authority = auth_sxx_sect
+		civics = {
+			civic = civic_sxx_fe
+			civic = civic_memorialist
+		}
+		species = last_created_species
+		ethos = {
+			ethic = ethic_fanatic_authoritarian
+		}
+		flag = {
+			icon= {
+				category = "human"
+				file = "flag_human_5.dds"
+			}
+			background= {
+				category = "backgrounds"
+				file = "00_solid.dds"
+			}
+			colors={
+				"white"
+				"white"
+				"null"
+				"null"
+			}
+		}
+		origin = "origin_fallen_empire"
+		effect = {
+			save_global_event_target_as = sxx_fallen_1
+			country_add_ethic = ethic_fanatic_authoritarian
+			change_government = {
+				authority = auth_sxx_sect
+				cooldown = no
+				remove_invalid_civics = yes
+				civics = { civic = civic_sxx_fe civic = civic_memorialist }
+			}
+			add_resource = {
+				minerals = 10000
+				energy = 10000
+				food = 10000
+				consumer_goods = 5000
+				alloys = 2500
+			#	sxx_stones = 10000
+			#	sxx_pills = 1000
+				influence = 500
+			}
+			# must initialize global designs here
+			add_global_ship_design = NAME_SXX_FE1_TT
+			add_global_ship_design = NAME_SXX_FE1_LS
+			add_global_ship_design = NAME_SXX_FE1_SS
+			add_global_ship_design = NAME_SXX_FE1_Platform
+			add_global_ship_design = NAME_SXX_FE1_Constructor
+			add_global_ship_design = NAME_SXX_FE1_Starbase
+
+			add_modifier = { modifier = sxx_fallen_modifier }
+			add_modifier = { modifier = sxx_fairy_country }
+			set_graphical_culture = fallen_empire_01
+			room_name_override = "personality_fallen_empire_teal_room"
+			every_owned_leader = {
+				sxx_remove_xiuxian_trait = yes
+				modify_species = {
+					species = this
+					add_trait = trait_sxx_dujie
+				}
+				#set_skill = 10
+				add_experience = 100000
+			}
+			country_event = { id = sxx_event.200 }
+		}
+	}
+}
+
+create_sxx_fe1_fringe_colony = {
+	set_planet_flag = fallen_empire_world
+	clear_blockers = yes
+	prevent_anomaly = yes
+	set_owner = event_target:sxx_fallen_1
+	
+	while = {
+		count = 5
+		remove_deposit = d_sxx_lingmai_1
+		remove_deposit = d_sxx_lingmai_2
+		remove_deposit = d_sxx_lingmai_3
+		remove_deposit = d_sxx_lingmai_4
+	}
+	add_deposit = d_sxx_lingmai_2
+	add_deposit = d_sxx_lingmai_2
+	while = {
+		count = 5
+		add_district = {
+			district_type = district_city
+			ignore_cap = yes
+		}
+	}
+	#add_building = building_system_capital
+	add_building = building_galactic_memorial_3
+	add_building = building_fe_dome
+	add_building = building_sxx_stones_mine_2
+	add_building = building_sxx_stones_mine_2
+	while = {
+		count = 12
+		create_pop = {
+			species = owner_main_species
+		}
+	}
+	while = {
+		count = 4
+		random_owned_pop = {
+			set_pop_flag = sxx_cultivator
+			set_pop_flag = sxx_lianxu
+			modify_species = {
+				species = this
+				add_trait = trait_sxx_lianxu
+			}
+		}
+	}
+}
+
+sxx_create_fe1_home_citadel = {
+	create_starbase = {
+		size = "starbase_citadel"
+
+		module = "shipyard"
+		module = "shipyard"
+		module = "shipyard"
+		module = "hangar_bay"
+		module = "gun_battery"
+		module = "gun_battery"
+
+		building = "target_uplink_computer"
+		building = "defense_grid"
+		building = "colossus_yards"
+		building = "titan_yards"
+
+		effect = {
+			set_owner = event_target:sxx_fallen_1
+			while = {
+				count = 10
+				create_sxx_fe1_platform = yes
+			}
+		}
+	}
+}
+
+sxx_create_fe1_citadel = {
+	create_starbase = {
+		size = "starbase_citadel"
+
+		module = "shipyard"
+		module = "anchorage"
+		module = "anchorage"
+		module = "hangar_bay"
+		module = "gun_battery"
+		module = "gun_battery"
+
+		building = "crew_quarters"
+		building = "command_center"
+		building = "target_uplink_computer"
+		building = "listening_post"
+
+		effect = {
+			set_owner = event_target:sxx_fallen_1
+			while = {
+				count = 4
+				create_sxx_fe1_platform = yes
+			}
+			if = {
+				limit = {
+					solar_system = {
+						has_star_flag = sxx_seal_system
+					}
+				}
+				while = {
+					count = 20
+					create_sxx_fe1_platform = yes
+				}
+			}
+		}
+	}
+}
+
+sxx_create_fe1_outpost = {
+	create_starbase = {
+		size = "starbase_outpost"
+		effect = {
+			set_owner = event_target:sxx_fallen_1
+			while = {
+				count = 2
+				create_sxx_fe1_platform = yes
+			}
+		}
+	}
+}
+
+create_sxx_fe1_platform = {
+	create_ship = {
+		name = random
+		design = NAME_SXX_FE1_Platform
+		graphical_culture = owner
+	}
+}
+
+create_sxx_fallen_1_cultivator_fleet = {
+	owner = {
+		create_leader = {
+			class = admiral
+			species = owner_main_species
+			name = random
+			skill = 10
+			set_age = 20
+		}
+	}
+	last_created_leader = {
+		sxx_remove_xiuxian_trait = yes
+		modify_species = {
+			species = this
+			add_trait = trait_sxx_dujie
+		}
+		add_trait_no_notify = leader_trait_sxx_dujie
+		random_list = {
+			10 = { set_age = 1653 }
+			10 = { set_age = 1437 }
+			10 = { set_age = 1286 }
+			10 = { set_age = 1142 }
+			10 = { set_age = 1139 }
+			10 = { set_age = 1058 }
+			10 = { set_age = 1015 }
+			10 = { set_age = 984 }
+			10 = { set_age = 942 }
+			10 = { set_age = 921 }
+		}
+	}
+	create_fleet = {
+		name = "NAME_SXX_FE1_Cultivator_Fleet"
+		settings = {
+			can_change_composition = no
+			uses_naval_capacity = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = PREV.owner
+			while = {
+				count = 6
+				create_ship = {
+					name = "NAME_SXX_Ship_dujie"
+					design = "NAME_SXX_Cultivator_dujie"
+				}
+				last_created_ship = {
+					add_modifier = { modifier = sxx_cultivator_ship_modifier_9 }
+				}
+			}
+			while = {
+				count = 24
+				create_ship = {
+					name = "NAME_SXX_Ship_dacheng"
+					design = "NAME_SXX_Cultivator_dacheng"
+				}
+				last_created_ship = {
+					add_modifier = { modifier = sxx_cultivator_ship_modifier_8 }
+				}
+			}
+			assign_leader = last_created_leader
+			set_location = {
+				target = PREV
+				distance = 30
+				angle = random
+			}
+			set_fleet_bombardment_stance = indiscriminate
+		}
+	}
+}
+
+create_sxx_fallen_1_ship_fleet = {
+	owner = {
+		create_leader = {
+			class = admiral
+			species = owner_main_species
+			name = random
+			skill = 10
+			set_age = 20
+		}
+	}
+	last_created_leader = {
+		sxx_remove_xiuxian_trait = yes
+		modify_species = {
+			species = this
+			add_trait = trait_sxx_dujie
+		}
+		add_trait_no_notify = leader_trait_sxx_dujie
+		random_list = {
+			10 = { set_age = 1653 }
+			10 = { set_age = 1437 }
+			10 = { set_age = 1286 }
+			10 = { set_age = 1142 }
+			10 = { set_age = 1139 }
+			10 = { set_age = 1058 }
+			10 = { set_age = 1015 }
+			10 = { set_age = 984 }
+			10 = { set_age = 942 }
+			10 = { set_age = 921 }
+		}
+	}
+	create_fleet = {
+		name = "NAME_SXX_FE1_Ship_Fleet"
+		settings = {
+			can_change_composition = no
+		}
+		effect = {
+			set_owner = PREV.owner
+			create_ship = {
+				design = "NAME_SXX_FE1_TT"
+			}
+			while = {
+				count = 12
+				create_ship = {
+					design = "NAME_SXX_FE1_LS"
+				}
+			}
+			while = {
+				count = 36
+				create_ship = {
+					design = "NAME_SXX_FE1_SS"
+				}
+			}
+			assign_leader = last_created_leader
+			set_location = {
+				target = PREV
+				distance = 30
+				angle = random
+			}
+			set_fleet_bombardment_stance = indiscriminate
+		}
+	}
+}
+
+create_sxx_fallen_1_construction_ship_fleet = {
+	create_fleet = {
+		effect = {
+			set_owner = prev.owner
+			create_ship = {
+				name = random
+				design = "NAME_SXX_FE1_Constructor"
+				graphical_culture = owner
+			}
+			set_location = {
+				target = prev
+				distance = 60
+				angle = random
+			}
+		}
+	}
+}
+
+sxx_create_outer_demon_country = {
+	if = {
+		limit = {
+			NOT = { exists = event_target:sxx_outer_demon_country }
+		}
+		create_country = {
+			name = "NAME_SXX_Outer_Demon"
+			type = sxx_outer_demon
+			flag = {
+				icon = {
+					category = "zoological"
+					file = "flag_zoological_5.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "horizontal.dds"
+				}
+				colors={
+					"dark_purple"
+					"black"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = sxx_outer_demon_country
+				set_graphical_culture = extra_dimensional_01
+				create_ship_design = { design = "NAME_SXX_Dimensional_Horror" }
+				add_ship_design = last_created_design
+				every_playable_country = {
+					establish_communications_no_message = event_target:sxx_outer_demon_country
+				}
+				switch = {
+					trigger = has_global_flag
+					sxx_outer_demon_level_1 = { add_modifier = { modifier = sxx_outer_demon_modifier_1 } }
+					sxx_outer_demon_level_2 = { add_modifier = { modifier = sxx_outer_demon_modifier_2 } }
+					sxx_outer_demon_level_3 = { add_modifier = { modifier = sxx_outer_demon_modifier_3 } }
+					sxx_outer_demon_level_4 = { add_modifier = { modifier = sxx_outer_demon_modifier_4 } }
+					sxx_outer_demon_level_5 = { add_modifier = { modifier = sxx_outer_demon_modifier_4 } }
+					default = { add_modifier = { modifier = sxx_outer_demon_modifier_2 } }
+				}
+			}
+		}
+	}
+}
+
+sxx_create_outer_demon_god = {
+	if = {
+		limit = {
+			exists = event_target:sxx_crisis_god_fleet
+			event_target:sxx_crisis_god_fleet = { owner = { NOT = { is_country_type = sxx_outer_demon } } }
+		}
+		event_target:sxx_crisis_god_fleet = {
+			set_owner = event_target:sxx_outer_demon_country
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_flag = sxx_crisis_god_died }
+			event_target:sxx_pool_country = {
+				check_variable = {
+					which = sxx_crisis_god_spawn_count
+					value < 9
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = event_target:sxx_outer_demon_country }
+			}
+			create_country = {
+				name = "NAME_SXX_Outer_Demon"
+				type = sxx_outer_demon
+				flag = {
+					icon = {
+						category = "zoological"
+						file = "flag_zoological_5.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "horizontal.dds"
+					}
+					colors={
+						"dark_purple"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					set_country_flag = sxx_crisis_god
+					save_global_event_target_as = sxx_outer_demon_country
+					set_graphical_culture = extra_dimensional_01
+					create_ship_design = { design = "NAME_SXX_Dimensional_Horror" }
+					add_ship_design = last_created_design
+					every_playable_country = {
+						establish_communications_no_message = event_target:sxx_outer_demon_country
+					}
+					switch = {
+						trigger = has_global_flag
+						sxx_outer_demon_level_1 = { add_modifier = { modifier = sxx_outer_demon_modifier_1 } }
+						sxx_outer_demon_level_2 = { add_modifier = { modifier = sxx_outer_demon_modifier_2 } }
+						sxx_outer_demon_level_3 = { add_modifier = { modifier = sxx_outer_demon_modifier_3 } }
+						sxx_outer_demon_level_4 = { add_modifier = { modifier = sxx_outer_demon_modifier_4 } }
+						sxx_outer_demon_level_5 = { add_modifier = { modifier = sxx_outer_demon_modifier_4 } }
+						default = { add_modifier = { modifier = sxx_outer_demon_modifier_2 } }
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = event_target:sxx_crisis_god_planet }
+			}
+			random_galaxy_planet = {
+				limit = {
+					solar_system = {
+						NOR = {
+							has_star_flag = sxx_forbidden_area
+							any_fleet_in_system = { owner = { is_hostile = event_target:sxx_outer_demon_country } }
+						}
+					}
+				}
+				save_global_event_target_as = sxx_crisis_god_planet
+				solar_system = {
+					set_star_flag = cannot_be_hit_by_aow_starfall_spear
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = event_target:sxx_crisis_god_planet }
+			}
+			random_galaxy_planet = {
+				limit = {
+					solar_system = {
+						NOT = {
+							has_star_flag = sxx_forbidden_area
+						}
+					}
+				}
+				save_global_event_target_as = sxx_crisis_god_planet
+				solar_system = {
+					set_star_flag = cannot_be_hit_by_aow_starfall_spear
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = event_target:sxx_crisis_god_fleet }
+			}
+			create_fleet = {
+				name = "NAME_SXX_Outer_Demon_Fleet_God"
+				settings = {
+					spawn_debris = no
+					is_boss = yes
+					can_change_composition = no
+					can_change_leader = no
+					uses_naval_capacity = no
+				}
+				effect = {
+					set_owner = event_target:sxx_outer_demon_country
+					create_ship = {
+						name = "NAME_SXX_Cloud_God_Entity_Ship"
+						design = "NAME_SXX_Cloud_God_Entity"
+						effect = {
+							set_ship_flag = sxx_crisis_god_ship
+							save_global_event_target_as = sxx_crisis_god_ship
+							switch = {
+								trigger = has_global_flag
+								sxx_outer_demon_level_3 = { add_modifier = { modifier = sxx_crisis_god_modifier_3 } ship_event = { id = sxx_crisis.2040 days = 2 } }
+								sxx_outer_demon_level_4 = { add_modifier = { modifier = sxx_crisis_god_modifier_4 } ship_event = { id = sxx_crisis.2040 days = 1 } }
+								sxx_outer_demon_level_5 = { add_modifier = { modifier = sxx_crisis_god_modifier_4 } ship_event = { id = sxx_crisis.2040 days = 1 } }
+							}
+						}
+					}
+					set_location = {
+						target = event_target:sxx_crisis_god_planet
+						distance = 5
+						angle = random
+					}
+					save_global_event_target_as = sxx_crisis_god_fleet
+					set_fleet_stance = aggressive
+					set_aggro_range = 500
+					set_aggro_range_measure_from = self
+				}
+			}
+			event_target:sxx_pool_country = {
+				change_variable = {
+					which = sxx_crisis_god_spawn_count
+					value = 1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { exists = event_target:sxx_crisis_god_ship }
+			}
+			event_target:sxx_crisis_god_fleet = {
+				set_owner = event_target:sxx_outer_demon_country
+				create_ship = {
+					name = "NAME_SXX_Cloud_God_Entity_Ship"
+					design = "NAME_SXX_Cloud_God_Entity"
+					effect = {
+						set_ship_flag = sxx_crisis_god_ship
+						save_global_event_target_as = sxx_crisis_god_ship
+						switch = {
+							trigger = has_global_flag
+							sxx_outer_demon_level_3 = { add_modifier = { modifier = sxx_crisis_god_modifier_3 } ship_event = { id = sxx_crisis.2040 days = 2 } }
+							sxx_outer_demon_level_4 = { add_modifier = { modifier = sxx_crisis_god_modifier_4 } ship_event = { id = sxx_crisis.2040 days = 1 } }
+							sxx_outer_demon_level_5 = { add_modifier = { modifier = sxx_crisis_god_modifier_4 } ship_event = { id = sxx_crisis.2040 days = 1 } }
+						}
+					}
+				}
+				event_target:sxx_pool_country = {
+					change_variable = {
+						which = sxx_crisis_god_spawn_count
+						value = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+sxx_create_outer_demon_portal = {
+	create_fleet = {
+		name = "NAME_SXX_Outer_Demon_Portal"
+		settings = {
+			can_change_composition = no
+			can_change_leader = no
+			uses_naval_capacity = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:sxx_outer_demon_country
+			create_ship = {
+				name = "NAME_SXX_Outer_Demon_Portal"
+				design = "NAME_SXX_Outer_Demon_Portal"
+				graphical_culture = "extra_dimensional_01"
+				effect = { set_ship_flag = sxx_outer_demon_portal }
+			}
+			set_location = {
+				target = PREV
+				distance = 5
+				angle = random
+			}
+			save_global_event_target_as = sxx_outer_demon_portal
+		}
+	}
+}
+
+sxx_create_outer_demon_fleet_1 = {
+	create_fleet = {
+		name = "NAME_SXX_Outer_Demon_Fleet_1"
+		settings = {
+			can_change_composition = no
+			can_change_leader = no
+			uses_naval_capacity = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:sxx_outer_demon_country
+			create_ship = {
+				name = "NAME_SXX_Large_Cloud_Entity_Ship"
+				design = "NAME_SXX_Large_Cloud_Entity"
+			}
+			while = {
+				count = 12
+				create_ship = {
+					name = "NAME_SXX_Cloud_Entity_Ship"
+					design = "NAME_SXX_Cloud_Entity"
+				}
+			}
+			set_location = {
+				target = event_target:sxx_outer_demon_portal
+				distance = 5
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range = 500
+			set_aggro_range_measure_from = self
+		}
+	}
+}
+
+sxx_create_outer_demon_fleet_2 = {
+	create_fleet = {
+		name = "NAME_SXX_Outer_Demon_Fleet_2"
+		settings = {
+			can_change_composition = no
+			can_change_leader = no
+			uses_naval_capacity = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:sxx_outer_demon_country
+			create_ship = {
+				name = "NAME_SXX_Cloud_King_Entity_Ship"
+				design = "NAME_SXX_Cloud_King_Entity"
+			}
+			while = {
+				count = 6
+				create_ship = {
+					name = "NAME_SXX_Large_Cloud_Entity_Ship"
+					design = "NAME_SXX_Large_Cloud_Entity"
+				}
+			}
+			while = {
+				count = 30
+				create_ship = {
+					name = "NAME_SXX_Cloud_Entity_Ship"
+					design = "NAME_SXX_Cloud_Entity"
+				}
+			}
+			set_location = {
+				target = event_target:sxx_outer_demon_portal
+				distance = 5
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range = 500
+			set_aggro_range_measure_from = self
+		}
+	}
+}
+
+sxx_create_outer_demon_fleet_3 = {
+	if = {
+		limit = {
+			has_sxx_crisis_emperor = yes
+			any_system = {
+				NOR = {
+					any_system_planet = { is_colony = yes }
+					has_star_flag = sxx_forbidden_area
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_SXX_Outer_Demon_Fleet_3"
+			settings = {
+				can_change_composition = no
+				can_change_leader = no
+				uses_naval_capacity = no
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = event_target:sxx_outer_demon_country
+				create_ship = {
+					name = "NAME_SXX_Cloud_Emperor_Entity_Ship"
+					design = "NAME_SXX_Cloud_Emperor_Entity"
+				}
+				while = {
+					count = 6
+					create_ship = {
+						name = "NAME_SXX_Cloud_King_Entity_Ship"
+						design = "NAME_SXX_Cloud_King_Entity"
+					}
+				}
+				while = {
+					count = 30
+					create_ship = {
+						name = "NAME_SXX_Large_Cloud_Entity_Ship"
+						design = "NAME_SXX_Large_Cloud_Entity"
+					}
+				}
+				random_system = {
+					limit = {
+						NOT = { has_star_flag = sxx_forbidden_area }
+					}
+					star = {
+						save_event_target_as = sxx_crisis_emperor_star
+					}
+				}
+				set_location = {
+					target = event_target:sxx_crisis_emperor_star
+					distance = 5
+					angle = random
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range = 500
+				set_aggro_range_measure_from = self
+	
+				save_event_target_as = sxx_crisis_emperor_fleet
+				fleet_event = { id = sxx_crisis.1205 days = 330 random = 60 }
+				every_country = {
+					limit = {
+						is_ai = no
+					}
+					country_event = { id = sxx_crisis.1200 }
+				}
+			}
+		}
+	}
+}
+
+sxx_create_outer_demon_fleet_defend = {
+	create_fleet = {
+		name = "NAME_SXX_Outer_Demon_Fleet_Defend"
+		settings = {
+			can_change_composition = no
+			can_change_leader = no
+			uses_naval_capacity = no
+			spawn_debris = no
+		}
+		effect = {
+			set_owner = event_target:sxx_outer_demon_country
+			if = {
+				limit = {
+					has_sxx_crisis_emperor = yes
+				}
+				while = {
+					count = 3
+					create_ship = {
+						name = "NAME_SXX_Cloud_Emperor_Entity_Ship"
+						design = "NAME_SXX_Cloud_Emperor_Defend_Entity"
+					}
+				}
+			}
+			while = {
+				count = 12
+				create_ship = {
+					name = "NAME_SXX_Cloud_King_Entity_Ship"
+					design = "NAME_SXX_Cloud_King_Defend_Entity"
+				}
+			}
+			while = {
+				count = 36
+				create_ship = {
+					name = "NAME_SXX_Large_Cloud_Entity_Ship"
+					design = "NAME_SXX_Large_Cloud_Defend_Entity"
+				}
+			}
+			set_location = {
+				target = event_target:sxx_outer_demon_portal
+				distance = 10
+				angle = random
+			}
+			set_fleet_stance = aggressive
+			set_aggro_range = 500
+			set_aggro_range_measure_from = self
+		}
+	}
+}
+
+sxx_kills_demon_count = {
+	if = {
+		limit = {
+			root.FROM = { has_event_chain = "sxx_outer_demon_invasion_chain" }
+		}
+		root.FROM = {
+			add_event_chain_counter = {
+				event_chain = "sxx_outer_demon_invasion_chain"
+				counter = sxx_kills_crisis_$SIZE$_us
+				amount = 1
+			}
+		}
+	}
+	every_country = {
+		limit = {
+			has_event_chain = "sxx_outer_demon_invasion_chain"
+			NOT = { is_same_value = root.FROM }
+		}
+		add_event_chain_counter = {
+			event_chain = "sxx_outer_demon_invasion_chain"
+			counter = sxx_kills_crisis_$SIZE$_others
+			amount = 1
+		}
+	}
+}
+
+
+sxx_arc_sites_random_events = {
+	random_list = {
+		10 = { fleet_event = { id = ancrel.8040 } }
+		10 = { fleet_event = { id = ancrel.8055 } }
+		10 = { fleet_event = { id = ancrel.8060 } }
+		10 = { fleet_event = { id = ancrel.8065 } }
+		10 = { fleet_event = { id = ancrel.8070 } }
+		10 = { fleet_event = { id = ancrel.8080 } }
+	}
+}
+
+sxx_demon_site_failed_events = {
+	random_list = {
+		25 = {
+			fleet_event = { id = sxx_site.1006 }
+			modifier = {
+				factor = 0
+				leader.species = { sxx_pop_is_not_under_heti = yes }
+			}
+		}
+		25 = {
+			fleet_event = { id = sxx_site.1007 }
+			modifier = {
+				factor = 0
+				leader.species = { NOT = { has_trait = trait_sxx_heti } }
+			}
+		}
+		25 = {
+			fleet_event = { id = sxx_site.1008 }
+			modifier = {
+				factor = 0
+				leader.species = { NOT = { has_trait = trait_sxx_heti } }
+			}
+		}
+		25 = {
+			fleet_event = { id = sxx_site.1009 }
+			modifier = {
+				factor = 0
+				leader.species = { sxx_pop_is_not_under_dacheng = no }
+			}
+		}
+	}
+}

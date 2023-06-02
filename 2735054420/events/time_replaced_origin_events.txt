@@ -1,0 +1,116 @@
+
+namespace = time_replaced_origin
+
+country_event = {
+	id = time_replaced_origin.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_mechanists
+	}
+	
+	immediate = {
+		give_technology = { tech = "tech_droid_workers" message = no }
+		add_research_option = tech_synthetic_workers
+	}
+}
+
+country_event = {
+	id = time_replaced_origin.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_syncretic_evolution
+	}
+	
+	immediate = {
+		give_technology = { tech = "tech_genome_mapping" message = no }
+		give_technology = { tech = "tech_cloning" message = no }
+		give_technology = { tech = "tech_frontier_health" message = no }
+		add_research_option = tech_gene_tailoring
+		add_research_option = tech_gene_expressions
+		add_tech_progress = {
+			tech = tech_gene_tailoring
+			progress = 0.50
+		}
+		add_tech_progress = {
+			tech = tech_gene_expressions
+			progress = 0.50
+		}
+		capital_scope = {
+			add_building = building_clinic
+		}
+	}
+}
+
+country_event = {
+	id = time_replaced_origin.3
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_hegemon
+	}
+	
+	immediate = {
+		every_playable_country = {
+			limit = {
+				has_origin = origin_hegemon_npc
+				is_in_federation_with = root
+			}
+			set_subject_of = {
+				who = root
+			}
+			add_modifier = { modifier = time_origin_hegemon_modifier days = 7200 }
+		}
+	}
+}
+
+country_event = {
+	id = time_replaced_origin.4
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_default
+	}
+	
+	immediate = {
+		capital_scope = {
+			remove_modifier = prosp_uni_mod
+			remove_modifier = prosp_uni_mod_gestalt
+			if = {
+				limit = {
+					root = {
+						is_regular_empire = yes
+					}
+				}
+				add_modifier = { modifier = prosp_uni_mod days = -1 }
+			}
+			else = {
+				add_modifier = { modifier = prosp_uni_mod_gestalt days = -1 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = time_replaced_origin.5
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_life_seeded
+	}
+	
+	immediate = {
+		owner_main_species = {
+			change_species_characteristics = {
+				remove_trait = trait_pc_gaia_preference
+				add_trait = trait_pc_gaia_preference_terraforming
+			}
+		}
+	}
+}

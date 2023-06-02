@@ -1,0 +1,1072 @@
+#国家
+create_dimension_traveler_leader = {
+	remove_dimension_traveler_leader = { CLASS = governor }
+	remove_dimension_traveler_leader = { CLASS = scientist }
+	remove_dimension_traveler_leader = { CLASS = admiral }
+	remove_dimension_traveler_leader = { CLASS = general }
+	set_country_flag = dimension_traveler_$CLASS$_active
+	create_leader = {
+		class = $CLASS$
+		species = event_target:dimension_traveler_species
+		name = NAME_Dimension_Traveler
+		gender = female
+		immortal = yes
+		randomize_traits = no
+		event_leader = yes
+		skill = 1
+		set_age = 18
+		skip_background_generation = yes
+		custom_catch_phrase = dimension_traveler_catch_phrase
+		custom_description = dimension_traveler_backstory
+		traits = {
+			trait = subclass_$CLASS$_dimension_traveler
+		}
+		effect = {
+			save_global_event_target_as = dimension_traveler_leader
+			save_global_event_target_as = dimension_traveler_$CLASS$
+			set_leader_flag = immune_to_negative_traits
+			set_leader_flag = has_gained_level_trait
+			set_leader_flag = leader_death_events_blocked
+			set_skill = owner.dimension_traveler_level
+			dimension_traveler_level_up = yes
+			dimension_traveler_add_experience = yes
+			give_dimension_traveler_trait = yes
+			set_dimension_traveler_ethic = yes
+			set_dimension_traveler_portrait = yes
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = dimension_traveler_trait_time_secret
+						has_country_flag = dimension_traveler_trait_circle_secret
+						has_country_flag = dimension_traveler_trait_dimension_secret
+					}
+				}
+				set_leader_flag = legendary_leader
+				owner = {
+					create_message = {
+						type = MESSAGE_RECRUITED_LEADER
+						localization =  MESSAGE_RECRUITED_LEADER_DESC
+						days = @toast_message_days
+						target = event_target:dimension_traveler_leader
+						variable = {
+							type = name
+							localization = LEADER
+							scope = event_target:dimension_traveler_leader
+						}
+						variable = {
+							key = "border"
+							value = "GFX_border_legendary" 
+						}
+					}
+				}
+			}
+			else = {
+				set_leader_flag = renowned_leader
+				owner = {
+					create_message = {
+						type = MESSAGE_RECRUITED_LEADER
+						localization =  MESSAGE_RECRUITED_LEADER_DESC
+						days = @toast_message_days
+						target = event_target:dimension_traveler_leader
+						variable = {
+							type = name
+							localization = LEADER
+							scope = event_target:dimension_traveler_leader
+						}
+						variable = {
+							key = "border"
+							value = "GFX_border_veteran" 
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#国家
+remove_dimension_traveler_leader = {
+	if = {
+		limit = { has_country_flag = dimension_traveler_$CLASS$_active }
+		remove_country_flag = dimension_traveler_$CLASS$_active
+		event_target:dimension_traveler_$CLASS$ = {
+			check_dimension_traveler_level = yes
+			kill_leader = { show_notification = no }
+		}
+	}
+}
+
+#领袖
+set_dimension_traveler_ethic = {
+	random_list = {
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_gestalt = no
+				}
+			}
+			change_background_ethic = ethic_gestalt_consciousness
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_dimension_traveler_ignored_ethic = { ETHIC = materialist }
+				}
+			}
+			change_background_ethic = ethic_materialist
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_dimension_traveler_ignored_ethic = { ETHIC = spiritualist }
+				}
+			}
+			change_background_ethic = ethic_spiritualist
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_dimension_traveler_ignored_ethic = { ETHIC = militarist }
+				}
+			}
+			change_background_ethic = ethic_militarist
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_dimension_traveler_ignored_ethic = { ETHIC = pacifist }
+				}
+			}
+			change_background_ethic = ethic_pacifist
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_dimension_traveler_ignored_ethic = { ETHIC = egalitarian }
+				}
+			}
+			change_background_ethic = ethic_egalitarian
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_dimension_traveler_ignored_ethic = { ETHIC = authoritarian }
+				}
+			}
+			change_background_ethic = ethic_authoritarian
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_dimension_traveler_ignored_ethic = { ETHIC = xenophile }
+				}
+			}
+			change_background_ethic = ethic_xenophile
+		}
+		1 = {
+			modifier = {
+				factor = 0
+				owner = {
+					is_dimension_traveler_ignored_ethic = { ETHIC = xenophobe }
+				}
+			}
+			change_background_ethic = ethic_xenophobe
+		}
+	}
+}
+
+#领袖
+check_dimension_traveler_level = {
+	owner = {
+		set_variable = {
+			which = dimension_traveler_level
+			value = prev.trigger:has_skill
+		}
+		set_variable = {
+			which = dimension_traveler_experience
+			value = prev.trigger:has_experience
+		}
+	}
+	check_dimension_traveler_trait = yes
+	if = {
+		limit = {
+			leader_class = admiral
+			owner = {
+				OR = {
+					any_owned_leader = {
+						has_leader_flag = als_admiral
+					}
+					has_country_flag = dimension_traveler_als
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = dimension_traveler_als }
+				}
+				set_country_flag = dimension_traveler_als
+			}
+		}
+		dimension_traveler_als_check = yes
+	}
+}
+
+#领袖
+dimension_traveler_level_up = {
+	# 基础等级特质
+	remove_dimension_traveler_trait = yes
+	if = {
+		limit = {
+			owner = { has_policy_flag = horror_dimension_traveler }
+		}
+		give_dimension_traveler_any_trait = {
+			LEVEL = horror_dimension_traveler
+			CATEGORY = subclass
+		}
+	}
+	else = {
+		give_dimension_traveler_any_trait = {
+			LEVEL = dimension_traveler
+			CATEGORY = subclass
+		}
+	}
+	# 通用升级特质
+	switch = {
+		trigger = leader_class
+		governor = {
+			give_dimension_traveler_governor_skill_trait = yes
+		}
+		scientist = {
+			give_dimension_traveler_scientist_skill_trait = yes
+		}
+		admiral = {
+			give_dimension_traveler_admiral_skill_trait = yes
+		}
+		general = {
+			give_dimension_traveler_general_skill_trait = yes
+		}
+	}
+	# 防止有的特质改变年龄与背景
+	set_age = 18
+	change_background_job = end_messenger
+	# MLL模组
+	if = {
+		limit = {
+			leader_class = governor
+			owner = {
+				OR = {
+					any_owned_leader = {
+						has_leader_flag = gle_leader
+					}
+					has_country_flag = dimension_traveler_gle
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = dimension_traveler_gle }
+				}
+				set_country_flag = dimension_traveler_gle
+			}
+		}
+		dimension_traveler_gle_effect = yes
+	}
+	else_if = {
+		limit = {
+			leader_class = scientist
+			owner = {
+				OR = {
+					any_owned_leader = {
+						has_leader_flag = sls_have_traits
+					}
+					has_country_flag = dimension_traveler_sls
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = dimension_traveler_sls }
+				}
+				set_country_flag = dimension_traveler_sls
+			}
+		}
+		dimension_traveler_sls_effect = yes
+	}
+	else_if = {
+		limit = {
+			leader_class = admiral
+			owner = {
+				OR = {
+					any_owned_leader = {
+						has_leader_flag = als_admiral
+					}
+					has_country_flag = dimension_traveler_als
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = dimension_traveler_als }
+				}
+				set_country_flag = dimension_traveler_als
+			}
+		}
+		dimension_traveler_als_effect = yes
+	}
+}
+
+#领袖
+remove_dimension_traveler_trait = {
+	remove_trait = subclass_governor_dimension_traveler
+	remove_trait = subclass_governor_horror_dimension_traveler
+	remove_trait = subclass_scientist_dimension_traveler
+	remove_trait = subclass_scientist_horror_dimension_traveler
+	remove_trait = subclass_admiral_dimension_traveler
+	remove_trait = subclass_admiral_horror_dimension_traveler
+	remove_trait = subclass_general_dimension_traveler
+	remove_trait = subclass_general_horror_dimension_traveler
+}
+
+#领袖
+check_dimension_traveler_trait = {
+	# 物种特质
+	change_dimension_traveler_species_trait = yes
+	# 天选之人
+	check_dimension_traveler_generic_trait = { LEVEL = chosen }
+	# 器具谕使
+	check_dimension_traveler_generic_trait = { LEVEL = instrument_chosen }
+	# 织缕谕使
+	check_dimension_traveler_generic_trait = { LEVEL = composer_chosen }
+	# 喰煞谕使
+	check_dimension_traveler_generic_trait = { LEVEL = eater_chosen }
+	# 低语谕使
+	check_dimension_traveler_generic_trait = { LEVEL = whisperers_chosen }
+	# 触碰虚境（1级）
+	check_dimension_traveler_generic_trait = { LEVEL = mind_wipe_01 }
+	# 触碰虚境（2级）
+	check_dimension_traveler_generic_trait = { LEVEL = mind_wipe_02 }
+	# 来自深渊
+	check_dimension_traveler_generic_trait = { LEVEL = pass_black_hole }
+	# 命中注定相会
+	check_dimension_traveler_generic_trait = { LEVEL = foredoomed_to_a_rendezvous }
+	# 屠龙者
+	check_dimension_traveler_generic_trait = { LEVEL = dragonslayer }
+	# 龙见愁
+	check_dimension_traveler_generic_trait = { LEVEL = dragonbane }
+	# 行商拦截者
+	check_dimension_traveler_generic_trait = { LEVEL = caravan_counter }
+	# 岁月之痕
+	check_dimension_traveler_generic_trait = { LEVEL = time_hotel }
+	# 毛巾携带者
+	check_dimension_traveler_generic_trait = { LEVEL = towel }
+	# 敲击维护者
+	check_dimension_traveler_generic_trait = { LEVEL = percussive_maintainer }
+}
+
+#领袖
+check_dimension_traveler_generic_trait = {
+	if = {
+		limit = {
+			OR = {
+				has_trait = leader_trait_ruler_$LEVEL$
+				has_trait = leader_trait_governor_$LEVEL$
+				has_trait = leader_trait_scientist_$LEVEL$
+				has_trait = leader_trait_admiral_$LEVEL$
+				has_trait = leader_trait_general_$LEVEL$
+				has_trait = gestalt_trait_ruler_$LEVEL$
+				has_trait = gestalt_trait_governor_$LEVEL$
+				has_trait = gestalt_trait_scientist_$LEVEL$
+				has_trait = gestalt_trait_admiral_$LEVEL$
+				has_trait = gestalt_trait_general_$LEVEL$
+				has_trait = leader_trait_$LEVEL$
+			}
+			owner = {
+				NOT = { has_country_flag = dimension_traveler_trait_$LEVEL$ }
+			}
+		}
+		owner = {
+			set_country_flag = dimension_traveler_trait_$LEVEL$
+		}
+	}
+}
+
+#领袖
+give_dimension_traveler_trait = {
+	if = {
+		limit = {
+			owner = { is_gestalt = no }
+		}
+		if = {
+			limit = {
+				owner = { has_country_flag = dimension_traveler_end }
+			}
+			add_trait_no_notify = leader_trait_dimension_traveler_horror_secret_true
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = dimension_traveler_trait_time_secret
+					has_country_flag = dimension_traveler_trait_circle_secret
+					has_country_flag = dimension_traveler_trait_dimension_secret
+				}
+			}
+			add_trait_no_notify = leader_trait_dimension_traveler_horror_secret
+		}
+		else_if = {
+			limit = {
+				OR = {
+					leader_class = governor
+					leader_class = scientist
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = dimension_traveler_trait_time_secret
+						has_country_flag = dimension_traveler_trait_circle_secret
+					}
+				}
+				add_trait_no_notify = leader_trait_time_circle_secret
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = dimension_traveler_trait_circle_secret
+						has_country_flag = dimension_traveler_trait_dimension_secret
+					}
+				}
+				add_trait_no_notify = leader_trait_circle_dimension_secret
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = dimension_traveler_trait_dimension_secret
+						has_country_flag = dimension_traveler_trait_time_secret
+					}
+				}
+				add_trait_no_notify = leader_trait_dimension_time_secret
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = dimension_traveler_trait_time_secret
+					}
+				}
+				add_trait_no_notify = leader_trait_time_secret
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = dimension_traveler_trait_circle_secret
+					}
+				}
+				add_trait_no_notify = leader_trait_circle_secret
+			}
+			else_if = {
+				limit = {
+					owner = {
+						has_country_flag = dimension_traveler_trait_dimension_secret
+					}
+				}
+				add_trait_no_notify = leader_trait_dimension_secret
+			}
+		}
+	}
+	
+	if = {
+		limit = {
+			owner = { has_ascension_perk = ap_time }
+		}
+		add_trait_no_notify = leader_trait_horror_foxy_fox
+	}
+	
+	# 以下自带flag判断
+	
+	# 合成人
+	give_dimension_traveler_species_trait = {
+		SPECIES = mechanical
+		LEVEL = synthetic
+	}
+	# 义体人
+	give_dimension_traveler_species_trait = {
+		SPECIES = cybernetic
+		LEVEL = cyborg
+	}
+	# 灵能
+	give_dimension_traveler_species_trait = {
+		SPECIES = psionic
+		LEVEL = psionic
+	}
+	# 博闻多识
+	give_dimension_traveler_species_trait = {
+		SPECIES = erudite
+		LEVEL = erudite
+	}
+	# 脑蛞蝓宿主
+	give_dimension_traveler_species_trait = {
+		SPECIES = brainslug
+		LEVEL = brainslug
+	}
+	
+	# 天选之人
+	give_dimension_traveler_generic_trait_without_class = { LEVEL = chosen }
+	# 器具谕使
+	give_dimension_traveler_generic_trait_without_class = { LEVEL = instrument_chosen }
+	# 织缕谕使
+	give_dimension_traveler_generic_trait_without_class = { LEVEL = composer_chosen }
+	# 喰煞谕使
+	give_dimension_traveler_generic_trait_without_class = { LEVEL = eater_chosen }
+	# 低语谕使
+	give_dimension_traveler_generic_trait_without_class = { LEVEL = whisperers_chosen }
+	# 触碰虚境（1级）
+	if = {
+		limit = {
+			owner = { is_gestalt = no }
+			NOT = { leader_class = governor }
+		}
+		give_dimension_traveler_generic_trait_with_class = { LEVEL = mind_wipe_01 }
+	}
+	else = {
+		give_dimension_traveler_generic_trait_with_class = {
+			CATEGORY = gestalt_trait
+			LEVEL = mind_wipe_01
+		}
+	}
+	# 触碰虚境（2级）
+	if = {
+		limit = {
+			owner = { is_gestalt = no }
+			NOT = { leader_class = governor }
+		}
+		give_dimension_traveler_generic_trait_with_class = { LEVEL = mind_wipe_02 }
+	}
+	else = {
+		give_dimension_traveler_generic_trait_with_class = {
+			CATEGORY = gestalt_trait
+			LEVEL = mind_wipe_02
+		}
+	}
+	
+	give_dimension_traveler_generic_trait_without_class = { LEVEL = brief }
+	give_dimension_traveler_generic_trait_without_class = { LEVEL = pass_black_hole }
+	
+	# 若不写FLAG = xxx，则不判定flag
+	give_dimension_traveler_class_trait = {
+		CLASS = admiral
+		FLAG = need
+		LEVEL = foredoomed_to_a_rendezvous
+	}
+	give_dimension_traveler_class_trait = {
+		CLASS = admiral
+		FLAG = need
+		LEVEL = dragonslayer
+	}
+	give_dimension_traveler_class_trait = {
+		CLASS = admiral
+		FLAG = need
+		LEVEL = dragonbane
+	}
+	give_dimension_traveler_class_trait = {
+		CLASS = admiral
+		FLAG = need
+		LEVEL = caravan_counter
+	}
+	give_dimension_traveler_class_trait = {
+		CLASS = scientist
+		FLAG = need
+		LEVEL = time_hotel
+	}
+	give_dimension_traveler_class_trait = {
+		CLASS = scientist
+		FLAG = need
+		LEVEL = towel
+	}
+	give_dimension_traveler_class_trait = {
+		CLASS = scientist
+		FLAG = need
+		LEVEL = percussive_maintainer
+	}
+}
+
+#领袖（无任何判定）（与职务有关）
+give_dimension_traveler_any_trait = {
+	switch = {
+		trigger = leader_class
+		governor = {
+			add_trait_no_notify = $CATEGORY|leader_trait$_governor_$LEVEL$
+		}
+		scientist = {
+			add_trait_no_notify = $CATEGORY|leader_trait$_scientist_$LEVEL$
+		}
+		admiral = {
+			add_trait_no_notify = $CATEGORY|leader_trait$_admiral_$LEVEL$
+		}
+		general = {
+			add_trait_no_notify = $CATEGORY|leader_trait$_general_$LEVEL$
+		}
+	}
+}
+
+# 领袖（与职务无关）
+give_dimension_traveler_generic_trait_without_class = {
+	if = {
+		limit = {
+			owner = { has_country_flag = dimension_traveler_trait_$LEVEL$ }
+		}
+		add_trait_no_notify = $CATEGORY|leader_trait$_$LEVEL$
+	}
+}
+
+# 领袖（与职务有关）
+give_dimension_traveler_generic_trait_with_class = {
+	if = {
+		limit = {
+			owner = { has_country_flag = dimension_traveler_trait_$LEVEL$ }
+		}
+		switch = {
+			trigger = leader_class
+			governor = {
+				add_trait_no_notify = $CATEGORY|leader_trait$_governor_$LEVEL$
+			}
+			scientist = {
+				add_trait_no_notify = $CATEGORY|leader_trait$_scientist_$LEVEL$
+			}
+			admiral = {
+				add_trait_no_notify = $CATEGORY|leader_trait$_admiral_$LEVEL$
+			}
+			general = {
+				add_trait_no_notify = $CATEGORY|leader_trait$_general_$LEVEL$
+			}
+		}
+	}
+}
+
+# 领袖（物种特质）（与职务无关）
+give_dimension_traveler_species_trait = {
+	if = {
+		limit = {
+			event_target:dimension_traveler_species = {
+				has_trait = trait_$SPECIES$
+			}
+			NOT = {
+				has_trait = leader_trait_$LEVEL$
+			}
+		}
+		add_trait_no_notify = leader_trait_$LEVEL$
+	}
+}
+
+# 领袖（职业要求）
+give_dimension_traveler_class_trait = {
+	if = {
+		limit = {
+			[[CLASS] leader_class = $CLASS$]
+			[[FLAG] owner = { has_country_flag = dimension_traveler_trait_$LEVEL$ }]
+		}
+		add_trait_no_notify = leader_trait_$LEVEL$
+	}
+}
+
+# 领袖
+change_dimension_traveler_species_trait = {
+	# 合成人
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = synthetic_empire
+			}
+			event_target:dimension_traveler_species = {
+				NOT = { has_trait = trait_mechanical }
+			}
+		}
+		event_target:dimension_traveler_species = {
+			change_species_characteristics = {
+				add_trait = trait_mechanical
+			}
+		}
+	}
+	# 义体人
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = cyborg_empire
+			}
+			event_target:dimension_traveler_species = {
+				NOT = { has_trait = trait_cybernetic }
+			}
+		}
+		event_target:dimension_traveler_species = {
+			change_species_characteristics = {
+				add_trait = trait_cybernetic
+			}
+		}
+	}
+	# 灵能潜势
+	if = {
+		limit = {
+			owner = {
+				has_tradition = tr_psionics_adopt
+				NOT = { has_tradition = tr_psionics_psionic_assimilation }
+			}
+			event_target:dimension_traveler_species = {
+				NOT = { has_trait = trait_latent_psionic }
+			}
+		}
+		event_target:dimension_traveler_species = {
+			change_species_characteristics = {
+				add_trait = trait_latent_psionic
+			}
+		}
+	}
+	if = {
+		limit = {
+			owner = {
+				has_tradition = tr_psionics_psionic_assimilation
+			}
+			event_target:dimension_traveler_species = {
+				has_trait = trait_latent_psionic
+			}
+		}
+		event_target:dimension_traveler_species = {
+			change_species_characteristics = {
+				remove_trait = trait_latent_psionic
+			}
+		}
+	}
+	# 灵能
+	if = {
+		limit = {
+			owner = {
+				has_tradition = tr_psionics_psionic_assimilation
+			}
+			event_target:dimension_traveler_species = {
+				NOT = { has_trait = trait_psionic }
+			}
+		}
+		event_target:dimension_traveler_species = {
+			change_species_characteristics = {
+				add_trait = trait_psionic
+			}
+		}
+	}
+	# 博闻多识
+	if = {
+		limit = {
+			owner = {
+				has_tradition = tr_genetics_creation
+			}
+			event_target:dimension_traveler_species = {
+				NOT = { has_trait = trait_erudite }
+			}
+		}
+		event_target:dimension_traveler_species = {
+			change_species_characteristics = {
+				add_trait = trait_erudite
+			}
+		}
+	}
+	# 脑蛞蝓宿主
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = finished_brainslug_chain
+			}
+			event_target:dimension_traveler_species = {
+				NOT = { has_trait = trait_brainslug }
+			}
+		}
+		event_target:dimension_traveler_species = {
+			change_species_characteristics = {
+				add_trait = trait_brainslug
+			}
+		}
+	}
+}
+
+#领袖
+dimension_traveler_add_experience = {
+	add_experience = 10
+	set_variable = {
+		which = experience_has_gain #20
+		value = trigger:has_experience
+	}
+	set_variable = {
+		which = experience_gain #20
+		value = trigger:has_experience
+	}
+	divide_variable = {
+		which = experience_gain #2
+		value = 10
+	}
+	owner = {
+		subtract_variable = {
+			which = dimension_traveler_experience #100
+			value = prev.experience_has_gain #20
+		}
+		divide_variable = {
+			which = dimension_traveler_experience #80
+			value = prev.experience_gain #2
+		}
+	}
+	clear_variable = experience_has_gain
+	clear_variable = experience_gain
+	add_experience = owner.dimension_traveler_experience #40x2+20=100
+}
+
+#领袖
+refresh_dimension_traveler = {
+	set_age = 18
+	check_dimension_traveler_level = yes
+	dimension_traveler_level_up = yes
+	change_species = event_target:dimension_traveler_species
+	set_name = NAME_Dimension_Traveler
+	set_gender = female
+	set_dimension_traveler_portrait = yes
+}
+
+#领袖
+set_dimension_traveler_portrait = {
+	if = {
+		limit = {
+			event_target:dimension_traveler_species = { is_species_class = HUM }
+		}
+		switch = {
+			trigger = leader_class
+			governor = {
+				change_leader_portrait = dimension_traveler_governor_portrait
+			}
+			scientist = {
+				change_leader_portrait = dimension_traveler_scientist_portrait
+			}
+			admiral = {
+				change_leader_portrait = dimension_traveler_admiral_portrait
+			}
+			general = {
+				change_leader_portrait = dimension_traveler_general_portrait
+			}
+		}
+	}
+	owner = {
+		set_dimension_traveler_event_portrait = yes
+	}
+}
+
+#国家
+set_dimension_traveler_event_portrait = {
+	if = {
+		limit = {
+			NOT = { exists = event_target:dimension_traveler_portrait_leader }
+		}
+		create_leader = {
+			class = scientist
+			species = event_target:dimension_traveler_species
+			name = NAME_Dimension_Traveler
+			gender = female
+			immortal = yes
+			randomize_traits = no
+			event_leader = yes
+			skill = 1
+			set_age = 18
+			skip_background_generation = yes
+			custom_catch_phrase = dimension_traveler_catch_phrase
+			custom_description = dimension_traveler_backstory
+			traits = {
+				trait = subclass_scientist_dimension_traveler
+			}
+			effect = {
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = dimension_traveler_trait_time_secret
+							has_country_flag = dimension_traveler_trait_circle_secret
+							has_country_flag = dimension_traveler_trait_dimension_secret
+						}
+					}
+					set_leader_flag = legendary_leader
+				}
+				else = {
+					set_leader_flag = renowned_leader
+				}
+				set_leader_flag = leader_death_events_blocked
+				dimension_traveler_level_up = yes
+				set_dimension_traveler_ethic = yes
+				save_global_event_target_as = dimension_traveler_portrait_leader
+				exile_leader_as = dimension_traveler_portrait_leader
+			}
+		}
+	}
+	if = {
+		limit = {
+			event_target:dimension_traveler_species = { is_species_class = HUM }
+		}
+		switch = {
+			trigger = has_country_flag
+			dimension_traveler_governor_active = {
+				event_target:dimension_traveler_portrait_leader = {
+					change_leader_portrait = dimension_traveler_governor_portrait
+				}
+			}
+			dimension_traveler_scientist_active = {
+				event_target:dimension_traveler_portrait_leader = {
+					change_leader_portrait = dimension_traveler_scientist_portrait
+				}
+			}
+			dimension_traveler_admiral_active = {
+				event_target:dimension_traveler_portrait_leader = {
+					change_leader_portrait = dimension_traveler_admiral_portrait
+				}
+			}
+			dimension_traveler_general_active = {
+				event_target:dimension_traveler_portrait_leader = {
+					change_leader_portrait = dimension_traveler_general_portrait
+				}
+			}
+			default = {
+				event_target:dimension_traveler_portrait_leader = {
+					change_leader_portrait = dimension_traveler_portrait
+				}
+			}
+		}
+	}
+}
+
+#全部
+play_dimension_traveler_response_sound = {
+	if = {
+		limit = {
+			event_target:dimension_traveler_owner = {
+				NOT = { has_country_flag = has_play_dimension_traveler_response_sound } #防止回应界面确认会再次触发音效
+			}
+		}
+		event_target:dimension_traveler_owner = {
+			set_timed_country_flag = {
+				flag = has_play_dimension_traveler_response_sound
+				days = 1
+			}
+		}
+		play_sound = dimension_traveler_response
+	}
+}
+
+# 国家
+give_dimension_traveler_horror_modifier = {
+	switch = {
+		trigger = has_country_flag
+		dimension_traveler_horror_governor = {
+			add_modifier = {
+				modifier = dimension_traveler_horror_governor_modifier_$TYPE$
+				days = 1
+				time_multiplier = value:dimension_traveler_horror_modifier_time|TYPE|$TYPE$|
+			}
+		}
+		dimension_traveler_horror_scientist = {
+			add_modifier = {
+				modifier = dimension_traveler_horror_scientist_modifier_$TYPE$
+				days = 1
+				time_multiplier = value:dimension_traveler_horror_modifier_time|TYPE|$TYPE$|
+			}
+		}
+		dimension_traveler_horror_admiral = {
+			add_modifier = {
+				modifier = dimension_traveler_horror_admiral_modifier_$TYPE$
+				days = 1
+				time_multiplier = value:dimension_traveler_horror_modifier_time|TYPE|$TYPE$|
+			}
+		}
+		dimension_traveler_horror_general = {
+			add_modifier = {
+				modifier = dimension_traveler_horror_general_modifier_$TYPE$
+				days = 1
+				time_multiplier = value:dimension_traveler_horror_modifier_time|TYPE|$TYPE$|
+			}
+		}
+	}
+}
+
+# 国家
+give_dimension_traveler_horror_modifier_good = {
+	hidden_effect = {
+		# 设置冷却并触发下一事件（因果爆发与因果过载的总时间）
+		if = {
+			limit = {
+				has_policy_flag = horror_dimension_traveler
+			}
+			if = {
+				limit = {
+					has_country_flag = dimension_traveler_end
+				}
+				if = {
+					limit = {
+						has_ascension_perk = ap_time
+					}
+					trigger_dimension_traveler_horror_modifier_bad_event = { FLAG = 270 EVENT = 180 }
+				}
+				else_if = {
+					limit = {
+						has_ascension_perk = ap_horror
+					}
+					trigger_dimension_traveler_horror_modifier_bad_event = { FLAG = 180 EVENT = 120 }
+				}
+				else = {
+					trigger_dimension_traveler_horror_modifier_bad_event = { FLAG = 90 EVENT = 60 }
+				}
+			}
+			else = {
+				trigger_dimension_traveler_horror_modifier_bad_event = { FLAG = 180 EVENT = 120 }
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					has_country_flag = dimension_traveler_end
+				}
+				if = {
+					limit = {
+						has_ascension_perk = ap_time
+					}
+					trigger_dimension_traveler_horror_modifier_bad_event = { FLAG = 135 EVENT = 90 }
+				}
+				else_if = {
+					limit = {
+						has_ascension_perk = ap_horror
+					}
+					trigger_dimension_traveler_horror_modifier_bad_event = { FLAG = 90 EVENT = 60 }
+				}
+				else = {
+					trigger_dimension_traveler_horror_modifier_bad_event = { FLAG = 45 EVENT = 30 }
+				}
+			}
+			else = {
+				trigger_dimension_traveler_horror_modifier_bad_event = { FLAG = 90 EVENT = 60 }
+			}
+		}
+	}
+	# 获得修正
+	give_dimension_traveler_horror_modifier = { TYPE = good }
+}
+
+# 国家
+trigger_dimension_traveler_horror_modifier_bad_event = {
+	# 冷却
+	set_timed_country_flag = {
+		flag = dimension_traveler_horror_cooldown
+		days = $FLAG$
+	}
+	# 事件的时间没法引用script value，蠢驴！！！
+	country_event = {
+		id = dimension_traveler.1002
+		days = $EVENT$
+	}
+}

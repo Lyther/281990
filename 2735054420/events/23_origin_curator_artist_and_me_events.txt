@@ -1,0 +1,106 @@
+namespace = origin_curator_artist_and_me
+
+country_event = {
+	id = origin_curator_artist_and_me.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_curator_artist_and_me
+	}
+	
+	immediate = {
+		establish_communications_no_message = event_target:curator_enclave_country
+		establish_communications_no_message = event_target:artist_enclave_country
+		set_country_flag = curator_intro
+		set_country_flag = enclave_artist_encountered
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = 25
+			}
+		}
+		event_target:artist_enclave_country = {
+			add_trust = {
+				who = root
+				amount = 25
+			}
+		}
+		capital_star = {
+			set_star_flag = guardians_curators_system
+			set_star_flag = guardians_artists_system
+			set_star_flag = enclave
+			event_target:curator_enclave_country = {
+				create_fleet = {
+					name = "NAME_Curator_Enclave_Time"
+					settings = { spawn_debris = no }
+					effect = {
+						set_owner = prev
+						create_ship = {
+							name = random
+							design = "NAME_Curator_Enclave_Station"
+							graphical_culture = prev
+						}							
+						set_location = {
+							target = prevprev
+							distance = 120
+						}
+					}
+				}
+			}
+			event_target:artist_enclave_country = {
+				create_fleet = {
+					name = "NAME_Ars_Artem"
+					settings = { spawn_debris = no }
+					effect = {
+						set_owner = prev
+						create_ship = {
+							name = random
+							design = "NAME_Artist_Enclave_Station"
+							graphical_culture = prev
+						}
+						set_location = {
+							target = prevprev
+							distance = 90
+						}
+						set_fleet_flag = artist_enclave_station
+					}
+				}
+			}
+		}
+		create_leader = {
+			class = governor
+			species = event_target:curator_enclave_country.species
+			name = "NAME_Curator_Time"
+			gender = male
+			skill = 5
+			leader_age_min = 35
+			leader_age_max = 40
+			custom_description = leader_trait_governor_time_curator_desc
+			traits = {
+				trait = leader_trait_governor_time_curator
+			}
+			event_leader = yes
+			effect = {
+				set_leader_flag = renowned_leader
+			}
+		}
+		create_leader = {
+			class = governor
+			species = event_target:artist_enclave_country.species
+			name = "NAME_Artist_Time"
+			gender = female
+			skill = 5
+			leader_age_min = 35
+			leader_age_max = 40
+			custom_description = leader_trait_governor_time_artist_desc
+			traits = {
+				trait = leader_trait_governor_time_artist
+			}
+			event_leader = yes
+			effect = {
+				set_leader_flag = renowned_leader
+			}
+		}
+	}
+}

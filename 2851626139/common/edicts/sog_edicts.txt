@@ -1,0 +1,81 @@
+
+# # # Набросок из WSC мода с указами на мир. Т.к Observer не считается за империю / хоста, то и прокликать за него указы на мир я не могу.
+# # # Остановился на статичном флаге на 30 лет мира.
+# # Все что ниже c эдиктами связано отоброжаться не будет т.к там идёт проверка на флаг
+
+sog_peace_period_20 = {
+	icon = "GFX_edict_type_policy"
+	length = -1
+	resources = { category = edicts }
+	potential = {
+		has_country_flag = game_host
+		NOR = {
+			years_passed >= 20
+			has_global_flag = sog_peace_period_30
+			has_global_flag = sog_peace_period_40
+			has_edict = sog_reset_peace_period
+		}
+	}
+	effect = { 
+		set_global_flag = sog_peace_period_20
+	}
+	ai_weight = { weight = 0 }
+}
+
+sog_peace_period_30 = {
+	icon = "GFX_edict_type_policy"
+	length = -1
+	resources = { category = edicts }
+	potential = {
+		has_country_flag = game_host
+		NOR = {
+			years_passed >= 30
+			has_global_flag = sog_peace_period_20
+			has_global_flag = sog_peace_period_40
+			has_edict = sog_reset_peace_period
+		}	
+	}
+	effect = { 
+		set_global_flag = sog_peace_period_30
+	}
+	ai_weight = { weight = 0 }
+}
+
+sog_peace_period_40 = {
+	icon = "GFX_edict_type_policy"
+	length = -1
+	resources = { category = edicts }
+	potential = {
+		has_country_flag = game_host
+		NOR = {
+			years_passed >= 40
+			has_global_flag = sog_peace_period_20
+			has_global_flag = sog_peace_period_30
+			has_edict = sog_reset_peace_period
+		}	
+	}
+	effect = { 
+		set_global_flag = sog_peace_period_40
+	}
+	ai_weight = { weight = 0 }
+}
+
+sog_reset_peace_period = {
+	icon = "GFX_edict_type_policy"
+	length = -1
+	resources = { category = edicts }
+	potential = {
+		has_country_flag = game_host
+		OR = {
+			has_global_flag = sog_peace_period_20
+			has_global_flag = sog_peace_period_30
+			has_global_flag = sog_peace_period_40
+		}
+	}
+	effect = { 
+		remove_global_flag = sog_peace_period_20
+		remove_global_flag = sog_peace_period_30
+		remove_global_flag = sog_peace_period_40
+	}
+	ai_weight = { weight = 0 }
+}

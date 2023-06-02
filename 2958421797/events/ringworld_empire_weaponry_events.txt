@@ -1,0 +1,417 @@
+##############################
+#### 	ZoFE Weaponry
+####	  By Kolyn
+##############################
+
+
+namespace = ringworld_weaponry
+
+
+#Ringworld Empire
+
+#Ringworld Empire Databank
+country_event = {
+	id = ringworld_weaponry.100
+	title = ringworld_weaponry.100.name
+	
+	picture = GFX_evt_ancient_databank
+	location = from
+	show_sound = event_mystic_reveal
+	
+	desc = {
+		trigger = { 
+			owner = { 
+				NOR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_fanatic_egalitarian
+					has_authority = "auth_hive_mind"
+					has_authority = "auth_machine_intelligence"
+				}
+			}
+		}
+		text = "ringworld_weaponry.100.desc"
+	}
+	
+	desc = {
+		trigger = { owner = { has_ethic = ethic_fanatic_spiritualist } }
+		text = "ringworld_weaponry.100.desc.spiritualist"
+	}
+	desc = {
+		trigger = { owner = { has_ethic = ethic_fanatic_materialist } }
+		text = "ringworld_weaponry.100.desc.materialist"
+	}
+	desc = { 
+		trigger = { owner = { has_ethic = ethic_fanatic_xenophile } }
+		text = "ringworld_weaponry.100.desc.xenophile"
+	}
+	desc = { 
+		trigger = { owner = { has_ethic = ethic_fanatic_xenophobe } }
+		text = "ringworld_weaponry.100.desc.xenophobe"
+	}
+	desc = {
+		trigger = { owner = { has_ethic = ethic_fanatic_militarist } }
+		text = "ringworld_weaponry.100.desc.militarist"
+	}
+	desc = {
+		trigger = { owner = { has_ethic = ethic_fanatic_pacifist } }
+		text = "ringworld_weaponry.100.desc.pacifist"
+	}
+	desc = { 
+		trigger = { owner = { has_ethic = ethic_fanatic_authoritarian } }
+		text = "ringworld_weaponry.100.desc.authoritarian"
+	}
+	desc = { 
+		trigger = { owner = { has_ethic = ethic_fanatic_egalitarian } }
+		text = "ringworld_weaponry.100.desc.egalitarian"
+	}
+	desc = { 
+		trigger = { owner = { has_authority = "auth_hive_mind" } }
+		text = "ringworld_weaponry.100.desc.hive"
+	}
+	desc = { 
+		trigger = { owner = { has_authority = "auth_machine_intelligence" } }
+		text = "ringworld_weaponry.100.desc.machine"
+	}
+
+	fire_only_once = yes
+
+	trigger = {
+		host_has_dlc = "Ancient Relics Story Pack"
+		masters_of_warfare = yes	
+#		is_ai = no #For Testing
+		is_ascended_empire = yes
+		has_technology = tech_fallen_technologies_4
+		has_technology = tech_fallen_technologies_6
+
+		any_owned_planet = { has_planet_flag = ringworld_start }
+	
+		NOT = { has_country_flag = ringworld_empire_archives_raided }
+	}
+	
+	mean_time_to_happen = {
+		days = 5
+	}
+	
+	immediate = {
+		set_country_flag = ringworld_empire_archives_raided
+		
+		random_owned_planet = {
+			limit = {
+#				is_capital = yes
+				has_planet_flag = ringworld_start
+			}
+			save_event_target_as = ringworld_empire_archive_digsite
+		}
+	}
+	
+	option = {
+		name = ringworld_weaponry.100.a
+		event_target:ringworld_empire_archive_digsite = { 
+			create_archaeological_site = ringworld_empire_digsite_1
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+     			value = @tier1researchreward
+     			min = @tier1researchmin
+     			max = @tier1researchmax
+     		}
+		}
+	}
+}
+
+fleet_event = { 
+	id = ringworld_weaponry.101
+	title = "ringworld_weaponry.101.name"
+	desc = ringworld_weaponry.101.desc
+	picture = GFX_evt_analyzing_artifacts
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ringworld_weaponry.101.a
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_dark_energy_power_core
+					has_tech_option = tech_dark_energy_power_core
+				}
+			}
+		}
+		owner = {
+			add_research_option = tech_dark_energy_power_core
+			add_tech_progress = {
+				tech = tech_dark_energy_power_core
+				progress = 0.25
+			}
+		}
+		small_artifact_reward = yes
+	}
+	option = {
+		name = ringworld_weaponry.101.b
+		trigger = {
+			owner = { 
+				OR = {
+					has_technology = tech_dark_energy_power_core
+					has_tech_option = tech_dark_energy_power_core
+				} 
+			}
+		}
+		owner = {
+			add_resource = { minor_artifacts = 400 }
+		}
+		small_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = ringworld_weaponry.102
+	title = "ringworld_weaponry.102.name"
+	desc = ringworld_weaponry.102.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ringworld_weaponry.102.a
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_dark_energy_jump_drive
+					has_tech_option = tech_dark_energy_jump_drive
+				}
+			}
+		}
+		owner = {
+			add_research_option = tech_dark_energy_jump_drive
+			add_tech_progress = {
+				tech = tech_dark_energy_jump_drive
+				progress = 0.25
+			}
+		}
+		small_artifact_reward = yes
+	}
+	option = {
+		name = ringworld_weaponry.102.b
+		trigger = {
+			owner = { 
+				OR = {
+					has_technology = tech_dark_energy_jump_drive
+					has_tech_option = tech_dark_energy_jump_drive
+				} 
+			}
+		}
+		owner = {
+			add_resource = { minor_artifacts = 400 }
+		}
+		small_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = ringworld_weaponry.103
+	title = "ringworld_weaponry.103.name"
+	desc = ringworld_weaponry.103.desc
+	picture = GFX_evt_fleet_neutral
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ringworld_weaponry.103.a
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_dark_energy_power_booster
+					has_tech_option = tech_dark_energy_power_booster
+				}
+			}
+		}
+		owner = {
+			add_research_option = tech_dark_energy_power_booster
+			add_tech_progress = {
+				tech = tech_dark_energy_power_booster
+				progress = 0.25
+			}
+		}
+		medium_artifact_reward = yes
+	}
+	option = {
+		name = ringworld_weaponry.103.b
+		trigger = {
+			owner = { 
+				OR = {
+					has_technology = tech_dark_energy_power_booster
+					has_tech_option = tech_dark_energy_power_booster
+				} 
+			}
+		}
+		owner = {
+			add_resource = { minor_artifacts = 400 }
+		}
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = ringworld_weaponry.104
+	title = "ringworld_weaponry.104.name"
+	desc = ringworld_weaponry.104.desc
+	picture = GFX_evt_small_space_battle
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ringworld_weaponry.104.a
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_massive_autocannons
+					has_tech_option = tech_massive_autocannons
+				}
+			}
+		}
+		owner = {
+			add_research_option = tech_massive_autocannons
+			add_tech_progress = {
+				tech = tech_massive_autocannons
+				progress = 0.25
+			}
+		}
+		medium_artifact_reward = yes
+	}
+	option = {
+		name = ringworld_weaponry.104.b
+		trigger = {
+			owner = { 
+				OR = {
+					has_technology = tech_massive_autocannons
+					has_tech_option = tech_massive_autocannons
+				} 
+			}
+		}
+		owner = {
+			add_resource = { minor_artifacts = 400 }
+		}
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = ringworld_weaponry.105
+	title = "ringworld_weaponry.105.name"
+	desc = ringworld_weaponry.105.desc
+	picture = GFX_evt_death_from_above
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ringworld_weaponry.105.a
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_dark_energy_shield
+					has_tech_option = tech_dark_energy_shield
+				}
+			}
+		}
+		owner = {
+			add_research_option = tech_dark_energy_shield
+			add_tech_progress = {
+				tech = tech_dark_energy_shield
+				progress = 0.25
+			}
+		}
+		large_artifact_reward = yes
+	}
+	option = {
+		name = ringworld_weaponry.105.b
+		trigger = {
+			owner = { 
+				OR = {
+					has_technology = tech_dark_energy_shield
+					has_tech_option = tech_dark_energy_shield
+				} 
+			}
+		}
+		owner = {
+			add_resource = { minor_artifacts = 400 }
+		}
+		large_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = ringworld_weaponry.106
+	title = "ringworld_weaponry.106.name"
+	desc = ringworld_weaponry.106.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			random_owned_leader = {
+				limit = { is_researching_area = physics }
+				save_event_target_as = silly_scientist
+			}
+		}
+	}
+	
+	option = {
+		name = ringworld_weaponry.106.a
+		custom_tooltip = lost_technology_insights_gained_tooltip
+		owner = {
+			set_country_flag = ringworld_empire_archive_digsite_completed
+		}
+		hidden_effect = {
+			owner = { lost_technology_insights_gained = yes }
+		}
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_researching_area = physics 	
+				}
+				kill_leader = { 
+					show_notification = no 
+					type = scientist 
+				}
+			}
+			add_modifier = {
+				modifier = ancestors_insights
+				days = -1
+			}
+		}
+		large_artifact_reward = yes
+		add_large_minor_artifacts_deposit = yes
+	}
+}

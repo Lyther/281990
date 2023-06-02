@@ -1,0 +1,62 @@
+
+namespace = origin_monster_hunter
+
+country_event = {
+	id = origin_monster_hunter.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_monster_hunter
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = origin_monster_hunter_modifier
+				}
+			}
+			add_modifier = {
+				modifier = origin_monster_hunter_modifier
+				days = -1
+			}
+		}
+		capital_scope = {
+			planet_event = { id = origin_monster_hunter.2 }
+		}
+	}
+}
+
+planet_event = {
+	id = origin_monster_hunter.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		owner = {
+			has_origin = origin_monster_hunter
+		}
+		OR = {
+			has_building = building_holo_theatres
+			has_building = tech_holo_entertainment
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_building = building_holo_theatres
+			}
+			remove_building = building_holo_theatres
+			add_building = building_origin_monster_hunter_1
+		}
+		if = {
+			limit = {
+				has_building = tech_holo_entertainment
+			}
+			remove_building = tech_holo_entertainment
+			add_building = building_origin_monster_hunter_2
+		}
+	}
+}

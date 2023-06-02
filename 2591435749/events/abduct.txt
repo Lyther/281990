@@ -1,0 +1,1912 @@
+namespace = aa_abduct
+pop_event = {
+    id = aa_abduct.1
+    hide_window = yes
+    is_triggered_only = yes
+
+	immediate = {      
+		planet = {
+			owner = {
+				random_owned_planet = {
+  		            limit = {
+         	   	        has_modifier = aa_raiding_target
+          		    }
+                   	resettle_pop = { pop = root planet = this }
+                }
+			}
+		}
+	}
+}
+
+namespace = planetmdestruction
+planet_event = {
+	id = planetmdestruction.2
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {
+		
+		from.owner = {
+			every_owned_planet = {
+				limit = {
+					has_modifier = aa_raiding_target
+				}	
+			save_event_target_as = happy
+			}
+			save_event_target_as = sad	
+		}
+		owner = {
+			save_event_target_as = unluck
+		}	
+
+		every_owned_pop= {
+			resettle_pop = {
+				pop = this
+				planet = event_target:happy
+			}			
+		}
+	}
+}
+namespace = enclave
+country_event = {
+	id = enclave.205
+	title = enclave.205.name
+	desc = {
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+		}
+		text = enclave.205.desc
+	}
+	desc = {
+		trigger = {
+			is_hostile = event_target:mercenary_enclave_country
+			#is_homicidal = no
+		}
+		text = enclave.205.desc.hostile
+	}
+	#desc = {
+	#	trigger = {
+	#		is_homicidal = yes
+	#	}
+	#	text = enclave.205.desc.unfriendly
+	#}
+	is_triggered_only = yes
+
+	diplomatic = yes
+	custom_gui = "enclave_mercenary_window"
+	custom_gui_option = "enclave_mercenary_option"
+	picture_event_data = {
+		portrait = event_target:mercenary_enclave_country
+		room = mercenary_enclave_room
+	}
+	location = event_target:mercenary_enclave_system
+
+	immediate = {
+		event_target:mercenary_enclave_country = {
+			species = {
+				save_event_target_as = mercenary_enclave_species
+			}
+			random_owned_fleet = {
+				limit = {
+					is_ship_size = enclave_mercenary_station
+				}
+				solar_system = {
+					save_event_target_as = mercenary_enclave_system
+					if = {
+						limit = {
+							exists = space_owner
+						}
+						space_owner = {
+							save_event_target_as = mercenary_patron
+						}
+					}
+				}
+			}
+			random_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+					is_leased = yes
+				}
+				controller = {
+					save_event_target_as = current_client
+				}
+			}
+		}
+		
+		# without this immediate is not invoked when event runs in a special mode that allows AI to collect trade data
+		run_in_ai_mode = yes
+	}
+
+	option = {
+		name = GOODBYE
+		trigger = {
+			NOT = {
+				is_hostile = event_target:mercenary_enclave_country
+			}
+		}
+		default_hide_option = yes
+	}
+
+	# Hostility options
+	option = {
+		name = enclave.205.i
+		trigger = {
+			is_hostile = event_target:mercenary_enclave_country
+			#NOT = { is_homicidal = yes }
+		}
+		allow = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 2500
+			}
+		}
+		add_resource = {
+			energy = -2500
+		}
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				set_faction_hostility = {
+					target = root
+					set_neutral = yes
+				}
+				every_owned_fleet = {
+					limit = {
+						is_in_combat = yes
+						solar_system = { is_same_value = event_target:mercenary_enclave_system }
+					}
+					clear_fleet_actions = this
+					queue_actions = {
+						repeat = {
+							max_iterations = 1
+							find_closest_planet = {
+								found_planet = {
+									orbit_planet = this
+								}
+							}
+						}
+					}
+				}
+			}
+			every_owned_fleet = {
+				limit = {
+					is_in_combat = yes
+					solar_system = { is_same_value = event_target:mercenary_enclave_system }
+				}
+				clear_fleet_actions = this
+				queue_actions = {
+					repeat = {
+						max_iterations = 1
+						find_closest_planet = {
+							found_planet = {
+								orbit_planet = this
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	#Hire fleet
+	option = {
+		name = enclave.205.a
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+			event_target:mercenary_enclave_country = {
+				NOT = { has_country_flag = fleet_commandeered }
+				NOT = {
+					any_owned_fleet = {
+						is_ship_class = shipclass_military
+						is_leased = yes
+						controller = {
+							is_same_value = root
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_ai = yes
+				}
+				NOT = { has_country_flag = merc_ai_delay }
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = enclave.205.tooltip.a
+				event_target:mercenary_enclave_country = {
+					NOT = {
+						any_owned_fleet = {
+							is_ship_class = shipclass_military
+							is_leased = yes
+							owner = {
+								is_same_value = event_target:mercenary_enclave_country
+							}
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = enclave.205.tooltip.b
+				event_target:mercenary_enclave_country = {
+					any_owned_fleet = {
+						is_ship_class = shipclass_military
+						NOT = { any_controlled_ship = { is_damaged = yes } }
+						fleet_power >= 500
+					}
+				}
+			}						
+		}
+		ai_trade_facility = {
+			custom_tooltip = mercenary_tt_hirefleet
+			offer_hire_mercenary_fleet = yes
+			offer_prolong_fleet_contract = yes
+			hidden_effect = {
+				country_event = { id = enclave.210 }
+			}
+		}
+	}
+	#Manage hired fleet (extend loan, recall)
+	option = {
+		name = enclave.205.b
+		custom_tooltip = mercenary_tt_managefleet
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+			any_controlled_fleet = {
+				is_ship_class = shipclass_military
+				is_leased = yes
+				owner = {
+					is_same_value = event_target:mercenary_enclave_country
+				}
+				controller = {
+					is_same_value = root
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.215 }
+		}
+	}
+	#Mercenary Garrison starbase building
+	option = {
+		name = enclave.205.c
+		custom_tooltip = mercenary_tt_garrison
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+			NOT = { has_country_flag = mercenary_enclave_bought_mercenary_garrison }
+			event_target:mercenary_enclave_country = {
+				trust = {
+					who = root
+					value >= 30
+				}
+			}
+		}
+		allow = {
+			event_target:mercenary_enclave_country = {
+				trust = {
+					who = root
+					value >= 40
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.220 }
+		}
+	}
+
+	#Tactical Appraisal
+	option = {
+		name = enclave.205.e
+		custom_tooltip = mercenary_tt_tactical
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+			OR = {
+				any_country = {
+					is_country_type = awakened_marauders
+					has_communications = root
+				}
+				any_country = {
+					OR = {
+						is_country_type = gray
+						is_country_type = gray_goo
+					}
+					has_communications = root
+				}
+				any_country = {
+					is_country_type = swarm
+					has_communications = root
+				}
+				any_country = {
+					is_country_type = extradimensional
+					has_communications = root
+				}
+				any_country = {
+					is_country_type = ai_empire
+					has_communications = root
+				}
+			}
+			event_target:mercenary_enclave_country = {
+				trust = {
+					who = root
+					value >= 50
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.240 }
+		}
+	}
+
+	#Recruit Armies
+	option = {
+		name = enclave.205.f
+		custom_tooltip = mercenary_tt_hirearmies
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+		}
+		allow = {
+			event_target:mercenary_enclave_country = {
+				trust = {
+					who = root
+					value >= 20
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.270 }
+		}
+	}
+
+	#Mercenary Logistic Services
+	option = {
+		name = enclave.205.g
+		custom_tooltip = mercenary_tt_logistic
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+			event_target:mercenary_enclave_country = {
+				trust = {
+					who = root
+					value >= 20
+				}
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = enclave.205.g.tooltip
+				NOT = {
+					has_modifier = mercenary_enclave_logistic_help
+				}
+			}
+			event_target:mercenary_enclave_country = {
+				trust = {
+					who = root
+					value >= 30
+				}
+			}
+		}
+
+		hidden_effect = {
+			country_event = { id = enclave.2030 }
+		}
+	}
+
+	#Patron Panel
+	option = {
+		name = enclave.205.h
+		custom_tooltip = mercenary_tt_patron
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+			exists = event_target:mercenary_patron
+			event_target:mercenary_patron = {
+				is_same_empire = root
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.280 }
+		}
+	}
+	option = {
+		name = megumin.205.a
+		custom_tooltip = mercenary_tt_patron
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+			exists = event_target:mercenary_patron
+			event_target:mercenary_patron = {
+				is_same_empire = root
+				has_ascension_perk = ap_lord_of_war
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.2800 }
+		}
+	}
+	#option = {
+	#	name = DOTDOTDOT
+	#	trigger = {
+	#		OR = {
+	#			is_hostile = event_target:mercenary_enclave_country
+	#			is_homicidal = yes
+	#		}
+	#	}
+	#}
+
+	after = {
+		hidden_effect = {
+			set_country_flag = mercenary_enclave_diplomacy_engaged
+		}
+	}
+}
+
+country_event = {
+	id = enclave.280
+	base = enclave.205
+	desc_clear = yes
+	option_clear = yes
+
+	desc = {
+		text = enclave.280.a.desc
+		text = enclave.280.b.desc
+		text = enclave.280.c.desc
+	}
+
+	immediate = {
+		event_target:mercenary_enclave_country = {
+			random_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+					is_leased = yes
+				}
+				save_event_target_as = loaned_mercenary_fleet
+			}
+		}
+	}
+
+	#Discuss another matter (return to menu)
+	option = {
+		name = enclave.215.a
+		hidden_effect = {
+			country_event = { id = enclave.205 }
+		}
+	}
+
+	#Expand Mercenary Fleet
+	option = {
+		name = enclave.205.d
+		# trigger = {
+		# 	event_target:mercenary_enclave_country = {
+		# 		NOT = { has_modifier = mercenary_fleet_size_upgrade_5 }
+		# 	}
+		# }
+		allow = {
+			custom_tooltip = {
+				fail_text = enclave.205.d.timeout
+				event_target:mercenary_enclave_country = {
+					NOT = { has_country_flag = upgraded_station }
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.235 }
+		}
+	}
+
+	#Recall Fleet
+	option = {
+		name = enclave.280.b
+		trigger = {
+			exists = event_target:loaned_mercenary_fleet
+			event_target:loaned_mercenary_fleet = {
+				controller = {
+					NOT = { is_same_value = root }
+				}
+			}
+			event_target:mercenary_enclave_country ={
+				NOT = { has_country_flag = fleet_commandeered }
+			}
+		}
+		allow = {
+			event_target:mercenary_enclave_country = {
+				trust = {
+					who = root
+					value >= 80
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.285 }
+		}
+	}
+
+	#Share Technology
+	option = {
+		name = enclave.280.c
+		allow = {
+			custom_tooltip = {
+				fail_text = enclave.280.c.timeout
+				event_target:mercenary_enclave_country = {
+					NOT = { has_country_flag = updating_databanks }
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.2040 }
+		}
+	}
+}
+
+country_event = {
+	id = enclave.2800
+	base = enclave.205
+	desc_clear = yes
+	option_clear = yes
+
+	desc = {
+		text = enclave.280.a.desc
+		text = enclave.280.b.desc
+		text = enclave.280.c.desc
+	}
+
+	immediate = {
+		event_target:mercenary_enclave_country = {
+			random_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+					is_leased = yes
+				}
+				save_event_target_as = loaned_mercenary_fleet
+			}
+		}
+	}
+
+	#Discuss another matter (return to menu)
+	option = {
+		name = enclave.215.a
+		hidden_effect = {
+			country_event = { id = enclave.205 }
+		}
+	}
+
+	#部署模块
+	option = {
+		name = megumin.205.d
+		# trigger = {
+		# 	event_target:mercenary_enclave_country = {
+		# 		NOT = { has_modifier = mercenary_fleet_size_upgrade_5 }
+		# 	}
+		# }
+		hidden_effect = {
+			country_event = { id = enclave.2355 }
+		}
+	}
+
+	#召回舰队
+	option = {
+		name = megumin.280.b
+		trigger = {
+			exists = event_target:loaned_mercenary_fleet
+			event_target:loaned_mercenary_fleet = {
+				controller = {
+					NOT = { is_same_value = root }
+				}
+			}
+			event_target:mercenary_enclave_country ={
+				NOT = { has_country_flag = fleet_commandeered }
+			}
+		}
+		allow = {
+			event_target:mercenary_enclave_country = {
+				trust = {
+					who = root
+					value >= 80
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.2855 }
+		}
+	}
+
+	#调整构成
+	option = {
+		name = megumin.280.c
+		
+		hidden_effect = {
+			country_event = { id = enclave.2356 }
+		}
+	}
+	#舰队自沉
+	option = {
+		name = megumin.280.d
+		trigger = {
+			NOR = {
+				is_hostile = event_target:mercenary_enclave_country
+				#is_homicidal = yes
+			}
+			any_controlled_fleet = {
+				is_ship_class = shipclass_military
+				is_leased = yes
+				owner = {
+					is_same_value = event_target:mercenary_enclave_country
+				}
+				controller = {
+					is_same_value = root
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = enclave.2856  }
+		}
+	}
+}
+
+country_event = {
+	id = enclave.2855 #超级召回
+	base = enclave.205
+	desc_clear = yes
+	option_clear = yes
+
+	desc = enclave.2855.desc
+
+	immediate = {
+		event_target:loaned_mercenary_fleet = {
+			controller = {
+				save_event_target_as = current_mercenary_client
+			}
+		}
+	}
+
+	#Discuss another matter (return to menu)
+	option = {
+		name = enclave.215.a
+		hidden_effect = {
+			country_event = { id = enclave.205 }
+		}
+	}
+
+	#Multiple options to scale costs with fleet size
+	#Size 0
+	option = {
+		name = DEAL
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 1500 }
+			resource_stockpile_compare = { resource = influence value >= 50 }
+		}
+		add_resource = { energy = -1500 }
+		add_resource = { influence = -50 }
+		custom_tooltip = enclave.285.tooltip
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				add_trust = {
+					who = root
+					amount = -15
+				}
+				#转移
+				random_owned_fleet = {
+					limit = {
+						is_ship_class = shipclass_military
+						is_leased = yes
+					}
+					save_event_target_as = mercenary_fleet
+				}
+				random_owned_fleet = {
+					limit = {
+						is_ship_size = enclave_mercenary_station
+					}
+					solar_system = {
+						save_event_target_as = mercenary_home_system
+						space_owner = {
+							save_event_target_as = mercenary_patron
+						}
+					}
+				}
+				root = {
+					save_event_target_as = mercenary_enclave_country
+				}
+				event_target:mercenary_fleet = {
+					end_fleet_contract = {
+						initiator = event_target:mercenary_enclave_country
+						reason = cancelled
+					}
+					remove_fleet_flag = fleet_on_loan@root
+					set_location = {
+						target = event_target:mercenary_home_system
+					}
+					give_fleet = { controller = root days = 1510 }
+					
+				}
+				
+			}
+		}
+	}
+
+
+	option = {
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+#舰队自沉
+country_event = {
+	id = enclave.2856 
+	base = enclave.205
+	desc_clear = yes
+	option_clear = yes
+
+	desc = enclave.2856.desc
+
+	immediate = {
+		event_target:loaned_mercenary_fleet = {
+			controller = {
+				save_event_target_as = current_mercenary_client
+			}
+		}
+	}
+
+	#Discuss another matter (return to menu)
+	option = {
+		name = enclave.215.a
+		hidden_effect = {
+			country_event = { id = enclave.205 }
+		}
+	}
+
+	option = {
+		name = "自沉并重新造吧"
+		hidden_effect = {
+			every_controlled_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+					is_leased = yes
+					owner = {
+						is_same_value = event_target:mercenary_enclave_country
+					}
+					controller = {
+						is_same_value = root
+					}					
+				}
+				destroy_fleet = this
+			}
+			event_target:mercenary_enclave_country = {				
+				add_trust = {
+					who = root
+					amount = 20
+				}
+				add_resource = {
+					alloys = 20000
+				}
+			}
+		}
+							
+	}
+
+
+	option = {
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+
+country_event = {
+	id = enclave.235
+	base = enclave.205
+	desc_clear = yes
+	option_clear = yes
+
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_1 }
+			}
+		}
+		text = enclave.235.1.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_2 }
+				has_modifier = mercenary_fleet_size_upgrade_1
+			}
+		}
+		text = enclave.235.2.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_3 }
+				has_modifier = mercenary_fleet_size_upgrade_2
+			}
+		}
+		text = enclave.235.3.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_4 }
+				has_modifier = mercenary_fleet_size_upgrade_3
+			}
+		}
+		text = enclave.235.4.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_5 }
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		text = enclave.235.5.desc
+	}
+
+	#Discuss another matter (return to menu)
+	option = {
+		name = enclave.215.a
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = { id = enclave.205 }
+		}
+	}
+
+	#First Increase
+	option = {
+		name = DEAL
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_1 }
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 1000 }
+			resource_stockpile_compare = { resource = alloys value >= 500 }
+		}
+		add_resource = { energy = -1000  }
+		add_resource = { alloys = -500  }
+		custom_tooltip = opinion20
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+				add_modifier = {
+					modifier = mercenary_fleet_size_upgrade_1
+					days = -1
+				}
+				upgrade_mercenary_starbase = {
+					TIER = 1
+				}
+			}
+			country_event = { id = enclave.225 }
+		}
+	}
+	#Second Increase
+	option = {
+		name = DEAL
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_2 }
+				has_modifier = mercenary_fleet_size_upgrade_1
+			}
+		}
+		allow = {
+		resource_stockpile_compare = { resource = energy value >= 2500 }
+			resource_stockpile_compare = { resource = alloys value >= 1250 }
+		}
+		add_resource = { energy = -2500 }
+		add_resource = { alloys = -1250 }
+		custom_tooltip = opinion20
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+				add_modifier = {
+					modifier = mercenary_fleet_size_upgrade_2
+					days = -1
+				}
+				upgrade_mercenary_starbase = {
+					TIER = 2
+				}
+			}
+			country_event = { id = enclave.225 }
+		}
+	}
+	#Third Increase
+	option = {
+		name = DEAL
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_3 }
+				has_modifier = mercenary_fleet_size_upgrade_2
+			}
+		}
+		allow = {
+			#opinion trigger ?
+			resource_stockpile_compare = { resource = energy value >= 5500 }
+			resource_stockpile_compare = { resource = alloys value >= 2750 }
+		}
+		add_resource = { energy = -5500 }
+		add_resource = { alloys = -2750 }
+		custom_tooltip = opinion20
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+				add_modifier = {
+					modifier = mercenary_fleet_size_upgrade_3
+					days = -1
+				}
+				upgrade_mercenary_starbase = {
+					TIER = 3
+				}
+			}
+			country_event = { id = enclave.225 }
+		}
+	}
+	#Fourth Increase
+	option = {
+		name = DEAL
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_4 }
+				has_modifier = mercenary_fleet_size_upgrade_3
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 10000 }
+			resource_stockpile_compare = { resource = alloys value >= 5000 }
+		}
+		add_resource = { energy = -10000 }
+		add_resource = { alloys = -5000 }
+		custom_tooltip = opinion20
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				add_trust = {
+					who = root
+					amount = 20
+				}
+				add_modifier = {
+					modifier = mercenary_fleet_size_upgrade_4
+					days = -1
+				}
+				upgrade_mercenary_starbase = {
+					TIER = 4
+				}
+			}
+			country_event = { id = enclave.225 }
+		}
+	}
+	#Fifth Increase
+	option = {
+		name = DEAL
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_5 }
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 13000 }
+			resource_stockpile_compare = { resource = alloys value >= 6500 }
+		}
+		add_resource = { energy = -13000 }
+		add_resource = { alloys = -6500 }
+		custom_tooltip = opinion20
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				change_variable = {
+					which = wuxianshengji
+					value = 1
+				}
+				add_trust = {
+					who = root
+					amount = 20
+				}
+				add_modifier = {
+					modifier = mercenary_fleet_size_upgrade_5
+					days = -1
+				}
+				upgrade_mercenary_starbase = {
+					TIER = 5
+				}
+				set_country_flag = maximally_effective_achievement
+			}
+			country_event = { id = enclave.225 }
+		}
+	}
+	#无限升级
+	option = {
+		name = DEAL
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				has_modifier = mercenary_fleet_size_upgrade_5
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 5000 multiplier = event_target:mercenary_enclave_country.wuxianshengji}
+			resource_stockpile_compare = { resource = alloys value >= 2500 multiplier = event_target:mercenary_enclave_country.wuxianshengji}
+			has_ascension_perk = ap_lord_of_war
+		}
+		add_resource = { energy = -5000 multiplier = event_target:mercenary_enclave_country.wuxianshengji}
+		add_resource = { alloys = -2500 multiplier = event_target:mercenary_enclave_country.wuxianshengji}
+		custom_tooltip = opinion20
+		event_target:mercenary_enclave_country = {
+			change_variable = {
+				which = wuxianshengji
+				value = 1
+			}
+		}		
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {				
+				add_trust = {
+					who = root
+					amount = 20
+				}
+				remove_modifier = mercenary_fleet_size_upgrade_4
+				add_modifier = {
+					modifier = mercenary_fleet_size_upgrade_4
+					days = -1
+					multiplier = wuxianshengji
+				}
+				add_resource = {
+					alloys = 2500
+					multiplier = event_target:mercenary_enclave_country.wuxianshengji
+				}
+				add_modifier = {
+					modifier = 战争之王加成
+					days = -1
+				}
+			}
+			country_event = { id = enclave.235 }
+		}
+		ai_chance = {
+			weight = 0
+		}
+	}
+}
+#部署模块
+country_event = { 
+	id = enclave.2355
+	base = enclave.205
+	desc_clear = yes
+	option_clear = yes
+
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_1 }
+			}
+		}
+		text = enclave.235.1.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_2 }
+				has_modifier = mercenary_fleet_size_upgrade_1
+			}
+		}
+		text = enclave.235.2.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_3 }
+				has_modifier = mercenary_fleet_size_upgrade_2
+			}
+		}
+		text = enclave.235.3.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_4 }
+				has_modifier = mercenary_fleet_size_upgrade_3
+			}
+		}
+		text = enclave.235.4.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_5 }
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		text = enclave.235.5.desc
+	}
+
+	#Discuss another matter (return to menu)
+	option = {
+		name = enclave.215.a
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = { id = enclave.205 }
+		}
+	}
+
+	#巨型船坞
+	option = {
+		name = enclave.2355.aa
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				not = {
+					has_modifier = 巨型船坞模块
+				}
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 50000 }
+			resource_stockpile_compare = { resource = alloys value >= 50000 }
+			has_ascension_perk = ap_lord_of_war
+		}
+		add_resource = { energy = -50000 }
+		add_resource = { alloys = -50000 }
+		custom_tooltip = opinion20
+		event_target:mercenary_enclave_country = {
+			add_modifier = {
+				modifier = 巨型船坞模块
+			}
+		}		
+		hidden_effect = {
+			country_event = { id = enclave.2355 }
+		}
+		
+	}
+	#舰队学院
+	option = {
+		name = enclave.2355.bb
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				not = {
+					has_modifier = 舰队学院模块
+				}
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 25000 }
+			resource_stockpile_compare = { resource = alloys value >= 20000 }
+			has_ascension_perk = ap_lord_of_war
+		}
+		add_resource = { energy = -25000 }
+		add_resource = { alloys = -20000 }
+		custom_tooltip = opinion20
+		event_target:mercenary_enclave_country = {
+			add_modifier = {
+				modifier = 舰队学院模块
+			}
+		}		
+		hidden_effect = {
+			country_event = { id = enclave.2355 }
+		}
+		
+	}
+	#维护平台
+	option = {
+		name = enclave.2355.cc
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				not = {
+					has_modifier = 维护模块
+				}
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 20000 }
+			resource_stockpile_compare = { resource = alloys value >= 10000 }
+			has_ascension_perk = ap_lord_of_war
+		}
+		add_resource = { energy = -20000 }
+		add_resource = { alloys = -10000 }
+		custom_tooltip = opinion20
+		event_target:mercenary_enclave_country = {
+			add_modifier = {
+				modifier = 维护模块
+			}
+		}		
+		hidden_effect = {
+			country_event = { id = enclave.2355 }
+		}
+		
+	}
+	#生产模块
+	option = {
+		name = enclave.2355.dd
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				not = {
+					has_modifier = 生产模块
+				}
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = minerals value >= 40000 }
+			has_ascension_perk = ap_lord_of_war
+		}
+		add_resource = { minerals = -40000 }
+		custom_tooltip = opinion20
+		event_target:mercenary_enclave_country = {
+			add_modifier = {
+				modifier = 生产模块
+			}
+		}		
+		hidden_effect = {
+			country_event = { id = enclave.2355 }
+		}
+		
+	}
+}
+#调整构成
+country_event = { 
+	id = enclave.2356
+	base = enclave.205
+	desc_clear = yes
+	option_clear = yes
+
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_1 }
+			}
+		}
+		text = enclave.235.1.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_2 }
+				has_modifier = mercenary_fleet_size_upgrade_1
+			}
+		}
+		text = enclave.235.2.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_3 }
+				has_modifier = mercenary_fleet_size_upgrade_2
+			}
+		}
+		text = enclave.235.3.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_4 }
+				has_modifier = mercenary_fleet_size_upgrade_3
+			}
+		}
+		text = enclave.235.4.desc
+	}
+	desc = {
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_5 }
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		text = enclave.235.5.desc
+	}
+
+	#Discuss another matter (return to menu)
+	option = {
+		name = enclave.215.a
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = { id = enclave.205 }
+		}
+	}
+
+	#
+	option = {
+		name = "禁止造护卫舰"
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				not = {
+					has_modifier = 禁止护卫舰
+				}
+			}
+		}
+		event_target:mercenary_enclave_country = {
+			add_modifier = {
+				modifier = 禁止护卫舰
+			}
+		}		
+		hidden_effect = {
+			country_event = { id = enclave.2356 }
+		}
+		
+	}
+	option = {
+		name = "禁止造驱逐舰"
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				not = {
+					has_modifier = 禁止驱逐舰
+				}
+			}
+		}
+		event_target:mercenary_enclave_country = {
+			add_modifier = {
+				modifier = 禁止驱逐舰
+			}
+		}		
+		hidden_effect = {
+			country_event = { id = enclave.2356 }
+		}
+		
+	}
+	option = {
+		name = "禁止造巡洋舰"
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				not = {
+					has_modifier = 禁止巡洋舰
+				}
+			}
+		}
+		event_target:mercenary_enclave_country = {
+			add_modifier = {
+				modifier = 禁止巡洋舰
+			}
+		}		
+		hidden_effect = {
+			country_event = { id = enclave.2356 }
+		}
+		
+	}
+	option = {
+		name = "恢复禁止制造"
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				or = {
+					has_modifier = 禁止护卫舰
+					has_modifier = 禁止驱逐舰
+					has_modifier = 禁止巡洋舰
+				}
+			}
+		}
+		event_target:mercenary_enclave_country = {
+			remove_modifier = 禁止护卫舰
+			remove_modifier = 禁止驱逐舰
+			remove_modifier = 禁止巡洋舰
+		}		
+		hidden_effect = {
+			country_event = { id = enclave.2356 }
+		}
+		
+	}
+}
+
+
+#分红
+country_event = {
+	id = enclave.275
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		#Check who owns the system the enclave is in and register them as the target for the payment event.
+		random_owned_fleet = {
+			limit = {
+				is_ship_size = enclave_mercenary_station
+			}
+			solar_system = {
+				space_owner = {
+					save_event_target_as = mercenary_patron
+				}
+			}
+		}
+		root = {
+			save_event_target_as = mercenary_enclave_country
+		}
+
+		event_target:mercenary_patron = {
+			random_list = {
+				24 = { country_event = { id = enclave.2000 } }
+				24 = { country_event = { id = enclave.2005 } }
+				24 = { country_event = { id = enclave.2010 } }
+				24 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_ascension_perk = ap_lord_of_war
+							event_target:mercenary_patron = { used_naval_capacity_percent > 0.95 }
+						}						
+					}
+					country_event = { id = enclave.2015 }
+				}
+				2 = { 
+					modifier = {
+						factor = 0
+						OR = {
+							has_ascension_perk = ap_lord_of_war
+							event_target:mercenary_patron = { used_naval_capacity_percent > 0.95 }
+						}						
+					}
+					country_event = { id = enclave.2020 } 
+				}
+				2 = { country_event = { id = enclave.2025 } }
+			}
+		}
+	}
+
+	after = {
+		start_situation = {
+			type = mercenary_dividends
+			target = root
+		}
+		destroy_situation = from
+	}
+}
+##Tech Reward
+country_event = {
+	id = enclave.2000
+	title = enclave.2000.name
+	desc = enclave.2000.desc
+	picture = GFX_evt_mercenary_enclave
+	show_sound = evn_ove_mercenary_enclave
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_2 }
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_4 }
+				has_modifier = mercenary_fleet_size_upgrade_2
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier2materialreward
+			min = @tier2materialmin
+			max = @tier2materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier2materialreward
+			min = @tier2materialmin
+			max = @tier2materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier2materialreward
+			min = @tier2materialmin
+			max = @tier2materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier2materialreward
+			min = @tier2materialmin
+			max = @tier2materialmax
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			NOT = {
+				has_ascension_perk = ap_lord_of_war
+			}
+			event_target:mercenary_enclave_country = {
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier3materialreward
+			min = @tier3materialmin
+			max = @tier3materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier3materialreward
+			min = @tier3materialmin
+			max = @tier3materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier3materialreward
+			min = @tier3materialmin
+			max = @tier3materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3materialreward
+			min = @tier3materialmin
+			max = @tier3materialmax
+		}
+	}
+	#升级后
+	option = {
+		name = EXCELLENT
+		trigger = {
+			has_ascension_perk = ap_lord_of_war
+			event_target:mercenary_enclave_country = {
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = 9
+			min = @tier3materialmin
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 9
+			min = @tier3materialmin
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = 9
+			min = @tier3materialmin
+		}
+	}
+}
+##Raw Resources Reward
+country_event = {
+	id = enclave.2005
+	title = enclave.2000.name
+	desc = enclave.2005.desc
+	picture = GFX_evt_mercenary_enclave
+	show_sound = evn_ove_mercenary_enclave
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_2 }
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier2materialreward
+			min = @tier2materialmin
+			max = @tier2materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = food
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_4 }
+				has_modifier = mercenary_fleet_size_upgrade_2
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier2materialreward
+			min = @tier2materialmin
+			max = @tier2materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier3materialreward
+			min = @tier3materialmin
+			max = @tier3materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = food
+			value = @tier2materialreward
+			min = @tier2materialmin
+			max = @tier2materialmax
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			NOT = {
+				has_ascension_perk = ap_lord_of_war
+			}
+			event_target:mercenary_enclave_country = {
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier3materialreward
+			min = @tier3materialmin
+			max = @tier3materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier4materialreward
+			min = @tier4materialmin
+			max = @tier4materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = food
+			value = @tier3materialreward
+			min = @tier3materialmin
+			max = @tier3materialmax
+		}
+	}
+	#升级后
+	option = {
+		name = EXCELLENT
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+			has_ascension_perk = ap_lord_of_war
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier3materialreward
+			min = @tier3materialmin
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier3materialreward
+			min = @tier4materialmin
+		}
+		add_monthly_resource_mult = {
+			resource = food
+			value = @tier3materialreward
+			min = @tier3materialmin
+		}
+	}
+}
+##Cash Reward
+country_event = {
+	id = enclave.2010
+	title = enclave.2000.name
+	desc = enclave.2010.desc
+	picture = GFX_evt_mercenary_enclave
+	show_sound = evn_ove_mercenary_enclave
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_2 }
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier2materialreward
+			min = @tier2materialmin
+			max = @tier2materialmax
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_4 }
+				has_modifier = mercenary_fleet_size_upgrade_2
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier3materialreward
+			min = @tier3materialmin
+			max = @tier3materialmax
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			NOT = {
+				has_ascension_perk = ap_lord_of_war
+			}
+			event_target:mercenary_enclave_country = {
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier4materialreward
+			min = @tier4materialmin
+			max = @tier4materialmax
+		}
+	}
+	#升级后
+	option = {
+		name = EXCELLENT
+		trigger = {
+			has_ascension_perk = ap_lord_of_war
+			event_target:mercenary_enclave_country = {
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		add_monthly_resource_mult = {
+			resource = alloys
+			value = 6
+			min = @tier4materialmin
+		}
+	}
+}
+
+##Sadpot
+country_event = {
+	id = enclave.2025
+	title = enclave.2000.name
+	desc = enclave.2025.desc
+	picture = GFX_evt_mercenary_enclave
+	show_sound = evn_ove_mercenary_enclave
+	is_triggered_only = yes
+
+	option = {
+		name = enclave.2025.a
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				add_modifier = {
+					modifier = merc_financial_troubles
+					days = 3600
+				}
+			}
+		}
+	}
+
+	option = {
+		name = enclave.2025.b
+		event_target:mercenary_enclave_country = {
+			ruler = {
+				kill_leader = { show_notification = no}
+			}
+		}
+		hidden_effect = {
+			event_target:mercenary_enclave_country = {
+				add_modifier = {
+					modifier = merc_financial_troubles
+					days = 1000
+				}
+				create_leader = {
+					class = ruler
+					species = owner_main_species
+					name = random
+					skill = 1
+				}
+				set_leader = last_created_leader
+			}
+		}
+	}
+
+	option = {
+		name = enclave.2025.c
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_2 }
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 1000 }
+		}
+		add_resource = { energy = -1000 }
+		add_resource = { influence = 50 }
+		event_target:mercenary_enclave_country = {
+			add_trust = {
+				who = root
+				amount = 20
+			}
+		}
+	}
+
+	option = {
+		name = enclave.2025.c
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				NOT = { has_modifier = mercenary_fleet_size_upgrade_4 }
+				has_modifier = mercenary_fleet_size_upgrade_2
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 2500 }
+		}
+		add_resource = { energy = -2500 }
+		add_resource = { influence = 75 }
+		event_target:mercenary_enclave_country = {
+			add_trust = {
+				who = root
+				amount = 20
+			}
+		}
+	}
+
+	option = {
+		name = enclave.2025.c
+		trigger = {
+			event_target:mercenary_enclave_country = {
+				has_modifier = mercenary_fleet_size_upgrade_4
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 10000 }
+		}
+		add_resource = { energy = -10000 }
+		add_resource = { influence = 100 }
+		event_target:mercenary_enclave_country = {
+			add_trust = {
+				who = root
+				amount = 20
+			}
+		}
+	}
+}

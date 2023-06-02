@@ -1,0 +1,368 @@
+situation_dimension_traveler_1 = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	picture = GFX_evt_wormhole
+	
+	stages = {
+		stage_dimension_traveler_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 20
+		}
+		stage_dimension_traveler_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = dimension_traveler.20 } #阻滞
+			}
+			end = 40
+		}
+		stage_dimension_traveler_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 60
+		}
+		stage_dimension_traveler_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 80
+		}
+		stage_dimension_traveler_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 100
+		}
+	}
+	
+	on_progress_complete = {
+		custom_tooltip = situation_dimension_traveler_complete_effect
+	}
+	
+	approach = {
+		name = approach_dimension_traveler_nature_0
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_green
+		potential = {
+			current_stage = stage_dimension_traveler_1
+		}
+		on_select = {
+			custom_tooltip = approach_dimension_traveler_nature_effect
+		}
+	}
+	
+	approach = {
+		name = approach_dimension_traveler_nature
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_yellow
+		potential = {
+			current_stage = stage_dimension_traveler_2
+		}
+		on_select = {
+			custom_tooltip = approach_dimension_traveler_nature_effect
+		}
+	}
+	
+	approach = {
+		name = approach_dimension_traveler_out
+		icon = GFX_situation_approach_fleet
+		icon_background = GFX_situation_approach_bg_green
+		potential = {
+			current_stage = stage_dimension_traveler_2
+		}
+		on_select = {
+			custom_tooltip = approach_dimension_traveler_out_effect
+		}
+	}
+	
+	monthly_progress = {
+		modifier = {
+			desc = string_white_hole
+			add = 20
+		}
+	}
+}
+
+situation_dimension_traveler_2 = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_negative
+	picture = GFX_evt_wormhole
+	
+	stages = {
+		stage_dimension_traveler_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 20
+		}
+		stage_dimension_traveler_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 40
+		}
+		stage_dimension_traveler_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = dimension_traveler.21 } #牵引
+			}
+			end = 60
+		}
+		stage_dimension_traveler_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = dimension_traveler.22 } #迫近
+			}
+			end = 80
+		}
+		stage_dimension_traveler_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = dimension_traveler.23 } #吞噬
+			}
+			end = 100
+		}
+	}
+	
+	on_progress_complete = {
+		custom_tooltip = situation_dimension_traveler_complete_effect
+		hidden_effect = {
+			situation_event = { id = dimension_traveler.42 } #终结
+		}
+	}
+	
+	on_fail = {
+		custom_tooltip = situation_dimension_traveler_fail_effect
+		hidden_effect = {
+			situation_event = { id = dimension_traveler.41 } #毁灭
+		}
+	}
+	
+	approach = {
+		name = approach_dimension_traveler_nature
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = approach_dimension_traveler_nature_effect
+		}
+		ai_weight = {
+			base = 0
+		}
+	}
+	
+	approach = {
+		name = approach_dimension_traveler_out
+		icon = GFX_situation_approach_fleet
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = approach_dimension_traveler_out_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				trigger = {
+					NOT = { has_situation_flag = dimension_traveler_1 }
+				}
+				energy = 5
+			}
+			upkeep = {
+				trigger = {
+					has_situation_flag = dimension_traveler_1
+					NOT = { has_situation_flag = dimension_traveler_2 }
+				}
+				energy = 10
+			}
+			upkeep = {
+				trigger = {
+					has_situation_flag = dimension_traveler_2
+					NOT = { has_situation_flag = dimension_traveler_3 }
+				}
+				energy = 15
+			}
+			upkeep = {
+				trigger = {
+					has_situation_flag = dimension_traveler_3
+				}
+				energy = 20
+			}
+		}
+	}
+	
+	monthly_progress = {
+		modifier = {
+			desc = string_white_hole
+			add = 20
+		}
+		modifier = {
+			desc = string_black_hole
+			NOT = { has_situation_flag = dimension_traveler_1 }
+			subtract = 12
+		}
+		modifier = {
+			desc = string_black_hole
+			has_situation_flag = dimension_traveler_1
+			NOT = { has_situation_flag = dimension_traveler_2 }
+			subtract = 24
+		}
+		modifier = {
+			desc = string_black_hole
+			has_situation_flag = dimension_traveler_2
+			NOT = { has_situation_flag = dimension_traveler_3 }
+			subtract = 40
+		}
+		modifier = {
+			desc = string_black_hole
+			has_situation_flag = dimension_traveler_3
+			NOT = { has_situation_flag = dimension_traveler_4 }
+			subtract = 60
+		}
+		modifier = {
+			desc = string_fleet_energy
+			current_situation_approach = approach_dimension_traveler_out
+			NOT = { has_situation_flag = dimension_traveler_1 }
+			add = 8
+		}
+		modifier = {
+			desc = string_fleet_energy
+			current_situation_approach = approach_dimension_traveler_out
+			has_situation_flag = dimension_traveler_1
+			NOT = { has_situation_flag = dimension_traveler_2 }
+			add = 16
+		}
+		modifier = {
+			desc = string_fleet_energy
+			current_situation_approach = approach_dimension_traveler_out
+			has_situation_flag = dimension_traveler_2
+			NOT = { has_situation_flag = dimension_traveler_3 }
+			add = 24
+		}
+		modifier = {
+			desc = string_fleet_energy
+			current_situation_approach = approach_dimension_traveler_out
+			has_situation_flag = dimension_traveler_3
+			add = 32
+		}
+	}
+}
+
+situation_dimension_traveler_true = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_negative
+	picture = GFX_evt_surreal_visions
+	
+	stages = {
+		stage_dimension_traveler_true_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 20
+		}
+		stage_dimension_traveler_true_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = dimension_traveler.321 }
+			}
+			end = 40
+		}
+		stage_dimension_traveler_true_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = dimension_traveler.322 }
+			}
+			end = 60
+		}
+		stage_dimension_traveler_true_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = dimension_traveler.323 }
+			}
+			end = 80
+		}
+		stage_dimension_traveler_true_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = dimension_traveler.324 }
+			}
+			end = 100
+		}
+	}
+	
+	on_progress_complete = {
+		custom_tooltip = situation_dimension_traveler_true_complete_effect
+		hidden_effect = {
+			situation_event = { id = dimension_traveler.331 }
+		}
+	}
+	
+	on_fail = {
+		custom_tooltip = situation_dimension_traveler_true_fail_effect
+		hidden_effect = {
+			situation_event = { id = dimension_traveler.330 }
+		}
+	}
+	
+	approach = {
+		name = approach_dimension_traveler_true
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = approach_dimension_traveler_true_effect
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 100
+			}
+		}
+		ai_weight = {
+			base = 10
+		}
+	}
+	
+	monthly_progress = {
+		modifier = {
+			desc = string_situation_dimension_traveler_true
+			owner = {
+				NOT = { has_country_flag = dimension_traveler_true_4 }
+			}
+			add = 5
+		}
+		modifier = {
+			desc = string_situation_dimension_traveler_true
+			owner = {
+				has_country_flag = dimension_traveler_true_4
+			}
+			add = 10
+		}
+		modifier = {
+			desc = string_situation_dimension_traveler_false
+			has_situation_flag = dimension_traveler_false
+			subtract = 25
+		}
+	}
+}

@@ -1,0 +1,157 @@
+entity = { #腐化冲击
+	name = "tc_tainted_blast_entity"
+	pdxmesh = "tc_null_mesh"
+	scale = 3
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" state_time = 10
+		event = { node = "root" time = 0.0 particle = "tc_tainted_blast_aura_effect_particle" trigger_once = yes keep_particle = yes sound = { soundeffect = tc_tainted_blast stop_on_state_change = no } }
+		event = { node = "root" time = 0.0 particle = "tc_tainted_blast_aura_effect_particle" trigger_once = yes keep_particle = yes }
+		event = { node = "root" time = 0.0 particle = "tc_tainted_blast_aura_effect_particle" trigger_once = yes keep_particle = yes }
+	}
+}
+
+entity = { #动能冲击
+	name = "tc_kinetic_girdle_blast_entity"
+	scale = 20
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = { name = "idle" state_time = 1.6 looping = no 
+		start_event = { node = "root" particle = "tc_explosion_effect_particle" keep_particle = yes trigger_once = yes }
+	}
+}
+
+entity = { #时间停止
+	name = "tc_time_freeze_entity"
+	pdxmesh = "tc_null_mesh"
+	scale = 5
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" state_time = 10
+		event = { node = "root" particle = "tc_aura_time_particle" trigger_once = yes keep_particle = yes sound = { soundeffect = "" stop_on_state_change = no } }
+	}
+}
+
+entity = { #闪电标记
+	name = "tc_tempestas_target_entity"
+	pdxmesh = "tc_null_mesh"
+	scale = 15
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" state_time = 10 looping = no
+		event = { node = "root" particle = "tc_tempestas_target_particle" trigger_once = yes keep_particle = yes sound = { soundeffect = "" stop_on_state_change = no } }
+
+	}
+}
+entity = { #闪电风暴
+	name = "tc_lighting_storm_entity"
+	pdxmesh = "tc_null_mesh"
+	scale = 10
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" state_time = 10
+		event = { time = 1 sound = { soundeffect = xl_arc_emitter_fire stop_on_state_change = no } }
+		event = { time = 1 sound = { soundeffect = xl_arc_emitter_fire stop_on_state_change = no } }
+		event = { time = 1 trigger_once = yes sound = { soundeffect = distance_xl_arc_emitter_fire stop_on_state_change = no } }
+		event = { time = 1 trigger_once = yes sound = { soundeffect = distance_xl_arc_emitter_fire stop_on_state_change = no } }
+		event = { node = "root" particle = "tc_radiu_non_axis_particle" trigger_once = yes keep_particle = yes }
+		event = { node = "root" particle = "tc_lighting_storm_particle" trigger_once = yes keep_particle = yes }
+		event = { node = "root" particle = "tc_tempestas_target_particle" trigger_once = yes keep_particle = yes }
+	}
+}
+
+entity = { #熔融残骸
+	name = "tc_molten_area_entity"
+	pdxmesh = "tc_null_mesh"
+	scale = 7.5
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" state_time = 10
+		event = { node = "root" particle = "tc_molten_area_particle" trigger_once = yes keep_particle = yes sound = { soundeffect = "" stop_on_state_change = no } }
+		event = { node = "root" time = 0.0 particle = "tc_radiu_non_axis_ignis_particle" trigger_once = yes keep_particle = yes }
+	}
+}
+
+###半径指示器
+entity = { #范围指示测试 #基准半径1
+	name = "tc_radiu_test_entity"
+	pdxmesh = "tc_null_mesh"
+	scale = 100
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" state_time = 10 looping = yes
+		event = { node = "root" time = 0.0 particle = "tc_radiu_test_particle" trigger_once = yes keep_particle = yes }
+	}
+}
+
+#测试实体
+entity = {
+	name = tc_aura_test_entity
+	scale = 1
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = idle
+	get_state_from_parent = no
+	state = {
+		name = idle state_time = 10 
+	}
+
+	attach = { root = tc_aura_test_100_entity }
+	attach = { root = tc_aura_test_200_entity }
+}
+
+entity = { #半径100
+	name = tc_aura_test_100_entity
+	scale = 100
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" state_time = 10 looping = yes
+		event = { node = "root" time = 0.0 particle = "tc_radiu_non_axis_particle" trigger_once = yes keep_particle = yes }
+	}
+}
+
+entity = { #半径100
+	name = tc_aura_test_200_entity
+	scale = 200
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle" state_time = 10 looping = yes
+		event = { node = "root" time = 0.0 particle = "tc_radiu_axis_particle" trigger_once = yes keep_particle = yes }
+	}
+}

@@ -1,0 +1,129 @@
+############################
+#
+# Megacorp Events
+#
+# Written by Maximilian Olbers
+#
+############################
+
+namespace = mega
+
+
+
+
+# Lost Consecrated World
+# on_system_lost
+# From = system
+# FromFrom = country (new owner)
+# This = country (previous owner), if one exists -- otherwise don't/won't/can't fire)
+country_event = {
+	id = mega.100
+	title = mega.100.name
+	desc = mega.100.desc
+	picture = GFX_evt_ruined_system
+	show_sound = event_planetary_riot
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = root
+		is_zofe_compatible = yes
+		has_ascension_perk = ap_consecrated_worlds
+		from = {
+			any_system_planet = {
+				has_planet_flag = consecrated@root
+			}
+		}
+	}
+
+	immediate = {
+		while = {
+			count = 3
+			from = {
+				random_system_planet = {
+					limit = { has_planet_flag = consecrated@root }
+					remove_planet_flag = consecrated@root
+					switch = {
+						trigger = has_modifier
+						consecrated_quality_4 = {
+							remove_modifier = consecrated_quality_4
+							root = {
+								change_variable = {
+									which = consecrated_variable
+									value = -4
+								}
+								change_variable = {
+									which = num_consecrated_worlds
+									value = -1
+								}
+							}
+						}
+						consecrated_quality_3 = {
+							remove_modifier = consecrated_quality_3
+							root = {
+								change_variable = {
+									which = consecrated_variable
+									value = -3
+								}
+								change_variable = {
+									which = num_consecrated_worlds
+									value = -1
+								}
+							}
+						}
+						consecrated_quality_2 = {
+							remove_modifier = consecrated_quality_2
+							root = {
+								change_variable = {
+									which = consecrated_variable
+									value = -2
+								}
+								change_variable = {
+									which = num_consecrated_worlds
+									value = -1
+								}
+							}
+						}
+						consecrated_quality_1 = {
+							remove_modifier = consecrated_quality_1
+							root = {
+								change_variable = {
+									which = consecrated_variable
+									value = -1
+								}
+								change_variable = {
+									which = num_consecrated_worlds
+									value = -1
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		root = {
+			recalculate_consecrated_world_modifier = yes
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = consecrated_worlds_mourning }
+				remove_modifier = consecrated_worlds_mourning
+			}
+			add_modifier = {
+				modifier = consecrated_worlds_mourning
+				days = 1800
+			}
+			tooltip = {
+				add_modifier = {
+					modifier = consecrated_worlds_mourning
+					days = 1800
+				}
+			}
+		}
+	}
+}

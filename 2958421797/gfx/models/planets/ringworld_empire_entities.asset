@@ -1,0 +1,3801 @@
+
+
+###########################################################################
+###																		###
+###								Ringworlds								###
+###																		###
+###########################################################################	
+
+@ringworld_segment_size = 50
+
+@ringworld_scale = 1
+
+@ringworld_north_scale =  450
+@ringworld_south_scale = -450
+@ringworld_west_scale  =  450
+@ringworld_east_scale  = -450
+
+@cull_radius_1 = 500
+
+@cull_radius_2 = 10000
+
+
+	#	entity = {
+	#		name = "ringworld_habitable_entity_01_constructor_entity"
+	#		pdxmesh = "ringworld_habitable_01_mesh"
+	#		cull_radius = 500.0
+	#	}
+    #
+	#	entity = {
+	#		name = "ringworld_tech_entity_01_constructor_entity"
+	#		pdxmesh = "ringworld_tech_01_mesh"
+	#			cull_radius = 500.0
+	#	}
+    #
+	#	entity = {
+	#		name = "ringworld_seam_entity_01_constructor_entity"
+	#		pdxmesh = "ringworld_seam_01_mesh"
+	#		cull_radius = 500.0
+	#	}
+	
+	
+	
+# Fallen Spiritualist 01
+entity = {
+	name = "fallen_spiritualist_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+entity = {
+	name = "fallen_spiritualist_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	attach = { locator1 = "molluscoid_01_ringworld_construction_entity" }
+	attach = { locator2 = "molluscoid_01_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_spiritualist_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "molluscoid_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "molluscoid_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "molluscoid_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "molluscoid_01_ringworld_3x_seams_entity" }
+}
+
+entity = {
+	name = "fallen_spiritualist_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_spiritualist_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_spiritualist_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_spiritualist_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_molluscoid_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "molluscoid_01_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "molluscoid_01_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+	
+	
+## Fallen Spiritualist 02
+
+entity = {
+	name = "fallen_spiritualist_02_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+entity = {
+	name = "fallen_spiritualist_02_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	attach = { locator1 = "fallen_spiritualist_02_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_spiritualist_02_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_spiritualist_02_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_spiritualist_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_spiritualist_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_spiritualist_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_spiritualist_02_ringworld_3x_seams_entity" }
+}
+
+entity = {
+	name = "fallen_spiritualist_02_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_spiritualist_02_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_spiritualist_02_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_spiritualist_02_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_spiritualist_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_spiritualist_02_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_spiritualist_02_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+	
+	
+##Fallen Materialist 02
+	
+entity = {
+	name = "fallen_materialist_02_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+entity = {
+	name = "fallen_materialist_02_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_mammalian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+		state = { name = "idle"
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+		}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "mammalian_01_ringworld_construction_entity" }
+	attach = { locator2 = "mammalian_01_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_materialist_02_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "mammalian_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "mammalian_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "mammalian_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "mammalian_01_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_materialist_02_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	attach = { root = "ringworld_habitable_entity_01_clouds_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_materialist_02_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+		
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+
+entity = {
+	name = "fallen_materialist_02_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_diffuse.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_materialist_02_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_mammalian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "mammalian_01_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "mammalian_01_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+## Fallen Xenophile
+
+entity = {
+	name = "fallen_xenophile_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_reptilian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_reptilian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+
+
+entity = {
+	name = "fallen_xenophile_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_reptilian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_reptilian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "reptilian_01_ringworld_construction_entity" }
+	attach = { locator2 = "reptilian_01_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_xenophile_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "reptilian_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "reptilian_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "reptilian_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "reptilian_01_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_xenophile_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_reptilian_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_xenophile_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_reptilian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_xenophile_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_reptilian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_reptilian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_xenophile_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_reptilian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_reptilian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "reptilian_01_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "reptilian_01_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+## Fallen Xenophobe
+
+entity = {
+	name = "fallen_xenophobe_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+entity = {
+	name = "fallen_xenophobe_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+		state = { name = "idle"
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+		}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_xenophobe_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_xenophobe_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_xenophobe_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_xenophobe_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_xenophobe_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_xenophobe_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_xenophobe_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_xenophobe_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	attach = { root = "ringworld_habitable_entity_01_clouds_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_xenophobe_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+		
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+
+entity = {
+	name = "fallen_xenophobe_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_seam_diffuse.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_xenophobe_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_xenophobe_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_xenophobe_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_xenophobe_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+##Fallen Xenophobe 02
+
+entity = {
+	name = "fallen_xenophobe_02_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+entity = {
+	name = "fallen_xenophobe_02_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+		state = { name = "idle"
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+		}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_xenophobe_02_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_xenophobe_02_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_xenophobe_02_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_xenophobe_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_xenophobe_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_xenophobe_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_xenophobe_02_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_xenophobe_02_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	attach = { root = "ringworld_habitable_entity_01_clouds_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_xenophobe_02_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+		
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+
+entity = {
+	name = "fallen_xenophobe_02_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_seam_diffuse.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_xenophobe_02_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_xenophobe_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_xenophobe_02_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_xenophobe_02_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+##Fallen Militarist
+
+entity = {
+	name = "fallen_militarist_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+entity = {
+	name = "fallen_militarist_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+		state = { name = "idle"
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+		}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_militarist_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_militarist_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_militarist_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_militarist_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_militarist_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_militarist_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_militarist_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_militarist_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	attach = { root = "ringworld_habitable_entity_01_clouds_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_militarist_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+		
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+
+entity = {
+	name = "fallen_militarist_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_seam_diffuse.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_militarist_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_militarist_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_militarist_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_militarist_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+##Fallen Militarist 02
+
+entity = {
+	name = "fallen_militarist_02_ringworld_construction_entity"
+	#cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+
+
+entity = {
+	name = "fallen_militarist_02_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_militarist_02_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_militarist_02_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_militarist_02_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"}
+    
+	attach = { ringworld_north 		= "fallen_militarist_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_militarist_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_militarist_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_militarist_02_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_militarist_02_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_militarist_02_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+		custom_texture = "gfx/models/planets/ringworld_tech_fadein.dds"
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_militarist_02_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_militarist_02_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_militarist_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_militarist_02_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_militarist_02_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+##Fallen Pacifist
+
+entity = {
+	name = "fallen_pacifist_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+entity = {
+	name = "fallen_pacifist_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	attach = { locator1 = "fallen_pacifist_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_pacifist_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_pacifist_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_pacifist_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_pacifist_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_pacifist_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_pacifist_ringworld_3x_seams_entity" }
+}
+
+entity = {
+	name = "fallen_pacifist_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_pacifist_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_pacifist_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_pacifist_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_pacifist_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_pacifist_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_pacifist_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+
+##Fallen Authoritarian
+
+entity = {
+	name = "fallen_authoritarian_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+entity = {
+	name = "fallen_authoritarian_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+		state = { name = "idle"
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+		}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_authoritarian_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_authoritarian_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_authoritarian_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_authoritarian_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_authoritarian_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_authoritarian_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_authoritarian_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_authoritarian_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	attach = { root = "ringworld_habitable_entity_01_clouds_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_authoritarian_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+		
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+
+entity = {
+	name = "fallen_authoritarian_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_seam_diffuse.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_authoritarian_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_authoritarian_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_authoritarian_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_authoritarian_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+
+##Fallen Egalitarian 02
+
+entity = {
+	name = "fallen_egalitarian_02_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_avian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_avian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+entity = {
+	name = "fallen_egalitarian_02_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_avian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_avian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_egalitarian_02_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_egalitarian_02_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_egalitarian_02_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_egalitarian_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_egalitarian_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_egalitarian_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_egalitarian_02_ringworld_3x_seams_entity" }
+}
+
+
+
+entity = {
+	name = "fallen_egalitarian_02_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	state = { name = "construction"
+	}
+
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_avian_01_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_egalitarian_02_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_avian_01_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_egalitarian_02_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_avian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_avian_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_egalitarian_02_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_avian_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_avian_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_egalitarian_02_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_egalitarian_02_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+##Fallen Hive Mind
+
+entity = {
+	name = "fallen_hive_mind_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+entity = {
+	name = "fallen_hive_mind_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	attach = { locator1 = "fallen_hive_mind_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_hive_mind_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_hive_mind_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_hive_mind_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_hive_mind_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_hive_mind_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_hive_mind_ringworld_3x_seams_entity" }
+}
+
+entity = {
+	name = "fallen_hive_mind_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_hive_mind_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_hive_mind_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_hive_mind_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_hive_mind_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_hive_mind_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_hive_mind_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+##Fallen Hive Mind 02
+
+entity = {
+	name = "fallen_hive_mind_02_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+entity = {
+	name = "fallen_hive_mind_02_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	attach = { locator1 = "fallen_hive_mind_02_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_hive_mind_02_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_hive_mind_02_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "fallen_hive_mind_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_hive_mind_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_hive_mind_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_hive_mind_02_ringworld_3x_seams_entity" }
+}
+
+entity = {
+	name = "fallen_hive_mind_02_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_hive_mind_02_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_hive_mind_02_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_hive_mind_02_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_hive_mind_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_hive_mind_02_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_hive_mind_02_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+##Fallen Machine
+
+entity = {
+	name = "fallen_machine_ringworld_construction_entity"
+	#cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+
+
+entity = {
+	name = "fallen_machine_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_machine_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_machine_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_machine_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"}
+    
+	attach = { ringworld_north 		= "fallen_machine_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_machine_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_machine_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_machine_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_machine_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_machine_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+		custom_texture = "gfx/models/planets/ringworld_tech_fadein.dds"
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_machine_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_machine_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_arthropoid_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_machine_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_machine_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_machine_02_ringworld_construction_entity"
+	#cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+
+
+
+entity = {
+	name = "fallen_machine_02_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_machine_02_ringworld_construction_entity" }
+	attach = { locator2 = "fallen_machine_02_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_machine_02_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"}
+    
+	attach = { ringworld_north 		= "fallen_machine_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "fallen_machine_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "fallen_machine_02_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "fallen_machine_02_ringworld_3x_seams_entity" }
+}
+
+
+entity = {
+	name = "fallen_machine_02_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "ai_01_diffuse.dds"
+		texture_normal = "ai_01_normals.dds"
+		texture_specular = "ai_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_machine_02_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+		custom_texture = "gfx/models/planets/ringworld_tech_fadein.dds"
+	}
+	
+	scale = @ringworld_scale
+}
+
+
+entity = {
+	name = "fallen_machine_02_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "fallen_machine_02_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_fallen_machine_02_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_arthropoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "fallen_machine_02_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "fallen_machine_02_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}
+
+
+
+##original 01
+
+entity = {
+	name = "original_empire_01_ringworld_construction_entity"
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+}
+
+entity = {
+	name = "original_empire_01_ringworld_3x_seams_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_construction_mesh"
+	
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface161Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	attach = { locator1 = "original_empire_01_ringworld_construction_entity" }
+	attach = { locator2 = "original_empire_01_ringworld_construction_entity" }
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "original_empire_01_ringworld_seam_entity_01_full_entity"
+	cull_radius = @cull_radius_2
+	
+	
+	locator = { name = "ringworld_north" 		position = { @ringworld_north_scale	0 	0 		} rotation = {	90	0	0	}		}
+	locator = { name = "ringworld_south" 		position = { @ringworld_south_scale	0 	0 		} rotation = {	-90	0	0	}		}
+	locator = { name = "ringworld_west" 		position = { 0		0 	@ringworld_west_scale 	} rotation = {	0	0	0	}		}
+	locator = { name = "ringworld_east" 		position = { 0		0 	@ringworld_east_scale 	} rotation = {	180	0	0	}		}	
+    
+	state = { name = "construction"
+	}
+    
+	attach = { ringworld_north 		= "original_empire_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_south 		= "original_empire_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_west 		= "original_empire_01_ringworld_3x_seams_entity" }
+	attach = { ringworld_east 		= "original_empire_01_ringworld_3x_seams_entity" }
+}
+
+entity = {
+	name = "original_empire_01_ringworld_habitable_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_habitable_01_mesh"
+		
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pCube20Shape"
+		index = 0
+		texture_diffuse = "ringworld_habitable_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_habitable_normal.dds"
+		texture_specular = "ringworld_habitable_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface9Shape"
+		index = 0
+		texture_diffuse = "continental_01_diffuse.dds"
+		texture_normal = "continental_01_normals.dds"
+		texture_specular = "continental_01_spec.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface34Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_shadow_diffuse.dds"
+		texture_specular = "nospec.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	meshsettings = {
+		name = "polySurface35Shape"
+		index = 0
+		texture_diffuse = "clouds_medium_diffuse.dds"
+		texture_normal = "clouds_medium_normal.dds"
+		texture_specular = "clouds_medium_specular.dds"
+		shader = "PdxMeshClouds"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "original_empire_01_ringworld_tech_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_tech_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle"		state_time = 5
+		event = { time = 0 node = "tech_1" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 1 node = "tech_2" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1 node = "tech_3" particle = "ringworld_tech_particle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "construction"
+	}
+	
+	
+	meshsettings = {
+		name = "pasted__polySurface28Shape"
+		index = 0
+		texture_diffuse = "ringworld_tech_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_tech_normal.dds"
+		texture_specular = "ringworld_tech_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "original_empire_01_ringworld_seam_entity_01_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 100 time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_01" stop_on_state_change = yes } }
+		start_event = { trigger_once = yes sound = { soundeffect = "ringworld_hum_idle_02" stop_on_state_change = yes } }
+	}
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	meshsettings = {
+		name = "polySurface128Shape"
+		index = 0
+		texture_diffuse = "ringworld_construction_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_construction_normal.dds"
+		texture_specular = "ringworld_construction_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+
+	game_data = {
+		size = @ringworld_segment_size
+	}
+	
+	scale = @ringworld_scale
+}
+
+entity = {
+	name = "original_empire_01_ringworld_phase_3_construction_entity"
+	cull_radius = @cull_radius_1
+	pdxmesh = "ringworld_seam_01_mesh"
+	
+	meshsettings = {
+		name = "pCube24Shape"
+		index = 0
+		texture_diffuse = "ringworld_seam_original_empire_01_diffuse.dds"
+		texture_normal = "ringworld_seam_normal.dds"
+		texture_specular = "ringworld_seam_molluscoid_01_specular.dds"
+		shader = "PdxMeshTerra"
+	}
+	
+	state = { name = "construction"
+	start_event = { trigger_once = yes sound = { soundeffect = "ringworld_construction_ambient" } }
+	}
+	
+	locator = { name = "locator1" 	position = { -225 	0 	-60.289 	} rotation ={ -30 0 0} 	}
+	locator = { name = "locator2" 	position = {  225 	0 	-60.289		} rotation ={ 30 0 0}	}
+	
+	attach = { locator1 = "original_empire_01_ringworld_habitable_entity_01_entity" }
+	attach = { locator2 = "original_empire_01_ringworld_tech_entity_01_entity" }
+	
+	scale = @ringworld_scale
+}

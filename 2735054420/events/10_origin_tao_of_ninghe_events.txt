@@ -1,0 +1,2489 @@
+
+namespace = tao_of_ninghe
+
+# 开局
+country_event = {
+	id = tao_of_ninghe.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_tao_of_ninghe
+	}
+	
+	immediate = {
+		country_event = { id = tao_of_ninghe.100 days = 1080 random = 1440 }
+		country_event = { id = tao_of_ninghe.200 days = 29 }
+		refresh_tao_of_ninghe_country_value = yes
+		start_situation = {
+			type = situation_tao_of_ninghe_country
+			target = root
+			effect = {
+				set_situation_approach = approach_tao_of_ninghe
+			}
+		}
+		every_owned_planet = {
+			planet_event = { id = tao_of_ninghe.5 }
+		}
+	}
+}
+
+# 废弃
+event = {
+	id = tao_of_ninghe.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = { has_global_flag = tao_of_ninghe_2_triggered }
+	}
+
+	immediate = {
+		set_global_flag = tao_of_ninghe_2_triggered
+	}
+}
+
+# 失去宁和星球
+situation_event = {
+	id = tao_of_ninghe.3
+	title = tao_of_ninghe.3.name
+	desc = tao_of_ninghe.3.desc
+	picture = GFX_evt_unity_symbol
+	show_sound = event_yellow_alert
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	option = {
+		name = tao_of_ninghe.3.a
+		destroy_situation = this
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.4
+	title = tao_of_ninghe.4.name
+	desc = tao_of_ninghe.4.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_red_alert
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		target = {
+			add_modifier = {
+				modifier = storms_of_yin
+				days = 720
+			}
+			add_planet_devastation = 100
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.4.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_0
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			target = {
+				add_modifier = {
+					modifier = storms_of_yin
+					days = 720
+				}
+				add_planet_devastation = 100
+			}
+		}
+	}
+}
+
+# 触发宁和机制
+planet_event = {
+	id = tao_of_ninghe.5
+	title = tao_of_ninghe.5.name
+	desc = tao_of_ninghe.5.desc
+	picture = GFX_evt_unity_symbol
+	show_sound = event_mystic_reveal
+	location = root
+	
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_origin = origin_tao_of_ninghe
+		}
+		num_pops > 0
+		is_under_colonization = no
+	}
+
+	immediate = {
+		refresh_tao_of_ninghe_value = yes
+		owner = {
+			start_situation = {
+				type = situation_tao_of_ninghe_5
+				target = root
+				effect = {
+					set_situation_approach = approach_tao_of_ninghe_keep
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.5.a
+		icon = {
+			icon = GFX_situation_approach_amenities
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		tooltip = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_5
+					target = root
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_keep
+					}
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.6
+	title = tao_of_ninghe.6.name
+	desc = tao_of_ninghe.6.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_red_alert
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		target = {
+			add_modifier = {
+				modifier = wind_of_yang
+				days = 720
+			}
+			add_planet_devastation = 100
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.6.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_10
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			target = {
+				add_modifier = {
+					modifier = wind_of_yang
+					days = 720
+				}
+				add_planet_devastation = 100
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.10
+	title = tao_of_ninghe.10.name
+	desc = tao_of_ninghe.10.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.10.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_0
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.10.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_red
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_0
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.11
+	title = tao_of_ninghe.11.name
+	desc = tao_of_ninghe.11.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.11.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_1
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.11.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_1
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.12
+	title = tao_of_ninghe.12.name
+	desc = tao_of_ninghe.12.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.12.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_2
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.12.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_2
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.13
+	title = tao_of_ninghe.13.name
+	desc = tao_of_ninghe.13.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.13.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_3
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.13.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_3
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.14
+	title = tao_of_ninghe.14.name
+	desc = tao_of_ninghe.14.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.14.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_4
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		custom_tooltip = "tooltip_approach_tao_of_ninghe"
+	}
+	
+	option = {
+		name = tao_of_ninghe.14.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_4
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		custom_tooltip = "tooltip_approach_tao_of_ninghe_nature"
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.15
+	title = tao_of_ninghe.15.name
+	desc = tao_of_ninghe.15.desc
+	picture = GFX_evt_unity_symbol
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.15.a
+		icon = {
+			icon = GFX_situation_approach_amenities
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_5
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_keep
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.16
+	title = tao_of_ninghe.16.name
+	desc = tao_of_ninghe.16.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.16.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_6
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.16.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_6
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.17
+	title = tao_of_ninghe.17.name
+	desc = tao_of_ninghe.17.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.17.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_7
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.17.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_7
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.18
+	title = tao_of_ninghe.18.name
+	desc = tao_of_ninghe.18.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.18.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_8
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.18.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_8
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.19
+	title = tao_of_ninghe.19.name
+	desc = tao_of_ninghe.19.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.19.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_9
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.19.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_9
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = 45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.21
+	title = tao_of_ninghe.21.name
+	desc = tao_of_ninghe.21.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.21.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_1
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.21.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_1
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.22
+	title = tao_of_ninghe.22.name
+	desc = tao_of_ninghe.22.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.22.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_2
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.22.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_2
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.23
+	title = tao_of_ninghe.23.name
+	desc = tao_of_ninghe.23.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.23.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_3
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.23.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_3
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.24
+	title = tao_of_ninghe.24.name
+	desc = tao_of_ninghe.24.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.24.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_4
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.24.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_4
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.25
+	title = tao_of_ninghe.25.name
+	desc = tao_of_ninghe.25.desc
+	picture = GFX_evt_unity_symbol
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.25.a
+		icon = {
+			icon = GFX_situation_approach_amenities
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_5
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_keep
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.26
+	title = tao_of_ninghe.26.name
+	desc = tao_of_ninghe.26.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.26.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_6
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		custom_tooltip = "tooltip_approach_tao_of_ninghe"
+	}
+	
+	option = {
+		name = tao_of_ninghe.26.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_6
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		custom_tooltip = "tooltip_approach_tao_of_ninghe_nature"
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.27
+	title = tao_of_ninghe.27.name
+	desc = tao_of_ninghe.27.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.27.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_7
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.27.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_7
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.28
+	title = tao_of_ninghe.28.name
+	desc = tao_of_ninghe.28.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.28.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_8
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.28.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_8
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.29
+	title = tao_of_ninghe.29.name
+	desc = tao_of_ninghe.29.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.29.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_9
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.29.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_9
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.30
+	title = tao_of_ninghe.30.name
+	desc = tao_of_ninghe.30.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = tao_of_ninghe.30.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_10
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.30.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_red
+			text = set_situation_approach_icon_text
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_tao_of_ninghe_10
+					target = root.target
+					effect = {
+						set_situation_approach = approach_tao_of_ninghe_nature
+						add_situation_progress = -45
+					}
+				}
+			}
+			destroy_situation = this
+		}
+		tooltip = {
+			set_situation_approach = approach_tao_of_ninghe_nature
+		}
+	}
+}
+
+# 开始循环
+country_event = {
+	id = tao_of_ninghe.100
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_tao_of_ninghe
+	}
+	
+	immediate = {
+		country_event = { id = tao_of_ninghe.100 days = 1080 random = 1440 }
+		every_owned_planet = {
+			planet_event = { id = tao_of_ninghe.101 days = 1 random = 1799 }
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.101
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		any_targeting_situation = {
+			OR = {
+				is_situation_type = situation_tao_of_ninghe_0
+				is_situation_type = situation_tao_of_ninghe_1
+				is_situation_type = situation_tao_of_ninghe_2
+				is_situation_type = situation_tao_of_ninghe_3
+				is_situation_type = situation_tao_of_ninghe_4
+				is_situation_type = situation_tao_of_ninghe_5
+				is_situation_type = situation_tao_of_ninghe_6
+				is_situation_type = situation_tao_of_ninghe_7
+				is_situation_type = situation_tao_of_ninghe_8
+				is_situation_type = situation_tao_of_ninghe_9
+				is_situation_type = situation_tao_of_ninghe_10
+			}
+		}
+	}
+
+	immediate = {
+		random_targeting_situation = {
+			limit = {
+				OR = {
+					is_situation_type = situation_tao_of_ninghe_0
+					is_situation_type = situation_tao_of_ninghe_1
+					is_situation_type = situation_tao_of_ninghe_2
+					is_situation_type = situation_tao_of_ninghe_3
+					is_situation_type = situation_tao_of_ninghe_4
+					is_situation_type = situation_tao_of_ninghe_5
+					is_situation_type = situation_tao_of_ninghe_6
+					is_situation_type = situation_tao_of_ninghe_7
+					is_situation_type = situation_tao_of_ninghe_8
+					is_situation_type = situation_tao_of_ninghe_9
+					is_situation_type = situation_tao_of_ninghe_10
+				}
+			}
+			save_event_target_as = tao_of_ninghe_planet_situation
+		}
+		random_list = {
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_111_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						years_of_peace = {
+							value > 9
+						}
+					}
+				}
+				planet_event = { id = tao_of_ninghe.111 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_112_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						years_of_peace = {
+							value > 9
+						}
+					}
+				}
+				planet_event = { id = tao_of_ninghe.112 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_113_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						years_of_peace = {
+							value > 9
+						}
+					}
+				}
+				planet_event = { id = tao_of_ninghe.113 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_114_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						years_of_peace = {
+							value > 9
+						}
+					}
+				}
+				planet_event = { id = tao_of_ninghe.114 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_115_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						years_of_peace = {
+							value > 9
+						}
+					}
+				}
+				planet_event = { id = tao_of_ninghe.115 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_121_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						is_at_war = yes
+					}
+				}
+				planet_event = { id = tao_of_ninghe.121 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_122_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						is_at_war = yes
+					}
+				}
+				planet_event = { id = tao_of_ninghe.122 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_123_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						is_at_war = yes
+					}
+				}
+				planet_event = { id = tao_of_ninghe.123 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_124_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						is_at_war = yes
+					}
+				}
+				planet_event = { id = tao_of_ninghe.124 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = tao_of_ninghe_125_triggered
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						is_at_war = yes
+					}
+				}
+				planet_event = { id = tao_of_ninghe.125 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.111
+	title = tao_of_ninghe.111.name
+	desc = tao_of_ninghe.111.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_111_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.111.a
+		add_modifier = {
+			modifier = yin_1
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.111.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.112
+	title = tao_of_ninghe.112.name
+	desc = tao_of_ninghe.112.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_112_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.112.a
+		add_modifier = {
+			modifier = yin_2
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.112.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.113
+	title = tao_of_ninghe.113.name
+	desc = tao_of_ninghe.113.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_113_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.113.a
+		add_modifier = {
+			modifier = yin_3
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.113.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.114
+	title = tao_of_ninghe.114.name
+	desc = tao_of_ninghe.114.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_114_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.114.a
+		add_modifier = {
+			modifier = yin_4
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.114.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.115
+	title = tao_of_ninghe.115.name
+	desc = tao_of_ninghe.115.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_115_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.115.a
+		add_modifier = {
+			modifier = yin_5
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.115.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.121
+	title = tao_of_ninghe.121.name
+	desc = tao_of_ninghe.121.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_121_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.121.a
+		add_modifier = {
+			modifier = yang_1
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.121.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.122
+	title = tao_of_ninghe.122.name
+	desc = tao_of_ninghe.122.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_122_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.122.a
+		add_modifier = {
+			modifier = yang_2
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.122.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.123
+	title = tao_of_ninghe.123.name
+	desc = tao_of_ninghe.123.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_123_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.123.a
+		add_modifier = {
+			modifier = yang_3
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.123.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.124
+	title = tao_of_ninghe.124.name
+	desc = tao_of_ninghe.124.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_124_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.124.a
+		add_modifier = {
+			modifier = yang_4
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.124.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tao_of_ninghe.125
+	title = tao_of_ninghe.125.name
+	desc = tao_of_ninghe.125.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_mystic_reveal
+	location = root
+	situation = event_target:tao_of_ninghe_planet_situation
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = tao_of_ninghe_125_triggered
+			years = 10
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.125.a
+		add_modifier = {
+			modifier = yang_5
+			days = 1800
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.125.b
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = unity
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				unity = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+	}
+}
+
+# 每月自动刷新变量
+country_event = {
+	id = tao_of_ninghe.200
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		country_event = { id = tao_of_ninghe.200 days = 30 }
+		refresh_tao_of_ninghe_country_value = yes
+		every_owned_planet = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+}
+
+# 建筑竣工、拆除等刷新变量
+planet_event = {
+	id = tao_of_ninghe.201
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		owner = {
+			has_origin = origin_tao_of_ninghe
+		}
+	}
+	
+	immediate = {
+		refresh_tao_of_ninghe_value = yes
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.1000
+	title = tao_of_ninghe.1000.name
+	desc = tao_of_ninghe.1000.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_red_alert
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		owner = {
+			add_modifier = {
+				modifier = storms_of_yin_country
+				days = 1800
+			}
+			country_event = { id = tao_of_ninghe.1010 days = 1800 }
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.1000.a
+		tooltip = {
+			owner = {
+				add_modifier = {
+					modifier = storms_of_yin_country
+					days = 1800
+				}
+			}
+		}
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+}
+
+situation_event = {
+	id = tao_of_ninghe.1001
+	title = tao_of_ninghe.1001.name
+	desc = tao_of_ninghe.1001.desc
+	picture = GFX_evt_atmospheric_entry
+	show_sound = event_red_alert
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		owner = {
+			add_modifier = {
+				modifier = wind_of_yang_country
+				days = 1800
+			}
+			country_event = { id = tao_of_ninghe.1010 days = 1800 }
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.1001.a
+		tooltip = {
+			owner = {
+				add_modifier = {
+					modifier = wind_of_yang_country
+					days = 1800
+				}
+			}
+		}
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+}
+
+country_event = {
+	id = tao_of_ninghe.1010
+	title = tao_of_ninghe.1010.name
+	desc = tao_of_ninghe.1010.desc
+	picture = GFX_evt_unity_symbol
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_tao_of_ninghe
+	}
+	
+	immediate = {
+		refresh_tao_of_ninghe_country_value = yes
+		start_situation = {
+			type = situation_tao_of_ninghe_country
+			target = root
+			effect = {
+				set_situation_approach = approach_tao_of_ninghe
+			}
+		}
+	}
+	
+	option = {
+		name = tao_of_ninghe.1010.a
+		icon = {
+			icon = GFX_situation_approach_unity
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		tooltip = {
+			start_situation = {
+				type = situation_tao_of_ninghe_country
+				target = root
+				effect = {
+					set_situation_approach = approach_tao_of_ninghe
+				}
+			}
+		}
+	}
+}

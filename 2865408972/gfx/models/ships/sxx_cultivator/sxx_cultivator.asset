@@ -1,0 +1,878 @@
+entity = {
+	name = "sxx_cultivator_entity"
+	pdxmesh = "sxx_cultivator_frame_mesh"
+	scale = 0.2
+	
+	default_state = "idle"
+	state = { name = "idle"   animation = "idle"  state_time = 5 }
+	state = { name = "moving" animation = "idle"  state_time = 5 }
+	state = { name = "death"  animation = "death" state_time = 6.5 looping = no  
+		event = { time = 6.4 particle = "sxx_cultivator_explosion_pink_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_destroyed_big_explosion" } }
+	}
+	
+	locator = { name = "part1" }
+}
+
+entity = {
+	name = "sxx_cultivator_ship_entity"
+	pdxmesh = "sxx_cultivator_mesh"
+	scale = 0.2
+	
+	default_state = "idle"
+	
+	state = { name = "idle"
+        start_event = { trigger_once = yes sound = { soundeffect = "shroud_creature_idle_low" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "shroud_creature_idle_high" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "shroud_creature_corrupted_idle" } }		
+	}
+}
+
+
+entity = {
+	name = "sxx_fairy_entity"
+	pdxmesh = "locator_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 10 }
+	state = { name = "death" state_time = 2.5 looping = no 
+		event = { time = 1.25 node = "root" particle = "sxx_small_shroud_death_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	game_data = {
+	  	raytrace_projectiles = no
+  		dissolve_on_death = 2.5
+		ship_color = hsv { 0.75 0.25 0.2 1.0 }    
+	}
+	
+	locator = { name = "root" 	position = { 0 0 0 } }
+	locator = { name = "part1" 	position = { 0 0 0 } }
+	cull_radius = 10.0
+}
+
+entity = {
+	name = "sxx_fairy_ship_entity"
+	pdxmesh = "shroud_creature_01_mesh"
+	scale = 0.25
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" 
+		event = { time = 0 node = "effect_1" particle = "shroud_creature_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "root" particle = "shroud_creature_cloud_effect" keep_particle = yes trigger_once = yes }
+		start_event = { trigger_once = yes sound = { soundeffect = "shroud_creature_idle_low" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "shroud_creature_idle_high" } }
+		event = { time = 1.2 trigger_once = yes sound = { soundeffect = "shroud_creature_thunder" } }
+	}
+	state = { name = "death"	animation = "death" animation_blend_time = 0.0 animation_speed = 1 looping = no 
+		event = { sound = { soundeffect = "shroud_creature_death" } }
+	}
+	
+	game_data = { 
+		bloom_factor = 1.0 
+		uv_animation_speed 		= 2
+		uv_animation_direction 	= { 0.0 -0.02 }
+	}
+	
+	attach = { root = "shroud_creature_clouds_01_entity" }
+}
+
+
+##########################################################################
+############################### 域外天魔 #################################
+##########################################################################
+
+entity = {
+	name = "extra_dimensional_01_sxx_outer_demon_portal_entity"
+	scale = 1
+	
+	locator = {
+		name = "root"
+	}
+	locator = {
+		name = "part1"
+	}
+}
+
+entity = {
+	name = "starbase_sxx_dimensional_horror_entity"
+	pdxmesh = "locator_mesh"
+	
+	locator = { name = "part1" 	position = { 0 0 0 } }
+  
+	game_data = {
+  		raytrace_projectiles = no
+  		dissolve_on_death = 4.0
+		ship_color = hsv { 0.68 0.5 0.5 1.0 }
+ 	}
+  
+	cull_radius = 10.0
+  
+}
+
+entity = {
+	name = "sxx_space_cloud_entity"
+	pdxmesh = "space_cloud_mesh"
+	locator = { name = "part1" }
+	default_state = idle
+	state = { name = "idle"	animation = "idle" animation_blend_time = 0.3 animation_speed = 1.0 
+			event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	
+		start_event = { trigger_once = yes sound = { soundeffect = "space_cloud_idle" } }
+	}
+	
+	state = { name = "attack"	animation = "attack" animation_blend_time = 0.3 animation_speed = 1.0 
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "moving"	animation = "move" animation_blend_time = 0.3 animation_speed = 0.5
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "death"	animation = "death" animation_blend_time = 0.0 animation_speed = 0.5 looping = no
+		event = { time = 0.9 node = "root" particle = "cloud_entity_death_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "space_cloud_death" } }
+	}
+	
+	game_data = {
+		size = 15
+	}
+	
+	
+	scale = 2
+}
+
+entity = {
+	name = "sxx_large_space_cloud_entity"
+	pdxmesh = "space_cloud_mesh"
+	locator = { name = "part1" }
+	default_state = idle
+	state = { name = "idle"	animation = "idle" animation_blend_time = 0.3 animation_speed = 1.0 
+			event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	
+		start_event = { trigger_once = yes sound = { soundeffect = "space_cloud_idle" } }
+	}
+	
+	state = { name = "attack"	animation = "attack" animation_blend_time = 0.3 animation_speed = 1.0 
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "moving"	animation = "move" animation_blend_time = 0.3 animation_speed = 0.5
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "death"	animation = "death" animation_blend_time = 0.0 animation_speed = 0.5 looping = no
+		event = { time = 0.9 node = "root" particle = "cloud_entity_death_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "space_cloud_death" } }
+	}
+	
+	game_data = {
+		size = 15
+	}
+	
+	
+	scale = 4
+}
+
+entity = {
+	name = "sxx_large_space_cloud_defend_entity"
+	pdxmesh = "space_cloud_mesh"
+	locator = { name = "part1" }
+	default_state = idle
+	state = { name = "idle"	animation = "idle" animation_blend_time = 0.3 animation_speed = 1.0 
+			event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	
+		start_event = { trigger_once = yes sound = { soundeffect = "space_cloud_idle" } }
+	}
+	
+	state = { name = "attack"	animation = "attack" animation_blend_time = 0.3 animation_speed = 1.0 
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "moving"	animation = "move" animation_blend_time = 0.3 animation_speed = 0.5
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "death"	animation = "death" animation_blend_time = 0.0 animation_speed = 0.5 looping = no
+		event = { time = 0.9 node = "root" particle = "cloud_entity_death_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "space_cloud_death" } }
+	}
+	
+	game_data = {
+		size = 15
+	}
+	
+	
+	scale = 4
+}
+
+entity = {
+	name = "sxx_space_cloud_king_entity"
+	pdxmesh = "space_cloud_mesh"
+	locator = { name = "part1" }
+	default_state = idle
+	state = { name = "idle"	animation = "idle" animation_blend_time = 0.3 animation_speed = 1.0 
+			event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	
+		start_event = { trigger_once = yes sound = { soundeffect = "space_cloud_idle" } }
+	}
+	
+	state = { name = "attack"	animation = "attack" animation_blend_time = 0.3 animation_speed = 1.0 
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "moving"	animation = "move" animation_blend_time = 0.3 animation_speed = 0.5
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "death"	animation = "death" animation_blend_time = 0.0 animation_speed = 0.5 looping = no
+		event = { time = 0.9 node = "root" particle = "cloud_entity_death_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "space_cloud_death" } }
+	}
+	
+	game_data = {
+		size = 15
+	}
+	
+	
+	scale = 6
+}
+
+entity = {
+	name = "sxx_space_cloud_king_defend_entity"
+	pdxmesh = "space_cloud_mesh"
+	locator = { name = "part1" }
+	default_state = idle
+	state = { name = "idle"	animation = "idle" animation_blend_time = 0.3 animation_speed = 1.0 
+			event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	
+		start_event = { trigger_once = yes sound = { soundeffect = "space_cloud_idle" } }
+	}
+	
+	state = { name = "attack"	animation = "attack" animation_blend_time = 0.3 animation_speed = 1.0 
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "moving"	animation = "move" animation_blend_time = 0.3 animation_speed = 0.5
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "death"	animation = "death" animation_blend_time = 0.0 animation_speed = 0.5 looping = no
+		event = { time = 0.9 node = "root" particle = "cloud_entity_death_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "space_cloud_death" } }
+	}
+	
+	game_data = {
+		size = 15
+	}
+	
+	
+	scale = 6
+}
+
+entity = {
+	name = "sxx_space_cloud_emperor_entity"
+	pdxmesh = "space_cloud_mesh"
+	locator = { name = "part1" }
+	default_state = idle
+	state = { name = "idle"	animation = "idle" animation_blend_time = 0.3 animation_speed = 1.0 
+			event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	
+		start_event = { trigger_once = yes sound = { soundeffect = "space_cloud_idle" } }
+	}
+	
+	state = { name = "attack"	animation = "attack" animation_blend_time = 0.3 animation_speed = 1.0 
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "moving"	animation = "move" animation_blend_time = 0.3 animation_speed = 0.5
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "death"	animation = "death" animation_blend_time = 0.0 animation_speed = 0.5 looping = no
+		event = { time = 0.9 node = "root" particle = "cloud_entity_death_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "space_cloud_death" } }
+	}
+	
+	game_data = {
+		size = 15
+	}
+	
+	
+	scale = 8
+}
+
+entity = {
+	name = "sxx_space_cloud_emperor_defend_entity"
+	pdxmesh = "space_cloud_mesh"
+	locator = { name = "part1" }
+	default_state = idle
+	state = { name = "idle"	animation = "idle" animation_blend_time = 0.3 animation_speed = 1.0 
+			event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	
+		start_event = { trigger_once = yes sound = { soundeffect = "space_cloud_idle" } }
+	}
+	
+	state = { name = "attack"	animation = "attack" animation_blend_time = 0.3 animation_speed = 1.0 
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		#event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		#event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "moving"	animation = "move" animation_blend_time = 0.3 animation_speed = 0.5
+		event = { time = 0 node = "star_mid" particle = "cloud_entity_center_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "top_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "top_arm_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "left_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "left_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "right_leg_shoulder" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_1" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_2" particle = "cloud_entity_arm_big_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "right_leg_tip" particle = "cloud_entity_arm_small_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = "death"	animation = "death" animation_blend_time = 0.0 animation_speed = 0.5 looping = no
+		event = { time = 0.9 node = "root" particle = "cloud_entity_death_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "space_cloud_death" } }
+	}
+	
+	game_data = {
+		size = 15
+	}
+	
+	
+	scale = 8
+}
+
+entity = {
+	name = "sxx_space_cloud_god_entity"
+	pdxmesh = "locator_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 10 }
+	state = { name = "death" state_time = 2.5 looping = no 
+		event = { time = 1.0 node = "root" particle = "shroud_corrupted_death_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	game_data = {
+	  	raytrace_projectiles = no
+  		dissolve_on_death = 2.5
+		ship_color = hsv { 0.9 0.25 0.2 1.0 }    
+	}
+	
+	locator = { name = "root" 	position = { 0 0 0 } }
+	locator = { name = "part1" 	position = { 0 0 0 } }
+	cull_radius = 10.0
+
+	scale = 10
+}
+
+################## 青云真君 ###################
+
+entity = {
+	name = "sxx_qingyun_entity"
+	pdxmesh = "locator_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 10 }
+	state = { name = "death" state_time = 2.5 looping = no 
+		event = { time = 1.25 node = "root" particle = "shroud_death_particle" keep_particle = yes trigger_once = yes }
+	}
+	
+	game_data = {
+	  	raytrace_projectiles = no
+  		dissolve_on_death = 2.5
+		ship_color = hsv { 0.75 0.25 0.2 1.0 }    
+	}
+	
+	locator = { name = "root" 	position = { 0 0 0 } }
+	locator = { name = "part1" 	position = { 0 0 0 } }
+	cull_radius = 10.0
+
+	scale = 10
+}

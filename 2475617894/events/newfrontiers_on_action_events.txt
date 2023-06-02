@@ -1,0 +1,575 @@
+############################
+#
+# On Action Events
+#
+# Written by Annatar
+#
+############################
+
+
+namespace = newfrontiers_action
+
+### Infernal World found!
+ship_event = {
+	id = newfrontiers_action.1
+	title = "newfrontiers_action.1.name"
+	desc = "newfrontiers_action.1.desc"
+	picture = GFX_evt_infernal_world
+	show_sound = event_scanner
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		from = {
+			has_planet_flag = infernal_world
+			NOT = { has_modifier = infernal_world }
+		}
+	}
+	
+	immediate = {
+		from = {
+			change_pc = { class = pc_hollow inherit_entity = yes }
+			set_planet_entity = { 
+				picture = pc_infernal
+				atmosphere_color = hsv { 0.05 0.65 1.4 }
+				atmosphere_intensity = 0.05
+				atmosphere_width = 1.0
+			}
+			add_modifier = {
+				modifier = infernal_world
+				days = -1
+			}
+			reroll_deposits = yes
+			remove_planet_flag = infernal_world
+		}
+		owner = { country_event = { id = story.5 days = 2 } }
+	}
+
+	option = {
+		name = INCREDIBLE
+	}
+}
+
+### Terraform finish
+planet_event = {
+	id = newfrontiers_action.2
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		THIS = {
+			remove_subclass_modifiers = yes
+			remove_condition_modifiers = yes
+		}
+	}
+
+}
+
+### Subglacial World found!
+ship_event = {
+	id = newfrontiers_action.3
+	title = "newfrontiers_action.3.name"
+	desc = "newfrontiers_action.3.desc"
+	picture = GFX_evt_subglacial_world
+	show_sound = event_scanner
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		from = {
+			has_planet_flag = subglacial_world
+			NOT = { has_modifier = subglacial_world }
+		}
+	}
+	
+	immediate = {
+		from = {
+			change_pc = { class = pc_hollow inherit_entity = yes }
+			set_planet_entity = { 
+				picture = pc_subglacial
+				atmosphere_color 		= hsv { 0.55 0.15 0.7 }
+				atmosphere_intensity 	= 1.0
+				atmosphere_width 		= 0.5
+			}
+			add_modifier = {
+				modifier = subglacial_world
+				days = -1
+			}
+			reroll_deposits = yes
+			remove_planet_flag = subglacial_world
+		}
+		owner = { country_event = { id = story.5 days = 2 } }
+	}
+
+	option = {
+		name = INCREDIBLE
+	}
+}
+
+### Ammonia Biosphere
+# ship_event = {
+	# id = newfrontiers_action.4
+	# title = "anomaly.690.name"
+	# desc = "newfrontiers_action.4.desc"
+	# picture = GFX_evt_ammonia_world
+	# show_sound = event_ship_bridge
+	# location = FROM
+	
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# from = {
+			# has_modifier = ammonia_world
+		# }
+	# }
+
+	# immediate = {
+		# fromfrom = { clear_deposits = yes }
+		# owner = { country_event = { id = story.5 days = 2 } }
+	# }
+	
+	# option = {
+		# name = FASCINATING
+		# FROMFROM = { 
+			# set_deposit = d_society_3
+		# }
+	# }
+# }
+
+### Hollow World found!
+ship_event = {
+	id = newfrontiers_action.5
+	title = "newfrontiers_action.5.name"
+	desc = "newfrontiers_action.5.desc"
+	picture = GFX_evt_hollow_world
+	show_sound = event_scanner
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		from = {
+			has_planet_flag = hollow_world
+			NOT = { is_planet_class = pc_hollow }
+		}
+	}
+	
+	immediate = {
+		from = {
+			change_pc = { class = pc_hollow inherit_entity = yes }
+			reroll_deposits = yes
+			remove_planet_flag = hollow_world
+		}
+		owner = { country_event = { id = story.5 days = 2 } }
+	}
+
+	option = {
+		name = INCREDIBLE
+	}
+}
+
+### Forsaken Home Planet found! (Ship)
+ship_event = {
+	id = newfrontiers_action.6
+	title = "newfrontiers_action.6.name"
+	desc = "newfrontiers_action.6.desc"
+	picture = GFX_evt_city_ruins
+	show_sound = event_scanner
+	location = FROM
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		from = {
+			has_planet_flag = forsaken_home_planet
+		}
+		owner = {
+			has_origin = origin_forsaken
+			NOT = { has_country_flag = forsaken_home_planet_found }
+		}
+	}
+	
+	immediate = {
+		owner = { set_country_flag = forsaken_home_planet_found }
+	}
+
+	option = {
+		name = newfrontiers_action.6.a
+		from = {
+			add_modifier = {
+				modifier = "lost_home"
+				days = -1
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier5influencereward
+				min = @tier5influencemin
+				max = @tier5influencemax
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier5unityreward
+				min = @tier5unitymin
+				max = @tier5unitymax
+			}
+		}
+	}
+}
+
+### Forsaken Home Planet found!
+planet_event = {
+	id = newfrontiers_action.7
+	title = "newfrontiers_action.7.name"
+	desc = "newfrontiers_action.7.desc"
+	picture = GFX_evt_city_ruins
+	show_sound = event_scanner
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_planet_flag = forsaken_home_planet
+		from = {
+			has_origin = origin_forsaken
+			NOT = { has_country_flag = forsaken_home_planet_found }
+		}
+	}
+	
+	immediate = {
+		from = { set_country_flag = forsaken_home_planet_found }
+	}
+
+	option = {
+		name = newfrontiers_action.7.a
+		add_modifier = {
+			modifier = "lost_home"
+			days = -1
+		}
+		from = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier4unityreward
+				min = @tier4unitymin
+				max = @tier4unitymax
+			}
+		}
+	}
+}
+
+#Heart or Seed of the Overmind destroyed (oh no!)
+#colony destroyed
+planet_event = {
+	id = newfrontiers_action.8
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_deposit = d_heart_of_the_overmind
+			has_deposit = d_seed_of_the_overmind
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_deposit = d_heart_of_the_overmind }
+			remove_deposit = d_heart_of_the_overmind
+			if = {
+				limit = { owner = { any_owned_planet = { has_deposit = d_seed_of_the_overmind } } }
+				owner = {
+					random_owned_planet = {
+						limit = { has_deposit = d_seed_of_the_overmind }
+						weights = {
+							base = 5
+							modifier = {
+								add = 5
+								planet_size > 17
+							}
+							modifier = {
+								add = 5
+								planet_size > 21
+							}
+							modifier = { 
+								factor = 2
+								has_building = building_hive_capital
+							}
+							modifier = { 
+								factor = 4
+								has_building = building_hive_major_capital
+							}
+						}
+						planet_event = { id = newfrontiers_action.11 }
+					}
+				}
+			}
+			else = {
+				owner = { destroy_country = yes }
+			}
+		}
+		if = {
+			limit = { has_deposit = d_seed_of_the_overmind }
+			remove_deposit = d_seed_of_the_overmind
+			owner = { country_event = { id = newfrontiers_action.12 }}
+		}
+	}
+}
+
+#planet transfer
+planet_event = {
+	id = newfrontiers_action.9
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_deposit = d_heart_of_the_overmind
+			has_deposit = d_seed_of_the_overmind
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_deposit = d_heart_of_the_overmind }
+			remove_deposit = d_heart_of_the_overmind
+			
+			every_country = {
+				limit = {
+					AND = {
+						has_origin = origin_sentient_planet
+						NOT = { any_owned_planet = { has_deposit = d_heart_of_the_overmind } }
+					}
+				}
+				if = {
+					limit = { any_owned_planet = { has_deposit = d_seed_of_the_overmind } }
+					random_owned_planet = {
+						limit = { has_deposit = d_seed_of_the_overmind }
+						weights = {
+							base = 5
+							modifier = {
+								add = 5
+								planet_size > 17
+							}
+							modifier = {
+								add = 5
+								planet_size > 21
+							}
+							modifier = { 
+								factor = 2
+								has_building = building_hive_capital
+							}
+							modifier = { 
+								factor = 4
+								has_building = building_hive_major_capital
+							}
+						}
+						planet_event = { id = newfrontiers_action.11 }
+					}
+				}
+				else = {
+					destroy_country = yes
+				}
+			}
+		}
+		if = {
+			limit = { has_deposit = d_seed_of_the_overmind }
+			remove_deposit = d_seed_of_the_overmind
+		}
+	}
+}
+
+#planet occupied
+planet_event = {
+	id = newfrontiers_action.10
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_deposit = d_heart_of_the_overmind
+			has_deposit = d_seed_of_the_overmind
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_deposit = d_heart_of_the_overmind }
+			remove_deposit = d_heart_of_the_overmind
+			if = {
+				limit = { from = { any_owned_planet = { has_deposit = d_seed_of_the_overmind } } }
+				from = {
+					random_owned_planet = {
+						limit = { has_deposit = d_seed_of_the_overmind }
+						weights = {
+							base = 5
+							modifier = {
+								add = 5
+								planet_size > 17
+							}
+							modifier = {
+								add = 5
+								planet_size > 21
+							}
+							modifier = { 
+								factor = 2
+								has_building = building_hive_capital
+							}
+							modifier = { 
+								factor = 4
+								has_building = building_hive_major_capital
+							}
+						}
+						planet_event = { id = newfrontiers_action.11 }
+					}
+				}
+			}
+			else = {
+				from = { destroy_country = yes }
+			}
+		}
+		if = {
+			limit = { has_deposit = d_seed_of_the_overmind }
+			remove_deposit = d_seed_of_the_overmind
+			from = { country_event = { id = newfrontiers_action.12 }}
+		}
+	}
+}
+
+planet_event = {
+	id = newfrontiers_action.11
+	title = "newfrontiers_action.11.name"
+	desc = "newfrontiers_action.11.desc"
+	picture = GFX_evt_heart_of_the_overmind
+	show_sound = event_space_whale
+	location = ROOT
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_deposit = d_seed_of_the_overmind
+		if = {
+			limit = { NOT = { is_planet_class = pc_sterile } }
+			random_list = {
+				50 = {
+					change_pc = pc_sterile
+				}
+				25 = {
+					change_pc = pc_sterile
+					set_planet_entity = {
+						picture = pc_lava
+						entity = lava_planet_01_entity
+					}
+					add_modifier = {
+						modifier = "lava_world"
+						days = -1
+					}
+				}
+				25 = {
+					change_pc = pc_sterile
+					set_planet_entity = {
+						picture = pc_ash
+						entity = ash_planet_01_entity
+					}
+					add_modifier = {
+						modifier = "ash_world"
+						days = -1
+					}
+				}
+			}
+			reroll_deposits = yes
+		}
+		add_deposit = d_heart_of_the_overmind
+	}
+
+	option = {
+		name = TERRIBLE
+		set_capital = yes
+	}
+}
+
+country_event = {
+	id = newfrontiers_action.12
+	title = "newfrontiers_action.12.name"
+	desc = "newfrontiers_action.12.desc"
+	picture = GFX_evt_heart_of_the_overmind
+	show_sound = event_space_whale
+	location = ROOT
+	
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+### Checks subclass match
+planet_event = {
+	id = newfrontiers_action.13
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		is_planet_subclass = yes
+	}
+	
+	immediate = {
+		remove_incorrect_subclass = yes
+	}
+}
+
+### Nuclear war happened
+planet_event = {
+	id = newfrontiers_action.14
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		is_planet_class = pc_nuked
+		is_planet_subclass = no
+	}
+	
+	immediate = {
+		random_list = {
+			30 = {
+				set_fallout_subclass = yes
+				planet_event = { id = newfrontiers_periodic_event.301 days = 18000 random = 3650 }
+			}
+			70 = {
+				planet_event = { id = newfrontiers_periodic_event.300 days = 18000 random = 3650 }
+			}
+		}
+	}
+}
+
+### Rust World for Fen Habbanis
+planet_event = {
+	id = newfrontiers_action.15
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		set_rust_subclass = yes
+	}
+}
+
+
+
+
+
+

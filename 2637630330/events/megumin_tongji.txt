@@ -1,0 +1,178 @@
+namespace = megumin_tongji
+
+country_event = {
+	id = megumin_tongji.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		is_country_type = global_event
+	}
+	immediate = {
+		set_variable = {
+			which = Ships_lost
+			value = 0
+		}
+
+		set_variable = {
+			which = pop_killed
+			value = 0
+		}
+
+		set_variable = {
+			which = pop_jinghua
+			value = 0
+		}
+
+		set_variable = {
+			which = Empires_killed
+			value = 0
+		}
+
+		set_variable = {
+			which = Ships_killed
+			value = 0
+		}
+
+		set_variable = {
+			which = planet_destroyed
+			value = 0
+		}
+	}
+}
+
+country_event = { #损失舰船
+	id = megumin_tongji.2
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		is_ai = no
+	}
+	immediate = {
+		event_target:global_event_country = {
+			change_variable = {
+				which = Ships_lost
+				value = 1
+			}
+		}		
+	}
+}	
+
+planet_event = { #杀死人口
+	id = megumin_tongji.3
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		from = {
+			is_ai = no
+		}
+	}
+	immediate = {
+		event_target:global_event_country = {
+			change_variable = {
+				which = pop_killed
+				value = 1
+			}
+		}
+	}
+}
+
+country_event = { #毁灭国家
+	id = megumin_tongji.4
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		from = {
+			is_ai = no
+		}
+	}
+	immediate = {
+		event_target:global_event_country = {
+			change_variable = {
+				which = Empires_killed
+				value = 1
+			}
+		}
+	}
+}
+
+country_event = { #消灭舰船
+	id = megumin_tongji.5
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		is_ai = no
+	}
+	immediate = {
+		event_target:global_event_country = {
+			change_variable = {
+				which = Ships_killed
+				value = 1
+			}
+		}
+	}
+}	
+
+planet_event = { #摧毁星球
+	id = megumin_tongji.6
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		from.owner = {
+			is_ai = no
+		}
+	}
+	immediate = {
+		from.owner = {
+			event_target:global_event_country = {
+				change_variable = {
+					which = planet_destroyed
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+planet_event = { #被巨像
+	id = megumin_tongji.7
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		from.owner = {
+			is_ai = no
+		}
+	}
+	immediate = {
+		from.owner = {
+			event_target:global_event_country = {
+				change_variable = {
+					which = pop_killed
+					value = root.trigger:num_pops
+				}
+			}
+		}
+		
+	}
+}
+
+planet_event = { #被巨像
+	id = megumin_tongji.8
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		from.owner = {
+			is_ai = no
+		}
+	}
+	immediate = {
+		from.owner = {
+			event_target:global_event_country = {
+				subtract_variable = {
+					which = pop_killed
+					value = root.trigger:num_pops
+				}
+			}
+		}
+		
+	}
+}

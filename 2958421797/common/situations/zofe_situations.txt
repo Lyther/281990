@@ -1,0 +1,1173 @@
+situation_zofe_ascension = {
+	picture = GFX_evt_fallen_empire_awakes
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_meh
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_ascension_stage_0_tooltip
+			end = 120
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_ascension_stage_1_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.101 }
+			}
+			end = 180
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_ascension_stage_2_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.102 }
+			}
+			end = 240
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_ascension_stage_3_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.103 }
+			}
+			end = 300
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_ascension_stage_4_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.104 }
+			}
+			end = 360
+		}
+		stage_6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_ascension_stage_5_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.105 }
+			}
+			end = 420
+		}
+		stage_7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_ascension_stage_6_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.106 }
+			}
+			end = 480
+		}
+
+	}
+
+	category = positive
+
+	on_progress_complete = {
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_ascended_empire"
+			custom_tooltip = "describe_ascended_empire"
+		}
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_ascended_hive_mind"
+			custom_tooltip = "describe_ascended_hive_mind"
+		}
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_ascended_machine"
+			custom_tooltip = "describe_ascended_machine"
+		}
+		if = {
+			limit = {
+				zofe_vanilla = yes
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_galactic_ascendancy"
+			custom_tooltip = "describe_galactic_ascendancy"
+		}
+		if = {
+			limit = { 
+				zofe_vanilla = yes
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_galactic_consciousness"
+			custom_tooltip = "describe_galactic_consciousness"
+		}
+		if = {
+			limit = { 
+				zofe_vanilla = yes
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_galactic_intelligence"
+			custom_tooltip = "describe_galactic_intelligence"
+		}
+		
+		hidden_effect = {
+			owner = {
+				country_event = { id = fallen_technologies.1000 }
+			}
+		}
+	}
+	on_start = { }
+	on_fail = {
+		custom_tooltip = zofe_ascension_fail_tooltip
+		owner = { 
+			remove_country_flag = ascending_empire
+			set_country_flag = ascension_failed
+		}
+		hidden_effect = {
+			owner = {
+				country_event = { id = fallen_technologies.21 }
+			}
+		}
+	}
+	
+	start_value = 10
+
+	modifier = {
+		all_technology_research_speed = 0.10
+		country_unity_produces_mult = 0.10
+	}
+	on_monthly = {
+	}
+	approach = {#Low Priority
+		name = approach_ascension_low_priority
+		on_select = {
+			custom_tooltip = ascension_low_priority_effect
+		}
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 1
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 10
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 10
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 0.2
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	approach = {#Moderate Priority
+		name = approach_ascension_moderate_priority
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = ascension_moderate_priority_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 5
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 50
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 50
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 1
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	approach = {#High Priority
+		name = approach_ascension_high_priority
+		on_select = {
+			custom_tooltip = ascension_high_priority_effect
+		}
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 15
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 150
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 150
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 3
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 4
+		modifier = {
+			add = 4
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_high_priority
+		}
+		modifier = {
+			add = 0
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_moderate_priority
+			
+		}
+		modifier = {
+			add = -2
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_low_priority
+		}
+		modifier = {
+			factor = 0.5
+			desc = war_during_ascension
+			owner = { is_at_war = yes }
+		}
+		modifier = {
+			add = -5
+			desc = complied_fallen_empire
+			OR = {
+				AND = {
+					owner = { has_country_flag = complied_spiritualist_fallen_empire }
+					any_country = { is_fallen_empire_spiritualist = yes }
+				}
+				AND = {
+					owner = { has_country_flag = complied_materialist_fallen_empire }
+					any_country = { is_fallen_empire_materialist = yes }
+				}
+				AND = {
+					owner = { has_country_flag = complied_xenophile_fallen_empire }
+					any_country = { is_fallen_empire_xenophile = yes }
+				}
+				AND = {
+					owner = { has_country_flag = complied_xenophobe_fallen_empire }
+					any_country = { is_fallen_empire_xenophobe = yes }
+				}
+			}
+		}
+		modifier = {
+			add = -4
+			desc = does_not_meet_ascension_fleet_power_requirement
+			OR = {
+				AND = {
+					owner = { fleet_power < 125000 }
+					has_global_flag = ascended_empire_min_navy_enabled_1 
+				}
+				AND = {
+					owner = { fleet_power < 250000 }
+					has_global_flag = ascended_empire_min_navy_enabled_2
+				}
+				AND = {
+					owner = { fleet_power < 500000 }
+					has_global_flag = ascended_empire_min_navy_enabled_3
+				}
+				AND = {
+					owner = { fleet_power < 750000 }
+					has_global_flag = ascended_empire_min_navy_enabled_4
+				}
+				AND = {
+					owner = { fleet_power < 1000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_5
+				}
+				AND = {
+					owner = { fleet_power < 2000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_6
+				}
+			}
+		}
+		modifier = {
+			add = -8
+			desc = subject_ascension_disallowed
+			OR = {
+				AND = {
+					has_global_flag = ai_ascension_disabled
+					owner = { is_ai = yes }
+				}
+				AND = {
+					has_global_flag = subject_ascension_disabled
+					owner = { is_subject = yes }
+				}
+			}
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = owner }
+			AND = {
+				has_global_flag = ai_ascension_disabled
+				owner = { is_ai = yes }
+			}
+			AND = {
+				has_global_flag = subject_ascension_disabled
+				owner = { is_subject = yes }
+			}
+		}
+	}
+	
+	on_abort = {
+		owner = { 
+			remove_country_flag = ascending_empire
+			set_country_flag = ascension_failed
+		}
+	}
+}
+
+situation_re_ascension = {
+	picture = GFX_evt_fallen_empire_awakes
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_meh
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = re_ascension_stage_0_tooltip
+			end = 120
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = re_ascension_stage_1_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.101 }
+			}
+			end = 180
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = re_ascension_stage_2_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.102 }
+			}
+			end = 240
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = re_ascension_stage_3_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.103 }
+			}
+			end = 300
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = re_ascension_stage_4_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.104 }
+			}
+			end = 360
+		}
+		stage_6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = re_ascension_stage_5_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.105 }
+			}
+			end = 420
+		}
+		stage_7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = re_ascension_stage_6_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.106 }
+			}
+			end = 480
+		}
+
+	}
+
+	category = positive
+
+	on_progress_complete = {
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_ascended_empire"
+			custom_tooltip = "describe_ascended_empire"
+		}
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_ascended_hive_mind"
+			custom_tooltip = "describe_ascended_hive_mind"
+		}
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_ascended_machine"
+			custom_tooltip = "describe_ascended_machine"
+		}
+		if = {
+			limit = {
+				zofe_vanilla = yes
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_galactic_ascendancy"
+			custom_tooltip = "describe_galactic_ascendancy"
+		}
+		if = {
+			limit = { 
+				zofe_vanilla = yes
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_galactic_consciousness"
+			custom_tooltip = "describe_galactic_consciousness"
+		}
+		if = {
+			limit = { 
+				zofe_vanilla = yes
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_galactic_intelligence"
+			custom_tooltip = "describe_galactic_intelligence"
+		}
+		
+		hidden_effect = {
+			owner = {
+				country_event = { id = fallen_technologies.1000 }
+			}
+		}
+	}
+	on_start = { }
+	on_fail = {
+		custom_tooltip = zofe_ascension_fail_tooltip
+		owner = { 
+			remove_country_flag = ascending_empire
+			set_country_flag = ascension_failed
+		}
+		hidden_effect = {
+			owner = {
+				country_event = { id = fallen_technologies.21 }
+			}
+		}
+	}
+	
+	start_value = 10
+
+	modifier = {
+		all_technology_research_speed = 0.10
+		country_unity_produces_mult = 0.10
+	}
+	on_monthly = {
+	}
+	approach = {#Low Priority
+		name = approach_ascension_low_priority
+		on_select = {
+			custom_tooltip = ascension_low_priority_effect
+		}
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 1
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 10
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 10
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 0.2
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	approach = {#Moderate Priority
+		name = approach_ascension_moderate_priority
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = ascension_moderate_priority_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 5
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 50
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 50
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 1
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	approach = {#High Priority
+		name = approach_ascension_high_priority
+		on_select = {
+			custom_tooltip = ascension_high_priority_effect
+		}
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 15
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 150
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 150
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 3
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 4
+		modifier = {
+			add = 4
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_high_priority
+		}
+		modifier = {
+			add = 0
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_moderate_priority
+			
+		}
+		modifier = {
+			add = -2
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_low_priority
+		}
+		modifier = {
+			factor = 0.5
+			desc = war_during_ascension
+			owner = { is_at_war = yes }
+		}
+		modifier = {
+			add = -4
+			desc = does_not_meet_ascension_fleet_power_requirement
+			OR = {
+				AND = {
+					owner = { fleet_power < 125000 }
+					has_global_flag = ascended_empire_min_navy_enabled_1 
+				}
+				AND = {
+					owner = { fleet_power < 250000 }
+					has_global_flag = ascended_empire_min_navy_enabled_2
+				}
+				AND = {
+					owner = { fleet_power < 500000 }
+					has_global_flag = ascended_empire_min_navy_enabled_3
+				}
+				AND = {
+					owner = { fleet_power < 750000 }
+					has_global_flag = ascended_empire_min_navy_enabled_4
+				}
+				AND = {
+					owner = { fleet_power < 1000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_5
+				}
+				AND = {
+					owner = { fleet_power < 2000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_6
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			desc = ringworld_empire_ascension
+			owner = { has_origin = origin_ringworld_empire }
+		}
+		modifier = {
+			add = -8
+			desc = subject_ascension_disallowed
+			OR = {
+				AND = {
+					has_global_flag = ai_ascension_disabled
+					owner = { is_ai = yes }
+				}
+				AND = {
+					has_global_flag = subject_ascension_disabled
+					owner = { is_subject = yes }
+				}
+			}
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = owner }
+			AND = {
+				has_global_flag = ai_ascension_disabled
+				owner = { is_ai = yes }
+			}
+			AND = {
+				has_global_flag = subject_ascension_disabled
+				owner = { is_subject = yes }
+			}
+		}
+	}
+	
+	on_abort = {
+		owner = { 
+			remove_country_flag = ascending_empire
+			set_country_flag = ascension_failed
+		}
+	}
+}
+
+situation_oe_ascension = {
+	picture = GFX_evt_fallen_empire_awakes
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_meh
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = oe_ascension_stage_0_tooltip
+			end = 120
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = oe_ascension_stage_1_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.101 }
+			}
+			end = 180
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = oe_ascension_stage_2_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.102 }
+			}
+			end = 240
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = oe_ascension_stage_3_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.103 }
+			}
+			end = 300
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = oe_ascension_stage_4_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.104 }
+			}
+			end = 360
+		}
+		stage_6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = oe_ascension_stage_5_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.105 }
+			}
+			end = 420
+		}
+		stage_7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = oe_ascension_stage_6_tooltip
+			on_first_enter = {
+				situation_event = { id = fallen_technologies.106 }
+			}
+			end = 480
+		}
+
+	}
+
+	category = positive
+
+	on_progress_complete = {
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_ascended_empire"
+			custom_tooltip = "describe_ascended_empire"
+		}
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_ascended_hive_mind"
+			custom_tooltip = "describe_ascended_hive_mind"
+		}
+		if = {
+			limit = { 
+				zofe_sandbox = yes
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_ascended_machine"
+			custom_tooltip = "describe_ascended_machine"
+		}
+		if = {
+			limit = {
+				zofe_vanilla = yes
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_galactic_ascendancy"
+			custom_tooltip = "describe_galactic_ascendancy"
+		}
+		if = {
+			limit = { 
+				zofe_vanilla = yes
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_galactic_consciousness"
+			custom_tooltip = "describe_galactic_consciousness"
+		}
+		if = {
+			limit = { 
+				zofe_vanilla = yes
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_galactic_intelligence"
+			custom_tooltip = "describe_galactic_intelligence"
+		}
+		
+		hidden_effect = {
+			owner = {
+				country_event = { id = fallen_technologies.1000 }
+			}
+		}
+	}
+	on_start = { }
+	on_fail = {
+		custom_tooltip = zofe_ascension_fail_tooltip
+		owner = { 
+			remove_country_flag = ascending_empire
+			set_country_flag = ascension_failed
+		}
+		hidden_effect = {
+			owner = {
+				country_event = { id = fallen_technologies.21 }
+			}
+		}
+	}
+	
+	start_value = 10
+
+	modifier = {
+		all_technology_research_speed = 0.10
+		pop_citizen_happiness = 0.10
+		country_unity_produces_mult = 0.10
+		starbase_shipyard_build_speed_mult = 0.10
+	}
+	on_monthly = {
+	}
+	approach = {#Low Priority
+		name = approach_ascension_low_priority
+		on_select = {
+			custom_tooltip = ascension_low_priority_effect
+		}
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 1
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 10
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 10
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 5
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 0.2
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	approach = {#Moderate Priority
+		name = approach_ascension_moderate_priority
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = ascension_moderate_priority_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 5
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 50
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 50
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 25
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 1
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	approach = {#High Priority
+		name = approach_ascension_high_priority
+		on_select = {
+			custom_tooltip = ascension_high_priority_effect
+		}
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			produces = {
+				unity = 15
+				multiplier = owner.trigger:num_pops
+			}
+			upkeep = {
+				energy = 150
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				minerals = 150
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				physics_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				society_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				engineering_research = 75
+				multiplier = owner.trigger:num_owned_planets
+			}
+			upkeep = {
+				sr_dark_matter = 3
+				multiplier = owner.trigger:num_owned_planets
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 4
+		modifier = {
+			add = 4
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_high_priority
+		}
+		modifier = {
+			add = 0
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_moderate_priority
+			
+		}
+		modifier = {
+			add = -2
+			desc = string_current_approach
+			current_situation_approach = approach_ascension_low_priority
+		}
+		modifier = {
+			factor = 0.5
+			desc = war_during_ascension
+			owner = { is_at_war = yes }
+		}
+		modifier = {
+			add = -4
+			desc = does_not_meet_ascension_fleet_power_requirement
+			OR = {
+				AND = {
+					owner = { fleet_power < 125000 }
+					has_global_flag = ascended_empire_min_navy_enabled_1 
+				}
+				AND = {
+					owner = { fleet_power < 250000 }
+					has_global_flag = ascended_empire_min_navy_enabled_2
+				}
+				AND = {
+					owner = { fleet_power < 500000 }
+					has_global_flag = ascended_empire_min_navy_enabled_3
+				}
+				AND = {
+					owner = { fleet_power < 750000 }
+					has_global_flag = ascended_empire_min_navy_enabled_4
+				}
+				AND = {
+					owner = { fleet_power < 1000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_5
+				}
+				AND = {
+					owner = { fleet_power < 2000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_6
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			desc = original_empire_ascension
+			owner = { has_origin = origin_original_people }
+		}
+		modifier = {
+			add = -8
+			desc = subject_ascension_disallowed
+			OR = {
+				AND = {
+					has_global_flag = ai_ascension_disabled
+					owner = { is_ai = yes }
+				}
+				AND = {
+					has_global_flag = subject_ascension_disabled
+					owner = { is_subject = yes }
+				}
+			}
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = owner }
+			AND = {
+				has_global_flag = ai_ascension_disabled
+				owner = { is_ai = yes }
+			}
+			AND = {
+				has_global_flag = subject_ascension_disabled
+				owner = { is_subject = yes }
+			}
+		}
+	}
+	
+	on_abort = {
+		owner = { 
+			remove_country_flag = ascending_empire
+			set_country_flag = ascension_failed
+		}
+	}
+}

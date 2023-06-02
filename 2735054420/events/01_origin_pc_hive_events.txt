@@ -1,0 +1,53 @@
+
+namespace = origin_pc_hive
+
+country_event = {
+	id = origin_pc_hive.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_pc_hive
+	}
+	
+	immediate = {
+		room_name_override = swarm_room
+		give_technology = { tech = "tech_genome_mapping" message = no }
+		give_technology = { tech = "tech_cloning" message = no }
+		give_technology = { tech = "tech_colonization_2" message = no }
+		add_research_option = tech_gene_tailoring
+		add_research_option = tech_gene_expressions
+		add_tech_progress = {
+			tech = tech_gene_tailoring
+			progress = 0.50
+		}
+		add_tech_progress = {
+			tech = tech_gene_expressions
+			progress = 0.50
+		}
+		capital_scope = {
+			add_deposit = d_pc_hive_blocker
+			while = {
+				limit = {
+					has_district = district_generator
+				}
+				remove_district = district_generator
+				add_district = district_generator_uncapped
+			}
+			while = {
+				limit = {
+					has_district = district_mining
+				}
+				remove_district = district_mining
+				add_district = district_mining_uncapped
+			}
+			while = {
+				limit = {
+					has_district = district_farming
+				}
+				remove_district = district_farming
+				add_district = district_farming_uncapped
+			}
+		}
+	}
+}

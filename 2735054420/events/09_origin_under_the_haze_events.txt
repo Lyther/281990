@@ -1,0 +1,3322 @@
+
+namespace = under_the_haze
+
+#0
+country_event = {
+	id = under_the_haze.1
+	title = under_the_haze.1.name
+	desc = under_the_haze.1.desc
+	picture = GFX_evt_burning_city
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_under_the_haze
+	}
+
+	immediate = {
+		set_variable = {
+			which = under_the_haze
+			value = 0
+		}
+		capital_scope = {
+			save_global_event_target_as = under_the_haze_planet
+		}
+	}
+	
+	option = {
+		name = under_the_haze.1.a
+		start_situation = {
+			type = situation_under_the_haze_1
+			target = capital_scope
+			effect = {
+				set_situation_approach = approach_disperse_the_haze
+			}
+		}
+	}
+}
+
+#95
+situation_event = {
+	id = under_the_haze.2
+	title = under_the_haze.2.name
+	desc = under_the_haze.2.desc
+	picture = GFX_evt_vivisection
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_under_the_haze_2
+					target = root.target
+					effect = {
+						set_situation_approach = approach_haze_spread
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = under_the_haze.2.a
+	}
+	
+	option = {
+		name = under_the_haze.2.b
+	}
+}
+
+#5
+situation_event = {
+	id = under_the_haze.3
+	title = under_the_haze.3.name
+	desc = under_the_haze.3.desc
+	picture = GFX_evt_zro_4
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_under_the_haze_3
+					target = root.target
+					effect = {
+						set_situation_approach = approach_disperse_the_haze
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = under_the_haze.3.a
+	}
+	
+	option = {
+		name = under_the_haze.3.b
+	}
+}
+
+#50
+situation_event = {
+	id = under_the_haze.4
+	title = under_the_haze.4.name
+	desc = under_the_haze.4.desc
+	picture = GFX_evt_three_sided_deal
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.4.a
+		icon = {
+			icon = GFX_situation_approach_influence
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		target = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_5
+				days = -1
+			}
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_under_the_haze_4
+					target = root.target
+					effect = {
+						set_situation_approach = approach_under_the_haze_left
+						add_situation_progress = -20
+						situation_event = { id = under_the_haze.5 days = 180 }
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = under_the_haze.4.b
+		icon = {
+			icon = GFX_situation_approach_this_is_fine
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		target = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_5
+				days = -1
+			}
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_under_the_haze_4
+					target = root.target
+					effect = {
+						set_situation_approach = approach_under_the_haze_right
+						add_situation_progress = 10
+						situation_event = { id = under_the_haze.5 days = 180 }
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = under_the_haze.4.c
+		icon = {
+			icon = GFX_situation_approach_pop
+			icon_background = GFX_situation_approach_bg_red
+			text = set_situation_approach_icon_text
+		}
+		trigger = {
+			owner = {
+				check_variable = {
+					which = under_the_haze
+					value > 3
+				}
+			}
+		}
+		target = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_5
+				days = -1
+			}
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_under_the_haze_4
+					target = root.target
+					effect = {
+						set_situation_flag = middle
+						set_situation_approach = approach_under_the_haze_middle
+						situation_event = { id = under_the_haze.5 days = 180 }
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+}
+
+#50
+situation_event = {
+	id = under_the_haze.5
+	title = under_the_haze.5.name
+	desc = under_the_haze.5.desc
+	picture = GFX_evt_two_sided_deal
+	show_sound = event_ground_battle
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_situation_flag = left }
+		NOT = { has_situation_flag = right }
+	}
+
+	immediate = {
+		situation_event = { id = under_the_haze.6 days = 180 }
+	}
+	
+	after = {
+		target = {
+			add_planet_devastation = 30
+		}
+	}
+	
+	option = {
+		name = under_the_haze.5.a
+		icon = {
+			icon = GFX_situation_approach_influence
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		set_situation_approach = approach_under_the_haze_left
+		add_situation_progress = -20
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				is_authoritarian = yes
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.5.b
+		icon = {
+			icon = GFX_situation_approach_this_is_fine
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		set_situation_approach = approach_under_the_haze_right
+		add_situation_progress = 10
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				is_egalitarian = yes
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.5.c
+		icon = {
+			icon = GFX_situation_approach_pop
+			icon_background = GFX_situation_approach_bg_red
+			text = set_situation_approach_icon_text
+		}
+		trigger = {
+			owner = {
+				check_variable = {
+					which = under_the_haze
+					value > 3
+				}
+			}
+		}
+		set_situation_approach = approach_under_the_haze_middle
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+#50
+situation_event = {
+	id = under_the_haze.6
+	title = under_the_haze.6.name
+	desc = under_the_haze.6.desc
+	picture = GFX_evt_zro_3
+	show_sound = event_red_alert
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_situation_flag = left }
+		NOT = { has_situation_flag = right }
+	}
+
+	immediate = {
+		set_situation_locked = yes
+		owner = {
+			ruler = {
+				save_global_event_target_as = under_the_haze_ruler
+			}
+			exile_leader_as = exiled_under_the_haze_ruler
+		}
+		target = {
+			while = {
+				count = 30
+				random_pop = {
+					kill_pop = yes
+				}
+			}
+			solar_system = {
+				every_system_planet = {
+					limit = {
+						is_star = yes
+					}
+					change_pc = pc_black_hole
+					clear_deposits = yes
+					add_deposit = d_dark_matter_deposit_10
+					clear_planet_modifiers = yes
+				}
+				set_star_class = sc_black_hole
+			}
+		}
+		create_country = {
+			name = "NAME_Under_The_Haze_Country_3"
+			type = adversary
+			graphical_culture = root.owner
+			species = root.owner.species
+			origin = origin_separatists
+			flag={
+				icon={
+					category="necroid"
+					file="necroid_12.dds"
+				}
+				background={
+					category="backgrounds"
+					file="flag_BG_13.dds"
+				}
+				colors={
+					"white"
+					"black"
+					"null"
+					"null"
+				}
+			}
+			auto_delete = no
+			effect = {
+				add_modifier = {
+					modifier = under_the_haze_creator
+					days = -1
+				}
+				save_global_event_target_as = under_the_haze_country_3
+				establish_contact = { who = root.owner location = root.target }
+				establish_communications_no_message = root.owner
+			}
+		}
+		create_fleet = {
+			name = "NAME_under_the_haze_creator"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				can_change_leader = no
+				uses_naval_capacity = no
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = event_target:under_the_haze_country_3
+				create_ship = {
+					name = {
+						key = "NAME_under_the_haze_ruler"
+						variable_string = "[under_the_haze_ruler.GetName]"
+					}
+					design = "NAME_under_the_haze_creator"
+					prefix = no
+					upgradable = no
+				}
+				set_location = root.target
+			}
+		}
+		create_fleet = {
+			name = "NAME_Under_The_Haze_Fleet_1"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = root.owner
+				while = {
+					count = 6
+					create_ship = {
+						name = "NAME_Under_The_Haze_Ship_1"
+						design = "NAME_Under_The_Haze_Design_1"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.target
+					distance = 30
+					angle = random
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_Under_The_Haze_Fleet_2"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = root.owner
+				while = {
+					count = 2
+					create_ship = {
+						name = "NAME_Under_The_Haze_Ship_2"
+						design = "NAME_Under_The_Haze_Design_2"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.target
+					distance = 30
+					angle = random
+				}
+			}
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.6.a
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.6.b
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_militarist
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.6.c
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_pacifist
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.6.d
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_xenophile
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.6.e
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophobe
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.6.f
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_egalitarian
+					has_ethic = ethic_egalitarian
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.6.g
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_authoritarian
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.6.h
+		trigger = {
+			owner = {
+				is_materialist = no
+				is_militarist = no
+				is_pacifist = no
+				is_xenophile = no
+				is_xenophobe = no
+				is_egalitarian = no
+				is_authoritarian = no
+			}
+		}
+	}
+}
+
+#50
+country_event = {
+	id = under_the_haze.7
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_under_the_haze
+		From = {
+			is_same_value = event_target:under_the_haze_country_3
+		}
+	}
+	
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_under_the_haze_4
+			}
+			situation_event = { id = under_the_haze.8 }
+		}
+	}
+}
+
+#50
+situation_event = {
+	id = under_the_haze.8
+	title = under_the_haze.8.name
+	desc = under_the_haze.8.desc
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		target = {
+			remove_modifier = "under_the_haze_modifier_5"
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.8.a
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_END_PROJECT
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = under_the_haze.9
+	title = under_the_haze.9.name
+	desc = under_the_haze.9.desc
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = under_the_haze.9.a
+		custom_tooltip = "time.501.a.tooltip"
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_relic = r_horror_matter }
+				}
+				add_relic = r_horror_matter
+			}
+			else = {
+				add_resource = { sr_dark_matter = 10000 }
+				custom_tooltip = "r_horror_matter_become_powerful"
+			}
+			hidden_effect = {
+				set_country_flag = under_the_haze_relic
+				set_country_flag = gain_tradition_horror
+			}
+		}
+		from = {
+			leader = {
+				add_experience = 500
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+#20
+situation_event = {
+	id = under_the_haze.11
+	title = under_the_haze.11.name
+	desc = under_the_haze.11.desc
+	picture = GFX_evt_burning_city
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = under_the_haze.11.a
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_egalitarian
+					has_ethic = ethic_egalitarian
+				}
+			}
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = influence
+					amount >= 20
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = -20 }
+			hidden_effect = {
+				change_variable = {
+					which = under_the_haze
+					value = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.11.b
+		add_situation_progress = -5
+		target = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_1
+				days = -1
+			}
+		}
+	}
+}
+
+#40
+situation_event = {
+	id = under_the_haze.12
+	title = under_the_haze.12.name
+	desc = {
+		text = under_the_haze.12.desc_a
+		trigger = {
+			target = {
+				NOT = { has_modifier = under_the_haze_modifier_1 }
+			}
+		}
+	}
+	desc = {
+		text = under_the_haze.12.desc_b
+		trigger = {
+			target = {
+				has_modifier = under_the_haze_modifier_1
+			}
+		}
+	}
+	picture = GFX_evt_burning_city
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+		target = {
+			if = {
+				limit = {
+					has_modifier = under_the_haze_modifier_1
+				}
+				remove_modifier = "under_the_haze_modifier_1"
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.12.a
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_pacifist
+				}
+			}
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = influence
+					amount >= 40
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = -40 }
+			hidden_effect = {
+				change_variable = {
+					which = under_the_haze
+					value = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.12.b
+		add_situation_progress = -10
+		target = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_2
+				days = -1
+			}
+		}
+	}
+}
+
+#60
+situation_event = {
+	id = under_the_haze.13
+	title = under_the_haze.13.name
+	desc = {
+		text = under_the_haze.13.desc_a
+		trigger = {
+			target = {
+				NOT = { has_modifier = under_the_haze_modifier_2 }
+			}
+		}
+	}
+	desc = {
+		text = under_the_haze.13.desc_b
+		trigger = {
+			target = {
+				has_modifier = under_the_haze_modifier_2
+			}
+		}
+	}
+	picture = GFX_evt_burning_city
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+		target = {
+			if = {
+				limit = {
+					has_modifier = under_the_haze_modifier_2
+				}
+				remove_modifier = "under_the_haze_modifier_2"
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.13.a
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_fanatic_pacifist
+				}
+			}
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = influence
+					amount >= 60
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = -60 }
+			hidden_effect = {
+				change_variable = {
+					which = under_the_haze
+					value = 1
+				}
+			}
+		}
+		target = {
+			add_planet_devastation = 20
+		}
+	}
+	
+	option = {
+		name = under_the_haze.13.b
+		add_situation_progress = -15
+		target = {
+			add_planet_devastation = 10
+			add_modifier = {
+				modifier = under_the_haze_modifier_3
+				days = -1
+			}
+		}
+	}
+}
+
+#80
+situation_event = {
+	id = under_the_haze.14
+	title = under_the_haze.14.name
+	desc = {
+		text = under_the_haze.14.desc_a
+		trigger = {
+			target = {
+				NOT = { has_modifier = under_the_haze_modifier_3 }
+			}
+		}
+	}
+	desc = {
+		text = under_the_haze.14.desc_b
+		trigger = {
+			target = {
+				has_modifier = under_the_haze_modifier_3
+			}
+		}
+	}
+	picture = GFX_evt_burning_city
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		situation_event = { id = under_the_haze.2 days = 45 }
+		add_situation_progress = 10
+	}
+	
+	after = {
+		target = {
+			if = {
+				limit = {
+					has_modifier = under_the_haze_modifier_3
+				}
+				remove_modifier = "under_the_haze_modifier_3"
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.14.a
+		tooltip = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = under_the_haze.14.b
+		tooltip = {
+			add_situation_progress = 10
+		}
+	}
+}
+
+#75
+situation_event = {
+	id = under_the_haze.21
+	title = under_the_haze.21.name
+	desc = under_the_haze.21.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = under_the_haze.21.a
+		set_situation_flag = accept
+		owner = {
+			hidden_effect = {
+				change_variable = {
+					which = under_the_haze
+					value = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.21.b
+		add_situation_progress = -10
+		owner = {
+			add_resource = { influence = 100 }
+		}
+		set_situation_flag = reject
+	}
+}
+
+#55
+situation_event = {
+	id = under_the_haze.22
+	title = under_the_haze.22.name
+	desc = {
+		text = under_the_haze.22.desc_a
+		trigger = {
+			has_situation_flag = accept
+		}
+	}
+	desc = {
+		text = under_the_haze.22.desc_b
+		trigger = {
+			has_situation_flag = reject
+		}
+	}
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = under_the_haze.22.a
+		trigger = {
+			OR = {
+				has_situation_flag = accept
+				owner = {
+					OR = {
+						has_ethic = ethic_fanatic_materialist
+						has_ethic = ethic_materialist
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.22.b
+		set_situation_flag = give_up
+		add_situation_progress = -15
+	}
+}
+
+#35
+situation_event = {
+	id = under_the_haze.23
+	title = under_the_haze.23.name
+	desc = under_the_haze.23.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_situation_flag = give_up }
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.23.a
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_DATA_PROJECT_1
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.23.b
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_ACCIDENT_PROJECT_1
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+#15
+situation_event = {
+	id = under_the_haze.24
+	title = under_the_haze.24.name
+	desc = under_the_haze.24.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_situation_flag = give_up }
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.24.a
+		trigger = {
+			has_situation_flag = accident
+		}
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_DATA_PROJECT_2
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.24.b
+		trigger = {
+			has_situation_flag = data
+		}
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_ACCIDENT_PROJECT_2
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.24.c
+		trigger = {
+			has_situation_flag = data
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+		set_situation_locked = no
+		hidden_effect = {
+			situation_event = { id = under_the_haze.3 days = 45 }
+		}
+		owner = {
+			hidden_effect = {
+				subtract_variable = {
+					which = under_the_haze
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+#-5
+situation_event = {
+	id = under_the_haze.25
+	title = under_the_haze.25.name
+	desc = under_the_haze.25.desc
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			country_event = { id = under_the_haze.100 days = 1800 }
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.25.a
+		owner = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_end_false
+				days = -1
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+#35
+situation_event = {
+	id = under_the_haze.26
+	title = under_the_haze.26.name
+	desc = under_the_haze.26.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_councilor_type = councilor_research
+				}
+				save_global_event_target_as = under_the_haze_researcher
+			}
+		}
+	}
+	
+	after = {
+		clear_global_event_target = under_the_haze_researcher
+	}
+	
+	option = {
+		name = under_the_haze.26.a
+		set_situation_locked = no
+		set_situation_flag = data
+		event_target:under_the_haze_researcher = {
+			add_experience = 200
+		}
+	}
+}
+
+#35
+situation_event = {
+	id = under_the_haze.27
+	title = under_the_haze.27.name
+	desc = under_the_haze.27.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_councilor_type = councilor_research
+				}
+				save_global_event_target_as = under_the_haze_researcher
+			}
+		}
+	}
+	
+	after = {
+		clear_global_event_target = under_the_haze_researcher
+	}
+	
+	option = {
+		name = under_the_haze.27.a
+		set_situation_locked = no
+		set_situation_flag = accident
+		event_target:under_the_haze_researcher = {
+			add_experience = 200
+		}
+	}
+}
+
+#15
+situation_event = {
+	id = under_the_haze.28
+	title = under_the_haze.28.name
+	desc = under_the_haze.28.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_councilor_type = councilor_research
+				}
+				save_global_event_target_as = under_the_haze_researcher
+			}
+		}
+	}
+	
+	after = {
+		clear_global_event_target = under_the_haze_researcher
+	}
+	
+	option = {
+		name = under_the_haze.28.a
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_DATA_PROJECT_3
+				location = this
+				owner = root.owner
+			}
+		}
+		event_target:under_the_haze_researcher = {
+			add_experience = 100
+		}
+	}
+}
+
+#15
+situation_event = {
+	id = under_the_haze.29
+	title = under_the_haze.29.name
+	desc = under_the_haze.29.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_councilor_type = councilor_research
+				}
+				save_global_event_target_as = under_the_haze_researcher
+			}
+		}
+		situation_event = { id = under_the_haze.3 days = 45 }
+	}
+	
+	after = {
+		clear_global_event_target = under_the_haze_researcher
+	}
+	
+	option = {
+		name = under_the_haze.29.a
+		set_situation_locked = no
+		event_target:under_the_haze_researcher = {
+			add_experience = 100
+		}
+	}
+}
+
+#15
+situation_event = {
+	id = under_the_haze.30
+	title = under_the_haze.30.name
+	desc = under_the_haze.30.desc
+	picture = GFX_evt_undertaker
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_councilor_type = councilor_research
+				}
+				save_global_event_target_as = under_the_haze_researcher
+			}
+		}
+		situation_event = { id = under_the_haze.3 days = 45 }
+	}
+	
+	after = {
+		clear_global_event_target = under_the_haze_researcher
+	}
+	
+	option = {
+		name = under_the_haze.30.a
+		set_situation_locked = no
+		event_target:under_the_haze_researcher = {
+			add_experience = 100
+		}
+	}
+}
+
+#20
+situation_event = {
+	id = under_the_haze.31
+	title = under_the_haze.31.name
+	desc = under_the_haze.31.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = under_the_haze.31.city
+		trigger = {
+			target = {
+				has_district = district_city
+			}
+		}
+		set_situation_flag = city
+		hidden_effect = {
+			change_variable = {
+				which = under_the_haze
+				value = 1
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.31.industrial
+		trigger = {
+			target = {
+				has_district = district_industrial
+			}
+		}
+		set_situation_flag = industrial
+	}
+	
+	option = {
+		name = under_the_haze.31.generator
+		trigger = {
+			target = {
+				has_district = district_generator
+			}
+		}
+		set_situation_flag = generator
+	}
+	
+	option = {
+		name = under_the_haze.31.mining
+		trigger = {
+			target = {
+				has_district = district_mining
+			}
+		}
+		set_situation_flag = mining
+	}
+	
+	option = {
+		name = under_the_haze.31.farming
+		trigger = {
+			target = {
+				OR = {
+					has_district = district_farming
+					has_district = district_farming_uncapped
+				}
+			}
+		}
+		set_situation_flag = farming
+	}
+}
+
+#40
+situation_event = {
+	id = under_the_haze.32
+	title = under_the_haze.32.name
+	desc = {
+		text = under_the_haze.32.desc_city
+		trigger = {
+			has_situation_flag = city
+		}
+	}
+	desc = {
+		text = under_the_haze.32.desc_industrial
+		trigger = {
+			has_situation_flag = industrial
+		}
+	}
+	desc = {
+		text = under_the_haze.32.desc_generator
+		trigger = {
+			has_situation_flag = generator
+		}
+	}
+	desc = {
+		text = under_the_haze.32.desc_mining
+		trigger = {
+			has_situation_flag = mining
+		}
+	}
+	desc = {
+		text = under_the_haze.32.desc_farming
+		trigger = {
+			has_situation_flag = farming
+		}
+	}
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		situation_event = { id = under_the_haze.36 days = 91 }
+	}
+	
+	after = {
+		if = {
+			limit = {
+				has_situation_flag = city
+			}
+			target = {
+				remove_district = district_city
+			}
+			owner = {
+				add_resource = { consumer_goods = 500 }
+			}
+		}
+		if = {
+			limit = {
+				has_situation_flag = industrial
+			}
+			target = {
+				remove_district = district_industrial
+			}
+			owner = {
+				add_resource = { alloys = 500 }
+			}
+		}
+		if = {
+			limit = {
+				has_situation_flag = generator
+			}
+			target = {
+				remove_district = district_generator
+			}
+			owner = {
+				add_resource = { energy = 1000 }
+			}
+		}
+		if = {
+			limit = {
+				has_situation_flag = mining
+			}
+			target = {
+				remove_district = district_mining
+			}
+			owner = {
+				add_resource = { minerals = 1000 }
+			}
+		}
+		if = {
+			limit = {
+				has_situation_flag = farming
+			}
+			target = {
+				if = {
+					limit = {
+						has_district = district_farming
+					}
+					remove_district = district_farming
+				}
+				else = {
+					remove_district = district_farming_uncapped
+				}
+			}
+			owner = {
+				add_resource = { food = 1000 }
+			}
+		}
+		target = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_4
+				days = 90
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.32.city
+		trigger = {
+			target = {
+				has_district = district_city
+			}
+			NOT = { has_situation_flag = city }
+		}
+		hidden_effect = {
+			change_variable = {
+				which = under_the_haze
+				value = 1
+			}
+		}
+	}
+	
+	option = {
+		name = under_the_haze.32.industrial
+		trigger = {
+			target = {
+				has_district = district_industrial
+			}
+			NOT = { has_situation_flag = industrial }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.32.generator
+		trigger = {
+			target = {
+				has_district = district_generator
+			}
+			NOT = { has_situation_flag = generator }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.32.mining
+		trigger = {
+			target = {
+				has_district = district_mining
+			}
+			NOT = { has_situation_flag = mining }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.32.farming
+		trigger = {
+			target = {
+				OR = {
+					has_district = district_farming
+					has_district = district_farming_uncapped
+				}
+			}
+			NOT = { has_situation_flag = farming }
+		}
+	}
+}
+
+#60
+situation_event = {
+	id = under_the_haze.33
+	title = under_the_haze.33.name
+	desc = under_the_haze.33.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		situation_event = { id = under_the_haze.38 days = 91 }
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.33.a
+	}
+}
+
+#80
+situation_event = {
+	id = under_the_haze.34
+	title = under_the_haze.34.name
+	desc = under_the_haze.34.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		situation_event = { id = under_the_haze.40 days = 91 }
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.34.a
+	}
+}
+
+#-10
+situation_event = {
+	id = under_the_haze.35
+	title = under_the_haze.35.name
+	desc = under_the_haze.35.desc
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			country_event = { id = under_the_haze.100 days = 1800 }
+		}
+		owner = {
+			if = {
+				limit = {
+					has_special_project = UNDER_THE_HAZE_SEARCH_PROJECT
+				}
+				abort_special_project = {
+					type = UNDER_THE_HAZE_SEARCH_PROJECT
+					location = root.target
+				}
+			}
+			if = {
+				limit = {
+					has_special_project = UNDER_THE_HAZE_EXCAVATE_PROJECT
+				}
+				abort_special_project = {
+					type = UNDER_THE_HAZE_EXCAVATE_PROJECT
+					location = root.target
+				}
+			}
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.35.a
+		owner = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_end_false
+				days = -1
+			}
+		}
+		tooltip = {
+			owner = {
+				if = {
+					limit = {
+						has_special_project = UNDER_THE_HAZE_SEARCH_PROJECT
+					}
+					abort_special_project = {
+						type = UNDER_THE_HAZE_SEARCH_PROJECT
+						location = root.target
+					}
+				}
+				if = {
+					limit = {
+						has_special_project = UNDER_THE_HAZE_EXCAVATE_PROJECT
+					}
+					abort_special_project = {
+						type = UNDER_THE_HAZE_EXCAVATE_PROJECT
+						location = root.target
+					}
+				}
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+#55
+situation_event = {
+	id = under_the_haze.36
+	title = under_the_haze.36.name
+	desc = under_the_haze.36.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = back
+		set_situation_approach = approach_haze_spread
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.36.a
+		trigger = {
+			owner = {
+				is_ai = no
+			}
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = energy
+					amount >= 500
+				}
+			}
+		}
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_SEARCH_PROJECT
+				location = this
+				owner = root.owner
+			}
+		}
+		owner = {
+			add_resource = { energy = -500 }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.36.b
+		trigger = {
+			owner = {
+				is_ai = no
+			}
+		}
+		owner = {
+			add_resource = { unity = 1000 }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.36.a
+		trigger = {
+			owner = {
+				is_ai = yes
+			}
+		}
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_SEARCH_PROJECT
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+#取决于项目完成
+situation_event = {
+	id = under_the_haze.37
+	title = under_the_haze.37.name
+	desc = under_the_haze.37.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		remove_situation_flag = back
+		set_situation_approach = approach_disperse_the_haze
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.37.a
+		from = {
+			leader = {
+				add_experience = 100
+			}
+		}
+	}
+}
+
+#75
+situation_event = {
+	id = under_the_haze.38
+	title = under_the_haze.38.name
+	desc = under_the_haze.38.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = back
+		set_situation_approach = approach_haze_spread
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.38.a
+		trigger = {
+			owner = {
+				is_ai = no
+			}
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = energy
+					amount >= 500
+				}
+			}
+		}
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_EXCAVATE_PROJECT
+				location = this
+				owner = root.owner
+			}
+		}
+		owner = {
+			add_resource = { energy = -500 }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.38.b
+		trigger = {
+			owner = {
+				is_ai = no
+			}
+		}
+		owner = {
+			add_resource = { unity = 1000 }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.38.a
+		trigger = {
+			owner = {
+				is_ai = yes
+			}
+		}
+		target = {
+			enable_special_project = {
+				name = UNDER_THE_HAZE_EXCAVATE_PROJECT
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+#取决于项目完成
+situation_event = {
+	id = under_the_haze.39
+	title = under_the_haze.39.name
+	desc = under_the_haze.39.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		remove_situation_flag = back
+		set_situation_approach = approach_disperse_the_haze
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.39.a
+		owner = {
+			add_resource = { minerals = 500 }
+		}
+	}
+}
+
+#95
+situation_event = {
+	id = under_the_haze.40
+	title = under_the_haze.40.name
+	desc = under_the_haze.40.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = back
+		set_situation_approach = approach_haze_spread
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = under_the_haze.40.a
+		trigger = {
+			owner = {
+				is_ai = no
+			}
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = unity
+					amount >= 100
+				}
+			}
+		}
+		add_situation_progress = -15
+		owner = {
+			add_resource = { unity = -100 }
+		}
+		hidden_effect = {
+			situation_event = { id = under_the_haze.4 days = 91 }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.40.b
+		trigger = {
+			owner = {
+				is_ai = no
+			}
+		}
+		add_situation_progress = -15
+	}
+	
+	option = {
+		name = under_the_haze.40.a
+		trigger = {
+			owner = {
+				is_ai = yes
+			}
+		}
+		add_situation_progress = -15
+		hidden_effect = {
+			situation_event = { id = under_the_haze.4 days = 91 }
+		}
+	}
+}
+
+#60
+situation_event = {
+	id = under_the_haze.41
+	title = under_the_haze.41.name
+	desc = under_the_haze.41.desc
+	picture = GFX_evt_zro_2
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = under_the_haze.41.a
+		add_situation_progress = 20
+	}
+	
+	option = {
+		name = under_the_haze.41.b
+	}
+}
+
+#80
+situation_event = {
+	id = under_the_haze.42
+	title = under_the_haze.42.name
+	desc = under_the_haze.42.desc
+	picture = GFX_evt_zro_2
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+		set_situation_flag = right
+		create_country = {
+			name = "NAME_Under_The_Haze_Country_1"
+			type = adversary
+			graphical_culture = root.owner
+			species = root.owner.species
+			origin = origin_separatists
+			flag = {
+				icon = {
+					category="domination"
+					file="domination_7.dds"
+				}
+				background = {
+					category="backgrounds"
+					file="flag_BG_13.dds"
+				}
+				colors = {
+					"intense_red"
+					"bright_yellow"
+					"null"
+					"null"
+				}
+			}
+			auto_delete = no
+			effect = {
+				save_global_event_target_as = under_the_haze_country_1
+				establish_contact = { who = root.owner location = root.target }
+				establish_communications_no_message = root.owner
+				create_leader = {
+					class = general
+					species = owner_main_species
+					name = random
+					skill = 3
+				}
+			}
+		}
+		target = {
+			while = {
+				count = 12
+				create_army = {
+					name = "NAME_Under_The_Haze_Army_1"
+					owner = event_target:under_the_haze_country_1
+					species = event_target:under_the_haze_country_1.species
+					type = "under_the_haze_army_1"
+					leader = last_created_leader
+				}
+			}
+			while = {
+				count = 3
+				create_army = {
+					name = "NAME_Under_The_Haze_Army_2"
+					owner = root.owner
+					species = root.owner.species
+					type = "under_the_haze_army_2"
+				}
+			}
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.42.a
+	}
+}
+
+#80
+country_event = {
+	id = under_the_haze.43
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_under_the_haze
+		From = {
+			is_same_value = event_target:under_the_haze_country_1
+		}
+	}
+	
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_under_the_haze_4
+			}
+			situation_event = { id = under_the_haze.44 }
+		}
+	}
+}
+
+#80
+situation_event = {
+	id = under_the_haze.44
+	title = under_the_haze.44.name
+	desc = under_the_haze.44.desc
+	picture = GFX_evt_small_space_battle
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		add_situation_progress = 5
+		event_target:under_the_haze_country_1 = {
+			create_leader = {
+				class = admiral
+				species = owner_main_species
+				name = random
+				skill = 3
+			}
+		}
+		create_fleet = {
+			name = "NAME_Under_The_Haze_Fleet_1"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = event_target:under_the_haze_country_1
+				while = {
+					count = 12
+					create_ship = {
+						name = "NAME_Under_The_Haze_Ship_1"
+						design = "NAME_Under_The_Haze_Design_1"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.target
+					distance = 30
+					angle = random
+				}
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+		create_fleet = {
+			name = "NAME_Under_The_Haze_Fleet_2"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = root.owner
+				while = {
+					count = 2
+					create_ship = {
+						name = "NAME_Under_The_Haze_Ship_2"
+						design = "NAME_Under_The_Haze_Design_2"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.target
+					distance = 30
+					angle = random
+				}
+			}
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.44.a
+		tooltip = {
+			add_situation_progress = 5
+		}
+	}
+}
+
+#85
+country_event = {
+	id = under_the_haze.45
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_under_the_haze
+		From = {
+			is_same_value = event_target:under_the_haze_country_1
+		}
+	}
+	
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_under_the_haze_4
+			}
+			situation_event = { id = under_the_haze.46 }
+		}
+	}
+}
+
+#85
+situation_event = {
+	id = under_the_haze.46
+	title = under_the_haze.46.name
+	desc = under_the_haze.46.desc
+	picture = GFX_evt_victorious_army
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = no
+		add_situation_progress = 5
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.46.a
+		target = {
+			remove_modifier = "under_the_haze_modifier_5"
+		}
+		tooltip = {
+			add_situation_progress = 5
+		}
+	}
+}
+
+#100
+situation_event = {
+	id = under_the_haze.47
+	title = under_the_haze.47.name
+	desc = under_the_haze.47.desc
+	picture = GFX_evt_vortex
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		target = {
+			while = {
+				count = 20
+				random_pop = {
+					kill_pop = yes
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_Ishar_mla"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				can_change_leader = no
+				uses_naval_capacity = no
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = root.owner
+				create_ship = {
+					name = "NAME_Ishar_mla"
+					design = "NAME_Ishar_mla"
+					prefix = no
+					upgradable = no
+				}
+				set_location = root.target
+			}
+		}
+		owner = {
+			set_country_flag = chosen_one_ruler_event
+			every_owned_leader = {
+				add_trait = leader_trait_chosen
+			}
+			every_pool_leader = {
+				add_trait = leader_trait_chosen
+			}
+		}
+		create_ambient_object = {
+			type = "psi_storm_1"
+			location = root.target
+		}
+		event_target:under_the_haze_country_1 = {
+			destroy_country = yes
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.47.a
+		owner = {
+			clear_ethos = yes
+			country_add_ethic = "ethic_fanatic_spiritualist"
+			country_add_ethic = "ethic_authoritarian"
+			change_government = {
+				authority = auth_imperial
+				civics = {
+					civic = civic_imperial_cult
+					civic = civic_aristocratic_elite
+					civic = civic_philosopher_king
+				}
+			}
+			add_modifier = {
+				modifier = under_the_haze_modifier_end_2
+				days = -1
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+#30
+situation_event = {
+	id = under_the_haze.51
+	title = under_the_haze.51.name
+	desc = under_the_haze.51.desc
+	picture = GFX_evt_zro_2
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = under_the_haze.51.a
+		add_situation_progress = -20
+	}
+	
+	option = {
+		name = under_the_haze.51.b
+	}
+}
+
+#10
+situation_event = {
+	id = under_the_haze.52
+	title = under_the_haze.52.name
+	desc = under_the_haze.52.desc
+	picture = GFX_evt_zro_2
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+		set_situation_flag = left
+		create_country = {
+			name = "NAME_Under_The_Haze_Country_2"
+			type = adversary
+			graphical_culture = root.owner
+			species = root.owner.species
+			origin = origin_separatists
+			flag = {
+				icon = {
+					category="domination"
+					file="domination_19.dds"
+				}
+				background = {
+					category="backgrounds"
+					file="flag_BG_13.dds"
+				}
+				colors = {
+					"dark_purple"
+					"intense_blue"
+					"null"
+					"null"
+				}
+			}
+			auto_delete = no
+			effect = {
+				save_global_event_target_as = under_the_haze_country_2
+				establish_contact = { who = root.owner location = root.target }
+				establish_communications_no_message = root.owner
+				create_leader = {
+					class = general
+					species = owner_main_species
+					name = random
+					skill = 3
+				}
+			}
+		}
+		target = {
+			while = {
+				count = 6
+				create_army = {
+					name = "NAME_Under_The_Haze_Army_2"
+					owner = event_target:under_the_haze_country_2
+					species = event_target:under_the_haze_country_2.species
+					type = "under_the_haze_army_2"
+					leader = last_created_leader
+				}
+			}
+			while = {
+				count = 6
+				create_army = {
+					name = "NAME_Under_The_Haze_Army_1"
+					owner = root.owner
+					species = root.owner.species
+					type = "under_the_haze_army_1"
+				}
+			}
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.52.a
+	}
+}
+
+#10
+country_event = {
+	id = under_the_haze.53
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_under_the_haze
+		From = {
+			is_same_value = event_target:under_the_haze_country_2
+		}
+	}
+	
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_under_the_haze_4
+			}
+			situation_event = { id = under_the_haze.54 }
+		}
+	}
+}
+
+#10
+situation_event = {
+	id = under_the_haze.54
+	title = under_the_haze.54.name
+	desc = under_the_haze.54.desc
+	picture = GFX_evt_space_monster
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		add_situation_progress = -5
+		owner = {
+			set_variable = {
+				which = under_the_haze_fleet
+				value = 0
+			}
+		}
+		target = {
+			while = {
+				count = 10
+				random_pop = {
+					kill_pop = yes
+				}
+			}
+		}
+		event_target:under_the_haze_country_2 = {
+			create_leader = {
+				class = admiral
+				species = owner_main_species
+				name = random
+				skill = 3
+			}
+		}
+		create_ambient_object = {
+			type = "psi_storm_1"
+			location = root.target
+		}
+		create_fleet = {
+			name = "NAME_Ishar_mla"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				can_change_leader = no
+				uses_naval_capacity = no
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = event_target:under_the_haze_country_2
+				create_ship = {
+					name = "NAME_Ishar_mla"
+					design = "NAME_Ishar_mla"
+					prefix = no
+					upgradable = no
+				}
+				set_location = root.target
+			}
+		}
+		create_fleet = {
+			name = "NAME_Under_The_Haze_Fleet_2"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = event_target:under_the_haze_country_2
+				while = {
+					count = 2
+					create_ship = {
+						name = "NAME_Under_The_Haze_Ship_2"
+						design = "NAME_Under_The_Haze_Design_2"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.target
+					distance = 30
+					angle = random
+				}
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+		create_fleet = {
+			name = "NAME_Under_The_Haze_Fleet_1"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = root.owner
+				while = {
+					count = 6
+					create_ship = {
+						name = "NAME_Under_The_Haze_Ship_1"
+						design = "NAME_Under_The_Haze_Design_1"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.target
+					distance = 30
+					angle = random
+				}
+			}
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.54.a
+		tooltip = {
+			add_situation_progress = -5
+		}
+	}
+}
+
+#5
+country_event = {
+	id = under_the_haze.55
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_under_the_haze
+		From = {
+			is_same_value = event_target:under_the_haze_country_2
+		}
+	}
+	
+	immediate = {
+		change_variable = {
+			which = under_the_haze_fleet
+			value = 1
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = under_the_haze_fleet
+					value > 1
+				}
+			}
+			random_situation = {
+				limit = {
+					is_situation_type = situation_under_the_haze_4
+				}
+				situation_event = { id = under_the_haze.56 }
+			}
+		}
+	}
+}
+
+#5
+situation_event = {
+	id = under_the_haze.56
+	title = under_the_haze.56.name
+	desc = under_the_haze.56.desc
+	picture = GFX_evt_victorious_army
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = no
+		add_situation_progress = -5
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.56.a
+		target = {
+			remove_modifier = "under_the_haze_modifier_5"
+		}
+		tooltip = {
+			add_situation_progress = -5
+		}
+	}
+}
+
+#-10
+situation_event = {
+	id = under_the_haze.57
+	title = under_the_haze.57.name
+	desc = under_the_haze.57.desc
+	picture = GFX_evt_alien_nature
+	show_sound = event_mystic_reveal_light
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		event_target:under_the_haze_country_1 = {
+			destroy_country = yes
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = under_the_haze.57.a
+		owner = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_end_3
+				days = -1
+			}
+		}
+		target = {
+			add_deposit = d_under_the_haze
+			hidden_effect = {
+				save_global_event_target_as = d_under_the_haze_planet
+			}
+		}
+		destroy_situation = this
+	}
+}
+
+planet_event = {
+	id = under_the_haze.58
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		is_same_value = event_target:d_under_the_haze_planet
+		NOT = { has_deposit = d_under_the_haze }
+	}
+	
+	immediate = {
+		add_deposit = d_under_the_haze
+	}
+}
+
+country_event = {
+	id = under_the_haze.100
+	title = under_the_haze.100.name
+	desc = under_the_haze.100.desc
+	picture = GFX_evt_zro_1
+	show_sound = event_red_alert
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		remove_modifier = "under_the_haze_modifier_end_false"
+		add_modifier = {
+			modifier = under_the_haze_modifier_end_1
+			days = 7200
+		}
+		ruler = {
+			kill_leader = {
+				type = ruler
+			}
+		}
+		event_target:under_the_haze_planet = {
+			solar_system = {
+				starbase = {
+					delete_ship = this
+				}
+				star = {
+					create_ambient_object = {
+						type = "destroyed_system"
+						location = this
+					}
+					last_created_ambient_object = {
+						set_ambient_object_flag = destroyed_system_effect
+						set_location = {
+							target = prev
+							distance = 0
+							angle = random
+						}
+					}
+				}
+				every_system_planet = {
+					limit = {
+						NOR = {
+							is_planet_class = pc_ringworld_habitable
+							is_planet_class = pc_ringworld_habitable_damaged
+							is_planet_class = pc_ringworld_tech
+							is_planet_class = pc_ringworld_tech_damaged
+							is_planet_class = pc_ringworld_seam
+							is_planet_class = pc_ringworld_seam_damaged
+							is_planet_class = pc_asteroid
+							is_planet_class = pc_ice_asteroid
+						}
+					}
+					if = {
+						limit = {
+							is_colony = yes
+						}
+						remove_all_buildings = yes
+						every_owned_pop = { kill_pop = yes }
+						destroy_colony = yes
+					}
+					change_pc = pc_black_hole
+					clear_deposits = yes
+					if = {
+						limit = {
+							is_primary_star = yes
+						}
+						add_deposit = d_dark_matter_deposit_10
+					}
+					else = {
+						random_list = {
+							1 = {
+								add_deposit = d_dark_matter_deposit_1
+							}
+							1 = {
+								add_deposit = d_dark_matter_deposit_2
+							}
+							1 = {
+								add_deposit = d_dark_matter_deposit_3
+							}
+						}
+					}
+					clear_planet_modifiers = yes
+				}
+				every_system_planet = {
+					limit = {
+						is_ringworld = yes
+					}
+					if = {
+						limit = {
+							is_colony = yes
+						}
+						remove_all_buildings = yes
+						every_owned_pop = { kill_pop = yes }
+						destroy_colony = yes
+					}
+					spawn_ringworld_cracker_effect = yes
+					change_pc = pc_ringworld_habitable_damaged
+					clear_deposits = yes
+					clear_planet_modifiers = yes
+				}
+				every_system_planet = {
+					limit = {
+						is_planet_class = pc_ringworld_tech
+					}
+					if = {
+						limit = {
+							is_colony = yes
+						}
+						remove_all_buildings = yes
+						every_owned_pop = { kill_pop = yes }
+						destroy_colony = yes
+					}
+					spawn_ringworld_cracker_effect = yes
+					change_pc = pc_ringworld_tech_damaged
+					clear_deposits = yes
+					clear_planet_modifiers = yes
+				}
+				every_system_planet = {
+					limit = {
+						is_planet_class = pc_ringworld_seam
+					}
+					if = {
+						limit = {
+							is_colony = yes
+						}
+						remove_all_buildings = yes
+						every_owned_pop = { kill_pop = yes }
+						destroy_colony = yes
+					}
+					spawn_ringworld_cracker_effect = yes
+					change_pc = pc_ringworld_seam_damaged
+					clear_deposits = yes
+					clear_planet_modifiers = yes
+				}
+				every_system_planet = {
+					limit = {
+						exists = orbital_station
+					}
+					orbital_station = { dismantle = yes }
+				}
+				every_system_planet = {
+					limit = { is_asteroid = yes }
+					clear_deposits = yes
+					clear_planet_modifiers = yes
+				}
+				every_fleet_in_system = {
+					destroy_fleet = this
+				}
+				every_system_megastructure = {
+					set_ruined_megastructure = yes
+				}
+				set_star_class = sc_black_hole
+			}
+			planet_event = { id = under_the_haze.101 }
+		}
+	}
+	
+	option = {
+		name = under_the_haze.100.a
+	}
+}
+
+planet_event = {
+	id = under_the_haze.101
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		solar_system = {
+			set_star_flag = lcluster
+		}
+		if = {
+			limit = {
+				any_system = { has_hyperlane_to = root.solar_system }
+			}
+			planet_event = { id = under_the_haze.102 }
+		}
+	}
+}
+
+planet_event = {
+	id = under_the_haze.102
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		any_system = { has_hyperlane_to = root.solar_system }
+	}
+	
+	immediate = {
+		random_system = {
+			limit = {
+				has_hyperlane_to = root.solar_system
+			}
+			save_global_event_target_as = remove_hyperlane_system
+		}
+		remove_hyperlane = {
+			from = root.solar_system
+			to = event_target:remove_hyperlane_system
+		}
+		if = {
+			limit = {
+				any_system = { has_hyperlane_to = root.solar_system }
+			}
+			planet_event = { id = under_the_haze.102 }
+		}
+	}
+}
+
+situation_event = {
+	id = under_the_haze.103
+	title = under_the_haze.100.name
+	desc = under_the_haze.103.desc
+	picture = GFX_evt_zro_1
+	show_sound = event_red_alert
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		owner = {
+			add_modifier = {
+				modifier = under_the_haze_modifier_end_1
+				days = 7200
+			}
+			ruler = {
+				kill_leader = {
+					type = ruler
+				}
+			}
+		}
+		event_target:under_the_haze_planet = {
+			solar_system = {
+				starbase = {
+					delete_ship = this
+				}
+				star = {
+					create_ambient_object = {
+						type = "destroyed_system"
+						location = this
+					}
+					last_created_ambient_object = {
+						set_ambient_object_flag = destroyed_system_effect
+						set_location = {
+							target = prev
+							distance = 0
+							angle = random
+						}
+					}
+				}
+				every_system_planet = {
+					limit = {
+						NOR = {
+							is_planet_class = pc_ringworld_habitable
+							is_planet_class = pc_ringworld_habitable_damaged
+							is_planet_class = pc_ringworld_tech
+							is_planet_class = pc_ringworld_tech_damaged
+							is_planet_class = pc_ringworld_seam
+							is_planet_class = pc_ringworld_seam_damaged
+							is_planet_class = pc_asteroid
+							is_planet_class = pc_ice_asteroid
+						}
+					}
+					if = {
+						limit = {
+							is_colony = yes
+						}
+						remove_all_buildings = yes
+						every_owned_pop = { kill_pop = yes }
+						destroy_colony = yes
+					}
+					change_pc = pc_black_hole
+					clear_deposits = yes
+					if = {
+						limit = {
+							is_primary_star = yes
+						}
+						add_deposit = d_dark_matter_deposit_10
+					}
+					else = {
+						random_list = {
+							1 = {
+								add_deposit = d_dark_matter_deposit_1
+							}
+							1 = {
+								add_deposit = d_dark_matter_deposit_2
+							}
+							1 = {
+								add_deposit = d_dark_matter_deposit_3
+							}
+						}
+					}
+					clear_planet_modifiers = yes
+				}
+				every_system_planet = {
+					limit = {
+						is_ringworld = yes
+					}
+					if = {
+						limit = {
+							is_colony = yes
+						}
+						remove_all_buildings = yes
+						every_owned_pop = { kill_pop = yes }
+						destroy_colony = yes
+					}
+					spawn_ringworld_cracker_effect = yes
+					change_pc = pc_ringworld_habitable_damaged
+					clear_deposits = yes
+					clear_planet_modifiers = yes
+				}
+				every_system_planet = {
+					limit = {
+						is_planet_class = pc_ringworld_tech
+					}
+					if = {
+						limit = {
+							is_colony = yes
+						}
+						remove_all_buildings = yes
+						every_owned_pop = { kill_pop = yes }
+						destroy_colony = yes
+					}
+					spawn_ringworld_cracker_effect = yes
+					change_pc = pc_ringworld_tech_damaged
+					clear_deposits = yes
+					clear_planet_modifiers = yes
+				}
+				every_system_planet = {
+					limit = {
+						is_planet_class = pc_ringworld_seam
+					}
+					if = {
+						limit = {
+							is_colony = yes
+						}
+						remove_all_buildings = yes
+						every_owned_pop = { kill_pop = yes }
+						destroy_colony = yes
+					}
+					spawn_ringworld_cracker_effect = yes
+					change_pc = pc_ringworld_seam_damaged
+					clear_deposits = yes
+					clear_planet_modifiers = yes
+				}
+				every_system_planet = {
+					limit = {
+						exists = orbital_station
+					}
+					orbital_station = { dismantle = yes }
+				}
+				every_system_planet = {
+					limit = { is_asteroid = yes }
+					clear_deposits = yes
+					clear_planet_modifiers = yes
+				}
+				every_fleet_in_system = {
+					destroy_fleet = this
+				}
+				every_system_megastructure = {
+					set_ruined_megastructure = yes
+				}
+				set_star_class = sc_black_hole
+			}
+			planet_event = { id = under_the_haze.101 }
+			planet_event = { id = under_the_haze.104 }
+		}
+		destroy_situation = this
+	}
+	
+	option = {
+		name = under_the_haze.103.a
+	}
+}
+
+planet_event = {
+	id = under_the_haze.104
+	title = under_the_haze.100.name
+	desc = under_the_haze.104.desc
+	picture = GFX_evt_zro_1
+	show_sound = event_red_alert
+	location = root
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = under_the_haze.104.a
+	}
+}

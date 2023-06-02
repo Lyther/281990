@@ -1,0 +1,629 @@
+#reloadable with 'reload stats'
+# This file is where you start when you want to configure something new, then go to sections
+
+####################
+# NOTE FOR MODDERS #
+####################
+# modifier = { } only takes the following modifiers
+# hull, shield & armor add/mult and regen add perc/static
+# evasion add/mult
+# speed/base speed mult
+# weapon damage mult
+# upkeep mult
+# for other modifiers, use ship_modifier = { }
+# use_shipnames_from = other_size # allows a ship size to use names from another size
+# icon = ship_size_military_1
+		#ship_size_military_1 is default. The following sprite keys are generated from it:
+			#GFX_text_<key>
+			#GFX_<key>
+			#GFX_<key>_top
+			#GFX_<key>_top_damaged
+# icon_frame: now only used for starbases. Value of 2 or more means it shows up on the galaxy map, 1-5 denote which icon it uses on starbase sprite sheets (e.g. gfx/interface/icons/starbase_ship_sizes.dds)
+# ai_ship_data = {					#For determining how many ships the AI wants. Ships it can't recruit (i.e. missing tech prereqs or fails potential_country or possible_country) are pre-filtered out.
+# 	fraction = { }					#As standard, base, modifier = { factor }, etc. The AI will want this divided by the total fraction it is able to recruit. Note: it is the fraction of the naval cap, so the final value is divided by size_multiplier
+#									#Note: if the fraction is > 0, the following lines will not be applied
+#	min = 1							#Sets a minimum absolute number the country will aim to have
+#	system_mult/planet_mult = 0.1	#Adds this amount for each system/planet the country owns. I.e. min + ( num planets * planet_mult ) + ( num systems * system_mult )
+#	max = 5							#Sets a maximum absolute number the country will aim to have. Note that it will still want only the minimum unless you define a system_mult or planet_mult
+#}
+
+####################
+
+@corvette_collision_radius = 2.0
+@corvette_formation_priority = 4
+
+@destroyer_collision_radius = 2.5
+@destroyer_formation_priority = 2
+
+@cruiser_collision_radius = 3.5
+@cruiser_formation_priority = 3
+
+@battleship_collision_radius = 6
+@battleship_formation_priority = 5
+
+@titan_collision_radius = 12
+@titan_formation_priority = 1
+
+@fe_escort_collision_radius = 2.5
+@fe_escort_formation_priority = 2
+
+@fe_battlecruiser_collision_radius = 6
+@fe_battlecruiser_formation_priority = 5
+
+@fe_titan_collision_radius = 12
+@fe_titan_formation_priority = 40
+
+@fe_goliath_collision_radius = 24
+@fe_goliath_formation_priority = 60
+
+@build_block_radius_none = 0
+@build_block_radius_civilian = 20
+@build_block_radius_military = 200
+
+@speed_very_slow = 80
+@speed_slow = 100
+@speed_default = 120
+@speed_fast = 140
+@speed_very_fast = 160
+
+#################
+# FALLEN EMPIRE #
+#################
+
+
+# Fallen Empire Escort
+
+fe_escort = {
+	formation_priority = @fe_escort_formation_priority
+	
+	max_speed = @speed_fast
+	acceleration = 0.3
+	rotation_speed = 0.2
+	collision_radius = @fe_escort_collision_radius
+	modifier = {
+		ship_evasion_add = 35
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+	}
+	max_hitpoints = @destroyer_hp
+	size_multiplier = 2
+	fleet_slot_size = 2
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part1" } "stern" = { locator = "part1" } }
+	num_target_locators = 0
+	icon_frame = 3
+	icon = ship_size_military_2
+	is_space_station = no
+	is_space_object = yes
+	
+	default_behavior = line
+	ship_roles = { explosive screen gunship artillery }
+	
+	combat_disengage_chance = 1.5
+	
+	resources = {
+		category = ships	
+		upkeep = {
+			energy = @destroyer_upkeep_energy
+			alloys = @destroyer_upkeep_alloys
+		}
+	}
+	
+	min_upgrade_cost = {
+		alloys = 2
+	}
+	
+	base_buildtime = 200
+	
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	enable_default_design = yes
+	enable_3dview_in_ship_browser = yes
+	can_have_federation_design = yes
+	use_shipnames_from = destroyer
+	
+	prerequisites = { "tech_fe_escorts" }
+	
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	
+	potential_country = {
+		is_zofe_country = yes
+	}
+
+	ai_ship_data = {
+		fraction = {
+			base = 0
+			modifier = {
+				add = 50
+				is_zofe_country = yes
+			}
+		}
+	}
+}
+
+# Fallen Empire Battlecruiser
+
+fe_battlecruiser = {
+	formation_priority = @fe_battlecruiser_formation_priority
+	
+	max_speed = @speed_slow
+	acceleration = 0.2
+	rotation_speed = 0.15
+	collision_radius = @fe_battlecruiser_collision_radius
+	modifier = {
+		ship_evasion_add = 10
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+	}
+	max_hitpoints = @battleship_hp
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part1" } "stern" = { locator = "part1" }}
+	num_target_locators = 0
+	is_space_station = no
+	icon = ship_size_military_8
+	icon_frame = 5
+	is_space_object = yes
+	
+	default_behavior = artillery
+	ship_roles = { screen gunship artillery carrier  }
+	
+	combat_disengage_chance = 1.0
+	
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @battleship_upkeep_energy
+			alloys = @battleship_upkeep_alloys
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 8
+	}
+
+	base_buildtime = 600
+	
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	enable_default_design = yes
+	enable_3dview_in_ship_browser = yes
+	can_have_federation_design = yes
+	use_shipnames_from = cruiser
+	
+	prerequisites = { "tech_fe_battlecruisers" }
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	
+	potential_country = {
+		is_zofe_country = yes
+	}
+
+	ai_ship_data = {
+		fraction = {
+			base = 0
+			modifier = {
+				add = 50
+				is_zofe_country = yes
+			}
+		}
+	}
+}
+
+# Fallen Empire Titan
+
+fe_titan = {
+	formation_priority = @fe_titan_formation_priority
+	#entity = titan_entity
+	
+	max_speed = @speed_slow
+	acceleration = 0.15
+	rotation_speed = 0.1
+	collision_radius = @fe_titan_collision_radius
+	modifier = {
+		ship_evasion_add = 2
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+	}
+	max_hitpoints = @titan_hp
+	size_multiplier = 16
+	fleet_slot_size = 8
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part1" } "hangar" = { locator = "part1" } "stern" = { locator = "part1" } }
+	num_target_locators = 6
+	is_space_station = no
+	icon_frame = 7
+	icon = ship_size_military_16
+	
+	default_behavior = carrier
+	ship_roles = { line artillery carrier }
+	
+	is_space_object = yes
+	
+	combat_disengage_chance = 0.5
+	
+	resources = {
+		category = ships
+		upkeep = {
+			energy = @titan_upkeep_energy
+			alloys = @titan_upkeep_alloys
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 16
+	}
+
+	base_buildtime = 1800
+	
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	enable_default_design = yes
+	enable_3dview_in_ship_browser = yes
+	can_have_federation_design = yes
+	use_shipnames_from = battleship
+	
+	prerequisites = { "tech_fe_titans" }
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "ship_aura_components"
+	
+	potential_construction = {
+		OR = {
+			is_scope_type = starbase
+			AND = {
+				is_scope_type = megastructure
+				OR = {
+					is_megastructure_type = mega_shipyard_3
+					is_megastructure_type = mega_shipyard_restored
+				}
+			}
+		}
+	}
+	
+	possible_construction = {
+		custom_tooltip = {
+			fail_text = starbase_citadel_trigger
+			OR = {
+				AND = {
+					is_scope_type = megastructure
+					OR = {
+						is_megastructure_type = mega_shipyard_3
+						is_megastructure_type = mega_shipyard_restored
+					}
+				}
+				AND = {
+					is_scope_type = starbase
+					has_starbase_size >= starbase_citadel
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = starbase_titan_yards_trigger
+			OR = {
+				AND = {
+					is_scope_type = megastructure
+					OR = {
+						is_megastructure_type = mega_shipyard_3
+						is_megastructure_type = mega_shipyard_restored
+					}
+				}
+				AND = {
+					is_scope_type = starbase
+					has_starbase_building = titan_yards
+				}
+			}
+		}
+	}
+	
+	potential_country = {
+		is_zofe_country = yes
+	}
+
+	ai_ship_data = {
+		min = 1
+		max = 50
+		planet_mult = 0.5
+	}
+}
+
+# Goliath
+
+fe_goliath = {
+	formation_priority = @fe_goliath_formation_priority
+	
+	max_speed = @speed_very_slow
+	acceleration = 0.1
+	rotation_speed = 0.05
+	collision_radius = @fe_goliath_collision_radius
+	modifier = {
+		ship_evasion_mult = -1
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+	}
+	max_hitpoints = 60000
+	size_multiplier = 32
+	fleet_slot_size = 32
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part1" } "hangar" = { locator = "part1" } "stern" = { locator = "part1" } }
+	num_target_locators = 6
+	is_space_station = no
+	icon = ship_size_military_32
+	icon_frame = 7
+	is_space_object = yes
+	
+	default_behavior = carrier
+	ship_roles = { line artillery carrier }
+	
+	combat_disengage_chance = 0.25
+	
+	resources = {
+		category = ships
+
+		upkeep = {
+			energy = 9.2
+			alloys = 3.2
+		}
+	}
+	
+	min_upgrade_cost = {
+		alloys = 32
+	}
+	
+	base_buildtime = 3600
+	
+	
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	enable_default_design = yes
+	enable_3dview_in_ship_browser = yes
+	can_have_federation_design = no
+	use_shipnames_from = titan
+	
+	prerequisites = { "tech_fe_goliath" }
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "ship_aura_components"
+	
+	potential_construction = {
+		OR = {
+			AND = {
+				is_scope_type = starbase
+				NOT = { 
+					has_starbase_size = juggernaut
+				}
+			}
+			AND = {
+				is_scope_type = megastructure
+				OR = {
+					is_megastructure_type = mega_shipyard_3
+					is_megastructure_type = mega_shipyard_restored
+				}
+			}
+		}
+	}
+
+	possible_construction = {
+		custom_tooltip = {
+			fail_text = starbase_citadel_trigger
+			OR = {
+				AND = {
+					is_scope_type = megastructure
+					OR = {
+						is_megastructure_type = mega_shipyard_3
+						is_megastructure_type = mega_shipyard_restored
+					}
+				}
+				AND = {
+					is_scope_type = starbase
+					has_starbase_size >= starbase_citadel
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = starbase_colossal_yards_trigger
+			OR = {
+				AND = {
+					is_scope_type = megastructure
+					OR = {
+						is_megastructure_type = mega_shipyard_3
+						is_megastructure_type = mega_shipyard_restored
+					}
+				}
+				AND = {
+					is_scope_type = starbase
+					has_starbase_building = colossus_yards
+				}
+			}
+		}
+	}
+	
+	potential_country = {
+		is_zofe_country = yes
+	}
+
+	ai_ship_data = {
+		min = 1
+		max = 10
+		planet_mult = 0.1
+	}
+
+}
+
+
+# Fallen Empire Defense Platform
+fe_small_station = {
+	max_speed = 6
+	rotation_speed = 10
+	acceleration = 10
+	modifier = {
+		ship_evasion_mult = -1
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+		ships_upkeep_mult = -0.25
+		ship_piracy_suppression_add = 2
+	}
+	ship_modifier = {
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = @station_medium_hp
+	
+	combat_size_multiplier = 4
+	size_multiplier = 2
+	fleet_slot_size = 2
+	section_slots = { "heavy" = { locator = "part1" } "medium" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	is_space_object = yes
+	
+	ship_roles = { gunship screen artillery carrier energy_torpedoes }
+
+	icon_frame = 5
+	build_block_radius = @build_block_radius_military
+	
+	uses_name_prefix = no
+	takes_name_from_ship_design = yes
+	
+	potential_construction = {
+		is_scope_type = starbase
+		OR = {
+			has_starbase_size >= starbase_outpost
+			has_starbase_size >= orbital_ring_tier_1
+		}
+	}
+	
+	resources = {
+		category = ships
+
+	}
+	
+	min_upgrade_cost = {
+		alloys = 2
+	}
+	
+	base_buildtime = 365
+	
+	class = shipclass_military_station
+	construction_type = starbase_defenses
+	is_designable =  yes
+	enable_default_design = yes
+	enable_3dview_in_ship_browser = yes
+
+	prerequisites = { "tech_fe_defense_platforms_1" }
+	
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+
+
+
+# Fallen Empire Large Military Station
+
+fe_large_station = {
+	
+	max_speed = 6
+	rotation_speed = 10
+	acceleration = 10
+	modifier = {
+		ship_evasion_mult = -1
+		ship_hull_regen_add_perc = 0.4
+		ship_armor_regen_add_perc = 0.4
+		ships_upkeep_mult = -0.25
+		ship_piracy_suppression_add = 8
+	}
+	ship_modifier = {
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = @station_large_hp
+	combat_size_multiplier = 20
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "xl" = { locator = "part1" } "heavy" = { locator = "part1" } "medium" = { locator = "part1" } "pd" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	is_space_object = yes
+
+	icon_frame = 5
+	build_block_radius = @build_block_radius_military
+	
+	uses_name_prefix = no
+	takes_name_from_ship_design = yes
+	
+	resources = {
+		category = ships
+
+	}
+	
+	min_upgrade_cost = {
+		alloys = 8
+	}
+
+	base_buildtime = 730
+	
+	class = shipclass_military_station
+	construction_type = starbase_defenses
+	is_designable = yes
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	enable_3dview_in_ship_browser = yes
+
+	prerequisites = { "tech_fe_defense_platforms_2" }
+	
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	
+	potential_construction = {
+		is_scope_type = starbase
+		OR = {
+			has_starbase_size >= starbase_citadel
+			has_starbase_size >= orbital_ring_tier_3
+		}
+	}
+}
+
+## FE Garrison Base
+
+# Original Empire Garrison
+fe_garrison_station = {
+	graphical_culture = { "original_empire_01" }
+	entity = starbase_outpost_entity
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.0
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 20
+		ships_upkeep_mult = -1
+	}
+	max_hitpoints = 100000
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_civilian
+
+	use_shipnames_from = military_station_small
+
+	class = shipclass_military_station
+	is_designable = no
+	icon = ship_size_military_station
+}

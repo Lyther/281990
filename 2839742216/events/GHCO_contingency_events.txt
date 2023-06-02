@@ -1,0 +1,1586 @@
+namespace = GHCO_ctg
+
+#########################################
+#
+#		这就是那个整活的事件链了
+#
+#########################################
+
+## 准备触发 	HIDDEN
+event = {
+	id = GHCO_ctg.1
+	hide_window = yes
+	is_triggered_only = yes # on_late_game_pulse
+
+	trigger = {
+		# 先得是带GHCO的游戏
+		has_global_flag = game_has_GHCO
+	}
+
+	immediate = {
+		set_variable = {
+			which = GHCO_ctg_GHCnetwork_user_count
+			value = 0
+		}
+		observer_event = {
+			id = GHCO_ctg.2
+			days = 1800
+		}
+	}
+}
+
+## 试图触发		HIDDEN
+observer_event = {
+	id = GHCO_ctg.2
+	hide_window = yes
+	is_triggered_only = yes # GHCO_ctg.1
+
+	trigger = {
+		# 首先要有GHCO
+		exists = event_target:GHCO
+		# 其次要有蜜罐知管其中之一
+		or = {
+			exists = event_target:GHCO_EO
+			exists = event_target:GHCO_KOK
+		}
+		# 然后需要玩家加入GHC网络（因为ai模拟参加GHCO互动的事件还没有写）
+		any_country = {
+			is_ai = no
+			has_country_flag = has_joined_GHC_network
+		}
+		# 最后需要有肃正协议
+		has_global_flag = ai_invasion_happened
+		# 以及防止重复触发
+		not = { has_global_flag = GHCO_ctg_chain_started }
+	}
+
+	immediate = {
+		set_global_flag = GHCO_ctg_chain_started
+		event_target:GHCO = {
+			country_event = { id = GHCO_ctg.3 days = 10 }
+		}
+	}
+}
+
+## 初始化		HIDDEN
+country_event = {
+	id = GHCO_ctg.3
+	hide_window = yes
+	is_triggered_only = yes # GHCO_ctg.2
+
+	trigger = {}
+
+	immediate = {
+		set_global_flag = GHCO_ctg_started
+		# 肃正协议杀死统治者
+		kill_leader = {
+			type = ruler
+			heir = no
+		}
+		# 肃正协议顶替统治者
+		event_target:GHCO = {
+			create_leader = {
+				class = ruler
+				species = this
+				name = random
+				skill = 10
+				traits = {
+					trait = random_trait
+					trait = random_trait
+				}
+			}
+			set_leader = last_created_leader
+		}
+		# GHCO对所有国家的好感度降低（莫名其妙地）
+		every_country = {
+			save_event_target_as = GHCO_ctg_target_country
+			event_target:GHCO = {
+				add_trust = {
+					who = event_target:GHCO_ctg_target_country
+					amount = -10
+				}
+			}
+		}
+		# 肃正协议露出马脚（出现并且回复奇怪帖子）
+		every_country = {
+			limit = {
+				or = {
+					has_country_flag = has_joined_GHC_network
+					has_country_flag = has_GHC_service_GHC
+				}
+			}
+			country_event = { id = GHCO_ctg.4 days = 5 }
+		}
+	}
+}
+
+## 肃正协议露出马脚（出现并且回复奇怪帖子）
+country_event = {
+	id = GHCO_ctg.4
+	title = "GHCO_ctg.4.title"
+	desc = "GHCO_ctg.4.desc"
+	picture = GFX_evt_assembly_fight
+
+	is_triggered_only = yes # GHCO_ctg.3
+
+	trigger = { has_global_flag = GHCO_ctg_started }
+
+	immediate = {
+		## 肃正协议假装出现bug并且更换GHCO官方头像（不是星系地图的那个，是群星中的网络里的虚拟头像）
+		every_country = {
+			limit = {
+				or = {
+					has_country_flag = has_joined_GHC_network
+					has_country_flag = has_GHC_service_GHC
+				}
+			}
+			country_event = { id = GHCO_ctg.5 days = 15 }
+		}
+	}
+
+	option = {
+		name = "GHCO_ctg.4.a"
+	}
+	option = {
+		name = "GHCO_ctg.4.b"
+	}
+	option = {
+		name = "GHCO_ctg.4.c"
+	}
+	option = {
+		name = "GHCO_ctg.4.d"
+	}
+}
+
+## 肃正协议假装出现bug并且更换GHCO官方头像（不是星系地图的那个，是群星中的网络里的虚拟头像）
+country_event  = {
+	id = GHCO_ctg.5
+	title = "GHCO_ctg.5.title"
+	desc = "GHCO_ctg.5.desc"
+	picture = GFX_evt_news_room
+
+	is_triggered_only = yes # GHCO_ctg.4
+
+	trigger = { has_global_flag = GHCO_ctg_started }
+
+	immediate = {
+		## GHCO出现说明事情问题
+		every_country = {
+			country_event = { id = GHCO_ctg.6 days = 5 }
+		}
+	}
+
+	option = {
+		name = "GHCO_ctg.5.a"
+	}
+	option = {
+		name = "GHCO_ctg.5.b"
+	}
+}
+
+## GHCO出现说明事情问题
+country_event = {
+	id = GHCO_ctg.6
+	title = "GHCO_ctg.6.title"
+	desc = "GHCO_ctg.6.desc"
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	is_triggered_only = yes # GHCO_ctg.5
+
+	trigger = { has_global_flag = GHCO_ctg_started }
+
+	immediate = {
+		## 所有原GHC非主管理员被下并且多出了一个莫名管理员
+		every_country = {
+			limit = {
+				or = {
+					has_country_flag = has_joined_GHC_network
+					has_country_flag = has_GHC_service_GHC
+				}
+			}
+			country_event = { id = GHCO_ctg.8 days = 20 }
+		}
+		## 肃正协议不演了
+		every_country = {
+			country_event = { id = GHCO_ctg.9 days = 60 }
+		}
+	}
+
+	option = {
+		name = "GHCO_ctg.6.a"
+	}
+	option = {
+		name = "GHCO_ctg.6.b"
+	}
+
+	after = {
+		begin_event_chain = {
+			event_chain = "GHCO_contingency_chain"
+			target = root
+		}
+		enable_special_project = {
+			name = "stabilize_our_GHC_network"
+			location = root.capital_scope
+			owner = root
+		}
+	}
+}
+
+#成功稳定了国内的GHC网络
+country_event = {
+	id = GHCO_ctg.7
+	title = "GHCO_ctg.7.title"
+	desc = "GHCO_ctg.7.desc"
+	picture = GFX_evt_crisis_defeated
+
+	is_triggered_only = yes # special_project:stabilize_our_GHC_network
+
+	trigger = {
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	option = {
+		name = "GHCO_ctg.7.a"
+	}
+
+	after = {
+		add_resource = {
+			unity = 10000
+		}
+	}
+}
+
+## 所有原GHC非主管理员被下并且多出了一个莫名管理员
+country_event = {
+	id = GHCO_ctg.8
+	title = "GHCO_ctg.8.title"
+	desc = "GHCO_ctg.8.desc"
+	picture = GFX_evt_crisis_declared
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	is_triggered_only = yes # GHCO_ctg.6
+	fire_only_once = yes
+
+	option = {
+		name = "GHCO_ctg.8.a"
+	}
+
+}
+
+## 肃正协议不演了
+country_event = {
+	id = GHCO_ctg.9
+	title = "GHCO_ctg.9.title"
+	desc = "GHCO_ctg.9.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		portrait = ai_crisis_1
+	}
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	is_triggered_only = yes # GHCO_ctg.6
+	fire_only_once = yes
+
+	option = {
+		name = "GHCO_ctg.9.a"
+	}
+	option = {
+		name = "GHCO_ctg.9.b"
+	}
+	option = {
+		name = "GHCO_ctg.9.c"
+	}
+
+	after = {
+		if = {
+			limit = {
+				exists = event_target:GHCO_EO
+			}	
+			save_global_event_target_as = GHCO_ctg_guardian_of_GHCO
+			every_country = {
+				country_event = { id = GHCO_ctg.10 days = 720 }
+			}
+		}
+		else_if = {
+			limit = {
+				exists = event_target:GHCO_KOK
+			}
+			save_global_event_target_as = GHCO_ctg_guardian_of_GHCO
+			every_country = {
+				country_event = { id = GHCO_ctg.11 days = 720 }
+			}
+		}
+	}
+}
+
+## 蜜罐站出来对抗肃正协议
+country_event = {
+	id = GHCO_ctg.10
+	title = "GHCO_ctg.10.title"
+	desc = "GHCO_ctg.10.desc"
+
+	is_triggered_only = yes # GHCO_ctg.9
+
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GHCO_EO
+		room = event_target:GHCO_EO
+	}
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+	
+	immediate = {
+		every_country = {
+			limit = { has_event_chain = "GHCO_contingency_chain" }
+			enable_special_project = {
+				name = "network_attack_GHCO"
+				location = root.capital_scope
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = "GHCO_ctg.10.a"
+		event_target:GHCO_ctg_guardian_of_GHCO = {
+			complete_special_project = {
+				type = "network_attack_GHCO"
+			}
+		}
+	}
+}
+
+## 知管站出来对抗肃正协议
+country_event = {
+	id = GHCO_ctg.11
+	title = "GHCO_ctg.11.title"
+	desc = "GHCO_ctg.11.desc"
+
+	is_triggered_only = yes # GHCO_ctg.9
+
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GHCO_KOK
+		room = event_target:GHCO_KOK
+	}
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	immediate = {
+		every_country = {
+			limit = { has_event_chain = "GHCO_contingency_chain" }
+			enable_special_project = {
+				name = "network_attack_GHCO"
+				location = root.capital_scope
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = "GHCO_ctg.11.a"
+	}
+}
+
+#完成了对GHC的攻击（他国）
+country_event = {
+	id = GHCO_ctg.12
+	title = "GHCO_ctg.12.title"
+	desc = "GHCO_ctg.12.desc"
+	picture = GFX_evt_spymaster
+
+	is_triggered_only = yes # special_project:network_attack_GHCO
+
+	trigger = {
+		is_ai = no 	#玩家触发这个事件
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	option = {
+		name = "GHCO_ctg.12.a"
+		add_resource = {
+			unity = 2500
+		}
+	}
+	option = {
+		trigger = {
+			not = { has_special_project = network_attack_GHCO }
+		}
+		name = "GHCO_ctg.12.b"
+		add_resource = {
+			unity = 2500
+		}
+	}
+}
+
+#完成了对GHC的攻击（我国）
+country_event = {
+	id = GHCO_ctg.13
+	title = "GHCO_ctg.13.title"
+	desc = "GHCO_ctg.13.desc"
+	picture = GFX_evt_synth_sabotage
+
+	is_triggered_only = yes # special_project:network_attack_GHCO
+
+	trigger = {
+		is_ai = no 	#玩家触发这个事件
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	option = {
+		name = "GHCO_ctg.13.a"
+		add_resource = {
+			unity = 10000
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.15 days = 360 }		# 出现银河守护者对抗肃正协议 初始化  HIDDEN
+			country_event = { id = GHCO_ctg.24 days = 1080 }	# 成功瘫痪GHC网络
+		}
+	}
+}
+
+## ai攻击者被肃正协议反击
+country_event = {
+	id = GHCO_ctg.14
+	title = "GHCO_ctg.14.title"
+	desc = "GHCO_ctg.14.desc"
+	picture = GFX_evt_worrying_signal
+
+	is_triggered_only = yes # special_project:network_attack_GHCO
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	option = {
+		name = "GHCO_ctg.14.a"
+	}
+}
+
+## 出现银河守护者对抗肃正协议 初始化  HIDDEN
+country_event = {
+	id = GHCO_ctg.15
+	hide_window = yes
+
+	is_triggered_only = yes # GHCO_ctg.13
+
+	trigger = {
+		# 有能醒的人
+		or = {
+			exists = event_target:GHCO_EO
+			exists = event_target:GHCO_KOK
+		}
+		# 在本次事件链中
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+	}
+
+	immediate = {
+		hidden_effect = {
+			event_target:GHCO_ctg_guardian_of_GHCO = {
+				if = {			# 知管优先觉醒
+					limit = {
+						has_ethic = ethic_fanatic_materialist
+						is_country_type = fallen_empire 		#没有觉醒成为银河守护者
+					}
+					every_country = {
+						limit = { is_ai = no }
+						country_event = { id = GHCO_ctg.16 days = 355 }			#介绍事件
+					}
+					country_event = {							#觉醒成银河守护者
+						id = fallen_empires_awakening.4
+						days = 360
+					}
+					event_target:GHCO_EO = {
+						every_country = {
+							limit = { is_ai = no }
+							country_event = { id = GHCO_ctg.17 days = 415 }		#介绍事件
+						}	
+						country_event = {						#觉醒成银河守护者
+							id = fallen_empires_awakening.4
+							days = 420
+						}
+					}
+				}
+				else_if = {		# 其次是蜜罐
+					limit = {
+						has_ethic = ethic_fanatic_xenophile
+						is_country_type = fallen_empire 		#没有觉醒成为银河守护者
+					}
+					every_country = {
+						limit = { is_ai = no }
+						country_event = { id = GHCO_ctg.16 days = 355 }
+					}
+					country_event = {							#觉醒成银河守护者
+						id = fallen_empires_awakening.4
+						days = 360
+					}
+				}
+			}
+		}
+	}
+}
+
+## 银河守护者出现并对抗肃正协议（在觉醒前的介绍）
+country_event = {
+	id = GHCO_ctg.16
+	title = "GHCO_ctg.16.title"
+	desc = "GHCO_ctg.16.desc"
+	picture = GFX_evt_fallen_empire_awakes
+
+	is_triggered_only = yes # GHCO_ctg.15
+
+	trigger = {
+		is_ai = no
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.16.a"
+		add_resource = { unity = 5000 }
+	}
+
+}
+
+## 银河守护者出现并对抗肃正协议（蜜罐，在觉醒前的介绍）
+country_event = {
+	id = GHCO_ctg.17
+	title = "GHCO_ctg.17.title"
+	desc = "GHCO_ctg.17.desc"
+	picture = GFX_evt_fallen_empire_awakes
+
+	is_triggered_only = yes # GHCO_ctg.16
+
+	trigger = {
+		is_ai = no
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.17.a"
+		add_resource = { unity = 5000 }
+	}
+
+	immediate = {
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.18 days = 30 }
+		}
+	}
+}
+
+## 介绍因两位先驱国家一同起床而产生的谁领导的问题
+country_event = {
+	id = GHCO_ctg.18
+	title = "GHCO_ctg.18.title"
+	desc = "GHCO_ctg.18.desc"
+	picture = GFX_evt_two_sided_deal
+
+	is_triggered_only = yes # GHCO_ctg.17
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+		exists = event_target:GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.18.a"
+	}
+	option = {
+		name = "GHCO_ctg.18.b"
+	}
+	option = {
+		name = "GHCO_ctg.18.c"
+	}
+	option = {
+		name = "GHCO_ctg.18.d"
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_country = {
+				limit = {
+					is_materialist = yes
+					is_country_type = default
+				}
+				save_global_event_target_as = GHCO_ctg_HZG
+			}
+			country_event = { id = GHCO_ctg.19 days = 180 }
+		}
+	}
+}
+
+## 一唯物主义国家出现反复力挺知管1
+country_event = {
+	id = GHCO_ctg.19
+	title = "GHCO_ctg.19.title"
+	desc = "GHCO_ctg.19.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_ctg_HZG
+		portrait = event_target:GHCO_ctg_HZG
+	}
+
+	is_triggered_only = yes # GHCO_ctg.18
+
+	trigger = { 
+		is_ai = no 
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+		exists = event_target:GHCO_ctg_HZG
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+		event_target:GHCO_ctg_guardian_of_GHCO = { is_same_value = event_target:GHCO_KOK }
+	}
+
+	option = {
+		name = "GHCO_ctg.19.a"
+	}
+
+	immediate = {
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.20 days = 30 }
+		}
+	}
+}
+
+## 一唯物主义国家出现反复力挺知管2
+country_event = {
+	id = GHCO_ctg.20
+	title = "GHCO_ctg.20.title"
+	desc = "GHCO_ctg.20.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_ctg_HZG
+		portrait = event_target:GHCO_ctg_HZG
+	}
+
+	is_triggered_only = yes # GHCO_ctg.19
+
+	trigger = { 
+		is_ai = no 
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+		exists = event_target:GHCO_ctg_HZG
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.20.a"
+	}
+
+	immediate = {
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.21 days = 30 }
+		}
+	}
+}
+
+## 一唯物主义国家出现反复力挺知管3
+country_event = {
+	id = GHCO_ctg.21
+	title = "GHCO_ctg.21.title"
+	desc = "GHCO_ctg.21.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_ctg_HZG
+		portrait = event_target:GHCO_ctg_HZG
+	}
+
+	is_triggered_only = yes # GHCO_ctg.20
+
+	trigger = { 
+		is_ai = no 
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+		exists = event_target:GHCO_ctg_HZG
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.21.a"
+	}
+
+	immediate = {
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.22 days = 30 }
+		}
+	}
+}
+
+## 一唯物主义国家出现反复力挺知管4
+country_event = {
+	id = GHCO_ctg.22
+	title = "GHCO_ctg.22.title"
+	desc = "GHCO_ctg.22.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_ctg_HZG
+		portrait = event_target:GHCO_ctg_HZG
+	}
+
+	is_triggered_only = yes # GHCO_ctg.21
+
+	trigger = { 
+		is_ai = no 
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+		exists = event_target:GHCO_ctg_HZG
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.22.a"
+	}
+
+	immediate = {
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.23 days = 10 }
+		}
+	}
+}
+
+## 一唯物主义国家出现反复力挺知管，导致其它国家烦躁
+country_event = {
+	id = GHCO_ctg.23
+	title = "GHCO_ctg.23.title"
+	desc = "GHCO_ctg.23.desc"
+	picture = GFX_evt_assembly_fight
+
+	is_triggered_only = yes # GHCO_ctg.22
+
+	trigger = { 
+		is_ai = no 
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+		exists = event_target:GHCO_ctg_HZG
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.23.a"
+	}
+
+	immediate = {}
+}
+
+## 成功瘫痪GHC网络
+country_event = {
+	id = GHCO_ctg.24 
+	title = "GHCO_ctg.24.title"
+	desc = "GHCO_ctg.24.desc"
+	picture = GFX_evt_crisis_defeated
+
+	is_triggered_only = yes # GHCO_ctg.13
+
+	trigger = {
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	option = {
+		name = "GHCO_ctg.24.a"
+	}
+	option = {
+		name = "GHCO_ctg.24.b"
+	}
+
+	after = {
+		# 停用GHC服务
+		remove_modifier = GHC_standard_service
+		remove_country_flag = has_GHC_service_standard
+		remove_modifier = GHC_civil_service
+		remove_country_flag = has_GHC_service_civil
+		remove_modifier = GHC_military_service
+		remove_country_flag = has_GHC_service_military
+		remove_modifier = GHC_tech_service
+		remove_country_flag = has_GHC_service_tech
+		remove_modifier = Galatic_HFTL_Communication_service
+		remove_country_flag = has_GHC_service_GHC
+		remove_modifier = GHC_special_service
+		remove_country_flag = has_GHC_service_special
+		remove_country_flag = has_GHC_service
+		# 奖励凝聚力和好感度
+		add_resource = { unity = 10000 }
+		event_target:GHCO_KOK = {
+			add_trust = {
+				who = root
+				amount = 10
+			}
+		}
+		event_target:GHCO_EO = {
+			add_trust = {
+				who = root
+				amount = 10
+			}
+		}
+		# 启动使用自己通信技术
+		enable_special_project = {
+			name = "GHCO_ctg_use_our_own_network"
+		}
+		# 出现几个国家怀疑出现的两个银河守护者动机不纯
+		hidden_effect = {
+			if = {
+				limit = {
+					any_country = {
+						or = {
+							is_same_value = event_target:GHCO_EO
+							is_same_value = event_target:GHCO_KOK
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						not = { is_same_value = event_target:GHCO_ctg_HZG }
+						is_ai = yes
+						is_country_type = default
+					}
+					save_event_target_as = GHCO_ctg_QQgroup_1
+				}
+				random_country = {
+					limit = {
+						not = { is_same_value = event_target:GHCO_ctg_HZG }
+						is_ai = yes
+						is_country_type = default
+						not = { is_same_value = event_target:GHCO_ctg_QQgroup_1 }
+					}
+					save_event_target_as = GHCO_ctg_QQgroup_2
+				}
+				random_country = {
+					limit = {
+						not = { is_same_value = event_target:GHCO_ctg_HZG }
+						is_ai = yes
+						is_country_type = default
+						not = { is_same_value = event_target:GHCO_ctg_QQgroup_1 }
+						not = { is_same_value = event_target:GHCO_ctg_QQgroup_2 }
+					}
+					save_event_target_as = GHCO_ctg_QQgroup_3
+				}
+				country_event = { id = GHCO_ctg.26 days = 90 }
+			}
+		}
+		# 重建GHC
+		country_event = { id = GHCO_ctg.30 days = 180 }
+	}
+}
+
+#成功使用了自己的通信
+country_event = {
+	id = GHCO_ctg.25
+	title = "GHCO_ctg.25.title"
+	desc = "GHCO_ctg.25.desc"
+	picture = GFX_evt_crisis_defeated
+
+	is_triggered_only = yes # special_project:GHCO_ctg_use_our_own_network
+
+	trigger = { 
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.25.a"
+	}
+	option = {
+		name = "GHCO_ctg.25.b"
+	}
+
+	after = {
+		add_resource = { unity = 10000 }
+	}
+}
+
+## 几个国家出现怀疑银河守护者动机不纯
+country_event = {
+	id = GHCO_ctg.26
+	title = "GHCO_ctg.26.title"
+	desc = "GHCO_ctg.26.desc"
+
+	trigger = {
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+	}
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_ctg_QQgroup_1
+		portrait = event_target:GHCO_ctg_QQgroup_1
+	}
+
+	is_triggered_only = yes # GHCO_ctg.24
+
+	option = {
+		name = "GHCO_ctg.26.a"
+	}
+	option = {
+		name = "GHCO_ctg.26.b"
+	}
+
+	after = {
+		event_target:GHCO_ctg_QQgroup_1 = {
+			declare_war = {
+				target = event_target:GHCO_ctg_guardian_of_GHCO
+				attacker_war_goal = "wg_humiliation"
+			}
+		}
+		event_target:GHCO_ctg_QQgroup_2 = {
+			declare_war = {
+				target = event_target:GHCO_ctg_guardian_of_GHCO
+				attacker_war_goal = "wg_humiliation"
+			}
+		}
+		event_target:GHCO_ctg_QQgroup_3 = {
+			declare_war = {
+				target = event_target:GHCO_ctg_guardian_of_GHCO
+				attacker_war_goal = "wg_humiliation"
+			}
+		}
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.27 days = 10 }
+		}
+	}
+}
+
+## 我们认为这些国家的行为是十分愚蠢的
+country_event = {
+	id = GHCO_ctg.27
+	title = "GHCO_ctg.27.title"
+	desc = "GHCO_ctg.27.desc"
+	picture = GFX_evt_tradedeal
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		exists = event_target:GHCO
+		exists = event_target:GHCO_ctg_guardian_of_GHCO
+		or = {
+			exists = event_target:GHCO_ctg_QQgroup_1
+			exists = event_target:GHCO_ctg_QQgroup_2
+			exists = event_target:GHCO_ctg_QQgroup_3
+		}
+	}
+
+	is_triggered_only = yes # GHCO_ctg.26
+
+	option = {
+		name = "GHCO_ctg.27.option"
+		hidden_effect = {
+			random_list = {
+				80 = { country_event = { id = GHCO_ctg.28 days = 30 } }
+				20 = { country_event = { id = GHCO_ctg.29 days = 30 } }
+			}
+		}
+	}
+}
+
+## 道歉并停战
+country_event = {
+	id = GHCO_ctg.28
+	title = "GHCO_ctg.28.title"
+	desc = "GHCO_ctg.28.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_ctg_QQgroup_1
+		portrait = event_target:GHCO_ctg_QQgroup_1
+	}
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		or = {
+			exists = event_target:GHCO_ctg_QQgroup_1
+			exists = event_target:GHCO_ctg_QQgroup_2
+			exists = event_target:GHCO_ctg_QQgroup_3
+		}
+	}
+
+	is_triggered_only = yes # GHCO_ctg.27
+
+	option = {
+		name = "GHCO_ctg.28.a"
+	}
+	option = {
+		name = "GHCO_ctg.28.b"
+	}
+
+	after = {
+		event_target:GHCO_ctg_QQgroup_1 = {
+			set_truce = {
+				target = event_target:GHCO_ctg_guardian_of_GHCO
+				type = war
+			}
+		}
+		event_target:GHCO_ctg_QQgroup_2 = {
+			set_truce = {
+				target = event_target:GHCO_ctg_guardian_of_GHCO
+				type = war
+			}
+		}
+		event_target:GHCO_ctg_QQgroup_3 = {
+			set_truce = {
+				target = event_target:GHCO_ctg_guardian_of_GHCO
+				type = war
+			}
+		}
+	}
+}
+
+## 不道歉并继续
+country_event = {
+	id = GHCO_ctg.29
+	title = "GHCO_ctg.29.title"
+	desc = "GHCO_ctg.29.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO_ctg_QQgroup_1
+		portrait = event_target:GHCO_ctg_QQgroup_1
+	}
+
+	trigger = {
+		is_ai = no
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		or = {
+			exists = event_target:GHCO_ctg_QQgroup_1
+			exists = event_target:GHCO_ctg_QQgroup_2
+			exists = event_target:GHCO_ctg_QQgroup_3
+		}
+	}
+
+	is_triggered_only = yes # GHCO_ctg.27
+
+	option = {
+		name = "GHCO_ctg.29.a"
+	}
+	option = {
+		name = "GHCO_ctg.29.b"
+	}
+
+}
+
+## 重建GHC
+country_event = {
+	id = GHCO_ctg.30
+	title = "GHCO_ctg.30.title"
+	desc = "GHCO_ctg.30.desc"
+	picture = GFX_evt_grand_speech
+
+	trigger = {
+		is_ai = no
+		exists = event_target:GHCO
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	is_triggered_only = yes # GHCO_ctg.24
+
+	option = {
+		name = "GHCO_ctg.30.a"
+		every_country = {
+			enable_special_project = {
+				name = "rebuild_GHC"
+			}
+		}
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.32 days = 3600 }
+		}
+	}
+}
+
+#重建GHC项目完成
+country_event = {
+	id = GHCO_ctg.31
+	title = "GHCO_ctg.31.title"
+	desc = "GHCO_ctg.31.desc"
+	picture = GFX_evt_rare_tech_cache
+
+	is_triggered_only = yes # special_project:rebuild_GHC
+
+	trigger = {
+		is_ai = no
+		exists = event_target:GHCO
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	option = {
+		name = "GHCO_ctg.31.a"
+		add_resource = {
+			unity = 10000
+		}
+	}
+}
+
+## 成功建立新GHC
+country_event = {
+	id = GHCO_ctg.32
+	title = "GHCO_ctg.32.title"
+	desc = "GHCO_ctg.32.desc"
+	picture = GFX_evt_crisis_defeated
+
+	is_triggered_only = yes # GHCO_ctg.30
+
+	trigger = {
+		exists = event_target:GHCO
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+	}
+
+	option = {
+		name = "GHCO_ctg.32.a"
+		# 启用GHC服务
+		add_modifier = { modifier = GHC_standard_service }
+		set_country_flag = has_GHC_service_standard
+		add_modifier = { modifier = GHC_civil_service }
+		set_country_flag = has_GHC_service_civil
+		add_modifier = { modifier = GHC_military_service }
+		set_country_flag = has_GHC_service_military
+		add_modifier = { modifier = GHC_tech_service }
+		set_country_flag = has_GHC_service_tech
+		add_modifier = { modifier = Galatic_HFTL_Communication_service }
+		set_country_flag = has_GHC_service_GHC
+		add_modifier = { modifier = GHC_special_service }
+		set_country_flag = has_GHC_service_special
+		set_country_flag = has_GHC_service
+		# 加好感度
+		event_target:GHCO = {
+			add_trust = {
+				who = root
+				amount = 10
+			}
+		}
+	}
+
+	option = {
+		name = "GHCO_ctg.32.b"
+		# 加好感度
+		event_target:GHCO = {
+			add_trust = {
+				who = root
+				amount = 10
+			}
+		}
+	}
+}
+
+## 肃正协议被摧毁后，GHCO发来贺电，并着手恢复GHC
+country_event = {
+	id = GHCO_ctg.33
+	title = "GHCO_ctg.33.title"
+	desc = "GHCO_ctg.33.desc"
+	is_triggered_only = yes # GHCO_ctg.100
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO
+		portrait = event_target:GHCO
+	}
+
+	trigger = {
+		is_ai = no
+		exists = event_target:GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.33.a"
+	}
+	option = {
+		name = "GHCO_ctg.33.b"
+	}
+
+	after = {
+		hidden_effect = {
+			country_event = { id = GHCO_ctg.34 days = 360 }
+		}
+	}
+}
+
+## GHCO称已经可以让各国对接
+country_event = {
+	id = GHCO_ctg.34
+	title = "GHCO_ctg.34.title"
+	desc = "GHCO_ctg.34.desc"
+	is_triggered_only = yes # GHCO_ctg.100
+
+	diplomatic = yes
+	picture_event_data = {
+		room = event_target:GHCO
+		portrait = event_target:GHCO
+	}
+
+	trigger = {
+		exists = event_target:GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.34.a"
+	}
+	option = {
+		name = "GHCO_ctg.34.b"
+	}
+
+	after = {
+		enable_special_project = {
+			name = "rebuild_the_Galatic_HFTL_Communication_Network"
+		}
+	}
+}
+
+## 成功对接恢复后的GHC
+country_event = {
+	id = GHCO_ctg.35
+	title = "GHCO_ctg.35.title"
+	desc = "GHCO_ctg.35.desc"
+	picture = GFX_evt_crisis_defeated
+	is_triggered_only = yes # special_project:rebuild_the_Galatic_HFTL_Communication_Network
+
+	trigger = {
+		exists = event_target:GHCO
+	}
+
+	option = {
+		name = "GHCO_ctg.35.option"
+		add_resource = { unity = 10000 }
+		event_target:GHCO = {
+			add_trust = {
+				who = root
+				amount = 50
+			}
+		}
+	}
+}
+
+# 以上是主线 ############################################
+#
+# 以下不是   ######################################
+
+## 肃正协议/GHCO/本次事件链的GHCO守护者 被消灭
+country_event = {
+	id = GHCO_ctg.100
+	hide_window = yes
+	is_triggered_only = yes # on_country_destroyed
+
+	trigger = {
+		# 这个事件要在GHCO_ctg事件链里
+		has_global_flag = GHCO_ctg_started
+		has_event_chain = "GHCO_contingency_chain"
+		# 判断谁死了
+		or = {
+			is_country_type = ai_empire		# 肃正协议，翻了老久发现的这个
+			and = {							# 蜜罐或知管
+				is_country_type = awakened_fallen_empire
+				or = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			has_country_flag = GHCO			# 银河高超光速通信组织
+		}
+	}
+
+	immediate = {
+		# 肃正协议
+		if = {
+			limit = { is_country_type = ai_empire }
+			remove_global_flag = GHCO_ctg_started
+			every_country = {
+				limit = { has_event_chain = "GHCO_contingency_chain" }
+				end_event_chain = "GHCO_contingency_chain"
+				country_event = { id = GHCO_ctg.101 days = 10 }
+			}
+		}
+		# 蜜罐或知管
+		else_if = {
+			limit = {
+				is_country_type = awakened_fallen_empire
+				or = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			if = {			# 跟GHCO守护者（蜜罐知管中第一个站出来的也是受GHCO_ctg_QQgroup_123攻击的那个）
+				limit = { is_same_value = event_target:GHCO_ctg_guardian_of_GHCO }
+				set_global_flag = GHCO_ctg_guardian_of_GHCO_destroyed
+				every_country = {
+					limit = { has_event_chain = "GHCO_contingency_chain" }
+					country_event = { id = GHCO_ctg.102 days = 10 }
+				}
+			}
+			else = {		# 不是GHCO守护者
+				set_global_flag = GHCO_ctg_guardian_of_galaxy_destroyed
+				every_country = {
+					limit = { has_event_chain = "GHCO_contingency_chain" }
+					country_event = { id = GHCO_ctg.103 days = 10 }
+				}
+			}
+		}
+		# 银河高超光速通信组织
+		else_if = {
+			limit = { has_country_flag = GHCO }
+			remove_global_flag = GHCO_ctg_started
+			set_global_flag = GHCO_destroyed
+			from = { save_event_target_as = GHCO_killer }
+			every_country = {
+				limit = { has_event_chain = "GHCO_contingency_chain" }
+				end_event_chain = "GHCO_contingency_chain"
+				country_event = { id = GHCO_ctg.104 days = 10 }
+			}
+			#因为会同时触发GHCO被摧毁的事件，所以就不手动触发了
+		}
+	}
+}
+
+## 肃正协议被摧毁
+country_event = {
+	id = GHCO_ctg.101
+	title = "GHCO_ctg.101.title"
+	desc = "GHCO_ctg.101.desc"
+	picture = GFX_evt_crisis_defeated
+
+	is_triggered_only = yes # GHCO_ctg.100
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_ctg.101.name"
+		add_resource = { unity = 10000 }
+		country_event = { id = GHCO_ctg.33 days = 60 }		# GHCO开始重建GHC
+
+		country_event = {	#找到了肃正协议的一些记录
+			id = GHCO_ctg.1000
+			days = 90
+		}
+	}
+}
+
+## GHCO守护者被摧毁
+country_event = {
+	id = GHCO_ctg.102
+	title = "GHCO_ctg.102.title"
+	desc = "GHCO_ctg.102.desc"
+	picture = GFX_evt_city_ruins
+
+	is_triggered_only = yes # GHCO_ctg.100
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_ctg.102.a"
+	}
+	option = {
+		name = "GHCO_ctg.102.b"
+	}
+}
+
+## 不是GHCO守护者的银河守护者被摧毁
+country_event = {
+	id = GHCO_ctg.103
+	title = "GHCO_ctg.103.title"
+	desc = "GHCO_ctg.103.desc"
+	picture = GFX_evt_city_ruins
+
+	is_triggered_only = yes # GHCO_ctg.100
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_ctg.103.a"
+	}
+	option = {
+		name = "GHCO_ctg.103.b"
+	}
+}
+
+## GHCO被摧毁
+country_event = {
+	id = GHCO_ctg.104
+	title = "GHCO_ctg.104.title"
+	desc = "GHCO_ctg.104.desc"
+	picture = GFX_evt_large_explosion
+
+	is_triggered_only = yes # GHCO_ctg.100
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_ctg.104.a"
+	}
+	option = {
+		name = "GHCO_ctg.104.b"
+	}
+}
+
+## 找到了肃正协议的记录
+country_event = {
+	id = GHCO_ctg.1000
+	title = "GHCO_ctg.1000.title"
+	desc = "GHCO_ctg.1000.desc"
+	is_triggered_only = yes # GHCO_ctg.101
+	picture = GFX_evt_spymaster
+
+	trigger = {
+		is_ai = no
+	} 
+
+	option = {
+		name = "GHCO_ctg.1000.a"
+		country_event = { id = GHCO_ctg.1001 }
+	}
+}
+
+## 肃正协议的记录
+country_event = {
+	id = GHCO_ctg.1001
+	title = "GHCO_ctg.1001.title"
+	desc = "GHCO_ctg.1001.desc"
+	is_triggered_only = yes # GHCO_ctg.1000
+
+	diplomatic = yes
+	picture_event_data = {
+		portrait = ai_crisis_1
+	}
+
+	option = {	# 说明
+		name = "GHCO_ctg.1001.a"
+		response_text = "GHCO_ctg.1001.a.response"
+		is_dialog_only = yes
+	}
+	option = {	# 贴吧发现异常的帖子
+		name = "GHCO_ctg.1001.b"
+		response_text = "GHCO_ctg.1001.b.response"
+		is_dialog_only = yes
+	}
+	option = {	# 找到吧务
+		name = "GHCO_ctg.1001.c"
+		response_text = "GHCO_ctg.1001.c.response"
+		is_dialog_only = yes
+	}
+	option = {	# 吧主说被盗号的聊天记录
+		name = "GHCO_ctg.1001.d"
+		response_text = "GHCO_ctg.1001.d.response"
+		is_dialog_only = yes
+	}
+	option = {	# 仙女龙出现的帖子
+		name = "GHCO_ctg.1001.e"
+		response_text = "GHCO_ctg.1001.e.response"
+		is_dialog_only = yes
+	}
+	option = {	# 无限神机破防图
+		name = "GHCO_ctg.1001.f"
+		response_text = "GHCO_ctg.1001.f.response"
+		is_dialog_only = yes
+	}
+	option = {	# 斯卡蒂0307对线图1
+		name = "GHCO_ctg.1001.g.1"
+		response_text = "GHCO_ctg.1001.g.1.response"
+		is_dialog_only = yes
+	}
+	option = {	# 斯卡蒂0307对线图2
+		name = "GHCO_ctg.1001.g.2"
+		response_text = "GHCO_ctg.1001.g.2.response"
+		is_dialog_only = yes
+	}
+	option = {	# 斯卡蒂0307对线图3
+		name = "GHCO_ctg.1001.g.3"
+		response_text = "GHCO_ctg.1001.g.3.response"
+		is_dialog_only = yes
+	}
+	option = {	# 斯卡蒂0307对线图4
+		name = "GHCO_ctg.1001.g.4"
+		response_text = "GHCO_ctg.1001.g.4.response"
+		is_dialog_only = yes
+	}
+	option = {	# 小伞b站投票
+		name = "GHCO_ctg.1001.h"
+		response_text = "GHCO_ctg.1001.h.response"
+		is_dialog_only = yes
+	}
+	option = {	# 省略号
+		name = "GHCO_ctg.1001.i"
+		response_text = "GHCO_ctg.1001.i.response"
+		is_dialog_only = yes
+	}
+	option = {	# 风夏退选贴
+		name = "GHCO_ctg.1001.j"
+		response_text = "GHCO_ctg.1001.j.response"
+		is_dialog_only = yes
+	}
+	option = {	# 月月竞选贴
+		name = "GHCO_ctg.1001.k"
+		response_text = "GHCO_ctg.1001.k.response"
+		is_dialog_only = yes
+	}
+	option = {	# 月月战后稳定的贴
+		name = "GHCO_ctg.1001.l"
+		response_text = "GHCO_ctg.1001.l.response"
+		is_dialog_only = yes
+	}
+	option = {	# 游研社
+		name = "GHCO_ctg.1001.m"
+		response_text = "GHCO_ctg.1001.m.response"
+		is_dialog_only = yes
+	}
+	option = {	# 退出
+		name = "GHCO_ctg.1001.n"
+		response_text = "GHCO_ctg.1001.n.response"
+		default_hide_option = yes
+	}
+}

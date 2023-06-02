@@ -1,0 +1,356 @@
+#眺望银河
+bd_watcher_system_in = {
+	class = sc_f
+	usage = origin
+	#usage = custom_empire
+	usage_odds = 0
+	flags = {
+		empire_home_system
+		bd_watcher_in
+	}
+	planet = {
+		class = star
+		orbit_distance = 0
+		orbit_angle = 0
+		size = 24
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			add_deposit = d_energy_6
+		}
+	}
+	change_orbit = 30
+	planet = {
+		has_ring = no
+		orbit_distance = {
+			min = 20
+			max = 30
+		}
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
+		size = {
+			min = 25
+			max = 20
+		}
+		class = random_non_colonizable
+		change_orbit = @base_moon_distance
+		moon = {
+			class = pc_barren_cold
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
+			size = 20
+			orbit_distance = 5
+			init_effect = {
+				clear_deposits = yes
+				prevent_anomaly = yes
+				add_deposit = d_minerals_7
+			}
+		}
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			add_deposit = d_energy_5
+		}
+	}
+	planet = {
+		flags = {
+			watcher_out_home
+		}
+		has_ring = no
+		orbit_distance = 30
+		orbit_angle = -45
+		size = 30
+		class = pc_gaia
+		home_planet = yes
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+		}
+	}
+	planet = {
+		class = pc_ocean
+		has_ring = no
+		orbit_distance = 30
+		orbit_angle = {
+			min = 90
+			max = 270
+		}
+		size = 30
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			bd_add_start_deposit_twelve = yes
+		}
+	}
+	init_effect = {
+		spawn_megastructure = {
+			type = bd_lgate_base
+			orbit_angle = 270
+			orbit_distance = 40
+			init_effect = {
+				activate_gateway = this
+			}
+		}
+		no_scope = {
+			set_spawn_system_batch = begin
+			spawn_system = {
+				max_distance = 120
+				min_distance = 210
+				initializer = "bd_centres_system"
+			}
+			add_extra_hyperlane_to_spawned_system_effect = yes
+			if = {
+				limit = {
+					last_created_system = {
+						has_hyperlane_to = prev
+					}
+				}
+				remove_hyperlane = {
+					from = this
+					to = last_created_system
+				}
+			}
+			set_spawn_system_batch = end
+		}
+	}
+}
+
+bd_watcher_system_out = {
+	class = sc_f
+	#usage = origin
+	flags = {
+		empire_home_system
+		bd_watcher_out
+	}
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 160
+	}
+	planet = {
+		class = star
+		orbit_distance = 0
+		orbit_angle = 0
+		size = 24
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+		}
+	}
+	change_orbit = 30
+	planet = {
+		orbit_distance = 10
+		orbit_angle = 54
+		size = 24
+		class = pc_barren_cold
+		has_ring = no
+		init_effect = {
+			prevent_anomaly = yes
+			clear_deposits = yes
+			trigger_megastructure_icon = yes
+			save_event_target_as = bd_watcher_megastructure
+		}
+		change_orbit = @base_moon_distance
+		moon = {
+			size = 20
+			count = 1
+			class = random_non_colonizable
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
+			orbit_distance = 5
+			init_effect = {
+				prevent_anomaly = yes
+				clear_deposits = yes
+				add_deposit = d_minerals_6
+			}
+		}
+	}
+	planet = {
+		orbit_distance = 25
+		orbit_angle = 261
+		size = 30
+		class = pc_gaia
+		home_planet = yes
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+		}
+	}
+	planet = {
+		orbit_distance = 25
+		orbit_angle = 45
+		size = 20
+		name = EnergyBank
+		class = pc_gas_giant
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			add_deposit = d_energy_10
+			#set_planet_flag = starting_mining_target
+		}
+		moon = {
+			size = 20
+			class = pc_shrouded
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
+			orbit_distance = 13
+			init_effect = {
+				clear_deposits = yes
+				prevent_anomaly = yes
+			}
+		}
+	}
+	planet = {
+		orbit_distance = 20
+		orbit_angle = 73
+		size = 20
+		class = pc_gas_giant
+		has_ring = no
+		moon = {
+			size = 20
+			class = pc_shrouded
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
+			orbit_distance = 13
+			init_effect = {
+				clear_deposits = yes
+				prevent_anomaly = yes
+				add_deposit = d_society_5
+			}
+		}
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			add_deposit = d_exotic_gases_2
+		}
+	}
+	planet = {
+		orbit_distance = 25
+		orbit_angle = 148
+		size = 20
+		class = pc_gas_giant
+		has_ring = no
+		moon = {
+			size = 20
+			class = pc_shrouded
+			orbit_angle = {
+				min = 90
+				max = 270
+			}
+			orbit_distance = 12
+			init_effect = {
+				clear_deposits = yes
+				prevent_anomaly = yes
+			}
+		}
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+		}
+	}
+	planet = {
+		orbit_distance = 25
+		orbit_angle = 229
+		size = 10
+		class = pc_asteroid
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			add_deposit = d_volatile_motes_2
+		}
+	}
+	planet = {
+		count = 4
+		orbit_distance = 0
+		orbit_angle = 72
+		size = 10
+		class = pc_asteroid
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+		}
+	}
+	planet = {
+		orbit_distance = 0
+		orbit_angle = 24
+		size = 10
+		class = pc_ice_asteroid
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			add_deposit = d_zro_deposit_2
+		}
+	}
+	planet = {
+		count = 5
+		orbit_distance = 0
+		orbit_angle = 72
+		size = 10
+		class = pc_ice_asteroid
+		has_ring = no
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+		}
+	}
+	planet = {
+		orbit_distance = 0
+		orbit_angle = 96
+		size = 10
+		class = pc_rare_crystal_asteroid
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+			add_deposit = d_rare_crystals_2
+		}
+	}
+	planet = {
+		count = 5
+		orbit_distance = 0
+		orbit_angle = 72
+		size = 10
+		class = pc_rare_crystal_asteroid
+		init_effect = {
+			clear_deposits = yes
+			prevent_anomaly = yes
+		}
+	}
+	init_effect = {
+		spawn_megastructure = {
+			type = "spy_orb_restored"
+			graphical_culture = humanoid_01
+			planet = event_target:bd_watcher_megastructure
+		}
+		spawn_megastructure = {
+			type = bd_lgate_base
+			orbit_angle = 270
+			orbit_distance = 40
+			init_effect = {
+				activate_gateway = this
+			}
+		}
+	}
+}

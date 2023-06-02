@@ -1,0 +1,2689 @@
+
+namespace = origin_colossus
+
+country_event = {
+	id = origin_colossus.0
+	title = origin_colossus.0.name
+	desc = {
+		text = origin_colossus.0.desc_1
+		trigger = {
+			NOT = {
+				has_completed_special_project_in_log = ORIGIN_COLOSSUS_PROJECT_MIDDLE
+			}
+		}
+	}
+	desc = {
+		text = origin_colossus.0.desc_2
+		trigger = {
+			has_completed_special_project_in_log = ORIGIN_COLOSSUS_PROJECT_MIDDLE
+		}
+	}
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		FromFrom = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+	}
+	
+	immediate = {
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_0
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_1
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_2
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_3
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_4
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_5
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_MIDDLE
+			location = event_target:origin_colossus_fleet
+		}
+	}
+	
+	option = {
+		name = origin_colossus.0.a
+		end_event_chain = ORIGIN_COLOSSUS_CHAIN
+	}
+}
+
+country_event = {
+	id = origin_colossus.1
+	title = origin_colossus.1.name
+	desc = origin_colossus.1.desc
+	picture = GFX_evt_alien_abduction
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_colossus
+	}
+
+	immediate = {
+		create_country = {
+			name = "NAME_origin_colossus"
+			type = origin_colossus
+			graphical_culture = root
+			species = root.species
+			flag={
+				icon={
+					category="pointy"
+					file="flag_pointy_7.dds"
+				}
+				background={
+					category="backgrounds"
+					file="flag_BG_36.dds"
+				}
+				colors={
+					"red"
+					"grey"
+					"null"
+					"null"
+				}
+			}
+			auto_delete = no
+			effect = {
+				save_global_event_target_as = origin_colossus_country
+			}
+		}
+		create_fleet = {
+			name = "NAME_origin_colossus"
+			settings = {
+				spawn_debris = no
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = event_target:origin_colossus_country
+				create_ship = {
+					name = "NAME_origin_colossus"
+					design = "NAME_origin_colossus"
+					prefix = no
+					upgradable = no
+				}
+				set_location = root.capital_scope
+				save_global_event_target_as = origin_colossus_fleet
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.1.a
+		begin_event_chain = {
+			event_chain = ORIGIN_COLOSSUS_CHAIN
+			target = root
+		}
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_1
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.2
+	title = origin_colossus.2.name
+	desc = origin_colossus.2.desc
+	picture = GFX_evt_ancient_databank
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		exists = event_target:origin_colossus_fleet
+	}
+	
+	immediate = {
+		event_target:origin_colossus_country = {
+			establish_contact = { who = root location = root.capital_scope }
+			establish_communications_no_message = root.owner
+		}
+	}
+	
+	option = {
+		name = origin_colossus.2.a
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_2
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.3
+	title = origin_colossus.3.name
+	desc = origin_colossus.3.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		exists = event_target:origin_colossus_fleet
+	}
+	
+	immediate = {
+		event_target:origin_colossus_country = {
+			set_faction_hostility = {
+				target = root
+				set_hostile = no
+				set_neutral = no
+				set_friendly = yes
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.3.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 5000
+			}
+		}
+		add_resource = { energy = -5000 }
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_3
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+	
+	option = {
+		name = origin_colossus.3.b
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_0
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.4
+	title = origin_colossus.4.name
+	desc = origin_colossus.4.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		exists = event_target:origin_colossus_fleet
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.3.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 5000
+			}
+		}
+		add_resource = { energy = -5000 }
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_3
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+	
+	option = {
+		name = origin_colossus.3.b
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_0
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.5
+	title = origin_colossus.5.name
+	desc = origin_colossus.5.desc
+	picture = GFX_evt_planet_beam
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		exists = event_target:origin_colossus_fleet
+	}
+	
+	immediate = {
+		event_target:origin_colossus_fleet = {
+			set_owner = root
+		}
+	}
+	
+	option = {
+		name = origin_colossus.5.a
+	}
+	
+	option = {
+		name = origin_colossus.5.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.10
+	title = origin_colossus.10.name
+	desc = origin_colossus.10.desc
+	picture = GFX_evt_conclave
+	show_sound = event_alien_signal
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		any_owned_fleet = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+		has_country_flag = worm_events_available
+		NOT = { has_country_flag = origin_colossus_10_triggered }
+	}
+	
+	immediate = {
+		set_country_flag = origin_colossus_10_triggered
+		event_target:origin_colossus_fleet = {
+			set_event_locked = yes
+		}
+	}
+	
+	after = {
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_4
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+	
+	option = {
+		name = origin_colossus.10.a
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.10.b
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.10.c
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.10.d
+	}
+}
+
+country_event = {
+	id = origin_colossus.11
+	title = origin_colossus.11.name
+	desc = origin_colossus.11.desc
+	picture = GFX_evt_clones
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		any_owned_fleet = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+	}
+	
+	immediate = {
+		set_variable = {
+			which = origin_colossus_count
+			value = 0
+		}
+		event_target:origin_colossus_fleet = {
+			set_event_locked = no
+		}
+		country_event = { id = origin_colossus.20 days = 360 random = 720 }
+	}
+	
+	option = {
+		name = origin_colossus.11.a
+	}
+}
+
+country_event = {
+	id = origin_colossus.12
+	title = origin_colossus.12.name
+	desc = origin_colossus.12.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		any_owned_fleet = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+		has_country_flag = worm_tomb_ending
+		NOT = { has_country_flag = origin_colossus_12_triggered }
+		check_variable = {
+			which = origin_colossus_count
+			value > 5
+		}
+	}
+	
+	immediate = {
+		set_country_flag = origin_colossus_12_triggered
+	}
+	
+	option = {
+		name = origin_colossus.12.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 10000
+			}
+			has_country_resource = {
+				type = minerals
+				amount >= 10000
+			}
+			has_country_resource = {
+				type = alloys
+				amount >= 5000
+			}
+			has_country_resource = {
+				type = sr_dark_matter
+				amount >= 500
+			}
+		}
+		add_resource = { energy = -10000 }
+		add_resource = { minerals = -10000 }
+		add_resource = { alloys = -5000 }
+		add_resource = { sr_dark_matter = -500 }
+		event_target:origin_colossus_fleet = {
+			set_event_locked = yes
+		}
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_MIDDLE
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+	
+	option = {
+		name = origin_colossus.12.b
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_5
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.13
+	title = origin_colossus.13.name
+	desc = origin_colossus.13.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		any_owned_fleet = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.12.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 10000
+			}
+			has_country_resource = {
+				type = minerals
+				amount >= 10000
+			}
+			has_country_resource = {
+				type = alloys
+				amount >= 5000
+			}
+			has_country_resource = {
+				type = sr_dark_matter
+				amount >= 500
+			}
+		}
+		add_resource = { energy = -10000 }
+		add_resource = { minerals = -10000 }
+		add_resource = { alloys = -5000 }
+		add_resource = { sr_dark_matter = -500 }
+		event_target:origin_colossus_fleet = {
+			set_event_locked = yes
+		}
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_MIDDLE
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+	
+	option = {
+		name = origin_colossus.12.b
+		enable_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_5
+			location = event_target:origin_colossus_fleet
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.14
+	title = origin_colossus.14.name
+	desc = origin_colossus.14.desc
+	picture = GFX_evt_planet_beam
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		any_owned_fleet = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+	}
+	
+	immediate = {
+		create_fleet = {
+			name = "NAME_origin_colossus_middle"
+			settings = {
+				spawn_debris = no
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = root
+				create_ship = {
+					name = "NAME_origin_colossus_middle"
+					design = "NAME_origin_colossus_middle"
+					prefix = no
+					upgradable = no
+				}
+				set_location = event_target:origin_colossus_fleet
+				add_modifier = {
+					modifier = origin_colossus_modifier_0
+					days = -1
+				}
+			}
+		}
+		event_target:origin_colossus_fleet = {
+			delete_fleet = this
+		}
+		last_created_fleet = {
+			save_global_event_target_as = origin_colossus_fleet
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_21_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_1
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_22_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_2
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_23_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_3
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_24_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_4
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_25_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_5
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_26_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_6
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_27_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_7
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_28_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_8
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_29_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_9
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_30_finished
+						NOT = { has_country_flag = origin_colossus_true }
+						NOT = { has_country_flag = origin_colossus_normal }
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_10
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.14.a
+	}
+}
+
+country_event = {
+	id = origin_colossus.20
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = origin_colossus_12_triggered }
+	}
+	
+	immediate = {
+		country_event = { id = origin_colossus.20 days = 360 random = 720 }
+		if = {
+			limit = {
+				any_owned_fleet = {
+					is_same_value = event_target:origin_colossus_fleet
+				}
+			}
+			random_list = {
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_21_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_jump_drive_1 }
+					}
+					country_event = { id = origin_colossus.21 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_22_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_sensors_3 }
+					}
+					country_event = { id = origin_colossus.22 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_23_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_thrusters_4 }
+					}
+					country_event = { id = origin_colossus.23 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_24_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_zero_point_power }
+					}
+					country_event = { id = origin_colossus.24 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_25_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_horror_beam }
+					}
+					country_event = { id = origin_colossus.25 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_26_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_lasers_5 }
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_mass_drivers_5 }
+					}
+					country_event = { id = origin_colossus.26 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_27_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_horror_shield }
+					}
+					country_event = { id = origin_colossus.27 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_28_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_horror_armor }
+					}
+					country_event = { id = origin_colossus.28 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_29_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_shield_rechargers_1 }
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_regenerative_hull_tissue }
+					}
+					country_event = { id = origin_colossus.29 }
+				}
+				100 = {
+					modifier = {
+						factor = 0
+						has_country_flag = origin_colossus_30_finished
+					}
+					modifier = {
+						factor = 0
+						NOT = { has_technology = tech_combat_computers_3 }
+					}
+					country_event = { id = origin_colossus.30 }
+				}
+				1 = {
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.21
+	title = origin_colossus.21.name
+	desc = origin_colossus.21.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.21.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_21_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_1
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.21.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.22
+	title = origin_colossus.22.name
+	desc = origin_colossus.22.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.22.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_22_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_2
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.22.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.23
+	title = origin_colossus.23.name
+	desc = origin_colossus.23.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.23.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_23_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_3
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.23.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.24
+	title = origin_colossus.24.name
+	desc = origin_colossus.24.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.24.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_24_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_4
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.24.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.25
+	title = origin_colossus.25.name
+	desc = origin_colossus.25.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.25.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_25_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_5
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.25.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.26
+	title = origin_colossus.26.name
+	desc = origin_colossus.26.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.26.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_26_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_6
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.26.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.27
+	title = origin_colossus.27.name
+	desc = origin_colossus.27.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.27.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_27_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_7
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.27.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.28
+	title = origin_colossus.28.name
+	desc = origin_colossus.28.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.28.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_28_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_8
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.28.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.29
+	title = origin_colossus.29.name
+	desc = origin_colossus.29.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.29.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_29_finished
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_9
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.29.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.30
+	title = origin_colossus.30.name
+	desc = origin_colossus.30.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_construction
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.30.a
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 2000
+			}
+		}
+		add_resource = { energy = -2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_30_finished
+			country_event = { id = origin_colossus.31 }
+		}
+	}
+	
+	option = {
+		name = origin_colossus.30.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.31
+	title = origin_colossus.31.name
+	desc = origin_colossus.31.desc
+	picture = GFX_evt_analyzing_artifacts
+	show_sound = event_activating_unknown_technology
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_colossus.31.a
+		custom_tooltip = "origin_colossus.31.no"
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_10
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.31.b
+		custom_tooltip = "origin_colossus.31.no"
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_10
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.31.c
+		custom_tooltip = "origin_colossus.31.no"
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_count
+				value = 1
+			}
+			event_target:origin_colossus_fleet = {
+				add_modifier = {
+					modifier = origin_colossus_modifier_10
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.31.d
+		custom_tooltip = "origin_colossus.31.yes"
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+			}
+		}
+		allow = {
+			has_country_resource = {
+				type = energy
+				amount >= 3000
+			}
+		}
+		add_resource = { energy = -3000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_true
+		}
+	}
+	
+	option = {
+		name = origin_colossus.31.e
+		custom_tooltip = "origin_colossus.31.yes"
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+		}
+		allow = {
+			has_country_resource = {
+				type = unity
+				amount >= 2500
+			}
+		}
+		add_resource = { unity = -2500 }
+		add_resource = { energy = 2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_true
+		}
+	}
+	
+	option = {
+		name = origin_colossus.31.f
+		custom_tooltip = "origin_colossus.31.yes"
+		add_resource = { energy = 2000 }
+		hidden_effect = {
+			set_country_flag = origin_colossus_normal
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.40
+	title = origin_colossus.40.name
+	desc = {
+		text = origin_colossus.40.desc_1
+		trigger = {
+			NOT = {
+				has_country_flag = origin_colossus_30_finished
+			}
+		}
+	}
+	desc = {
+		text = origin_colossus.40.desc_2
+		trigger = {
+			has_country_flag = origin_colossus_30_finished
+			NOR = {
+				has_country_flag = origin_colossus_true
+				has_country_flag = origin_colossus_normal
+			}
+		}
+	}
+	desc = {
+		text = origin_colossus.40.desc_3
+		trigger = {
+			has_country_flag = origin_colossus_30_finished
+			OR = {
+				has_country_flag = origin_colossus_true
+				has_country_flag = origin_colossus_normal
+			}
+		}
+	}
+	picture = GFX_evt_deficit
+	show_sound = event_yellow_alert
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		any_owned_fleet = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+		end_game_years_passed >= 0
+		NOT = { has_country_flag = origin_colossus_40_triggered }
+	}
+	
+	immediate = {
+		set_global_flag = origin_colossus_start
+		set_country_flag = origin_colossus_40_triggered
+		capital_scope.star = {
+			save_global_event_target_as = origin_colossus_fleet_target
+		}
+		event_target:origin_colossus_country = {
+			set_faction_hostility = {
+				target = root
+				set_hostile = no
+				set_neutral = yes
+				set_friendly = no
+			}
+		}
+		create_fleet = {
+			name = "NAME_origin_colossus_middle"
+			settings = {
+				spawn_debris = no
+				can_upgrade = no
+				can_change_composition = no
+				uses_naval_capacity = no
+			}
+			effect = {
+				set_owner = event_target:origin_colossus_country
+				create_ship = {
+					name = "NAME_origin_colossus_middle"
+					design = "NAME_origin_colossus_other"
+					prefix = no
+					upgradable = no
+				}
+				set_location = event_target:origin_colossus_fleet
+				add_modifier = {
+					modifier = origin_colossus_modifier_0
+					days = -1
+				}
+				set_fleet_stance = aggressive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 250
+				auto_move_to_planet = {
+					target = event_target:origin_colossus_fleet_target
+					clear_auto_move_on_arrival = yes
+				}
+			}
+		}
+		event_target:origin_colossus_fleet = {
+			delete_fleet = this
+		}
+		last_created_fleet = {
+			save_global_event_target_as = origin_colossus_fleet
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_21_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_1
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_22_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_2
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_23_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_3
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_24_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_4
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_25_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_5
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_26_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_6
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_27_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_7
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_28_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_8
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_29_finished
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_9
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					owner = {
+						has_country_flag = origin_colossus_30_finished
+						NOT = { has_country_flag = origin_colossus_true }
+						NOT = { has_country_flag = origin_colossus_normal }
+					}
+				}
+				add_modifier = {
+					modifier = origin_colossus_modifier_10
+					days = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.40.a
+		hidden_effect = {
+			event_target:origin_colossus_country = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = yes
+					set_neutral = no
+					set_friendly = no
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.40.b
+	}
+}
+
+country_event = {
+	id = origin_colossus.41
+	title = origin_colossus.41.name
+	desc = {
+		text = origin_colossus.41.desc_1
+		trigger = {
+			NOT = { has_country_flag = origin_colossus_43_triggered }
+		}
+	}
+	desc = {
+		text = origin_colossus.41.desc_2
+		trigger = {
+			has_country_flag = origin_colossus_43_triggered
+		}
+	}
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+
+	trigger = {
+		has_event_chain = ORIGIN_COLOSSUS_CHAIN
+		has_country_flag = origin_colossus_40_triggered
+		FromFromFrom = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		end_event_chain = ORIGIN_COLOSSUS_CHAIN
+	}
+	
+	option = {
+		name = origin_colossus.41.a
+		trigger = {
+			NOT = { has_country_flag = origin_colossus_43_triggered }
+		}
+	}
+	
+	option = {
+		name = origin_colossus.41.b
+		trigger = {
+			has_country_flag = origin_colossus_43_triggered
+		}
+		add_modifier = {
+			modifier = origin_colossus_modifier_end_1
+			days = -1
+		}
+	}
+	
+	option = {
+		name = origin_colossus.41.c
+		trigger = {
+			has_country_flag = origin_colossus_43_triggered
+		}
+		add_modifier = {
+			modifier = origin_colossus_modifier_end_2
+			days = -1
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.42
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_same_value = event_target:origin_colossus_country
+		From = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+		has_global_flag = origin_colossus_start
+		NOT = { has_global_flag = origin_colossus_arrival }
+	}
+	
+	immediate = {
+		set_global_flag = origin_colossus_arrival
+		random_playable_country = {
+			limit = {
+				has_event_chain = ORIGIN_COLOSSUS_CHAIN
+			}
+			country_event = { id = origin_colossus.43 }
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.43
+	title = "TRANSMISSION"
+	desc = origin_colossus.43.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = root.species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_country_flag = origin_colossus_43_triggered
+		event_target:origin_colossus_country = {
+			set_faction_hostility = {
+				target = root
+				set_hostile = no
+				set_neutral = yes
+				set_friendly = no
+			}
+		}
+	}
+
+	option = {
+		name = origin_colossus.43.a
+		response_text = origin_colossus.43.a.response
+		is_dialog_only = yes
+	}
+	
+	option = {
+		name = origin_colossus.43.b
+		response_text = origin_colossus.43.b.response
+		is_dialog_only = yes
+	}
+	
+	option = {
+		name = origin_colossus.43.c
+		response_text = origin_colossus.43.c.response
+		is_dialog_only = yes
+	}
+	
+	option = {
+		name = origin_colossus.43.d
+		response_text = origin_colossus.43.d.response
+		is_dialog_only = yes
+	}
+	
+	option = {
+		name = origin_colossus.43.e
+		response_text = origin_colossus.43.e.response
+		default_hide_option = yes
+		trigger = {
+			OR = {
+				NOR = {
+					has_country_flag = origin_colossus_true
+					has_country_flag = origin_colossus_normal
+				}
+				has_valid_civic = civic_fanatic_purifiers
+				has_ascension_perk = ap_become_the_crisis
+				has_country_flag = time_crisis_country
+			}
+		}
+		hidden_effect = {
+			event_target:origin_colossus_country = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = yes
+					set_neutral = no
+					set_friendly = no
+				}
+			}
+			play_sound = event_red_alert
+			country_event = { id = origin_colossus.44 days = 90 }
+		}
+	}
+	
+	option = {
+		name = origin_colossus.43.f
+		default_hide_option = yes
+		trigger = {
+			OR = {
+				has_country_flag = origin_colossus_true
+				has_country_flag = origin_colossus_normal
+			}
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_ascension_perk = ap_become_the_crisis
+				has_country_flag = time_crisis_country
+			}
+		}
+		hidden_effect = {
+			country_event = { id = origin_colossus.50 }
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.44
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:origin_colossus_fleet
+	}
+	
+	immediate = {
+		event_target:origin_colossus_fleet = {
+			fleet_event = { id = origin_colossus.45 }
+		}
+	}
+}
+
+fleet_event = {
+	id = origin_colossus.45
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:origin_colossus_fleet_target = {
+			planet_event = { id = crisis.4550 }
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.50
+	title = "TRANSMISSION"
+	desc = origin_colossus.50.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = root.species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_variable = {
+			which = origin_colossus_threat
+			value = 0
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			country_event = { id = origin_colossus.51 }
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.50.a
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#信任
+	option = {
+		name = origin_colossus.50.b
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.50.c
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#信任
+	option = {
+		name = origin_colossus.50.d
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+			}
+		}
+	}
+	
+	#信任
+	option = {
+		name = origin_colossus.50.e
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.50.f
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.50.g
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_egalitarian
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.50.h
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.50.i
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.51
+	title = "TRANSMISSION"
+	desc = origin_colossus.51.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = root.species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			country_event = { id = origin_colossus.52 }
+		}
+	}
+	
+	#信任
+	option = {
+		name = origin_colossus.51.a
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.51.b
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#信任
+	option = {
+		name = origin_colossus.51.c
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+		}
+	}
+	
+	#信任
+	option = {
+		name = origin_colossus.51.d
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.51.e
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.51.f
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.51.g
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_egalitarian
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.51.h
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+	
+	#不信任
+	option = {
+		name = origin_colossus.51.i
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = origin_colossus_threat
+				value = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.52
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				check_variable = {
+					which = origin_colossus_threat
+					value > 1
+				}
+			}
+			country_event = { id = origin_colossus.53 }
+		}
+		else = {
+			country_event = { id = origin_colossus.54 }
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.53
+	title = "TRANSMISSION"
+	desc = origin_colossus.53.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = root.species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:origin_colossus_country = {
+			set_faction_hostility = {
+				target = root
+				set_hostile = yes
+				set_neutral = no
+				set_friendly = no
+			}
+		}
+		play_sound = event_red_alert
+		country_event = { id = origin_colossus.44 days = 90 }
+	}
+	
+	option = {
+		name = origin_colossus.53.a
+	}
+}
+
+country_event = {
+	id = origin_colossus.54
+	title = "TRANSMISSION"
+	desc = {
+		text = origin_colossus.54.desc_1
+		trigger = {
+			has_country_flag = origin_colossus_true
+		}
+	}
+	desc = {
+		text = origin_colossus.54.desc_2
+		trigger = {
+			has_country_flag = origin_colossus_normal
+		}
+	}
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = root.species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = origin_colossus_true
+			}
+			create_fleet = {
+				name = "NAME_origin_colossus_end"
+				settings = {
+					spawn_debris = no
+					can_upgrade = no
+					can_change_composition = no
+					uses_naval_capacity = no
+				}
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "NAME_origin_colossus_end"
+						design = "NAME_origin_colossus_end"
+						prefix = no
+						upgradable = no
+					}
+					set_location = event_target:origin_colossus_fleet
+					add_modifier = {
+						modifier = origin_colossus_modifier_0
+						days = -1
+					}
+				}
+			}
+			event_target:origin_colossus_fleet = {
+				delete_fleet = this
+			}
+			last_created_fleet = {
+				save_global_event_target_as = origin_colossus_fleet
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_21_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_1
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_22_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_2
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_23_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_3
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_24_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_4
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_25_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_5
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_26_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_6
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_27_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_7
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_28_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_8
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_29_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_9
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_30_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_10
+						days = -1
+					}
+				}
+			}
+		}
+		else = {
+			create_fleet = {
+				name = "NAME_origin_colossus_middle"
+				settings = {
+					spawn_debris = no
+					can_upgrade = no
+					can_change_composition = no
+					uses_naval_capacity = no
+				}
+				effect = {
+					set_owner = root
+					create_ship = {
+						name = "NAME_origin_colossus_middle"
+						design = "NAME_origin_colossus_middle"
+						prefix = no
+						upgradable = no
+					}
+					set_location = event_target:origin_colossus_fleet
+					add_modifier = {
+						modifier = origin_colossus_modifier_0
+						days = -1
+					}
+				}
+			}
+			event_target:origin_colossus_fleet = {
+				delete_fleet = this
+			}
+			last_created_fleet = {
+				save_global_event_target_as = origin_colossus_fleet
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_21_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_1
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_22_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_2
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_23_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_3
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_24_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_4
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_25_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_5
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_26_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_6
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_27_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_7
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_28_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_8
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						owner = {
+							has_country_flag = origin_colossus_29_finished
+						}
+					}
+					add_modifier = {
+						modifier = origin_colossus_modifier_9
+						days = -1
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_colossus.54.a
+		trigger = {
+			has_country_flag = origin_colossus_true
+		}
+		add_modifier = {
+			modifier = origin_colossus_modifier_end_3
+			days = -1
+		}
+		end_event_chain = ORIGIN_COLOSSUS_CHAIN
+	}
+	
+	option = {
+		name = origin_colossus.54.b
+		trigger = {
+			has_country_flag = origin_colossus_normal
+		}
+		add_modifier = {
+			modifier = origin_colossus_modifier_end_3
+			days = -1
+		}
+		end_event_chain = ORIGIN_COLOSSUS_CHAIN
+	}
+}
+
+country_event = {
+	id = origin_colossus.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_same_value = event_target:origin_colossus_country
+		FromFrom = {
+			is_same_value = event_target:origin_colossus_fleet
+		}
+		any_playable_country = {
+			has_event_chain = ORIGIN_COLOSSUS_CHAIN
+			NOT = {
+				has_completed_special_project_in_log = ORIGIN_COLOSSUS_PROJECT_3
+			}
+		}
+	}
+	
+	immediate = {
+		random_playable_country = {
+			limit = {
+				has_event_chain = ORIGIN_COLOSSUS_CHAIN
+				NOT = {
+					has_completed_special_project_in_log = ORIGIN_COLOSSUS_PROJECT_3
+				}
+			}
+			country_event = { id = origin_colossus.101 }
+		}
+	}
+}
+
+country_event = {
+	id = origin_colossus.101
+	title = origin_colossus.0.name
+	desc = origin_colossus.0.desc_1
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_0
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_1
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_2
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_3
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_4
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_5
+			location = event_target:origin_colossus_fleet
+		}
+		abort_special_project = {
+			name = ORIGIN_COLOSSUS_PROJECT_MIDDLE
+			location = event_target:origin_colossus_fleet
+		}
+	}
+	
+	option = {
+		name = origin_colossus.0.a
+		end_event_chain = ORIGIN_COLOSSUS_CHAIN
+	}
+}

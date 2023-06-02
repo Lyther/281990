@@ -1,0 +1,100 @@
+entity = {
+	name = "tc_ancient_lock_entity"
+	pdxmesh = "tc_ancient_lock_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 1 next_state = "idle" }
+	state = { name = "op" animation = "op" animation_speed = 0.5 looping = no }
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+}
+
+entity = {
+	name = "tc_ancient_lock_open_entity"
+	pdxmesh = "tc_ancient_lock_open_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 1 next_state = "idle" }
+	state = { name = "op" animation = "op" animation_speed = 0.5 looping = no }
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+}
+
+entity = {
+	name = "tc_ancient_lock_frame_entity"
+	pdxmesh = "tc_ancient_lock_frame_mesh"
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+}
+
+
+entity = {
+	name = "tc_ancient_portal_effect_entity"
+	pdxmesh = "tc_ancient_portal_effect_mesh"
+
+	game_data = {
+		uv_animation_direction = { 0.5 0.0 }
+		uv_animation_speed = 0.01
+		bloom_factor = 0.5
+	}
+}
+
+#组合体
+entity = {
+	name = "tc_ancient_room_entity"
+	pdxmesh = "tc_ancient_lock_frame_mesh"
+	scale = 10.0
+
+	default_state = "idle"
+	state = { name = "idle" looping = no }
+
+	attach = { "root" = "tc_ancient_portal_effect_entity" }
+	attach = { "lock_1" = "tc_ancient_lock_entity" }
+	attach = { "lock_2" = "tc_ancient_lock_entity" }
+	attach = { "lock_3" = "tc_ancient_lock_entity" }
+	attach = { "lock_4" = "tc_ancient_lock_entity" }
+	attach = { "lock_5" = "tc_ancient_lock_entity" }
+	attach = { "lock_6" = "tc_ancient_lock_entity" }
+}
+
+entity = {
+	name = "tc_ancient_room_open_entity"
+	pdxmesh = "tc_ancient_lock_frame_mesh"
+	scale = 10.0
+
+	default_state = "op"
+	state = { name = "op" animation_speed = 0.5 looping = no }
+	#state = { name = "idle" animation_speed = 0 next_state = "idle" }
+
+	attach = { "root" = "tc_ancient_portal_effect_entity" }
+	attach = { "lock_1" = "tc_ancient_lock_open_entity" }
+	attach = { "lock_2" = "tc_ancient_lock_open_entity" }
+	attach = { "lock_3" = "tc_ancient_lock_open_entity" }
+	attach = { "lock_4" = "tc_ancient_lock_open_entity" }
+	attach = { "lock_5" = "tc_ancient_lock_open_entity" }
+	attach = { "lock_6" = "tc_ancient_lock_open_entity" }
+}
+
+entity = {
+	name = "tc_ancient_room_opened_entity"
+	#pdxmesh = "tc_ancient_lock_frame_mesh"
+	scale = 10.0
+	locator = { name = "frame" position = { 0 -50 0 } }
+
+	default_state = "idle"
+	state = { name = "idle" looping = no }
+	attach = { "frame" = "tc_ancient_lock_frame_entity" }
+}
+
+animation = {
+	name = tc_ancient_lock_idle
+	file = tc_ancient_lock_idle.anim
+}
+
+animation = {
+	name = tc_ancient_lock_op
+	file = tc_ancient_lock_op.anim
+}

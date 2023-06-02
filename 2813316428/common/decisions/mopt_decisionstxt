@@ -1,0 +1,36 @@
+mopt_decision_fertilize_planet = {
+	icon = decision_fertilize_planet
+	enactment_time = 540
+	resources = {
+		category = decisions
+		cost = {
+			energy = 5000
+			influence = 20
+		}
+	}
+	potential = {
+		exists = space_owner
+		exists = from
+		space_owner = { is_same_value = from }
+		from = { is_ai = no }
+		NOT = { has_modifier = terraforming_candidate }
+		OR = {
+			is_planet_class = pc_barren
+			is_planet_class = pc_barren_cold
+		}
+	}
+	allow = {
+		hidden_trigger = { from = { is_ai = no } }
+		from = { has_ascension_perk = ap_world_shaper }
+	}
+	effect = {
+		add_modifier = { modifier = terraforming_candidate days = -1 }
+		hidden_effect = {
+			from = { country_event = { id = mopt_evt.1000 } }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}

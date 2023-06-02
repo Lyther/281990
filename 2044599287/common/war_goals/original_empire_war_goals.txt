@@ -1,0 +1,72 @@
+wg_original_empire_domination = {
+	casus_belli = cb_original_empire_subjugation
+	set_defender_wargoal = wg_end_threat
+	hide_if_no_cb = no
+	total_war = no
+	
+	galactic_empire_joins_defender = {
+		from = { is_galactic_emperor = yes }
+		imperial_authority >= 100
+	}
+	
+	allowed_peace_offers = {
+		status_quo
+		surrender
+		demand_surrender
+	}
+	
+	cede_claims = occupied_only
+	
+	potential = {
+		is_country_type = awakened_original_empire
+
+		from = {
+			has_country_flag = defied_original_empire
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_machine_terminator	
+				has_valid_civic = civic_machine_assimilator
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+	}
+	possible = {
+		always = yes
+	}
+	on_accept = {
+		if = {
+			limit = {
+				NOT = { from = { has_origin = origin_original_people } }
+			}
+			from = {
+				set_subject_of = {
+					who = root
+					preset = preset_original_empire_subject
+				}
+				if = {
+					limit = { has_country_flag = defied_original_empire }
+					remove_country_flag = defied_original_empire
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = { has_origin = origin_original_people }
+			}
+			from = {
+				set_subject_of = {
+					who = root
+					preset = preset_original_empire_special_subject
+				}
+				if = {
+					limit = { has_country_flag = defied_original_empire }
+					remove_country_flag = defied_original_empire
+				}
+			}
+		}		
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}

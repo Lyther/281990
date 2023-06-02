@@ -1,0 +1,317 @@
+namespace = tc_test
+
+#星系生成
+country_event = {
+	id = tc_test.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		#NOT = {
+		#	has_global_flag = thaumcraft_system_discovered
+		#}
+	}
+
+	immediate = {
+		set_spawn_system_batch = begin
+		no_scope = {
+			spawn_system = {
+				min_distance >= 10
+				max_distance <= 10
+				min_orientation_angle = 10
+				max_orientation_angle = 20
+				max_jumps = 51
+				min_jumps = 49
+				initializer = "tc_minecraft_sol_system_initializer"
+				hyperlane = no
+			}
+		}
+		set_spawn_system_batch = end
+	}
+}
+
+country_event = {
+	id = tc_test.2
+	title = "test_event_title"
+	desc = "test_event_desc"
+	picture = "GFX_tc_ui_infusion_matrix"
+	hide_window = no
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_country_flag = community_mod_rules_trigger
+		set_country_flag = community_can_orbital_bombard_true
+		set_country_flag = community_can_orbital_bombard_false
+		set_country_flag = community_can_orbital_bombard_owned_false
+		set_country_flag = community_can_orbital_bombard_owned_true
+	}
+
+	option = {
+		name = ok
+	}
+}
+
+country_event = {
+	id = tc_test.3
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		change_country_flag = { icon = { category = tc_event file = tc_crimson_flag.dds } background={ category="backgrounds" file="circle.dds" } colors={ "red" "red" "null" "null" } }
+	}
+}
+
+country_event = {
+	id = tc_test.4
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		create_leader = {
+			class = scientist
+			species = owner_main_species
+			name = "NAME_TEST"
+
+			traits = {
+				
+			}
+			effect = {
+				set_age = 30
+				set_is_female = no 
+				set_leader_flag = TEST_FLAG
+				set_name = ""
+				set_skill = 1
+			}
+		}
+		export_resource_stockpile_to_variable = {
+			resource = alloys
+			variable = x
+		}
+	}
+}
+
+planet_event = {
+	id = tc_test.5
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		
+	}
+
+	immediate = {
+		solar_system = { set_star_class = sc_neutron_star }
+		create_ambient_object = {
+			type = "tc_test_object"
+			location = star
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			entity_offset = 0
+			use_3d_location = yes
+			entity_face_object = star
+		}
+	}
+}
+
+country_event = {
+	id = tc_test.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+}
+
+planet_event = {
+	id = tc_test.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_planet_entity = { entity = tc_magic_forest_planet_02_entity }
+	}
+}
+
+country_event = {
+	id = tc_test.12
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:tc_ancient_room_target = {
+			create_ambient_object = {
+				type = tc_ancient_room_lock_on
+				effect = {
+					save_global_event_target_as = tc_ancient_room_on_target
+				}
+			}
+			destroy_ambient_object = this
+		}
+		clear_global_event_target = tc_ancient_room_target
+	}
+}
+
+country_event = {
+	id = tc_test.13
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:tc_ancient_room_on_target = {
+			create_ambient_object = {
+				type = tc_ancient_room_lock_frame
+				effect = {
+					save_global_event_target_as = tc_ancient_room_frame_target
+				}
+			}
+			destroy_ambient_object = this
+		}
+		clear_global_event_target = tc_ancient_room_on_target
+	}
+}
+
+fleet_event = {
+	id = tc_test.14
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	immediate = {
+		#
+			#add_modifier = { modifier = tc_cloak_test }
+			set_cloaking_active = yes
+			owner = { create_ship_design = { design = TC_MCV_TEST_DESIGN } add_ship_design = last_created_design }
+			starbase = { set_starbase_module = { slot = 1 module = tc_t_weapon_shadowbeam_module } }
+			starbase = { set_starbase_module = { slot = 1 module = detection_array } }
+	}
+}
+
+planet_event = {
+	id = tc_test.15
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_planet_shield_gold_object"
+			location = this
+			entity_scale_to_size = yes
+			scale = 0.125
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			entity_offset = 0
+			use_3d_location = yes
+		}
+	}
+}
+planet_event = {
+	id = tc_test.16
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_planet_shield_red_object"
+			location = this
+			entity_scale_to_size = yes
+			scale = 0.125
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			entity_offset = 0
+			use_3d_location = yes
+		}
+	}
+}
+planet_event = {
+	id = tc_test.17
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_ambient_object = {
+			type = "tc_planet_shield_void_object"
+			location = this
+			entity_scale_to_size = yes
+			scale = 0.125
+			entity_offset_angle = 0
+			entity_offset_height = 0
+			entity_offset = 0
+			use_3d_location = yes
+		}
+	}
+}
+
+country_event = {
+	id = tc_test.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		create_ship_design = { design = TC_MCV_TEST_DESIGN } 
+		add_ship_design = last_created_design
+	}
+}
+fleet_event = {
+	id = tc_test.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		starbase = { set_starbase_module = { slot = 1 module = tc_t_weapon_shadowbeam_module } }
+		fleet_event = {
+			id = tc_test.22
+			days = 10
+		}
+	}
+}
+fleet_event = {
+	id = tc_test.22
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		starbase = { set_starbase_module = { slot = 1 module = detection_array } }
+		fleet_event = {
+			id = tc_test.21
+			days = 10
+		}
+	}
+}
+
+country_event = {
+	id = tc_test.100
+	title = "TEST_TITLE"
+	desc = "TEST_DESC"
+	is_triggered_only = yes
+	picture = "GFX_tc_ui_infusion_matrix"
+
+	immediate = {
+	}
+	option = {
+		name = TEST_OPTION
+	}
+}
+
+planet_event = {
+	id = tc_test.50
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		planet_size < 50
+	}
+
+	immediate = {
+		change_planet_size = 1
+	}
+}

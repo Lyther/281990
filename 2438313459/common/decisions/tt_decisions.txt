@@ -1,0 +1,632 @@
+#循循善诱
+TT_decision_guide_gently = {
+	owned_planets_only = yes
+	icon = decision_alien_propaganda
+	enactment_time = 120
+	resources = {
+		category = decisions
+		cost = {
+			energy = 500
+			unity = 1000
+		}
+	}
+	potential = {
+		has_modifier = planet_culture_shock
+		owner = { has_active_tradition = tr_tt_loyal_1 }
+	}
+	effect = { remove_modifier = planet_culture_shock }
+	ai_weight = {
+		weight = 1000
+	}
+}
+
+
+#自然保护区
+TT_decision_natural_reserve = {
+	owned_planets_only = yes
+	icon = decision_tt_natural_reserve
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			energy = 500
+			minerals = 500
+			unity = 250
+		}
+	}
+	allow = {
+		free_district_slots > 0	#必须拥有空闲区划
+	}
+	potential = {
+		is_artificial = no	#不能是人造星球
+		owner = { has_tradition = tr_tt_environment_protection_5 }
+		NOT = { has_deposit = d_tt_natural_reserve }
+	}
+	effect = { add_deposit = d_tt_natural_reserve }
+	ai_weight = {
+		weight = 50
+	}
+}
+#移除自然保护区
+TT_decision_remove_natural_reserve = {
+	owned_planets_only = yes
+	icon = decision_tt_natural_reserve_cancelled
+	enactment_time = 30
+	resources = {
+		category = decisions
+		cost = {
+			unity = 100
+		}
+	}
+	potential = { has_deposit = d_tt_natural_reserve }
+	effect = { remove_deposit = d_tt_natural_reserve }
+	ai_weight = { weight = 0 }
+}
+#闪耀星辰
+TT_decision_shining_stars = {
+	sound = event_administrative_work
+	icon = decision_tt_shining_stars
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		exists = space_owner
+		exists = from
+		space_owner = { is_same_value = from }
+		from = { has_tradition = tr_tt_chasingstars_5 }
+		NOT = { has_deposit = d_tt_shining_star }
+		is_star = yes
+	}
+	allow = {
+		is_star = yes
+		custom_tooltip = {
+			fail_text = "decision_tt_requires_no_shipclass_research_station"
+			NOT = { has_deposit_for = shipclass_research_station }
+		}
+	}
+	effect = { add_deposit = d_tt_shining_star }
+	ai_weight = { weight = 100 }
+}
+
+################################### 凝心聚力 #####################################
+
+#非格式塔帝国
+decision_tt_revival_cohesion = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_unity_symbol
+	resources = {
+		category = decisions
+		cost = { unity = 1000 }
+	}
+	potential = {
+		owner = { is_gestalt = no }
+		NOT = { has_modifier = focus_on_what_the_people_want }
+		owner = { has_active_tradition = tr_tt_revival_finish }
+	}
+	effect = { add_modifier = { modifier = "focus_on_what_the_people_want" days = -1 } }
+	ai_weight = {
+		weight = 100
+	}
+}
+decision_cancel_tt_revival_cohesion = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_unity_symbol
+	resources = {
+		category = decisions
+		cost = { unity = 100 }
+	}
+	potential = {
+		owner = { is_gestalt = no }
+		has_modifier = focus_on_what_the_people_want
+		owner = { has_active_tradition = tr_tt_revival_finish }
+	}
+	effect = { remove_modifier  = focus_on_what_the_people_want }
+	ai_weight = { factor = 0 }
+}
+
+
+#机械帝国
+decision_tt_revival_cohesion_machine = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_unity_symbol
+	resources = {
+		category = decisions
+		cost = { unity = 1000 }
+	}
+	potential = {
+		owner = { is_machine_empire = yes }
+		NOT = { has_modifier = focus_on_humanistic_concern }
+		owner = { has_tradition = tr_tt_revival_finish }
+	}
+	effect = { add_modifier = { modifier = "focus_on_humanistic_concern" days = -1 } }
+	ai_weight = { weight = 100 }
+}
+decision_cancel_tt_revival_cohesion_machine = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_unity_symbol_cancelled
+	resources = {
+		category = decisions
+		cost = { unity = 100 }
+	}
+	potential = {
+		owner = { is_machine_empire = yes }
+		has_modifier = focus_on_humanistic_concern
+		owner = { has_active_tradition = tr_tt_revival_finish }
+	}
+	effect = { remove_modifier = "focus_on_humanistic_concern" }
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#蜂巢帝国
+decision_tt_revival_cohesion_hive = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_unity_symbol
+	resources = {
+		category = decisions
+		cost = { unity = 1000 }
+	}
+	potential = {
+		owner = { is_hive_empire = yes }
+		NOT = { has_modifier = focus_on_humanistic_concern }
+		owner = { has_tradition = tr_tt_revival_finish }
+	}
+	effect = { add_modifier = { modifier = "focus_on_humanistic_concern" days = -1 } }
+	ai_weight = { weight = 100 }
+}
+decision_cancel_tt_revival_cohesion_hive = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_unity_symbol_cancelled
+	resources = {
+		category = decisions
+		cost = { unity = 100 }
+	}
+	potential = {
+		owner = { is_hive_empire = yes }
+		has_modifier = focus_on_humanistic_concern
+		owner = { has_tradition = tr_tt_revival_finish }
+	}
+	effect = { remove_modifier =  "focus_on_humanistic_concern" }
+	ai_weight = { weight = 0 }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+TT_decision_transfer_ether_trophy = {#以太龙
+	owned_planets_only = yes
+	icon = decision_ether_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = ether_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = ether_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = ether_trophy }
+				remove_modifier = ether_trophy
+			}
+		}
+		add_modifier =  { modifier = ether_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_all_seeing_shard = {#裂爪龙 全知碎片
+	owned_planets_only = yes
+	icon = decision_shard_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = all_seeing_shard }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = all_seeing_shard }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = all_seeing_shard }
+				remove_modifier = all_seeing_shard
+			}
+		}
+		add_modifier =  { modifier = all_seeing_shard days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_shard_trophy = {#裂爪龙
+	owned_planets_only = yes
+	icon = decision_shard_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = shard_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = shard_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = shard_trophy }
+				remove_modifier = shard_trophy
+			}
+		}
+		add_modifier =  { modifier = shard_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_dread_trophy = {#无畏战舰
+	owned_planets_only = yes
+	icon = decision_dread_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = dread_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = dread_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = dread_trophy }
+				remove_modifier = dread_trophy
+			}
+		}
+		add_modifier =  { modifier = dread_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_tiyanki_trophy = {#缇扬奇
+	owned_planets_only = yes
+	icon = decision_tiyanki_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = tiyanki_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = tiyanki_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = tiyanki_trophy }
+				remove_modifier = tiyanki_trophy
+			}
+		}
+		add_modifier =  { modifier = tiyanki_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_burnt_tiyanki_trophy = {#缇扬奇 焚烧
+	owned_planets_only = yes
+	icon = decision_tiyanki_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = burnt_tiyanki_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = burnt_tiyanki_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = burnt_tiyanki_trophy }
+				remove_modifier = burnt_tiyanki_trophy
+			}
+		}
+		add_modifier =  { modifier = burnt_tiyanki_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_sky_dragon_trophy = {#天龙
+	owned_planets_only = yes
+	icon = decision_sky_dragon_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = sky_dragon_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = sky_dragon_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = sky_dragon_trophy }
+				remove_modifier = sky_dragon_trophy
+			}
+		}
+		add_modifier =  { modifier = sky_dragon_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_scavenger_trophy = {#拾荒者
+	owned_planets_only = yes
+	icon = decision_scavenger_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = scavenger_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = scavenger_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = scavenger_trophy }
+				remove_modifier = scavenger_trophy
+			}
+		}
+		add_modifier =  { modifier = scavenger_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_wraith_trophy = {#幽魂
+	owned_planets_only = yes
+	icon = decision_wraith_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = wraith_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = wraith_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = wraith_trophy }
+				remove_modifier = wraith_trophy
+			}
+		}
+		add_modifier =  { modifier = wraith_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_infused_atmosphere = {#幽魂大气
+	owned_planets_only = yes
+	icon = decision_wraith_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = infused_atmosphere }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = infused_atmosphere }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = infused_atmosphere }
+				remove_modifier = infused_atmosphere
+			}
+		}
+		add_modifier =  { modifier = infused_atmosphere days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_fortress_trophy = {#神秘堡垒
+	owned_planets_only = yes
+	icon = decision_fortress_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = fortress_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = fortress_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = fortress_trophy }
+				remove_modifier = fortress_trophy
+			}
+		}
+		add_modifier =  { modifier = fortress_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_voidspawn_trophy = {#虚空滋孽
+	owned_planets_only = yes
+	icon = decision_voidspawn_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = voidspawn_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = voidspawn_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = voidspawn_trophy }
+				remove_modifier = voidspawn_trophy
+			}
+		}
+		add_modifier =  { modifier = voidspawn_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_stellar_devourer_trophy = {#噬星者
+	owned_planets_only = yes
+	icon = decision_stellar_devourer_trophy
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { unity = 500 }
+	}
+	potential = {
+		NOT = { has_modifier = stellar_devourer_trophy }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = stellar_devourer_trophy }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = stellar_devourer_trophy }
+				remove_modifier = stellar_devourer_trophy
+			}
+		}
+		add_modifier =  { modifier = stellar_devourer_trophy days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}
+TT_decision_transfer_horror_trophy = {#负相物质
+	owned_planets_only = yes
+	icon = decision_horror_trophy
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = { unity = 1000 }
+	}
+	potential = {
+		NOT = { has_modifier = horror_stabilized }
+		owner = {
+			is_ai = no
+			OR = {
+				has_tradition = tr_tt_change_adopt
+				has_tradition = tr_tt_update_adopt
+			}
+			any_owned_planet = { has_modifier = horror_stabilized }
+		}
+	}
+	effect = {
+		owner = {
+			random_owned_planet = {
+				limit = { has_modifier = horror_stabilized }
+				remove_modifier = horror_stabilized
+			}
+		}
+		add_modifier =  { modifier = horror_stabilized days = -1 }
+	}
+	ai_weight = { factor = 0 }
+}

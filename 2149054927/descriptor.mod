@@ -1,0 +1,9 @@
+version="3.2"
+tags={
+	"Buildings"
+	"Balance"
+}
+name="influence+"
+picture="thumbnail.png"
+supported_version="3.3.3"
+remote_file_id="2149054927"

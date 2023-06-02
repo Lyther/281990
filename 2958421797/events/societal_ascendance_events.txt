@@ -1,0 +1,70 @@
+####################################
+## ZoFE Societal Ascendance Events
+####################################
+
+namespace = societal_ascendance
+
+# Civilian Teleportation (Hidden)
+country_event = {
+	id = societal_ascendance.1
+	hide_window = yes
+	location = from
+
+	trigger = {
+		any_owned_planet = {
+			has_building = building_civilian_teleportation
+		}
+		any_owned_pop = {
+			is_unemployed = yes
+		}
+	}
+	
+	 mean_time_to_happen = {
+		days = 60
+	}
+
+	immediate = {
+		random_owned_pop = {
+			limit = {
+				is_unemployed = yes
+				owner = {
+					any_owned_planet = {
+						free_housing >= 1
+						free_jobs >= 1
+						is_under_colonization = no
+						is_controlled_by = owner
+						has_orbital_bombardment = no
+						has_building = building_civilian_teleportation
+					}
+				}
+			}
+			save_event_target_as = civilian_teleportation_target_pop
+
+			owner = {
+				random_owned_planet = {
+					limit = {
+						habitability = { who = event_target:civilian_teleportation_target_pop value >= 0.5 }
+						free_housing >= 1
+						free_jobs >= 1
+						is_under_colonization = no
+						is_controlled_by = owner
+						has_orbital_bombardment = no
+						has_building = building_civilian_teleportation
+					}
+					save_event_target_as = civilian_teleportation_target_planet
+
+					if = {
+						limit = {
+							exists = event_target:civilian_teleportation_target_pop
+							exists = event_target:civilian_teleportation_target_planet
+						}
+						resettle_pop = {
+							pop = event_target:civilian_teleportation_target_pop
+							planet = event_target:civilian_teleportation_target_planet
+						}
+					}
+				}
+			}
+		}
+	}
+}

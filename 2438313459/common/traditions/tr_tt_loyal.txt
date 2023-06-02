@@ -1,0 +1,209 @@
+tr_tt_loyal_adopt = {
+	unlocks_agenda = TT_agenda_tradition_loyal
+	modifier = {
+		pop_government_ethic_attraction = 0.25
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_adopt_gestalt
+		inherit_effects = no
+		inherit_icon = yes
+		inherit_name = no
+		trigger = {
+			OR = {
+				is_gestalt = yes
+				has_authority = auth_warshipgirls
+				has_authority = auth_wg_fe
+				has_authority = auth_shenhai
+				has_authority = auth_sh_fe
+			}
+		}
+		modifier = {
+			country_traditions_influence_produces_add = 0.5
+		}
+		weight = { factor = 1 }
+	}
+}
+
+tr_tt_loyal_finish = {
+	custom_tooltip_with_modifiers = tr_tt_loyal_finish_desc
+	modifier = {
+		ascension_perks_add = 1
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_finish_ai
+		inherit_effects = no
+		inherit_icon = yes
+		inherit_name = yes
+		trigger = {
+			is_ai = yes
+		}
+		modifier = {
+			planet_stability_add = 10
+			ascension_perks_add = 1
+		}
+		weight = { factor = 1 }
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_finish_gestalt
+		inherit_effects = no
+		inherit_icon = yes
+		inherit_name = no
+		trigger = {
+			is_gestalt = yes
+			is_ai = no
+		}
+		custom_tooltip_with_modifiers = tr_tt_loyal_finish_gestalt_desc
+		modifier = {
+			ascension_perks_add = 1
+		}
+		weight = { factor = 1 }
+	}
+}
+tr_tt_loyal_1 = {
+	modifier = {
+		subject_integration_influence_cost_mult = -0.25
+		country_subject_trust_cap_add = 50
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_1_homicidal
+		inherit_effects = no
+		inherit_icon = no
+		inherit_name = no
+		trigger = {
+			is_homicidal = yes
+		}
+		modifier = {
+			country_unity_produces_mult = 0.1
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	ai_weight = { factor = 5000 }
+}
+tr_tt_loyal_2 = {
+	possible = {
+		AND = {
+			has_tradition = tr_tt_loyal_1
+			has_tradition = tr_tt_loyal_5
+		}
+	}
+	custom_tooltip = tr_tt_loyal_2_desc
+	on_enabled = {#去除新近征服修正
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_modifier = pop_recently_conquered }
+				remove_modifier = pop_recently_conquered
+			}
+		}
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_2_gestalt
+		inherit_effects = no
+		inherit_icon = yes
+		inherit_name = no
+		trigger = {
+			is_gestalt = yes
+			NOT = { has_policy_flag = no_wars }
+			NOT = { is_homicidal = yes }
+		}
+		custom_tooltip = tr_tt_loyal_2_desc
+		on_enabled = {#去除新近征服修正
+			hidden_effect = {
+				every_owned_pop = {
+					limit = { has_modifier = pop_recently_conquered }
+					remove_modifier = pop_recently_conquered
+				}
+			}
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_2_homicidal
+		inherit_effects = no
+		inherit_icon = no
+		inherit_name = no
+		trigger = {
+			is_homicidal = yes
+		}
+		modifier = {
+			pop_purge_speed = 0.5
+			planet_stability_add = 5
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_2_pacifist
+		inherit_effects = no
+		inherit_icon = no
+		inherit_name = no
+		trigger = {
+			OR = {
+				has_policy_flag = liberation_wars
+				has_policy_flag = no_wars
+			}
+		}
+		modifier = {
+			empire_size_pops_mult = -0.1
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	ai_weight = { factor = 2500 }
+}
+tr_tt_loyal_3 = {
+	modifier = {
+		intel_encryption_add = 2
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_3_machine
+		inherit_effects = yes
+		inherit_icon = yes
+		inherit_name = no
+		trigger = {
+			is_machine_empire = yes
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	tradition_swap = {
+		name = tr_tt_loyal_3_hive
+		inherit_effects = yes
+		inherit_icon = yes
+		inherit_name = no
+		trigger = {
+			is_hive_empire = yes
+		}
+		weight = {
+			factor = 1
+		}
+	}
+	ai_weight = { factor = 5000 }
+}
+tr_tt_loyal_4 = {
+	possible = {
+		has_tradition = tr_tt_loyal_3
+	}
+	modifier = {
+		operations_cost_mult = -0.50
+		operations_upkeep_mult = -0.50
+		spy_network_daily_value_mult = 0.1
+	}
+	#ai_weight = { factor = 1000 }
+}
+tr_tt_loyal_5 = {
+	possible = {
+		has_tradition = tr_tt_loyal_3
+	}
+	modifier = {
+		starbase_shipyard_build_cost_mult = -0.05
+		armies_cost_mult = -0.1
+	}
+	#ai_weight = { factor = 5000 }
+}

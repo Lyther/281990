@@ -1,0 +1,285 @@
+#神秘
+entity = {
+	name = "tc_thaumic_colossus_section_entity"
+	pdxmesh = "tc_thaumic_colossus_mesh"
+
+	scale = 3
+	#引擎效果
+	attach = { "tc_engine_1" = "tc_thaumic_colossus_engine_effect_entity" }
+	attach = { "tc_engine_2" = "tc_thaumic_colossus_engine_effect_entity" }
+	attach = { "tc_engine_3" = "tc_thaumic_colossus_engine_effect_entity" }
+	attach = { "tc_engine_4" = "tc_thaumic_colossus_engine_effect_entity" }
+	attach = { "tc_engine_5" = "tc_thaumic_colossus_engine_effect_entity" }
+	attach = { "tc_engine_6" = "tc_thaumic_colossus_engine_effect_entity" }
+
+	default_state = "idle"
+	#默认状态
+	state = { 
+		name = "idle" animation = "idle" looping = no next_state = "idle" animation_speed = 1 
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 100
+				"working_looping" = 0
+			}
+		}
+	}
+	#开火结束进入空闲状态
+	state = {
+		name = "idle" animation = "ed" looping = no next_state = "idle" animation_speed = 2
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 0
+				"working_looping" = 100
+			}
+		}
+ 	}
+	#移动状态
+	state = {
+		name = "moving" animation = "idle" looping = yes next_state = "moving" animation_speed = 1
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 100
+				"working_looping" = 0
+			}
+		}
+	}
+	#取消开火转入移动
+	state = {
+		name = "moving" animation = "ed" looping = no next_state = "moving" animation_speed = 2
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 0
+				"working_looping" = 100
+			}
+		}
+	}
+	#开火过程
+	state = {
+		name = "working_looping" animation = "working" animation_speed = 0.5 
+		event = { time = 0	id = "beam_start" }
+		event = { time = 0 particle = "tc_arcane_ring_gold_s_particle" node = "rune_ring_1" keep_particle = yes trigger_once = yes }
+		event = { time = 0 particle = "tc_arcane_ring_gold_m_particle" node = "rune_ring_2" keep_particle = yes trigger_once = yes }
+	}
+	#准备过程
+	state = {
+		name = "working" animation = "op" looping = no next_state = "working_looping" animation_speed = 2
+		event = { time = 1000 id = "beam_start" }
+	}
+	#常规状态死亡
+	state = { 
+		name = "death" animation = "idle" looping = no animation_speed = 1
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 0
+				"working_looping" = 0
+			}
+		}
+	}
+	#开火过程死亡
+	state = {
+		name = "death" animation = "working" looping = no animation_speed = 0.25 animation_blend_time = 2
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 100
+				"working_looping" = 100
+			}
+		}
+	}
+
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+}
+#血腥
+entity = {
+	name = "tc_crimson_colossus_section_entity"
+	pdxmesh = "tc_thaumic_colossus_mesh"
+
+	scale = 3
+	#引擎效果
+	attach = { "tc_engine_1" = "tc_crimson_colossus_engine_effect_entity" }
+	attach = { "tc_engine_2" = "tc_crimson_colossus_engine_effect_entity" }
+	attach = { "tc_engine_3" = "tc_crimson_colossus_engine_effect_entity" }
+	attach = { "tc_engine_4" = "tc_crimson_colossus_engine_effect_entity" }
+	attach = { "tc_engine_5" = "tc_crimson_colossus_engine_effect_entity" }
+	attach = { "tc_engine_6" = "tc_crimson_colossus_engine_effect_entity" }
+
+	default_state = "idle"
+	#默认状态
+	state = { 
+		name = "idle" animation = "idle" looping = no next_state = "idle" animation_speed = 1 
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 100
+				"working_looping" = 0
+			}
+		}
+	}
+	#开火结束进入空闲状态
+	state = {
+		name = "idle" animation = "ed" looping = no next_state = "idle" animation_speed = 2
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 0
+				"working_looping" = 100
+			}
+		}
+ 	}
+	#移动状态
+	state = {
+		name = "moving" animation = "idle" looping = yes next_state = "moving" animation_speed = 1
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 100
+				"working_looping" = 0
+			}
+		}
+	}
+	#取消开火转入移动
+	state = {
+		name = "moving" animation = "ed" looping = no next_state = "moving" animation_speed = 2
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 0
+				"working_looping" = 100
+			}
+		}
+	}
+	#开火过程
+	state = {
+		name = "working_looping" animation = "working" animation_speed = 0.5 
+		event = { time = 0	id = "beam_start" }
+		event = { time = 0 particle = "tc_arcane_ring_gold_s_particle" node = "rune_ring_1" keep_particle = yes trigger_once = yes }
+		event = { time = 0 particle = "tc_arcane_ring_gold_m_particle" node = "rune_ring_2" keep_particle = yes trigger_once = yes }
+	}
+	#准备过程
+	state = {
+		name = "working" animation = "op" looping = no next_state = "working_looping" animation_speed = 2
+		event = { time = 1000 id = "beam_start" }
+	}
+	#常规状态死亡
+	state = { 
+		name = "death" animation = "idle" looping = no animation_speed = 1
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 0
+				"working_looping" = 0
+			}
+		}
+	}
+	#开火过程死亡
+	state = {
+		name = "death" animation = "working" looping = no animation_speed = 0.25 animation_blend_time = 2
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 100
+				"working_looping" = 100
+			}
+		}
+	}
+
+	game_data = {
+		emissive_recolor_crunch = 0
+	}
+
+	meshsettings = {
+		name = "coverShape"
+		index = 0
+		texture_diffuse = "tc_crimson_ship.dds"
+		texture_normal = "tc_thaumic_ship_normal.dds"
+		texture_specular = "tc_thaumic_ship_specular.dds"
+		shader = "PdxMeshShip"
+	}
+}
+#框架
+entity = {
+	name = "tc_thaumic_colossus_entity"
+	scale = 1.0
+
+	default_state = "idle"
+}
+##引擎效果
+#神秘
+entity = {
+	name = "tc_thaumic_colossus_engine_effect_entity"
+	scale = 0.5
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle"
+		start_event = { node = "root" particle = "tc_thaumic_engine_effect_particle" keep_particle = yes trigger_once = yes }
+	}
+}
+#血腥
+entity = {
+	name = "tc_crimson_colossus_engine_effect_entity"
+	scale = 0.5
+
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	get_state_from_parent = no
+	state = {
+		name = "idle"
+		start_event = { node = "root" particle = "tc_crimson_engine_effect_particle" keep_particle = yes trigger_once = yes }
+	}
+}
+
+animation = {
+	name = tc_thaumic_colossus_op
+	file = tc_thaumic_colossus_op.anim
+}
+
+animation = {
+	name = tc_thaumic_colossus_idle
+	file = tc_thaumic_colossus_idle.anim
+}
+
+animation = {
+	name = tc_thaumic_colossus_ed
+	file = tc_thaumic_colossus_ed.anim
+}
+
+animation = {
+	name = tc_thaumic_colossus_worker
+	file = tc_thaumic_colossus_worker.anim
+}

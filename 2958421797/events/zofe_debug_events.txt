@@ -1,0 +1,1803 @@
+######################################
+### 		ZoFE Debug Events
+###				By Kolyn
+######################################
+
+##Used for rapid testing of features by consoling the event id.
+
+namespace = zofe_debug
+
+# ZoFE Debug Menu
+country_event = {
+	id = zofe_debug.1
+	title = zofe_debug.1.name
+	desc = zofe_debug.1.desc
+	picture = GFX_evt_fallen_empire
+
+	is_triggered_only = yes
+
+	#ZoFE Menu Unlock
+	option = {
+		name = "zofe_debug.1.menu_unlock"
+		trigger = { zofe_settings_confirmed = yes }
+		custom_tooltip = zofe_menu_unlock_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = zofe_settings_confirmed }
+				remove_global_flag = zofe_settings_confirmed
+			}
+			country_event = { id = zofe_menu.100 days = 0 }
+		}
+	}
+	#ZoFE Situations
+	option = {
+		name = "zofe_debug.1.situations"
+		custom_tooltip = zofe_situations_tooltip
+		hidden_effect = {
+			country_event = { id = zofe_debug.101 days = 0 }
+		}
+	}
+	#ZoFE Events
+	option = {
+		name = "zofe_debug.1.events"
+		custom_tooltip = zofe_events_tooltip
+		hidden_effect = {
+			country_event = { id = zofe_debug.102 days = 0 }
+		}
+	}
+	#ZoFE Special Effects
+	option = {
+		name = "zofe_debug.1.special_effects"
+		if = {
+			limit = { has_global_flag = zofe_sandbox_activated }
+			custom_tooltip = zofe_special_effects_tooltip
+		}
+		if = {
+			limit = { NOT = { has_global_flag = zofe_sandbox_activated } }
+			custom_tooltip = zofe_no_sandbox_tooltip
+		}
+		allow = {
+			hidden_trigger = {
+				has_zofe_sandbox = yes
+			}
+		}
+		hidden_effect = {
+			country_event = { id = zofe_debug.103 days = 0 }
+		}
+	}
+	#ZoFE Cheats
+	option = {
+		name = "zofe_debug.1.cheats"
+		if = {
+			limit = { has_global_flag = zofe_sandbox_activated }
+			custom_tooltip = zofe_cheats_tooltip
+		}
+		if = {
+			limit = { NOT = { has_global_flag = zofe_sandbox_activated } }
+			custom_tooltip = zofe_no_sandbox_tooltip
+		}
+		allow = {
+			hidden_trigger = {
+				has_zofe_sandbox = yes
+			}
+		}
+		hidden_effect = {
+			country_event = { id = zofe_debug.104 days = 0 }
+		}
+	}
+	
+	option = {
+		name = "zofe_debug.1.exit"		
+	}
+}
+
+# ZoFE Situation Menu
+country_event = {
+	id = zofe_debug.101
+	title = zofe_debug.101.name
+	desc = zofe_debug.101.desc
+	picture = GFX_evt_fallen_empire
+
+	is_triggered_only = yes
+
+	
+	#ZoFE Ascension Situation
+	option = {
+		name = "zofe_debug.101.ascension"
+		custom_tooltip = zofe_ascension_situation_tooltip
+
+		#Marks the country as Ascending
+		set_country_flag = ascending_empire
+	
+		#New Ascended Empire are protected from DoW somewhat
+		set_timed_country_flag = { flag = new_ascended_empire years = 10 }
+		
+		#Decadence Flags
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_1 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 100 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_2 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 150 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_3 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 200 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_4 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 250 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_5 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 300 }
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_origin = origin_ringworld_empire
+					has_origin = origin_original_people
+				}
+			}
+			start_situation = {
+				type = situation_zofe_ascension
+				target = root.capital_scope	
+			}
+		}
+		if = {
+			limit = { has_origin = origin_ringworld_empire }
+			start_situation = {
+				type = situation_re_ascension
+				target = root.capital_scope	
+			}
+		}
+		if = {
+			limit = { has_origin = origin_original_people }
+			start_situation = {
+				type = situation_oe_ascension
+				target = root.capital_scope	
+			}
+		}
+	}
+	
+	#ZoFE Dark Matter Situation
+	option = {
+		name = "zofe_debug.101.dark_matter"
+		custom_tooltip = zofe_dark_matter_situation_tooltip
+		
+		start_situation = {
+			type = situation_zofe_dark_matter
+			target = root.capital_scope	
+		}		
+	}
+	
+	#ZoFE Utopian Situation
+	option = {
+		name = "zofe_debug.101.utopian"
+		custom_tooltip = zofe_utopian_situation_tooltip
+		
+		start_situation = {
+			type = situation_utopian_paradise
+			target = root.capital_scope	
+		}		
+	}
+	
+	#ZoFE Decadence Situation
+	option = {
+		name = "zofe_debug.101.decadence"
+		custom_tooltip = zofe_decadence_situation_tooltip
+		
+		if = {
+			limit = { is_gestalt = no }
+			start_situation = {
+				type = situation_zofe_decadence
+				target = root.capital_scope	
+			}		
+		}
+		if = {
+			limit = { has_authority = auth_machine_intelligence }
+			start_situation = {
+				type = situation_zofe_decadence_machine
+				target = root.capital_scope	
+			}		
+		}
+		if = {
+			limit = { has_authority = auth_hive_mind }
+			start_situation = {
+				type = situation_zofe_decadence_hive
+				target = root.capital_scope	
+			}		
+		}
+	}
+	
+	#ZoFE Descension Situation
+	option = {
+		name = "zofe_debug.101.descension"
+		custom_tooltip = zofe_descension_situation_tooltip
+		
+		start_situation = {
+			type = situation_zofe_descension
+			target = root.capital_scope	
+		}		
+	}
+	
+	option = {
+		name = "zofe_menu.101.exit"		
+		hidden_effect = {
+			country_event = { id = zofe_debug.1 days = 0 }
+		}
+	}
+}
+
+# ZoFE Events Menu
+country_event = {
+	id = zofe_debug.102
+	title = zofe_debug.102.name
+	desc = zofe_debug.102.desc
+	picture = GFX_evt_fallen_empire
+
+	is_triggered_only = yes
+
+	
+	#Ascension Event
+	option = {
+		name = "zofe_debug.102.a"
+		country_event = { id = fallen_technologies.1 }	
+	}
+	
+	#Dark Matter Possibilities
+	option = {
+		name = "zofe_debug.102.b"
+		country_event = { id = zofe.1 }	
+	}
+	
+	#Precursors' Power Source
+	option = {
+		name = "zofe_debug.102.c"
+		country_event = { id = zofe.11 }
+	}
+	
+	#The Quest for Dark Matter Power
+	option = {
+		name = "zofe_debug.102.d"
+		country_event = { id = zofe.100 }	
+	}
+	
+	#Ascendancy Affairs Office
+	option = {
+		name = "zofe_debug.102.e"
+		if = {
+			limit = { NOT = { has_global_flag = zofe_sandbox_activated } }
+			custom_tooltip = zofe_no_sandbox_tooltip
+		}
+		allow = {
+			hidden_trigger = {
+				has_zofe_sandbox = yes
+			}
+		}
+		country_event = { id = zofe_ascendancy_affairs.1 }	
+	}
+	
+	option = {
+		name = "zofe_menu.101.exit"	
+		hidden_effect = {
+			country_event = { id = zofe_debug.1 days = 0 }
+		}
+	}
+}
+
+# ZoFE Special Effects Menu
+country_event = {
+	id = zofe_debug.103
+	title = zofe_debug.103.name
+	desc = zofe_debug.103.desc
+	picture = GFX_evt_fallen_empire
+
+	is_triggered_only = yes
+	
+	#ZoFE Graphical Change
+	option = {
+		name = "zofe_debug.103.graphics"
+		country_event = { id = zofe_debug.2 }	
+	}
+	
+	#ZoFE Country Type Change - Ascended Empire
+	option = {
+		name = "zofe_debug.103.ascended_empire"	
+		trigger = { 
+			NOT = { is_country_type = ascended_empire }
+		}
+		set_country_type = ascended_empire	
+	}
+	
+	#ZoFE Country Type Change - Lost Empire
+	option = {
+		name = "zofe_debug.103.lost_empire"
+		trigger = {
+			NOT = { is_country_type = lost_empire }
+		}
+		set_country_type = lost_empire
+	}
+	
+	#ZoFE Country Type Change - Default
+	option = {
+		name = "zofe_debug.103.default"	
+		trigger = {
+			NOT = { is_country_type = default }
+		}
+		set_country_type = default
+	}
+
+	#Adds 10 Decadent Pops
+	option = {
+		name = "zofe_debug.103.hedonist_10"	
+		trigger = {
+			OR = {
+				is_country_type = ascended_empire
+				is_country_type = lost_empire
+			}
+		}
+		custom_tooltip = decadent_pop_add_10
+		if = {
+			limit = { is_gestalt = no }
+			while = {
+				count = 10
+				random_owned_pop = {
+					limit = {
+						is_sapient = yes
+						has_citizenship_rights = yes
+						is_pop_category = worker
+						is_enslaved = no
+						is_being_purged = no
+						is_robot_pop = no
+						is_being_assimilated = no
+						NOT = { has_pop_flag = decadent_pop }
+						NOT = { has_job = ae_hedonist }
+					}
+					set_pop_flag = decadent_pop
+				}
+			}
+		}
+		if = {
+			limit = { has_authority = auth_hive_mind }
+			while = {
+				count = 10
+				random_owned_pop = {
+					limit = {
+						is_pop_category = simple_drone
+						NOT = { has_pop_flag = decadent_pop }
+						NOT = { has_job = ae_confused_drone }
+					}
+					set_pop_flag = decadent_pop
+				}
+			}
+		}
+		if = {
+			limit = { has_authority = auth_machine_intelligence }
+			while = {
+				count = 10
+				random_owned_pop = {
+					limit = {
+						is_pop_category = simple_drone
+						NOT = { has_pop_flag = decadent_pop }
+						NOT = { has_job = ae_maintenance_bot }
+					}
+					set_pop_flag = decadent_pop
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.101.exit"
+		hidden_effect = {
+			country_event = { id = zofe_debug.1 days = 0 }
+		}
+	}
+}
+
+# ZoFE Cheats Menu
+country_event = {
+	id = zofe_debug.104
+	title = zofe_debug.104.name
+	desc = zofe_debug.104.desc
+	picture = GFX_evt_fallen_empire
+
+	is_triggered_only = yes
+	
+	#Gives All Original Empire Components
+	option = {
+		name = "zofe_debug.104.oe_components"
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_power_core }
+			}
+			give_technology = { tech = tech_original_empire_power_core message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_righteous_fire }
+			}
+			give_technology = { tech = tech_righteous_fire message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_blessed_sling }
+			}
+			give_technology = { tech = tech_blessed_sling message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_celestial_armor }
+			}
+			give_technology = { tech = tech_celestial_armor message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_technologies_3 }
+			}
+			give_technology = { tech = tech_original_technologies_3 message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_thruster }
+			}
+			give_technology = { tech = tech_original_empire_thruster message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_light_of_arya }
+			}
+			give_technology = { tech = tech_light_of_arya message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_holy_thunder }
+			}
+			give_technology = { tech = tech_holy_thunder message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_celestial_plating }
+			}
+			give_technology = { tech = tech_celestial_plating message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_chalice }
+			}
+			give_technology = { tech = tech_original_empire_chalice message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_jump_drive }
+			}
+			give_technology = { tech = tech_original_empire_jump_drive message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_deliverer_strike_craft }
+			}
+			give_technology = { tech = tech_deliverer_strike_craft message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_light_of_salvation }
+			}
+			give_technology = { tech = tech_light_of_salvation message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_shield }
+			}
+			give_technology = { tech = tech_original_empire_shield message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_crucible }
+			}
+			give_technology = { tech = tech_original_empire_crucible message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_sensors }
+			}
+			give_technology = { tech = tech_original_empire_sensors message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_divine_judgement }
+			}
+			give_technology = { tech = tech_divine_judgement message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_shield_disabler }
+			}
+			give_technology = { tech = tech_original_empire_shield_disabler message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_controls_jammer }
+			}
+			give_technology = { tech = tech_original_empire_controls_jammer message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_original_empire_subspace_snare }
+			}
+			give_technology = { tech = tech_original_empire_subspace_snare message = no }
+		}
+	}
+	
+	#Gives All Omni Weapons
+	option = {
+		name = "zofe_debug.104.omni_weapons"
+		if = {
+			limit = {
+				NOT = { has_technology = tech_omni_lance }
+			}
+			give_technology = { tech = tech_omni_lance message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_compact_omni_lance }
+			}
+			give_technology = { tech = tech_compact_omni_lance message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_omni_emitter }
+			}
+			give_technology = { tech = tech_omni_emitter message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_compact_omni_emitter }
+			}
+			give_technology = { tech = tech_compact_omni_emitter message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_massive_autocannons }
+			}
+			give_technology = { tech = tech_massive_autocannons message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_compact_massive_autocannons }
+			}
+			give_technology = { tech = tech_compact_massive_autocannons message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_omni_cannon }
+			}
+			give_technology = { tech = tech_omni_cannon message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_compact_omni_cannon }
+			}
+			give_technology = { tech = tech_compact_omni_cannon message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_omni_titan_lance }
+			}
+			give_technology = { tech = tech_omni_titan_lance message = no }
+		}
+	}
+	
+	#Rampaging Original Empire Fleets
+	option = {
+		name = "zofe_debug.104.oe_rampage"
+		country_event = { id = zofe_debug.5 }	
+	}
+	
+	#Utopian Worlds Debug
+	option = {
+		name = "zofe_debug.104.utopian"
+		country_event = { id = zofe_debug.6 }	
+	}
+	
+	#Increased Dark Matter Weapons Damage 
+	option = {
+		name = "zofe_debug.104.dm_tech"
+		trigger = {
+			NOT = { has_modifier = debug_dm_tech }
+		}
+		add_modifier = {
+			modifier = debug_dm_tech
+			days = -1
+		}
+	}
+	
+	#Increased Lost Weapons Damage 
+	option = {
+		name = "zofe_debug.104.lost_tech"
+		trigger = {
+			NOT = { has_modifier = debug_lost_tech }
+		}
+		add_modifier = {
+			modifier = debug_lost_tech
+			days = -1
+		}
+	}
+	
+	#Increased Original Weapons Damage 
+	option = {
+		name = "zofe_debug.104.original_tech"
+		trigger = {
+			NOT = { has_modifier = debug_original_tech }
+		}
+		add_modifier = {
+			modifier = debug_original_tech
+			days = -1
+		}
+	}	
+	
+	#Become a Servant of Kolyn - this includes selling your soul.
+	option = {
+		name = "zofe_debug.104.servant_of_kolyn"
+		custom_tooltip = servant_of_kolyn_tooltip
+		trigger = {
+			NOT = { has_modifier = servant_of_kolyn }
+		}
+		add_modifier = {
+			modifier = servant_of_kolyn
+			days = -1
+		}
+	}
+	
+	option = {
+		name = "zofe_menu.101.exit"
+		hidden_effect = {
+			country_event = { id = zofe_debug.1 days = 0 }
+		}
+	}
+}
+
+#Debug Changing shipsets/city sets
+country_event = {
+	id = zofe_debug.2
+	title = zofe_debug.2.name
+	desc = zofe_debug.2.desc
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+
+	option = {
+		name = zofe_debug.2.a
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_spiritualist
+			set_city_graphical_culture = fallen_spiritualist
+			room_name_override = "fallen_spiritualist_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.b
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_materialist
+			set_city_graphical_culture = fallen_materialist
+			room_name_override = "fallen_materialist_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.c
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_xenophile
+			set_city_graphical_culture = fallen_xenophile
+			room_name_override = "fallen_xenophile_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.da
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_xenophobe
+			set_city_graphical_culture = fallen_xenophobe
+			room_name_override = "fallen_xenophobe_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.db
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_xenophobe_02
+			set_city_graphical_culture = fallen_xenophobe_02
+			room_name_override = "fallen_xenophobe_02_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.e
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_militarist
+			set_city_graphical_culture = fallen_militarist
+			room_name_override = "fallen_militarist_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.fa
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_pacifist
+			set_city_graphical_culture = fallen_pacifist
+			room_name_override = "fallen_pacifist_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.fb
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_spiritualist_02
+			set_city_graphical_culture = fallen_spiritualist_02
+			room_name_override = "fallen_spiritualist_02_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.g
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_authoritarian
+			set_city_graphical_culture = fallen_authoritarian
+			room_name_override = "fallen_authoritarian_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.h
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_egalitarian_02
+			set_city_graphical_culture = fallen_egalitarian_02
+			room_name_override = "fallen_egalitarian_02_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.ia
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_hive_mind
+			set_city_graphical_culture = fallen_hive_mind
+			room_name_override = "fallen_hive_mind_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.ib
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_hive_mind_02
+			set_city_graphical_culture = fallen_hive_mind_02
+			room_name_override = "fallen_hive_mind_02_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.ja
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_machine
+			set_city_graphical_culture = fallen_machine
+			room_name_override = "fallen_machine_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.jb
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_machine_02
+			set_city_graphical_culture = fallen_machine_02
+			room_name_override = "fallen_machine_02_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.k
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_militarist_02
+			set_city_graphical_culture = fallen_militarist_02
+			room_name_override = "fallen_militarist_02_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.l
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = fallen_materialist_02
+			set_city_graphical_culture = fallen_materialist_02
+			room_name_override = "fallen_materialist_02_room"
+		}
+	}
+	option = {
+		name = zofe_debug.2.m
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_fallen_technologies_3 }
+			}
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+		}	
+		if = {
+			limit = { 
+				NOT = { has_technology = tech_dark_matter_propulsion }
+			}
+			give_technology = { tech = tech_dark_matter_propulsion message = no }
+		}	
+		hidden_effect = {
+			set_graphical_culture = original_empire_01
+			set_city_graphical_culture = original_empire_01
+			room_name_override = "original_empire_room"
+		}
+	}
+	option = {
+		name = "zofe_menu.101.exit"
+		hidden_effect = {
+			country_event = { id = zofe_debug.1 days = 0 }
+		}
+	}
+}
+
+country_event = {
+	id = zofe_debug.5
+	title = zofe_debug.5.name
+	desc = zofe_debug.5.desc
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe_debug.5.a
+		hidden_effect = {
+			random_owned_planet = {
+				save_event_target_as = armada_spawn
+			}
+			create_species = {
+				name = "NAME_Original"
+				class = ORIGINAL
+				namelist = HUM4
+				portrait = original
+				traits = {
+					trait = trait_punctual
+					trait = trait_patriotic
+					trait = trait_disciplined
+				}
+				effect = { save_event_target_as = original_species }
+			}
+			create_country = {
+				name = "NAME_ORIGINAL_EMPIRE_REMNANTS"
+				type = original_empire_remnants
+				auto_delete = yes
+				name_list = "HUM4"
+				flag = {
+					icon={
+						category="pointy"
+						file="flag_pointy_3.dds"
+					}
+					background={
+						category="backgrounds"
+						file="v.dds"
+					}
+					colors={
+						"beige"
+						"black"
+						"null"
+						"null"
+					}
+				}	
+			}
+			last_created_country = {
+				create_leader = {
+					class = admiral
+					species = event_target:original_species
+					name = random
+					skill = 10
+					traits = {
+						trait = leader_trait_cautious
+						trait = leader_trait_aggressive
+						trait = leader_trait_engineer
+					}
+				}
+				create_fleet = {
+					name = "NAME_IMPERIAL_ARMADA"
+					settings = { 
+						spawn_debris = yes
+						is_boss = yes
+					}
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = "LONE_GOLIATH"
+							design = "NAME_ORIGINAL_EMPIRE_GOLIATH"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 4
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_TITAN"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 16
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 32
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_location = event_target:armada_spawn
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500	
+
+						queue_actions = {
+							repeat = {
+								find_random_system = {
+									trigger = {
+										id = "original_empire_remnants_0.trigger.1"
+										any_system_planet = {
+											is_colony = yes
+										}
+									}
+									found_system = {
+										move_to = THIS
+									}
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "original_empire_remnants_0.trigger.2"
+										is_colony = yes
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = {
+											duration = 50
+											random = 25
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
+	option = {
+		name = zofe_debug.5.b
+		hidden_effect = {
+			random_owned_planet = {
+				save_event_target_as = armada_1_spawn
+			}
+			random_owned_planet = {
+				save_event_target_as = armada_2_spawn
+			}
+			random_owned_planet = {
+				save_event_target_as = armada_3_spawn
+			}
+			random_owned_planet = {
+				save_event_target_as = armada_4_spawn
+			}
+			random_owned_planet = {
+				save_event_target_as = armada_5_spawn
+			}
+			create_species = {
+				name = "NAME_Original"
+				class = ORIGINAL
+				namelist = HUM2
+				portrait = original
+				traits = {
+					trait = trait_punctual
+					trait = trait_patriotic
+					trait = trait_disciplined
+				}
+				effect = { save_event_target_as = original_species }
+			}
+			create_country = {
+				name = "NAME_ORIGINAL_EMPIRE_REMNANTS"
+				type = original_empire_remnants
+				auto_delete = yes
+				name_list = "HUM2"
+				flag = {
+					icon={
+						category="pointy"
+						file="flag_pointy_3.dds"
+					}
+					background={
+						category="backgrounds"
+						file="v.dds"
+					}
+					colors={
+						"beige"
+						"black"
+						"null"
+						"null"
+					}
+				}	
+			}
+			last_created_country = {
+				create_leader = {
+					class = admiral
+					species = event_target:original_species
+					name = random
+					skill = 10
+					traits = {
+						trait = leader_trait_cautious
+						trait = leader_trait_aggressive
+						trait = leader_trait_engineer
+					}
+				}
+				create_fleet = {
+					name = "NAME_IMPERIAL_ARMADA"
+					settings = { 
+						spawn_debris = yes
+						is_boss = yes
+					}
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = "LONE_GOLIATH"
+							design = "NAME_ORIGINAL_EMPIRE_GOLIATH"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 4
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_TITAN"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 16
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 32
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_location = event_target:armada_1_spawn
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500	
+
+						queue_actions = {
+							repeat = {
+								find_random_system = {
+									trigger = {
+										id = "original_empire_remnants_1.trigger.1"
+										any_system_planet = {
+											is_colony = yes
+										}
+									}
+									found_system = {
+										move_to = THIS
+									}
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "original_empire_remnants_1.trigger.2"
+										is_colony = yes
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = {
+											duration = 50
+											random = 25
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				create_leader = {
+					class = admiral
+					species = event_target:original_species
+					name = random
+					skill = 10
+					traits = {
+						trait = leader_trait_cautious
+						trait = leader_trait_aggressive
+						trait = leader_trait_engineer
+					}
+				}
+
+				create_fleet = {
+					name = "NAME_NORTHERN_ARMADA"
+					settings = { 
+						spawn_debris = yes
+						is_boss = yes
+					}
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_TITAN"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 8
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 16
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_location = event_target:armada_2_spawn
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500	
+
+						queue_actions = {
+							repeat = {
+								find_random_system = {
+									trigger = {
+										id = "original_empire_remnants_2.trigger.1"
+										any_system_planet = {
+											is_colony = yes
+										}
+									}
+									found_system = {
+										move_to = THIS
+									}
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "original_empire_remnants_2.trigger.2"
+										is_colony = yes
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = {
+											duration = 50
+											random = 25
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				create_leader = {
+					class = admiral
+					species = event_target:original_species
+					name = random
+					skill = 10
+					traits = {
+						trait = leader_trait_cautious
+						trait = leader_trait_aggressive
+						trait = leader_trait_engineer
+					}
+				}
+
+				create_fleet = {
+					name = "NAME_EASTERN_ARMADA"
+					settings = { 
+						spawn_debris = yes
+						is_boss = yes
+					}
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_TITAN"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 8
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 16
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_location = event_target:armada_3_spawn
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500	
+
+						queue_actions = {
+							repeat = {
+								find_random_system = {
+									trigger = {
+										id = "original_empire_remnants_3.trigger.1"
+										any_system_planet = {
+											is_colony = yes
+										}
+									}
+									found_system = {
+										move_to = THIS
+									}
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "original_empire_remnants_3.trigger.2"
+										is_colony = yes
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = {
+											duration = 50
+											random = 25
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				create_leader = {
+					class = admiral
+					species = event_target:original_species
+					name = random
+					skill = 10
+					traits = {
+						trait = leader_trait_cautious
+						trait = leader_trait_aggressive
+						trait = leader_trait_engineer
+					}
+				}
+
+				create_fleet = {
+					name = "NAME_SOUTHERN_ARMADA"
+					settings = { 
+						spawn_debris = yes
+						is_boss = yes
+					}
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_TITAN"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 8
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 16
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_location = event_target:armada_4_spawn
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500	
+
+						queue_actions = {
+							repeat = {
+								find_random_system = {
+									trigger = {
+										id = "original_empire_remnants_4.trigger.1"
+										any_system_planet = {
+											is_colony = yes
+										}
+									}
+									found_system = {
+										move_to = THIS
+									}
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "original_empire_remnants_4.trigger.2"
+										is_colony = yes
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = {
+											duration = 50
+											random = 25
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				create_leader = {
+					class = admiral
+					species = event_target:original_species
+					name = random
+					skill = 10
+					traits = {
+						trait = leader_trait_cautious
+						trait = leader_trait_aggressive
+						trait = leader_trait_engineer
+					}
+				}
+
+				create_fleet = {
+					name = "NAME_WESTERN_ARMADA"
+					settings = { 
+						spawn_debris = yes
+						is_boss = yes
+					}
+					effect = {
+						set_owner = PREV
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_TITAN"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 8
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 16
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_location = event_target:armada_5_spawn
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 500	
+
+						queue_actions = {
+							repeat = {
+								find_random_system = {
+									trigger = {
+										id = "original_empire_remnants_5.trigger.1"
+										any_system_planet = {
+											is_colony = yes
+										}
+									}
+									found_system = {
+										move_to = THIS
+									}
+								}
+								find_closest_planet = {
+									trigger = {
+										id = "original_empire_remnants_5.trigger.2"
+										is_colony = yes
+									}
+									found_planet = {
+										orbit_planet = THIS
+										wait = {
+											duration = 50
+											random = 25
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = zofe_debug.5.c
+	}
+}
+
+
+# For Utopian Worlds Debug
+country_event = {
+	id = zofe_debug.6
+	title = zofe_debug.6.name
+	desc = zofe_debug.6.desc
+	picture = GFX_evt_ancient_records
+
+	is_triggered_only = yes
+	
+	immediate = {
+		give_technology = { tech = tech_paradise_creation }
+		give_technology = { tech = tech_paradise_creation_machine }
+		give_technology = { tech = tech_paradise_creation_hive }
+		add_resource = { sr_living_metal = 50000 }
+	}
+		
+	
+	option = {
+		name = "zofe_debug.6.a"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_class_5_singularity
+				has_tech_option = tech_fe_class_5_singularity
+			}
+		}
+		give_technology = { tech = tech_fe_class_5_singularity }
+	}
+	option = {
+		name = "zofe_debug.6.b"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_dimensional_harvester
+				has_tech_option = tech_fe_dimensional_harvester
+			}
+		}
+		give_technology = { tech = tech_fe_dimensional_harvester }
+	}
+	option = {
+		name = "zofe_debug.6.c"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_gourmet_center
+				has_tech_option = tech_fe_gourmet_center
+			}
+		}
+		give_technology = { tech = tech_fe_gourmet_center }
+	}
+	option = {
+		name = "zofe_debug.6.d"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_opulent_plaza
+				has_tech_option = tech_fe_opulent_plaza
+			}
+		}
+		give_technology = { tech = tech_fe_opulent_plaza }
+	}
+	option = {
+		name = "zofe_debug.6.e"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_nano_forge_2
+				has_tech_option = tech_fe_nano_forge_2
+			}
+		}
+		give_technology = { tech = tech_fe_nano_forge_2 }
+	}
+
+	option = {
+		name = "lost_technologies.1002.a"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_dark_matter_power_plant
+				has_tech_option = tech_fe_dark_matter_power_plant
+			}
+		}
+		give_technology = { tech = tech_fe_dark_matter_power_plant }
+	}
+	option = {
+		name = "lost_technologies.1002.b"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_autonomous_fabricator
+				has_tech_option = tech_fe_autonomous_fabricator
+			}
+		}
+		give_technology = { tech = tech_fe_autonomous_fabricator }
+	}
+	option = {
+		name = "lost_technologies.1002.c"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_agri_processing_complex
+				has_tech_option = tech_fe_agri_processing_complex
+			}
+		}
+		give_technology = { tech = tech_fe_agri_processing_complex }
+	}
+	option = {
+		name = "lost_technologies.1002.d"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_opulent_tower
+				has_tech_option = tech_fe_opulent_tower
+			}
+		}
+		give_technology = { tech = tech_fe_opulent_tower }
+	}
+	option = {
+		name = "lost_technologies.1002.e"
+		trigger = {
+			NOR = {
+				has_technology = tech_fe_pico_forge
+				has_tech_option = tech_fe_pico_forge
+			}
+		}
+		give_technology = { tech = tech_fe_pico_forge }
+	}
+	
+	option = {
+		name = "zofe_debug.6.f"
+		trigger = {
+			NOR = {
+				has_technology = tech_original_empire_sun_generator
+				has_tech_option = tech_original_empire_sun_generator
+			}
+		}
+		give_technology = { tech = tech_original_empire_sun_generator }
+	}
+	option = {
+		name = "zofe_debug.6.g"
+		trigger = {
+			NOR = {
+				has_technology = tech_original_empire_siphoner
+				has_tech_option = tech_original_empire_siphoner
+			}
+		}
+		give_technology = { tech = tech_original_empire_siphoner }
+	}
+	option = {
+		name = "zofe_debug.6.h"
+		trigger = {
+			NOR = {
+				has_technology = tech_original_empire_cornucopia
+				has_tech_option = tech_original_empire_cornucopia
+			}
+		}
+		give_technology = { tech = tech_original_empire_cornucopia }
+	}
+	option = {
+		name = "zofe_debug.6.i"
+		trigger = {
+			NOR = {
+				has_technology = tech_original_empire_pleasure_palace
+				has_tech_option = tech_original_empire_pleasure_palace
+			}
+		}
+		give_technology = { tech = tech_original_empire_pleasure_palace }
+	}
+	option = {
+		name = "zofe_debug.6.j"
+		trigger = {
+			NOR = {
+				has_technology = tech_original_empire_star_forge
+				has_tech_option = tech_original_empire_star_forge
+			}
+		}
+		give_technology = { tech = tech_original_empire_star_forge }
+	}
+}

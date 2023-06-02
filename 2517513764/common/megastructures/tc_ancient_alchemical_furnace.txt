@@ -1,0 +1,298 @@
+tc_ancient_alchemical_furnace_00 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_tc_ancient_alchemical_furnace"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = -7 y = -7 }
+
+	build_time = 900
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 5000
+			unity = 2560
+		}
+		upkeep = {
+		}
+	}
+
+	prerequisites = { tc_tech_advanced_alchemical tech_mega_engineering }
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			has_no_non_gate_megastructure = yes
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		#custom_tooltip = {
+		#	fail_text = "requires_no_existing_ancient_alchemical_furnace"
+		#	from = { NOT = { has_country_flag = tc_built_ancient_alchemical_furnace } }
+		#}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+				NOT = { is_colonizable = yes }
+				NOT = { is_colony = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						has_star_flag = ring_world_built
+					}
+					is_artificial = yes
+				}
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		#from = { set_country_flag = tc_built_ancient_alchemical_furnace }
+		FROMFROM.planet = { set_planet_flag = has_megastructure }
+	}
+}
+
+tc_ancient_alchemical_furnace_01 = {
+	entity = "tc_ancient_alchemical_furnace_01_entity"
+	construction_entity = "tc_ancient_alchemical_furnace_part_01_entity"
+	portrait = "GFX_megastructure_tc_ancient_alchemical_furnace"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = -7 y = -7 }
+
+	build_time = 900
+	upgrade_from = { tc_ancient_alchemical_furnace_00 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 5000
+			unity = 2560
+		}
+		upkeep = {
+			energy = 10
+			minerals = 50
+		}
+		produces = {
+			tc_essences = 100
+		}
+	}
+
+	prerequisites = { tc_tech_advanced_alchemical tech_mega_engineering }
+
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_ancient_alchemical_furnace_02 = {
+	entity = "tc_ancient_alchemical_furnace_02_entity"
+	construction_entity = "tc_ancient_alchemical_furnace_part_02_entity"
+	portrait = "GFX_megastructure_tc_ancient_alchemical_furnace"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = -7 y = -7 }
+
+	build_time = 1800
+	upgrade_from = { tc_ancient_alchemical_furnace_01 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_void_metal = 5000
+			unity = 2560
+		}
+		upkeep = {
+			energy = 10
+			minerals = 250
+		}
+		produces = {
+			tc_essences = 500
+		}
+	}
+
+	prerequisites = { tc_tech_advanced_alchemical tech_mega_engineering }
+
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_ancient_alchemical_furnace_03 = {
+	entity = "tc_ancient_alchemical_furnace_03_entity"
+	construction_entity = "tc_ancient_alchemical_furnace_part_03_entity"
+	portrait = "GFX_megastructure_tc_ancient_alchemical_furnace"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = -7 y = -7 }
+
+	build_time = 1200
+	upgrade_from = { tc_ancient_alchemical_furnace_02 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 7500
+			unity = 2560
+		}
+		upkeep = {
+			energy = 20
+			minerals = 500
+		}
+		produces = {
+			tc_essences = 1000
+		}
+	}
+
+	prerequisites = { tc_tech_advanced_alchemical tech_mega_engineering }
+
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_ancient_alchemical_furnace_04 = {
+	entity = "tc_ancient_alchemical_furnace_04_entity"
+	construction_entity = "tc_ancient_alchemical_furnace_part_04_entity"
+	portrait = "GFX_megastructure_tc_ancient_alchemical_furnace"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = -7 y = -7 }
+
+	build_time = 1200
+	upgrade_from = { tc_ancient_alchemical_furnace_03 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 7500
+			unity = 2560
+		}
+		upkeep = {
+			energy = 25
+			minerals = 750
+		}
+		produces = {
+			tc_essences = 1500
+		}
+	}
+
+	prerequisites = { tc_tech_advanced_alchemical tech_mega_engineering }
+
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_ancient_alchemical_furnace_complet = {
+	entity = "tc_ancient_alchemical_furnace_complet_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_ancient_alchemical_furnace"
+	place_entity_on_planet_plane = no
+	show_galactic_map_icon = no
+	show_in_outliner = no
+
+	entity_offset = { x = -7 y = -7 }
+
+	build_time = 30
+	upgrade_from = { tc_ancient_alchemical_furnace_04 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_essences = 500
+		}
+		upkeep = {
+			minerals = 500
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			energy = 50
+		}
+		produces = {
+			tc_essences = 2000
+		}
+	}
+
+	country_modifier = {
+		planet_pops_upkeep_mult = -0.25
+	}
+
+	prerequisites = { tc_tech_advanced_alchemical tech_mega_engineering }
+
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}

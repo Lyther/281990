@@ -1,0 +1,171 @@
+namespace = mopt_espionage
+
+
+### 关闭分部
+# this   = operation
+# owner  = operation starter
+# target = operation target
+
+espionage_operation_event = {
+	id = mopt_espionage.100
+	title = mopt_espionage.100.name
+	desc = mopt_espionage.100.desc
+
+	picture = XXX
+	is_triggered_only = yes
+	espionage_operation = yes
+
+	immediate = {
+		target = {
+			random_owned_planet = {
+				limit = {
+					has_branch_office = yes
+					branch_office_owner = {
+						NOT = { is_same_value = root.owner }
+					}
+				}
+				set_planet_flag = flag_p_mopt_target_planet@root
+			}
+		}
+	}
+
+	option = {
+		name = PROCEED
+	}
+
+}
+
+espionage_operation_event = {
+	id = mopt_espionage.110
+	title = mopt_espionage.110.name
+	desc = mopt_espionage.110.desc
+
+	picture = XXX
+	is_triggered_only = yes
+	espionage_operation = yes
+
+	immediate = {
+		target = {
+			random_owned_planet = {
+				limit = { has_country_flag = flag_p_mopt_target_planet@root }
+				save_event_target_as = target_planet
+			}
+		}
+	}
+
+	option = {
+		name = mopt_espionage.110.a
+	}
+	
+}
+
+espionage_operation_event = {
+	id = mopt_espionage.120
+	title = mopt_espionage.120.name
+	desc = mopt_espionage.120.desc
+
+	picture = XXX
+	is_triggered_only = yes
+	espionage_operation = yes
+
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+		target = {
+			random_owned_planet = {
+				limit = { has_country_flag = flag_p_mopt_target_planet@root }
+				save_event_target_as = target_planet
+			}
+		}
+	}
+
+	option = {
+		name = mopt_espionage.120.a
+		hidden_effect = {
+			target = { country_event = { id = mopt_espionage.121 } }
+		}
+	}
+
+	after = {
+		set_espionage_operation_progress_locked = no
+	}
+}
+
+# 被渗透关闭分部的国家
+# 选择1：关闭随机星球的分部
+# 选择2：不关分部，但是获得debuff
+country_event = {
+	id = mopt_espionage.121
+	title = mopt_espionage.121.name
+	desc = mopt_espionage.121.desc
+
+	picture = XXX
+	is_triggered_only = yes
+
+	option = {
+		name = mopt_espionage.121.a
+		event_target:target_planet = {
+			hidden_effect = {
+				branch_office_owner = { country_event = { id = mopt_espionage.122 } }
+			}
+			close_branch_office = yes
+		}
+		hidden_effect = {
+			event_target:operation_owner = { country_event = { id = mopt_espionage.123 } }
+		}
+
+		ai_chance = { base = 10000 }
+	}
+
+	option = {
+		name = mopt_espionage.121.b
+		event_target:target_planet = {
+			add_modifier = {
+				modifier = mopt_distrust_branch_office
+				months = 6
+			}
+		}
+
+		ai_chance = { base = 0 }
+	}
+}
+
+# 被关闭分部的所有者
+country_event = {
+	id = mopt_espionage.122
+	title = mopt_espionage.122.name
+	desc = mopt_espionage.122.desc
+
+	picture = XXX
+	is_triggered_only = yes
+
+	option = {
+		name = mopt_espionage.122.a
+	}
+}
+
+# 渗透行动执行完成的提示
+country_event = {
+	id = mopt_espionage.123
+	title = mopt_espionage.123.name
+	desc = mopt_espionage.123.desc
+
+	picture = XXX
+	is_triggered_only = yes
+
+	option = {
+		name = GOOD
+	}
+}
+
+country_event = {
+	id = mopt_espionage.124
+	title = mopt_espionage.124.name
+	desc = mopt_espionage.124.desc
+
+	picture = XXX
+	is_triggered_only = yes
+
+	option = {
+		name = mopt_espionage.124.a
+	}
+}

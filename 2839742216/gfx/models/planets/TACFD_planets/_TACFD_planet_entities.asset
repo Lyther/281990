@@ -1,0 +1,98 @@
+######################################################################
+#部件#
+entity = {#主体
+	name = "TACFD_planet_part1_entity"
+	pdxmesh = "TACFD_planet_part1_mesh"
+}
+entity = {#星环#
+	name = "TACFD_planet_part2_entity"
+	pdxmesh = "TACFD_planet_rings_mesh"
+	default_state = idle
+	state = { name = "idle" animation = "idle" animation_speed = 1.5 }
+	game_data = { emissive_recolor_crunch = 0 }	
+	scale = 0.5
+}
+entity = {#核心#
+	name = "TACFD_planet_part3_entity"
+	pdxmesh = "AI_core_mesh"
+	game_data = { emissive_recolor_crunch = 0 }	
+	scale = 4	
+}
+#######################################################################
+entity = {#星环（静态）#
+	name = "FEIDI_planetring_part1_entity"
+	locator = { name = "center" position = { 0 0 0 } rotation = { 0 0 0}}
+	attach = { center = "TACFD_planet_part2_entity" }
+}
+entity = {#星环（静态02）#
+	name = "FEIDI_planetring_part1_02_entity"
+	locator = { name = "center" position = { 0 0 0 } rotation = { 0 0 90}}
+	attach = { center = "TACFD_planet_part2_entity" }
+	scale = 3
+}
+entity = {#世界环##竖1#
+	name = "FEIDI_planetring_part1_03_entity"
+	locator = { name = "set1" position = { 0 0 0 } rotation = { 0 0 90}}
+	attach = { set1 = "FEIDI_SEAM_RING_01_entity" }
+	scale = 2
+}
+entity = {#内环1#
+	name = "FEIDI_planetring_part2_entity"
+	pdxmesh ="AI_mega_ration_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 1.5 }
+	attach = { root = "TACFD_planet_part2_entity" }
+	scale = 0.85
+}
+entity = {#内环2#
+	name = "FEIDI_planetring_part3_entity"
+	pdxmesh ="AI_mega_ration_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 5 }
+	attach = { root = "TACFD_planet_part2_entity" }
+	scale = 0.75
+}
+entity = {#环#
+	name = "FEIDI_planetring_entity"
+	locator = { name = "set1" position = { 0 0 0 } rotation = { 0 0 0}}
+	locator = { name = "set2" position = { 0 0 0 } rotation = { 160 120 90}}
+	locator = { name = "set3" position = { 0 0 0 } rotation = { 30 0 120}}
+	attach = {
+		set1 = "FEIDI_planetring_part1_entity"
+		set2 = "FEIDI_planetring_part2_entity"
+		set3 = "FEIDI_planetring_part3_entity"
+	}
+	scale = 2
+}
+#############################################################################
+#组合
+entity = {#内部#
+	name = "FEIDI_planets_section_01_entity"
+	locator = { name = "set1" position = { 0 0 0 } rotation = { 0 0 0}}
+	attach = {
+		set1 = "TACFD_planet_part1_entity"
+		set1 = "TACFD_planet_part3_entity"
+		set1 = "FEIDI_planetring_entity"
+	}
+	scale = 0.5 
+}
+entity = {#动画#
+	name = "FEIDI_planets_section_02_entity"
+	pdxmesh ="AI_ring_world_ration_mesh2"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 2 }
+	attach = { root = "FEIDI_planets_section_01_entity" }
+}
+entity = {#集合#
+	name = "FEIDI_planets_entity"
+	locator = { name = "set1" position = { 0 0 0 } rotation = { 0 0 0}}
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 1
+		start_event = { node = "set1" particle = "TAC_ship_idle_core_effect2" keep_particle = yes trigger_once = yes }
+	}
+	attach = {
+		set1 = "FEIDI_planets_section_02_entity"
+		set1 = "FEIDI_planetring_part1_02_entity"
+		set1 = "FEIDI_planetring_part1_03_entity"
+	}
+}

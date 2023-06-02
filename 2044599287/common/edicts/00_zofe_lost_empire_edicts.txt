@@ -1,0 +1,116 @@
+####################
+# Lost Empire Edicts
+####################
+
+@Edict1Cost = 10
+@Edict2Cost = 20
+@Edict3Cost = 30
+@EdictSpecialCost = 1
+
+@EdictPerpetual = -1
+
+rearmament = {
+	length = @EdictPerpetual
+	icon = "GFX_edict_type_policy"
+	edict_cap_usage = 1
+	
+	resources = {
+		category = edicts
+		upkeep = {
+			unity = @Edict3Cost
+			multiplier = value:edict_size_effect
+		}
+	}
+	
+	potential = {
+		is_country_type = lost_empire
+		has_valid_civic = civic_treaty_bound
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = is_at_war
+			is_at_war = no
+		}
+	}
+	
+	modifier = {
+		starbase_shipyard_build_time_mult = -0.5
+		starbase_shipyard_build_speed_mult = 0.5
+		starbase_shipyard_build_cost_mult = -0.5
+	}
+	
+	effect = {
+		custom_tooltip = rearmament
+		hidden_effect = { 
+			set_country_flag = lost_empire_rearmed
+			country_event = { id = lost_empire.6 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 2
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_militarist
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_authoritarian
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_materialist
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_spiritualist
+			}
+	}
+}
+
+mobilization = {
+	length = @EdictPerpetual
+	icon = "GFX_edict_type_policy"
+	edict_cap_usage = 1
+	
+	resources = {
+		category = edicts
+		upkeep = {
+			unity = @Edict3Cost
+			multiplier = value:edict_size_effect
+		}
+	}
+	
+	potential = {
+		is_country_type = lost_empire
+		has_valid_civic = civic_lost_fervor
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = is_at_war
+			is_at_war = no
+		}
+	}
+	
+	modifier = {
+		starbase_shipyard_build_speed_mult = 0.25
+	}
+	
+	effect = {
+		custom_tooltip = mobilization
+		hidden_effect = { 
+			set_country_flag = lost_empire_mobilized
+			country_event = { id = lost_empire.6 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 1
+	}
+}

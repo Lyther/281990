@@ -1,0 +1,405 @@
+
+namespace = fourth_crisis
+
+country_event = {
+	id = fourth_crisis.0
+	title = fourth_crisis.0.name
+	desc = fourth_crisis.0.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		any_playable_country = {
+			has_origin = origin_fourth_crisis
+			is_ai = yes
+		}
+	}
+	
+	option = {
+		name = fourth_crisis.0.a
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					has_origin = origin_fourth_crisis
+					is_ai = yes
+				}
+				set_country_flag = allow_origin_fourth_crisis
+				country_event = { id = fourth_crisis.1 }
+			}
+		}
+	}
+	
+	option = {
+		name = fourth_crisis.0.b
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					has_origin = origin_fourth_crisis
+					is_ai = yes
+				}
+				set_origin_default_effect = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = fourth_crisis.1
+	title = fourth_crisis.1.name
+	desc = fourth_crisis.1.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_fourth_crisis
+		OR = {
+			is_ai = no
+			has_country_flag = allow_origin_fourth_crisis
+		}
+	}
+	
+	immediate = {
+		set_global_flag = fourth_crisis_happened
+		
+		give_physics_tech_tier_1_effect_no_message = yes
+		give_physics_tech_tier_2_effect_no_message = yes
+		give_society_tech_tier_1_effect_no_message = yes
+		give_society_tech_tier_2_effect_no_message = yes
+		give_engineering_tech_tier_1_effect_no_message = yes
+		give_engineering_tech_tier_2_effect_no_message = yes
+		give_technology = { tech = "tech_ascension_theory" message = no }
+
+		add_resource = {
+			energy = 20000
+			minerals = 20000
+			food = 20000
+			alloys = 10000
+			consumer_goods = 10000
+			volatile_motes = 1000
+			rare_crystals = 1000
+			exotic_gases = 1000
+			sr_dark_matter = 1000
+			sr_zro = 1000
+			sr_living_metal = 1000
+			nanites = 1000
+			unity = 50000
+			influence = 500
+		}
+		
+		add_modifier = {
+			modifier = new_country_others_modifier
+			days = 1800
+		}
+		
+		if = {
+			limit = {
+				is_ai = yes
+			}
+			add_modifier = {
+				modifier = fourth_crisis_ai_modifier
+				days = -1
+			}
+		}
+
+		set_global_flag = galactic_crisis_happened
+		country_event = { id = crisis.10 days = 10800 random = 7200 }
+		country_event = { id = crisis.1000 days = 10800 random = 7200 }
+		country_event = { id = crisis.2005 days = 10800 random = 7200 }
+		every_playable_country = {
+			limit = {
+				NOT = { has_origin = origin_fourth_crisis }
+			}
+			country_event = { id = fourth_crisis.2 }
+		}
+		
+		set_ai_personality = time_became_the_crisis
+		activate_crisis_progression = yes
+		set_country_flag = time_crisis_country
+	}
+
+	option = {
+		name = fourth_crisis.1.a
+		tooltip = {
+			activate_crisis_progression = yes
+		}
+	}
+}
+
+country_event = {
+	id = fourth_crisis.2
+	title = fourth_crisis.2.name
+	desc = fourth_crisis.2.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = fourth_crisis.2.a
+		if = {
+			limit = {
+				is_ai = no
+			}
+			add_modifier = {
+				modifier = fourth_crisis_modifier
+				days = -1
+			}
+		}
+		# 使AI能更尽力抗击第四天灾
+		else = {
+			add_modifier = {
+				modifier = fourth_crisis_modifier
+				days = -1
+				multiplier = 2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = fourth_crisis.3
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_fourth_crisis
+	}
+	
+	immediate = {
+		from = {
+			country_event = { id = fourth_crisis.4 }
+		}
+	}
+}
+
+country_event = {
+	id = fourth_crisis.4
+	title = fourth_crisis.4.name
+	desc = fourth_crisis.4.desc
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = fourth_crisis.4.a
+		trigger = {
+			is_homicidal = no
+			NOR = {
+				has_ascension_perk = ap_become_the_crisis
+				has_country_flag = time_crisis_country
+			}
+		}
+		remove_modifier = "fourth_crisis_modifier"
+		add_modifier = {
+			modifier = fourth_crisis_destroyer_modifier
+			days = -1
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier5unityreward
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							has_origin = origin_fourth_crisis
+						}
+					}
+				}
+				every_playable_country = {
+					limit = {
+						NOT = { has_origin = origin_fourth_crisis }
+						NOT = { is_same_value = root }
+					}
+					country_event = { id = fourth_crisis.5 }
+				}
+				remove_global_flag = fourth_crisis_happened
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	
+	option = {
+		name = fourth_crisis.4.b
+		trigger = {
+			NOR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+				has_civic = civic_machine_servitor
+			}
+		}
+		remove_modifier = "fourth_crisis_modifier"
+		if = {
+			limit = {
+				is_ai = yes
+			}
+			add_modifier = {
+				modifier = fourth_crisis_ai_modifier
+				days = -1
+			}
+		}
+		set_origin = origin_fourth_crisis
+		if = {
+			limit = {
+				NOR = {
+					has_ascension_perk = ap_become_the_crisis
+					has_country_flag = time_crisis_country
+				}
+			}
+			activate_crisis_progression = yes
+			hidden_effect = {
+				set_ai_personality = time_became_the_crisis
+				set_country_flag = time_crisis_country
+			}
+		}
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					NOT = { has_origin = origin_fourth_crisis }
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = fourth_crisis.6 }
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_ethic = ethic_militarist
+			}
+			modifier = {
+				factor = 4
+				has_ethic = ethic_fanatic_militarist
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 4
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 0.5
+				has_origin = origin_tree_of_life
+			}
+			modifier = {
+				factor = 2
+				has_valid_civic = civic_hive_strength_of_legions
+			}
+			modifier = {
+				factor = 0.5
+				has_government = gov_machine_research
+			}
+			modifier = {
+				factor = 2
+				has_valid_civic = civic_machine_warbots
+			}
+			modifier = {
+				factor = 2
+				has_tradition = tr_supremacy_finish
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = normal_wonder_country_35
+			}
+			modifier = {
+				factor = 100
+				has_country_flag = crazy_wonder_country_35
+			}
+		}
+	}
+}
+
+country_event = {
+	id = fourth_crisis.5
+	title = fourth_crisis.5.name
+	desc = fourth_crisis.5.desc
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = fourth_crisis.5.a
+		remove_modifier = "fourth_crisis_modifier"
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier5unityreward
+		}
+	}
+}
+
+country_event = {
+	id = fourth_crisis.6
+	title = fourth_crisis.6.name
+	desc = fourth_crisis.6.desc
+	picture = GFX_evt_sapient_AI
+	show_sound = event_death_cult
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = fourth_crisis.6.a
+	}
+}
+
+planet_event = {
+	id = fourth_crisis.7
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = owner
+		owner = {
+			has_origin = origin_fourth_crisis
+			NOT = {
+				any_owned_planet = {
+					NOT = { is_same_value = root }
+				}
+			}
+		}
+		is_colony = yes
+	}
+	
+	immediate = {
+		from.owner = {
+			country_event = { id = fourth_crisis.4 }
+		}
+	}
+}

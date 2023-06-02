@@ -1,0 +1,117 @@
+#外域门
+tc_elder_gate_off = {
+	entity = "tc_elder_gate_obelisk_off_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_elder_gate"
+	place_entity_on_planet_plane = no
+	#show_galactic_map_icon = no
+
+	#construction_blocks_others = no
+	#construction_blocked_by_others = no
+	construction_blocks_and_blocked_by = self_type
+
+	possible = {
+		always = no
+	}
+	potential = {
+		always = no
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {}
+}
+
+tc_elder_gate_on = {
+	entity = "tc_elder_gate_obelisk_on_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_elder_gate"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_elder_gate_off }
+	show_galactic_map_icon = no
+	show_in_outliner = no
+
+	#construction_blocks_others = no
+	#construction_blocked_by_others = no
+	construction_blocks_and_blocked_by = self_type
+
+	prerequisites = { tc_tech_opening_eye }
+
+	potential = {
+		has_technology = tc_tech_opening_eye
+	}
+
+	bypass_type = tc_elder_gate
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_void_metal = 6400
+			tc_element_shard = 256
+			influence = 100
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM = {
+			set_megastructure_flag = tc_elder_gate_node
+		}
+		every_system = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = tc_elder_gate_open }
+				}
+				set_global_flag = tc_elder_gate_open
+				every_system = { #激活其他方尖碑
+					every_system_megastructure = {
+						limit = {
+							is_megastructure_type = tc_elder_gate_off
+						}
+						upgrade_megastructure_to = tc_elder_gate_on
+					}
+				} 
+				FROM = { #星团生成
+					country_event = {
+						id = tc_outer.1
+					}
+				}
+			}
+		}
+		activate_gateway = fromfrom
+	}
+}
+
+tc_ancient_gate = {
+	entity = "tc_ancient_gate_obelisk_on_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_elder_gate"
+	place_entity_on_planet_plane = no
+	show_galactic_map_icon = no
+	show_in_outliner = no
+
+	#construction_blocks_others = no
+	#construction_blocked_by_others = no
+	construction_blocks_and_blocked_by = self_type
+
+	bypass_type = tc_elder_gate
+
+	possible = {
+		always = no
+	}
+	potential = {
+		always = no
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		FROMFROM = {
+			set_megastructure_flag = tc_elder_gate_nexus
+		}
+		activate_gateway = fromfrom
+	}
+}

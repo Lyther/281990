@@ -1,0 +1,366 @@
+
+namespace = time_wanderer
+
+# 游荡奇点
+event = {
+	id = time_wanderer.1
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		refresh_time_wanderer = yes
+	}
+}
+
+# 抵达星系
+system_event = {
+	id = time_wanderer.2
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		add_modifier = { modifier = time_wanderer_system_modifier }
+		save_global_event_target_as = time_wanderer_system
+		# 循环
+		system_event = { id = time_wanderer.4 days = 180 random = 180 }
+		# 选择星球
+		if = {
+			limit = {
+				count_system_planet = {
+					count > 0
+				}
+			}
+			if = {
+				limit = {
+					any_system_planet = {
+						is_planet_class = pc_black_hole
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_planet_class = pc_black_hole
+					}
+					choose_as_time_wanderer_planet = yes
+				}
+			}
+			else = {
+				random_system_planet = {
+					choose_as_time_wanderer_planet = yes
+				}
+			}
+		}
+		else = {
+			# 新星系内无星球，也要移除旧的位置
+			event_target:time_wanderer_planet = {
+				remove_modifier = time_wanderer_planet_modifier
+			}
+			clear_global_event_target = event_target:time_wanderer_planet
+		}
+		# 星系拥有者获得提示
+		if = {
+			limit = {
+				exists = owner
+			}
+			owner = {
+				country_event = { id = time_wanderer.6 }
+			}
+		}
+	}
+}
+
+# 抵达星球
+planet_event = {
+	id = time_wanderer.3
+	title = time_wanderer.3.name
+	desc = time_wanderer.3.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_mystic_reveal
+	location = root
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		add_modifier = { modifier = time_wanderer_planet_modifier }
+		save_global_event_target_as = time_wanderer_planet
+	}
+	
+	option = {
+		name = time_wanderer.3.a
+		tooltip = {
+			add_modifier = { modifier = time_wanderer_planet_modifier }
+		}
+	}
+}
+
+# 随机行动
+system_event = {
+	id = time_wanderer.4
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		# 刷新
+		if = {
+			limit = {
+				NOT = {
+					is_same_value = event_target:time_wanderer_system
+				}
+			}
+			event_target:time_wanderer_system = {
+				remove_modifier = time_wanderer_system_modifier
+			}
+			add_modifier = { modifier = time_wanderer_system_modifier }
+			save_global_event_target_as = time_wanderer_system
+		}
+		# 随机行动
+		random_list = {
+			# 移动至相邻星系
+			2 = {
+				if = {
+					limit = {
+						count_neighbor_system = {
+							count > 0
+						}
+					}
+					random_neighbor_system = {
+						choose_as_time_wanderer_system = yes
+					}
+				}
+				else = {
+					refresh_time_wanderer = yes
+				}
+			}
+			# 移动至随机星球
+			0 = {
+				modifier = {
+					add = 3
+					any_system_planet = {
+						NOT = { is_same_value = event_target:time_wanderer_planet }
+					}
+				}
+				random_system_planet = {
+					limit = {
+						NOT = { is_same_value = event_target:time_wanderer_planet }
+					}
+					choose_as_time_wanderer_planet = yes
+				}
+				# 循环
+				system_event = { id = time_wanderer.4 days = 180 random = 180 }
+			}
+			# 吞噬星球
+			1 = {
+				modifier = {
+					factor = 0
+					NOT = { exists = event_target:time_wanderer_planet }
+				}
+				modifier = {
+					factor = 0
+					event_target:time_wanderer_planet = {
+						OR = {
+							# 不吃殖民地
+							is_colony = yes
+							# 不吃人工星球
+							is_artificial = yes
+							# 不吃正在殖民的星球
+							is_under_colonization = yes
+							# 不吃黑洞与白洞
+							is_time_black_hole_planet_class = yes
+							# 不吃异常
+							has_anomaly = yes
+							# 不吃项目
+							# （好像没有对应的trigger）
+							# 不吃局势
+							count_targeting_situation = {
+								count > 0
+							}
+							# 不吃考古
+							exists = archaeological_site
+						}
+					}
+				}
+				event_target:time_wanderer_planet = {
+					if = {
+						limit = {
+							is_star = yes
+							solar_system = {
+								is_time_black_hole_star_class = no
+							}
+						}
+						solar_system = {
+							set_star_class = sc_black_hole
+						}
+					}
+					clear_planet_modifiers = yes
+					every_owned_pop = {
+						kill_pop = yes
+					}
+					destroy_colony = yes
+					set_planet_size = 2
+					change_pc = pc_black_hole
+					reset_planet = yes
+					create_ambient_object = {
+						type = "dimensional_horrorling_object"
+						scale = 0.2
+						location = this
+						use_3d_location = yes
+						entity_offset_height = 1
+					}
+					# 黑洞穿行可选星系
+					solar_system = {
+						set_star_flag = has_black_hole_by_horror
+					}
+				}
+				# 星系拥有者获得提示
+				if = {
+					limit = {
+						exists = owner
+					}
+					owner = {
+						country_event = { id = time_wanderer.7 }
+					}
+				}
+				# 循环
+				system_event = { id = time_wanderer.4 days = 180 random = 180 }
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = time_wanderer.5
+	title = time_wanderer.5.name
+	desc = time_wanderer.5.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_mystic_reveal
+	location = root
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		from = {
+			is_same_value = event_target:time_wanderer_system
+		}
+		owner = {
+			NOT = { has_country_flag = meet_time_wanderer }
+		}
+	}
+	
+	after = {
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = meet_time_wanderer }
+				}
+				add_monthly_resource_mult = {
+					resource = physics_research
+					value = @tier4researchreward
+					min = @tier4researchmin
+					max = @tier4researchmax
+				}
+				hidden_effect = {
+					set_country_flag = meet_time_wanderer
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = time_wanderer.5.a
+	}
+}
+
+country_event = {
+	id = time_wanderer.6
+	title = time_wanderer.6.name
+	desc = {
+		text = time_wanderer.6.desc_1
+		trigger = {
+			NOT = { has_country_flag = meet_time_wanderer }
+		}
+	}
+	desc = {
+		text = time_wanderer.6.desc_2
+		trigger = {
+			has_country_flag = meet_time_wanderer
+		}
+	}
+	picture = GFX_evt_black_hole
+	show_sound = event_mystic_reveal
+	location = from
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_country_flag = stop_time_wanderer_6_trigger }
+	}
+	
+	after = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = meet_time_wanderer }
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier4researchreward
+				min = @tier4researchmin
+				max = @tier4researchmax
+			}
+			hidden_effect = {
+				set_country_flag = meet_time_wanderer
+			}
+		}
+	}
+	
+	option = {
+		name = time_wanderer.6.a
+		trigger = {
+			NOT = { has_country_flag = meet_time_wanderer }
+		}
+	}
+	
+	option = {
+		name = time_wanderer.6.b
+		trigger = {
+			has_country_flag = meet_time_wanderer
+		}
+	}
+	
+	option = {
+		name = time_wanderer.6.c
+		hidden_effect = {
+			set_country_flag = stop_time_wanderer_6_trigger
+		}
+	}
+}
+
+country_event = {
+	id = time_wanderer.7
+	title = time_wanderer.7.name
+	desc = time_wanderer.7.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_mystic_reveal
+	location = event_target:time_wanderer_planet
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_country_flag = stop_time_wanderer_7_trigger }
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = time_wanderer.7.a
+	}
+	
+	option = {
+		name = time_wanderer.7.b
+		hidden_effect = {
+			set_country_flag = stop_time_wanderer_7_trigger
+		}
+	}
+}

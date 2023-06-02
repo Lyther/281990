@@ -1,0 +1,1242 @@
+namespace = artrts_event
+country_event = {
+	id = artrts_event.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		NOT = {
+			has_country_flag = artrts_start_system
+		}
+	}
+
+	immediate = {
+		set_country_flag = artrts_start_system
+		#初始禁用科技
+		set_country_flag = artrts_tech_repeatable_improved_ship_health
+		create_country = {
+			type = artrts_research_helper
+			name = NAME_artrts_country
+			effect = {
+				set_country_flag = artrts_research_helper@root
+				copy_ethos_and_authority = root
+				establish_communications_no_message = root
+				change_country_flag = {
+					colors = {
+						"black"
+						"blue"
+					}
+					icon = {
+						category = "human"
+						file = "flag_human_10.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "new_dawn.dds"
+					}
+				}
+			}
+		}
+	}
+	after = { country_event = { id = artrts_event.2 } }
+}
+country_event = {
+	id = artrts_event.100
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = { country_event = { id = artrts_event.0 days = 1 } }
+}
+
+#菜单
+country_event = {
+	id = artrts_event.200
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = { FROM = { is_country_type = artrts_research_helper } }
+	immediate = { country_event = { id = artrts_event.2 } }
+}
+country_event = {
+	id = artrts_event.2
+	title = artrts_event.2.title
+	desc = artrts_event.2.desc
+
+	diplomatic = yes
+	diplomatic_title = artrth_d_title
+	custom_gui = ARTRTH_UI
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = artrts_event.2.phi
+		custom_gui = ARTRTH_option
+		trigger = { has_country_flag = artrth_open_physics }
+		hidden_effect = {
+			remove_country_flag = artrth_open_physics
+			country_event = { id = artrts_event.2 }
+		}
+	}
+	option = {
+		name = artrts_event.2.phi
+		custom_gui = ARTRTH_option_up
+		trigger = { NOT = { has_country_flag = artrth_open_physics } }
+		hidden_effect = {
+			set_country_flag = artrth_open_physics
+			country_event = { id = artrts_event.2 }
+		}
+	}
+	#########################################################
+	#物理科技
+	#########################################################
+		########################################################################
+		#原版
+		########################################################################
+			option = {
+				trigger = { has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_tile_energy_output
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_shield_output
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_energy_damage
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_energy_fire_rate
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_reduced_building_cost
+				}
+			}
+		########################################################################
+		#不知道什么mod
+		########################################################################
+			option = {
+				trigger = { has_global_flag = LsE_crisis_real has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = LsE_tech_repeatable_weapon_type_h.D_damage
+				}
+			}
+		########################################################################
+		#太虚
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = enable_empty_vagrant_mod
+					is_country_type = default_ev
+					has_country_flag = artrth_open_physics
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ships_research_upkeep_output
+				}
+			}
+		########################################################################
+		#更卡巨构
+		########################################################################
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_dimensional_storage
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_blokkat_physics_repeatable
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_dyson_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_dyson_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_array_capped_r  has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_array_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_matter_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_matter_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_nexus_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_nexus_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = suppressor_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_suppressor_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = hraemc_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_hraemc_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = kugel_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_kugel_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = disco_moon_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_disco_moon_cap
+				}
+			}
+			option = {
+				name = giga_tech_repeatable_matrioshka_brain_cap
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = matrioshka_brain_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_matrioshka_brain_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = penrose_sphere_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_penrose_sphere_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = planetary_computer_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_planetary_computer_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = accelerator_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_accelerator_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = compressor_capped_r has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_compressor_cap
+				}
+			}
+		########################################################################
+		#涅托
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = has_NYTO_mod
+					has_country_flag = artrth_open_physics
+					is_ai = no
+					is_fallen_empire = no
+					has_country_flag = has_nyto_Prp_flag
+					has_country_flag = has_nyto_ftl_flag
+					has_country_flag = has_nyto_ai_flag
+					has_country_flag = has_nyto_Ex_shield_flag
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_GF_nyto_repeatable_phys_100
+				}
+			}
+		########################################################################
+		#工整传统
+		########################################################################
+			option = {
+				trigger = { has_global_flag = tidy_tradition_active has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_lingxiutisheng
+				}
+			}
+		########################################################################
+		#ESC
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = Extra_Ship_Components_NEXT
+					has_country_flag = artrth_open_physics
+					NOT = { has_global_flag = ESC_GLOBAL_FLAG_nanite_weapons_forbidden }
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = esc_tech_repeatable_nanite_damage
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = Extra_Ship_Components_NEXT
+					has_country_flag = artrth_open_physics
+					NOT = { has_global_flag = ESC_GLOBAL_FLAG_nanite_weapons_forbidden }
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = esc_tech_repeatable_nanite_fire_rate
+				}
+			}
+		########################################################################
+		#永恒
+		########################################################################
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_shield
+				}
+			}
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_armor_penetration
+				}
+			}
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_physics }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_shield_penetration
+				}
+			}
+		########################################################################
+		option = {
+			name = artrts_all_tech_banned
+			custom_gui = enclave_artist_option
+			trigger = { has_country_flag = artrth_open_physics }
+			hidden_effect = { ARTRTS_refresh_phi = yes country_event = { id = artrts_event.2 } }
+		}
+		option = {
+			name = artrts_all_tech_research
+			custom_gui = enclave_artist_option
+			trigger = { has_country_flag = artrth_open_physics }
+			hidden_effect = { ARTRTS_research_phi = yes country_event = { id = artrts_event.2 } }
+		}
+	#########################################################
+	option = {
+		name = artrts_event.2.soc
+		custom_gui = ARTRTH_option
+		trigger = { has_country_flag = artrth_open_society }
+		hidden_effect = {
+			remove_country_flag = artrth_open_society
+			country_event = { id = artrts_event.2 }
+		}
+	}
+	option = {
+		name = artrts_event.2.soc
+		custom_gui = ARTRTH_option_up
+		trigger = { NOT = { has_country_flag = artrth_open_society } }
+		hidden_effect = {
+			set_country_flag = artrth_open_society
+			country_event = { id = artrts_event.2 }
+		}
+	}
+	#########################################################
+	#社会科技
+	#########################################################
+		########################################################################
+		#原版
+		########################################################################
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_tile_food_output
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_core_system_cap
+				}
+			}
+			#option = {
+			#	name = tech_repeatable_improved_edict_length
+			#	if = {
+			#		limit = {
+			#			has_country_flag = artrts_tech_repeatable_improved_edict_length
+			#		}
+			#		custom_tooltip = artrts_cannot_research
+			#	}
+			#	else = {
+			#		custom_tooltip = artrts_can_research
+			#	}
+			#	hidden_effect = {
+			#		if = {
+			#			limit = { 
+			#				has_country_flag = artrts_tech_repeatable_improved_edict_length
+			#			}
+			#			remove_country_flag = artrts_tech_repeatable_improved_edict_length
+			#		}
+			#		else = {
+			#			set_country_flag = artrts_tech_repeatable_improved_edict_length
+			#		}
+			#	}
+			#}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_army_damage
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_army_health
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_leader_life_span
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_naval_cap
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_command_limit
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_starbase_capacity
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_strike_craft_fire_damage
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_strike_craft_fire_rate
+				}
+			}
+		########################################################################
+		#伞
+		########################################################################
+			option = {
+				trigger = { has_global_flag = AAR_installed has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = AAR_tech_AP_repeatable
+				}
+			}
+		########################################################################
+		#古代帝国
+		########################################################################
+			option = {
+				trigger = { has_global_flag = has_ancient_empire_mod has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_ag_revision_psionic_theory
+				}
+			}
+		########################################################################
+		#太虚
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = enable_empty_vagrant_mod
+					is_country_type = default_ev
+					has_country_flag = artrth_open_society
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_galaxy_guardians
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = enable_empty_vagrant_mod
+					is_country_type = default_ev
+					has_country_flag = artrth_open_society
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ships_first_industry_upkeep_output
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = enable_empty_vagrant_mod
+					is_country_type = default_ev
+					has_country_flag = artrth_open_society
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_ev_naval_capacity_add
+				}
+			}
+		########################################################################
+		#更卡巨构
+		########################################################################
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_blokkat_society_repeatable
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_blokkat_scrap_research
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_interstellar_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_interstellar_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_art_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_art_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_shipyard_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_shipyard_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_strategic_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_strategic_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = terraform_toxic_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_terraform_toxic_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = warmoon_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_warmoon_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = warplanet_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_warplanet_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = terraform_barren_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_terraform_barren_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = geothermal_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_geothermal_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = glue_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_glue_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = terraform_gasgiant_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_terraform_gasgiant_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = orbital_artificial_eco_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_orbital_artificial_eco_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = siphon_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_siphon_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = systemcraft_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_systemcraft_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = orchid_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_orchid_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = the_vat_capped_r has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_the_vat_cap
+				}
+			}
+		########################################################################
+		#舰R
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = has_wsg_mod
+					has_authority = auth_united_fleet
+					has_ascension_perk = ap_uf_2
+					has_country_flag = ap_uf_2_chain_finished
+					has_country_flag = artrth_open_society
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_sr_uf_damage
+				}
+			}
+		########################################################################
+		#涅托
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = has_NYTO_mod
+					has_country_flag = artrth_open_society
+					is_ai = no 
+					is_fallen_empire = no
+					has_country_flag = has_nyto_Prp_flag
+					has_country_flag = has_nyto_ftl_flag
+					has_country_flag = has_nyto_ai_flag
+					has_country_flag = has_nyto_Ex_shield_flag
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_GF_nyto_repeatable_soc_100
+				}
+			}
+		########################################################################
+		#ESC
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = Extra_Ship_Components_NEXT has_country_flag = artrth_open_society
+					NOT = { has_global_flag = ESC_GLOBAL_FLAG_biological_weapons_forbidden }
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = esc_tech_repeatable_bio_damage
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = Extra_Ship_Components_NEXT has_country_flag = artrth_open_society
+					NOT = { has_global_flag = ESC_GLOBAL_FLAG_biological_weapons_forbidden }
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = esc_tech_repeatable_bio_fire_rate
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = Extra_Ship_Components_NEXT has_country_flag = artrth_open_society
+					NOT = { has_global_flag = ESC_GLOBAL_FLAG_psionic_weapons_forbidden }
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = esc_tech_repeatable_psionic_damage
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = Extra_Ship_Components_NEXT has_country_flag = artrth_open_society
+					NOT = { has_global_flag = ESC_GLOBAL_FLAG_psionic_weapons_forbidden }
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = esc_tech_repeatable_psionic_fire_rate
+				}
+			}
+		########################################################################
+		#游戏人生
+		########################################################################
+			option = {
+				trigger = { has_global_flag = has_ngnl_mod_change_version3 has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_black_ash
+				}
+			}
+		########################################################################
+		#永恒
+		########################################################################
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_developement
+				}
+			}
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_awesome
+				}
+			}
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_society }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_eter
+				}
+			}
+		########################################################################
+		#红警2心灵终结
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = momod_active
+					has_edict = allied_tech_repeatable
+					has_country_flag = artrth_open_society
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_allied_repeatable
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = momod_active
+					has_edict = epsilon_tech_repeatable
+					has_country_flag = artrth_open_society
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_epsilon_repeatable
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = momod_active
+					has_edict = foehn_tech_repeatable
+					has_country_flag = artrth_open_society
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_foehn_repeatable
+				}
+			}
+			option = {
+				trigger = {
+					has_global_flag = momod_active
+					has_edict = soviet_tech_repeatable
+					has_country_flag = artrth_open_society
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_soviet_repeatable
+				}
+			}
+		########################################################################
+		option = {
+			trigger = { has_country_flag = artrth_open_society }
+			custom_gui = enclave_artist_option
+			name = artrts_all_tech_banned
+			hidden_effect = { ARTRTS_refresh_soc = yes country_event = { id = artrts_event.2 } }
+		}
+		option = {
+			trigger = { has_country_flag = artrth_open_society }
+			custom_gui = enclave_artist_option
+			name = artrts_all_tech_research
+			hidden_effect = { ARTRTS_research_soc = yes country_event = { id = artrts_event.2 } }
+		}
+	########################################################################
+	option = {
+		name = artrts_event.2.eng
+		custom_gui = ARTRTH_option
+		trigger = { has_country_flag = artrth_open_engineering }
+		hidden_effect = {
+			remove_country_flag = artrth_open_engineering
+			country_event = { id = artrts_event.2 }
+		}
+	}
+	option = {
+		name = artrts_event.2.eng
+		custom_gui = ARTRTH_option_up
+		trigger = { NOT = { has_country_flag = artrth_open_engineering } }
+		hidden_effect = {
+			set_country_flag = artrth_open_engineering
+			country_event = { id = artrts_event.2 }
+		}
+	}
+	#########################################################
+	#工程科技
+	#########################################################
+		########################################################################
+		#原版
+		########################################################################
+			option = { 
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_tile_mineral_output
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_military_station_damage
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_military_station_health
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_armor_output
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_explosive_damage
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_explosive_fire_rate
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_kinetic_damage
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_weapon_type_kinetic_fire_rate
+				}
+			}
+			option = {
+				trigger = { has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_reduced_building_time
+				}
+			}
+		########################################################################
+		#默认关闭的循环
+		########################################################################
+			option = {
+				trigger = { 
+					has_country_flag = artrth_open_engineering 
+					NOT = { has_global_flag = artrts_tech_repeatable_improved_ship_health } 
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_ship_health
+				}
+			}
+		########################################################################
+		#古代&失落
+		########################################################################
+			option = {
+				name = tech_ag_revision_gravity_theory
+				trigger = { has_global_flag = has_ancient_empire_mod has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_ag_revision_gravity_theory
+				}
+			}
+			option = {
+				trigger = { has_global_flag = LsE_crisis_real has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = LsE_tech_repeatable_weapon_type_h.D_fire_rate
+				}
+			}
+		########################################################################
+		#太虚
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = enable_empty_vagrant_mod
+					is_country_type = default_ev
+					has_country_flag = artrth_open_engineering
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ships_secondary_industry_upkeep_output
+				}
+			}
+		########################################################################
+		#更卡巨构
+		########################################################################
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_reduced_mega_building_time
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_increased_katzen_damage
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_asteroid_artillery_upgrade
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_defense_nexus_capacity_upgrade
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_blokkat_engineering_repeatable
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_blokkat_scrap_damage
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = vanilla_ringworld_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_vanilla_ringworld_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = alderson_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_alderson_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = drill_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_drill_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = crystal_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_crystal_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = shipyard_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_shipyard_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = hyperstructural_ass_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_hyperstructural_ass_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = stellarhabitat_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_stellarhabitat_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = megabase_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_megabase_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = gigaforge_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_gigaforge_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = nidavellir_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_nidavellir_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = orbital_arcologies_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_orbital_arcologies_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = academy_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_academy_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = lifters_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_lifters_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = succ_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_succ_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = asteroid_manufactory_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_asteroid_manufactory_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = asteroid_artillery_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_asteroid_artillery_cap
+				}
+			}
+			option = {
+				name = giga_tech_repeatable_planetshipyard_cap
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = planetshipyard_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_planetshipyard_cap
+				}
+			}
+			option = {
+				trigger = { has_global_flag = gigastructures_enabled has_global_flag = maginot_capped_r has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = giga_tech_repeatable_maginot_cap
+				}
+			}
+		########################################################################
+		#舰R
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = has_wsg_mod
+					has_country_flag = artrth_open_engineering
+					has_authority = auth_united_fleet
+					has_ascension_perk = ap_uf_2
+					has_country_flag = ap_uf_2_chain_finished
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_uf_megastructures_produces
+				}
+			}
+			option = {
+				name = tech_repeatable_uf_auto_building_upgrade
+				trigger = {
+					has_global_flag = has_wsg_mod
+					has_country_flag = artrth_open_engineering
+					has_authority = auth_united_fleet
+					has_ascension_perk = ap_uf_3
+					OR = {
+						has_megastructure = uf_mega_habitat_4
+						has_megastructure = uf_mega_habitat_5
+					}
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_uf_auto_building_upgrade
+				}
+			}
+		########################################################################
+		#涅托
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = has_NYTO_mod
+					has_country_flag = artrth_open_engineering
+					is_ai = no
+					is_fallen_empire = no
+					has_country_flag = has_nyto_Prp_flag
+					has_country_flag = has_nyto_ftl_flag
+					has_country_flag = has_nyto_ai_flag
+					has_country_flag = has_nyto_Ex_shield_flag
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_GF_nyto_repeatable_eng_100
+				}
+			}
+		########################################################################
+		#游戏人生
+		########################################################################
+			option = {
+				trigger = { has_global_flag = has_ngnl_mod_change_version3 has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_improved_ngnl_ship_health
+				}
+			}
+		########################################################################
+		#永恒
+		########################################################################
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_armor
+				}
+			}
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_hp
+				}
+			}
+			option = {
+				trigger = { has_global_flag = tech_eternal_enable has_country_flag = artrth_open_engineering }
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_repeatable_ee_evasion
+				}
+			}
+		########################################################################
+		#红警2心灵终结
+		########################################################################
+			option = {
+				trigger = {
+					has_global_flag = momod_active
+					has_country_flag = artrth_open_engineering
+				}
+				inline_script = { script = "artrts_tech_option"
+					TECH_NAME = tech_mo_automation_repeatable
+				}
+			}
+		########################################################################
+		option = {
+			trigger = { has_country_flag = artrth_open_engineering }
+			custom_gui = enclave_artist_option
+			name = artrts_all_tech_banned
+			hidden_effect = { ARTRTS_refresh_eng = yes country_event = { id = artrts_event.2 } }
+		}
+		option = {
+			trigger = { has_country_flag = artrth_open_engineering }
+			custom_gui = enclave_artist_option
+			name = artrts_all_tech_research
+			hidden_effect = { ARTRTS_research_eng = yes country_event = { id = artrts_event.2 } }
+		}
+	########################################################################
+	option = {
+		name = artrts_event.2.global
+		custom_tooltip = artrts_event.204.desc
+		custom_gui = ARTRTH_option
+		trigger = { has_country_flag = artrth_open_global }
+		hidden_effect = {
+			remove_country_flag = artrth_open_global
+			country_event = { id = artrts_event.2 }
+		}
+	}
+	option = {
+		name = artrts_event.2.global
+		custom_tooltip = artrts_event.204.desc
+		custom_gui = ARTRTH_option_up
+		trigger = { NOT = { has_country_flag = artrth_open_global } }
+		hidden_effect = {
+			set_country_flag = artrth_open_global
+			country_event = { id = artrts_event.2 }
+		}
+	}
+	#########################################################
+	#默认关闭的循环
+	#########################################################
+		option = {
+			name = tech_repeatable_improved_ship_health
+			custom_gui = enclave_curator_option
+			trigger = { has_country_flag = artrth_open_global }
+			if = {
+				limit = { has_global_flag = artrts_tech_repeatable_improved_ship_health }
+				custom_tooltip = artrts_cannot_research
+			}
+			else = { custom_tooltip = artrts_can_research }
+			hidden_effect = {
+				if = {
+					limit = { has_global_flag = artrts_tech_repeatable_improved_ship_health }
+					remove_global_flag = artrts_tech_repeatable_improved_ship_health
+					every_country = { remove_modifier = ARTRTH_repair_hull_tech_bug }
+				}
+				else = {
+					set_global_flag = artrts_tech_repeatable_improved_ship_health
+					every_country = {
+						remove_modifier = ARTRTH_repair_hull_tech_bug
+						add_modifier = {
+							modifier = ARTRTH_repair_hull_tech_bug
+							multiplier = artrts_count_tech_repeatable_improved_ship_health
+						}
+					}
+				}
+			}
+		}
+	option = {
+		name = artrts_exit
+		default_hide_option = yes
+	}
+}
+
+#开局禁用科技
+event = {
+	id = artrts_event.3
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = artrts_tech_repeatable_improved_ship_health
+		every_country = {
+			limit = { has_technology = tech_repeatable_improved_ship_health }
+			change_variable = {
+				which = artrts_count_tech_repeatable_improved_ship_health
+				value = 10
+			}
+			remove_modifier = ARTRTH_repair_hull_tech_bug
+			add_modifier = {
+				modifier = ARTRTH_repair_hull_tech_bug
+				multiplier = artrts_count_tech_repeatable_improved_ship_health
+			}
+		}
+	}
+}
+#在研究船体循环后
+country_event = {
+	id = artrts_event.300
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_repeatable_improved_ship_health
+	}
+
+	immediate = {
+		change_variable = {
+			which = artrts_count_tech_repeatable_improved_ship_health
+			value = 1
+		}
+		if = {
+			limit = { 
+				has_global_flag = artrts_tech_repeatable_improved_ship_health
+			}
+			remove_modifier = ARTRTH_repair_hull_tech_bug
+			add_modifier = {
+				modifier = ARTRTH_repair_hull_tech_bug
+				multiplier = artrts_count_tech_repeatable_improved_ship_health
+			}
+		}
+	}
+}

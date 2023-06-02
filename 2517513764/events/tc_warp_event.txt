@@ -1,0 +1,1288 @@
+namespace = tc_warp
+#on_monthly_pulse
+#每月触发但有3月冷却
+#决定事件触发概率
+event = {
+	id = tc_warp.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = "tc_warp_effect_cooldown"
+		}
+	}
+
+	immediate = {
+		set_timed_global_flag = {
+			flag = tc_warp_effect_cooldown
+			days = 90
+		}
+		every_country = {
+			limit = {
+				has_country_flag = tc_warp_initialization
+				NOT = { #扭曲守护状态不会触发
+					has_modifier = tc_warpward
+					#has_edict = tc_warpward
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = tc_warp
+						value >= 100
+					}
+				}
+				random_list = { #75%
+					75 = {
+						country_event = { id = tc_warp.2 }
+					}
+					25 = { }
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = tc_warp
+						value >= 66
+					}
+				}
+				random_list = { #50%
+					50 = {
+						country_event = { id = tc_warp.2 }
+					}
+					50 = { }
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = tc_warp
+						value >= 33
+					}
+				}
+				random_list = { #20%
+					20 = {
+						country_event = { id = tc_warp.2 }
+					}
+					80 = { }
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = tc_warp
+						value > 0
+					}
+				}
+				random_list = { #5%
+					5 = {
+						country_event = { id = tc_warp.2 }
+					}
+					95 = { }
+				}
+			}
+			else = { }
+		}
+	}
+}
+
+#效果随机和强度计算
+country_event = {
+	id = tc_warp.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = tc_warp
+			value >= 0
+		}
+	}
+
+	immediate = {
+		set_variable = {
+			which = tc_warp_mult
+			value = tc_warp
+		}
+		if = { #主体物种拥有扭曲毒瘤特性 减少50
+			limit = {
+				owner_main_species = {
+					has_trait = tc_trait_warped_tumor
+				}
+			}
+			subtract_variable = {
+				which = tc_warp_mult
+				value = 50
+			}
+		}
+		random_list = { #random +- 15
+			1 = { }
+			1 = { change_variable = { which = tc_warp_mult value = 1 } }
+			1 = { change_variable = { which = tc_warp_mult value = 2 } }
+			1 = { change_variable = { which = tc_warp_mult value = 3 } }
+			1 = { change_variable = { which = tc_warp_mult value = 4 } }
+			1 = { change_variable = { which = tc_warp_mult value = 5 } }
+			1 = { change_variable = { which = tc_warp_mult value = 6 } }
+			1 = { change_variable = { which = tc_warp_mult value = 7 } }
+			1 = { change_variable = { which = tc_warp_mult value = 8 } }
+			1 = { change_variable = { which = tc_warp_mult value = 9 } }
+			1 = { change_variable = { which = tc_warp_mult value = 10 } }
+			1 = { change_variable = { which = tc_warp_mult value = 11 } }
+			1 = { change_variable = { which = tc_warp_mult value = 12 } }
+			1 = { change_variable = { which = tc_warp_mult value = 13 } }
+			1 = { change_variable = { which = tc_warp_mult value = 14 } }
+			1 = { change_variable = { which = tc_warp_mult value = 15 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 1 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 2 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 3 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 4 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 5 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 6 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 7 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 8 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 9 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 10 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 11 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 12 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 13 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 14 } }
+			1 = { subtract_variable = { which = tc_warp_mult value = 15 } }
+		}
+		divide_variable = { which = tc_warp_mult value = 30 } #/30
+		#round_variable = tc_warp_mult #四舍五入取整
+		divide_variable = { 							#四舍五入
+			which = tc_warp_mult 
+			value = 100000 
+		}
+		multiply_variable = { 							#四舍五入
+			which = tc_warp_mult 
+			value = 100000 
+		} 
+
+		random_list = {
+			10 = { #你身上涌出古怪的疲乏感 人口产出-
+				random_owned_planet = {
+					every_owned_pop = {
+						set_variable = {
+							which = tc_warp_mult
+							value = owner.tc_warp_mult
+						}
+						if = {
+							limit = { has_trait = tc_trait_silverwood_heart }
+							tc_warp_effect_mult = { MODIFIER = tc_warp_produces_down DAYS = 30 COUNT = tc_warp_mult }
+						}
+						else = {
+							tc_warp_effect_mult = { MODIFIER = tc_warp_produces_down DAYS = 90 COUNT = tc_warp_mult }
+						}
+						clear_variable = tc_warp_mult
+					}
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_flag = tc_warp_message_off }
+							}
+						}
+						planet_event = {
+							id = tc_warp.10
+						}
+					}
+					else = {
+						create_message = {
+							type = "TC_MESSAGE_WARP"
+							localization = "tc_warp.10.desc"
+							days = 30
+							target = THIS
+						}
+					}
+				}
+			}
+			10 = { #突如其来的反常饥饿感让你感到劳累 人口维护+
+				random_owned_planet = {
+					every_owned_pop = {
+						set_variable = {
+							which = tc_warp_mult
+							value = owner.tc_warp_mult
+						}
+						if = {
+							limit = { has_trait = tc_trait_silverwood_heart }
+							tc_warp_effect_mult = { MODIFIER = tc_warp_pop_upkeep_up DAYS = 30 COUNT = tc_warp_mult }
+						}
+						else = {
+							tc_warp_effect_mult = { MODIFIER = tc_warp_pop_upkeep_up DAYS = 90 COUNT = tc_warp_mult }
+						}
+						clear_variable = tc_warp_mult
+					}
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_flag = tc_warp_message_off }
+							}
+						}
+						planet_event = {
+							id = tc_warp.11
+						}
+					}
+					else = {
+						create_message = {
+							type = "TC_MESSAGE_WARP"
+							localization = "tc_warp.11.desc"
+							days = 30
+							target = THIS
+						}
+					}
+				}
+			}
+			10 = { #你的胃突然发出异常古怪的咕咕声 生成咒波粘浆.
+				random_owned_planet = {
+					set_variable = {
+						which = tc_warp_mult
+						value = owner.tc_warp_mult
+					}
+					while = {
+						add_deposit = tc_flux_goo
+						count = tc_warp_mult
+					}
+					clear_variable = tc_warp_mult
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_flag = tc_warp_message_off }
+							}
+						}
+						planet_event = {
+							id = tc_warp.12
+						}
+					}
+					else = {
+						create_message = {
+							type = "TC_MESSAGE_WARP"
+							localization = "tc_warp.12.desc"
+							days = 30
+							target = THIS
+						}
+					}
+				}
+			}
+			10 = { #你的视野变得诡异而模糊 舰船命中- 舰船追踪-
+				tc_warp_effect_mult = { MODIFIER = tc_warp_tracking_down DAYS = 90 COUNT = tc_warp_mult }
+				if = {
+					limit = {
+						NOT = { has_country_flag = tc_warp_message_off }
+					}
+					country_event = {
+						id = tc_warp.13
+					}
+				}
+				else = {
+					create_message = {
+						type = "TC_MESSAGE_WARP"
+						localization = "tc_warp.13.desc"
+						days = 30
+						target = THIS
+					}
+				}
+
+			}
+			#10 = { #光线突然变得不可抗拒的明亮起来,你的皮肤开始燃烧 
+			#}
+			10 = { #浓雾凭空而生,其间鬼影绰绰. 生成数个邪术守卫陆军
+				if = { #若未创建过邪术守卫国家 则初始化
+					limit = {
+						NOT = { has_global_flag = tc_eldritch_county_init }
+					}
+					create_species = {
+						class = HUM
+						name = "Elderitch"
+					}
+					create_country = {
+						type = tc_eldritch_county
+						name = "Elderitch"
+						flag = {
+							icon={
+								category="tc_hd_aspects"
+								file="hd_alienis.dds"
+							}
+							background={
+								category="backgrounds"
+								file="circle.dds"
+							}
+							colors={
+								"dark_purple"
+								"black"
+								"null"
+								"null"
+							}
+						}
+						species = "Elderitch"
+					}
+					last_created_country = {
+						save_global_event_target_as = tc_eldritch_county_target
+					}
+					set_global_flag = tc_eldritch_county_init
+					every_country = { establish_communications_no_message = event_target:tc_eldritch_county_target }
+				}
+				random_owned_planet = {
+					set_variable = {
+						which = tc_warp_mult
+						value = owner.tc_warp_mult
+					}
+					while = {
+						create_army = { 
+							owner = event_target:tc_eldritch_county_target
+							type = tc_eldritch_guardian
+							species = event_target:tc_eldritch_county_target.species
+						}
+						count = tc_warp_mult
+					}
+					clear_variable = tc_warp_mult
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_flag = tc_warp_message_off }
+							}
+						}
+						planet_event = {
+							id = tc_warp.15
+						}
+					}
+					else = {
+						create_message = {
+							type = "TC_MESSAGE_WARP"
+							localization = "tc_warp.15.desc"
+							days = 30
+							target = THIS
+						}
+					}
+				}
+			}
+			10 = { #它们无处不在!快跑! 稳定度-
+				random_owned_planet = {
+					set_variable = {
+						which = tc_warp_mult
+						value = owner.tc_warp_mult
+					}
+					tc_warp_effect_mult = { MODIFIER = tc_warp_planet_stability_down DAYS = 90 COUNT = tc_warp_mult }
+					clear_variable = tc_warp_mult
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_flag = tc_warp_message_off }
+							}
+						}
+						planet_event = {
+							id = tc_warp.16
+						}
+					}
+					else = {
+						create_message = {
+							type = "TC_MESSAGE_WARP"
+							localization = "tc_warp.16.desc"
+							days = 30
+							target = THIS
+						}
+					}
+				}
+			}
+			10 = { #突然之间你厌倦了破坏 人口能量产出- 人口矿物产出-
+				random_owned_planet = {
+					every_owned_pop = {
+						set_variable = {
+							which = tc_warp_mult
+							value = owner.tc_warp_mult
+						}
+						if = {
+							limit = { has_trait = tc_trait_silverwood_heart }
+							tc_warp_effect_mult = { MODIFIER = tc_warp_pop_minerals_energy_down DAYS = 30 COUNT = tc_warp_mult }
+						}
+						else = {
+							tc_warp_effect_mult = { MODIFIER = tc_warp_pop_minerals_energy_down DAYS = 90 COUNT = tc_warp_mult }
+						}
+						clear_variable = tc_warp_mult
+					}
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_flag = tc_warp_message_off }
+							}
+						}
+						planet_event = {
+							id = tc_warp.17
+						}
+					}
+					else = {
+						create_message = {
+							type = "TC_MESSAGE_WARP"
+							localization = "tc_warp.17.desc"
+							days = 30
+							target = THIS
+						}
+					}
+				}
+			}
+			10 = { #你的感觉猛地膨胀开来 舰船命中+ 舰船追踪+
+				tc_warp_effect_mult = { MODIFIER = tc_warp_tracking_up DAYS = 90 COUNT = tc_warp_mult }
+				if = {
+					limit = {
+						NOT = { has_country_flag = tc_warp_message_off }
+					}
+					country_event = {
+						id = tc_warp.18
+					}
+				}
+				else = {
+					create_message = {
+						type = "TC_MESSAGE_WARP"
+						localization = "tc_warp.18.desc"
+						days = 30
+						target = THIS
+					}
+				}
+			}
+			10 = { #那片嘈杂声是怎么回事?有东西在尾随你. 人口幸福度-
+				random_owned_planet = {
+					every_owned_pop = {
+						set_variable = {
+							which = tc_warp_mult
+							value = owner.tc_warp_mult
+						}
+						if = {
+							limit = { has_trait = tc_trait_silverwood_heart }
+							tc_warp_effect_mult = { MODIFIER = tc_warp_pop_happiness_down DAYS = 30 COUNT = tc_warp_mult }
+						}
+						else = {
+							tc_warp_effect_mult = { MODIFIER = tc_warp_pop_happiness_down DAYS = 90 COUNT = tc_warp_mult }
+						}
+						clear_variable = tc_warp_mult
+					}
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_flag = tc_warp_message_off }
+							}
+						}
+						planet_event = {
+							id = tc_warp.19
+						}
+					}
+					else = {
+						create_message = {
+							type = "TC_MESSAGE_WARP"
+							localization = "tc_warp.19.desc"
+							days = 30
+							target = THIS
+						}
+					}
+				}
+			}
+			10 = { #古怪的耳语向你倾吐着秘密 知识碎片+
+				add_resource = {
+					tc_knowledge_fragment = 10
+					mult = tc_warp_mult
+				}
+				if = {
+					limit = {
+						NOT = { has_country_flag = tc_warp_message_off }
+					}
+					country_event = {
+						id = tc_warp.20
+					}
+				}
+				else = {
+					create_message = {
+						type = "TC_MESSAGE_WARP"
+						localization = "tc_warp.20.desc"
+						days = 30
+						target = THIS
+					}
+				}
+			}
+			10 = { #有那么一瞬间你感到头脑无比清晰 研究速度+
+				tc_warp_effect_mult = { MODIFIER = tc_warp_research_speed_up DAYS = 90 COUNT = tc_warp_mult }
+				if = {
+					limit = {
+						NOT = { has_country_flag = tc_warp_message_off }
+					}
+					country_event = {
+						id = tc_warp.21
+					}
+				}
+				else = {
+					create_message = {
+						type = "TC_MESSAGE_WARP"
+						localization = "tc_warp.21.desc"
+						days = 30
+						target = THIS
+					}
+				}	
+			}
+		}
+
+		clear_variable = tc_warp_mult #清除变量
+	}
+}
+
+#污染地块计算
+#月检测
+event = {
+	id = tc_warp.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		every_country = {
+			limit = {
+				has_country_flag = tc_warp_initialization
+			}
+			every_owned_planet = { #根据星球建筑积累污染和转变咒波地块
+				limit = { #免疫腐化类型
+					NOR = {
+						is_planet_class = pc_gaia
+						is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+						is_planet_class = pc_tc_advanced_alchemical_planet
+						is_planet_class = pc_tc_pocket_planar
+						has_planet_flag = "tc_taint_immunity_planet"
+					}
+				}
+				if = { #非格式塔
+					limit = {
+						owner = {
+							is_gestalt = no
+						}
+					}
+					export_trigger_value_to_variable = {
+						trigger = num_assigned_jobs
+						parameters = {
+							job = tc_alchemical_job
+						}
+						variable = tc_alchemical_job_num_temp_var
+					}
+					export_trigger_value_to_variable = {
+						trigger = num_assigned_jobs
+						parameters = {
+							job = tc_essence_distil_drone
+						}
+						variable = tc_essence_distil_job_num_temp_var
+					}
+				}
+				else = { #格式塔
+					export_trigger_value_to_variable = {
+						trigger = num_assigned_jobs
+						parameters = {
+							job = tc_alchemical_job
+						}
+						variable = tc_alchemical_job_num_temp_var
+					}
+					export_trigger_value_to_variable = {
+						trigger = num_assigned_jobs
+						parameters = {
+							job = tc_essence_distil_drone
+						}
+						variable = tc_essence_distil_job_num_temp_var
+					}
+				}
+				#设定炼金污染乘数
+				set_variable = { which = tc_alchemical_taint_temp_var value = 1 }
+				if = { #炼金塔
+					limit = { 
+						has_building = building_tc_alchemical_t1
+					}
+					multiply_variable = {
+						which = tc_alchemical_taint_temp_var
+						value = 3
+					}
+				}
+				else_if = {
+					limit = { 
+						has_building = building_tc_alchemical_t2
+					}
+					multiply_variable = {
+						which = tc_alchemical_taint_temp_var
+						value = 2
+					}
+				}
+				else_if = {
+					limit = { 
+						has_building = building_tc_alchemical_t1
+					}
+					multiply_variable = {
+						which = tc_alchemical_taint_temp_var
+						value = 1
+					}
+				}
+				else = { }
+				#设定蒸馏污染乘数
+				set_variable = { which = tc_essence_distil_taint_temp_var value = 1 }
+				if = { #蒸馏塔
+					limit = { 
+						has_building = building_tc_essence_distil_t3
+					}
+					multiply_variable = {
+						which = tc_essence_distil_taint_temp_var
+						value = 3
+					}
+				}
+				else_if = {
+					limit = { 
+						has_building = building_tc_essence_distil_t1
+					}
+					multiply_variable = {
+						which = tc_essence_distil_taint_temp_var
+						value = 2
+					}
+				}
+				else_if = {
+					limit = { 
+						has_building = building_tc_essence_distil_t2
+					}
+					multiply_variable = {
+						which = tc_essence_distil_taint_temp_var
+						value = 1
+					}
+				}
+				else = { }
+				#乘以职业数量
+				multiply_variable = { which = tc_alchemical_taint_temp_var value = tc_alchemical_job_num_temp_var }
+				multiply_variable = { which = tc_essence_distil_taint_temp_var value = tc_essence_distil_job_num_temp_var }
+				#若存在清理器 则-25%
+				if = {
+					limit = {
+						has_building = building_tc_flux_scrubber
+					}
+					multiply_variable = {
+						which = tc_alchemical_taint_temp_var
+						value = 0.75
+					}
+					multiply_variable = {
+						which = tc_essence_distil_taint_temp_var
+						value = 0.75
+					}
+				}
+				#添加至星球污染值
+				change_variable = { which = tc_planet_taint_var value = tc_alchemical_taint_temp_var }
+				change_variable = { which = tc_planet_taint_var value = tc_essence_distil_taint_temp_var }
+				#若超过512则转化为咒波
+				while = {
+					count = 1
+					if = {
+						limit = {
+							check_variable = {
+								which = tc_planet_taint_var
+								value >= 512
+							}
+						}
+						subtract_variable = {
+							which = tc_planet_taint_var
+							value = 512
+						}
+						add_deposit = tc_flux_goo
+						random_deposit = {
+							limit = {
+								is_deposit_type = tc_flux_goo
+								NOT = { has_deposit_flag = tc_flux_goo_trigger_cooldown }
+							}
+							set_timed_deposit_flag = {
+								flag = tc_flux_goo_trigger_cooldown
+								days = 360
+							}
+						}
+						if = {
+							limit = {
+								NOT = { has_building = building_tc_flux_scrubber }
+							}
+							create_message = {
+								type = "TC_MESSAGE_WARP"
+								localization = "tc_flux_goo_spawn"
+								days = 30
+								target = THIS
+							}
+						}
+					}
+				}
+				#清除临时变量
+				clear_variable = tc_alchemical_taint_temp_var
+				clear_variable = tc_essence_distil_taint_temp_var
+				clear_variable = tc_alchemical_job_num_temp_var
+				clear_variable = tc_essence_distil_job_num_temp_var
+				if = { #咒波洗涤器-特殊星球类型
+					limit = {
+						OR = {
+							has_building = building_tc_flux_scrubber
+							is_planet_class = pc_gaia
+							is_planet_class = pc_tc_advanced_alchemical_planet
+							is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+							has_planet_flag = "tc_taint_immunity_planet"
+						}
+					}
+					random_list = {
+						50 = {}
+						50 = {
+							random_deposit = {
+								limit = {
+									is_deposit_type = tc_flux_goo
+								}
+								clear_blocker = yes
+								PREVPREV = {
+									add_resource = {
+										tc_essences = 512
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			every_owned_planet = { #咒波地块的转化
+				limit = { #免疫腐化类型
+					NOR = {
+						is_planet_class = pc_gaia
+						is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+						is_planet_class = pc_tc_advanced_alchemical_planet
+						has_planet_flag = "tc_taint_immunity_planet"
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_planet_flag = tc_flux_goo_trigger_cooldown
+						}
+					}
+					random_deposit = { #有咒波地块的,延时360天,未清理则将其中之一转为腐化之地
+						if = {
+							limit = {
+								is_deposit_type = tc_flux_goo
+								NOT = { has_deposit_flag = tc_flux_goo_trigger_cooldown }
+								planet = {
+									NOT = { has_planet_flag = tc_flux_goo_trigger_cooldown }
+								}
+							}
+							planet = {
+								set_timed_planet_flag = {
+									flag = tc_flux_goo_trigger_cooldown
+									days = 360
+								}
+								planet_event = {
+									id = tc_warp.4
+									days = 360
+								}
+							}
+						}
+					}
+				}
+				if = { #若存在天域花 则1/10概率减少一块腐化之地
+					limit = {
+						has_deposit = tc_ethereal_bloom
+					}
+					random_list = {
+						90 = {}
+						10 = {
+							random_deposit = {
+								limit = {
+									is_deposit_type = tc_taint_land
+								}
+								clear_blocker = yes
+							}
+						}
+					}
+				}
+				else_if = { #若不存在天域花 每次判断5%概率增加一块腐化之地
+					limit = {
+						has_deposit = tc_taint_land
+					}
+					random_list = {
+						95 = {}
+						5 = {
+							add_deposit = tc_taint_land
+						}
+					}
+				}
+				else = { }
+				
+				#此代码块有严重问题不可使用
+				##export_trigger_value_to_variable = {
+				##	trigger = num_uncleared_blockers
+				##	parameters = {
+				##		type = tc_taint_land
+				##	}
+				##	variable = tc_taint_block_num_temp_var
+				##}
+
+				#传统统计方式 若超过100可能失效(但应该没有什么魔怔玩意整超过100大小的球)
+				while = {
+					limit = {
+						has_deposit = tc_taint_land
+					}
+					random_deposit = {
+						limit = {
+							is_deposit_type = tc_taint_land
+						}
+						clear_blocker = yes
+					}
+					change_variable = {
+						which = tc_taint_block_num_temp_var
+						value = 1
+					}
+				}
+
+				if = { #腐化之地地块大于星球大小时,将星球转化为腐化星球 延时三年
+					limit = {
+						check_variable = {
+							which = tc_taint_block_num_temp_var
+							value > trigger:planet_size
+						}
+					}
+					planet_event = {
+						id = tc_warp.8
+					}
+					set_timed_planet_flag = {
+						flag = tc_taint_land_check_cooldown
+						days = 1080
+					}
+				}
+				while = {
+					count = tc_taint_block_num_temp_var
+					add_deposit = tc_taint_land
+				}
+				clear_variable = tc_taint_block_num_temp_var
+			}
+		}
+	}
+}
+
+#咒波地块转化为腐化之地
+planet_event = {
+	id = tc_warp.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_deposit = tc_flux_goo
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_planet_flag = tc_flux_goo_trigger_cooldown
+				}
+			}
+			random_deposit = {
+				limit = {
+					is_deposit_type = tc_flux_goo
+					NOT = {
+						has_deposit_flag = tc_flux_goo_trigger_cooldown
+					}
+				}
+				planet = {
+					add_deposit = tc_taint_land
+					planet_event = {
+						id = tc_warp.5
+					}
+				}
+				clear_blocker = yes
+			}
+		}
+	}
+}
+
+#通知事件
+planet_event = {
+	id = tc_warp.5
+	title = tc_warp.5.title
+	desc = tc_warp.5.desc
+	is_triggered_only = yes
+	picture = "GFX_event_tc_taint_world"
+	location = THIS
+
+	trigger = {
+		exists = owner
+		owner = {
+			NOT = {
+				has_country_flag = tc_taint_manage_off
+			}
+		}
+	}
+
+	option = {
+		name = tc_warp.5.a
+	}
+
+	option = {
+		name = tc_warp.5.b
+		trigger = {
+			NOT = {
+				has_deposit = tc_ethereal_bloom
+			}
+			planet_owner = {
+				has_technology = tc_tech_ethereal_bloom
+				resource_stockpile_compare = { resource = "tc_element_shard" value >= 500 } }
+			}
+		add_deposit = tc_ethereal_bloom
+		owner = {
+			add_resource = {
+				tc_element_shard = -500
+			}
+		}
+	}
+
+	option = {
+		name = tc_warp.5.c
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = tc_taint_manage_off
+				}		
+			}
+		}
+		owner = {
+			set_country_flag = tc_taint_manage_off
+		}
+	}
+}
+
+#若被邪术守卫攻陷,添加破坏度并归还所有者
+country_event = {
+	id = tc_warp.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = tc_eldritch_county
+	}
+
+	immediate = {
+		FROMFROM = {
+			every_planet_army = {
+				limit = {
+					army_type = tc_eldritch_guardian
+				}
+				remove_army = yes
+			}
+			planet_event = {
+				id = tc_warp.7
+				days = 1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = tc_warp.7
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_controller = planet.owner
+		add_planet_devastation = 30
+	}
+}
+
+#通知事件 同时触发延时
+planet_event = {
+	id = tc_warp.8
+	title = tc_warp.8.title
+	desc = tc_warp.8.desc
+	is_triggered_only = yes
+	location = THIS
+
+	trigger = {
+		NOT = {
+			has_planet_flag = tc_taint_land_check_cooldown
+		}
+	}
+
+	immediate = {
+		planet_event = {
+			id = tc_warp.9
+			days = 1080
+		}
+	}
+
+	option = {
+		name = "tc_warp.8.a"
+	}
+}
+
+#倒计时结束 进行再次判定 若仍然符合条件则转化星球
+planet_event = {
+	id = tc_warp.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {}
+
+	immediate = {
+		#此代码块有严重问题不可使用
+		##export_trigger_value_to_variable = {
+		##	trigger = num_uncleared_blockers
+		##	parameters = {
+		##		type = tc_taint_land
+		##	}
+		##	variable = tc_taint_block_num_temp_var
+		##}
+
+		#传统统计方式
+		while = {
+			limit = {
+				has_deposit = tc_taint_land
+			}
+			random_deposit = {
+				limit = {
+					is_deposit_type = tc_taint_land
+				}
+				clear_blocker = yes
+			}
+			change_variable = {
+				which = tc_taint_block_num_temp_var
+				value = 1
+			}
+		}
+		if = { 
+			limit = {
+				check_variable = {
+					which = tc_taint_block_num_temp_var
+					value > trigger:planet_size
+				}
+			}
+			planet_event = {
+				id = tc_planet.22
+			}
+			remove_all_armies = yes
+			remove_all_buildings = yes
+			clear_blockers = yes
+			every_owned_pop = {
+				kill_pop = yes
+			}
+			if = {
+				limit = {
+					OR = {
+						is_planet_class = pc_ringworld_habitable
+						is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+						is_planet_class = pc_tc_alchemical_ringworld_habitable
+					}
+				}
+				change_pc = pc_ringworld_habitable_damaged
+				set_planet_entity = {
+					entity = pc_tc_tainted_ringworld_01_entity
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						is_planet_class = pc_habitat
+						is_artificial = yes
+					}
+				}
+				remove_planet = yes
+			}
+			else = {
+				change_pc = pc_tc_taint
+			}
+		}
+		clear_variable = tc_taint_block_num_temp_var
+	}
+}
+
+###通知事件
+#你身上涌出古怪的疲乏感 人口产出-
+planet_event = {
+	id = tc_warp.10
+	is_triggered_only = yes
+	desc = tc_warp.10.desc
+	title = tc_warp.10.title
+	picture = "GFX_evt_alien_segregation"
+	location = ROOT
+
+	option = { name = tc_warp.10.a }
+	option = { 
+		name = tc_warp.off
+		owner = {
+			set_country_flag = tc_warp_message_off
+		}
+	}
+}
+
+#突如其来的反常饥饿感让你感到劳累 人口维护+
+planet_event = {
+	id = tc_warp.11
+	is_triggered_only = yes
+	desc = tc_warp.11.desc
+	title = tc_warp.11.title
+	picture = "GFX_evt_alien_segregation"
+	location = ROOT
+
+	option = { name = tc_warp.11.a }
+	option = { 
+		name = tc_warp.off
+		owner = {
+			set_country_flag = tc_warp_message_off
+		}
+	}
+}
+
+#你的胃突然发出异常古怪的咕咕声 生成咒波粘浆
+planet_event = {
+	id = tc_warp.12
+	is_triggered_only = yes
+	desc = tc_warp.12.desc
+	title = tc_warp.12.title
+	picture = "GFX_evt_alien_segregation"
+	location = ROOT
+
+	option = { name = tc_warp.12.a }
+	option = { 
+		name = tc_warp.off
+		owner = {
+			set_country_flag = tc_warp_message_off
+		}
+	}
+}
+
+#你的视野变得诡异而模糊 舰船命中- 舰船追踪-
+country_event = {
+	id = tc_warp.13
+	is_triggered_only = yes
+	desc = tc_warp.13.desc
+	title = tc_warp.13.title
+	picture = "GFX_evt_synth_sabotage"
+
+	option = { name = tc_warp.13.a }
+	option = { 
+		name = tc_warp.off
+		set_country_flag = tc_warp_message_off
+
+	}
+}
+
+#光线突然变得不可抗拒的明亮起来,你的皮肤开始燃烧 
+country_event = {
+	id = tc_warp.14
+	is_triggered_only = yes
+	desc = tc_warp.14.desc
+	title = tc_warp.14.title
+	picture = ""
+
+	option = { name = tc_warp.14.a }
+	option = { 
+		name = tc_warp.off
+		set_country_flag = tc_warp_message_off
+	}
+}
+
+#浓雾凭空而生,其间鬼影绰绰. 生成数个邪术守卫陆军
+planet_event = {
+	id = tc_warp.15
+	is_triggered_only = yes
+	desc = tc_warp.15.desc
+	title = tc_warp.15.title
+	picture = "GFX_evt_psionic_battle"
+	location = ROOT
+
+	option = { name = tc_warp.15.a }
+	option = { 
+		name = tc_warp.off
+		owner = {
+			set_country_flag = tc_warp_message_off
+		}
+	}
+}
+
+#它们无处不在!快跑! 稳定度-
+planet_event = {
+	id = tc_warp.16
+	is_triggered_only = yes
+	desc = tc_warp.16.desc
+	title = tc_warp.16.title
+	picture = "GFX_evt_psionic_battle"
+	location = ROOT
+
+	option = { name = tc_warp.16.a }
+	option = { 
+		name = tc_warp.off
+		owner = {
+			set_country_flag = tc_warp_message_off
+		}
+	}
+}
+
+#突然之间你厌倦了破坏 人口能量产出- 人口矿物产出-
+planet_event = {
+	id = tc_warp.17
+	is_triggered_only = yes
+	desc = tc_warp.17.desc
+	title = tc_warp.17.title
+	picture = "GFX_evt_mining_operations"
+	location = ROOT
+
+	option = { name = tc_warp.17.a }
+	option = { 
+		name = tc_warp.off
+		owner = {
+			set_country_flag = tc_warp_message_off
+		}
+	}
+}
+
+#你的感觉猛地膨胀开来 舰船命中+ 舰船追踪+
+country_event = {
+	id = tc_warp.18
+	is_triggered_only = yes
+	desc = tc_warp.18.desc
+	title = tc_warp.18.title
+	picture = "GFX_evt_partition"
+
+	option = { name = tc_warp.18.a }
+	option = { 
+		name = tc_warp.off
+		set_country_flag = tc_warp_message_off
+	}
+}
+
+#那片嘈杂声是怎么回事?有东西在尾随你. 人口幸福度-
+planet_event = {
+	id = tc_warp.19
+	is_triggered_only = yes
+	desc = tc_warp.19.desc
+	title = tc_warp.19.title
+	picture = "GFX_evt_psionic_battle"
+	location = ROOT
+
+	option = { name = tc_warp.19.a }	
+	option = { 
+		name = tc_warp.off
+		owner = {
+			set_country_flag = tc_warp_message_off
+		}
+	}
+}
+
+#古怪的耳语向你倾吐着秘密 知识碎片+
+country_event = {
+	id = tc_warp.20
+	is_triggered_only = yes
+	desc = tc_warp.20.desc
+	title = tc_warp.20.title
+	picture = "GFX_evt_physics_research"
+
+	option = { name = tc_warp.20.a }	
+	option = { 
+		name = tc_warp.off
+		set_country_flag = tc_warp_message_off
+	}	
+}
+
+#有那么一瞬间你感到头脑无比清晰 研究速度+
+country_event = {
+	id = tc_warp.21
+	is_triggered_only = yes
+	desc = tc_warp.21.desc
+	title = tc_warp.21.title
+	picture = "GFX_evt_physics_research"
+
+	option = { name = tc_warp.21.a }
+	option = { 
+		name = tc_warp.off
+		set_country_flag = tc_warp_message_off
+	}		
+}

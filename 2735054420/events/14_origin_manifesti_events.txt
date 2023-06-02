@@ -1,0 +1,1722 @@
+
+namespace = origin_manifesti
+
+country_event = {
+	id = origin_manifesti.1
+	title = "origin_manifesti.1.name"
+	desc = "origin_manifesti.1.desc"
+	picture = GFX_evt_tradestation_interior
+	show_sound = event_factions
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_manifesti
+	}
+	
+	immediate = {
+		set_country_flag = manifesti_spawned
+		country_event = { id = origin_manifesti.9 days = 360 random = 1440 }
+		species = {
+			set_living_standard = {
+				country = root
+				type = living_standard_decadent
+				cooldown = yes
+			}
+		}
+		set_variable = {
+			which = origin_manifesti_count
+			value = 0
+		}
+		capital_scope = {
+			save_global_event_target_as = origin_manifesti_home_planet
+			set_planet_flag = fallen_empire_world #蠢驴瞎改建筑底层代码，若不这么做，堕落建筑会被清掉
+			clear_blockers = yes
+			add_deposit = d_former_relic_world
+			remove_all_districts = yes
+			while = {
+				count = 5
+				add_district = district_arcology_housing
+			}
+			remove_all_buildings = yes
+			add_building = building_capital
+			add_building = building_origin_manifesti
+			add_building = building_class_4_singularity
+			add_building = building_dimensional_fabricator
+			add_building = building_nourishment_center
+			add_building = building_nano_forge
+			add_building = building_affluence_center
+			add_building = building_master_archive
+			add_building = building_fe_dome
+			every_owned_pop = {
+				limit = {
+					is_unemployed = yes
+				}
+				clear_pop_category = yes
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.1.a
+		start_situation = {
+			type = situation_origin_manifesti
+			target = root
+			effect = {
+				set_situation_approach = approach_origin_manifesti_default
+				save_global_event_target_as = situation_origin_manifesti
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = origin_manifesti.2
+	title = "origin_manifesti.2.name"
+	desc = "origin_manifesti.2.desc"
+	picture = GFX_evt_hive_mind
+	show_sound = event_mystic_reveal_light
+	situation = this
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		owner = {
+			change_variable = {
+				which = origin_manifesti_count
+				value = 1
+			}
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = {
+						check_variable = {
+							which = origin_manifesti_count
+							value < 6
+						}
+					}
+					start_situation = {
+						type = situation_origin_manifesti
+						target = owner
+						effect = {
+							set_situation_approach = approach_origin_manifesti_default
+							add_situation_progress = -50
+							save_global_event_target_as = situation_origin_manifesti
+						}
+					}
+				}
+				else = {
+					country_event = { id = origin_manifesti.4 }
+				}
+			}
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.2.a
+		if = {
+			limit = {
+				owner = {
+					check_variable = {
+						which = origin_manifesti_count
+						value = 3
+					}
+				}
+			}
+			custom_tooltip = "origin_manifesti.tooltip"
+		}
+	}
+}
+
+situation_event = {
+	id = origin_manifesti.3
+	title = "origin_manifesti.3.name"
+	desc = "origin_manifesti.3.desc"
+	picture = GFX_evt_hive_mind
+	show_sound = event_mystic_reveal_light
+	situation = this
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		owner = {
+			change_variable = {
+				which = origin_manifesti_count
+				value = -1
+			}
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = {
+						check_variable = {
+							which = origin_manifesti_count
+							value > -6
+						}
+					}
+					start_situation = {
+						type = situation_origin_manifesti
+						target = owner
+						effect = {
+							set_situation_approach = approach_origin_manifesti_default
+							add_situation_progress = 45
+							save_global_event_target_as = situation_origin_manifesti
+						}
+					}
+				}
+				else = {
+					country_event = { id = origin_manifesti.5 }
+				}
+			}
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.3.a
+		if = {
+			limit = {
+				owner = {
+					check_variable = {
+						which = origin_manifesti_count
+						value = -3
+					}
+				}
+			}
+			custom_tooltip = "origin_manifesti.tooltip"
+		}
+	}
+}
+
+country_event = {
+	id = origin_manifesti.4
+	title = "origin_manifesti.4.name"
+	desc = "origin_manifesti.4.desc"
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_manifesti
+	}
+	
+	immediate = {
+		set_origin = origin_manifesti_dream_1
+		every_owned_planet = {
+			limit = {
+				NOT = {
+					has_building = building_origin_manifesti
+				}
+			}
+			remove_modifier = origin_manifesti_modifier_0
+			remove_modifier = origin_manifesti_modifier_1
+			remove_modifier = origin_manifesti_modifier_2
+			remove_modifier = origin_manifesti_modifier_3
+			remove_modifier = origin_manifesti_modifier_4
+			remove_modifier = origin_manifesti_modifier_5
+			remove_modifier = origin_manifesti_modifier_6
+			remove_modifier = origin_manifesti_modifier_7
+			remove_modifier = origin_manifesti_modifier_8
+			remove_modifier = origin_manifesti_modifier_9
+			remove_modifier = origin_manifesti_modifier_10
+			remove_modifier = origin_manifesti_modifier_11
+			remove_modifier = origin_manifesti_modifier_12
+			remove_modifier = origin_manifesti_modifier_13
+			remove_modifier = origin_manifesti_modifier_14
+			remove_modifier = origin_manifesti_modifier_15
+			clear_planet_modifiers = yes
+			remove_all_buildings = yes
+			remove_all_districts = yes
+			every_owned_pop = { kill_pop = yes }
+			destroy_colony = yes
+		}
+		every_owned_planet = {
+			limit = {
+				has_building = building_origin_manifesti
+			}
+			remove_building = building_origin_manifesti
+			remove_building = building_class_4_singularity
+			remove_building = building_dimensional_fabricator
+			remove_building = building_nourishment_center
+			remove_building = building_nano_forge
+			remove_building = building_affluence_center
+			remove_building = building_master_archive
+			remove_building = building_fe_dome
+			remove_modifier = origin_manifesti_modifier_0
+			remove_modifier = origin_manifesti_modifier_1
+			remove_modifier = origin_manifesti_modifier_2
+			remove_modifier = origin_manifesti_modifier_3
+			remove_modifier = origin_manifesti_modifier_4
+			remove_modifier = origin_manifesti_modifier_5
+			remove_modifier = origin_manifesti_modifier_6
+			remove_modifier = origin_manifesti_modifier_7
+			remove_modifier = origin_manifesti_modifier_8
+			remove_modifier = origin_manifesti_modifier_9
+			remove_modifier = origin_manifesti_modifier_10
+			remove_modifier = origin_manifesti_modifier_11
+			remove_modifier = origin_manifesti_modifier_12
+			remove_modifier = origin_manifesti_modifier_13
+			remove_modifier = origin_manifesti_modifier_14
+			remove_modifier = origin_manifesti_modifier_15
+		}
+		every_owned_starbase = {
+			delete_ship = this
+		}
+		every_owned_fleet = {
+			delete_fleet = this
+		}
+		every_owned_army = {
+			remove_army = yes
+		}
+		every_subject = {
+			set_subject_of = {
+				who = none
+			}
+		}
+		clear_resources = yes
+		add_resource = {
+			minerals = 1000
+			energy = 500
+			food = 100
+			influence = 100
+		}
+		if = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = origin_manifesti.7 days = 360 }
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.4.a
+		custom_tooltip = "origin_manifesti.dream_1.tooltip"
+		tooltip = {
+			set_origin = origin_manifesti_dream_1
+		}
+	}
+}
+
+country_event = {
+	id = origin_manifesti.5
+	title = "origin_manifesti.5.name"
+	desc = "origin_manifesti.5.desc"
+	picture = GFX_evt_collapsing_roof
+	show_sound = event_mystic_reveal_light
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_manifesti
+	}
+	
+	immediate = {
+		add_modifier = {
+			modifier = origin_manifesti_modifier_dream
+			days = -1
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.5.a
+		enable_special_project = {
+			name = ORIGIN_MANIFESTI_DREAM_PROJECT
+			location = capital_scope
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = origin_manifesti.6
+	title = "origin_manifesti.6.name"
+	desc = "origin_manifesti.6.desc"
+	picture = GFX_evt_shroudwalker_enclave
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_manifesti
+	}
+	
+	immediate = {
+		set_origin = origin_manifesti_dream_2
+		every_owned_planet = {
+			limit = {
+				NOT = {
+					has_building = building_origin_manifesti
+				}
+			}
+			remove_modifier = origin_manifesti_modifier_0
+			remove_modifier = origin_manifesti_modifier_1
+			remove_modifier = origin_manifesti_modifier_2
+			remove_modifier = origin_manifesti_modifier_3
+			remove_modifier = origin_manifesti_modifier_4
+			remove_modifier = origin_manifesti_modifier_5
+			remove_modifier = origin_manifesti_modifier_6
+			remove_modifier = origin_manifesti_modifier_7
+			remove_modifier = origin_manifesti_modifier_8
+			remove_modifier = origin_manifesti_modifier_9
+			remove_modifier = origin_manifesti_modifier_10
+			remove_modifier = origin_manifesti_modifier_11
+			remove_modifier = origin_manifesti_modifier_12
+			remove_modifier = origin_manifesti_modifier_13
+			remove_modifier = origin_manifesti_modifier_14
+			remove_modifier = origin_manifesti_modifier_15
+			clear_planet_modifiers = yes
+			remove_all_buildings = yes
+			remove_all_districts = yes
+			every_owned_pop = { kill_pop = yes }
+			destroy_colony = yes
+		}
+		every_owned_planet = {
+			limit = {
+				has_building = building_origin_manifesti
+			}
+			remove_building = building_origin_manifesti
+			add_building = building_origin_manifesti_dream
+			remove_modifier = origin_manifesti_modifier_0
+			remove_modifier = origin_manifesti_modifier_1
+			remove_modifier = origin_manifesti_modifier_2
+			remove_modifier = origin_manifesti_modifier_3
+			remove_modifier = origin_manifesti_modifier_4
+			remove_modifier = origin_manifesti_modifier_5
+			remove_modifier = origin_manifesti_modifier_6
+			remove_modifier = origin_manifesti_modifier_7
+			remove_modifier = origin_manifesti_modifier_8
+			remove_modifier = origin_manifesti_modifier_9
+			remove_modifier = origin_manifesti_modifier_10
+			remove_modifier = origin_manifesti_modifier_11
+			remove_modifier = origin_manifesti_modifier_12
+			remove_modifier = origin_manifesti_modifier_13
+			remove_modifier = origin_manifesti_modifier_14
+			remove_modifier = origin_manifesti_modifier_15
+		}
+		every_owned_starbase = {
+			delete_ship = this
+		}
+		every_owned_fleet = {
+			delete_fleet = this
+		}
+		every_owned_army = {
+			remove_army = yes
+		}
+		every_subject = {
+			set_subject_of = {
+				who = none
+			}
+		}
+		clear_resources = yes
+		add_resource = {
+			minerals = 2000
+			energy = 1000
+			food = 200
+			influence = 200
+		}
+		remove_modifier = origin_manifesti_modifier_dream
+	}
+	
+	option = {
+		name = origin_manifesti.6.a
+		custom_tooltip = "origin_manifesti.dream_2.tooltip"
+		custom_tooltip = "time.501.a.tooltip"
+		tooltip = {
+			set_origin = origin_manifesti_dream_2
+		}
+		if = {
+			limit = {
+				NOT = { has_relic = r_horror_matter }
+			}
+			add_relic = r_horror_matter
+		}
+		else = {
+			add_resource = { sr_dark_matter = 10000 }
+			custom_tooltip = "r_horror_matter_become_powerful"
+		}
+		hidden_effect = {
+			set_country_flag = manifesti_relic_1
+			set_country_flag = gain_tradition_horror
+		}
+	}
+}
+
+country_event = {
+	id = origin_manifesti.7
+	title = "origin_manifesti.7.name"
+	desc = "origin_manifesti.7.desc"
+	picture = GFX_evt_board_meeting
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_ai = no
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_manifesti.7.a
+		add_modifier = {
+			modifier = origin_manifesti_modifier_dream_end
+			days = -1
+		}
+		enable_special_project = {
+			name = ORIGIN_MANIFESTI_DREAM_PROJECT_END
+			location = capital_scope
+			owner = root
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.7.b
+	}
+}
+
+country_event = {
+	id = origin_manifesti.8
+	title = "origin_manifesti.8.name"
+	desc = "origin_manifesti.8.desc"
+	picture = GFX_evt_zro_2
+	show_sound = event_activating_unknown_technology
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		remove_modifier = origin_manifesti_modifier_dream_end
+		set_origin = origin_manifesti_dream_end
+	}
+	
+	option = {
+		name = origin_manifesti.8.a
+		custom_tooltip = "time.501.a.tooltip"
+		tooltip = {
+			set_origin = origin_manifesti_dream_end
+		}
+		if = {
+			limit = {
+				NOT = { has_relic = r_horror_matter }
+			}
+			add_relic = r_horror_matter
+		}
+		else = {
+			add_resource = { sr_dark_matter = 10000 }
+			custom_tooltip = "r_horror_matter_become_powerful"
+		}
+		hidden_effect = {
+			set_country_flag = manifesti_relic_2
+			set_country_flag = gain_tradition_horror
+		}
+		win = yes
+	}
+}
+
+country_event = {
+	id = origin_manifesti.9
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_manifesti
+	}
+	
+	immediate = {
+		country_event = { id = origin_manifesti.9 days = 360 random = 1440 }
+		every_owned_planet = {
+			limit = {
+				NOT = { has_planet_flag = recent_origin_manifesti_planet_event }
+			}
+			random_list = {
+				1 = {
+					planet_event = { id = origin_manifesti.10 days = 1 random = 359 }
+				}
+				1 = {
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_planet_flag = recent_origin_manifesti_planet_event }
+	}
+	
+	immediate = {
+		random_list = {
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_11_triggered
+				}
+				planet_event = { id = origin_manifesti.11 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_12_triggered
+				}
+				planet_event = { id = origin_manifesti.12 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_13_triggered
+				}
+				planet_event = { id = origin_manifesti.13 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_14_triggered
+				}
+				planet_event = { id = origin_manifesti.14 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_15_triggered
+				}
+				planet_event = { id = origin_manifesti.15 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_16_triggered
+				}
+				planet_event = { id = origin_manifesti.16 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_17_triggered
+				}
+				planet_event = { id = origin_manifesti.17 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_18_triggered
+				}
+				planet_event = { id = origin_manifesti.18 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_19_triggered
+				}
+				planet_event = { id = origin_manifesti.19 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_20_triggered
+				}
+				modifier = {
+					factor = 0
+					owner = {
+						NOT = { has_technology = tech_artificial_moral_codes }
+					}
+				}
+				planet_event = { id = origin_manifesti.20 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_21_triggered
+				}
+				modifier = {
+					factor = 0
+					NAND = {
+						any_owned_pop = {
+							is_robot_pop = no
+						}
+						any_owned_pop = {
+							is_robot_pop = yes
+						}
+					}
+				}
+				planet_event = { id = origin_manifesti.21 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_22_triggered
+				}
+				modifier = {
+					factor = 0
+					owner = {
+						NOT = { has_technology = tech_galactic_markets }
+					}
+				}
+				planet_event = { id = origin_manifesti.22 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_23_triggered
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_owned_pop = {
+							has_living_standard = { type = living_standard_chemical_bliss }
+						}
+					}
+				}
+				planet_event = { id = origin_manifesti.23 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_24_triggered
+				}
+				modifier = {
+					factor = 0
+					NOT = { has_active_building = building_hyper_entertainment_forum }
+				}
+				planet_event = { id = origin_manifesti.24 }
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					has_planet_flag = origin_manifesti_25_triggered
+				}
+				modifier = {
+					factor = 0
+					NOT = { has_active_building = building_heritage_site }
+				}
+				planet_event = { id = origin_manifesti.25 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.11
+	title = "origin_manifesti.11.name"
+	desc = "origin_manifesti.11.desc"
+	picture = GFX_evt_announcement
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_11_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_11_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.11.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = energy
+					amount >= value:num_parallel_sky_value_2
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1
+				mult = value:num_parallel_sky_value_2
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_1
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.11.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.12
+	title = "origin_manifesti.12.name"
+	desc = "origin_manifesti.12.desc"
+	picture = GFX_evt_black_market
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_12_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_12_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.12.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = consumer_goods
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				consumer_goods = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_2
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.12.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.13
+	title = "origin_manifesti.13.name"
+	desc = "origin_manifesti.13.desc"
+	picture = GFX_evt_civil_action
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_13_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_13_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.13.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = energy
+					amount >= value:num_parallel_sky_value_2
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1
+				mult = value:num_parallel_sky_value_2
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_3
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.13.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.14
+	title = "origin_manifesti.14.name"
+	desc = "origin_manifesti.14.desc"
+	picture = GFX_evt_city_ruins
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_14_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_14_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.14.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = consumer_goods
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				consumer_goods = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_4
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.14.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.15
+	title = "origin_manifesti.15.name"
+	desc = "origin_manifesti.15.desc"
+	picture = GFX_evt_assembly_fight
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_15_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_15_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.15.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = energy
+					amount >= value:num_parallel_sky_value_2
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1
+				mult = value:num_parallel_sky_value_2
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_5
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.15.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.16
+	title = "origin_manifesti.16.name"
+	desc = "origin_manifesti.16.desc"
+	picture = GFX_evt_conclave
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_16_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_16_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.16.a
+		while = {
+			count = value:num_manifesti_value
+			random_pop = {
+				kill_pop = yes
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_6
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.16.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.17
+	title = "origin_manifesti.17.name"
+	desc = "origin_manifesti.17.desc"
+	picture = GFX_evt_synth_sabotage
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_17_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_17_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.17.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = energy
+					amount >= value:num_parallel_sky_value_2
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1
+				mult = value:num_parallel_sky_value_2
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_7
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.17.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.18
+	title = "origin_manifesti.18.name"
+	desc = "origin_manifesti.18.desc"
+	picture = GFX_evt_analyzing_artifacts
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_18_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_18_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.18.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = consumer_goods
+					amount >= value:num_parallel_sky_value_1
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				consumer_goods = -1
+				mult = value:num_parallel_sky_value_1
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_8
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.18.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.19
+	title = "origin_manifesti.19.name"
+	desc = "origin_manifesti.19.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_19_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_19_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.19.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = energy
+					amount >= value:num_parallel_sky_value_2
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1
+				mult = value:num_parallel_sky_value_2
+			}
+		}
+		add_modifier = {
+			modifier = origin_manifesti_modifier_9
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.19.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.20
+	title = "origin_manifesti.20.name"
+	desc = "origin_manifesti.20.desc"
+	picture = GFX_evt_psionic_battle
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_20_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_20_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.20.a
+		add_modifier = {
+			modifier = origin_manifesti_modifier_10
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.20.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.21
+	title = "origin_manifesti.21.name"
+	desc = "origin_manifesti.21.desc"
+	picture = GFX_evt_synth_organic_relations
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_21_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_21_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.21.a
+		add_modifier = {
+			modifier = origin_manifesti_modifier_11
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.21.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.22
+	title = "origin_manifesti.22.name"
+	desc = "origin_manifesti.22.desc"
+	picture = GFX_evt_enigmatic_cache
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_22_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_22_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.22.a
+		add_modifier = {
+			modifier = origin_manifesti_modifier_12
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.22.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.23
+	title = "origin_manifesti.23.name"
+	desc = "origin_manifesti.23.desc"
+	picture = GFX_evt_dark_alley
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_23_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_23_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.23.a
+		add_modifier = {
+			modifier = origin_manifesti_modifier_13
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.23.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.24
+	title = "origin_manifesti.24.name"
+	desc = "origin_manifesti.24.desc"
+	picture = GFX_evt_coronation
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_24_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_24_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.24.a
+		add_modifier = {
+			modifier = origin_manifesti_modifier_14
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.24.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}
+
+planet_event = {
+	id = origin_manifesti.25
+	title = "origin_manifesti.25.name"
+	desc = "origin_manifesti.25.desc"
+	picture = GFX_evt_acquire_asset
+	show_sound = event_celebration
+	location = root
+	situation = event_target:situation_origin_manifesti
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_active_building = building_origin_manifesti }
+			}
+			set_timed_planet_flag = {
+				flag = recent_origin_manifesti_planet_event
+				years = 2
+			}
+			set_timed_planet_flag = {
+				flag = origin_manifesti_25_triggered
+				years = 10
+			}
+		}
+		else = {
+			set_timed_planet_flag = {
+				flag = origin_manifesti_25_triggered
+				years = 5
+			}
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.25.a
+		add_modifier = {
+			modifier = origin_manifesti_modifier_15
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = 10
+		}
+	}
+	
+	option = {
+		name = origin_manifesti.25.b
+		add_modifier = {
+			modifier = origin_manifesti_modifier_0
+			days = 720
+		}
+		event_target:situation_origin_manifesti = {
+			add_situation_progress = -10
+		}
+	}
+}

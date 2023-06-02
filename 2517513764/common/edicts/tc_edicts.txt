@@ -1,0 +1,177 @@
+#仙域召回-军事船
+tc_celestial_recall_military = {
+	length = 1
+	icon = GFX_tc_celestial_pearl
+	resources = {
+		category = edicts
+		cost = {
+			tc_essences = 200
+		}
+	}
+	prerequisites = { tc_tech_celestial_gateway }
+	potential = {
+		any_owned_megastructure = {
+			is_megastructure_type = tc_celestial_gateway
+		}
+	}
+	allow = {
+		any_owned_megastructure = {
+			is_megastructure_type = tc_celestial_gateway
+		}
+		NOT = {
+			has_modifier = tc_celestial_recall_edict_cooldown
+		}
+		any_owned_fleet = {
+			any_owned_ship = {
+				is_ship_class = shipclass_military
+				has_component = TC_WAND_FOCUS_RECALL
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+	effect = {
+		hidden_effect = {
+			random_owned_megastructure = {
+				limit = {
+					is_megastructure_type = tc_celestial_gateway
+				}
+				save_event_target_as = tc_celestial_recall_target
+			}
+			every_owned_fleet = {
+				limit = {
+					NOT = {
+						any_owned_ship = {
+							NOT = { has_component = TC_WAND_FOCUS_RECALL }
+						}
+					}
+					any_owned_ship = {
+						is_ship_class = shipclass_military
+					}
+				}
+				set_location = event_target:tc_celestial_recall_target
+				queue_actions = {
+					move_to = event_target:tc_celestial_recall_target
+				}
+			}
+			add_modifier = {
+				modifier = tc_celestial_recall_edict_cooldown
+				days = 60
+			}
+		}
+	}
+}
+
+#星门网络升级
+tc_celestial_upgreade = {
+	length = 1
+	icon = GFX_tc_celestial_pearl
+	resources = {
+		category = edicts
+		cost = { }
+	}
+	prerequisites = { tc_tech_celestial_gateway }
+	potential = {
+		NOT = { has_country_flag = tc_celestial_upgreade }
+	}
+	allow = {
+		any_owned_megastructure = {
+			OR = {
+				is_megastructure_type = gateway_final
+				is_megastructure_type = gateway_restored
+			}
+			solar_system = {
+				any_system_megastructure = {
+					NOR = {
+						is_megastructure_type = tc_celestial_gateway_0
+						is_megastructure_type = tc_celestial_gateway_1
+						is_megastructure_type = tc_celestial_gateway_2
+						is_megastructure_type = tc_celestial_gateway
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		every_owned_megastructure = {
+			limit = {
+				OR = {
+					is_megastructure_type = gateway_final
+					is_megastructure_type = gateway_restored
+				}
+			}
+			solar_system = {
+				spawn_megastructure = {
+					type = tc_celestial_gateway_1
+					planet = star
+					owner = ROOT
+					orbit_distance = 30
+					orbit_angle = 15
+				}
+			}
+			remove_megastructure = this
+		}
+		set_country_flag = tc_celestial_upgreade
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#扭曲守护 
+tc_warpward = {
+	length = 1000
+	icon = "GFX_tc_warpward"
+	resources = {
+		category = edicts
+		cost = {
+			tc_element_shard = 200
+		}
+	}
+	prerequisites = { tc_tech_purifying_bath_salts }
+	potential = { }
+	allow = {
+		#NOT = { has_edict = tc_warpward }
+		NOT = { has_modifier = tc_warpward }
+	}
+	effect = { #依据当前扭曲值减少持续时间
+		hidden_effect = {
+			set_variable = {								#基础时间乘数3600
+				which = tc_warpward_time_add
+				value = 3600
+			}
+			set_variable = { 								#调用扭曲值
+				which = tc_warpward_time_add_temp
+				value = root.tc_warp
+			}
+			multiply_variable = { 							#乘以10
+				which = tc_warpward_time_add_temp
+				value = 10
+			}
+			subtract_variable = {							#减少相应时间
+				which = tc_warpward_time_add
+				value = this.tc_warpward_time_add_temp
+			}
+			#round_variable = tc_warpward_time_add
+			divide_variable = { 							#四舍五入
+				which = tc_warpward_time_add 
+				value = 100000 
+			}
+			multiply_variable = { 							#四舍五入
+				which = tc_warpward_time_add 
+				value = 100000 
+			} 
+			add_modifier = { 								#添加效果时长
+				modifier = tc_warpward
+				days = 1
+				time_multiplier = tc_warpward_time_add
+			}
+			clear_variable = tc_warpward_time_add 			#清除变量
+			clear_variable = tc_warpward_time_add_temp
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}

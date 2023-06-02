@@ -1,0 +1,726 @@
+
+namespace = psionic
+
+country_event = {
+	id = psionic.1
+	title = psionic.1.name
+	desc = psionic.1.desc
+	picture = GFX_evt_psionics
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_psionic
+	}
+	
+	immediate = {
+		give_technology = { tech = "tech_psionic_theory" message = no }
+		give_technology = { tech = "tech_mine_zro" message = no }
+		give_technology = { tech = "tech_ascension_theory" message = no }
+		if = {
+			limit = {
+				is_ai = yes
+			}
+			country_event = { id = psionic.1000 days = 1800 random = 3600 }
+		}
+		capital_scope = {
+			if = {
+				limit = {
+					planet_size < 18
+				}
+				set_planet_size = 18
+			}
+			reroll_pc_psionic_deposits = yes
+			while = {
+				limit = {
+					has_district = district_city
+				}
+				remove_district = district_city
+				add_district = district_psionic_city
+			}
+			while = {
+				limit = {
+					has_district = district_industrial
+				}
+				remove_district = district_industrial
+				add_district = district_psionic_industrial
+			}
+			while = {
+				limit = {
+					has_district = district_generator
+				}
+				remove_district = district_generator
+				add_district = district_psionic_generator
+			}
+			while = {
+				limit = {
+					has_district = district_mining
+				}
+				remove_district = district_mining
+				add_district = district_psionic_mining
+			}
+			while = {
+				limit = {
+					has_district = district_farming
+				}
+				remove_district = district_farming
+				add_district = district_psionic_farming
+			}
+			time_repair_ruined_buildings = yes
+			add_modifier = {
+				modifier = psionic_origin
+				days = -1
+			}
+			create_ambient_object = {
+				type = consecrated_planet_stage_2_object
+				location = this
+
+				use_3d_location = yes
+				entity_scale_to_size = yes
+			}
+			last_created_ambient_object = {
+				set_ambient_object_flag = psionic_origin_ambient_object
+			}
+		}
+	}
+	
+	option = {
+		name = "psionic.1.a"
+	}
+}
+
+# The Seance
+country_event = {
+	id = psionic.4
+	title = "psionic.4.name"
+	desc = "psionic.4.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_psionic
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_country = {
+			limit = { is_country_type = shroud }
+			save_event_target_as = the_shroud
+		}
+	}
+
+	option = {
+		name = "psionic.4.a"
+		trigger = {
+			has_origin = origin_psionic
+		}
+		establish_communications_no_message = event_target:the_shroud
+		activate_crisis_progression = yes
+		hidden_effect = {
+			set_ai_personality = time_became_the_crisis
+			set_country_flag = time_crisis_country
+			set_country_flag = shroud_intro
+			country_event = { id = utopia.3000 }
+		}
+	}
+}
+
+planet_event = {
+	id = psionic.10
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_planet_class = pc_psionic
+	}
+
+	immediate = {
+		from = {
+			country_event = { id = psionic.11 }
+		}
+	}
+}
+
+country_event = {
+	id = psionic.11
+	title = psionic.11.name
+	desc = psionic.11.desc
+	picture = GFX_evt_psionics
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	location = from
+
+	trigger = {
+		has_origin = origin_psionic
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = psionic.11.a
+	}
+}
+
+planet_event = {
+	id = psionic.12
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = { is_planet_class = pc_psionic }
+		OR = {
+			has_modifier = best_psionic
+			has_modifier = good_psionic
+			has_modifier = normal_psionic
+			has_modifier = bad_psionic
+		}
+	}
+
+	immediate = {
+		remove_modifier = "best_psionic"
+		remove_modifier = "good_psionic"
+		remove_modifier = "normal_psionic"
+		remove_modifier = "bad_psionic"
+	}
+}
+
+planet_event = {
+	id = psionic.50
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		remove_modifier = "psionic_origin"
+		add_modifier = {
+			modifier = psionic_origin_best
+			days = -1
+		}
+		every_system_ambient_object = {
+			limit = { has_ambient_object_flag = psionic_origin_ambient_object }
+			destroy_ambient_object = this
+		}
+		create_ambient_object = {
+			type = consecrated_planet_stage_3_object
+			location = this
+
+			use_3d_location = yes
+			entity_scale_to_size = yes
+		}
+	}
+}
+
+planet_event = {
+	id = psionic.100
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_planet_class = pc_psionic
+	}
+
+	immediate = {
+		reroll_pc_psionic_deposits = yes
+	}
+}
+
+planet_event = {
+	id = psionic.101
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_planet_class = pc_psionic
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				add_modifier = {
+					modifier = normal_psionic
+					days = -1
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = worst_psionic
+					days = -1
+				}
+				planet_event = { id = psionic.110 days = 360 random = 180 }
+			}
+			3 = {
+				add_modifier = {
+					modifier = bad_psionic
+					days = -1
+				}
+				planet_event = { id = psionic.120 days = 360 random = 180 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = psionic.110
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_modifier = worst_psionic
+		NOT = { has_planet_flag = decision_psionic_2_finished }
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				planet_event = { id = psionic.111 days = 360 random = 180 }
+			}
+			1 = {
+				planet_event = { id = psionic.112 days = 360 random = 180 }
+			}
+			3 = {
+				planet_event = { id = psionic.110 days = 360 random = 180 }
+			}
+		}
+	}
+}
+
+# 浪潮式微
+planet_event = {
+	id = psionic.111
+	title = psionic.111.name
+	desc = psionic.111.desc
+	picture = GFX_evt_psionics
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+		has_modifier = worst_psionic
+		NOT = { has_planet_flag = decision_psionic_2_finished }
+	}
+
+	immediate = {
+		planet_event = { id = psionic.120 }
+	}
+
+	option = {
+		name = psionic.111.a
+		remove_modifier = "worst_psionic"
+		add_modifier = {
+			modifier = bad_psionic
+			days = -1
+		}
+	}
+}
+
+planet_event = {
+	id = psionic.112
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_modifier = worst_psionic
+		NOT = { has_planet_flag = decision_psionic_2_finished }
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				planet_event = { id = psionic.111 days = 720 random = 360 }
+			}
+			1 = {
+				planet_event = { id = psionic.113 days = 720 random = 360 }
+			}
+			2 = {
+				planet_event = { id = psionic.112 days = 720 random = 360 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = psionic.113
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_modifier = worst_psionic
+		NOT = { has_planet_flag = decision_psionic_2_finished }
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				planet_event = { id = psionic.112 days = 720 random = 360 }
+			}
+			2 = {
+				planet_event = { id = psionic.114 days = 720 random = 360 }
+			}
+			2 = {
+				planet_event = { id = psionic.113 days = 720 random = 360 }
+			}
+		}
+	}
+}
+
+# 灾难预兆
+planet_event = {
+	id = psionic.114
+	title = psionic.114.name
+	desc = psionic.114.desc
+	picture = GFX_evt_psionics
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+		has_modifier = worst_psionic
+		NOT = { has_planet_flag = psionic_disaster }
+		NOT = { has_planet_flag = decision_psionic_2_finished }
+	}
+
+	immediate = {
+		set_planet_flag = psionic_disaster
+		planet_event = { id = psionic.115 days = 720 random = 360 }
+	}
+
+	option = {
+		name = psionic.114.a
+		custom_tooltip = "psionic_warning.tooltip"
+	}
+}
+
+# 灵能灾难
+planet_event = {
+	id = psionic.115
+	title = psionic.115.name
+	desc = psionic.115.desc
+	picture = GFX_evt_psionics
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			if = {
+				limit = {
+					has_modifier = psionic_disaster
+				}
+				remove_modifier = "psionic_disaster"
+			}
+			add_modifier = {
+				modifier = psionic_disaster
+				days = 1800
+			}
+		}
+		every_owned_pop = { kill_pop = yes }
+		destroy_colony = yes
+		change_pc = pc_shrouded
+		clear_deposits = yes
+	}
+
+	option = {
+		name = psionic.115.a
+		tooltip = {
+			change_pc = pc_shrouded
+			owner = {
+				add_modifier = {
+					modifier = psionic_disaster
+					days = 1800
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = psionic.120
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_modifier = bad_psionic
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				planet_event = { id = psionic.121 days = 360 random = 180 }
+			}
+			1 = {
+				planet_event = { id = psionic.120 days = 360 random = 180 }
+			}
+		}
+	}
+}
+
+# 重归正常
+planet_event = {
+	id = psionic.121
+	title = psionic.121.name
+	desc = psionic.121.desc
+	picture = GFX_evt_psionics
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+		has_modifier = bad_psionic
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = psionic.121.a
+		remove_modifier = "bad_psionic"
+		add_modifier = {
+			modifier = normal_psionic
+			days = -1
+		}
+	}
+}
+
+# 浪潮稳定
+planet_event = {
+	id = psionic.200
+	title = psionic.200.name
+	desc = psionic.200.desc
+	picture = GFX_evt_psionics
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = normal_psionic
+			}
+			remove_modifier = "normal_psionic"
+		}
+		if = {
+			limit = {
+				has_modifier = bad_psionic
+			}
+			remove_modifier = "bad_psionic"
+		}
+		if = {
+			limit = {
+				has_modifier = worst_psionic
+			}
+			remove_modifier = "worst_psionic"
+		}
+		add_modifier = {
+			modifier = good_psionic
+			days = -1
+		}
+		create_ambient_object = {
+			type = consecrated_planet_stage_1_object
+			location = this
+
+			use_3d_location = yes
+			entity_scale_to_size = yes
+		}
+	}
+
+	option = {
+		name = psionic.200.a
+		tooltip = {
+			if = {
+				limit = {
+					has_modifier = normal_psionic
+				}
+				remove_modifier = "normal_psionic"
+			}
+			if = {
+				limit = {
+					has_modifier = bad_psionic
+				}
+				remove_modifier = "bad_psionic"
+			}
+			if = {
+				limit = {
+					has_modifier = worst_psionic
+				}
+				remove_modifier = "worst_psionic"
+			}
+			add_modifier = {
+				modifier = good_psionic
+				days = -1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = psionic.300
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_planet_flag = decision_psionic_2_finished
+		random_list = {
+			4 = {
+				modifier = {
+					factor = 0.5
+					owner = {
+						has_tradition = tr_psionics_finish
+					}
+				}
+				planet_event = { id = psionic.302 days = 720 } # 浪潮式微
+			}
+			3 = {
+				planet_event = { id = psionic.200 days = 720 } # 浪潮稳定
+			}
+			2 = {
+				planet_event = { id = psionic.301 days = 720 } # 浪潮强大
+			}
+			1 = {
+				modifier = {
+					factor = 0
+					owner = {
+						has_tradition = tr_psionics_finish
+					}
+				}
+				planet_event = { id = psionic.303 days = 720 } # 灾难预兆
+			}
+		}
+	}
+}
+
+# 浪潮强大
+planet_event = {
+	id = psionic.301
+	title = psionic.301.name
+	desc = psionic.301.desc
+	picture = GFX_evt_psionics
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+	}
+
+	immediate = {
+		create_ambient_object = {
+			type = consecrated_planet_stage_2_object
+			location = this
+
+			use_3d_location = yes
+			entity_scale_to_size = yes
+		}
+	}
+
+	option = {
+		name = psionic.301.a
+		remove_modifier = "worst_psionic"
+		add_modifier = {
+			modifier = best_psionic
+			days = -1
+		}
+	}
+}
+
+# 浪潮式微
+planet_event = {
+	id = psionic.302
+	title = psionic.111.name
+	desc = psionic.111.desc
+	picture = GFX_evt_psionics
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+	}
+
+	immediate = {
+		planet_event = { id = psionic.120 }
+	}
+
+	option = {
+		name = psionic.111.a
+		remove_modifier = "worst_psionic"
+		add_modifier = {
+			modifier = bad_psionic
+			days = -1
+		}
+	}
+}
+
+# 灾难预兆
+planet_event = {
+	id = psionic.303
+	title = psionic.114.name
+	desc = psionic.114.desc
+	picture = GFX_evt_psionics
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+	}
+
+	immediate = {
+		set_planet_flag = psionic_disaster
+		planet_event = { id = psionic.115 days = 720 random = 360 }
+	}
+
+	option = {
+		name = psionic.114.a
+		custom_tooltip = "psionic_warning.tooltip"
+	}
+}
+
+country_event = {
+	id = psionic.1000
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_psionic
+		is_ai = yes
+	}
+	
+	immediate = {
+		country_event = { id = psionic.1000 days = 1800 random = 3600 }
+		if = {
+			limit = {
+				any_planet_within_border = {
+					OR = {
+						habitable_planet = yes
+						is_planet_class = pc_nuked
+						is_planet_class = pc_hive
+					}
+					is_terraforming = no
+				}
+				has_country_resource = {
+					type = sr_zro
+					amount >= 250
+				}
+			}
+			random_planet_within_border = {
+				limit = {
+					OR = {
+						habitable_planet = yes
+						is_planet_class = pc_nuked
+						is_planet_class = pc_hive
+					}
+					is_terraforming = no
+				}
+				change_pc = pc_psionic
+				planet_event = { id = psionic.100 }
+				planet_event = { id = psionic.101 }
+				create_colony = {
+					owner = root
+					species = root.owner_main_species
+				}
+			}
+			add_resource = {
+				sr_zro = -250
+			}
+		}
+	}
+}

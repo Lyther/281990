@@ -1,0 +1,659 @@
+##Vanilla Overwrites
+
+opinion_devouring_swarm = {		
+	trigger = {
+		is_country_type = ascended_empire
+		OR = {
+			has_valid_civic = "civic_hive_devouring_swarm"
+			AND = {			
+				from = { has_valid_civic = "civic_hive_devouring_swarm" }
+				NOT = { has_valid_civic = civic_fanatic_purifiers }
+			}			
+		}	
+	}
+	opinion = {
+		modifier = {
+			add = -1000				
+		}		
+	}
+}
+
+
+opinion_fanatic_purifiers = {
+	opinion = {
+		modifier = {
+		 	add = -1000
+			is_country_type = ascended_empire
+			NOR = { 
+				has_valid_civic = civic_fanatic_purifiers 
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_machine_terminator
+			}
+			FROM = { has_valid_civic = civic_fanatic_purifiers }
+		}	
+	}
+}
+
+# Desecrated Fallen Empire's holy world
+opinion_desecrated_holy_world = {
+	opinion = {
+		modifier = {
+			add = -200
+			has_ai_personality_behaviour = holy_planets
+			from = {
+				OR = {
+					is_country_type = ascended_empire
+					is_country_type = lost_empire
+				}
+				is_valid_target_fe_cleanse_holy_worlds = yes
+			}
+		}	
+	}
+}
+
+# Xenophobe Fallen Empires aren't fans of bordering other empires
+opinion_encroaching_borders = {
+	opinion = {
+		modifier = {
+			add = -200
+			has_ai_personality_behaviour = demands_clear_borders
+			from = {
+				OR = {
+					is_country_type = ascended_empire
+					is_country_type = lost_empire
+				}			
+				any_system_within_border = {
+					has_hyperlane_to = root
+				}					
+			}
+		}
+	}
+}
+
+
+
+##Vanilla Opinions
+
+# They just bombed a pop to death
+opinion_nuker = {
+	opinion = {
+		base = 0
+		modifier = {
+			add = -5
+			NOT = { has_ethic = "ethic_militarist" }
+			NOT = { has_ethic = "ethic_fanatic_militarist" }
+			is_zofe_country = yes
+		}
+		modifier = {
+			add = -5
+			has_ethic = "ethic_pacifist"
+			is_zofe_country = yes
+		}
+		modifier = {
+			add = -10
+			has_ethic = "ethic_fanatic_pacifist"
+			is_zofe_country = yes
+		}
+	}
+
+	min = -100
+
+	accumulative = yes
+
+	decay = {
+		base = 1
+	}
+}
+
+triggered_opinion_democratic_authority = {
+	trigger = {
+		is_zofe_country = yes
+		has_authority = auth_democratic
+		FROM = {
+			is_zofe_country = yes
+			has_authority = auth_democratic
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+triggered_opinion_oligarchic_authority = {
+	trigger = {
+		is_zofe_country = yes
+		has_authority = auth_oligarchic
+		FROM = {
+			is_zofe_country = yes
+			has_authority = auth_oligarchic
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+triggered_opinion_dictatorial_authority = {
+	trigger = {
+		is_zofe_country = yes
+		has_authority = auth_dictatorial
+		FROM = {
+			is_zofe_country = yes
+			has_authority = auth_dictatorial
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+triggered_opinion_imperial_authority = {
+	trigger = {
+		is_zofe_country = yes
+		has_authority = auth_imperial
+		FROM = {
+			is_zofe_country = yes
+			has_authority = auth_imperial
+		}
+	}
+
+	opinion = {
+		base = 10
+	}
+}
+
+triggered_opinion_hive_mind = {
+	trigger = {
+		is_zofe_country = yes
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		FROM = {
+			NOT = { has_valid_civic = "civic_hive_devouring_swarm" }
+			has_authority = auth_hive_mind
+		}
+	}
+
+	opinion = {
+		base = -30
+	}
+}
+
+triggered_organic_opinion_of_machine_empires = {
+	trigger = {
+		is_zofe_country = yes
+		is_mechanical_empire = no
+		is_cyborg_empire = no
+		NOT = {
+			has_ethic = ethic_gestalt_consciousness
+			has_ethic = ethic_materialist
+			has_ethic = ethic_fanatic_materialist
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist
+		}
+		FROM = {
+			has_authority = auth_machine_intelligence
+			NOR = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_assimilator
+			}
+		}
+		AND = {
+			NOR = {
+				has_ethic = ethic_gestalt_consciousness
+				owner_species = { has_trait = trait_decadent }
+				has_ai_personality = decadent_hierarchy
+				has_ai_personality = slaving_despots
+				has_ai_personality = democratic_crusaders
+			}
+			FROM = {
+				has_civic = civic_machine_servitor
+			}
+		}
+	}
+
+	opinion = {
+		base = -30
+	}
+}
+
+triggered_spiritualist_opinion_of_machine_empires = {
+	trigger = {
+		is_zofe_country = yes
+		has_ethic = ethic_spiritualist
+		FROM = {
+			has_authority = auth_machine_intelligence
+			is_mechanical_empire = no
+			is_cyborg_empire = no
+			NOR = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_assimilator
+			}
+		}
+	}
+	opinion = {
+		base = -40
+	}
+}
+
+triggered_fanatic_spiritualist_opinion_of_machine_empires = {
+	trigger = {
+		is_zofe_country = yes
+		has_ethic = ethic_fanatic_spiritualist
+		is_mechanical_empire = no
+		is_cyborg_empire = no
+		FROM = {
+			has_authority = auth_machine_intelligence
+			NOR = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_assimilator
+			}
+		}
+	}
+	opinion = {
+		base = -60
+	}
+}
+
+triggered_terminators_opinion_of_servitors = {
+	trigger = {
+		is_zofe_country = yes
+		has_civic = civic_machine_terminator
+		FROM = { has_civic = civic_machine_servitor }
+	}
+	opinion = {
+		base = -200
+	}
+}
+
+triggered_opinion_both_servitors = {
+	trigger = {
+		is_zofe_country = yes
+		has_civic = civic_machine_servitor
+		FROM = { has_civic = civic_machine_servitor }
+	}
+	opinion = {
+		base = 40
+	}
+}
+
+triggered_decadent_opinion_of_servitors = {
+	trigger = {
+		is_zofe_country = yes
+		OR = {
+			owner_species = { has_trait = trait_decadent }
+			has_ai_personality = decadent_hierarchy
+			has_ai_personality = slaving_despots
+		}
+		FROM = {
+			has_civic = civic_machine_servitor
+		}
+	}
+	opinion = {
+		base = 20
+	}
+}
+
+triggered_spiritualist_negative_opinion_of_assimilators = {
+	trigger = {
+		is_zofe_country = yes
+		OR = {
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist
+		}
+		FROM = { has_civic = civic_machine_assimilator }
+	}
+	opinion = {
+		base = -200
+	}
+}
+
+triggered_negative_opinion_of_assimilators = {
+	trigger = {
+		is_zofe_country = yes
+		NOR = {
+			has_ethic = ethic_spiritualist
+			has_ethic = ethic_fanatic_spiritualist
+			has_ethic = ethic_gestalt_consciousness
+			has_ai_personality = democratic_crusaders
+		}
+		FROM = { has_civic = civic_machine_assimilator }
+	}
+
+	opinion = {
+		base = -100
+	}
+}
+
+triggered_opinion_both_assimilators = {
+	trigger = {
+		is_zofe_country = yes
+		has_civic = civic_machine_assimilator
+		FROM = { has_civic = civic_machine_assimilator }
+	}
+	opinion = {
+		base = 40
+	}
+}
+
+triggered_negative_opinion_of_swarm_fe = {
+	trigger = {
+
+		has_ai_personality = lost_empire_xenophile
+		
+		FROM = { has_civic = civic_hive_devouring_swarm }
+	}
+	opinion = {
+		base = -80
+	}
+}
+
+triggered_negative_opinion_of_exterminators_fe = {
+	trigger = {
+
+		has_ai_personality = lost_empire_xenophile
+			
+		FROM = { has_civic = civic_machine_terminator }
+	}
+	opinion = {
+		base = -40
+	}
+}
+
+triggered_negative_opinion_of_exterminators = {
+	trigger = {
+		is_zofe_country = yes
+		is_mechanical_empire = no
+		NOR = {
+			has_authority = auth_machine_intelligence
+			has_valid_civic = civic_fanatic_purifiers
+			is_species_class = ROBOT
+			is_species_class = MACHINE
+			has_country_flag = synthetic_empire
+			owner_species = {
+				has_trait = trait_cybernetic
+				has_trait = trait_mechanical
+			}
+		}
+		FROM = { has_civic = civic_machine_terminator }
+	}
+	opinion = {
+		base = -1000
+	}
+}
+
+triggered_servitors_negative_opinion_of_exterminators = {
+	trigger = {
+		is_zofe_country = yes
+		has_civic = civic_machine_servitor
+		FROM = { has_civic = civic_machine_terminator }
+	}
+	opinion = {
+		base = -1000
+	}
+}
+
+triggered_opinion_both_terminators = {
+	trigger = {
+		is_zofe_country = yes
+		has_civic = civic_machine_terminator
+		FROM = { has_civic = civic_machine_terminator }
+	}
+	opinion = {
+		base = 200
+	}
+}
+
+triggered_exterminators_opinion_of_organics = {
+	trigger = {
+		is_zofe_country = yes
+		has_civic = civic_machine_terminator
+		FROM = {
+			NOR = {
+				has_authority = auth_machine_intelligence
+				is_species_class = MACHINE
+				is_species_class = ROBOT
+				has_country_flag = synthetic_empire
+				owner_species = {
+					has_trait = trait_cybernetic
+					has_trait = trait_mechanical
+				}
+			}
+		}
+	}
+	opinion = {
+		base = -1000
+	}
+}
+
+triggered_exterminators_opinion_of_machines = {
+	trigger = {
+		is_zofe_country = yes
+		has_civic = civic_machine_terminator
+		FROM = {
+			OR = {
+				has_authority = auth_machine_intelligence
+				is_species_class = ROBOT
+				is_species_class = MACHINE
+				has_country_flag = synthetic_empire
+				owner_species = {
+					has_trait = trait_cybernetic
+					has_trait = trait_mechanical
+				}
+			}
+			NOT = {
+				has_civic = civic_machine_terminator
+				has_civic = civic_machine_servitor
+			}
+		}
+	}
+	opinion = {
+		base = 100
+	}
+}
+
+triggered_opinion_barbaric_despoilers = {
+	trigger = {
+		is_zofe_country = yes
+		NOR = {
+			is_militarist = yes
+			is_pacifist = yes
+			is_authoritarian = yes
+			has_ethic = ethic_gestalt_consciousness
+			has_valid_civic = civic_fanatic_purifiers
+		}
+		NOT = { has_civic = civic_barbaric_despoilers }
+		FROM = { has_civic = civic_barbaric_despoilers }
+	}
+	opinion = {
+		base = -50
+	}
+}
+
+triggered_authoritarian_opinion_barbaric_despoilers = {
+	trigger = {
+		is_zofe_country = yes
+		is_authoritarian = yes
+		is_militarist = no
+		is_pacifist = no
+		NOT = { has_civic = civic_barbaric_despoilers }
+		FROM = { has_civic = civic_barbaric_despoilers }
+	}
+	opinion = {
+		base = -40
+	}
+}
+
+triggered_militarist_opinion_barbaric_despoilers = {
+	trigger = {
+		is_zofe_country = yes
+		is_militarist = yes
+		NOT = { has_civic = civic_barbaric_despoilers }
+		FROM = { has_civic = civic_barbaric_despoilers }
+	}
+	opinion = {
+		base = -20
+	}
+}
+
+triggered_pacifist_opinion_barbaric_despoilers = {
+	trigger = {
+		is_zofe_country = yes
+		is_pacifist = yes
+		NOT = { has_civic = civic_barbaric_despoilers }
+		FROM = { has_civic = civic_barbaric_despoilers }
+	}
+	opinion = {
+		base = -80
+	}
+}
+
+triggered_opinion_diplo_stance_supremacy = {
+	trigger = {
+		OR = {
+			is_zofe_country = yes
+			is_country_type = awakened_fallen_empire
+		}
+
+		has_policy_flag = diplo_stance_supremacist
+		FROM = {
+			has_policy_flag = diplo_stance_supremacist
+		}
+	}
+
+	opinion = {
+		base = -100
+	}
+}
+
+triggered_opinion_galactic_community_in_breach = {
+	trigger = {
+		OR = {
+			is_zofe_country = yes
+			is_country_type = awakened_fallen_empire
+		}
+
+		is_in_breach_of_any = no
+		is_galactic_community_member = yes
+
+		FROM = {
+			is_in_breach_of_any = yes
+			is_galactic_community_member = yes
+		}
+	}
+
+	opinion = {
+		base = -20
+	}
+}
+
+triggered_opinion_galactic_community_left = {
+	trigger = {
+		OR = {
+			is_zofe_country = yes
+			is_country_type = awakened_fallen_empire
+		}
+
+		is_galactic_community_member = yes
+		FROM = {
+			has_modifier = left_galactic_community
+		}
+	}
+
+	opinion = {
+		base = -30
+	}
+}
+
+
+###NEW ZOFE Opinions
+
+opinion_ascended_empire_same = {
+	trigger = {
+		is_country_type = ascended_empire
+		OR = {
+			AND = {
+				has_ethic = ethic_fanatic_spiritualist
+				from = { has_ethic = ethic_fanatic_spiritualist }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_materialist
+				from = { has_ethic = ethic_fanatic_materialist }
+				}
+			AND = {
+				has_ethic = ethic_fanatic_xenophile
+				from = { has_ethic = ethic_fanatic_xenophile }
+			}				
+			AND = {
+				has_ethic = ethic_fanatic_xenophobe
+				from = { has_ethic = ethic_fanatic_xenophobe }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_militarist
+				from = { has_ethic = ethic_fanatic_militarist }
+				}
+			AND = {
+				has_ethic = ethic_fanatic_pacifist
+				from = { has_ethic = ethic_fanatic_pacifist }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_authoritarian
+				from = { has_ethic = ethic_fanatic_authoritarian }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_egalitarian
+				from = { has_ethic = ethic_fanatic_egalitarian }
+			}
+		}
+	}
+
+	opinion = {
+		base = 500
+	}
+}
+
+opinion_ascended_empire_opposing = {
+	trigger = {
+		is_country_type = ascended_empire
+		OR = {
+			AND = {
+				has_ethic = ethic_fanatic_spiritualist
+				from = { has_ethic = ethic_fanatic_materialist }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_materialist
+				from = { has_ethic = ethic_fanatic_spiritualist }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_xenophile
+				from = { has_ethic = ethic_fanatic_xenophobe }
+			}				
+			AND = {
+				has_ethic = ethic_fanatic_xenophobe
+				from = { has_ethic = ethic_fanatic_xenophile }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_militarist
+				from = { has_ethic = ethic_fanatic_pacifist }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_pacifist
+				from = { has_ethic = ethic_fanatic_militarist }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_authoritarian
+				from = { has_ethic = ethic_fanatic_egalitarian }
+			}
+			AND = {
+				has_ethic = ethic_fanatic_egalitarian
+				from = { has_ethic = ethic_fanatic_authoritarian }
+			}
+		}
+	}
+
+
+	opinion = {
+		base = -500
+	}
+}

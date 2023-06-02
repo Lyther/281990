@@ -1,0 +1,984 @@
+namespace = ps_starlight
+
+country_event = {
+	id = ps_starlight.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+        if = {
+            limit = { has_civic = pony_stuff_gov_united_ponies }
+            give_technology = { tech = tech_unlock_civic_united_ponies message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_united_ponies_hive }
+            give_technology = { tech = tech_unlock_civic_united_ponies message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_starlights_unity }
+            give_technology = { tech = tech_unlock_civic_starlights_unity message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_starlights_unity_hive }
+            give_technology = { tech = tech_unlock_civic_starlights_unity message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_pony_pegasus }
+            give_technology = { tech = tech_unlock_civic_pony_pegasus message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_pony_earth }
+            give_technology = { tech = tech_unlock_civic_pony_earth message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_pony_unicorn }
+            give_technology = { tech = tech_unlock_civic_pony_unicorn message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_ling }
+            give_technology = { tech = tech_unlock_civic_ling message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_ling_hive }
+            give_technology = { tech = tech_unlock_civic_ling message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_griffin }
+            give_technology = { tech = tech_unlock_civic_griffin message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_bat_ponies }
+            give_technology = { tech = tech_unlock_civic_bat_ponies message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_crystal_ponies }
+            give_technology = { tech = tech_unlock_civic_crystal_ponies message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_crystal_ponies_hive }
+            give_technology = { tech = tech_unlock_civic_crystal_ponies message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_dragon }
+            give_technology = { tech = tech_unlock_civic_dragon message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_refling }
+            give_technology = { tech = tech_unlock_civic_refling message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_storm_king }
+            give_technology = { tech = tech_unlock_civic_storm_king message = no }
+        }
+        if = {
+            limit = { has_civic = pony_stuff_gov_kirin }
+            give_technology = { tech = tech_unlock_civic_kirin message = no }
+        }
+	}
+}
+
+event = {
+	id = ps_starlight.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	
+	immediate = {
+        # starbase_outpost
+        # starbase_starport
+        # starbase_starhold
+        # starbase_starfortress
+        # starbase_citadel
+        # starbase_stronghold
+		
+        every_country = {
+
+			limit = {
+				has_policy_flag = starlight_autostation_on
+			}
+			set_variable = {
+				which = starbase_civic_mult
+				value = 0.0
+			}
+            #limit = { is_ai = yes }
+            if = {
+                limit = { 
+					OR = { 
+						has_civic = pony_stuff_gov_united_ponies 
+						has_civic = pony_stuff_gov_united_ponies_hive 
+					}
+				}
+				
+				every_owned_starbase = {
+					if = {
+						limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_united } }
+						set_starbase_building = { slot = 1 building = ps_starbase_united }
+					}
+					if = {
+						limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.0
+							}
+						}
+					}
+					if = {
+						limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_united_2 } }
+						set_starbase_building = { slot = 1 building = ps_starbase_united_2 }
+					}
+					if = {
+						limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+					}
+				
+					if = {
+						limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_united_3 } }
+						set_starbase_building = { slot = 1 building = ps_starbase_united_3 }
+					}
+					if = {
+						limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = { 
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.0
+							}
+						}
+					}
+					if = {
+						limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_united_4 } }
+						set_starbase_building = { slot = 1 building = ps_starbase_united_4 }
+					}
+					if = {
+						limit = { has_starbase_size >= starbase_citadel	}
+						prev = { 
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+					}
+				}
+				log = "my variable is [This.starbase_civic_mult]"
+				set_variable = {
+					which = overflow_protection
+					value = 0.0
+				}
+				if = { 
+					limit = { 
+						check_variable = { 
+							which = starbase_civic_mult 
+							value > 80.0
+						} 
+					}
+					change_variable = {
+						which = overflow_protection
+						value = starbase_civic_mult
+					}
+					subtract_variable = {
+						which = overflow_protection
+						value = 80.0
+					}
+					subtract_variable = {
+						which = starbase_civic_mult
+						value = overflow_protection
+					}
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = overflow_protection
+							value > 0.0
+						}
+					}
+					clear_variable = starbase_civic_mult
+					set_variable = {
+						which = starbase_civic_mult
+						value = 80.0
+					}
+				}
+				remove_modifier = ps_stuff_gov_united_ponies_base
+				add_modifier = {
+					modifier = ps_stuff_gov_united_ponies_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+				clear_variable = overflow_protection				
+			}
+           
+            if = {
+                limit = { OR = { has_civic = pony_stuff_gov_starlights_unity has_civic = pony_stuff_gov_starlights_unity_hive } }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_unity } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_unity }
+ 					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+					}
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_unity_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_unity_2 }
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress}
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_unity_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_unity_3 }
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+					
+					
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_unity_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_unity_4 }
+ 					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+					}
+				}
+				remove_modifier = ps_stuff_gov_starlight_base
+				add_modifier = {
+					modifier = ps_stuff_gov_starlight_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_pony_pegasus }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_pegasi } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_pegasi }
+ 					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+					}
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_pegasi_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_pegasi_2 }
+					}
+  					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+					}
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_pegasi_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_pegasi_3 }
+   					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+					}
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_pegasi_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_pegasi_4 }
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+  						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+					}
+				}
+				remove_modifier = ps_stuff_gov_pegasi_base
+				add_modifier = {
+					modifier = ps_stuff_gov_pegasi_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_pony_earth }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_earth } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_earth }
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_earth_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_earth_2 }
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_earth_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_earth_3 }
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_earth_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_earth_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel	}
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_earth_base
+				add_modifier = {
+					modifier = ps_stuff_gov_earth_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_pony_unicorn }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_unicorn } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_unicorn } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_unicorn_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_unicorn_2 }
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_unicorn_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_unicorn_3 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_unicorn_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_unicorn_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_unicorn_base
+				add_modifier = {
+					modifier = ps_stuff_gov_unicorn_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { OR = { has_civic = pony_stuff_gov_ling has_civic = pony_stuff_gov_ling_hive } }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_ling } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_ling } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_ling_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_ling_2 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_ling_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_ling_3 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_ling_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_ling_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_ling_base
+				add_modifier = {
+					modifier = ps_stuff_gov_ling_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_griffin }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_griffin } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_griffin } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_griffin_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_griffin_2 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_griffin_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_griffin_3 } }
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }						
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_griffin_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_griffin_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_griffin_base
+				add_modifier = {
+					modifier = ps_stuff_gov_griffin_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_bat_ponies }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_bat } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_bat } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_bat_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_bat_2 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_bat_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_bat_3 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_bat_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_bat_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_bat_base
+				add_modifier = {
+					modifier = ps_stuff_gov_bat_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { OR = { has_civic = pony_stuff_gov_crystal_ponies has_civic = pony_stuff_gov_crystal_ponies_hive } }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_crystal } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_crystal } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_crystal_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_crystal_2 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_crystal_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_crystal_3 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_crystal_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_crystal_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_crystal_base
+				add_modifier = {
+					modifier = ps_stuff_gov_crystal_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_dragon }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_dragon } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_dragon } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_dragon_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_dragon_2 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_dragon_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_dragon_3 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_dragon_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_dragon_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }	
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_dragon_base
+				add_modifier = {
+					modifier = ps_stuff_gov_dragon_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_refling }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_refling } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_refling } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_refling_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_refling_2 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_refling_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_refling_3 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_refling_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_refling_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel  }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_refling_base
+				add_modifier = {
+					modifier = ps_stuff_gov_refling_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_storm_king }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_storm_king } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_storm_king }
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_storm_king_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_storm_king_2 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_storm_king_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_storm_king_3 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_storm_king_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_storm_king_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_stormking_base
+				add_modifier = {
+					modifier = ps_stuff_gov_stormking_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+            if = {
+                limit = { has_civic = pony_stuff_gov_kirin }
+                every_owned_starbase = {
+                    if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold NOT = { has_starbase_building = ps_starbase_kirin } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_kirin } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starport has_starbase_size < starbase_starhold }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress NOT = { has_starbase_building = ps_starbase_kirin_2 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_kirin_2 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starhold has_starbase_size < starbase_starfortress }	prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 1.5
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel NOT = { has_starbase_building = ps_starbase_kirin_3 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_kirin_3 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_starfortress has_starbase_size < starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2
+							}
+						}
+                    }
+                    if = {
+                        limit = { has_starbase_size >= starbase_citadel NOT = { has_starbase_building = ps_starbase_kirin_4 } }
+                        set_starbase_building = { slot = 1 building = ps_starbase_kirin_4 } 
+					}
+					if = {
+                        limit = { has_starbase_size >= starbase_citadel }
+						prev = {
+							change_variable = {
+								which = starbase_civic_mult
+								value = 2.5
+							}
+						}
+                    }
+				}
+				remove_modifier = ps_stuff_gov_kirin_base
+				add_modifier = {
+					modifier = ps_stuff_gov_kirin_base
+					multiplier = starbase_civic_mult
+				}
+				clear_variable = starbase_civic_mult				
+			}
+            
+        }
+	}
+}

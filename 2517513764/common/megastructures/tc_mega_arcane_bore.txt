@@ -1,0 +1,798 @@
+@tc_mega_bore_minerals_produces_1 = 256
+@tc_mega_bore_minerals_produces_2 = 512
+@tc_mega_bore_minerals_produces_3 = 1024
+
+@tc_mega_bore_essences_produces_1 = 128
+@tc_mega_bore_essences_produces_2 = 256
+@tc_mega_bore_essences_produces_3 = 512
+
+@tc_mega_bore_rare_produces_1 = 8
+@tc_mega_bore_rare_produces_2 = 16
+@tc_mega_bore_rare_produces_3 = 32
+
+@tc_mega_bore_exrare_produces_1 = 2
+@tc_mega_bore_exrare_produces_2 = 4
+@tc_mega_bore_exrare_produces_3 = 8
+
+tc_mega_arcane_bore_00 = {
+	entity = "tc_mega_arcane_bore_00_entity"
+	construction_entity = "tc_mega_arcane_bore_00_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_arcane_bore"
+
+	prerequisites = { tc_tech_arcane_stope tech_mega_engineering }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 2560
+			unity = 1024
+		}
+		upkeep = {
+			tc_essences = 20
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		#custom_tooltip = {
+		#	fail_text = "requires_no_existing_megastructure"
+		#	has_no_non_gate_megastructure = yes
+		#}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+				NOT = { is_colonizable = yes }
+				NOT = { is_colony = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						has_star_flag = ring_world_built
+					}
+					is_artificial = yes
+				}
+			}
+			custom_tooltip = { #已采掘星球
+				fail_text = "tc_planet_killer_excavation_nothing_dig"
+				NOT = {
+					is_planet_class = pc_tc_bedrock
+					is_planet_class = pc_gas_giant
+				}
+			}
+			custom_tooltip = {
+				fail_text = "tc_planet_too_small"
+				planet_size > 10
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			set_planet_flag = has_megastructure 
+			if = {
+				limit = { has_modifier = terraforming_candidate }
+				remove_modifier = terraforming_candidate
+			}
+		}
+	}
+}
+
+tc_mega_arcane_bore_01 = {
+	entity = "tc_mega_arcane_bore_01_entity"
+	construction_entity = "tc_mega_arcane_bore_01_construction_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_arcane_bore"
+	upgrade_from = { tc_mega_arcane_bore_00 }
+	prerequisites = { tc_tech_arcane_stope tech_mega_engineering }
+
+	build_time = 960
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			unity = 1024
+		}
+		upkeep = {
+			tc_essences = 60
+		}
+		produces = {
+			minerals = @tc_mega_bore_minerals_produces_1
+		}
+		produces = { #水晶
+			trigger = {
+				planet = {
+					has_resource = { type = rare_crystals amount >= 1 }
+				}
+			}
+			rare_crystals = @tc_mega_bore_rare_produces_1
+		}
+		produces = { #天然气
+			trigger = {
+				planet = {
+					has_resource = { type = exotic_gases amount >= 1 }
+				}
+			}
+			exotic_gases = @tc_mega_bore_rare_produces_1
+		}
+		produces = { #易爆颗粒
+			trigger = {
+				planet = {
+					has_resource = { type = volatile_motes amount >= 1 }
+				}
+			}
+			volatile_motes = @tc_mega_bore_rare_produces_1
+		}
+		produces = { #纳米
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_gray_goo
+						has_resource = { type = nanites amount >= 1 }
+					}
+				}
+			}
+			nanites = @tc_mega_bore_exrare_produces_1
+		}
+		produces = { #虚境
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_shrouded
+						has_resource = { type = sr_zro amount >= 1 }
+					}
+				}
+			}
+			sr_zro = @tc_mega_bore_exrare_produces_1
+		}
+		produces = { #活金属
+			trigger = {
+				planet = {
+					has_resource = { type = sr_living_metal amount >= 1 }
+				}
+			}
+			sr_living_metal = @tc_mega_bore_exrare_produces_1
+		}
+		produces = { #暗物质
+			trigger = {
+				planet = {
+					has_resource = { type = sr_dark_matter amount >= 1 }
+				}
+			}
+			sr_dark_matter = @tc_mega_bore_exrare_produces_1
+		}
+		produces = { #元素碎片
+			trigger = {
+				planet = {
+					has_resource = { type = tc_element_shard amount >= 1 }
+				}
+			}
+			tc_element_shard = @tc_mega_bore_rare_produces_1
+		}
+		produces = { #文物
+			trigger = {
+				planet = {
+					exists = archaeological_site
+				}
+			}
+			minor_artifacts = @tc_mega_bore_rare_produces_1
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			set_planet_flag = tc_mega_arcane_bore_01_flag
+			add_modifier = { modifier = tc_mega_arcane_bore_tooltip }
+			planet_event = {
+				id = tc_mega.20
+				days = 30
+			}
+		}
+	}
+}
+
+tc_mega_arcane_bore_02 = {
+	entity = "tc_mega_arcane_bore_02_entity"
+	construction_entity = "tc_mega_arcane_bore_02_construction_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_arcane_bore"
+	upgrade_from = { tc_mega_arcane_bore_01 }
+	prerequisites = { tc_tech_arcane_stope tech_mega_engineering }
+
+	build_time = 960
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			unity = 1024
+		}
+		upkeep = {
+			tc_essences = 100
+		}
+		produces = {
+			minerals = @tc_mega_bore_minerals_produces_2
+		}
+		produces = { #水晶
+			trigger = {
+				planet = {
+					has_resource = { type = rare_crystals amount >= 1 }
+				}
+			}
+			rare_crystals = @tc_mega_bore_rare_produces_2
+		}
+		produces = { #天然气
+			trigger = {
+				planet = {
+					has_resource = { type = exotic_gases amount >= 1 }
+				}
+			}
+			exotic_gases = @tc_mega_bore_rare_produces_2
+		}
+		produces = { #易爆颗粒
+			trigger = {
+				planet = {
+					has_resource = { type = volatile_motes amount >= 1 }
+				}
+			}
+			volatile_motes = @tc_mega_bore_rare_produces_2
+		}
+		produces = { #纳米
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_gray_goo
+						has_resource = { type = nanites amount >= 1 }
+					}
+				}
+			}
+			nanites = @tc_mega_bore_exrare_produces_2
+		}
+		produces = { #虚境
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_shrouded
+						has_resource = { type = sr_zro amount >= 1 }
+					}
+				}
+			}
+			sr_zro = @tc_mega_bore_exrare_produces_2
+		}
+		produces = { #活金属
+			trigger = {
+				planet = {
+					has_resource = { type = sr_living_metal amount >= 1 }
+				}
+			}
+			sr_living_metal = @tc_mega_bore_exrare_produces_2
+		}
+		produces = { #暗物质
+			trigger = {
+				planet = {
+					has_resource = { type = sr_dark_matter amount >= 1 }
+				}
+			}
+			sr_dark_matter = @tc_mega_bore_exrare_produces_2
+		}
+		produces = { #元素碎片
+			trigger = {
+				planet = {
+					has_resource = { type = tc_element_shard amount >= 1 }
+				}
+			}
+			tc_element_shard = @tc_mega_bore_rare_produces_2
+		}
+		produces = { #文物
+			trigger = {
+				planet = {
+					exists = archaeological_site
+				}
+			}
+			minor_artifacts = @tc_mega_bore_rare_produces_2
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			remove_planet_flag = tc_mega_arcane_bore_01_flag 
+			set_planet_flag = tc_mega_arcane_bore_02_flag 
+		}
+	}
+}
+
+tc_mega_arcane_bore_03 = {
+	entity = "tc_mega_arcane_bore_03_entity"
+	construction_entity = "tc_mega_arcane_bore_03_construction_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_arcane_bore"
+	upgrade_from = { tc_mega_arcane_bore_02 }
+	prerequisites = { tc_tech_arcane_stope tech_mega_engineering }
+
+	build_time = 960
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			unity = 1024
+		}
+		upkeep = {
+			tc_essences = 160
+		}
+		produces = {
+			minerals = @tc_mega_bore_minerals_produces_3
+		}
+		produces = { #水晶
+			trigger = {
+				planet = {
+					has_resource = { type = rare_crystals amount >= 1 }
+				}
+			}
+			rare_crystals = @tc_mega_bore_rare_produces_3
+		}
+		produces = { #天然气
+			trigger = {
+				planet = {
+					has_resource = { type = exotic_gases amount >= 1 }
+				}
+			}
+			exotic_gases = @tc_mega_bore_rare_produces_3
+		}
+		produces = { #易爆颗粒
+			trigger = {
+				planet = {
+					has_resource = { type = volatile_motes amount >= 1 }
+				}
+			}
+			volatile_motes = @tc_mega_bore_rare_produces_3
+		}
+		produces = { #纳米
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_gray_goo
+						has_resource = { type = nanites amount >= 1 }
+					}
+				}
+			}
+			nanites = @tc_mega_bore_exrare_produces_3
+		}
+		produces = { #虚境
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_shrouded
+						has_resource = { type = sr_zro amount >= 1 }
+					}
+				}
+			}
+			sr_zro = @tc_mega_bore_exrare_produces_3
+		}
+		produces = { #活金属
+			trigger = {
+				planet = {
+					has_resource = { type = sr_living_metal amount >= 1 }
+				}
+			}
+			sr_living_metal = @tc_mega_bore_exrare_produces_3
+		}
+		produces = { #暗物质
+			trigger = {
+				planet = {
+					has_resource = { type = sr_dark_matter amount >= 1 }
+				}
+			}
+			sr_dark_matter = @tc_mega_bore_exrare_produces_3
+		}
+		produces = { #元素碎片
+			trigger = {
+				planet = {
+					has_resource = { type = tc_element_shard amount >= 1 }
+				}
+			}
+			tc_element_shard = @tc_mega_bore_rare_produces_3
+		}
+		produces = { #文物
+			trigger = {
+				planet = {
+					exists = archaeological_site
+				}
+			}
+			minor_artifacts = @tc_mega_bore_rare_produces_3
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			remove_planet_flag = tc_mega_arcane_bore_02_flag  
+			set_planet_flag = tc_mega_arcane_bore_03_flag  
+		}
+	}
+}
+
+#解离模式
+tc_mega_arcane_bore_disintegration_01 = {
+	entity = "tc_mega_arcane_bore_disintegration_01_entity"
+	construction_entity = "tc_mega_arcane_bore_disintegration_01_construction_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_arcane_bore"
+	upgrade_from = { tc_mega_arcane_bore_00 }
+	prerequisites = { tc_tech_arcane_stope tech_mega_engineering tc_tech_wand_focus_disintegration }
+
+	build_time = 960
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			unity = 1024
+		}
+		upkeep = {
+			energy = 20
+		}
+		produces = {
+			tc_essences = @tc_mega_bore_essences_produces_1
+		}
+		produces = { #水晶
+			trigger = {
+				planet = {
+					has_resource = { type = rare_crystals amount >= 1 }
+				}
+			}
+			rare_crystals = @tc_mega_bore_rare_produces_1
+		}
+		produces = { #天然气
+			trigger = {
+				planet = {
+					has_resource = { type = exotic_gases amount >= 1 }
+				}
+			}
+			exotic_gases = @tc_mega_bore_rare_produces_1
+		}
+		produces = { #易爆颗粒
+			trigger = {
+				planet = {
+					has_resource = { type = volatile_motes amount >= 1 }
+				}
+			}
+			volatile_motes = @tc_mega_bore_rare_produces_1
+		}
+		produces = { #纳米
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_gray_goo
+						has_resource = { type = nanites amount >= 1 }
+					}
+				}
+			}
+			nanites = @tc_mega_bore_exrare_produces_1
+		}
+		produces = { #虚境
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_shrouded
+						has_resource = { type = sr_zro amount >= 1 }
+					}
+				}
+			}
+			sr_zro = @tc_mega_bore_exrare_produces_1
+		}
+		produces = { #活金属
+			trigger = {
+				planet = {
+					has_resource = { type = sr_living_metal amount >= 1 }
+				}
+			}
+			sr_living_metal = @tc_mega_bore_exrare_produces_1
+		}
+		produces = { #暗物质
+			trigger = {
+				planet = {
+					has_resource = { type = sr_dark_matter amount >= 1 }
+				}
+			}
+			sr_dark_matter = @tc_mega_bore_exrare_produces_1
+		}
+		produces = { #元素碎片
+			trigger = {
+				planet = {
+					has_resource = { type = tc_element_shard amount >= 1 }
+				}
+			}
+			tc_element_shard = @tc_mega_bore_rare_produces_1
+		}
+		produces = { #文物
+			trigger = {
+				planet = {
+					exists = archaeological_site
+				}
+			}
+			minor_artifacts = @tc_mega_bore_rare_produces_1
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			set_planet_flag = tc_mega_arcane_bore_01_flag
+			add_modifier = { modifier = tc_mega_arcane_bore_tooltip }
+			planet_event = {
+				id = tc_mega.20
+				days = 30
+			}
+		}
+	}
+}
+
+tc_mega_arcane_bore_disintegration_02 = {
+	entity = "tc_mega_arcane_bore_disintegration_02_entity"
+	construction_entity = "tc_mega_arcane_bore_disintegration_02_construction_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_arcane_bore"
+	upgrade_from = { tc_mega_arcane_bore_disintegration_01 }
+	prerequisites = { tc_tech_arcane_stope tech_mega_engineering tc_tech_wand_focus_disintegration }
+
+	build_time = 960
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			unity = 1024
+		}
+		upkeep = {
+			energy = 50
+		}
+		produces = {
+			tc_essences = @tc_mega_bore_essences_produces_2
+		}
+		produces = { #水晶
+			trigger = {
+				planet = {
+					has_resource = { type = rare_crystals amount >= 1 }
+				}
+			}
+			rare_crystals = @tc_mega_bore_rare_produces_2
+		}
+		produces = { #天然气
+			trigger = {
+				planet = {
+					has_resource = { type = exotic_gases amount >= 1 }
+				}
+			}
+			exotic_gases = @tc_mega_bore_rare_produces_2
+		}
+		produces = { #易爆颗粒
+			trigger = {
+				planet = {
+					has_resource = { type = volatile_motes amount >= 1 }
+				}
+			}
+			volatile_motes = @tc_mega_bore_rare_produces_2
+		}
+		produces = { #纳米
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_gray_goo
+						has_resource = { type = nanites amount >= 1 }
+					}
+				}
+			}
+			nanites = @tc_mega_bore_exrare_produces_2
+		}
+		produces = { #虚境
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_shrouded
+						has_resource = { type = sr_zro amount >= 1 }
+					}
+				}
+			}
+			sr_zro = @tc_mega_bore_exrare_produces_2
+		}
+		produces = { #活金属
+			trigger = {
+				planet = {
+					has_resource = { type = sr_living_metal amount >= 1 }
+				}
+			}
+			sr_living_metal = @tc_mega_bore_exrare_produces_2
+		}
+		produces = { #暗物质
+			trigger = {
+				planet = {
+					has_resource = { type = sr_dark_matter amount >= 1 }
+				}
+			}
+			sr_dark_matter = @tc_mega_bore_exrare_produces_2
+		}
+		produces = { #元素碎片
+			trigger = {
+				planet = {
+					has_resource = { type = tc_element_shard amount >= 1 }
+				}
+			}
+			tc_element_shard = @tc_mega_bore_rare_produces_2
+		}
+		produces = { #文物
+			trigger = {
+				planet = {
+					exists = archaeological_site
+				}
+			}
+			minor_artifacts = @tc_mega_bore_rare_produces_2
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			remove_planet_flag = tc_mega_arcane_bore_01_flag 
+			set_planet_flag = tc_mega_arcane_bore_02_flag 
+		}
+	}
+}
+
+tc_mega_arcane_bore_disintegration_03 = {
+	entity = "tc_mega_arcane_bore_disintegration_03_entity"
+	construction_entity = "tc_mega_arcane_bore_disintegration_03_construction_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_arcane_bore"
+	upgrade_from = { tc_mega_arcane_bore_disintegration_02 }
+	prerequisites = { tc_tech_arcane_stope tech_mega_engineering tc_tech_wand_focus_disintegration }
+
+	build_time = 960
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 1280
+			unity = 1024
+		}
+		upkeep = {
+			energy = 80
+		}
+		produces = {
+			tc_essences = @tc_mega_bore_essences_produces_3
+		}
+		produces = { #水晶
+			trigger = {
+				planet = {
+					has_resource = { type = rare_crystals amount >= 1 }
+				}
+			}
+			rare_crystals = @tc_mega_bore_rare_produces_3
+		}
+		produces = { #天然气
+			trigger = {
+				planet = {
+					has_resource = { type = exotic_gases amount >= 1 }
+				}
+			}
+			exotic_gases = @tc_mega_bore_rare_produces_3
+		}
+		produces = { #易爆颗粒
+			trigger = {
+				planet = {
+					has_resource = { type = volatile_motes amount >= 1 }
+				}
+			}
+			volatile_motes = @tc_mega_bore_rare_produces_3
+		}
+		produces = { #纳米
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_gray_goo
+						has_resource = { type = nanites amount >= 1 }
+					}
+				}
+			}
+			nanites = @tc_mega_bore_exrare_produces_3
+		}
+		produces = { #虚境
+			trigger = {
+				planet = {
+					OR = {
+						is_planet_class = pc_shrouded
+						has_resource = { type = sr_zro amount >= 1 }
+					}
+				}
+			}
+			sr_zro = @tc_mega_bore_exrare_produces_3
+		}
+		produces = { #活金属
+			trigger = {
+				planet = {
+					has_resource = { type = sr_living_metal amount >= 1 }
+				}
+			}
+			sr_living_metal = @tc_mega_bore_exrare_produces_3
+		}
+		produces = { #暗物质
+			trigger = {
+				planet = {
+					has_resource = { type = sr_dark_matter amount >= 1 }
+				}
+			}
+			sr_dark_matter = @tc_mega_bore_exrare_produces_3
+		}
+		produces = { #元素碎片
+			trigger = {
+				planet = {
+					has_resource = { type = tc_element_shard amount >= 1 }
+				}
+			}
+			tc_element_shard = @tc_mega_bore_rare_produces_3
+		}
+		produces = { #文物
+			trigger = {
+				planet = {
+					exists = archaeological_site
+				}
+			}
+			minor_artifacts = @tc_mega_bore_rare_produces_3
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			remove_planet_flag = tc_mega_arcane_bore_02_flag  
+			set_planet_flag = tc_mega_arcane_bore_03_flag  
+		}
+	}
+}

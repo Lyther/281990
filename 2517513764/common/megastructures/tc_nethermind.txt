@@ -1,0 +1,265 @@
+#下界之核
+tc_nethermind_00 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_tc_nethermind"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = 15 y = -15 }
+
+	build_time = 360
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 5000
+			unity = 2560
+		}
+
+		upkeep = {
+		}
+	}
+
+	prerequisites = { tc_tech_nethermind }
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			has_no_non_gate_megastructure = yes
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_nethermind"
+			from = { NOT = { has_country_flag = tc_built_nethermind } }
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+				NOT = { is_colonizable = yes }
+				NOT = { is_colony = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						has_star_flag = ring_world_built
+					}
+					is_artificial = yes
+				}
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		from = { set_country_flag = tc_built_nethermind }
+		FROMFROM.planet = { set_planet_flag = has_megastructure }
+	}
+
+}
+
+tc_nethermind_01 = {
+	entity = "tc_nethermind_entity"
+	construction_entity = "tc_nethermind_01_entity"
+	portrait = "GFX_megastructure_tc_nethermind"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = 15 y = -15 }
+
+	build_time = 640
+	upgrade_from = { tc_nethermind_00 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 8000
+			tc_element_shard = 128
+			unity = 2560
+		}
+
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 60
+		}
+
+		produces = {
+			minerals = 200
+		}
+	}
+
+	prerequisites = { tc_tech_nethermind }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_nethermind_02 = {
+	entity = "tc_dimensional_lure_entity"
+	construction_entity = "tc_dimensional_lure_01_entity"
+	portrait = "GFX_megastructure_tc_nethermind"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = 15 y = -15 }
+
+	build_time = 640
+	upgrade_from = { tc_nethermind_01 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 8000
+			tc_element_shard = 128
+			unity = 2560
+		}
+
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 80
+		}
+
+		produces = {
+			minerals = 600
+			volatile_motes = 24
+			rare_crystals = 24
+		}
+	}
+
+	prerequisites = { tc_tech_dimensional_lure }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_nethermind_03 = {
+	entity = "tc_dimensional_lure_complet_entity"
+	construction_entity = "tc_dimensional_lure_02_entity"
+	portrait = "GFX_megastructure_tc_nethermind"
+	place_entity_on_planet_plane = no
+
+	entity_offset = { x = 15 y = -15 }
+
+	build_time = 640
+	upgrade_from = { tc_nethermind_02 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 8000
+			tc_element_shard = 128
+			unity = 2560
+		}
+
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 120
+		}
+
+		produces = {
+			minerals = 1200
+			sr_zro = 20
+			sr_living_metal = 10
+			volatile_motes = 64
+			rare_crystals = 64
+		}
+	}
+
+	prerequisites = { tc_tech_dimensional_lure }
+	
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}

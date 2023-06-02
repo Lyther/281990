@@ -1,0 +1,54 @@
+namespace = zofe_modifiers
+
+#event = {
+#	id = zofe_modifiers.1
+#	hide_window = yes
+#	is_triggered_only = yes
+	
+#	immediate = {
+		
+#		every_planet = {
+#			limit = { 
+#				has_planet_flag = fallen_empire_world
+#				OR = {
+#					is_planet_class = pc_gaia
+#					is_planet_class = pc_ringworld_habitable
+#				}	
+#			}
+#			add_modifier = {
+#					modifier = "pm_Utopian_Paradise"
+#					days = -1
+#			}
+#		}	
+#	}
+#}
+
+#Utopian Paradise Removal
+planet_event = {
+	id = zofe_modifiers.2
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOR = {
+			is_planet_class = pc_utopian_gaia
+			is_planet_class = pc_utopian_ringworld
+			is_planet_class = pc_utopian_city
+		}
+		exists = owner
+		owner = {
+			is_regular_empire = no
+		}
+		has_modifier = "pm_Utopian_Paradise"
+	}
+				
+	immediate = {
+		remove_modifier = "pm_Utopian_Paradise"
+		if = {
+			limit = { has_modifier = "pm_Living_Metal_Architecture" }
+			remove_modifier = "pm_Living_Metal_Architecture"
+		}		
+	}
+}
+

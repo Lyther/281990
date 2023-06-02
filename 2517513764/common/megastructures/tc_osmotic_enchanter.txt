@@ -1,0 +1,256 @@
+#渗透附魔台
+tc_osmotic_enchanter_00 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_tc_osmotic_enchanter"
+	place_entity_on_planet_plane = no
+
+	build_time = 900
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 5000
+			unity = 2560
+		}
+		upkeep = {
+		}
+	}
+
+	prerequisites = { tc_tech_osmotic_enchanter }
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			has_no_non_gate_megastructure = yes
+			solar_system = {
+				NOT = {
+					any_system_megastructure = {
+						is_megastructure_type = tc_stellar_node_generator_03
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_osmotic_enchanter"
+			from = { NOT = { has_country_flag = tc_built_osmotic_enchanter } }
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+				NOT = { is_colonizable = yes }
+				NOT = { is_colony = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						has_star_flag = ring_world_built
+					}
+					is_artificial = yes
+				}
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		from = { set_country_flag = tc_built_osmotic_enchanter }
+		FROMFROM.planet = { set_planet_flag = has_megastructure }
+	}
+
+}
+
+tc_osmotic_enchanter_01 = {
+	entity = "osmotic_enchanter_01_entity"
+	construction_entity = "osmotic_enchanter_01_entity"
+	portrait = "GFX_megastructure_tc_osmotic_enchanter"
+	place_entity_on_planet_plane = no
+
+	build_time = 1800
+	upgrade_from = { tc_osmotic_enchanter_00 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 10000
+			tc_element_shard = 240
+			unity = 3840
+		}
+		upkeep = {
+			minerals = 20
+		}
+	}
+
+	prerequisites = { tc_tech_osmotic_enchanter }
+	
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_osmotic_enchanter_02 = {
+	entity = "osmotic_enchanter_part_02_entity"
+	construction_entity = "osmotic_enchanter_02_entity"
+	portrait = "GFX_megastructure_tc_osmotic_enchanter"
+	place_entity_on_planet_plane = no
+
+	build_time = 1800
+	upgrade_from = { tc_osmotic_enchanter_01 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 15000
+			tc_element_shard = 120
+			unity = 3840
+		}
+		upkeep = {
+			minerals = 50
+		}
+	}
+
+	prerequisites = { tc_tech_osmotic_enchanter }
+	
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_osmotic_enchanter_03 = {
+	entity = "osmotic_enchanter_part_03_entity"
+	construction_entity = "osmotic_enchanter_03_entity"
+	portrait = "GFX_megastructure_tc_osmotic_enchanter"
+	place_entity_on_planet_plane = no
+
+	build_time = 1800
+	upgrade_from = { tc_osmotic_enchanter_02 }
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 15000
+			tc_element_shard = 120
+			unity = 3840
+		}
+		upkeep = {
+			minerals = 100
+		}
+	}
+
+	prerequisites = { tc_tech_osmotic_enchanter }
+	
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM = {
+			set_megastructure_flag = tc_osmotic_enchanter
+		}
+	}
+}
+
+tc_osmotic_enchanter_start = {
+	entity = "tc_osmotic_enchanter_start_entity"
+	construction_entity = "tc_osmotic_enchanter_start_entity"
+	portrait = "GFX_megastructure_tc_osmotic_enchanter"
+	place_entity_on_planet_plane = no
+
+	build_time = 360
+	upgrade_from = { tc_osmotic_enchanter_03 }
+	resources = {
+		category = megastructures
+		cost = {
+		}
+		upkeep = {
+		}
+	}
+
+	prerequisites = { tc_tech_osmotic_enchanter }
+	possible = {
+		custom_tooltip = {
+			fail_text = "tc_oe_need_fleet"
+			NOT = { exists = event_target:tc_oe_fleet }
+			any_system_megastructure = {
+				is_megastructure_type = tc_osmotic_enchanter_03
+				has_megastructure_flag = tc_osmotic_enchanter
+				any_fleet_in_orbit = {
+					is_owned_by = FROM
+				}
+			}
+		}
+	}
+	on_build_start = {
+		FROMFROM = {
+			random_fleet_in_orbit = {
+				fleet_event = {
+					id = tc_mega.3
+				}
+			}
+			set_halted = -1
+		}
+	}	
+	on_build_cancel = {}
+	on_build_complete = {
+		FROMFROM = {
+			random_fleet_in_orbit = {
+				limit = { has_fleet_flag = tc_oe_fleet }
+				fleet_event = {
+					id = tc_mega.11
+				}
+			}
+		}
+		spawn_megastructure = {
+			type = tc_osmotic_enchanter_03
+			planet = FROMFROM.planet
+			owner = FROM
+		}
+		remove_megastructure = FROMFROM
+	}
+}

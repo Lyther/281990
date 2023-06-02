@@ -1,0 +1,195 @@
+################################
+#
+# Galactic Community Events
+#
+###############################
+
+namespace = galcom
+
+# Killed Matriarch in Violation of Act
+country_event = {
+	id = galcom.110
+	title = "galcom.107.name"
+	desc = "galcom.110.desc"
+	picture = GFX_evt_civil_action
+	show_sound = event_assembly_fight
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_zofe_compatible = yes
+		is_galactic_community_formed = yes
+		is_galactic_community_member = yes
+		is_active_resolution = resolution_tiyanki_conservation_act
+	}
+
+	immediate = {
+		set_timed_country_flag = { flag = resolution_breached_killed_tiyanki days = 3600 }
+	}
+
+	option = {
+		name = galcom.110.a
+		trigger = {
+			is_xenophile = no
+			is_xenophobe = no
+		}
+		add_resource = { energy = -5000 }
+	}
+	option = {
+		name = galcom.110.b
+		trigger = {
+			is_xenophile = yes
+		}
+		add_resource = { energy = -5000 }
+	}
+	option = {
+		name = galcom.110.c
+		trigger = {
+			is_xenophobe = yes
+		}
+		add_resource = { energy = -5000 }
+	}
+}
+
+# Galactic Market Nomination Period is over event
+# Establishes who will take over as Galactic Market "owner"
+country_event = {
+	id = galcom.67
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		every_playable_country = {
+			limit = { has_event_chain = market_relocation_chain }
+			end_event_chain = market_relocation_chain
+		}
+		remove_global_flag = ongoing_market_relocation_nomination
+		# Nominees start equal, modifiers improve chances
+		random_country = {
+			limit = {
+				is_zofe_compatible = yes
+				has_country_flag = market_nomination_eligible
+			}
+			weights = {
+				# can use add or mult
+				base = 1
+				modifier = {
+					add = 75
+					check_variable = {
+						which = market_rating
+						value = 5
+					}
+				}
+				modifier = {
+					add = 50
+					check_variable = {
+						which = market_rating
+						value = 4
+					}
+				}
+				modifier = {
+					add = 30
+					check_variable = {
+						which = market_rating
+						value = 3
+					}
+				}
+				modifier = {
+					add = 20
+					check_variable = {
+						which = market_rating
+						value = 2
+					}
+				}
+				modifier = {
+					add = 10
+					check_variable = {
+						which = market_rating
+						value = 1
+					}
+				}
+				modifier = {
+					factor = 0.5
+					NOT = {
+						any_owned_planet = {
+							OR = {
+								has_modifier = market_nominee_level_1
+								has_modifier = market_nominee_level_2
+								has_modifier = market_nominee_level_3
+								has_modifier = market_nominee_level_4
+								has_modifier = market_nominee_level_5
+							}
+						}
+					}
+				}
+			}
+			save_global_event_target_as = market_founder
+			random_owned_planet = {
+				weights = {
+					base = 1
+					modifier = {
+						factor = 9999
+						OR = {
+							has_modifier = market_nominee_level_1
+							has_modifier = market_nominee_level_2
+							has_modifier = market_nominee_level_3
+							has_modifier = market_nominee_level_4
+							has_modifier = market_nominee_level_5
+						}
+					}
+				}
+				save_global_event_target_as = market_founder_planet
+			}
+			country_event = { id = galcom.68 }
+		}
+		every_playable_country = {
+			limit = { has_country_flag = market_nomination_eligible }
+			every_owned_planet = {
+				limit = {
+					OR = {
+						has_modifier = market_nominee_level_1
+						has_modifier = market_nominee_level_2
+						has_modifier = market_nominee_level_3
+						has_modifier = market_nominee_level_4
+						has_modifier = market_nominee_level_5
+					}
+				}
+				# remove boosted flags
+				if = {
+					limit = { has_planet_flag = boosted_once }
+					remove_planet_flag = boosted_once
+				}
+				if = {
+					limit = { has_planet_flag = boosted_twice }
+					remove_planet_flag = boosted_twice
+				}
+				# remove modifiers
+				if = {
+					limit = { has_modifier = market_nominee_level_1 }
+					remove_modifier = market_nominee_level_1
+				}
+				else_if = {
+					limit = { has_modifier = market_nominee_level_2 }
+					remove_modifier = market_nominee_level_2
+				}
+				else_if = {
+					limit = { has_modifier = market_nominee_level_3 }
+					remove_modifier = market_nominee_level_3
+				}
+				else_if = {
+					limit = { has_modifier = market_nominee_level_4 }
+					remove_modifier = market_nominee_level_4
+				}
+				else_if = {
+					limit = { has_modifier = market_nominee_level_5 }
+					remove_modifier = market_nominee_level_5
+				}
+			}
+			set_variable = {
+				which = market_rating
+				value = 0
+			}
+		}
+	}
+}

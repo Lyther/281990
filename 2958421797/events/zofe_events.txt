@@ -1,0 +1,1246 @@
+###########################################
+#      			ZoFE Events
+#		  		  By Kolyn
+###########################################
+
+namespace = zofe
+
+#Dark Matter Possibilities Trigger
+country_event = {
+	id = zofe.0
+	hide_window = yes
+	
+	trigger = {
+		is_country_type = default
+		has_technology = tech_zero_point_power
+		has_technology = tech_mine_dark_matter
+		any_relation = {
+			is_country_type = fallen_empire	
+			has_communications = root				
+		}
+		NOT = { has_country_flag = dark_matter_power_possibilities }
+		NOR = {
+			has_technology = tech_dark_matter_power_core
+			has_tech_option = tech_dark_matter_power_core
+		}
+	}
+	
+	#Will change to 10 years
+	mean_time_to_happen = {
+		years = 10
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		set_country_flag = dark_matter_power_possibilities
+		country_event = { id = zofe.1 }
+	}
+}
+
+##Dark Matter - Possibilities
+country_event = {
+	id = zofe.1
+	title = zofe.1.name
+	desc = zofe.1.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.1.a
+	}
+}
+
+#Precursors' Power Source Trigger
+country_event = {
+	id = zofe.10
+	hide_window = yes
+	
+	trigger = {
+		is_country_type = default
+		has_country_flag = dark_matter_power_possibilities
+		NOR = {
+			has_technology = tech_dark_matter_power_core
+			has_tech_option = tech_dark_matter_power_core
+			has_country_flag = precursor_power_source_started
+		}
+		OR = {
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+			has_origin = origin_ringworld_empire
+			AND = {
+				has_origin = origin_original_people
+				OR = {
+					has_country_flag = original_escort_spawned
+					has_country_flag = original_empire_shielded_world_opened
+				}
+			}
+		}
+	}
+	
+	#Will change to 10 years
+	mean_time_to_happen = {
+		years = 10
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		set_country_flag = precursor_power_source_started
+		country_event = { id = zofe.11 }
+	}
+}
+
+# Precursors' Power Source
+country_event = {
+	id = zofe.11
+	title = zofe.11.name
+
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	
+	desc = { 
+		trigger = { 
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		text = "zofe.11.desc"
+	}
+
+	desc = { 
+		trigger = { has_origin = origin_ringworld_empire }
+		text = "zofe.11.desc.ringworld_empire"
+	}
+	
+	desc = { 
+		trigger = { has_origin = origin_original_people }
+		text = "zofe.11.desc.original_people"
+	}
+	
+	is_triggered_only = yes
+
+	immediate = {
+		closest_system = {
+			limit = {
+				NOR = {
+					has_star_flag = hostile_system
+					is_pirate_system = yes
+					AND = {
+						exists = space_owner
+						space_owner = { is_country_type = fallen_empire }
+					}	
+				}				
+				has_access_fleet = root
+				any_neighbor_system = {
+					exists = space_owner
+					space_owner = { is_country_type = fallen_empire }
+				}
+			}
+			set_star_flag = dark_matter_power_source
+			save_event_target_as = dark_matter_power_source
+			random_neighbor_system = {
+				limit = {
+					exists = space_owner
+					space_owner = { is_country_type = fallen_empire }
+				}
+				space_owner = {
+					save_event_target_as = dark_matter_power_provider
+					owner_species = { save_event_target_as = dark_matter_provider_species }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = zofe.11.a	
+		trigger = {
+			is_ai = no
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		event_target:dark_matter_power_source = {
+			enable_special_project = {
+				name = "DARK_MATTER_POWER_STUDY"
+				location = this
+				owner = ROOT
+			}
+		}
+		ai_chance = {										
+			factor = 0			
+		}
+	}
+	
+	option = {
+		name = zofe.11.b	
+		trigger = {
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "DARK_MATTER_POWER_STUDY_HOME"
+				location = this
+				owner = ROOT
+			}
+		}
+		ai_chance = {										
+			factor = 1000			
+		}
+	}
+	
+	option = {
+		name = zofe.11.c	
+		trigger = {	has_origin = origin_ringworld_empire }
+		capital_scope = {
+			enable_special_project = {
+				name = "DARK_MATTER_POWER_STUDY_RE"
+				location = this
+				owner = ROOT
+			}
+		}
+		ai_chance = {										
+			factor = 1000			
+		}
+	}
+	
+	option = {
+		name = zofe.11.d	
+		trigger = {	has_origin = origin_original_people }
+		capital_scope = {
+			enable_special_project = {
+				name = "DARK_MATTER_POWER_STUDY_OE"
+				location = this
+				owner = ROOT
+			}
+		}
+		ai_chance = {										
+			factor = 1000			
+		}
+	}
+}
+
+# Precursor Expedition Concluded
+country_event = {
+	id = zofe.12
+	title = zofe.12.name
+	
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { has_country_flag = dark_matter_power_studies_critical_success }
+		text = "zofe.12.desc.critical_success"
+	}
+	desc = {
+		trigger = { has_country_flag = dark_matter_power_studies_success }
+		text = "zofe.12.desc.success"
+	}
+	desc = { 
+		trigger = { has_country_flag = dark_matter_power_studies_failure }
+		text = "zofe.12.desc.failure"
+	}
+	desc = {
+		trigger = { has_country_flag = dark_matter_power_studies_critical_failure }
+		text = "zofe.12.desc.critical_failure"
+	}
+	
+	option = {
+		name = zofe.12.a 
+		trigger = { has_country_flag = dark_matter_power_studies_critical_success }
+		owner = {
+			set_country_flag = dark_matter_studies_concluded
+			add_resource = { 
+				physics_research = 5000
+				society_research = 5000
+				engineering_research = 5000 
+				minor_artifacts = 10
+			}
+		}
+	}
+	
+	option = {
+		name = zofe.12.b
+		trigger = { has_country_flag = dark_matter_power_studies_success }
+		owner = {
+			set_country_flag = dark_matter_studies_concluded
+			add_resource = { 
+				physics_research = 5000
+				society_research = 5000
+				engineering_research = 5000 
+			}
+		}
+	}
+	
+	option = {
+		name = zofe.12.c
+		trigger = { has_country_flag = dark_matter_power_studies_failure }
+		owner = {
+			set_country_flag = dark_matter_studies_concluded
+		}
+	}
+	
+	option = {
+		name = zofe.12.d
+		trigger = { has_country_flag = dark_matter_power_studies_critical_failure }
+		owner = { set_country_flag = dark_matter_studies_concluded }
+		from = {
+			fleet = {
+				kill_leader = { type = scientist show_notification = yes }
+				destroy_fleet = this
+			}
+		}
+	}
+}
+
+# Precursor Studies Concluded
+country_event = {
+	id = zofe.13
+	title = zofe.13.name
+	desc = zofe.13.desc
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.13.a
+		set_country_flag = dark_matter_studies_concluded
+		add_resource = { 
+			physics_research = 5000
+			society_research = 5000
+			engineering_research = 5000 
+		}
+	}
+}
+
+
+#Fallen Empire Notices a default empire spying and decides to respond
+country_event = {
+	id = zofe.14
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_country_type = fallen_empire
+		is_at_war = no
+		any_country = {
+			has_country_flag = dark_matter_power_studies_complete
+			has_country_flag = dark_matter_power_studies_critical_failure
+		}
+	}
+
+	#Retribution will be swift
+	mean_time_to_happen = {
+		days = 10
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		random_playable_country = {
+			limit = { 
+				has_country_flag = dark_matter_power_studies_complete
+				has_country_flag = dark_matter_power_studies_critical_failure
+				NOT = { has_country_flag = fallen_empire_noticed_spying }
+			}
+			set_country_flag = fallen_empire_noticed_spying
+			establish_communications_no_message = event_target:fallen_empire_warner
+			country_event = { id = zofe.15 }
+		}
+	}
+}
+
+#Fallen Empire is annoyed about spying
+country_event = {
+	id = zofe.15
+	title = zofe.15.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Spiritualists
+	desc = {
+		trigger = {
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		text = "zofe.15.desc.spiritualist"
+	}
+	
+	#Materialists
+	desc = {
+		trigger = {
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		text = "zofe.15.desc.materialist"
+	}	
+	#Xenophile
+	desc = {
+		trigger = {
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		text = "zofe.15.desc.xenophile"
+	}
+	#Xenophobe
+	desc = {
+		trigger = {
+			event_target:fallen_empire_warner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		text = "zofe.15.desc.xenophobe"
+	}
+	#Machine
+	desc = {
+		trigger = {
+			event_target:fallen_empire_warner = {
+				is_gestalt = yes
+			}
+		}
+		text = "zofe.15.desc.machine"
+	}
+	
+	#Declaration of Punishment War
+	option = {
+		name = zofe.15.a
+		custom_tooltip = fallen_empire_warning_unhappy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_majorly_failed_fallen_empire_task } } }
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_fe_humiliation"
+			}
+		}
+	}
+}
+
+##Insurance event for FE contact
+country_event = {
+	id = zofe.16
+	hide_window = yes
+	
+	trigger = {
+		is_country_type = default
+		is_ai = no
+		has_technology = tech_zero_point_power
+		has_technology = tech_mine_dark_matter
+		any_country = { is_country_type = fallen_empire }
+		NOT = {
+			any_relation = {
+				is_country_type = fallen_empire	
+				has_communications = root				
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+
+	immediate = {
+		random_country = {
+			limit = { is_country_type = fallen_empire }
+			save_event_target_as = fallen_empire_contact
+		}
+		establish_communications_no_message = event_target:fallen_empire_contact
+	}
+}
+
+#The Quest for Dark Matter Power Trigger
+country_event = {
+	id = zofe.17
+	hide_window = yes
+	
+	trigger = {
+		is_country_type = default
+		has_country_flag = dark_matter_studies_concluded
+		NOT = { has_country_flag = can_research_dark_matter_power_core }
+		NOR = {
+			has_technology = tech_dark_matter_power_core
+			has_tech_option = tech_dark_matter_power_core
+		}
+		NOR = {
+			has_origin = origin_ringworld_empire
+			has_origin = origin_original_people
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+
+	immediate = {
+		set_country_flag = can_research_dark_matter_power_core
+		country_event = { id = zofe.100 }
+	}
+}
+		
+
+## The Quest for Dark Matter Power
+country_event = {
+	id = zofe.100
+	title = zofe.100.name
+
+	picture = GFX_evt_physics_research
+	
+	desc = { 
+		trigger = { 
+			is_gestalt = no
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		text = "zofe.100.desc"
+	}
+	desc = { 
+		trigger = { 
+			has_authority = auth_hive_mind
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		text = "zofe.100.desc.hive"
+	}
+	desc = { 
+		trigger = { 
+			has_authority = auth_machine_intelligence
+			NOT = { has_origin = origin_ringworld_empire }
+		}
+		text = "zofe.100.desc.machine"
+	}
+	desc = { 
+		trigger = { has_origin = origin_ringworld_empire }
+		text = "zofe.100.desc.ringworld_empire"
+	}
+	desc = { 
+		trigger = { has_origin = origin_original_people }
+		text = "zofe.100.desc.original_people"
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "zofe.100.a"
+		trigger = { 
+			NOT = { has_origin = origin_ringworld_empire }
+		}
+		set_country_flag = dark_matter_power_situation
+		
+		#Starts Dark Matter Situation
+		start_situation = {
+			type = situation_zofe_dark_matter
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = zofe.2 }
+			}
+		}
+		
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 10
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+	
+	option = {
+		name = "zofe.100.b"
+		trigger = { 
+			has_technology = tech_arcane_deciphering
+			NOT = { has_origin = origin_ringworld_empire }
+		}	
+		set_country_flag = dark_matter_power_arfifacts
+		custom_tooltip = "dark_matter_power_arfifacts_tooltip"
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = zofe.2 }
+			}
+		}
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 10
+				has_resource = { type = minor_artifacts amount > 50 }
+			}
+		}
+	}
+	
+	option = {
+		name = "zofe.100.c"	
+		trigger = { 
+			NOT = { has_origin = origin_ringworld_empire }
+		}	
+		add_resource = { influence = 100 }
+		ai_chance = {
+			factor = 100
+		}
+	}
+	option = {
+		name = "zofe.100.d"
+		trigger = { has_origin = origin_ringworld_empire }
+		add_research_option = tech_dark_matter_power_core
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = zofe.200 }
+			}
+		}
+		ai_chance = {
+			factor = 1000
+		}
+	}
+	option = {
+		name = "zofe.100.e"
+		trigger = { has_origin = origin_original_people }
+		add_research_option = tech_dark_matter_power_core
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = zofe.200 }
+			}
+		}
+		ai_chance = {
+			factor = 1000
+		}
+	}
+}
+
+## Stage 1 Complete
+situation_event = {
+	id = zofe.101
+	title = zofe.101.name
+	desc = zofe.101.desc
+	picture = GFX_evt_analyzing_artifacts
+
+	is_triggered_only = yes
+
+	option = {
+		name = "zofe.101.a"
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 5000
+				}
+			}
+		}
+		owner = {
+			add_resource = { energy = -5000 }
+		}
+	}
+	
+	option = {
+		name = "zofe.101.b"
+		add_situation_progress = -30
+		hidden_effect = {
+			owner = {
+				random_owned_leader = {
+					limit = {
+						is_researching_area = physics 	
+					}
+					kill_leader = { 
+						show_notification = no 
+						type = scientist 
+					}
+				}
+				add_modifier = {
+					modifier = scientists_strike
+					days = 180
+				}
+			}
+		}
+	}
+}
+
+## Stage 2 Complete
+situation_event = {
+	id = zofe.102
+	title = zofe.102.name
+	desc = zofe.102.desc
+	picture = GFX_evt_engineering_research
+
+	is_triggered_only = yes
+
+	option = {
+		name = "zofe.102.a"
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 10000
+				}
+			}
+		}
+		owner = {
+			add_resource = { energy = -10000 }
+		}
+	}
+	
+	option = {
+		name = "zofe.102.b"
+		add_situation_progress = -30
+		hidden_effect = {
+			owner = {
+				random_owned_leader = {
+					limit = {
+						is_researching_area = engineering 	
+					}
+					kill_leader = { 
+						show_notification = no 
+						type = scientist 
+					}
+				}
+				add_modifier = {
+					modifier = scientists_strike
+					days = 180
+				}
+			}
+		}
+	}
+}
+
+## Stage 3 Complete
+situation_event = {
+	id = zofe.103
+	title = zofe.103.name
+	desc = zofe.103.desc
+	picture = GFX_evt_physics_research
+
+	is_triggered_only = yes
+
+	option = {
+		name = "zofe.103.a"
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 15000
+				}
+			}
+		}
+		owner = {
+			add_resource = { energy = -15000 }
+		}
+	}
+	
+	option = {
+		name = "zofe.103.b"
+		add_situation_progress = -30
+		hidden_effect = {
+			owner = {
+				random_owned_leader = {
+					limit = {
+						is_researching_area = physics 	
+					}
+					kill_leader = { 
+						show_notification = no 
+						type = scientist 
+					}
+				}
+				add_modifier = {
+					modifier = scientists_strike
+					days = 180
+				}
+			}
+		}
+	}
+}
+
+## Stage 4 Complete
+situation_event = {
+	id = zofe.104
+	title = zofe.104.name
+	desc = zofe.104.desc
+	picture = GFX_evt_analyzing_artifacts
+
+	is_triggered_only = yes
+
+	option = {
+		name = "zofe.104.a"
+		hidden_effect = { destroy_situation = this }
+		owner = {
+			give_technology = { tech = tech_dark_matter_power_core	message = no }
+			set_country_flag = dark_matter_power_researched
+		}
+	}
+}
+
+# Artifact Dark Matter Power Research Success
+country_event = {
+	id = zofe.105
+	title = "zofe.105.name"
+	desc = "zofe.105.desc"
+	picture = GFX_evt_ancient_records
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "FASCINATING"
+
+        add_research_option = tech_dark_matter_power_core
+		set_country_flag = artifact_dark_matter_given
+    }
+}
+
+# Dark Matter Breakthrough player notification (Started the situation)
+country_event = {
+	id = zofe.2
+	title = zofe.2.name
+	desc = zofe.2.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.2.a		
+	}
+}
+
+# Dark Matter has been researched by an Empire! Trigger a notification
+country_event = {
+	id = zofe.20
+	hide_window = yes
+	
+	trigger = { 
+		is_country_type = default
+		NOT = { has_country_flag = dark_matter_power_informed }
+		has_technology = tech_dark_matter_power_core
+	}
+	
+	mean_time_to_happen = { days = 3 }
+	
+	immediate = {	
+		every_country = {					# Notify Players
+			limit = {
+				NOT = { is_same_value = root }
+				is_ai = no			
+			}
+			country_event = { id = zofe.200 }
+		}
+		set_country_flag = dark_matter_power_informed
+	}
+}
+
+# Dark Matter has been researched by an Empire player notification - needs rework.
+country_event = {
+	id = zofe.200
+	title = "zofe.200.name"
+	picture = GFX_evt_physics_research
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { 
+			from = {
+				NOR = {
+					has_country_flag = dark_matter_salvaged
+					has_country_flag = artifact_dark_matter_given	
+					has_country_flag = dark_matter_power_researched
+				}
+			}
+		}
+		text = zofe.200.desc.unknown
+	}
+	
+	desc = {
+		trigger = { 
+			from = {
+				has_country_flag = dark_matter_salvaged
+			}
+		}
+		text = zofe.200.desc.salvaged
+	}
+	
+	desc = {
+		trigger = { 
+			from = {
+				has_country_flag = artifact_dark_matter_given
+			}
+		}
+		text = zofe.200.desc.artifact
+	}
+	
+	desc = {
+		trigger = { 
+			from = {
+				has_country_flag = dark_matter_power_researched
+			}
+		}
+		text = zofe.200.desc.research
+	}
+	
+	option = {
+		name = "INTERESTING"
+    }
+}
+
+
+# Ascended Empire Decadence Ascendancy Action Unlock
+country_event = {
+	id = zofe.3
+	title = zofe.3.name
+	desc = zofe.3.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+
+	option = {
+		name = zofe.3.a
+		custom_tooltip = enable_decadence_ascendancy_action 
+	}
+}
+
+# Ascended Empire Decadence Ascendancy Action Unlock - Hive
+country_event = {
+	id = zofe.30
+	title = zofe.30.name
+	desc = zofe.30.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+
+	option = {
+		name = zofe.30.a
+		custom_tooltip = enable_decadence_ascendancy_action_hive
+	}
+}
+
+# Ascended Empire Decadence Ascendancy Action Unlock - Machine
+country_event = {
+	id = zofe.300
+	title = zofe.300.name
+	desc = zofe.300.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+
+	option = {
+		name = zofe.300.a
+		custom_tooltip = enable_decadence_ascendancy_action_machine
+	}
+}
+
+#Hedonist Decision Very Good Outcome
+planet_event = {
+	id = zofe.3001
+	title = zofe.3001.name
+	desc = zofe.3001.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3001.a
+		every_owned_pop = {
+			limit = { has_pop_flag = decadent_pop }
+			remove_pop_flag = decadent_pop
+		}
+	}
+}
+
+#Hedonist Decision Good Outcome
+planet_event = {
+	id = zofe.3002
+	title = zofe.3002.name
+	desc = zofe.3002.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3002.a
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_pop_flag = decadent_pop }
+				remove_pop_flag = decadent_pop
+			}
+		}
+		##Happiness Modifier
+		add_modifier = {
+			modifier = decadence_unhappiness_1
+			days = 720
+		}
+	}
+}
+
+#Hedonist Decision Bad Outcome
+planet_event = {
+	id = zofe.3003
+	title = zofe.3003.name
+	desc = zofe.3003.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3003.a
+
+		##Happiness Modifier
+		add_modifier = {
+			modifier = decadence_unhappiness_1
+			days = 720
+		}
+	}
+}
+
+#Hedonist Decision Very Bad Outcome
+planet_event = {
+	id = zofe.3004
+	title = zofe.3004.name
+	desc = zofe.3004.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3004.a
+		if = {
+			limit = {
+				exists = owner
+				owner = { NOT = { has_authority = auth_corporate } }
+			}
+			custom_tooltip = decadence_demotion
+		}
+		if = {
+			limit = {
+				exists = owner
+				owner = { has_authority = auth_corporate }
+			}
+			custom_tooltip = decadence_demotion_megacorp
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = owner
+					owner = {
+						NOT = { has_authority = auth_corporate }
+					}
+					any_owned_pop = { has_job = politician }
+				}
+				random_owned_pop = {
+					limit = { has_job = politician }
+					unemploy_pop = yes
+					clear_pop_category = yes #Drops them to worker-class
+				}
+			}
+			
+			if = {
+				limit = {
+					exists = owner
+					owner = {
+						has_authority = auth_corporate
+					}
+					any_owned_pop = { has_job = executive }
+				}
+				random_owned_pop = {
+					limit = { has_job = executive }
+					unemploy_pop = yes
+					clear_pop_category = yes #Drops them to worker-class
+				}
+			}
+			
+			every_owned_pop = {
+				limit = { has_pop_flag = decadent_pop }
+				kill_pop = yes
+			}
+		}
+		##Happiness Modifier
+		add_modifier = {
+			modifier = decadence_unhappiness_2
+			days = 720
+		}
+	}
+}
+
+#Hedonist Decision Good Outcome - Hive
+planet_event = {
+	id = zofe.3011
+	title = zofe.3011.name
+	desc = zofe.3011.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3011.a
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_pop_flag = decadent_pop }
+				remove_pop_flag = decadent_pop
+			}
+		}
+	}
+}
+
+#Hedonist Decision Bad Outcome - Hive
+planet_event = {
+	id = zofe.3012
+	title = zofe.3012.name
+	desc = zofe.3012.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3012.a
+	}
+}
+
+#Hedonist Decision Very Bad Outcome - Hive
+planet_event = {
+	id = zofe.3013
+	title = zofe.3013.name
+	desc = zofe.3013.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3013.a
+
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_pop_flag = decadent_pop }
+				kill_pop = yes
+			}
+		}
+	}
+}
+
+#Hedonist Decision Good Outcome - Machine
+planet_event = {
+	id = zofe.3021
+	title = zofe.3021.name
+	desc = zofe.3021.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3021.a
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_pop_flag = decadent_pop }
+				remove_pop_flag = decadent_pop
+			}
+		}
+	}
+}
+
+#Hedonist Decision Bad Outcome - Machine
+planet_event = {
+	id = zofe.3022
+	title = zofe.3022.name
+	desc = zofe.3022.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3022.a
+	}
+}
+
+#Hedonist Decision Very Bad Outcome - Machine
+planet_event = {
+	id = zofe.3023
+	title = zofe.3023.name
+	desc = zofe.3023.desc
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = zofe.3023.a
+
+		hidden_effect = {
+			every_owned_pop = {
+				limit = { has_pop_flag = decadent_pop }
+				kill_pop = yes
+			}
+		}
+	}
+}
+	

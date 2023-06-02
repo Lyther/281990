@@ -1,0 +1,39 @@
+namespace = TT_tr_change
+
+planet_event = {
+	id = TT_tr_change.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		from = {
+			OR = {
+				has_tradition = tr_tt_change_1
+				has_tradition = tr_tt_update_1
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = { has_modifier = TT_mod_PLNT_new_world }
+			remove_modifier = TT_mod_PLNT_new_world
+		}
+		add_modifier = { modifier = TT_mod_PLNT_new_world days = 3600 }
+	}
+}
+
+country_event = {
+	id = TT_tr_change.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			has_modifier = TT_mod_CNTR_agenda_tradition_change
+			has_modifier = TT_mod_CNTR_agenda_tradition_update
+		}
+	}
+	immediate = {
+		every_owned_leader = {
+			remove_all_negative_traits = yes
+		}
+	}
+}

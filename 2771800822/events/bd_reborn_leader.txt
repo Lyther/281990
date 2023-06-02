@@ -1,0 +1,135 @@
+namespace = bd_reborn_leader
+###复活领袖
+country_event = {
+	id = "bd_reborn_leader.0"
+	title = "bd_reborn_leader.0_title"
+	desc = "bd_reborn_leader.0_desc"
+	picture = GFX_evt_surreal_visions
+	is_triggered_only = yes
+	trigger = {
+		has_ascension_perk = ap_bd_leader_management
+		is_ai = no
+		NOT = {
+			any_pool_leader = {
+				is_same_value = from				###不是领袖池内的未招募领袖
+			}
+		}
+		from = {
+			NOR = {
+				has_leader_flag = bd_don't_reborn
+				has_leader_flag = bd_has_rebornd
+				#has_leader_flag = temp_election_leader				###临时选举候选人
+			}
+			OR = {
+				leader_class = ruler
+				leader_class = general
+				leader_class = scientist
+				leader_class = admiral
+				leader_class = governor
+			}
+		}
+	}
+	immediate = {
+		from = {
+			save_event_target_as = bd_reborn_leader
+		}
+		event_target:bd_reborn_leader = {
+			if = {
+				limit = {
+					leader_class = ruler
+					#NOT = {
+					#	has_leader_flag = bd_has_rebornd
+					#}
+				}
+				owner = {
+					clone_leader = {
+						class = ruler
+						target = event_target:bd_reborn_leader
+					}
+					last_created_leader = {
+						set_age = 16
+						set_leader_flag = bd_has_rebornd
+					}
+					assign_leader = last_created_leader
+				}
+			}
+			else_if = {
+				limit = {
+					leader_class = governor
+					#NOT = {
+					#	has_leader_flag = bd_has_rebornd
+					#}
+				}
+				owner = {
+					clone_leader = {
+						class = governor
+						target = event_target:bd_reborn_leader
+						set_age = 16
+						effect = {
+							set_leader_flag = bd_has_rebornd
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					leader_class = scientist
+					#NOT = {
+					#	has_leader_flag = bd_has_rebornd
+					#}
+				}
+				owner = {
+					clone_leader = {
+						class = scientist
+						target = event_target:bd_reborn_leader
+						set_age = 16
+						effect = {
+							set_leader_flag = bd_has_rebornd
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					leader_class = admiral
+					#NOT = {
+					#	has_leader_flag = bd_has_rebornd
+					#}
+				}
+				owner = {
+					clone_leader = {
+						class = admiral
+						target = event_target:bd_reborn_leader
+						set_age = 16
+						effect = {
+							set_leader_flag = bd_has_rebornd
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					leader_class = general
+					#NOT = {
+					#	has_leader_flag = bd_has_rebornd
+					#}
+				}
+				owner = {
+					clone_leader = {
+						class = general
+						target = event_target:bd_reborn_leader
+						set_age = 16
+						effect = {
+							set_leader_flag = bd_has_rebornd
+						}
+					}
+				}
+			}
+			else = {
+			}
+		}
+	}
+	option = {
+		name = "bd_reborn_leader.0.a"
+	}
+}

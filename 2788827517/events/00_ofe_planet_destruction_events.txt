@@ -1,0 +1,76 @@
+namespace = planet_destruction
+
+# Fragged/shielded a holy world
+planet_event = {
+	id = planet_destruction.600
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_modifier = holy_planet
+		any_country = {
+			is_country_type = fallen_empire
+			has_ethic = ethic_fanatic_spiritualist
+			NOT = { is_at_war_with = from.owner }
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				is_country_type = fallen_empire
+				has_ethic = ethic_fanatic_spiritualist
+				NOT = { is_at_war_with = from.owner }
+			}
+			save_event_target_as = outraged_FE
+			country_event = { id = ofe_other.18 days = 3 }
+		}
+		from.owner = {
+			save_event_target_as = FE_outrager
+			country_event = { id = planet_destruction.610 days = 5 }
+		}
+	}
+}
+
+planet_event = {
+	id = planet_destruction.605
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_modifier = holy_planet
+		any_country = {
+			OR = {
+				has_ai_personality_behaviour = holy_planets # not awakened
+				AND = {
+					is_country_type = fallen_empire
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+			NOT = { is_at_war_with = from.from.owner }
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				OR = {
+					has_ai_personality_behaviour = holy_planets # not awakened
+					AND = {
+						is_country_type = fallen_empire
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				NOT = { is_at_war_with = from.from.owner }
+			}
+			save_event_target_as = outraged_FE
+			country_event = { id = ofe_other.18 days = 3 }
+		}
+		from.from.owner = {
+			save_event_target_as = FE_outrager
+			country_event = { id = planet_destruction.610 days = 5 }
+		}
+	}
+}

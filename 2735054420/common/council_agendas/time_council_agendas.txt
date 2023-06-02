@@ -1,0 +1,76 @@
+agenda_tradition_horror = {
+	agenda_cost = 7000
+	allow = {
+		has_tradition = tr_horror_finish
+	}
+	potential = {
+		has_tradition = tr_horror_adopt
+		NOT = { has_tradition = tr_time_finish }
+	}
+	modifiers = {
+		{
+			country_produces_mult = 0.05
+			country_cost_mult = -0.025
+			country_upkeep_mult = -0.025
+		}
+	}
+	finish_modifier = agenda_tradition_horror_finish
+	effect = {
+	}
+}
+
+agenda_tradition_time = {
+	agenda_cost = 7000
+	allow = {
+		has_tradition = tr_time_finish
+	}
+	potential = {
+		has_tradition = tr_time_adopt
+		NOT = { has_tradition = tr_end_finish }
+	}
+	modifiers = {
+		{
+			country_produces_mult = 0.1
+			country_cost_mult = -0.05
+			country_upkeep_mult = -0.05
+		}
+	}
+	finish_modifier = agenda_tradition_time_finish
+	effect = {
+		hidden_effect = {
+			remove_modifier = agenda_tradition_horror_finish
+		}
+	}
+}
+
+agenda_tradition_end = {
+	agenda_cost = 7000
+	allow = {
+		if = {
+			limit = {
+				tr_end_finish_swap_trigger = yes
+			}
+			has_active_tradition = tr_end_finish_origin_time
+		}
+		else = {
+			has_active_tradition = tr_end_finish
+		}
+	}
+	potential = {
+		has_tradition = tr_end_adopt
+	}
+	modifiers = {
+		{
+			country_produces_mult = 0.2
+			country_cost_mult = -0.1
+			country_upkeep_mult = -0.1
+		}
+	}
+	finish_modifier = agenda_tradition_end_finish
+	effect = {
+		hidden_effect = {
+			remove_modifier = agenda_tradition_horror_finish
+			remove_modifier = agenda_tradition_time_finish
+		}
+	}
+}

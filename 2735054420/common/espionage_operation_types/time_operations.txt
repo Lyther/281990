@@ -1,0 +1,197 @@
+operation_coils_god = {
+	target = none
+	categories = { op_cat_infiltration op_cat_government }
+	picture = GFX_evt_medieval_alien_civilization
+	desc = operation_coils_god_desc
+	stages = 6
+
+	resources = {
+		category = operations
+		cost = {
+			trigger = {
+				owner = {
+					has_appearance_modding_technology = no
+				}
+			}
+			influence = 55
+		}
+		cost = {
+			trigger = {
+				owner = {
+					has_appearance_modding_technology = yes
+				}
+			}
+			influence = 35
+		}
+		upkeep = {
+			energy = 7
+		}
+	}
+	spy_power_cost = 30
+
+	potential = {
+		target = {
+			is_primitive = yes
+			is_same_value = event_target:coils_country
+		}
+		owner = {
+			# 神之圆环触发者
+			OR = {
+				has_country_flag = coils_god_halted
+				has_country_flag = coils_god_end
+			}
+			# 神之圆环未结局
+			NOR = {
+				has_technology = tech_coils_god_1
+				has_technology = tech_coils_god_2
+			}
+		}
+	}
+	allow = {
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+		custom_tooltip = {
+			owner = {
+				OR = {
+					has_policy_flag = interference_subtle
+					has_policy_flag = interference_active
+				}
+			}
+			fail_text = operation_wrong_interference_policy
+		}
+		custom_tooltip = {
+			target = {
+				capital_scope = {
+					has_observation_outpost = yes
+					observation_outpost_owner = { is_same_value = root.owner }
+				}
+			}
+			fail_text = operation_requires_observation_outpost
+		}
+	}
+	abort = {
+		OR = {
+			target = {
+				OR = {
+					is_primitive = no
+					capital_scope = {
+						has_observation_outpost = no
+					}
+				}
+			}
+			owner = {
+				NOR = {
+					has_policy_flag = interference_subtle
+					has_policy_flag = interference_active
+				}
+			}
+		}
+	}
+
+	stage = {
+		difficulty = 3
+		icon = GFX_espionage_chapter_icon_security
+		event = time_akx.321
+	}
+	stage = {
+		difficulty = 1
+		icon = GFX_espionage_chapter_icon_document
+		event = time_akx.322
+	}
+	stage = {
+		difficulty = 4
+		icon = GFX_espionage_chapter_icon_motion
+		event = time_akx.323
+	}
+	stage = {
+		difficulty = 1
+		icon = GFX_espionage_chapter_icon_document
+		event = time_akx.324
+	}
+	stage = {
+		difficulty = 5
+		icon = GFX_espionage_chapter_icon_success
+		event = time_akx.325
+	}
+	stage = {
+		difficulty = 9
+		icon = GFX_espionage_chapter_icon_target
+		event = time_akx.326
+	}
+
+	on_roll_failed = {
+		pre_ftl_espionage_operation_on_roll_failed = { RANDOM_EVENTS = operation_random_events_pre_ftl }
+	}
+	on_create = {
+		target = {
+			set_timed_country_flag = {
+				flag = preftl_espionage_operation_targeted_by@root.owner #Used in random Spy Network events
+				days = @operationTargetedByTimer
+			}
+		}
+	}
+}
+
+operation_origin_the_matrix = {
+	target = none
+	categories = { op_cat_subterfuge }
+	picture = GFX_evt_spymaster
+	desc = operation_origin_the_matrix_desc
+	stages = 3
+
+	resources = {
+		category = operations
+		cost = {
+			influence = 50
+		}
+		upkeep = {
+			energy = 10
+		}
+	}
+
+	spy_power_cost = 35
+	potential = {
+		target = { is_primitive = no }
+		owner = {
+			has_origin = origin_the_matrix
+		}
+		always = no
+	}
+	allow = {
+		custom_tooltip = {
+			is_running_espionage_operation = no
+			fail_text = operation_one_at_a_time
+		}
+	}
+	stage = {
+		difficulty = 10
+		icon = GFX_espionage_chapter_icon_security
+		event = origin_the_matrix.10
+	}
+	stage = {
+		difficulty = 10
+		icon = GFX_espionage_chapter_icon_target
+		event = origin_the_matrix.11
+	}
+	stage = {
+		difficulty = 10
+		icon = GFX_espionage_chapter_icon_success
+		event = origin_the_matrix.12
+	}
+
+	on_roll_failed = {
+		standard_espionage_operation_on_roll_failed = {
+			RANDOM_EVENTS = operation_random_events_low_stakes
+		}
+	}
+	on_create = {
+		target = {
+			set_timed_country_flag = {
+				flag = espionage_operation_targeted_by@root.owner #Used in random Spy Network events
+				days = @operationTargetedByTimer
+			}
+		}
+	}
+}

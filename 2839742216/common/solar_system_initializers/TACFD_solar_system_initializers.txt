@@ -1,0 +1,244 @@
+#姗的星际公司#
+TAC_san_system = {
+	class = sc_b
+	name = "NAME_SAN_SYSTEM"
+	
+	usage = misc_system_init
+	usage_odds = 0
+
+	flags = { TAC_san_system_01 }
+
+	init_effect = {
+		every_system_planet = {
+			prevent_anomaly = yes
+			clear_deposits = yes
+		}
+		save_event_target_as = TAC_SAN_SYSTEM
+	}
+	planet = {
+		class = pc_TACFD_star
+		orbit_distance = 0
+		size = 35
+
+		init_effect = {
+			create_ambient_object = { type = "contingency_1" location = this }
+		}
+	}
+	init_effect = {
+		spawn_megastructure = {
+			type = TACFD_unkown
+			owner = event_target:TACFD_COUNTRY
+			orbit_angle = 0
+			orbit_distance = 0
+		}
+	}
+	planet = {
+		name = "NAME_TACFD_planet_01"
+		class = pc_TACFD_planet
+		orbit_distance = 70
+		orbit_angle = 120
+		size = 10
+		init_effect = {
+			save_event_target_as = TACFD_planet_01
+		}
+	}
+	planet = {
+		name = "NAME_TACFD_planet_02"
+		class = pc_TACFD_planet
+		orbit_distance = 20
+		orbit_angle = 90
+		size = 10
+		init_effect = {
+			save_event_target_as = TACFD_planet_02
+		}
+	}
+	planet = {
+		name = "NAME_TACFD_planet_03"
+		class = pc_TACFD_planet
+		orbit_distance = 15
+		orbit_angle = 180
+		size = 10
+		init_effect = {
+			save_event_target_as = TACFD_planet_03
+		}
+	}
+	planet = {
+		name = "NAME_TACFD_planet_04"
+		class = pc_TACFD_planet
+		orbit_distance = 20
+		orbit_angle = 270
+		size = 10
+		init_effect = {
+			save_event_target_as = TACFD_planet_04
+		}
+	}
+	init_effect = {
+		##################################################
+		#在创建国家前需要先创建种族
+		##################################################
+		create_species = {
+			name = "NAME_TAC_WAITER"			
+			plural = "NAME_TAC_WAITER_plural"		
+			class = TACWA
+			portrait = TAC_PUTONG_01
+			traits = {
+				ideal_planet_class = pc_habitat
+			}
+			effect = { save_event_target_as = TACWA_species } 
+		}
+		##################################################
+		#创建国家
+		##################################################
+		create_country = {
+			name = "NAME_TACFEIDI_country"
+			type = QQMGE_enclave
+			species = event_target:TACWA_species
+			flag = {
+				icon= {
+					category = "special"
+					file = "extradimensional_01.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"red"
+					"red"
+					"red"
+					"red"
+				}
+			}
+			ignore_initial_colony_error = yes
+			effect = {
+				save_event_target_as = TACFD_COUNTRY
+				set_country_flag = TACFEIDI_country
+				set_country_flag = smallfleet_give
+				set_graphical_culture = extra_dimensional_01
+			}
+		}
+		##################################################
+		#生成空间站
+		##################################################
+		last_created_country = {
+			create_fleet = {
+				name = "NAME_TACFEIDI_SANStation"
+				settings = {
+					spawn_debris = no	
+				}
+				effect = {
+					set_owner = event_target:TACFD_COUNTRY
+					create_ship = {
+						name = "NAME_TACFEIDI_SANStation"
+						design = "NAME_TACFEIDI_Station"
+						graphical_culture = extra_dimensional_01
+					}
+					set_location = {
+						target = event_target:TAC_SAN_SYSTEM
+						angle = 60
+						distance = 50
+					}
+					save_event_target_as = TACFD_station_here
+					set_fleet_flag = QQE_enclave_station
+					set_fleet_flag = TACFD_main_station							#通用标记，不要改
+					############################################################################
+				}
+			}
+			create_fleet = {
+				name = "NAME_TACFEIDI_SanStation"
+				settings = {
+					spawn_debris = no	
+				}
+				effect = {
+					set_owner = event_target:TACFD_COUNTRY
+					create_ship = {
+						name = "NAME_TACFEIDI_SanStation"
+						design = "NAME_TACFEIDI_Sidestation"
+						graphical_culture = extra_dimensional_01
+					}
+					set_location = {
+						target = event_target:TACFD_station_here
+						angle = 0
+						distance = 20
+					}
+					set_fleet_flag = QQE_enclave_station						
+				}
+			}
+			create_fleet = {
+				name = "NAME_TACFEIDI_SanStation"
+				settings = {
+					spawn_debris = no	
+				}
+				effect = {
+					set_owner = event_target:TACFD_COUNTRY
+					create_ship = {
+						name = "NAME_TACFEIDI_SanStation"
+						design = "NAME_TACFEIDI_Sidestation"
+						graphical_culture = extra_dimensional_01
+					}
+					set_location = {
+						target = event_target:TACFD_station_here
+						angle = 90
+						distance = 20
+					}
+					set_fleet_flag = QQE_enclave_station				
+				}
+			}
+			create_fleet = {
+				name = "NAME_TACFEIDI_SanStation"
+				settings = {
+					spawn_debris = no	
+				}
+				effect = {
+					set_owner = event_target:TACFD_COUNTRY
+					create_ship = {
+						name = "NAME_TACFEIDI_SanStation"
+						design = "NAME_TACFEIDI_Sidestation"
+						graphical_culture = extra_dimensional_01
+					}
+					set_location = {
+						target = event_target:TACFD_station_here
+						angle = 180
+						distance = 20
+					}
+					set_fleet_flag = QQE_enclave_station						
+				}
+			}
+			create_fleet = {
+				name = "NAME_TACFEIDI_SanStation"
+				settings = {
+					spawn_debris = no	
+				}
+				effect = {
+					set_owner = event_target:TACFD_COUNTRY
+					create_ship = {
+						name = "NAME_TACFEIDI_SanStation"
+						design = "NAME_TACFEIDI_Sidestation"
+						graphical_culture = extra_dimensional_01
+					}
+					set_location = {
+						target = event_target:TACFD_station_here
+						angle = 270
+						distance = 20
+					}
+					set_fleet_flag = QQE_enclave_station					
+				}
+			}
+			add_TACFDstation_ship = yes
+		}
+		##################################################
+		#创建领袖，ruler
+		##################################################
+		last_created_country = {
+			create_leader = {
+				class = ruler
+				species = event_target:TACWA_species				
+				name = 姗				
+				skill = 10
+			}
+			set_leader = last_created_leader
+		}
+	}
+}
+
+

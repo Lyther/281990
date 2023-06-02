@@ -1,0 +1,126 @@
+namespace = eca_ap_ninghe_event
+#每年检测人数并进行加成
+country_event = {
+	id = eca_ap_ninghe_event.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_ascension_perk = eca_ap_ninghe
+	}
+	immediate = {
+		set_variable = {
+			which = eca_bio_amount
+			value = trigger:num_pops
+		}
+		set_variable = {
+			which = eca_robot_amount
+			value = 0
+		}
+		every_owned_pop = {
+			limit = {
+				is_robot_pop = yes
+			}
+			root = {
+				change_variable = {
+					which = eca_robot_amount
+					value = 1
+				}
+			}
+		}
+		while = {
+			count = eca_robot_amount
+			change_variable = {
+				which = eca_bio_amount
+				value = -1
+			}
+		}
+		#计算差值，此处起eca_bio_amount代表差值
+		while = {
+			count = eca_robot_amount
+			change_variable = {
+				which = eca_bio_amount
+				value = -1
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = eca_bio_amount
+					value < 2
+				}
+				check_variable = {
+					which = eca_bio_amount
+					value > -2
+				}
+			}
+			add_modifier = {
+				modifier = modifiers_eca_ninghe_1
+				days = 360
+			}
+			set_variable = {
+				which = eca_bio_amount
+				value = 100
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = eca_bio_amount
+					value < 5
+				}
+				check_variable = {
+					which = eca_bio_amount
+					value > -5
+				}
+			}
+			add_modifier = {
+				modifier = modifiers_eca_ninghe_2
+				days = 360
+			}
+			set_variable = {
+				which = eca_bio_amount
+				value = 100
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = eca_bio_amount
+					value < 10
+				}
+				check_variable = {
+					which = eca_bio_amount
+					value > -10
+				}
+			}
+			add_modifier = {
+				modifier = modifiers_eca_ninghe_3
+				days = 360
+			}
+			set_variable = {
+				which = eca_bio_amount
+				value = 100
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = eca_bio_amount
+					value < 20
+				}
+				check_variable = {
+					which = eca_bio_amount
+					value > -20
+				}
+			}
+			add_modifier = {
+				modifier = modifiers_eca_ninghe_4
+				days = 360
+			}
+			set_variable = {
+				which = eca_bio_amount
+				value = 100
+			}
+		}
+	}
+}

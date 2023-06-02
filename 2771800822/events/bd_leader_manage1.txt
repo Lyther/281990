@@ -1,0 +1,3398 @@
+namespace = bd_leader_manage
+###主菜单
+country_event = {
+	id = "bd_leader_manage.0"
+	title = "bd_leader_manage.0.name"
+	desc = "bd_leader_manage.0.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+		has_ascension_perk = ap_bd_leader_management
+		NOT = {
+			has_country_flag = bd_managing
+		}
+	}
+	immediate = {
+		set_country_flag = bd_managing
+	}
+	##议程
+	option = {
+		name = "bd_leader_manage.0.aa"
+		trigger = {
+			NOR = {
+				has_ethic = "ethic_gestalt_consciousness"
+				has_authority = auth_democratic
+			}
+			exists = ruler
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.55
+			}
+			ruler = {
+				save_global_event_target_as = bd_agenda_ruler
+				set_leader_flag = bd_don't_reborn
+			}
+		}
+	}
+	##统治者
+	option = {
+		name = "bd_leader_manage.0.a"
+		trigger = {
+			NOT = {
+				has_ethic = "ethic_gestalt_consciousness"
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.1
+			}
+			every_owned_leader = {
+				limit = {
+					leader_class = ruler
+				}
+				bd_remove_all_generic_leader_traits = yes
+				bd_remove_all_ruler_traits = yes
+			}
+		}
+	}
+	##总督
+	option = {
+		name = "bd_leader_manage.0.b"
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.2
+			}
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				bd_remove_all_generic_leader_traits = yes
+				bd_remove_all_governor_traits = yes
+				set_leader_flag = bd_manage_leader
+			}
+		}
+	}
+	##舰队司令
+	option = {
+		name = "bd_leader_manage.0.c"
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.3
+			}
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				bd_remove_all_generic_leader_traits = yes
+				bd_remove_all_admiral_traits = yes
+				set_leader_flag = bd_manage_leader
+			}
+		}
+	}
+	##陆军将领
+	option = {
+		name = "bd_leader_manage.0.d"
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.4
+			}
+			every_owned_leader = {
+				limit = {
+					leader_class = general
+				}
+				bd_remove_all_generic_leader_traits = yes
+				bd_remove_all_general_traits = yes
+				set_leader_flag = bd_manage_leader
+			}
+		}
+	}
+	##物理学科学家
+	option = {
+		name = "bd_leader_manage.0.e"
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.5
+			}
+			every_owned_leader = {
+				limit = {
+					is_researching_area = physics
+				}
+				bd_remove_all_generic_leader_traits = yes
+				bd_remove_all_scientist_traits = yes
+				set_leader_flag = bd_manage_leader
+			}
+		}
+	}
+	##社会学科学家
+	option = {
+		name = "bd_leader_manage.0.f"
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.6
+			}
+			every_owned_leader = {
+				limit = {
+					is_researching_area = society
+				}
+				bd_remove_all_generic_leader_traits = yes
+				bd_remove_all_scientist_traits = yes
+				set_leader_flag = bd_manage_leader
+			}
+		}
+	}
+	##工程学科学家
+	option = {
+		name = "bd_leader_manage.0.g"
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.7
+			}
+			every_owned_leader = {
+				limit = {
+					is_researching_area = engineering
+				}
+				bd_remove_all_generic_leader_traits = yes
+				bd_remove_all_scientist_traits = yes
+				set_leader_flag = bd_manage_leader
+			}
+		}
+	}
+	##其他科学家
+	option = {
+		name = "bd_leader_manage.0.h"
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.8
+			}
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				bd_remove_all_generic_leader_traits = yes
+				bd_remove_all_scientist_traits = yes
+				set_leader_flag = bd_manage_leader
+			}
+		}
+	}
+	##清除负面特质
+	option = {
+		name = "bd_leader_manage.0.i"
+		hidden_effect = {
+			every_owned_leader = {
+				bd_remove_all_negative_traits = yes
+			}
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+	##特殊特质管理
+	option = {
+		name = "bd_leader_manage.0.j"
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.9
+			}
+		}
+	}
+	##更改思潮
+	option = {
+		name = "bd_leader_manage.0.k"
+		trigger = {
+			is_gestalt = no
+			has_ascension_perk = ap_bd_great_harmony
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.10
+			}
+		}
+	}
+	##退出
+	option = {
+		name = "bd_leader_manage.0.z"
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			every_owned_leader = {
+				limit = {
+					has_leader_flag = bd_manage_leader
+				}
+				remove_leader_flag = bd_manage_leader
+			}
+		}
+	}
+}
+
+###议程
+country_event = {
+	id = "bd_leader_manage.55"
+	title = "bd_leader_manage.01.name"
+	desc = "bd_leader_manage.01.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = "bd_leader_manage.01.a"
+		custom_tooltip = bd_leader_manage.01.a.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_defensive_focus
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.b"
+		custom_tooltip = bd_leader_manage.01.b.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_naval_focus
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.c"
+		custom_tooltip = bd_leader_manage.01.c.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_industrial
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.d"
+		custom_tooltip = bd_leader_manage.01.d.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_science
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.e"
+		custom_tooltip = bd_leader_manage.01.e.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_finanical
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.f"
+		custom_tooltip = bd_leader_manage.01.f.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_welfare
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.g"
+		custom_tooltip = bd_leader_manage.01.g.desc
+		trigger = {
+			NOT = {
+				num_communications < 1
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_expansionist_overtures
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.h"
+		custom_tooltip = bd_leader_manage.01.h.desc
+		trigger = {
+			NOR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_national_purity
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.i"
+		custom_tooltip = bd_leader_manage.01.i.desc
+		trigger = {
+			NOT = {
+				mid_game_years_passed < 0
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_public_debates
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.j"
+		custom_tooltip = bd_leader_manage.01.j.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_import_export
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.k"
+		custom_tooltip = bd_leader_manage.01.k.desc
+		trigger = {
+			NOR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_native_privilege
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.l"
+		custom_tooltip = bd_leader_manage.01.l.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_skill_development
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.m"
+		custom_tooltip = bd_leader_manage.01.m.desc
+		trigger = {
+			NOT = {
+				has_policy_flag = slavery_not_allowed
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_slave_optimization
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.n"
+		custom_tooltip = bd_leader_manage.01.n.desc
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_selective_nostalgia
+		}
+	}
+	option = {
+		name = "bd_leader_manage.01.o"
+		custom_tooltip = bd_leader_manage.01.o.desc
+		trigger = {
+			NOT = {
+				num_communications < 3
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.99
+			}
+			set_country_flag = bd_agenda_xeno_outreach
+		}
+	}
+	###退出
+	option = {
+		name = "bd_leader_manage.0.z"
+		hidden_effect = {
+			remove_country_flag = bd_managing
+		}
+	}
+	after = {
+		hidden_effect = {
+			clone_leader = {
+				target = ruler
+				effect = {
+					remove_leader_flag = bd_don't_reborn
+				}
+			}
+			assign_leader = last_created_leader
+			event_target:bd_agenda_ruler = {
+				kill_leader = {
+					show_notification = no
+				}
+				clear_global_event_target = bd_agenda_ruler
+			}
+		}
+		bd_remove_all_agenda_flags = yes
+	}
+}
+
+###统治者
+country_event = {
+	id = bd_leader_manage.1
+	title = "bd_leader_manage.1.name"
+	desc = "bd_leader_manage.1.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = "bd_leader_manage.1.a"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = leader_trait_reformer					#改革家
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = leader_trait_reformer			#改革家
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.b"
+		trigger = {
+			has_technology = tech_doctrine_fleet_size_2
+			ruler = {
+				NOT = {
+					has_trait = leader_trait_fleet_organizer					#舰队组织者
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = leader_trait_fleet_organizer			#舰队组织者
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.c"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_explorer					#探险家
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_explorer			#探险家
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.d"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_space_miner					#太空矿工
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_space_miner			#太空矿工
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.e"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_investor					#投资者
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_investor			#投资者
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.f"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_fertility_preacher					#重视农耕
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_fertility_preacher			#重视农耕
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.g"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_expansionist					#扩张主义者
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_expansionist			#扩张主义者
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.h"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_champion_of_the_people					#人民公仆
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_champion_of_the_people			#人民公仆
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.i"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_charismatic					#魅力非凡
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_charismatic			#魅力非凡
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.j"
+		trigger = {
+			has_technology = tech_planetary_unification
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_deep_connections					#关系深厚
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_deep_connections			#关系深厚
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.k"
+		trigger = {
+			has_technology = tech_galactic_administration
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_eye_for_talent					#伯乐之眼
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_eye_for_talent			#伯乐之眼
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.l"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_industrialist					#实业家
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_industrialist			#实业家
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.m"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_home_in_the_sky					#星辰大海
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_home_in_the_sky			#星辰大海
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.n"
+		trigger = {
+			has_technology = tech_terrestrial_sculpting
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_world_shaper					#星球塑形师
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_world_shaper			#星球塑形师
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.o"
+		trigger = {
+			has_technology = tech_colonization_1
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_frontier_spirit					#开拓精神
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_frontier_spirit			#开拓精神
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.p"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_architectural_sense					#重视建筑
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_architectural_sense			#重视建筑
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.q"
+		trigger = {
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_warlike					#好战
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_warlike			#好战
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.r"
+		trigger = {
+			has_technology = tech_refit_standards
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_military_pioneer					#军事先驱
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_military_pioneer			#军事先驱
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.s"
+		trigger = {
+			has_technology = tech_doctrine_navy_size_1
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_logistic_understanding					#深通后勤
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_logistic_understanding			#深通后勤
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.t"
+		trigger = {
+			has_technology = tech_space_defense_station_1
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_fortifier					#筑防者
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_fortifier			#筑防者
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.u"
+		trigger = {
+			has_technology = tech_centralized_command
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_from_the_ranks					#出身士卒
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_from_the_ranks			#出身士卒
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.v"
+		trigger = {
+			has_technology = tech_centralized_command
+			ruler = {
+				NOT = {
+					has_trait = trait_ruler_recruiter					#征募者
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_recruiter			#征募者
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.w"
+		trigger = {
+			has_technology = tech_battleships
+			ruler = {
+				NOR = {
+					has_trait = trait_ruler_corvette_focus					#护卫舰精通
+					has_trait = trait_ruler_destroyer_focus					#驱逐舰精通
+					has_trait = trait_ruler_cruiser_focus					#巡洋舰精通
+					has_trait = trait_ruler_battleship_focus					#战列舰精通
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_battleship_focus			#战列舰精通
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.aa"
+		trigger = {
+			has_technology = tech_cruisers
+			ruler = {
+				NOR = {
+					has_trait = trait_ruler_corvette_focus					#护卫舰精通
+					has_trait = trait_ruler_destroyer_focus					#驱逐舰精通
+					has_trait = trait_ruler_cruiser_focus					#巡洋舰精通
+					has_trait = trait_ruler_battleship_focus					#战列舰精通
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_cruiser_focus			#巡洋舰精通
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.ab"
+		trigger = {
+			has_technology = tech_destroyers
+			ruler = {
+				NOR = {
+					has_trait = trait_ruler_corvette_focus					#护卫舰精通
+					has_trait = trait_ruler_destroyer_focus					#驱逐舰精通
+					has_trait = trait_ruler_cruiser_focus					#巡洋舰精通
+					has_trait = trait_ruler_battleship_focus					#战列舰精通
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_destroyer_focus			#驱逐舰精通
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.1.ac"
+		trigger = {
+			has_technology = tech_destroyers
+			ruler = {
+				NOR = {
+					has_trait = trait_ruler_corvette_focus					#护卫舰精通
+					has_trait = trait_ruler_destroyer_focus					#驱逐舰精通
+					has_trait = trait_ruler_cruiser_focus					#巡洋舰精通
+					has_trait = trait_ruler_battleship_focus					#战列舰精通
+				}
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				leader_class = ruler
+			}
+			add_ruler_trait = trait_ruler_corvette_focus			#护卫舰精通
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.12
+			}
+		}
+	}
+	###无可用领袖,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOT = {
+				exists = ruler
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+}
+
+###总督
+country_event = {
+	id = bd_leader_manage.2
+	title = "bd_leader_manage.2.name"
+	desc = "bd_leader_manage.2.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = bd_leader_manage.2.a
+		custom_tooltip = bd_leader_manage.2.a.desc
+		trigger = {
+			allows_slavery = yes
+			NOT = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_iron_fist				#铁拳
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.b
+		custom_tooltip = bd_leader_manage.2.b.desc
+		trigger = {
+			has_technology = tech_centralized_command
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_army_veteran				#退伍老兵
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.c
+		custom_tooltip = bd_leader_manage.2.c.desc
+		trigger = {
+			has_technology = tech_interstellar_fleet_traditions
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_retired_fleet_officer				#退伍海军军官
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.d
+		custom_tooltip = bd_leader_manage.2.d.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_architectural_interest				#建筑学爱好者
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.e
+		custom_tooltip = bd_leader_manage.2.e.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_agrarian_upbringing				#土地培育师
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.f
+		custom_tooltip = bd_leader_manage.2.f.desc
+		trigger = {
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_intellectual				#知识分子
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.g
+		custom_tooltip = bd_leader_manage.2.g.desc
+		trigger = {
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_environmental_engineer				#环境工程师
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.h
+		custom_tooltip = bd_leader_manage.2.h.desc
+		trigger = {
+			NOR = {
+				has_authority = "auth_machine_intelligence"
+				has_authority = "auth_hive_mind"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_bureaucrat				#官僚
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.i
+		custom_tooltip = bd_leader_manage.2.i.desc
+		trigger = {
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_righteous				#正义凛然
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.j
+		custom_tooltip = bd_leader_manage.2.j.desc
+		trigger = {
+			has_authority = "auth_hive_mind"
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_mindfulness				#正念
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.k
+		custom_tooltip = bd_leader_manage.2.k.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_amplifier				#放大电路
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.l
+		custom_tooltip = bd_leader_manage.2.l.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			has_technology = tech_centralized_command
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_warbot_tinkerer				#杀器焊匠
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.m
+		custom_tooltip = bd_leader_manage.2.m.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			has_technology = tech_interstellar_fleet_traditions
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_ai_aided_design				#AI辅助设计
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.n
+		custom_tooltip = bd_leader_manage.2.n.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_bulldozer				#推土机
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.2.o
+		custom_tooltip = bd_leader_manage.2.o.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = governor
+				}
+				add_trait = leader_trait_analytical				#善于分析
+			}
+			country_event = {
+				id = bd_leader_manage.22
+			}
+		}
+	}
+	###无可用领袖,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOT = {
+				any_owned_leader = {
+					has_leader_flag = bd_manage_leader
+				}
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+}
+
+###舰队司令
+country_event = {
+	id = bd_leader_manage.3
+	title = "bd_leader_manage.3.name"
+	desc = "bd_leader_manage.3.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = bd_leader_manage.3.a
+		custom_tooltip = bd_leader_manage.3.a.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_trickster				#战略家
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.3.b
+		custom_tooltip = bd_leader_manage.3.b.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_fleet_logistician				#舰队后勤专家
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.3.c
+		custom_tooltip = bd_leader_manage.3.c.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_engineer				#工程师
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.3.d
+		custom_tooltip = bd_leader_manage.3.d.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_aggressive				#火力全开
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.3.e
+		custom_tooltip = bd_leader_manage.3.e.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_cautious				#谨慎
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.3.f
+		custom_tooltip = bd_leader_manage.3.f.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_scout				#侦擦专家
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.3.g
+		custom_tooltip = bd_leader_manage.3.g.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_unyielding				#不屈
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.3.h
+		custom_tooltip = bd_leader_manage.3.h.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_gale_speed				#其疾如风
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.3.i
+		custom_tooltip = bd_leader_manage.3.i.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = admiral
+				}
+				add_trait = leader_trait_maintenance_loop				#维护循环
+			}
+			country_event = {
+				id = bd_leader_manage.32
+			}
+		}
+	}
+	###无可用领袖,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOT = {
+				any_owned_leader = {
+					has_leader_flag = bd_manage_leader
+				}
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+}
+
+###陆军将领
+country_event = {
+	id = bd_leader_manage.4
+	title = "bd_leader_manage.4.name"
+	desc = "bd_leader_manage.4.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = bd_leader_manage.4.a
+		custom_tooltip = bd_leader_manage.4.a.desc
+		trigger = {
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = general
+				}
+				add_trait = leader_trait_restrained				#克制
+			}
+			country_event = {
+				id = bd_leader_manage.42
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.4.b
+		custom_tooltip = bd_leader_manage.4.b.desc
+		trigger = {
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = general
+				}
+				add_trait = leader_trait_charismatic				#魅力非凡
+			}
+			country_event = {
+				id = bd_leader_manage.42
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.4.c
+		custom_tooltip = bd_leader_manage.4.c.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = general
+				}
+				add_trait = leader_trait_butcher				#屠夫
+			}
+			country_event = {
+				id = bd_leader_manage.42
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.4.d
+		custom_tooltip = bd_leader_manage.4.d.desc
+		trigger = {
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = general
+				}
+				add_trait = leader_trait_glory_seeker				#身先士卒
+			}
+			country_event = {
+				id = bd_leader_manage.42
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.4.e
+		custom_tooltip = bd_leader_manage.4.e.desc
+		trigger = {
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = general
+				}
+				add_trait = leader_trait_army_logistician				#战队后勤专家
+			}
+			country_event = {
+				id = bd_leader_manage.42
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.4.f
+		custom_tooltip = bd_leader_manage.4.f.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = general
+				}
+				add_trait = leader_trait_parts_cannibalizer				#零件再利用
+			}
+			country_event = {
+				id = bd_leader_manage.42
+			}
+		}
+	}
+	option = {
+		name = bd_leader_manage.4.g
+		custom_tooltip = bd_leader_manage.4.g.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = general
+				}
+				add_trait = leader_trait_demoralizer				#灌输恐惧
+			}
+			country_event = {
+				id = bd_leader_manage.42
+			}
+		}
+	}
+	###无可用领袖,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOT = {
+				any_owned_leader = {
+					has_leader_flag = bd_manage_leader
+				}
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+}
+
+###物理学家
+country_event = {
+	id = bd_leader_manage.5
+	title = "bd_leader_manage.5.name"
+	desc = "bd_leader_manage.5.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = "bd_leader_manage.5.a"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = physics
+			}
+			add_trait = leader_trait_expertise_field_manipulation			#专长：力场操控
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.52
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.b"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = physics
+			}
+			add_trait = leader_trait_expertise_particles			#专长：粒子物理
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.52
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.c"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = physics
+			}
+			add_trait = leader_trait_expertise_computing			#专长：计算机理论
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.52
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.d"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = physics
+			}
+			add_trait = leader_trait_spark_of_genius			#灵光一闪
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.52
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.e"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = physics
+			}
+			add_trait = leader_trait_maniacal			#狂热
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.52
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.f"
+		trigger = {
+			has_technology = tech_sapient_ai
+			NOR = {
+				has_authority = "auth_hive_mind"
+				has_authority = "auth_machine_intelligence"
+				has_policy_flag = ai_outlawed
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = physics
+			}
+			add_trait = leader_trait_sapient_AI_assistant			#知性AI副官
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.52
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.g"
+		trigger = {
+			has_technology = tech_self_aware_logic
+			NOT = {
+				has_ethic = "ethic_gestalt_consciousness"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = physics
+			}
+			add_trait = leader_trait_custom_AI_assistant			#定制AI助理
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.52
+			}
+		}
+	}
+	###无可用领袖,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOT = {
+				any_owned_leader = {
+					has_leader_flag = bd_manage_leader
+				}
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+}
+
+###社会学家
+country_event = {
+	id = bd_leader_manage.6
+	title = "bd_leader_manage.6.name"
+	desc = "bd_leader_manage.6.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = "bd_leader_manage.6.a"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_expertise_psionics			#专长：灵能理论
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.6.b"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_expertise_new_worlds			#专长：新世界理论
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.6.c"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_expertise_statecraft			#专长：治国术
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.6.d"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_expertise_biology			#专长：生物学
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.6.e"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_expertise_military_theory			#专长：军事理论
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.d"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_spark_of_genius			#灵光一闪
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.e"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_maniacal			#狂热
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.f"
+		trigger = {
+			has_technology = tech_sapient_ai
+			NOR = {
+				has_authority = "auth_hive_mind"
+				has_authority = "auth_machine_intelligence"
+				has_policy_flag = ai_outlawed
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_sapient_AI_assistant			#知性AI副官
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.g"
+		trigger = {
+			has_technology = tech_self_aware_logic
+			NOT = {
+				has_ethic = "ethic_gestalt_consciousness"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = society
+			}
+			add_trait = leader_trait_custom_AI_assistant			#定制AI助理
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.62
+			}
+		}
+	}
+	###无可用领袖,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOT = {
+				any_owned_leader = {
+					has_leader_flag = bd_manage_leader
+				}
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+}
+
+###工程学家
+country_event = {
+	id = bd_leader_manage.7
+	title = "bd_leader_manage.7.name"
+	desc = "bd_leader_manage.7.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = "bd_leader_manage.7.a"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = engineering
+			}
+			add_trait = leader_trait_expertise_materials			#专长：材料科学
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.72
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.7.b"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = engineering
+			}
+			add_trait = leader_trait_expertise_propulsion			#专长：推进力学
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.72
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.7.c"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = engineering
+			}
+			add_trait = leader_trait_expertise_voidcraft			#专长：宇航技术
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.72
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.7.d"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = engineering
+			}
+			add_trait = leader_trait_expertise_industry			#专长：工业
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.72
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.d"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = engineering
+			}
+			add_trait = leader_trait_spark_of_genius			#灵光一闪
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.72
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.e"
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = engineering
+			}
+			add_trait = leader_trait_maniacal			#狂热
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.72
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.f"
+		trigger = {
+			has_technology = tech_sapient_ai
+			NOR = {
+				has_authority = "auth_hive_mind"
+				has_authority = "auth_machine_intelligence"
+				has_policy_flag = ai_outlawed
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = engineering
+			}
+			add_trait = leader_trait_sapient_AI_assistant			#知性AI副官
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.72
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.g"
+		trigger = {
+			has_technology = tech_self_aware_logic
+			NOT = {
+				has_ethic = "ethic_gestalt_consciousness"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		every_owned_leader = {
+			limit = {
+				is_researching_area = engineering
+			}
+			add_trait = leader_trait_custom_AI_assistant			#定制AI助理
+		}
+		hidden_effect = {
+			country_event = {
+				id = bd_leader_manage.72
+			}
+		}
+	}
+	###无可用领袖,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOT = {
+				any_owned_leader = {
+					has_leader_flag = bd_manage_leader
+				}
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+}
+
+###其他科学家
+country_event = {
+	id = bd_leader_manage.8
+	title = "bd_leader_manage.8.name"
+	desc = "bd_leader_manage.8.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	option = {
+		name = "bd_leader_manage.8.a"
+		custom_tooltip = bd_leader_manage.8.a.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_meticulous				#细致
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.8.b"
+		custom_tooltip = bd_leader_manage.8.b.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_carefree				#无忧无虑
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.8.c"
+		custom_tooltip = bd_leader_manage.8.c.desc
+		trigger = {
+			NOT = {
+				has_authority = "auth_machine_intelligence"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_roamer				#漫游者
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.8.ca"
+		custom_tooltip = bd_leader_manage.8.ca.desc
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_cataloger				#目录编纂者
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.8.d"
+		custom_tooltip = bd_leader_manage.8.d.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_archaeologist_ancrel				#考古学家(发掘速度)
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.d"
+		custom_tooltip = bd_leader_manage.5.d.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_spark_of_genius				#灵光一闪
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.e"
+		custom_tooltip = bd_leader_manage.5.e.desc
+		trigger = {
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_maniacal				#狂热
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.f"
+		custom_tooltip = bd_leader_manage.5.f.desc
+		trigger = {
+			has_technology = tech_sapient_ai
+			NOR = {
+				has_authority = "auth_hive_mind"
+				has_authority = "auth_machine_intelligence"
+				has_policy_flag = ai_outlawed
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_sapient_AI_assistant				#知性AI副官
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	option = {
+		name = "bd_leader_manage.5.g"
+		custom_tooltip = bd_leader_manage.5.g.desc
+		trigger = {
+			has_technology = tech_self_aware_logic
+			NOT = {
+				has_ethic = "ethic_gestalt_consciousness"
+			}
+			any_owned_leader = {
+				has_leader_flag = bd_manage_leader
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				limit = {
+					leader_class = scientist
+					NOR = {
+						is_researching_area = physics
+						is_researching_area = society
+						is_researching_area = engineering
+					}
+				}
+				add_trait = leader_trait_custom_AI_assistant				#定制AI助理
+			}
+			country_event = {
+				id = bd_leader_manage.82
+			}
+		}
+	}
+	###无可用领袖,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOT = {
+				any_owned_leader = {
+					has_leader_flag = bd_manage_leader
+				}
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+}
+
+###特殊特质
+country_event = {
+	id = bd_leader_manage.9
+	title = "bd_leader_manage.9.name"
+	desc = "bd_leader_manage.9.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+	}
+	##博学多识
+	option = {
+		name = bd_leader_manage.9.a
+		trigger = {
+			OR= {
+				has_ascension_perk = ap_engineered_evolution
+				any_owned_species = {
+					has_trait = trait_erudite
+				}
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = ruler
+						NOT = {
+							has_trait = leader_trait_ruler_erudite
+						}
+					}
+					add_trait = leader_trait_ruler_erudite
+				}
+				if = {
+					limit = {
+						species = {
+							has_trait = trait_erudite
+						}
+					}
+					if = {
+						limit = {
+							leader_class = admiral
+							NOT = {
+								has_trait = leader_trait_admiral_erudite
+							}
+						}
+						add_trait = leader_trait_admiral_erudite
+					}
+					else_if = {
+						limit = {
+							leader_class = general
+							NOT = {
+								has_trait = leader_trait_general_erudite
+							}
+						}
+						add_trait = leader_trait_general_erudite
+					}
+					else_if = {
+						limit = {
+							leader_class = governor
+							NOT = {
+								has_trait = leader_trait_governor_erudite
+							}
+						}
+						add_trait = leader_trait_governor_erudite
+					}
+					else_if = {
+						limit = {
+							leader_class = scientist
+							NOT = {
+								has_trait = leader_trait_scientist_erudite
+							}
+						}
+						add_trait = leader_trait_scientist_erudite
+					}
+				}
+			}
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	###义体人
+	option = {
+		name = bd_leader_manage.9.b
+		trigger = {
+			any_owned_species = {
+				has_trait = trait_cybernetic
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = ruler
+						NOT = {
+							has_trait = leader_trait_ruler_cyborg
+						}
+					}
+					add_ruler_trait = leader_trait_ruler_cyborg
+				}
+				if = {
+					limit = {
+						species = {
+							OR = {
+								has_trait = trait_mechanical
+								has_trait = trait_cybernetic
+							}
+						}
+					}
+					if = {
+						limit = {
+							leader_class = admiral
+							NOT = {
+								has_trait = leader_trait_admiral_cyborg
+							}
+						}
+						add_trait = leader_trait_admiral_cyborg
+					}
+					else_if = {
+						limit = {
+							leader_class = general
+							NOT = {
+								has_trait = leader_trait_general_cyborg
+							}
+						}
+						add_trait = leader_trait_general_cyborg
+					}
+					else_if = {
+						limit = {
+							leader_class = governor
+							NOT = {
+								has_trait = leader_trait_governor_cyborg
+							}
+						}
+						add_trait = leader_trait_governor_cyborg
+					}
+					else_if = {
+						limit = {
+							leader_class = scientist
+							NOT = {
+								has_trait = leader_trait_scientist_cyborg
+							}
+						}
+						add_trait = leader_trait_scientist_cyborg
+					}
+				}
+			}
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	###合成人
+	option = {
+		name = bd_leader_manage.9.c
+		trigger = {
+			any_owned_species = {
+				has_trait = trait_mechanical
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = ruler
+						NOT = {
+							has_trait = leader_trait_ruler_synthetic
+						}
+					}
+					add_ruler_trait = leader_trait_ruler_synthetic
+				}
+				if = {
+					limit = {
+						species = {
+							has_trait = trait_mechanical
+						}
+					}
+					if = {
+						limit = {
+							leader_class = admiral
+							NOT = {
+								has_trait = leader_trait_admiral_synthetic
+							}
+						}
+						add_trait = leader_trait_admiral_synthetic
+					}
+					else_if = {
+						limit = {
+							leader_class = general
+							NOT = {
+								has_trait = leader_trait_general_synthetic
+							}
+						}
+						add_trait = leader_trait_general_synthetic
+					}
+					else_if = {
+						limit = {
+							leader_class = governor
+							NOT = {
+								has_trait = leader_trait_governor_synthetic
+							}
+						}
+						add_trait = leader_trait_governor_synthetic
+					}
+					else_if = {
+						limit = {
+							leader_class = scientist
+							NOT = {
+								has_trait = leader_trait_scientist_synthetic
+							}
+						}
+						add_trait = leader_trait_scientist_synthetic
+					}
+				}
+			}
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	###灵媒
+	option = {
+		name = bd_leader_manage.9.d
+		trigger = {
+			any_owned_species = {
+				has_trait = trait_psionic
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = ruler
+						NOT = {
+							has_trait = leader_trait_ruler_psionic
+						}
+					}
+					add_ruler_trait = leader_trait_ruler_psionic
+				}
+				if = {
+					limit = {
+						species = {
+							has_trait = trait_psionic
+						}
+					}
+					if = {
+						limit = {
+							leader_class = admiral
+							NOT = {
+								has_trait = leader_trait_admiral_psionic
+							}
+						}
+						add_trait = leader_trait_admiral_psionic
+					}
+					else_if = {
+						limit = {
+							leader_class = general
+							NOT = {
+								has_trait = leader_trait_general_psionic
+							}
+						}
+						add_trait = leader_trait_general_psionic
+					}
+					else_if = {
+						limit = {
+							leader_class = governor
+							NOT = {
+								has_trait = leader_trait_governor_psionic
+							}
+						}
+						add_trait = leader_trait_governor_psionic
+					}
+					else_if = {
+						limit = {
+							leader_class = scientist
+							NOT = {
+								has_trait = leader_trait_scientist_psionic
+							}
+						}
+						add_trait = leader_trait_scientist_psionic
+					}
+				}
+			}
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	###天选之人
+	option = {
+		name = bd_leader_manage.9.e
+		trigger = {
+			any_owned_species = {
+				has_trait = trait_psionic
+			}
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = ruler
+						NOT = {
+							has_trait = leader_trait_ruler_chosen
+						}
+					}
+					add_ruler_trait = leader_trait_ruler_chosen
+				}
+				if = {
+					limit = {
+						species = {
+							has_trait = trait_psionic
+						}
+					}
+					if = {
+						limit = {
+							leader_class = admiral
+							NOT = {
+								has_trait = leader_trait_admiral_chosen
+							}
+						}
+						add_trait = leader_trait_admiral_chosen
+					}
+					else_if = {
+						limit = {
+							leader_class = general
+							NOT = {
+								has_trait = leader_trait_general_chosen
+							}
+						}
+						add_trait = leader_trait_general_chosen
+					}
+					else_if = {
+						limit = {
+							leader_class = governor
+							NOT = {
+								has_trait = leader_trait_governor_chosen
+							}
+						}
+						add_trait = leader_trait_governor_chosen
+					}
+					else_if = {
+						limit = {
+							leader_class = scientist
+							NOT = {
+								has_trait = leader_trait_scientist_chosen
+							}
+						}
+						add_trait = leader_trait_scientist_chosen
+					}
+				}
+			}
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	###脑蛞蝓
+	option = {
+		name = bd_leader_manage.9.f
+		trigger = {
+			NOT = {
+				has_authority = auth_machine_intelligence
+			}
+			has_country_flag = finished_brainslug_chain
+		}
+		hidden_effect = {
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = admiral
+						NOT = {
+							has_trait = leader_trait_admiral_brainslug
+						}
+					}
+					add_trait = leader_trait_admiral_brainslug
+				}
+				else_if = {
+					limit = {
+						leader_class = general
+						NOT = {
+							has_trait = leader_trait_general_brainslug
+						}
+					}
+					add_trait = leader_trait_general_brainslug
+				}
+				else_if = {
+					limit = {
+						leader_class = governor
+						NOT = {
+							has_trait = leader_trait_governor_brainslug
+						}
+					}
+					add_trait = leader_trait_governor_brainslug
+				}
+				else_if = {
+					limit = {
+						leader_class = scientist
+						NOT = {
+							has_trait = leader_trait_scientist_brainslug
+						}
+					}
+					add_trait = leader_trait_scientist_brainslug
+				}
+				else_if = {
+					limit = {
+						leader_class = ruler
+						NOT = {
+							has_trait = leader_trait_ruler_brainslug
+						}
+					}
+					add_ruler_trait = leader_trait_ruler_brainslug
+				}
+			}
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	###克隆人士兵
+	option = {
+		name = bd_leader_manage.9.g
+		trigger = {
+			OR = {
+				has_origin = origin_clone_army
+				has_country_flag = clone_army_full_potential
+				has_country_flag = clone_army_fertility_unlocked
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					has_origin = origin_clone_army
+					has_country_flag = clone_army_full_potential
+				}
+				every_owned_leader = {
+					limit = {
+						leader_class = admiral
+					}
+					add_trait = leader_trait_clone_army_full_admiral					#克隆先裔
+				}
+			}
+			else_if = {
+				limit = {
+					has_origin = origin_clone_army
+					has_country_flag = clone_army_fertility_unlocked
+				}
+				every_owned_leader = {
+					limit = {
+						leader_class = admiral
+					}
+					add_trait = leader_trait_clone_army_fertile_admiral					#克隆末裔
+				}
+			}
+			else_if = {
+				limit = {
+					has_origin = origin_clone_army
+					NOR = {
+						has_country_flag = clone_army_full_potential
+						has_country_flag = clone_army_fertility_unlocked
+					}
+				}
+				every_owned_leader = {
+					limit = {
+						leader_class = admiral
+					}
+					add_trait = leader_trait_clone_army_admiral					#克隆士兵
+				}
+			}
+			else = {
+				every_owned_leader = {
+					limit = {
+						leader_class = admiral
+					}
+					add_trait = leader_trait_clone_army_full_admiral					#克隆先裔
+				}
+			}
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	###无可用特质,返回主页
+	option = {
+		name = bd_leader_manage.9.h
+		trigger = {
+			NOR = {
+				any_owned_species = {
+					has_trait = trait_psionic
+				}
+				any_owned_species = {
+					has_trait = trait_mechanical
+				}
+				any_owned_species = {
+					has_trait = trait_cybernetic
+				}
+				any_owned_species = {
+					has_trait = trait_erudite
+				}
+				has_country_flag = finished_brainslug_chain
+				has_origin = origin_clone_army
+			}
+		}
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+	###退出
+	option = {
+		name = "bd_leader_manage.0.z"
+		hidden_effect = {
+			remove_country_flag = bd_managing
+		}
+	}
+}
+
+###转变思潮
+country_event = {
+	id = bd_leader_manage.10
+	title = "bd_leader_manage.10.name"
+	desc = "bd_leader_manage.10.desc"
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+	is_triggered_only = yes
+	trigger = {
+		is_ai = no
+		is_gestalt = no
+	}
+	##唯物
+	option = {
+		name = bd_leader_manage.10.a
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		hidden_effect = {
+			shift_ethic = ethic_materialist
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	##唯心
+	option = {
+		name = bd_leader_manage.10.b
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		hidden_effect = {
+			shift_ethic = ethic_spiritualist
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	##军国
+	option = {
+		name = bd_leader_manage.10.c
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+		hidden_effect = {
+			shift_ethic = ethic_militarist
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	##和平
+	option = {
+		name = bd_leader_manage.10.d
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_pacifist
+			}
+		}
+		hidden_effect = {
+			shift_ethic = ethic_pacifist
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	##亲外
+	option = {
+		name = bd_leader_manage.10.e
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		hidden_effect = {
+			shift_ethic = ethic_xenophobe
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	##排外
+	option = {
+		name = bd_leader_manage.10.f
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		hidden_effect = {
+			shift_ethic = ethic_xenophile
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	##威权
+	option = {
+		name = bd_leader_manage.10.g
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		hidden_effect = {
+			shift_ethic = ethic_authoritarian
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	##平等
+	option = {
+		name = bd_leader_manage.10.h
+		trigger = {
+			NOT = {
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+		hidden_effect = {
+			shift_ethic = ethic_egalitarian
+			country_event = {
+				id = bd_leader_manage.99
+			}
+		}
+	}
+	###返回主页
+	option = {
+		name = bd_leader_manage.1.z
+		hidden_effect = {
+			remove_country_flag = bd_managing
+			country_event = {
+				id = bd_leader_manage.0
+			}
+		}
+	}
+	###退出
+	option = {
+		name = bd_leader_manage.0.z
+		hidden_effect = {
+			remove_country_flag = bd_managing
+		}
+	}
+}

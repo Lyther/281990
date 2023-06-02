@@ -1,0 +1,96 @@
+namespace = tc_start
+
+#添加全局标识符
+event = {
+	id = tc_start.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = thaumstellaris_initialize
+	}
+}
+
+#口袋起源初始化
+#on_game_start_country
+country_event = {
+	id = tc_start.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = tc_pocket_planar_origin
+	}
+
+	immediate = {
+		capital_scope = {
+			change_planet_size = -5
+			clear_deposits = yes
+			remove_all_districts = yes
+			while = {
+				count = 1
+				add_deposit = tc_pocket_planar_fabrico
+				add_deposit = tc_pocket_planar_vitreus
+			}
+			while = {
+				count = 2
+				add_deposit = tc_pocket_planar_potentia
+				add_deposit = tc_pocket_planar_perfodio
+				add_deposit = tc_pocket_planar_herba
+				add_deposit = tc_pocket_planar_metallum
+				add_deposit = tc_pocket_planar_pannus
+				add_deposit = tc_pocket_planar_sensus
+				add_deposit = tc_pocket_planar_praecantatio
+			}
+			while = {
+				count = 3
+				add_deposit = tc_pocket_planar_auram
+			}
+			add_district = tc_pocket_planar_basic_resources_district
+			add_district = tc_pocket_planar_advanced_resources_district
+			add_district = tc_pocket_planar_arcane_resources_district
+			add_district = tc_pocket_planar_research_resources_district
+
+			add_building = building_research_lab_1
+			add_building = building_research_lab_1
+
+			while = { #消除一部分人口
+				count = 15
+				random_owned_pop = {
+					kill_pop = yes
+				}
+			}
+		}
+	}
+}
+
+#手册起源初始化
+#on_game_start_country
+country_event = {
+	id = tc_start.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = tc_arcane_research_origin
+	}
+
+	immediate = {
+		add_relic = tc_research_book
+		set_country_flag = tc_arcane_research_origin_country
+		give_technology = {
+			tech = tc_tech_arcane_research
+			message = no
+		}
+		add_resource = {
+			tc_knowledge_fragment = 2048
+			tc_essences = 1000
+			tc_thaumium = 500
+			tc_element_shard = 100
+		}
+		capital_scope = {
+			add_deposit = tc_arcane_miner
+			add_deposit = tc_arcane_research_origin_deposit
+		}
+	}
+}

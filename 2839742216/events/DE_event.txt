@@ -1,0 +1,1348 @@
+namespace = dove_enclave
+#这组事件是制作飞地的核心事件，各位也是从这里延申出各自的内容的
+#为了参考这个制作出新的飞地，建议是复制该文件，更改*文件名*及*namespace*，然后在*on_action*内添加对应的事件。
+#请无比测试确保内容成功运行再投稿，因为......不想坑害新管理（）
+
+####################################################################################
+#飞地的生成：开局随机在整个银河生成
+####################################################################################
+event = {
+	id = dove_enclave.1
+	hide_window = yes
+	is_triggered_only = yes	#在开局事件的*触发器*触发，即on_game_start
+	immediate = {
+		##################################################
+		#在创建国家前需要先创建种族
+		##################################################
+		create_species = {
+			name = "NAME_dove_species"			#种族名字
+			plural = NAME_dove_species_plural			#种族复数
+			class = PRE_AVI			#种族小类：即爬行，鸟类，软体...
+			portrait = avi16			#肖像
+			traits = {
+				#特质
+				ideal_planet_class = pc_habitat
+			}
+		}
+		##################################################
+		#创建国家
+		##################################################
+		create_country = {
+			name = "NAME_dove_country"			#国家名称，很重要
+			type = QQMGE_enclave			#指定country_type，不会的就不要动了
+			authority = "auth_oligarchic"			#政体
+			civics = {
+				#民政
+			}
+			origin = "origin_default"			#默认起源，这个不用管，玩家根本看不到飞地起源是啥
+			species = last_created_species			#设定种族，上面已经写好了，这一行不要动。
+			flag = {
+				#设定飞地旗帜，下边的自己搞吧
+				icon = {
+					category = "human"
+					file = "flag_human_4.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors = {
+					"green"
+					"green"
+					"null"
+					"null"
+				}
+			}
+			ethos = {
+				#思潮
+				ethic = ethic_xenophile
+				ethic = ethic_materialist
+				ethic = ethic_pacifist
+			}
+			ignore_initial_colony_error = yes
+			effect = {
+				############################################################################
+				#重要！！！！这个flag⭐国家标签⭐决定了你这个国家到底是谁，一定要改！
+				set_country_flag = dove_enclave_country
+				############################################################################
+				set_graphical_culture = npf_01					#默认的graphical_culture，不太需要动
+			}
+		}
+		##################################################
+		#生成所有的空间站
+		##################################################
+		while = {
+			count = 3	#总生成的个数
+			random_system = {
+				#随机某个星系
+				limit = {
+					#要求
+					NOR = {
+						exists = owner					#未被占据
+						has_star_flag = hostile_system					#避免原版的利维坦
+						has_star_flag = dove_enclave_system			#避免多个空间站生成在同一个星系
+					}
+				}
+				set_star_flag = dove_enclave_system
+				random_system_planet = {
+					#星系内随机星球
+					set_planet_flag = QQE_enclave_planet				#一个标记，暂时没有实际作用，但别删
+					##################################################
+					#生成空间站
+					##################################################
+					last_created_country = {
+						#以下为生成空间站
+						create_fleet = {
+							name = "NAME_dove_enclave_station"						#空间站舰队名称
+							settings = {
+								spawn_debris = no							#舰船是否生成残骸可供逆向
+							}
+							effect = {
+								set_owner = prev
+								create_ship = {
+									name = random
+									############################################################################
+									design = NAME_Dove_Enclave_Station								#空间站舰船设计，这里为默认，如果你想添加新的，自己参考着写。
+									############################################################################
+									graphical_culture = npf_01
+								}
+								set_location = {
+									#设定空间站位置，不要改
+									target = prevprev
+									distance = 90
+								}
+								save_event_target_as = CustomCapital
+								prev = {
+									set_custom_capital_location = event_target:CustomCapital
+								}
+								set_fleet_flag = QQE_enclave_station							#通用标记，不要改
+								############################################################################
+								set_fleet_flag = dove_enclave_station							#标记出这是你的策展人空间站，你可以更改标记来方便调用
+								############################################################################
+							}
+						}
+					}
+				}
+			}
+		}
+		##################################################
+		#创建领袖，ruler
+		##################################################
+		last_created_country = {
+			create_leader = {
+				#生成领袖
+				class = ruler
+				species = this				#领袖种族
+				name = random				#领袖名字（当前为随机）
+				skill = 5
+			}
+			set_leader = last_created_leader			#使刚刚创建的领袖成为统治者
+			save_global_event_target_as = dove_enclave_country
+			every_owned_fleet = {
+				every_country = {
+					limit = {
+						is_in_sensor_range = prev
+						NOT = {
+							has_communications = prevprev
+						}
+					}
+					establish_communications_no_message = prevprev
+					if = {
+						limit = {
+							is_ai = no
+						}
+						country_event = {
+							id = dove_enclave.200
+							days = 2
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+####################################################################################
+#飞地和我们建立通讯————在飞地进入我方探测器范围内时
+####################################################################################
+country_event = {
+	id = dove_enclave.2
+	title = dove_enclave.2.title	#事件标题
+	desc = dove_enclave.2.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = from.owner
+		room = enclave_curator_room
+	}
+
+	is_triggered_only = yes	#在舰队被探测到的*触发器*触发，即on_fleet_detected，from即探测到的舰队
+	trigger = {
+		from = {
+			owner = {
+				has_country_flag = dove_enclave_country	#判断探测到的舰队所属国家，通过之前设立的country_flag
+				NOT = {
+					has_communications = root	#尚未和我方建立联系
+				}
+			}
+		}
+	}
+	immediate = {
+		establish_communications_no_message = from.owner	#与探测到的舰队所有者建交
+	}
+	option = {
+		name = dove_enclave.2.a	#选项
+	}
+}
+
+country_event = {
+	id = dove_enclave.200
+	title = dove_enclave.2.title
+	desc = dove_enclave.2.desc
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:dove_enclave_country
+		room = enclave_curator_room
+	}
+
+	is_triggered_only = yes
+	trigger = {
+		event_target:dove_enclave_country = {
+			has_country_flag = dove_enclave_country
+		}
+	}
+	option = {
+		name = dove_enclave.2.a
+	}
+}
+
+####################################################################################
+#在通讯界面打开飞地菜单
+####################################################################################
+#引入事件：在点击国家图标时触发
+country_event = {
+	id = dove_enclave.3
+	is_triggered_only = yes		#在点击国家图标的*触发器*触发，即on_custom_diplomacy，from即图标对应国家
+	hide_window = yes
+	
+
+	trigger = {
+		from = {
+			has_country_flag = dove_enclave_country	#判断对应国家，通过之前设立的country_flag⭐国家标签⭐
+		}
+	}
+
+	immediate = {
+		from = {
+			save_event_target_as = DE_contacting_country	#将from存为event_target
+		}
+		if = {
+			limit = {
+				has_country_flag = attacked_DE
+			}
+			country_event = {
+				id = dove_enclave.400
+			}
+		}
+		else = {
+			country_event = {
+				id = dove_enclave.300	#触发正式的菜单事件
+			}
+		}
+	}
+}
+##################################################
+#飞地菜单
+#算是核心事件，通过该事件开始，实现你想要实现的各种乱七八糟的功能
+##################################################
+country_event = {
+	id = dove_enclave.300
+	title = dove_enclave.title	#事件标题
+	#多个desc可以是该事件文本随机挑一个显示，更生动（可选）
+	desc = dove_enclave.300.desc	#事件文本
+	desc = dove_enclave.300.desc2	#事件文本2
+	desc = dove_enclave.300.desc3	#事件文本3
+	desc = dove_enclave.300.desc4
+	desc = dove_enclave.300.desc5
+	desc = dove_enclave.300.desc6
+	desc = dove_enclave.300.desc7
+	desc = dove_enclave.300.desc8
+	desc = dove_enclave.300.desc9
+	desc = dove_enclave.300.desc10
+	desc = dove_enclave.300.desc11
+	desc = dove_enclave.300.desc12
+	desc = {
+		text = dove_enclave.300.desc.ATTACKED1
+		trigger = {
+			any_country = {
+				has_country_flag = attacked_DE
+			}
+		}
+	}
+	desc = {
+		text = dove_enclave.300.desc.ATTACKED2
+		trigger = {
+			any_country = {
+				has_country_flag = attacked_DE
+			}
+		}
+	}
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+	
+	trigger = {
+		NOT = {
+			has_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.300.a	#选项1
+		is_dialog_only = yes
+		response_text = dove_enclave.300.a.reply  #回复
+	}
+
+	option = {
+		name = dove_enclave.300.b	#选项2
+		allow = {
+			custom_tooltip = {
+				fail_text = dove_enclave.300.b.exists
+				NOT = {
+					has_modifier = support_dove_translation
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = dove_enclave.301
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.300.c
+		allow = {
+			custom_tooltip = {
+				fail_text = dove_enclave.300.c.opinion
+				event_target:DE_contacting_country = {
+					trust = {
+						who = root
+						value >= 20 
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = dove_enclave.303
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.exit
+		default_hide_option = yes
+	}
+}
+
+country_event = {#赞助飞地菜单
+	id = dove_enclave.301
+	title = dove_enclave.title
+	desc = dove_enclave.301.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.301.a
+		response_text = dove_enclave.301.a.reply
+		allow = {
+			resource_stockpile_compare = {
+				resource = food
+				value >= 1000
+			}
+			hidden_trigger = {
+				NOT = {
+					has_country_flag = attacked_DE
+				}
+			}
+		}
+		add_resource = {
+			food = -1000
+		}
+		custom_tooltip = opinion20
+		add_modifier = {
+			modifier = support_dove_translation
+			days = 3600
+		}
+		hidden_effect = {
+				#关于提升好感
+				#对于country_type中定义custom_opinion = yes的国家，可以用add_trust来调整国家好感。
+			event_target:DE_contacting_country = {	#刚刚存的target
+				add_trust = {	#提高信任（在此处则代表好感）
+					amount = 20	#提高数值
+					who = root	#目标：root即查看菜单中的国家，即玩家。
+				}
+			}
+			set_relation_flag = {
+				who = event_target:DE_contacting_country
+				flag = DE_trade
+			}
+			country_event = {
+				id = dove_enclave.302
+				days = 3600
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.back
+		hidden_effect = {
+			country_event = {
+				id = dove_enclave.300
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.exit
+		default_hide_option = yes
+	}
+}
+
+country_event = {#赞助飞地续约事件
+	id = dove_enclave.302
+	title = dove_enclave.title
+	desc = dove_enclave.302.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	trigger = {
+		NOT = {
+			has_country_flag = attacked_DE
+		}
+		exists = event_target:DE_contacting_country
+	}
+
+	immediate = {
+		remove_relation_flag = {
+			who = event_target:DE_contacting_country
+			flag = DE_trade
+		}
+	}
+
+	option = {
+		name = dove_enclave.302.a
+		response_text = dove_enclave.302.a.reply
+		allow = {
+			resource_stockpile_compare = {
+				resource = food
+				value >= 1000
+			}
+			hidden_trigger = {
+				NOT = {
+					has_country_flag = attacked_DE
+				}
+			}
+		}
+		add_resource = {
+			food = -1000
+		}
+		custom_tooltip = opinion20
+		add_modifier = {
+			modifier = support_dove_translation
+			days = 3600
+		}
+		hidden_effect = {
+			event_target:DE_contacting_country = {
+				add_trust = {
+					amount = 20
+					who = root
+				}
+			}
+			set_relation_flag = {
+				who = event_target:DE_contacting_country
+				flag = DE_trade
+			}
+			country_event = {
+				id = dove_enclave.302
+				days = 3600
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.302.b
+		default_hide_option = yes
+	}
+}
+
+country_event = {#翻译项目菜单
+	id = dove_enclave.303
+	title = dove_enclave.title
+	desc = dove_enclave.303.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.303.a
+		allow = {
+			custom_tooltip = {
+				fail_text = project_finish
+				NOT = {
+					has_country_flag = giga_project_finish
+				}
+			}
+			custom_tooltip = {
+				fail_text = has_active_project
+				NOT = {
+					has_modifier = dove_modifier_project_active
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = giga
+			country_event = {
+				id = dove_enclave.310
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.303.b
+		allow = {
+			custom_tooltip = {
+				fail_text = project_finish
+				NOT = {
+					has_country_flag = acot_project_finish
+				}
+			}
+			custom_tooltip = {
+				fail_text = has_active_project
+				NOT = {
+					has_modifier = dove_modifier_project_active
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = acot
+			country_event = {
+				id = dove_enclave.310
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.303.c
+		allow = {
+			custom_tooltip = {
+				fail_text = project_finish
+				NOT = {
+					has_country_flag = mem_project_finish
+				}
+			}
+			custom_tooltip = {
+				fail_text = has_active_project
+				NOT = {
+					has_modifier = dove_modifier_project_active
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = mem
+			country_event = {
+				id = dove_enclave.310
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.303.d
+		allow = {
+			custom_tooltip = {
+				fail_text = project_finish
+				NOT = {
+					has_country_flag = RS_project_finish
+				}
+			}
+			custom_tooltip = {
+				fail_text = has_active_project
+				NOT = {
+					has_modifier = dove_modifier_project_active
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = RS
+			country_event = {
+				id = dove_enclave.310
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.303.e
+		allow = {
+			custom_tooltip = {
+				fail_text = project_finish
+				NOT = {
+					has_country_flag = PD_project_finish
+				}
+			}
+			custom_tooltip = {
+				fail_text = has_active_project
+				NOT = {
+					has_modifier = dove_modifier_project_active
+				}
+			}
+		}
+		hidden_effect = {
+			set_country_flag = PD
+			country_event = {
+				id = dove_enclave.310
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.back
+		hidden_effect = {
+			country_event = {
+				id = dove_enclave.300
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.exit
+		default_hide_option = yes
+	}
+}
+
+country_event = {#翻译项目次级菜单，各项目合集
+	id = dove_enclave.310
+	title = dove_enclave.title
+	desc = {
+		trigger = {
+			has_country_flag = giga
+		}
+		text = dove_enclave.310a.desc
+	}
+	desc = {
+		trigger = {
+			has_country_flag = acot
+		}
+		text = dove_enclave.310b.desc
+	}
+	desc = {
+		trigger = {
+			has_country_flag = mem
+		}
+		text = dove_enclave.310c.desc
+	}
+	desc = {
+		trigger = {
+			has_country_flag = RS
+		}
+		text = dove_enclave.310d.desc
+	}
+	desc = {
+		trigger = {
+			has_country_flag = PD
+		}
+		text = dove_enclave.310e.desc
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.310
+		trigger = {
+			has_country_flag = giga
+		}
+		remove_country_flag = giga
+		custom_tooltip = dove_enclave.310a.text
+		hidden_effect = {
+			add_modifier = {
+				modifier = dove_modifier_project_active
+				days = -1
+			}
+			country_event = {
+				id = dove_enclave.311
+				days = 1449
+				random = 725
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.310
+		trigger = {
+			has_country_flag = acot
+		}
+		remove_country_flag = acot
+		custom_tooltip = dove_enclave.310b.text
+		hidden_effect = {
+			add_modifier = {
+				modifier = dove_modifier_project_active
+				days = -1
+			}
+			country_event = {
+				id = dove_enclave.312
+				days = 616
+				random = 308
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.310
+		trigger = {
+			has_country_flag = mem
+		}
+		remove_country_flag = mem
+		custom_tooltip = dove_enclave.310c.text
+		hidden_effect = {
+			add_modifier = {
+				modifier = dove_modifier_project_active
+				days = -1
+			}
+			country_event = {
+				id = dove_enclave.313
+				days = 702
+				random = 351
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.310
+		trigger = {
+			has_country_flag = RS
+		}
+		remove_country_flag = RS
+		custom_tooltip = dove_enclave.310d.text
+		hidden_effect = {
+			add_modifier = {
+				modifier = dove_modifier_project_active
+				days = -1
+			}
+			country_event = {
+				id = dove_enclave.314
+				days = 192
+				random = 96
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.310
+		trigger = {
+			has_country_flag = PD
+		}
+		remove_country_flag = PD
+		custom_tooltip = dove_enclave.310e.text
+		hidden_effect = {
+			add_modifier = {
+				modifier = dove_modifier_project_active
+				days = -1
+			}
+			country_event = {
+				id = dove_enclave.315
+				days = 453
+				random = 227
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.310back
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = giga
+						has_country_flag = acot
+						has_country_flag = mem
+						has_country_flag = RS
+						has_country_flag = PD
+					}
+				}
+				remove_country_flag = giga
+				remove_country_flag = acot
+				remove_country_flag = mem
+				remove_country_flag = RS
+				remove_country_flag = PD
+			}
+			country_event = {
+				id = dove_enclave.303
+			}
+		}
+	}
+}
+
+country_event = {#翻译项目，不多巨构
+	id = dove_enclave.311
+	title = dove_enclave.title
+	desc = dove_enclave.311.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.311
+		remove_modifier = dove_modifier_project_active
+		set_country_flag = giga_project_finish
+		random_list = {
+			75 = {
+				add_modifier = {
+					modifier = dove_modifier_giga
+					days = -1
+				}
+			}
+			25 = {
+				add_tech_progress = {
+					tech = tech_mega_engineering
+					progress = 0.1
+				}
+				add_modifier = {
+					modifier = dove_modifier_giga
+					days = -1
+				}
+			}
+		}
+	}
+}
+
+country_event = {#翻译项目，BCOT
+	id = dove_enclave.312
+	title = dove_enclave.title
+	desc = dove_enclave.312.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.312
+		remove_modifier = dove_modifier_project_active
+		set_country_flag = acot_project_finish
+		random_list = {
+			90 = {
+				add_modifier = {
+					modifier = dove_modifier_acot
+					days = -1
+				}
+			}
+			10 = {
+				add_tech_progress = {
+					tech = tech_dark_matter_power_core
+					progress = 0.1
+				}
+				add_modifier = {
+					modifier = dove_modifier_acot
+					days = -1
+				}
+			}
+		}
+	}
+}
+
+country_event = {#翻译项目，WEW
+	id = dove_enclave.313
+	title = dove_enclave.title
+	desc = dove_enclave.313.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.313
+		remove_modifier = dove_modifier_project_active
+		set_country_flag = mem_project_finish
+		add_modifier = {
+			modifier = dove_modifier_mem
+			days = -1
+		}
+	}
+}
+
+country_event = {#翻译项目，FakeSpace
+	id = dove_enclave.314
+	title = dove_enclave.title
+	desc = dove_enclave.314.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.314
+		remove_modifier = dove_modifier_project_active
+		set_country_flag = RS_project_finish
+		add_modifier = {
+			modifier = dove_modifier_RS
+			days = -1
+		}
+	}
+}
+
+country_event = {#翻译项目，Planetary Consistency
+	id = dove_enclave.315
+	title = dove_enclave.title
+	desc = dove_enclave.315.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:DE_contacting_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.315
+		remove_modifier = dove_modifier_project_active
+		set_country_flag = PD_project_finish
+		add_modifier = {
+			modifier = dove_modifier_PD
+			days = -1
+		}
+	}
+}
+
+country_event = {#袭击飞地后无回应
+	id = dove_enclave.400
+	title = dove_enclave.title
+	desc = dove_enclave.400.desc
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	trigger = {
+		NOT = {
+			has_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	immediate = {
+		set_country_flag = dove_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = dove_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dove_enclave.400
+		default_hide_option = yes
+	}
+}
+
+country_event = {#赞助飞地随机事件1：全员摸鱼
+	id = dove_enclave.500
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_modifier = support_dove_translation
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = first_active_lazy_event
+				}
+			}
+			country_event = {
+				id = dove_enclave.501
+			}
+		}
+		else = {
+			country_event = {
+				id = dove_enclave.502
+			}
+		}
+	}
+}
+
+country_event = {#第一次摸鱼
+	id = dove_enclave.501
+	title = dove_enclave.501.title
+	desc = dove_enclave.501.desc
+	is_triggered_only = yes
+	picture = GFX_evt_smugglers_in_bar
+
+	option = {
+		name = dove_enclave.501a
+		set_country_flag = first_active_lazy_event
+		add_modifier = {
+			modifier = dove_modifier_lazy
+			days = 720
+		}
+	}
+
+	option = {
+		name = dove_enclave.501b
+		set_country_flag = first_active_lazy_event
+		add_modifier = {
+			modifier = dove_modifier_lazy
+			days = 720
+		}
+	}
+}
+
+country_event = {#后续摸鱼
+	id = dove_enclave.502
+	title = dove_enclave.501.title
+	desc = dove_enclave.502.desc
+	is_triggered_only = yes
+	picture = GFX_evt_smugglers_in_bar
+
+	trigger = {
+		NOT = {
+			has_modifier = dove_modifier_lazy
+		}
+	}
+
+	option = {
+		name = dove_enclave.502
+		add_modifier = {
+			modifier = dove_modifier_lazy
+			days = 720
+		}
+	}
+}
+
+####################################################################################
+#飞地空间站被消灭
+#这个事件并没有做什么敌对减少信任的事件，所以，嗯，你们自学罢
+#这个事件在飞地空间站被消灭时触发
+####################################################################################
+country_event = {
+	id = dove_enclave.4
+	hide_window = yes
+	is_triggered_only = yes		#通过舰队被摧毁的*触发器*触发，即on_fleet_destroyed_perp，from即被摧毁舰队的所有者，fromfromfrom即被摧毁舰队
+	trigger = {
+		from = {	#遇害舰队的所有者
+			has_country_flag = dove_enclave_country	#拥有你的⭐国家标签⭐
+		}
+		fromfromfrom = {	#遇害舰队
+			has_fleet_flag = dove_enclave_station	#拥有你的飞地空间站标签
+		}
+	}
+
+	immediate = {
+		country_event = {
+			id = dove_enclave.5
+		}
+		set_country_flag = attacked_DE
+		save_event_target_as = DE_destroyer
+		every_country = {
+			limit = {
+				has_communications = from
+				NOT = {
+					is_country = event_target:DE_destroyer
+				}
+				is_country_type = default
+			}
+			country_event = {
+				id = dove_enclave.6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dove_enclave.5
+	title = dove_enclave.5.title
+	desc = {
+		text = dove_enclave.5a.desc
+		trigger = {
+			NOT = {
+				from.from = {
+					count_owned_ship = {
+						limit = {
+							is_ship_size = QQMGE_enclave_station
+						}
+						count < 1
+					}
+				}
+			}
+		}
+	}
+	desc = {
+		text = dove_enclave.5b.desc
+		trigger = {
+			from.from = {
+				count_owned_ship = {
+					limit = {
+						is_ship_size = QQMGE_enclave_station
+					}
+					count < 1
+				}
+			}
+		}
+	}
+	picture = GFX_evt_small_space_battle
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = destroyed_DE
+		if = {
+			limit = {
+				has_modifier = support_dove_translation
+				has_relation_flag = {
+					who = from.from
+					flag = DE_trade
+				}
+			}
+			remove_modifier = support_dove_translation
+			remove_relation_flag = {
+				who = from.from
+				flag = DE_trade
+			}
+		}
+	}
+	
+	option = {
+		name = dove_enclave.5a
+		trigger = {
+			NOT = {
+				from.from = {
+					count_owned_ship = {
+						limit = {
+							is_ship_size = QQMGE_enclave_station
+						}
+						count < 1
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.5b
+		trigger = {
+			from.from = {
+				count_owned_ship = {
+					limit = {
+						is_ship_size = QQMGE_enclave_station
+					}
+					count < 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dove_enclave.6
+	title = dove_enclave.5.title
+	desc = {
+		text = dove_enclave.6a.desc
+		trigger = {
+			NOT = {
+				from.from = {
+					count_owned_ship = {
+						limit = {
+							is_ship_size = QQMGE_enclave_station
+						}
+						count < 1
+					}
+				}
+			}
+		}
+	}
+	desc = {
+		text = dove_enclave.6b.desc
+		trigger = {
+			from.from = {
+				count_owned_ship = {
+					limit = {
+						is_ship_size = QQMGE_enclave_station
+					}
+					count < 1
+				}
+			}
+		}
+	}
+	picture = GFX_evt_small_space_battle
+	is_triggered_only = yes
+	
+
+	option = {
+		name = dove_enclave.6a
+		trigger = {
+			NOT = {
+				has_relation_flag = {
+					who = from.from
+					flag = DE_trade
+				}
+			}
+		}
+	}
+
+	option = {
+		name = dove_enclave.6b
+		trigger = {
+			has_relation_flag = {
+				who = from.from
+				flag = DE_trade
+			}
+			from.from = {
+				count_owned_ship = {
+					limit = {
+						is_ship_size = QQMGE_enclave_station
+					}
+					count < 1
+				}
+			}
+		}
+		hidden_effect = {
+			remove_relation_flag = {
+				who = from.from
+				flag = DE_trade
+			}
+		}
+	}
+}
+
+##################################################################################################################
+#其它小贴士
+#政府（government）可以随着⭐国家标签⭐改变，这一点请参考common的government文件夹
+#乱七八糟的政体，民政都对这个政府没啥影响，而特质完全就是做着好看，除非你需要刷出人口
+#建立联系也可以使用别的方式————比如使用进入星系的触发器，自己改罢
+#没了。

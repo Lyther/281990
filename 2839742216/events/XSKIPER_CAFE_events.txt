@@ -1,0 +1,1978 @@
+namespace = XSKIPER_QQE_basic
+
+
+####################################################################################
+#飞地的生成：开局随机在整个银河生成
+####################################################################################
+event = {
+	id = XSKIPER_QQE_basic.1
+	hide_window = yes
+	is_triggered_only = yes	#在开局事件的*触发器*触发，即on_game_start
+	immediate = {
+		##################################################
+		#在创建国家前需要先创建种族
+		##################################################
+		create_species = {
+			name = "NAME_XSKIPER_CAFE_species"			#种族名字
+			plural = NAME_XSKIPER_CAFE_species_plural			#种族复数
+			class = random_non_machine			#种族小类：即爬行，鸟类，软体...
+			portrait = random			#肖像
+			traits = {
+				#特质
+				ideal_planet_class = pc_habitat
+			}
+		}
+		##################################################
+		#创建国家
+		##################################################
+		create_country = {
+			name = "NAME_XSKIPER_CAFE_country"			#国家名称，很重要
+			type = QQMGE_enclave			#指定country_type，不会的就不要动了
+			authority = "auth_oligarchic"			#政体
+			civics = {
+				#民政
+			}
+			origin = "origin_default"			#默认起源，这个不用管，玩家根本看不到飞地起源是啥
+			species = last_created_species			#设定种族，上面已经写好了，这一行不要动。
+			flag = {
+				#设定飞地旗帜，下边的自己搞吧
+				icon = {
+					category = "XSkiper_cafe"
+					file = "XSKIPER_CAFE.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "double_hemispheres.dds"
+				}
+				colors = {
+					"dark_purple"
+					"blue"
+					"null"
+					"null"
+				}
+			}
+			ethos = {
+				#思潮
+				ethic = ethic_fanatic_xenophile
+				ethic = ethic_egalitarian
+			}
+			ignore_initial_colony_error = yes
+			effect = {
+				############################################################################
+				#重要！！！！这个flag⭐国家标签⭐决定了你这个国家到底是谁，一定要改！
+				set_country_flag = QQE_XSKIPER_CAFE_enclave_country
+				############################################################################
+				set_graphical_culture = npf_01					#默认的graphical_culture，不太需要动
+				save_global_event_target_as = XSKIPER_CAFE_country
+				XSKIPER_CAFE_BASIC_DATA_INITIALIZE = yes
+			}
+		}
+		##################################################
+		#生成所有的空间站
+		##################################################
+		while = {
+			count = 3	#总生成的个数
+			random_system = {
+				#随机某个星系
+				limit = {
+					#要求
+					NOR = {
+						exists = owner					#未被占据
+						has_star_flag = hostile_system					#避免原版的利维坦
+						has_star_flag = QQE_enclave_system			#避免多个空间站生成在同一个星系
+					}
+				}
+				set_star_flag = QQE_enclave_system
+				random_system_planet = {
+					#星系内随机星球
+					set_planet_flag = QQE_enclave_planet				#一个标记，暂时没有实际作用，但别删
+					##################################################
+					#生成空间站
+					##################################################
+					last_created_country = {
+						#以下为生成空间站
+						create_fleet = {
+							name = "NAME_XSKIPER_CAFE_Station"						#空间站舰队名称
+							settings = {
+								spawn_debris = no							#舰船是否生成残骸可供逆向
+							}
+							effect = {
+								set_owner = prev
+								create_ship = {
+									name = random
+									############################################################################
+									design = NAME_QQMGE_Enclave_Station								#空间站舰船设计，这里为默认，如果你想添加新的，自己参考着写。
+									############################################################################
+									graphical_culture = npf_01
+								}
+								set_location = {
+									#设定空间站位置，不要改
+									target = prevprev
+									distance = 90
+								}
+								save_event_target_as = CustomCapital
+								prev = {
+									set_custom_capital_location = event_target:CustomCapital
+								}
+								set_fleet_flag = QQE_enclave_station							#通用标记，不要改
+								############################################################################
+								set_fleet_flag = QQE_XSKIPER_CAFE_enclave_station							#标记出这是你的策展人空间站，你可以更改标记来方便调用
+								############################################################################
+							}
+						}
+					}
+				}
+			}
+		}
+		random_system = {
+			#随机某个星系
+			limit = {
+				#要求
+				NOR = {
+					exists = owner					#未被占据
+					has_star_flag = hostile_system					#避免原版的利维坦
+					has_star_flag = QQE_enclave_system			#避免多个空间站生成在同一个星系
+				}
+			}
+			set_star_flag = QQE_enclave_system
+			random_system_planet = {
+				#星系内随机星球
+				set_planet_flag = QQE_enclave_planet				#一个标记，暂时没有实际作用，但别删
+				##################################################
+				#生成空间站
+				##################################################
+				last_created_country = {
+					#以下为生成空间站
+					create_fleet = {
+						name = "NAME_XSKIPER_CAFE_Station_Main"						#空间站舰队名称
+						settings = {
+							spawn_debris = no							#舰船是否生成残骸可供逆向
+						}
+						effect = {
+							set_owner = prev
+							create_ship = {
+								name = random
+								############################################################################
+								design = NAME_QQMGE_Enclave_Station								#空间站舰船设计，这里为默认，如果你想添加新的，自己参考着写。
+								############################################################################
+								graphical_culture = npf_01
+							}
+							set_location = {
+								#设定空间站位置，不要改
+								target = prevprev
+								distance = 90
+							}
+							save_event_target_as = CustomCapital
+							prev = {
+								set_custom_capital_location = event_target:CustomCapital
+							}
+							set_fleet_flag = QQE_enclave_station							#通用标记，不要改
+							############################################################################
+							set_fleet_flag = QQE_XSKIPER_CAFE_enclave_station_main							#标记出这是你的策展人空间站，你可以更改标记来方便调用
+							############################################################################
+						}
+					}
+				}
+			}
+		}
+		##################################################
+		#创建领袖，ruler
+		##################################################
+		last_created_country = {
+			create_leader = {
+				#生成领袖
+				class = ruler
+				species = this				#领袖种族
+				name = NAME_XSKIPER_CAFE_OWNER				#领袖名字（当前为随机）
+				skill = 10
+				immortal = yes
+			}
+			set_leader = last_created_leader			#使刚刚创建的领袖成为统治者
+			every_owned_leader = {
+				limit = { NOT = { leader_class = ruler } }
+				kill_leader = { }
+			}
+			create_leader = {
+				#生成领袖
+				class = scientist
+				species = this				#领袖种族
+				name = NAME_XSKIPER_CAFE_OWNER				#领袖名字（当前为随机）
+				skill = 10
+				immortal = yes
+				effect = {
+					change_leader_portrait = XSKIPER_CAFE_empty
+					save_global_event_target_as = XSKIPER_empty_leader_portrait
+					set_owner = prev
+				}
+			}
+			every_owned_fleet = {
+				every_country = {
+					limit = {
+						is_in_sensor_range = prev
+						NOT = {
+							has_communications = prevprev
+						}
+					}
+					establish_communications_no_message = prevprev
+					if = {
+						limit = { 
+							is_ai = no
+						}
+						country_event = {
+							id = XSKIPER_QQE_basic.200
+							days = 2
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+####################################################################################
+#飞地和我们建立通讯————在飞地进入我方探测器范围内时
+####################################################################################
+country_event = {
+	id = XSKIPER_QQE_basic.2
+	hide_window = yes
+
+
+	is_triggered_only = yes	#在舰队被探测到的*触发器*触发，即on_fleet_detected，from即探测到的舰队
+	trigger = {
+		from = {
+			owner = {
+				has_country_flag = QQE_XSKIPER_CAFE_enclave_country	#判断探测到的舰队所属国家，通过之前设立的country_flag
+				NOT = {
+					has_communications = root	#尚未和我方建立联系
+				}
+			}
+		}
+	}
+	immediate = {
+		establish_communications_no_message = from.owner	#与探测到的舰队所有者建交
+		if = {
+			limit = { 
+				is_ai = no
+			}
+			country_event = {
+				id = XSKIPER_QQE_basic.200
+			}
+		}
+	}
+}
+country_event = {
+	id = XSKIPER_QQE_basic.200
+	title = XSKIPER_QQE_basic.2.title	#事件标题
+	desc = XSKIPER_QQE_basic.2.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:XSKIPER_CAFE_country
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes	#在舰队被探测到的*触发器*触发，即on_fleet_detected，from即探测到的舰队
+	immediate = {
+		
+	}
+	option = {
+		name = XSKIPER_QQE_basic.2.a	#选项
+		is_dialog_only = yes
+		response_text = XSKIPER_QQE_basic.2.ar
+	}
+	option = {
+		name = XSKIPER_QQE_basic.2.b	#选项
+		is_dialog_only = yes
+		response_text = XSKIPER_QQE_basic.2.br
+	}
+	option = {
+		name = XSKIPER_QQE_basic.2.c	#选项
+		is_dialog_only = yes
+		response_text = XSKIPER_QQE_basic.2.cr
+	}
+	option = {
+		name = XSKIPER_QQE_basic.2.d	#选项
+		response_text = XSKIPER_QQE_basic.2.dr
+		hidden_effect = {
+			country_event = {
+				id = XSKIPER_QQE_basic.201
+				days = 1
+			}
+		}
+	}
+}
+country_event = {
+	id = XSKIPER_QQE_basic.201
+	title = XSKIPER_QQE_basic.201.title
+	desc = XSKIPER_QQE_basic.201.desc
+	picture = GFX_evt_treasure_pile
+
+	is_triggered_only = yes
+	immediate = {
+		set_country_flag = XSKIPER_discover_CAFE
+	}
+	option = {
+		name = XSKIPER_QQE_basic.201.a
+	}
+}
+####################################################################################
+#在通讯界面打开飞地菜单
+####################################################################################
+#引入事件：在点击国家图标时触发
+country_event = {
+	id = XSKIPER_QQE_basic.3
+	is_triggered_only = yes		#在点击国家图标的*触发器*触发，即on_custom_diplomacy，from即图标对应国家
+	hide_window = yes
+	
+
+	trigger = {
+		from = {
+			has_country_flag = QQE_XSKIPER_CAFE_enclave_country	#判断对应国家，通过之前设立的country_flag⭐国家标签⭐
+		}
+		NOT = {
+			has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+		}
+		has_country_flag = XSKIPER_discover_CAFE
+	}
+
+	immediate = {
+		from = {
+			save_event_target_as = QQE_contacting_country	#将from存为event_target
+		}
+		set_timed_country_flag = {
+			flag = QQE_XSKIPER_CAFE_CONTACTING
+			years = 2
+		}
+		country_event = {
+			id = XSKIPER_QQE_basic.300	#触发正式的菜单事件
+		}
+		XSKIPER_refresh_leader_target = yes
+		country_event = { id = XSKIPER_QQE_basic.5 }
+		country_event = { id = XSKIPER_QQE_basic.500 }
+		country_event = { id = XSKIPER_QQE_basic.501 }
+		country_event = { id = XSKIPER_QQE_basic.502 }
+		country_event = { id = XSKIPER_QQE_basic.503 }
+		country_event = { id = XSKIPER_QQE_basic.504 }
+		country_event = { id = XSKIPER_QQE_basic.505 }
+		country_event = { id = XSKIPER_QQE_basic.506 }
+		country_event = { id = XSKIPER_QQE_basic.507 }
+		country_event = { id = XSKIPER_QQE_basic.508 }
+		country_event = { id = XSKIPER_QQE_basic.509 }
+		country_event = { id = XSKIPER_QQE_basic.510 }
+	}
+}
+##################################################
+#飞地菜单
+#算是核心事件，通过该事件开始，实现你想要实现的各种乱七八糟的功能
+##################################################
+country_event = {
+	id = XSKIPER_QQE_basic.300
+	title = XSKIPER_QQE_basic.300.title	#事件标题
+	desc = XSKIPER_QQE_basic.300.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+	custom_gui = XSKIPER_CAFE_window
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_country
+		room = enclave_curator_room
+	}
+	
+	
+	immediate = {
+		
+	}
+	abort_trigger = {
+		NOT = {
+			has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.300.a	#选项1
+		custom_gui = XSKIPER_CAFE_option
+		allow = {
+			always = no
+		}
+	}
+}
+#退出提示
+country_event = {
+	id = XSKIPER_QQE_basic.301
+	title = XSKIPER_QQE_basic.301.title	#事件标题
+	desc = XSKIPER_QQE_basic.301.desc		#事件文本
+	picture = GFX_evt_galactic_market
+
+	is_triggered_only = yes		#通过舰队被摧毁的*触发器*触发，即on_fleet_destroyed_perp，from即被摧毁舰队的所有者，fromfromfrom即被摧毁舰队
+	abort_trigger = {
+		NOT = {
+			has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+		}
+	}
+
+	option = {
+		name = OK	#事件选项
+	}
+}
+
+####################################################################################
+#飞地空间站被消灭
+#这个事件并没有做什么敌对减少信任的事件，所以，嗯，你们自学罢
+#这个事件在飞地空间站被消灭时触发
+####################################################################################
+country_event = {
+	id = XSKIPER_QQE_basic.4
+	title = XSKIPER_QQE_basic.4.title	#事件标题
+	desc = XSKIPER_QQE_basic.4.desc		#事件文本
+	picture = GFX_evt_small_space_battle	#事件插图
+
+	is_triggered_only = yes		#通过舰队被摧毁的*触发器*触发，即on_fleet_destroyed_perp，from即被摧毁舰队的所有者，fromfromfrom即被摧毁舰队
+	trigger = {
+		from = {	#遇害舰队的所有者
+			has_country_flag = QQE_XSKIPER_CAFE_enclave_country	#拥有你的⭐国家标签⭐
+		}
+		fromfromfrom = {	#遇害舰队
+			has_fleet_flag = QQE_XSKIPER_CAFE_enclave_station	#拥有你的飞地空间站标签
+		}
+	}
+
+	option = {
+		name = XSKIPER_QQE_basic.4.a	#事件选项
+		add_resource = {
+			exotic_gases = 2000
+			volatile_motes = 2000
+			society_research = 5000
+		}
+	}
+}
+country_event = {
+	id = XSKIPER_QQE_basic.400
+	title = XSKIPER_QQE_basic.400.title	#事件标题
+	desc = XSKIPER_QQE_basic.400.desc		#事件文本
+	picture = GFX_evt_small_space_battle	#事件插图
+
+	is_triggered_only = yes		#通过舰队被摧毁的*触发器*触发，即on_fleet_destroyed_perp，from即被摧毁舰队的所有者，fromfromfrom即被摧毁舰队
+	trigger = {
+		from = {	#遇害舰队的所有者
+			has_country_flag = QQE_XSKIPER_CAFE_enclave_country	#拥有你的⭐国家标签⭐
+		}
+		fromfromfrom = {	#遇害舰队
+			has_fleet_flag = QQE_XSKIPER_CAFE_enclave_station_main	#拥有你的飞地空间站标签
+		}
+	}
+	immediate = {
+		from = {
+			destroy_country = yes
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.400.a	#事件选项
+		add_resource = {
+			exotic_gases = 2000
+			volatile_motes = 2000
+			society_research = 5000
+		}
+	}
+}
+##################################################################################################################
+#重点参数
+#这里陈列一些重点参数，你可以直接全文替换来达到新建飞地的目的
+#####文件的namespace（也改变了本地化条目）
+#XSKIPER_QQE_basic
+#####国家名称
+#NAME_XSKIPER_CAFE_country
+#####种族名称
+#NAME_XSKIPER_CAFE_species
+#NAME_XSKIPER_CAFE_species_plural（复数）
+#####空间站名称
+#NAME_QQE_enclave_Station
+#####⭐国家标签⭐country_flag
+#QQE_XSKIPER_CAFE_enclave_country
+#####⭐空间站标签⭐fleet_flag
+#QQE_XSKIPER_CAFE_enclave_station
+##################################################################################################################
+#其它小贴士
+#政府（government）可以随着⭐国家标签⭐改变，这一点请参考common的government文件夹
+#乱七八糟的政体，民政都对这个政府没啥影响，而特质完全就是做着好看，除非你需要刷出人口
+#建立联系也可以使用别的方式————比如使用进入星系的触发器，自己改罢
+#没了。
+
+
+
+#领袖头像菜单
+	country_event = {
+		id = XSKIPER_QQE_basic.5
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_1
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.500
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait2
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_2
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.501
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait3
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_3
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.502
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait4
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_4
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.503
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait5
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_5
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.504
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait6
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_6
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.505
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait7
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_7
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.506
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait8
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_8
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.507
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait9
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_9
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.508
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait10
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_10
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.509
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait11
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_11
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+	country_event = {
+		id = XSKIPER_QQE_basic.510
+		title = OK	#事件标题
+		desc = OK		#事件文本
+
+		is_triggered_only = yes
+		diplomatic = yes
+		custom_gui = XSKIPER_CAFE_window_small_portrait12
+		picture_event_data = {
+			portrait = event_target:XSKIPER_show_leader_12
+			room = enclave_curator_room
+		}
+
+		immediate = {
+		}
+
+
+		abort_trigger = {
+			NOT = {
+				has_country_flag = QQE_XSKIPER_CAFE_CONTACTING
+			}
+		}
+		option = {
+			name = OK
+			allow = { always = no }
+		}
+	}
+#领袖提交选择
+country_event = {
+	id = XSKIPER_QQE_basic.6
+	title = XSKIPER_QQE_basic.6.title
+	desc = XSKIPER_QQE_basic.6.desc
+	picture = GFX_evt_acquire_asset
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = XSKIPER_CAFE_submiting_leader
+		}
+	}
+
+	immediate = {
+		set_country_flag = XSKIPER_CAFE_submiting_leader
+		every_owned_leader = {
+			limit = {
+				NOT = {
+					leader_class = ruler
+				}
+			}
+			if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_1 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_1
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_2 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_2
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_3 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_3
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_4 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_4
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_5 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_5
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_6 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_6
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_7 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_7
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_8 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_8
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_9 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_9
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_10 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_10
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_11 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_11
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_12 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_12
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_13 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_13
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_14 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_14
+			}
+			else_if = {
+				limit = { NOT = { exists = event_target:XSKIPER_SUB_LEADER_15 } }
+				save_event_target_as = XSKIPER_SUB_LEADER_15
+			}
+			set_variable = {
+				which = XSKIPER_CAFE_leader_has_level
+				value = trigger:has_level
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a1
+		custom_tooltip = XSKIPER_QQE_basic.6.a1tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_1 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_1 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a2
+		custom_tooltip = XSKIPER_QQE_basic.6.a2tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_2 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_2 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a3
+		custom_tooltip = XSKIPER_QQE_basic.6.a3tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_3 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_3 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a4
+		custom_tooltip = XSKIPER_QQE_basic.6.a4tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_4 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_4 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a5
+		custom_tooltip = XSKIPER_QQE_basic.6.a5tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_5 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_5 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a6
+		custom_tooltip = XSKIPER_QQE_basic.6.a6tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_6 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_6 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a7
+		custom_tooltip = XSKIPER_QQE_basic.6.a7tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_7 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_7 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a8
+		custom_tooltip = XSKIPER_QQE_basic.6.a8tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_8 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_8 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a9
+		custom_tooltip = XSKIPER_QQE_basic.6.a9tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_9 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_9 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a10
+		custom_tooltip = XSKIPER_QQE_basic.6.a10tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_10 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_10 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a11
+		custom_tooltip = XSKIPER_QQE_basic.6.a11tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_11 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_11 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a12
+		custom_tooltip = XSKIPER_QQE_basic.6.a12tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_12 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_12 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a13
+		custom_tooltip = XSKIPER_QQE_basic.6.a13tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_13 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_13 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a14
+		custom_tooltip = XSKIPER_QQE_basic.6.a14tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_14 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_14 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.a15
+		custom_tooltip = XSKIPER_QQE_basic.6.a15tip
+		trigger = { exists = event_target:XSKIPER_SUB_LEADER_15 }
+		hidden_effect = { event_target:XSKIPER_SUB_LEADER_15 = { save_event_target_as = XSKIPER_SUB_LEADER } }
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.b
+		default_hide_option = yes
+	}
+	after = {
+		hidden_effect = {
+			remove_country_flag = XSKIPER_CAFE_submiting_leader
+			if = {
+				limit = { exists = event_target:XSKIPER_SUB_LEADER }
+				event_target:XSKIPER_SUB_LEADER = {
+					set_owner = event_target:XSKIPER_CAFE_country
+					unassign_leader = this
+					add_trait = XSKIPER_CAFE_STUFF
+					set_variable = {
+						which = XSKIPER_CAFE_LEADER_AGE
+						value = trigger:leader_age
+					}
+					event_target:XSKIPER_CAFE_country = {
+						change_variable = { which = XSKIPER_CAFE_leader_COUNT value = 1 }
+						prev = { set_variable = { which = XSKIPER_CAFE_leader_ID value = prev.XSKIPER_CAFE_leader_COUNT } }
+					}
+				}
+				XSKIPER_refresh_leader_target = yes
+			}
+		}
+	}
+}
+#领袖工作设定
+country_event = {
+	id = XSKIPER_QQE_basic.7
+	title = XSKIPER_QQE_basic.7.title
+	desc = XSKIPER_QQE_basic.7.desc
+	picture = GFX_evt_signing
+
+
+	is_triggered_only = yes
+	option = {
+		name = XSKIPER_QQE_basic.7.none
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 0 }
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.7.a
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 1 }
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.7.b
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 2 }
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.7.c
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 3 }
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.7.d
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 4 }
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.7.e
+		trigger = { has_global_flag = XSKIPER_DP_5_UNLOCKED }
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 5 }
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.7.f
+		trigger = { has_global_flag = XSKIPER_DP_6_UNLOCKED }
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 6 }
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.7.g
+		trigger = { has_global_flag = XSKIPER_DP_7_UNLOCKED }
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 7 }
+			}
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.7.h
+		trigger = {
+			always = no
+		}
+		hidden_effect = {
+			event_target:XSKIPER_assignment_leader = {
+				set_variable = { which = XSKIPER_CAFE_leader_department value = 8 }
+			}
+		}
+	}
+}
+#领袖加点
+country_event = {
+	id = XSKIPER_QQE_basic.700
+	title = OK
+	desc = OK
+	diplomatic = yes
+	is_triggered_only = yes
+	custom_gui = XSKIPERCAFEAddPoint
+	abort_trigger = { NOT = { has_country_flag = QQE_XSKIPER_CAFE_CONTACTING } }
+	abort_effect = { clear_global_event_target = XSKIPER_UPGRADE_LEADER }
+	option = { name = OK hidden_effect = { clear_global_event_target = XSKIPER_UPGRADE_LEADER } default_hide_option = yes }
+}
+#领袖初始数值获取
+country_event = {
+	id = XSKIPER_QQE_basic.8
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = { }
+
+	immediate = {
+		from = {
+			if = {
+				limit = { 
+					is_event_leader = no
+				}
+				random_list = {
+					3 = { set_variable = { which = XSKIPER_CAFE_LEADER_RANK value = 5 } }
+					7 = { set_variable = { which = XSKIPER_CAFE_LEADER_RANK value = 4 } set_variable = { which = XSKIPER_CAFE_LEADER_RANK_need value = 40 } }
+					20 = { set_variable = { which = XSKIPER_CAFE_LEADER_RANK value = 3 } set_variable = { which = XSKIPER_CAFE_LEADER_RANK_need value = 30 } }
+					30 = { set_variable = { which = XSKIPER_CAFE_LEADER_RANK value = 2 } set_variable = { which = XSKIPER_CAFE_LEADER_RANK_need value = 20 } }
+					40 = { set_variable = { which = XSKIPER_CAFE_LEADER_RANK value = 1 } set_variable = { which = XSKIPER_CAFE_LEADER_RANK_need value = 10 } }
+				}
+			}
+			else = {
+				random_list = {
+					5 = { set_variable = { which = XSKIPER_CAFE_LEADER_RANK value = 5 } }
+					10 = { set_variable = { which = XSKIPER_CAFE_LEADER_RANK value = 4 } }
+					10 = { set_variable = { which = XSKIPER_CAFE_LEADER_RANK value = 3 } }
+				}
+			}
+
+			set_variable = {
+				which = XSKIPER_CAFE_LEADER_TOTAL_level
+				value = XSKIPER_CAFE_LEADER_RANK
+			}
+			multiply_variable = {
+				which = XSKIPER_CAFE_LEADER_TOTAL_level
+				value = 5
+			}
+			change_variable = {
+				which = XSKIPER_CAFE_LEADER_TOTAL_level
+				value = 10
+			}
+			change_variable = { which = XSKIPER_CAFE_LEADER_TOTAL_level value = trigger:has_level }
+			change_variable = { which = XSKIPER_CAFE_LEADER_TOTAL_level value = trigger:has_level }
+			
+			set_variable = { which = XSKIPER_CAFE_LEADER_level_tech value = 0 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_level_com value = 0 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_level_fitness value = 1 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_level_mental value = 0 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_level_inspiration value = 0 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_level_appearance value = 0 }
+			while = {
+				count = XSKIPER_CAFE_LEADER_TOTAL_level
+				random_list = {
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_tech value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_com value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_fitness value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_mental value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_inspiration value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_appearance value = 1 }
+					}
+				}
+			}
+			switch = {
+				trigger = leader_class
+				scientist = {
+					change_variable = { which = XSKIPER_CAFE_LEADER_level_tech value = 5 }
+					random_list = {
+						1 = {
+							change_variable = { which = XSKIPER_CAFE_LEADER_level_com value = 5 }
+						}
+						1 = {
+							change_variable = { which = XSKIPER_CAFE_LEADER_level_inspiration value = 5 }
+						}
+					}
+				}
+				governor = {
+					change_variable = { which = XSKIPER_CAFE_LEADER_level_com value = 5 }
+					change_variable = { which = XSKIPER_CAFE_LEADER_level_mental value = 5 }
+				}
+				admiral = {
+					change_variable = { which = XSKIPER_CAFE_LEADER_level_fitness value = 5 }
+					random_list = {
+						1 = {
+							change_variable = { which = XSKIPER_CAFE_LEADER_level_mental value = 5 }
+						}
+						1 = {
+							change_variable = { which = XSKIPER_CAFE_LEADER_level_inspiration value = 5 }
+						}
+						1 = {
+							change_variable = { which = XSKIPER_CAFE_LEADER_level_com value = 5 }
+						}
+					}
+				}
+				general = {
+					change_variable = { which = XSKIPER_CAFE_LEADER_level_fitness value = 5 }
+					random_list = {
+						1 = {
+							change_variable = { which = XSKIPER_CAFE_LEADER_level_mental value = 5 }
+						}
+						1 = {
+							change_variable = { which = XSKIPER_CAFE_LEADER_level_inspiration value = 5 }
+						}
+						1 = {
+							change_variable = { which = XSKIPER_CAFE_LEADER_level_com value = 5 }
+						}
+					}
+				}
+			}
+			#体力
+			set_variable = { which = XSKIPER_CAFE_LEADER_power value = XSKIPER_CAFE_LEADER_level_fitness }
+
+			#经验和等级
+			set_variable = { which = XSKIPER_CAFE_LEADER_EXP value = 0 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_LEVEL value = 1 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_LEVEL_NEED value = 100 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_LEVEL_NEED_data value = 10 }
+			set_variable = { which = XSKIPER_CAFE_LEADER_SKILL_POINT value = 0 }
+		}
+	}
+}
+#领袖升级
+country_event = {
+	id = XSKIPER_QQE_basic.801
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = { }
+	immediate = {
+		from = {
+			while = {
+				count = 3
+				random_list = {
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_tech value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_com value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_fitness value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_mental value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_inspiration value = 1 }
+					}
+					1 = {
+						change_variable = { which = XSKIPER_CAFE_LEADER_level_appearance value = 1 }
+					}
+				}
+			}
+		}
+	}
+}
+####################################
+#咖啡馆运营
+####################################
+event = {
+	id = XSKIPER_QQE_basic.800
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:XSKIPER_CAFE_country
+	}
+
+	immediate = {
+		event_target:XSKIPER_CAFE_country = {
+			XSKIPER_CAFE_DP_CALC = yes
+			XSKIPER_CAFE_DP_WORK = yes
+		}
+	}
+}
+####################################
+#选择咖啡
+####################################
+#一号槽
+country_event = {
+	id = XSKIPER_QQE_basic.900
+	title = XSKIPER_QQE_basic.900.title
+	desc = XSKIPER_QQE_basic.900.desc
+
+	is_triggered_only = yes
+	after = {
+		hidden_effect = { XSKIPER_CAFE_COFFEE_ADD_MODIFIER = yes }
+	}
+
+	option = {
+		name = XSKIPER_COFFEE_0
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_1
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 1 } }
+		custom_tooltip = XSKIPER_COFFEE_1_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_1 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_1_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_2
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 2 } }
+		custom_tooltip = XSKIPER_COFFEE_2_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_2 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_2_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_3
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 3 } }
+		custom_tooltip = XSKIPER_COFFEE_3_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_3 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_3_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_4
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 4 } }
+		custom_tooltip = XSKIPER_COFFEE_4_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_4 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_4_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_5
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 5 } }
+		custom_tooltip = XSKIPER_COFFEE_5_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_5 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_5_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_6
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 6 } }
+		custom_tooltip = XSKIPER_COFFEE_6_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_6 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_6_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_7
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 7 } }
+		custom_tooltip = XSKIPER_COFFEE_7_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_7 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_7_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_8
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 8 } }
+		custom_tooltip = XSKIPER_COFFEE_8_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_8 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_8_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_9
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 9 } }
+		custom_tooltip = XSKIPER_COFFEE_9_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_9 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_9_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_10
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 10 } }
+		custom_tooltip = XSKIPER_COFFEE_10_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_10 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_10_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_11
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 11 } }
+		custom_tooltip = XSKIPER_COFFEE_11_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_11 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_11_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_12
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 12 } }
+		custom_tooltip = XSKIPER_COFFEE_12_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_12 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_12_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_13
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 13 } }
+		custom_tooltip = XSKIPER_COFFEE_13_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_13 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_13_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_14
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 14 } }
+		custom_tooltip = XSKIPER_COFFEE_14_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_14 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_14_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_15
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 15 } }
+		custom_tooltip = XSKIPER_COFFEE_15_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_15 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_15_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_16
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 16 } }
+		custom_tooltip = XSKIPER_COFFEE_16_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_16 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_16_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_17
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 17 } }
+		custom_tooltip = XSKIPER_COFFEE_17_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_17 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_17_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_18
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 18 } }
+		custom_tooltip = XSKIPER_COFFEE_18_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_18 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_18_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_19
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 19 } }
+		custom_tooltip = XSKIPER_COFFEE_19_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_19 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_19_1
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_20
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_1 = { COUNT = 20 } }
+		custom_tooltip = XSKIPER_COFFEE_20_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_20 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 1 }
+			set_global_flag = XSKIPER_COFFEE_20_1
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.b
+	}
+}
+#二号槽
+country_event = {
+	id = XSKIPER_QQE_basic.901
+	title = XSKIPER_QQE_basic.900.title
+	desc = XSKIPER_QQE_basic.900.desc
+
+	is_triggered_only = yes
+	after = {
+		hidden_effect = { XSKIPER_CAFE_COFFEE_ADD_MODIFIER = yes }
+	}
+	option = {
+		name = XSKIPER_COFFEE_0
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_1
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 1 } }
+		custom_tooltip = XSKIPER_COFFEE_1_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_1 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_1_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_2
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 2 } }
+		custom_tooltip = XSKIPER_COFFEE_2_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_2 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_2_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_3
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 3 } }
+		custom_tooltip = XSKIPER_COFFEE_3_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_3 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_3_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_4
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 4 } }
+		custom_tooltip = XSKIPER_COFFEE_4_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_4 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_4_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_5
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 5 } }
+		custom_tooltip = XSKIPER_COFFEE_5_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_5 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_5_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_6
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 6 } }
+		custom_tooltip = XSKIPER_COFFEE_6_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_6 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_6_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_7
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 7 } }
+		custom_tooltip = XSKIPER_COFFEE_7_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_7 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_7_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_8
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 8 } }
+		custom_tooltip = XSKIPER_COFFEE_8_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_8 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_8_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_9
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 9 } }
+		custom_tooltip = XSKIPER_COFFEE_9_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_9 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_9_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_10
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 10 } }
+		custom_tooltip = XSKIPER_COFFEE_10_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_10 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_10_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_11
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 11 } }
+		custom_tooltip = XSKIPER_COFFEE_11_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_11 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_11_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_12
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 12 } }
+		custom_tooltip = XSKIPER_COFFEE_12_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_12 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_12_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_13
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 13 } }
+		custom_tooltip = XSKIPER_COFFEE_13_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_13 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_13_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_14
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 14 } }
+		custom_tooltip = XSKIPER_COFFEE_14_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_14 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_14_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_15
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 15 } }
+		custom_tooltip = XSKIPER_COFFEE_15_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_15 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_15_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_16
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 16 } }
+		custom_tooltip = XSKIPER_COFFEE_16_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_16 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_16_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_17
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 17 } }
+		custom_tooltip = XSKIPER_COFFEE_17_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_17 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_17_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_18
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 18 } }
+		custom_tooltip = XSKIPER_COFFEE_18_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_18 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_18_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_19
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 19 } }
+		custom_tooltip = XSKIPER_COFFEE_19_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_19 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_19_2
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_20
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_2 = { COUNT = 20 } }
+		custom_tooltip = XSKIPER_COFFEE_20_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_20 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 2 }
+			set_global_flag = XSKIPER_COFFEE_20_2
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.b
+	}
+}
+#三号槽
+country_event = {
+	id = XSKIPER_QQE_basic.902
+	title = XSKIPER_QQE_basic.900.title
+	desc = XSKIPER_QQE_basic.900.desc
+
+	is_triggered_only = yes
+	after = {
+		hidden_effect = { XSKIPER_CAFE_COFFEE_ADD_MODIFIER = yes }
+	}
+	option = {
+		name = XSKIPER_COFFEE_0
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_1
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 1 } }
+		custom_tooltip = XSKIPER_COFFEE_1_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_1 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_1_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_2
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 2 } }
+		custom_tooltip = XSKIPER_COFFEE_2_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_2 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_2_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_3
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 3 } }
+		custom_tooltip = XSKIPER_COFFEE_3_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_3 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_3_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_4
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 4 } }
+		custom_tooltip = XSKIPER_COFFEE_4_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_4 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_4_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_5
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 5 } }
+		custom_tooltip = XSKIPER_COFFEE_5_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_5 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_5_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_6
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 6 } }
+		custom_tooltip = XSKIPER_COFFEE_6_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_6 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_6_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_7
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 7 } }
+		custom_tooltip = XSKIPER_COFFEE_7_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_7 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_7_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_8
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 8 } }
+		custom_tooltip = XSKIPER_COFFEE_8_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_8 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_8_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_9
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 9 } }
+		custom_tooltip = XSKIPER_COFFEE_9_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_9 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_9_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_10
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 10 } }
+		custom_tooltip = XSKIPER_COFFEE_10_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_10 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_10_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_11
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 11 } }
+		custom_tooltip = XSKIPER_COFFEE_11_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_11 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_11_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_12
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 12 } }
+		custom_tooltip = XSKIPER_COFFEE_12_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_12 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_12_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_13
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 13 } }
+		custom_tooltip = XSKIPER_COFFEE_13_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_13 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_13_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_14
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 14 } }
+		custom_tooltip = XSKIPER_COFFEE_14_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_14 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_14_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_15
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 15 } }
+		custom_tooltip = XSKIPER_COFFEE_15_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_15 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_15_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_16
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 16 } }
+		custom_tooltip = XSKIPER_COFFEE_16_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_16 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_16_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_17
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 17 } }
+		custom_tooltip = XSKIPER_COFFEE_17_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_17 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_17_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_18
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 18 } }
+		custom_tooltip = XSKIPER_COFFEE_18_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_18 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_18_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_19
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 19 } }
+		custom_tooltip = XSKIPER_COFFEE_19_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_19 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_19_3
+		}
+	}
+	option = {
+		name = XSKIPER_COFFEE_20
+		trigger = { XSKIPER_CAFE_ALLOW_TO_USE_3 = { COUNT = 20 } }
+		custom_tooltip = XSKIPER_COFFEE_20_desc
+		tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_20 multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } }
+		hidden_effect = {
+			XSKIPER_CAFE_COFFEE_REMOVE_flag = { COUNT = 3 }
+			set_global_flag = XSKIPER_COFFEE_20_3
+		}
+	}
+	option = {
+		name = XSKIPER_QQE_basic.6.b
+	}
+}

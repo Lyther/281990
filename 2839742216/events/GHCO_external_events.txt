@@ -1,0 +1,715 @@
+namespace = GHCO_external
+####################################################################################
+#判断局势
+####################################################################################
+event = {
+	id = GHCO_external.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = game_has_GHCO
+	}
+
+	immediate = {
+		#智械叛乱-被叛乱国
+		every_country = {
+			limit = { has_country_flag = had_uprising }
+			set_country_flag = GHCO_had_machine_uprising
+			country_event = { id = GHCO_external.2 }	#称GHC服务不受智械叛乱影响
+		}
+		#事后移除：没有叛乱的时候移除flag
+		every_country = {
+			limit = { not = { has_country_flag = had_uprising } }
+			remove_country_flag = GHCO_had_machine_uprising
+		}
+		#智械叛乱-叛乱国
+		every_country = {
+			limit = { has_country_flag = machine_uprising_country }
+			country_event = { id = GHCO_basic.3 }	#建立联系并开始两年观察期
+		}
+		#灾飞-3段
+		every_country = {
+			limit = { has_crisis_level = crisis_level_3 }
+			set_country_flag = GHCO_saw_becoming_crisis
+			country_event = { id = GHCO_external.8 }
+		}
+		#灾飞-4段
+		every_country = {
+			limit = { has_crisis_level = crisis_level_4 }
+			set_country_flag = GHCO_beware_becoming_crisis
+			#GHCO_save_crisis_country_evt_target = yes
+			every_country = {
+				limit = {
+					has_crisis_level = crisis_level_4
+				}
+				save_global_event_target_as = GHCO_crisis_country
+				break = yes
+			}
+			country_event = { id = GHCO_external.9 }
+		}
+		#灾飞-5段
+		every_country = {
+			limit = { has_crisis_level = crisis_level_5 }
+			set_country_flag = GHCO_hostile_becoming_crisis
+			country_event = { id = GHCO_external.10 }
+		}
+		#可汗相关
+		if = {	#可汗出现过了
+			limit = { 
+				has_global_flag = marauder_crisis_started 
+				NOT = { has_global_flag = great_khan_dead }
+			}
+			set_global_flag = GHCO_special_period
+			every_country = {
+				if = {		#可汗/可汗附属国
+					limit = {
+						or = {
+							and = {
+								is_subject = yes
+								any_agreement = { agreement_preset = preset_satrapy }
+							}
+							is_country_type = awakened_marauders
+						}
+					}
+					set_country_flag = GHCO_is_khan
+					remove_country_flag = GHCO_not_khan
+				}
+				else = {	#不是可汗国
+					remove_country_flag = GHCO_is_khan
+					set_country_flag = GHCO_not_khan
+					country_event = { id = GHCO_external.3 }
+				}
+				if = {		#没有大可汗时
+					limit = { not = { any_country = { is_country_type = awakened_marauders } } }
+					if = {	#没有天灾时移除特殊时期flag
+						limit = { not = { has_global_flag = GHCO_galatic_crisis_happened } }
+						remove_global_flag = GHCO_special_period
+						country_event = { id = GHCO_external.5 }	#取消GHC特殊服务
+					}
+					every_country = {
+						limit = { has_country_flag = GHCO_is_khan }
+						remove_country_flag = GHCO_is_khan
+					}
+				}
+			}
+		}
+		#天灾
+		else_if = {
+			limit = { has_global_flag = galactic_crisis_happened }
+			set_global_flag = GHCO_special_period
+			set_global_flag = GHCO_galatic_crisis_happened
+			every_country = {
+				limit = {
+					is_ai = no
+					has_event_chain = "ai_crisis_chain"		#肃正协议的事件链，不是幽灵信号
+				}
+				set_global_flag = GHCO_crisis_is_contingency
+			}
+			if = {	#有银河守护者
+				limit = { has_global_flag = guardians_of_the_galaxy_happened }
+				set_global_flag = GHCO_has_grardian_of_galacy
+				country_event = { id = GHCO_external.5 days = 5 }	#GHC发文支持银河守护者
+				every_country = {
+					limit = { has_country_flag = guardians_of_the_galaxy }
+					save_global_event_target_as = GHCO_guardian_of_galaxy
+				}
+			}
+			if = {	#有幽灵信号
+				limit = { any_country = { has_event_chain = "ghost_signal_chain" } }
+				country_event = { id = GHCO_external.7 }
+			}
+		}
+		#天堂之战
+		if = {
+			limit = { has_global_flag = war_in_heaven_recently_started }	#天堂之战发生5400天内
+			set_global_flag = GHCO_special_period
+			if = {
+				limit = {
+					any_war = {
+						using_war_goal = {
+							type = "wg_war_in_heaven"
+							owner = event_target:GHCO_EO
+						}
+					}
+				}
+				if = {
+					limit = {
+						any_war = {
+							using_war_goal = {
+								type = "wg_war_in_heaven"
+								owner = event_target:GHCO_KOK
+							}
+						}
+					}
+					set_global_flag = GHCO_war_in_heaven_two
+				}
+				else = {
+					set_global_flag = GHCO_war_in_heaven_one
+				}
+			}
+			else_if = {
+				limit = {
+					any_war = { 
+						using_war_goal = {
+							type = "wg_war_in_heaven"
+							owner = event_target:GHCO_KOK
+						}
+					}
+				}
+				set_global_flag = GHCO_war_in_heaven_one
+			}
+			else = {
+				set_global_flag = GHCO_war_in_heaven_three
+			}
+		}
+	}
+}
+
+####################################################################################
+#智械叛乱
+####################################################################################
+country_event = {
+	id = GHCO_external.2
+	title = "GHCO_external.2.title"
+	desc = "GHCO_external.2.desc"
+	is_triggered_only = yes
+ 
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		has_country_flag = had_uprising
+	}
+	fire_only_once = yes
+
+	option = {
+		name = "GHCO_external.2.name"
+	}
+}
+
+####################################################################################
+#大可汗
+####################################################################################
+country_event = {	#在可汗出现时提供特殊服务和资源
+	id = GHCO_external.3
+	title = "GHCO_external.3.title"
+	desc = "GHCO_external.3.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		has_country_flag = GHCO_not_khan
+	}
+	fire_only_once = yes
+	
+	option = {
+		name = "GHCO_external.3.name"
+		add_modifier = { modifier = GHC_special_service }
+		set_country_flag = has_GHC_service
+		set_country_flag = has_GHC_service_special
+		add_resource = {
+			energy = 10000
+			minerals = 5000
+			alloys = 2500
+			unity = 3000
+		}
+	}
+}
+
+country_event = {	# 对可汗国去除特殊服务
+	id = GHCO_external.4
+	title = "GHCO_external.4.title"
+	desc = "GHCO_external.4.desc"
+
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = GHCO_is_khan
+	}
+
+	immediate = {
+		remove_modifier = GHC_special_service 
+		remove_country_flag = has_GHC_service_special
+		if = {
+			limit = {
+				nor = {
+					has_country_flag = has_GHC_service_standard
+					has_country_flag = has_GHC_service_civil
+					has_country_flag = has_GHC_service_military
+					has_country_flag = has_GHC_service_tech
+					has_country_flag = has_GHC_service_special
+					has_country_flag = has_GHC_service_GHC
+				}
+			}
+			remove_country_flag = has_GHC_service
+		}
+	}
+
+	option = {
+		name = "GHCO_external.4.a"
+	}
+}
+
+####################################################################################
+#天灾
+####################################################################################
+country_event = {	#GHCO发文支持银河守护者
+	id = GHCO_external.5
+	title = "GHCO_external.5.title"
+	desc = "GHCO_external.5.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		has_global_flag = GHCO_has_grardian_of_galacy
+	}
+
+	option = {
+		name = "GHCO_external.5.a"
+		add_trust = {
+			amount = 10
+			who = event_target:GHCO_guardian_of_galaxy
+		}
+	}
+
+	immediate = {
+		country_event = { id = GHCO_external.6 days = 20 }
+	}
+}
+
+country_event = {	#银河守护者回应GHCO并公布技术
+	id = GHCO_external.6
+	title = "GHCO_external.6.title"
+	desc = "GHCO_external.6.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	option = {
+		name = "GHCO_external.6.a"
+		every_country = {
+			add_modifier = { modifier = advanced_jumpdrive_using }
+			add_trust = {
+				who = event_target:GHCO_guardian_of_galaxy
+				amount = 25
+			}
+			add_trust = {
+				who = event_target:GHCO
+				amount = 25
+			}
+		}
+	}
+}
+
+country_event = {	#幽灵信号时提供对应buff（低配版）
+	id = GHCO_external.7
+	title = "GHCO_external.7.title"
+	desc = "GHCO_external.7.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		any_country = {
+			has_event_chain = "ghost_signal_chain"
+		}
+	}
+	fire_only_once = yes
+
+	option = {
+		name = "GHCO_external.7.a"
+		every_owned_pop = {
+			limit = {
+				or = {
+					has_modifier = pop_ghost_signal_5
+					has_modifier = pop_ghost_signal_4
+					has_modifier = pop_ghost_signal_3
+					has_modifier = pop_ghost_signal_2
+					has_modifier = pop_ghost_signal_1
+					has_modifier = pop_ghost_signal_5_machine
+					has_modifier = pop_ghost_signal_4_machine
+				}
+			}
+			add_modifier = { modifier = GHCO_buff_against_ghost_signal_pop }
+		}
+		every_owned_ship = {
+			limit = {
+				or = {
+					has_modifier = ship_ghost_signal_5
+					has_modifier = ship_ghost_signal_4
+					has_modifier = ship_ghost_signal_3
+					has_modifier = ship_ghost_signal_2
+					has_modifier = ship_ghost_signal_1
+				}
+			}
+			add_modifier = { modifier = GHCO_buff_against_ghost_signal_ship }
+		}
+	}
+	option = {
+		name = "GHCO_external.7.b"
+	}
+}
+
+
+####################################################################################
+#灾飞
+####################################################################################
+country_event = {	#灾飞3段
+	id = GHCO_external.8
+	title = "GHCO_external.8.title"
+	desc = "GHCO_external.8.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	fire_only_once = yes
+
+	option = {
+		name = "GHCO_external.8.name"
+	}
+}
+
+country_event = {	#灾飞4段
+	id = GHCO_external.9
+	title = "GHCO_external.9.title"
+	desc = "GHCO_external.9.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	fire_only_once = yes
+
+	option = {
+		name = "GHCO_external.9.name"
+	}
+
+	immediate = {
+		every_country = {
+			limit = { 
+				has_crisis_level = crisis_level_4 
+				not = { has_country_flag = GHCO_has_banned_service_crisis }
+			}
+			event_target:GHCO_crisis_country = {
+				#信任等级重置为1
+				GHCO_set_trust_level_1 = yes
+				#停止灾飞国家的GHC服务
+				remove_modifier = GHC_standard_service
+				remove_country_flag = has_GHC_service_standard
+				remove_modifier = GHC_civil_service
+				remove_country_flag = has_GHC_service_civil
+				remove_modifier = GHC_military_service
+				remove_country_flag = has_GHC_service_military
+				remove_modifier = GHC_tech_service
+				remove_country_flag = has_GHC_service_tech
+				remove_modifier = GHC_special_service
+				remove_country_flag = has_GHC_service_special
+				remove_country_flag = has_GHC_service
+				#好感度-100
+				event_target:GHCO = {
+					add_trust = {
+						who = prev
+						amount = -100
+					}
+				}
+				#防止多次被执行以上操作
+				set_country_flag = GHCO_has_banned_service_crisis
+			}
+		}
+	}
+}
+
+country_event = {	#灾飞5段
+	id = GHCO_external.10
+	title = "GHCO_external.10.title"
+	desc = "GHCO_external.10.desc"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	fire_only_once = yes
+
+	option = {
+		name = "GHCO_external.10.name"
+	}
+
+	immediate = {
+		every_country = {
+			limit = { 
+				has_crisis_level = crisis_level_5 #改到这里
+				not = { has_country_flag = GHCO_has_banned_service_crisis_ }
+			}
+			event_target:GHCO_crisis_country = {
+				#信任等级重置为0
+				remove_country_flag = GHCO_trust_level_1
+				remove_country_flag = GHCO_trust_level_2
+				remove_country_flag = GHCO_trust_level_3
+				set_country_flag = GHCO_trust_level_0
+				#永久观察期
+				set_country_flag = GHCO_permanent_observation
+				#好感度-100
+				event_target:GHCO = {
+					add_trust = {
+						who = prev
+						amount = -200
+					}
+				}
+				#防止多次被执行以上操作
+				set_country_flag = GHCO_has_banned_service_crisis_
+				#全面制裁
+				country_event = { id = GHCO_external.12 }
+			}
+		}
+	}
+}
+
+####################################################################################
+#制裁
+####################################################################################
+country_event = {	#常规制裁
+	id = GHCO_external.11
+	title = "GHCO_external.11.title"
+	desc = "GHCO_external.11.desc"
+	is_triggered_only = yes	#on_yaer_pulse_country
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		not = { has_country_flag = GHCO_standard_sanctions }
+	}
+
+	option = {
+		name = "GHCO_external.11.a"
+	}
+	option = {
+		name = "GHCO_external.11.b"
+	}
+
+	after = {
+		every_country = {
+			limit = {
+				has_communications = event_target:GHCO
+				nor = {
+					has_country_flag = GHCO_standard_sanctions
+					has_country_flag = GHCO_comprehensive_sanctions
+					has_country_flag = GHCO_two_years_observation
+					has_country_flag = GHCO_two_years_observation_
+				}
+			}
+			add_trust = {
+				who = root
+				amount = -5
+			}
+		}
+		add_modifier = { modifier = GHCO_standard_sanction }
+	}
+}
+
+country_event = {	#全面制裁
+	id = GHCO_external.12
+	title = "GHCO_external.12.title"
+	desc = "GHCO_external.12.desc"
+	is_triggered_only = yes	#on_yaer_pulse_country
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		not = { has_country_flag = GHCO_comprehensive_sanctions }
+	}
+
+	option = {
+		name = "GHCO_external.11.a"
+	}
+	option = {
+		name = "GHCO_external.11.b"
+	}
+
+	after = {
+		every_country = {
+			limit = {
+				has_communications = event_target:GHCO
+				nor = {
+					has_country_flag = GHCO_standard_sanctions
+					has_country_flag = GHCO_comprehensive_sanctions
+					has_country_flag = GHCO_two_years_observation
+					has_country_flag = GHCO_two_years_observation_
+				}
+			}
+			add_trust = {
+				who = root
+				amount = -10
+			}
+		}
+		add_modifier = { modifier = GHCO_comprehensive_sanction }
+		country_event = { id = GHCO_external.13 days = 360 }
+	}
+
+}
+
+country_event = {
+	id = GHCO_external.13
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = GHCO_comprehensive_sanctions
+	}
+
+	immediate = {
+		random_list = {
+			10 = { country_event = { id = GHCO_external.14 }}
+			90 = { country_event = { id = GHCO_external.13 days = 360 }}
+		}
+	}
+}
+
+country_event = {	#信息攻击
+	id = GHCO_external.14
+	title = "GHCO_external.14.title"
+	desc = "GHCO_external.14.desc"
+	is_triggered_only = yes
+	picture = GFX_evt_glitchy_matrix
+
+	trigger = {
+		has_country_flag = GHCO_comprehensive_sanctions
+	}
+
+	option = {
+		name = "GHCO_external.14.a"
+	}
+	option = {
+		name = "GHCO_external.14.b"
+	}
+
+	after = {
+		add_resource = { unity = -1000 }
+		country_event = { id = GHCO_external.13 days = 360 }
+	}
+}
+ 
+####################################################################################
+#特殊服务
+####################################################################################
+# 宣布提供特殊服务
+country_event = {
+	id = GHCO_external.15
+	title = "GHCO_external.15.title"
+	desc = "GHCO_external.15.desc"
+	is_triggered_only = yes	# GHCO_basic.100
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {}
+
+	immediate = {}
+
+	option = {
+		name = "GHCO_external.15.a"
+		add_modifier = { modifier = GHC_special_service }
+		hidden_effect = {
+			set_country_flag = has_GHC_service_special
+		}
+	}
+}
+
+# 宣布取消特殊服务
+country_event = {
+	id = GHCO_external.16
+	title = "GHCO_external.16.title"
+	desc = "GHCO_external.16.desc"
+	is_triggered_only = yes	# GHCO_basic.100
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {}
+
+	immediate = {}
+
+	option = {
+		name = "GHCO_external.16.a"
+		remove_modifier = GHC_special_service 
+		hidden_effect = {
+			remove_country_flag = has_GHC_service_special
+		}
+	}
+}

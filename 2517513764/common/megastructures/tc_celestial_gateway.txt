@@ -1,0 +1,203 @@
+#仙域之门
+tc_celestial_gateway_0 = {
+	entity = "celestial_gateway_block_entity"
+	construction_entity = "celestial_gateway_block_entity"
+	portrait = "GFX_megastructure_tc_celestial_gateway"
+	place_entity_on_planet_plane = no
+	build_outside_gravity_well = yes 
+	show_galactic_map_icon = no
+
+	construction_blocks_and_blocked_by = self_type
+
+	build_time = 360
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 256
+			unity = 512
+		}
+
+		upkeep = {
+		}
+	}
+
+	prerequisites = { tc_tech_celestial_gateway }
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_tc_gateway"
+			NOR = {
+				has_megastructure = tc_celestial_gateway_0
+				has_megastructure = tc_celestial_gateway_1
+				has_megastructure = tc_celestial_gateway_2
+				has_megastructure = tc_celestial_gateway
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		#移除平台并于恒星旁生成下一阶段
+		spawn_megastructure = {
+			type = tc_celestial_gateway_1
+			planet = star
+			owner = from
+			orbit_distance = 30
+			orbit_angle = 15
+		}
+		remove_megastructure = FROMFROM	
+	}
+}
+tc_celestial_gateway_1 = {
+	entity = "celestial_gateway_block_entity"
+	construction_entity = "celestial_gateway_block_entity"
+	portrait = "GFX_megastructure_tc_celestial_gateway"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_celestial_gateway_0 }
+	#show_galactic_map_icon = no
+
+	construction_blocks_and_blocked_by = self_type
+
+	build_time = 360
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 256
+		}
+
+		upkeep = {
+			tc_essences = 4
+		}
+	}
+
+	prerequisites = { tc_tech_celestial_gateway }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = { 
+		tc_megastructure_message = yes
+	}
+}
+tc_celestial_gateway_2 = {
+	entity = "celestial_gateway_block_entity"
+	construction_entity = "celestial_gateway_block_entity"
+	portrait = "GFX_megastructure_tc_celestial_gateway"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_celestial_gateway_1 }
+	show_galactic_map_icon = no
+
+	construction_blocks_and_blocked_by = self_type
+
+	build_time = 360
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 256
+		}
+
+		upkeep = {
+			tc_essences = 4
+		}
+	}
+
+	prerequisites = { tc_tech_celestial_gateway }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = { 
+		#从恒星上移开
+		spawn_megastructure = {
+			type = tc_celestial_gateway
+			coords_from = FROMFROM
+			owner = from
+			orbit_distance = 30
+			orbit_angle = 15
+		}
+		remove_megastructure = FROMFROM
+	}
+}
+tc_celestial_gateway = {
+	entity = "celestial_gateway_01_entity"
+	construction_entity = "celestial_gateway_01_entity"
+	portrait = "GFX_megastructure_tc_celestial_gateway"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_celestial_gateway_2 }
+	show_galactic_map_icon = no
+	show_in_outliner = no
+
+	bypass_type = tc_celestial_gateway_net
+
+	construction_blocks_and_blocked_by = self_type
+
+	build_time = 360
+	resources = {
+		category = megastructures
+		cost = {
+			tc_element_shard = 64
+			unity = 512
+		}
+		upkeep = {
+			tc_essences = 8
+		}
+	}
+
+	prerequisites = { tc_tech_celestial_gateway }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		activate_gateway = fromfrom
+	}
+}
+
+tc_temp_celestial_gateway = {
+	entity = "celestial_gateway_ring_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_celestial_gateway"
+	place_entity_on_planet_plane = no
+	show_galactic_map_icon = no
+	show_in_outliner = no
+
+	bypass_type = tc_celestial_gateway_net
+
+	construction_blocks_and_blocked_by = self_type
+
+	build_time = 360
+
+	possible = {
+		always = no
+	}
+	potential = {
+		always = no
+	}
+
+	resources = {
+		category = megastructures
+		cost = {
+			tc_element_shard = 64
+			unity = 512
+		}
+		upkeep = {
+			tc_essences = 8
+		}
+	}
+
+	prerequisites = { tc_tech_celestial_gateway }
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		activate_gateway = fromfrom
+		FROMFROM = {
+			upgrade_megastructure_to = tc_auto_remove
+			set_halted = 240 
+		}
+	}
+}

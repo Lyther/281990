@@ -1,0 +1,2396 @@
+
+namespace = origin_pirate_king
+
+country_event = {
+	id = origin_pirate_king.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	# This = owner of ship 1 (combatant)
+	# From = owner of ship 2 (destroyed)
+	# FromFrom = ship 1
+	# FromFromFrom = ship 2
+
+	trigger = {
+		OR = {
+			has_origin = origin_pirate_king
+			has_origin = origin_pirate_king_end
+		}
+		From = {
+			OR = {
+				is_ai = no
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+				is_country_type = pirate
+				is_country_type = dormant_marauders
+				is_country_type = ruined_marauders
+				is_country_type = awakened_marauders
+				is_country_type = marauder_raiders
+				is_same_value = event_target:pirate_king_country
+				is_same_value = event_target:pirate_king_end_country
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_situation = {
+					is_situation_type = situation_origin_pirate_king
+				}
+			}
+			random_situation = {
+				limit = {
+					is_situation_type = situation_origin_pirate_king
+				}
+				save_event_target_as = pirate_king_situation
+			}
+		}
+		# 工程船
+		if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_class = shipclass_constructor
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 100
+				minerals = 50
+				progress = 1
+			}
+		}
+		# 无人科研船
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_class = shipclass_science_ship
+					NOT = { exists = leader }
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 100
+				food = 50
+				progress = 1
+			}
+		}
+		# 载人科研船
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_class = shipclass_science_ship
+					exists = leader
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 150
+				food = 50
+				unity = 25
+				progress = 2
+			}
+		}
+		# 殖民船
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_class = shipclass_colonizer
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 150
+				food = 50
+				consumer_goods = 25
+				progress = 2
+			}
+		}
+		# 运输船
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_class = shipclass_transport
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 150
+				minerals = 50
+				food = 50
+				progress = 2
+			}
+		}
+		# 防御平台
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_class = shipclass_military_station
+						is_ship_class = pirate_station
+						is_ship_class = marauder_station
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 400
+				minerals = 100
+				alloys = 50
+				progress = 2
+			}
+		}
+		# 恒星基地
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_class = shipclass_starbase
+						is_ship_class = marauder_void_dwelling
+					}
+					fleet = { is_mobile = no }
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 1600
+				minerals = 400
+				alloys = 200
+				progress = 5
+			}
+		}
+		# 护卫舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = corvette
+						is_ship_size = offspring_corvette
+						is_ship_size = pirate_corvette
+						is_ship_size = marauder_corvette
+						is_ship_size = bemat_corvette
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 150
+				minerals = 50
+				alloys = 25
+				progress = 2
+			}
+		}
+		# 灾飞护卫舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = crisis_corvette
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 150
+				minerals = 100
+				progress = 2
+			}
+		}
+		# 雷击舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = frigate
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 200
+				minerals = 75
+				alloys = 30
+				progress = 3
+			}
+		}
+		# 驱逐舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = destroyer
+						is_ship_size = offspring_destroyer
+						is_ship_size = small_ship_fallen_empire
+						is_ship_size = pirate_destroyer
+						is_ship_size = marauder_destroyer
+						is_ship_size = bemat_destroyer
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 400
+				minerals = 100
+				alloys = 50
+				progress = 5
+			}
+		}
+		# 灾飞驱逐舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = crisis_destroyer
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 400
+				minerals = 200
+				progress = 5
+			}
+		}
+		# 巡洋舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = cruiser
+						is_ship_size = offspring_cruiser
+						is_ship_size = pirate_cruiser
+						is_ship_size = marauder_cruiser
+						is_ship_size = bemat_cruiser
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 800
+				minerals = 200
+				alloys = 100
+				progress = 10
+			}
+		}
+		# 灾飞巡洋舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = crisis_cruiser
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 800
+				minerals = 400
+				progress = 10
+			}
+		}
+		# 战列舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = battleship
+						is_ship_size = offspring_battleship
+						is_ship_size = large_ship_fallen_empire
+						is_ship_size = marauder_galleon
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 1600
+				minerals = 400
+				alloys = 200
+				progress = 20
+			}
+		}
+		# 泰坦
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = titan
+						is_ship_size = massive_ship_fallen_empire
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				minerals = 800
+				alloys = 400
+				progress = 40
+			}
+		}
+		# 巨像
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = colossus
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				minerals = 800
+				alloys = 400
+				progress = 40
+			}
+		}
+		# 主宰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = juggernaut
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 6400
+				minerals = 1600
+				alloys = 800
+				progress = 80
+			}
+		}
+		# 焚天神兵
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = star_eater
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 6400
+				minerals = 1600
+				sr_dark_matter = 100
+				progress = 80
+			}
+		}
+		
+		# 黑洞行舟
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = horror_titan
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				sr_dark_matter = 250
+				progress = 40
+			}
+		}
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = time_titan
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				sr_dark_matter = 500
+				progress = 80
+			}
+		}
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = end_titan
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				sr_dark_matter = 1000
+				progress = 160
+			}
+		}
+		
+		# 以太幼龙
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = space_dragon_baby
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				food = 1600
+				progress = 40
+			}
+		}
+		# 毒圣
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = toxic_god
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				food = 1600
+				progress = 40
+			}
+		}
+		# 无畏战舰
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = npc_warship_01
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				minerals = 800
+				alloys = 400
+				progress = 40
+			}
+		}
+		# 天龙
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = space_dragon_origin
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				food = 1600
+				progress = 40
+			}
+		}
+		# 雏龙
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = space_dragon_origin_baby
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 1600
+				food = 800
+				progress = 20
+			}
+		}
+		# 虚空孳孽（生于黑夜起源）
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = leviathan_01_voidspawn
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				food = 1600
+				progress = 40
+			}
+		}
+		# L星龙
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = nanite_space_dragon_baby
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				nanites = 100
+				progress = 40
+			}
+		}
+		# 小泡泡
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = space_amoeba
+						is_ship_size = reanimated_space_amoeba
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 150
+				food = 100
+				progress = 2
+			}
+		}
+		# 大泡泡
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = space_amoeba_mother
+						is_ship_size = reanimated_space_amoeba_mother
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 400
+				food = 200
+				progress = 5
+			}
+		}
+		# 百岁泡泡
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = space_amoeba_centenarian
+						is_ship_size = reanimated_space_amoeba_centenarian
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 800
+				food = 400
+				progress = 10
+			}
+		}
+		# 战士
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = large_ship_swarm
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 1600
+				food = 800
+				progress = 20
+			}
+		}
+		# 育母
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = large_ship_carrier_swarm
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 1600
+				food = 800
+				progress = 20
+			}
+		}
+		# 幼虫
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = small_ship_swarm
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 400
+				food = 200
+				progress = 5
+			}
+		}
+		# 灰风
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = graygoo_mothership
+						# 底下是自用MOD的，原版没有
+						is_ship_size = graygoo_warship_1
+						is_ship_size = graygoo_warship_2
+						is_ship_size = graygoo_warship_3
+						is_ship_size = graygoo_warship_4
+						is_ship_size = graygoo_warship_5
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				nanites = 200
+				progress = 80
+			}
+		}
+		# 亡灵泰坦级
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = reanimated_space_dragon_red
+						is_ship_size = reanimated_space_dragon_blue
+						is_ship_size = reanimated_space_dragon_origin
+						is_ship_size = reanimated_leviathan_01_elder_tiyanki
+						is_ship_size = reanimated_leviathan_01_voidspawn
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				food = 1600
+				progress = 40
+			}
+		}
+		# 亡灵驱逐级
+		else_if = {
+			limit = {
+				FromFromFrom = {
+					OR = {
+						is_ship_size = reanimated_space_whale_1
+						is_ship_size = reanimated_space_whale_2
+						is_ship_size = reanimated_space_whale_3
+						is_ship_size = reanimated_space_whale_4
+					}
+				}
+			}
+			give_origin_pirate_king_bonus = {
+				energy = 400
+				food = 200
+				progress = 5
+			}
+		}
+		# 玩家其它MOD的其它舰船类型（统一视作泰坦）
+		else = {
+			give_origin_pirate_king_bonus = {
+				energy = 3200
+				minerals = 800
+				alloys = 400
+				progress = 40
+			}
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.1
+	title = "origin_pirate_king.1.name"
+	desc = "origin_pirate_king.1.desc"
+	picture = GFX_evt_small_space_battle
+	show_sound = event_ship_bridge
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_pirate_king
+	}
+	
+	immediate = {
+		capital_scope = {
+			random_list = {
+				2 = {
+					while = {
+						count = 5
+						add_deposit = d_pirate_king_blocker
+					}
+				}
+				2 = {
+					while = {
+						count = 4
+						add_deposit = d_pirate_king_blocker
+					}
+				}
+				3 = {
+					while = {
+						count = 3
+						add_deposit = d_pirate_king_blocker
+					}
+				}
+				3 = {
+					while = {
+						count = 2
+						add_deposit = d_pirate_king_blocker
+					}
+				}
+			}
+			add_deposit = d_pirate_king_rare_blocker
+		}
+		if = {
+			limit = {
+				NOT = { exists = event_target:pirate_king_country }
+			}
+			create_country = {
+				name = "NAME_Pirate_King_Country"
+				type = origin_pirate_king
+				species = root.species
+				flag={
+					icon={
+						category="pirate"
+						file="pirate_12.dds"
+					}
+					background={
+						category="backgrounds"
+						file="flag_BG_34.dds"
+					}
+					colors={
+						"black"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				auto_delete = no
+				effect = {
+					save_global_event_target_as = pirate_king_country
+					set_graphical_culture = "pirate_01"
+					establish_contact = { who = root location = root.capital_scope }
+					establish_communications_no_message = root
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.1.a
+		start_situation = {
+			type = situation_origin_pirate_king
+			target = root
+			effect = {
+				set_situation_approach = approach_origin_pirate_king_default
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = origin_pirate_king.2
+	title = origin_pirate_king.2.name
+	desc = origin_pirate_king.2.desc
+	picture = GFX_evt_small_space_battle
+	show_sound = event_red_alert
+	situation = this
+	
+	immediate = {
+		create_species = {
+			name = random
+			class = random_non_machine
+			portrait = random
+			traits = random
+			effect = {
+				save_event_target_as = pirate_king_species
+			}
+		}
+		event_target:pirate_king_country = {
+			create_leader = {
+				class = admiral
+				species = event_target:pirate_king_species
+				name = random
+				randomize_traits = no
+				skill = 3
+				leader_age_min = 20
+				leader_age_max = 25
+				traits = {
+					trait = subclass_admiral_aggressor
+					trait = leader_trait_mercenary_warrior
+					trait = leader_trait_juryrigger
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_Pirate_King_Fleet_1"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+			}
+			effect = {
+				set_owner = event_target:pirate_king_country
+				# 5艘
+				while = {
+					count = 4
+					create_ship = {
+						design = "NAME_Outrider"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						design = "NAME_Lancer"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.owner.capital_star
+					distance = 30
+					angle = random
+				}
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.2.a
+	}
+}
+
+situation_event = {
+	id = origin_pirate_king.3
+	title = origin_pirate_king.3.name
+	desc = origin_pirate_king.3.desc
+	picture = GFX_evt_small_space_battle
+	show_sound = event_red_alert
+	situation = this
+	
+	immediate = {
+		create_species = {
+			name = random
+			class = random_non_machine
+			portrait = random
+			traits = random
+			effect = {
+				save_event_target_as = pirate_king_species
+			}
+		}
+		event_target:pirate_king_country = {
+			create_leader = {
+				class = admiral
+				species = event_target:pirate_king_species
+				name = random
+				randomize_traits = no
+				skill = 5
+				leader_age_min = 25
+				leader_age_max = 30
+				traits = {
+					trait = subclass_admiral_aggressor
+					trait = leader_trait_mercenary_warrior
+					trait = leader_trait_aggressive
+					trait = leader_trait_juryrigger_2
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_Pirate_King_Fleet_2"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+			}
+			effect = {
+				set_owner = event_target:pirate_king_country
+				# 10艘
+				while = {
+					count = 7
+					create_ship = {
+						design = "NAME_Outrider"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 2
+					create_ship = {
+						design = "NAME_Lancer"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						design = "NAME_Void_Champion"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.owner.capital_star
+					distance = 30
+					angle = random
+				}
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.3.a
+	}
+}
+
+situation_event = {
+	id = origin_pirate_king.4
+	title = origin_pirate_king.4.name
+	desc = origin_pirate_king.4.desc
+	picture = GFX_evt_small_space_battle
+	show_sound = event_red_alert
+	situation = this
+	
+	immediate = {
+		create_species = {
+			name = random
+			class = random_non_machine
+			portrait = random
+			traits = random
+			effect = {
+				save_event_target_as = pirate_king_species
+			}
+		}
+		event_target:pirate_king_country = {
+			create_leader = {
+				class = admiral
+				species = event_target:pirate_king_species
+				name = random
+				randomize_traits = no
+				skill = 7
+				leader_age_min = 30
+				leader_age_max = 35
+				traits = {
+					trait = subclass_admiral_aggressor
+					trait = leader_trait_mercenary_warrior
+					trait = leader_trait_unyielding
+					trait = leader_trait_aggressive_2
+					trait = leader_trait_juryrigger_3
+				}
+				effect = {
+					set_leader_flag = renowned_leader
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_Pirate_King_Fleet_3"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+			}
+			effect = {
+				set_owner = event_target:pirate_king_country
+				# 20艘
+				while = {
+					count = 14
+					create_ship = {
+						design = "NAME_Outrider"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 4
+					create_ship = {
+						design = "NAME_Lancer"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 2
+					create_ship = {
+						design = "NAME_Void_Champion"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.owner.capital_star
+					distance = 30
+					angle = random
+				}
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.4.a
+	}
+}
+
+situation_event = {
+	id = origin_pirate_king.5
+	title = origin_pirate_king.5.name
+	desc = origin_pirate_king.5.desc
+	picture = GFX_evt_small_space_battle
+	show_sound = event_red_alert
+	situation = this
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { exists = event_target:pirate_king_end_species }
+			}
+			create_species = {
+				name = "NAME_Pirate_King_Species"
+				class = NECROID
+				portrait = random
+				traits = random
+				immortal = yes
+				effect = {
+					save_global_event_target_as = pirate_king_end_species
+				}
+			}
+		}
+		event_target:pirate_king_country = {
+			create_leader = {
+				class = admiral
+				species = event_target:pirate_king_end_species
+				name = "NAME_Pirate_King_Leader"
+				gender = male
+				randomize_traits = no
+				skill = 10
+				immortal = yes
+				set_age = 1000
+				traits = {
+					trait = subclass_admiral_tactician
+					trait = leader_trait_pass_black_hole_pirate_king
+					trait = leader_trait_mercenary_warrior
+					trait = leader_trait_unyielding
+					trait = leader_trait_aggressive_2
+				}
+				effect = {
+					set_leader_flag = legendary_leader
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_Pirate_King_Fleet_4"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+			}
+			effect = {
+				set_owner = event_target:pirate_king_country
+				# 40艘
+				while = {
+					count = 25
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_4"
+						design = "NAME_Outrider"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 10
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_3"
+						design = "NAME_Lancer"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 4
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_2"
+						design = "NAME_Void_Champion"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_1"
+						design = "NAME_Ancestral_Glory"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = root.owner.capital_star
+					distance = 30
+					angle = random
+				}
+				save_global_event_target_as = pirate_king_fleet
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+		owner = {
+			add_modifier = {
+				modifier = origin_pirate_king_modifier
+				days = -1
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.5.a
+		destroy_situation = this
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.6
+	title = "origin_pirate_king.6.name"
+	desc = "origin_pirate_king.6.desc"
+	
+	diplomatic = yes
+	force_open = yes
+	
+	picture_event_data = {
+		portrait = event_target:pirate_king_end_species
+		room = "ethic_spaceship_room"
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_pirate_king
+		FromFromFrom = {
+			is_same_value = event_target:pirate_king_fleet
+		}
+	}
+	
+	immediate = {
+		remove_modifier = origin_pirate_king_modifier
+		set_origin = origin_pirate_king_end
+	}
+	
+	option = {
+		name = origin_pirate_king.6.a
+		tooltip = {
+			set_origin = origin_pirate_king_end
+		}
+	}
+}
+
+fleet_event = {
+	id = origin_pirate_king.10
+	title = origin_pirate_king.10.name
+	desc = origin_pirate_king.10.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	location = event_target:pirate_king_black_hole
+	trackable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = { has_origin = origin_pirate_king }
+			has_country_flag = worm_tomb_ending
+			NOT = { has_country_flag = origin_pirate_king_10_triggered }
+		}
+		solar_system = {
+			is_star_class = sc_black_hole
+			star = {
+				is_planet_class = pc_black_hole
+			}
+			has_star_flag = horizonsignal_spawn # 必须是四大特殊黑洞星系之一
+			NOR = {
+				has_star_flag = horizonsignal_system
+				has_star_flag = time_black_hole_system
+			}
+		}
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = origin_pirate_king_10_triggered
+			set_variable = {
+				which = pirate_king_end_count
+				value = 0
+			}
+		}
+		solar_system = {
+			star = {
+				save_global_event_target_as = pirate_king_black_hole
+			}
+			save_global_event_target_as = pirate_king_black_hole_system
+		}
+		if = {
+			limit = {
+				NOT = { exists = event_target:pirate_king_end_species } # 非江洋大盗起源
+			}
+			create_species = {
+				name = "NAME_Pirate_King_Species"
+				class = NECROID
+				portrait = random
+				traits = random
+				immortal = yes
+				effect = {
+					save_global_event_target_as = pirate_king_end_species
+				}
+			}
+		}
+		create_country = {
+			name = "NAME_Pirate_King_End_Country"
+			type = origin_pirate_king_end
+			species = event_target:pirate_king_end_species
+			flag={
+				icon={
+					category="pirate"
+					file="pirate_12.dds"
+				}
+				background={
+					category="backgrounds"
+					file="flag_BG_34.dds"
+				}
+				colors={
+					"black"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			auto_delete = no
+			effect = {
+				save_global_event_target_as = pirate_king_end_country
+				set_graphical_culture = "pirate_01"
+				establish_contact = { who = root location = root.capital_scope }
+				establish_communications_no_message = root
+			}
+		}
+		event_target:pirate_king_end_country = {
+			create_leader = {
+				class = admiral
+				species = event_target:pirate_king_end_species
+				name = "NAME_Pirate_King_Leader"
+				gender = male
+				randomize_traits = no
+				skill = 10
+				immortal = yes
+				set_age = 1000
+				traits = {
+					trait = subclass_admiral_tactician
+					trait = leader_trait_pass_black_hole_pirate_king
+					trait = leader_trait_mercenary_warrior
+					trait = leader_trait_wrecker
+					trait = leader_trait_artillerist
+					trait = leader_trait_unyielding_2
+					trait = leader_trait_aggressive_2
+				}
+				effect = {
+					set_leader_flag = legendary_leader
+					set_leader_flag = pirate_king_end
+				}
+			}
+			set_faction_hostility = { set_neutral = yes }
+		}
+		create_fleet = {
+			name = "NAME_Pirate_King_Fleet_4"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+			}
+			effect = {
+				set_owner = event_target:pirate_king_end_country
+				# 50艘
+				while = {
+					count = 25
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_4"
+						design = "NAME_Outrider"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 15
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_3"
+						design = "NAME_Lancer"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 8
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_2"
+						design = "NAME_Void_Champion"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 2
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_1"
+						design = "NAME_Ancestral_Glory"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = event_target:pirate_king_black_hole
+					distance = 0
+					angle = random
+				}
+				save_global_event_target_as = pirate_king_fleet
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+	}
+	
+	after = {
+		begin_event_chain = {
+			event_chain = PIRATE_KING_CHAIN
+			target = root.owner
+		}
+		hidden_effect = {
+			owner = {
+				country_event = { id = origin_pirate_king.11 }
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.10.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.10.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.11
+	title = "origin_pirate_king.11.name"
+	desc = "origin_pirate_king.11.desc"
+	
+	diplomatic = yes
+	force_open = yes
+	
+	picture_event_data = {
+		portrait = event_target:pirate_king_end_species
+		room = "ethic_spaceship_room"
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			country_event = { id = origin_pirate_king.12 }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.11.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.11.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.12
+	title = "origin_pirate_king.12.name"
+	desc = "origin_pirate_king.12.desc"
+	
+	diplomatic = yes
+	force_open = yes
+	
+	picture_event_data = {
+		portrait = event_target:pirate_king_end_species
+		room = "ethic_spaceship_room"
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			event_target:pirate_king_end_country = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = yes
+					set_neutral = no
+					set_friendly = no
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.12.a
+		response_text = origin_pirate_king.12.a.response
+		is_dialog_only = yes
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = origin_pirate_king_12_flag }
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			hidden_effect = {
+				set_country_flag = origin_pirate_king_12_flag
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.12.b
+		response_text = origin_pirate_king.12.b.response
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.12.c
+		response_text = origin_pirate_king.12.b.response
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.13
+	title = "origin_pirate_king.13.name"
+	desc = "origin_pirate_king.13.desc"
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion
+	location = event_target:pirate_king_black_hole
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = PIRATE_KING_CHAIN
+		check_variable = {
+			which = pirate_king_end_count
+			value = 0
+		}
+		FromFromFrom = {
+			is_same_value = event_target:pirate_king_fleet
+		}
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier3unityreward
+			min = @tier3unitymin
+			max = @tier3unitymax
+		}
+		hidden_effect = {
+			country_event = { id = origin_pirate_king.20 days = 180 random = 180 }
+			change_variable = {
+				which = pirate_king_end_count
+				value = 1
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.13.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.13.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.20
+	title = origin_pirate_king.20.name
+	desc = origin_pirate_king.20.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	location = event_target:pirate_king_black_hole
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:pirate_king_end_country = {
+			create_leader = {
+				class = admiral
+				species = event_target:pirate_king_end_species
+				name = "NAME_Pirate_King_Leader"
+				gender = male
+				randomize_traits = no
+				skill = 10
+				immortal = yes
+				set_age = 1000
+				traits = {
+					trait = subclass_admiral_tactician
+					trait = leader_trait_pass_black_hole_pirate_king
+					trait = leader_trait_mercenary_warrior
+					trait = leader_trait_wrecker_2
+					trait = leader_trait_artillerist_2
+					trait = leader_trait_unyielding_2
+					trait = leader_trait_aggressive_2
+				}
+				effect = {
+					set_leader_flag = legendary_leader
+					set_leader_flag = pirate_king_end
+				}
+			}
+			set_faction_hostility = { set_neutral = yes }
+		}
+		create_fleet = {
+			name = "NAME_Pirate_King_Fleet_4"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+			}
+			effect = {
+				set_owner = event_target:pirate_king_end_country
+				# 60艘
+				while = {
+					count = 25
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_4"
+						design = "NAME_Outrider"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_3"
+						design = "NAME_Lancer"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 12
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_2"
+						design = "NAME_Void_Champion"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 3
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_1"
+						design = "NAME_Ancestral_Glory"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = event_target:pirate_king_black_hole
+					distance = 0
+					angle = random
+				}
+				save_global_event_target_as = pirate_king_fleet
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = origin_pirate_king.21 }
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.20.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.20.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.21
+	title = "origin_pirate_king.21.name"
+	desc = "origin_pirate_king.21.desc"
+	
+	diplomatic = yes
+	force_open = yes
+	
+	picture_event_data = {
+		portrait = event_target:pirate_king_end_species
+		room = "ethic_spaceship_room"
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		hidden_effect = {
+			country_event = { id = origin_pirate_king.22 }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.21.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.21.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.22
+	title = "origin_pirate_king.22.name"
+	desc = "origin_pirate_king.22.desc"
+	
+	diplomatic = yes
+	force_open = yes
+	
+	picture_event_data = {
+		portrait = event_target:pirate_king_end_species
+		room = "ethic_spaceship_room"
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			event_target:pirate_king_end_country = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = yes
+					set_neutral = no
+					set_friendly = no
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.22.a
+		response_text = origin_pirate_king.12.b.response
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.22.b
+		response_text = origin_pirate_king.12.b.response
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.23
+	title = "origin_pirate_king.23.name"
+	desc = "origin_pirate_king.23.desc"
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion
+	location = event_target:pirate_king_black_hole
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = PIRATE_KING_CHAIN
+		check_variable = {
+			which = pirate_king_end_count
+			value = 1
+		}
+		FromFromFrom = {
+			is_same_value = event_target:pirate_king_fleet
+		}
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		hidden_effect = {
+			country_event = { id = origin_pirate_king.30 days = 360 random = 360 }
+			change_variable = {
+				which = pirate_king_end_count
+				value = 1
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.23.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.23.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.30
+	title = origin_pirate_king.30.name
+	desc = origin_pirate_king.30.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	location = event_target:pirate_king_black_hole
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		event_target:pirate_king_end_country = {
+			create_leader = {
+				class = admiral
+				species = event_target:pirate_king_end_species
+				name = "NAME_Pirate_King_Leader"
+				gender = male
+				randomize_traits = no
+				skill = 10
+				immortal = yes
+				set_age = 1000
+				traits = {
+					trait = subclass_admiral_tactician
+					trait = leader_trait_pass_black_hole_pirate_king
+					trait = leader_trait_mercenary_warrior
+					trait = leader_trait_wrecker_3
+					trait = leader_trait_artillerist_3
+					trait = leader_trait_unyielding_2
+					trait = leader_trait_aggressive_2
+				}
+				effect = {
+					set_leader_flag = legendary_leader
+					set_leader_flag = pirate_king_end
+				}
+			}
+			set_faction_hostility = { set_neutral = yes }
+		}
+		create_fleet = {
+			name = "NAME_Pirate_King_Fleet_4"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+			}
+			effect = {
+				set_owner = event_target:pirate_king_end_country
+				# 75艘
+				while = {
+					count = 25
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_4"
+						design = "NAME_Outrider"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 25
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_3"
+						design = "NAME_Lancer"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_2"
+						design = "NAME_Void_Champion"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				while = {
+					count = 5
+					create_ship = {
+						name = "NAME_Pirate_King_Ship_1"
+						design = "NAME_Ancestral_Glory"
+						graphical_culture = "pirate_01"
+						prefix = no
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = event_target:pirate_king_black_hole
+					distance = 0
+					angle = random
+				}
+				save_global_event_target_as = pirate_king_fleet
+			}
+		}
+		last_created_fleet = {
+			assign_leader = last_created_leader
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			owner = {
+				country_event = { id = origin_pirate_king.31 }
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.30.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.30.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.31
+	title = "origin_pirate_king.31.name"
+	desc = "origin_pirate_king.31.desc"
+	
+	diplomatic = yes
+	force_open = yes
+	
+	picture_event_data = {
+		portrait = event_target:pirate_king_end_species
+		room = "ethic_spaceship_room"
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			country_event = { id = origin_pirate_king.32 }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.31.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.31.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.32
+	title = "origin_pirate_king.32.name"
+	desc = "origin_pirate_king.32.desc"
+	
+	diplomatic = yes
+	force_open = yes
+	
+	picture_event_data = {
+		portrait = event_target:pirate_king_end_species
+		room = "ethic_spaceship_room"
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			event_target:pirate_king_end_country = {
+				set_faction_hostility = {
+					target = root
+					set_hostile = yes
+					set_neutral = no
+					set_friendly = no
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.32.a
+		response_text = origin_pirate_king.32.a.response
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.32.b
+		response_text = origin_pirate_king.32.a.response
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.33
+	title = "origin_pirate_king.33.name"
+	desc = "origin_pirate_king.33.desc"
+	picture = GFX_evt_technosphere
+	show_sound = event_ship_explosion
+	location = event_target:pirate_king_black_hole
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = PIRATE_KING_CHAIN
+		check_variable = {
+			which = pirate_king_end_count
+			value = 2
+		}
+		FromFromFrom = {
+			is_same_value = event_target:pirate_king_fleet
+		}
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		enable_special_project = {
+			name = PIRATE_KING_PROJECT
+			location = event_target:pirate_king_black_hole
+			owner = root
+		}
+		hidden_effect = {
+			change_variable = {
+				which = pirate_king_end_count
+				value = 1
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.33.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.33.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.40
+	title = origin_pirate_king.40.name
+	desc = origin_pirate_king.40.desc
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_mystic_reveal_light
+	location = event_target:pirate_king_black_hole
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		create_fleet = {
+			name = "NAME_Pirate_King_Monster"
+			settings = {
+				can_upgrade = no
+				can_change_composition = no
+				can_change_leader = no
+				uses_naval_capacity = no
+				spawn_debris = no
+				is_boss = yes
+			}
+			effect = {
+				set_owner = event_target:pirate_king_end_country
+				create_ship = {
+					name = "NAME_Pirate_King_Monster"
+					design = "NAME_Pirate_King_Monster"
+					prefix = no
+					upgradable = no
+				}
+				set_location = {
+					target = event_target:pirate_king_black_hole
+					distance = 0
+					angle = random
+				}
+				save_global_event_target_as = pirate_king_fleet
+			}
+		}
+	}
+	
+	after = {
+		from = {
+			leader = {
+				add_experience = 200
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.40.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.40.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.41
+	title = "origin_pirate_king.41.name"
+	desc = "origin_pirate_king.41.desc"
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_mystic_reveal_light
+	location = event_target:pirate_king_black_hole
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = PIRATE_KING_CHAIN
+		check_variable = {
+			which = pirate_king_end_count
+			value = 3
+		}
+		FromFromFrom = {
+			is_same_value = event_target:pirate_king_fleet
+		}
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		enable_special_project = {
+			name = PIRATE_KING_PROJECT_END
+			location = event_target:pirate_king_black_hole
+			owner = root
+		}
+		hidden_effect = {
+			country_event = { id = origin_pirate_king.42 }
+			change_variable = {
+				which = pirate_king_end_count
+				value = 1
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.41.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.41.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.42
+	title = origin_pirate_king.42.name
+	desc = {
+		text = origin_pirate_king.42.desc_a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	desc = {
+		text = origin_pirate_king.42.desc_b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+	
+	diplomatic = yes
+	force_open = yes
+	
+	picture_event_data = {
+		portrait = event_target:pirate_king_end_species
+		room = "ethic_spaceship_room"
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		if = {
+			limit = {
+				has_origin = origin_pirate_king_end
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier4unityreward
+				min = @tier4unitymin
+				max = @tier4unitymax
+			}
+		}
+		else = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+				min = @tier3unitymin
+				max = @tier3unitymax
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.a
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.b
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.c
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.d
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_pacifist
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.e
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_xenophile
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.f
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.g
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_egalitarian
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.h
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.i
+		trigger = {
+			is_materialist = no
+			is_spiritualist = no
+			is_militarist = no
+			is_pacifist = no
+			is_xenophile = no
+			is_xenophobe = no
+			is_egalitarian = no
+			is_authoritarian = no
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.42.j
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+	}
+}
+
+country_event = {
+	id = origin_pirate_king.43
+	title = origin_pirate_king.43.name
+	desc = origin_pirate_king.43.desc
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_mystic_reveal_light
+	location = event_target:pirate_king_black_hole
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		if = {
+			limit = {
+				NOT = { has_relic = r_horror_matter }
+			}
+			add_relic = r_horror_matter
+		}
+		else = {
+			add_resource = { sr_dark_matter = 10000 }
+			custom_tooltip = "r_horror_matter_become_powerful"
+		}
+		from = {
+			leader = {
+				add_experience = 500
+			}
+		}
+		end_event_chain = PIRATE_KING_CHAIN
+		hidden_effect = {
+			set_country_flag = pirate_king_relic
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.43.a
+		trigger = {
+			NOT = { has_origin = origin_pirate_king_end }
+		}
+		hidden_effect = {
+			set_country_flag = time_akx_pirate_king_end_1
+		}
+	}
+	
+	option = {
+		name = origin_pirate_king.43.b
+		trigger = {
+			has_origin = origin_pirate_king_end
+		}
+		hidden_effect = {
+			set_country_flag = time_akx_pirate_king_end_2
+		}
+	}
+}

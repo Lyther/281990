@@ -1,0 +1,10 @@
+version="0.6"
+tags={
+	"Events"
+	"Balance"
+	"Gameplay"
+}
+name="杂项优化"
+picture="thumbnail.png"
+supported_version="3.8.*"
+remote_file_id="2813316428"

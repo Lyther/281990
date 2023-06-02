@@ -1,0 +1,592 @@
+namespace = action
+pop_event = {
+	id = action.121
+	title = OK
+	desc = OK
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		root.planet.owner = {
+			#log = "-- Planet: [This.GetName]"
+			#log = "-- POP: [Root.GetName]"
+			random_owned_planet = {
+				limit = {
+					has_modifier = aa_raiding_target
+				}
+				#log = "-- Planet: [This.GetName]"
+				#log = "-- pop: [Root.GetName]"
+				resettle_pop = {
+					pop = root
+					planet = this
+				}
+			}
+		}
+		create_message = {
+			type = MESSAGE_TYPE_POP_ABDUCTED
+			localization = MESSAGE_POP_ABDUCTED
+			days = 30
+			target = from
+			variable = {
+				type = name
+				localization = SPECIES
+				scope = root.species
+			}
+			variable = {
+				type = name
+				localization = TARGET_PLANET
+				scope = root.planet
+			}
+			variable = {
+				type = name
+				localization = PLANET
+				scope = from
+			}
+		}
+		from = {
+			owner = {
+				create_message = {
+					type = MESSAGE_TYPE_POP_ABDUCTED_FROM_US
+					localization = MESSAGE_POP_ABDUCTED_FROM_US
+					days = 30
+					target = from
+					variable = {
+						type = name
+						localization = SPECIES
+						scope = root.species
+					}
+					variable = {
+						type = name
+						localization = ABDUCTER
+						scope = root.planet.owner
+					}
+					variable = {
+						type = name
+						localization = PLANET
+						scope = from
+					}
+				}
+			}
+		}
+	}
+}
+
+namespace = megumin
+#巨企分部移民
+country_event = {
+	id = megumin.1003
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_planet_flag = has_yimin_feisheng
+			}
+			planet_event = {
+				id = megumin.1004
+			}
+		}
+	}
+}
+planet_event = {
+	id = megumin.1004
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_planet_flag = has_yimin_feisheng
+		num_pops > 5
+	}
+
+	immediate = {		
+		while = {
+			count = 5
+			branch_office_owner = {
+				root = {
+					random_owned_pop = {
+						resettle_pop = {
+							pop = this
+							planet = prevprev.capital_scope
+						}						
+					}					
+				}				
+			}			
+		}			
+	}
+}
+
+planet_event = { #海洋改造触发
+	id = megumin.1005
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		owner = {
+			has_ascension_perk = ap_hydrocentric
+		}
+		NOR = {
+			has_modifier = ocean_paradise
+			has_modifier = ocean_paradise_hive
+		}
+		 is_planet_class = pc_ocean  #should never be possible, but just in case
+	}
+
+	immediate = {
+		if = {
+			limit = { owner = {is_gestalt = no} }
+			add_modifier = {
+				modifier = ocean_paradise
+			}
+		}
+		else = { add_modifier = {
+			modifier = ocean_paradise_hive
+		} }
+	}
+}
+
+#天国阶梯
+planet_event = {
+	id = megumin.1
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { is_planet_class = pc_ai }
+				exists = owner
+				owner = { NOT = { is_same_value = from.owner } }
+			}
+			from.owner = {
+				country_event = { id = megumin.3 }
+			}
+		}
+		
+		from.owner = {
+			every_owned_planet = {
+				limit = {
+					has_modifier = aa_raiding_target
+				}	
+			save_event_target_as = happy
+			}
+			save_event_target_as = sad	
+		}
+		owner = {
+			save_event_target_as = unluck
+		}	
+
+		every_owned_pop= {
+			resettle_pop = {
+				pop = this
+				planet = event_target:happy
+			}			
+		}
+	}
+}
+
+#万象重构
+planet_event = {
+	id = megumin.2
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { is_planet_class = pc_ai }
+				exists = owner
+				owner = { NOT = { is_same_value = from.owner } }
+			}
+			from.owner = {
+				country_event = { id = megumin.4 }
+			}
+		}
+		
+		from.owner = {
+			every_owned_planet = {
+				limit = {
+					has_modifier = aa_raiding_target
+				}	
+			save_event_target_as = happy
+			}
+			save_event_target_as = sad	
+		}
+		owner = {
+			save_event_target_as = unluck
+		}	
+
+		every_owned_pop= {
+			resettle_pop = {
+				pop = this
+				planet = event_target:happy
+			}			
+		}
+	}
+}
+
+planet_event = {#破晓
+	id = megumin.300
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { is_planet_class = pc_ai }
+				exists = owner
+				owner = { NOT = { is_same_value = from.owner } }
+			}
+			from.owner = {
+				country_event = { id = megumin.301 }
+			}
+		}
+		change_pc = pc_machine				
+	}
+	after = {
+		planet_event = {
+			id = action.68
+		}
+	}
+}
+
+country_event = { #黎明计划
+	id = megumin.301
+	title = megumin.301.name
+	desc = megumin.301.desc
+	picture = GFX_evt_planet_beam
+	show_sound = event_mystic_reveal
+	location = from
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = OK
+		from = {
+			custom_tooltip = megumin.301.tooltip
+		}
+	}
+}
+
+country_event = { #天国阶梯文本
+	id = megumin.3
+	title = megumin.3.name
+	desc = megumin.3.desc
+	picture = GFX_evt_planet_beam
+	show_sound = event_mystic_reveal
+	location = from
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = OK
+		from = {
+			custom_tooltip = megumin.3.tooltip
+		}
+	}
+}
+
+country_event = {
+	id = megumin.4
+	title = megumin.4.name
+	desc = megumin.4.desc
+	picture = GFX_evt_planet_beam
+	show_sound = event_mystic_reveal
+	location = from
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+
+	option = {
+		name = OK
+		from = {
+			custom_tooltip = megumin.4.tooltip
+		}
+	}
+}
+
+country_event = {#共同命运
+	id = megumin.9
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_edict = gongtong
+	}
+	immediate = {
+		every_subject = {
+			copy_techs_from = {
+				target = overlord
+			}
+		}
+	}
+}	
+
+
+country_event = {#失去首都
+	id = megumin.11
+    hide_window = yes
+
+	is_triggered_only = yes
+	#trigger = {
+	#	has_country_flag = megumin_imperial_1
+	#}
+	immediate = {
+		if = {
+			limit = { 
+				FromFrom = {
+					is_capital = yes
+				}
+				From = {
+					has_country_flag = megumin_imperial_1
+				}
+			}
+			From = {
+				country_event = {
+					id = megumin.12
+				}
+				add_modifier = {
+					modifier = losecapital
+					days = 3600
+				}
+			}
+		}
+	}
+}
+
+country_event = {#天下失心
+	id = megumin.12
+	title = losecapital.name
+	desc = losecapital.desc
+	picture = GFX_evt_night_raid
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+	option = {
+		name = shizhi
+	}
+	option = {
+		name = zhenya
+		while = {
+			count = 4
+			random_owned_pop = {
+				kill_pop = yes
+			}
+		}
+	}
+}
+
+country_event = {#以战养战
+	id = megumin.13
+	title = "megumin.13.name"
+	desc = "megumin.13.desc"
+	is_triggered_only = yes
+	picture = GFX_evt_night_raid
+	trigger = {
+		has_ascension_perk = ap_nihilistic_acquisition
+		FromFrom = {
+			is_capital = yes
+		}
+		
+	}
+	immediate = {
+		from = {
+			export_resource_stockpile_to_variable = {
+				resource = energy
+				variable = megumin13energy
+			}
+			export_resource_stockpile_to_variable = {
+				resource = alloys
+				variable = megumin13alloys
+			}
+			export_resource_stockpile_to_variable = {
+				resource = minerals
+				variable = megumin13minerals
+			}
+			export_resource_stockpile_to_variable = {
+				resource = food
+				variable = megumin13food
+			}
+		}
+		set_variable = {
+			which = megumin13energy
+			value = from.megumin13energy
+		}
+		set_variable = {
+			which = megumin13alloys
+			value = from.megumin13alloys
+		}
+		set_variable = {
+			which = megumin13minerals
+			value = from.megumin13minerals
+		}
+		set_variable = {
+			which = megumin13food
+			value = from.megumin13food
+		}		
+	}
+	option = {
+		name = megumin.13.a
+		add_resource = {
+			alloys = 0.3
+			multiplier = megumin13alloys
+		}
+		add_resource = {
+			food = 0.3
+			multiplier = megumin13food
+		}
+		add_resource = {
+			energy = 0.3
+			multiplier = megumin13energy
+		}
+		add_resource = {
+			minerals = 0.3
+			multiplier = megumin13minerals
+		}
+		steal_relic = {
+			target = from
+			relic = all
+		}
+		from = {
+			random_owned_leader = {
+				limit = { leader_class = scientist }
+				set_owner = root
+			}
+			random_owned_leader = {
+				limit = { leader_class = governor }
+				set_owner = root
+			}
+		}
+		hidden_effect = {
+			from = {
+				add_resource = {
+					alloys = -1
+					multiplier = megumin13alloys
+				}
+				add_resource = {
+					food = -1
+					multiplier = megumin13food
+				}
+				add_resource = {
+					energy = -1
+					multiplier = megumin13energy
+				}
+				add_resource = {
+					minerals = -1
+					multiplier = megumin13minerals
+				}
+			}
+		}
+	}
+
+	option = {
+		name = megumin.13.b
+		add_resource = {
+			influence = 25
+		}
+		hidden_effect = {
+			from = {
+				add_resource = {
+					alloys = -1
+					multiplier = megumin13alloys
+				}
+				add_resource = {
+					food = -1
+					multiplier = megumin13food
+				}
+				add_resource = {
+					energy = -1
+					multiplier = megumin13energy
+				}
+				add_resource = {
+					minerals = -1
+					multiplier = megumin13minerals
+				}
+			}
+		}
+	}
+}
+
+
+
+planet_event = {#转序
+	id = megumin.14
+	hide_window = yes
+	is_triggered_only = yes	
+	immediate = {		
+		every_owned_pop = {
+			if = {
+				limit = { 
+					from.owner = {
+						not = {has_ascension_perk = ap_engineered_evolution	}	
+						is_synthetic_empire = no		
+					}
+					species = {
+						nor = {
+							has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+							has_trait = trait_hive_mind
+						}
+					}
+				}
+				change_species = from.owner.species
+			}
+				
+			else_if = {
+				limit = { 
+					from.owner = {
+						has_ascension_perk = ap_engineered_evolution			
+						is_synthetic_empire = no			
+					}
+					species = {
+						nor = {
+							has_trait = trait_mechanical
+							has_trait = trait_machine_unit
+						}
+					}
+				}			
+				change_species = from.owner.species	
+			}
+			else = {
+				change_species = from.owner.species	
+			}
+		}
+		from.owner = {
+			country_event = {
+				id = megumin.15
+			}
+		}
+	}
+}
+
+
+country_event = { #转化弹窗
+	id = megumin.15
+	title = megumin.15.name
+	desc = {
+		trigger = {
+			has_ascension_perk = ap_engineered_evolution
+		}
+		text = megumin.15.a
+	}
+	desc = {
+		trigger = {
+			has_ascension_perk = ap_transcendence
+		}
+		text = megumin.15.b
+	}
+	desc = {
+		trigger = {
+			is_synthetic_empire = yes	
+		}
+		text = megumin.15.c
+	}
+	picture = GFX_evt_planet_beam
+	show_sound = event_mystic_reveal
+	location = from
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = OK
+	}
+}

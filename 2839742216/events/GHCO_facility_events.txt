@@ -1,0 +1,208 @@
+namespace = GHCO_facility
+####################################################################################
+#开局在地图上生成4个GHC设施	
+####################################################################################
+
+event = {
+	id = GHCO_facility.1
+	hide_window = yes
+	is_triggered_only = yes	# on_game_start
+
+	immediate = {
+		while = {
+			count = 4
+			random_system = {
+				limit = {
+					nor = {
+						exists = owner
+						has_star_flag = GHCO_system
+						has_star_flag = GHCO_system_has_ruined_GHC_ficility
+					}
+				}
+				spawn_megastructure = {
+					type = "GHC_facility_ruined"
+					graphical_culture = "fallen_empire_03"
+					coords_from = star
+					orbit_angle = 30
+					orbit_distance = 0
+				}
+				
+				set_star_flag = GHCO_system_has_ruined_GHC_ficility
+			}
+		}
+	}
+}
+
+####################################################################################
+#进入存在GHC设施的星系的事件写在basic里
+####################################################################################
+
+####################################################################################
+#研究明白了GHCO发来的资料（能够修复GHC设施）
+####################################################################################
+country_event = { 
+	id = GHCO_facility.2
+	title = "GHCO_facility.2.title"
+	desc = "GHCO_facility.2.desc"
+	picture = GFX_evt_spy_orb
+	is_triggered_only = yes # special_project:research_GHC_facility_data
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_facility.2.name"
+		set_country_flag = can_rebuild_GHC_facility
+	}
+}
+
+####################################################################################
+#开始修复GHC设施后，决定是否遵守协议
+####################################################################################
+country_event = {
+	id = GHCO_facility.3
+	title = "GHCO_facility.3.title"
+	desc = "GHCO_facility.3.desc"
+	picture = GFX_evt_synth_sabotage
+	is_triggered_only = yes # special_project:research_GHC_facility_data
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_facility.3.a"
+	}
+	option = {
+		name = "GHCO_facility.3.b"
+	}
+
+	after = {
+		enable_special_project = {
+			name = "rebuild_GHC_facility_1"
+		}
+		enable_special_project = {
+			name = "rebuild_GHC_facility_2"
+		}
+	}
+}
+
+#研究完成
+country_event = {
+	id = GHCO_facility.4
+	title = "GHCO_facility.4.title"
+	desc = "GHCO_facility.4.desc"
+	picture = GFX_evt_physics_research
+	is_triggered_only = yes # special_project:rebuild_GHC_facility_1
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_facility.4.a"
+		add_resource = {
+			physics_research = 50000
+			society_research = 10000
+			engineering_research = 50000
+		}
+		hidden_effect = {
+			random_list = {
+				80 = { country_event = { id = GHCO_facility.6 days = 720 } }
+				20 = {}	
+			}
+			set_country_flag = GHC_break_agreement
+		}
+	}
+}
+
+#监督遵守协议
+country_event = {
+	id = GHCO_facility.5
+	title = "GHCO_facility.5.title"
+	desc = "GHCO_facility.5.desc"
+	picture = GFX_evt_spy_orb
+	is_triggered_only = yes # special_project:rebuild_GHC_facility_2
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_facility.5.a"
+		add_resource = {
+			influence = 150
+			unity = 15000
+		}
+		event_target:GHCO = {
+			add_trust = {
+				who = root
+				amount = 10
+			}
+		}
+	}
+}
+
+####################################################################################
+#修复完GHC设施后
+####################################################################################
+# 被GHCO发现违反协议
+country_event = {
+	id = GHCO_facility.6
+	title = "GHCO_facility.6.title"
+	desc = "GHCO_facility.6.desc"
+	picture = GFX_evt_spy_orb
+
+	is_triggered_only = yes # GHCO_facility.4
+
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_facility.6.a"
+	}
+	option = {
+		name = "GHCO_facility.6.b"
+	}
+
+	after = {
+		GHCO_set_trust_level_3 = yes
+		event_target:GHCO = {
+			add_trust = {
+				who = root
+				amount = -25
+			}
+		}
+	}
+}
+
+# 完工GHC设施巨构
+country_event = {
+	id = GHCO_facility.7
+	title = "GHCO_facility.7.title"
+	desc = "GHCO_facility.7.desc"
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	is_triggered_only = yes # megastructure:GHC_facility_restored
+	trigger = { is_ai = no }
+
+	option = {
+		name = "GHCO_facility.7.a"
+	}
+	option = {
+		name = "GHCO_facility.7.b"
+	}
+
+	after = {
+		if = {
+			limit = { not = { has_country_flag = GHC_break_agreement } }
+			event_target:GHCO = {
+				add_trust = {
+					who = root
+					amount = 25
+				}
+			}
+			set_country_flag = can_build_GHC_buildings_in_country
+		}
+		set_country_flag = has_rebuilded_GHC_facility
+	}
+}

@@ -1,0 +1,169 @@
+namespace = QQE_basic_TAC
+#这组事件是制作飞地的核心事件，各位也是从这里延申出各自的内容的
+#为了参考这个制作出新的飞地，建议是复制该文件，更改*文件名*及*namespace*，然后在*on_action*内添加对应的事件。
+#请无比测试确保内容成功运行再投稿，因为......不想坑害新管理（）
+
+####################################################################################
+#飞地的生成：开局随机在整个银河生成
+####################################################################################
+event = {
+	id = QQE_basic_TAC.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_variable = { which = SANHAOGAN value = 0 }
+		no_scope = {
+			spawn_system = {
+				initializer = TAC_san_system
+				hyperlane = yes
+			}
+		}
+	}
+}
+
+####################################################################################
+#飞地和我们建立通讯————在飞地进入我方探测器范围内时
+####################################################################################
+country_event = {
+	id = QQE_basic_TAC.2
+	title = QQE_basic_TAC.2.title	#事件标题
+	desc = QQE_basic_TAC.2.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = TAC_waiter_10
+		room = "TAC_FEIDI_station_room"
+	}
+
+	is_triggered_only = yes	#在舰队被探测到的*触发器*触发，即on_fleet_detected，from即探测到的舰队
+	trigger = {
+		from = {
+			owner = {
+				has_country_flag = TACFEIDI_country	#判断探测到的舰队所属国家，通过之前设立的country_flag
+				NOT = {
+					has_communications = root	#尚未和我方建立联系
+				}
+			}
+		}
+	}
+	immediate = {
+		establish_communications_no_message = from.owner	#与探测到的舰队所有者建交
+	}
+	option = {
+		name = QQE_basic_TAC.2.a	#选项
+	}
+}
+
+####################################################################################
+#在通讯界面打开飞地菜单
+####################################################################################
+#引入事件：在点击国家图标时触发
+country_event = {
+	id = QQE_basic_TAC.3
+	is_triggered_only = yes		#在点击国家图标的*触发器*触发，即on_custom_diplomacy，from即图标对应国家
+	hide_window = yes
+	
+
+	trigger = {
+		from = { has_country_flag = TACFEIDI_country }
+	}
+
+	immediate = {
+		from = {
+			save_event_target_as = QQE_TAC_contacting_country	#将from存为event_target
+		}
+		country_event = {
+			id = QQE_basic_TAC.300	#触发正式的菜单事件
+		}
+	}
+}
+##################################################
+#飞地菜单
+#算是核心事件，通过该事件开始，实现你想要实现的各种乱七八糟的功能
+##################################################
+country_event = {
+	id = QQE_basic_TAC.300
+	title = QQE_basic_TAC.300.title	#事件标题
+	desc = QQE_basic_TAC.300.desc1
+	desc = QQE_basic_TAC.300.desc2
+	desc = QQE_basic_TAC.300.desc3
+	desc = QQE_basic_TAC.300.desc4
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+		portrait = TAC_waiter_10
+		room = "TAC_FEIDI_station_room"
+	}
+	
+	immediate = {
+		this = { save_event_target_as = TAC_player_country }
+	}
+
+	option = {
+		name = haogandu_01
+		trigger = { check_variable = { which = SANHAOGAN value < 25 }}
+		hidden_effect = { country_event = { id = QQE_basic_TAC.300 }}
+	}
+	option = {
+		name = haogandu_02
+		trigger = { 
+			check_variable = { which = SANHAOGAN value >= 25 }
+			check_variable = { which = SANHAOGAN value < 50 }
+		}
+		hidden_effect = { country_event = { id = QQE_basic_TAC.300 }}
+	}
+	option = {
+		name = haogandu_03
+		trigger = { check_variable = { which = SANHAOGAN value > 50 }}
+		hidden_effect = { country_event = { id = QQE_basic_TAC.300 }}
+	}
+
+	option = {#买船#
+		name = QQE_basic_TAC.300.a
+		custom_tooltip = open_shop_system
+		hidden_effect = {
+			country_event = { id = TACFD.1 }
+		}
+	}
+	option = {#买服务#
+		name = QQE_basic_TAC.300.b
+		custom_tooltip = open_service_system
+		hidden_effect = {
+			country_event = { id = TACFD.10 }
+		}
+	}
+	option = {#查询资料#
+		name = QQE_basic_TAC.300.c
+		custom_tooltip = open_data_system
+		hidden_effect = {
+			country_event = { id = TACFD.100 }
+		}
+	}
+	option = {#关闭通讯#
+		name = QQE_basic_TAC.300.d
+	}
+}
+
+
+####################################################################################
+#飞地空间站被消灭
+####################################################################################
+country_event = {
+	id = QQE_basic_TAC.4
+	title = QQE_basic_TAC.4.title	#事件标题
+	desc = QQE_basic_TAC.4.desc		#事件文本
+	picture = GFX_evt_small_space_battle	#事件插图
+
+	is_triggered_only = yes		#通过舰队被摧毁的*触发器*触发，即on_fleet_destroyed_perp，from即被摧毁舰队的所有者，fromfromfrom即被摧毁舰队
+	trigger = {
+		from = {	#遇害舰队的所有者
+			has_country_flag = TACFEIDI_country	#拥有你的⭐国家标签⭐
+		}
+		fromfromfrom = {	#遇害舰队
+			has_fleet_flag = TACFD_main_station		#拥有你的飞地空间站标签
+		}
+	}
+
+	option = {
+		name = QQE_basic_TAC.4.a	#事件选项
+	}
+}

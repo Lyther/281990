@@ -1,0 +1,191 @@
+namespace = mopt_lgate
+
+country_event = { # 修改L星门内容
+	id = mopt_lgate.0
+	title = mopt_lgate.0.name
+	desc = mod_lage.0.desc
+
+	is_triggered_only = yes
+	trigger = { is_ai = no }
+
+	picture = GFX_evt_l-gateway
+
+	option = { # 显示当前L星门内容
+		# allow = { always = no }
+		name = {
+			text = mopt_lgate.0.gray
+			trigger = {
+				NOR = {
+					has_global_flag = gray_goo_crisis_set
+					has_global_flag = dragon_season
+					has_global_flag = gray_goo_empire_set
+				}
+			}
+		}
+		name = {
+			text = mopt_lgate.0.dragon
+			trigger = {
+				has_global_flag = dragon_season
+			}
+		}
+		name = {
+			text = mopt_lgate.0.graygoo
+			trigger = {
+				has_global_flag = gray_goo_crisis_set
+			}
+		}
+		name = {
+			text = mopt_lgate.0.empire
+			trigger = {
+				has_global_flag = gray_goo_empire_set
+			}
+		}
+
+		hidden_effect = {
+			country_event = {
+				id = mopt_lgate.0
+			}
+		}
+	}
+
+	option = { # 切换为小灰
+		name = mopt_lgate.0.switch_to_gray
+		allow = {
+			custom_tooltip = {
+				fail_text =  mopt_lgate.0.switch_to_gray.fail
+				OR = {
+					has_global_flag = gray_goo_crisis_set
+					has_global_flag = dragon_season
+					has_global_flag = gray_goo_empire_set
+				}
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = gray_goo_crisis_set }
+				remove_global_flag = gray_goo_crisis_set
+				remove_global_flag = active_gray_goo
+			}
+			if = {
+				limit = { has_global_flag = dragon_season }
+				remove_global_flag = dragon_season
+			}
+			if = {
+				limit = { has_global_flag = gray_goo_empire_set }
+				remove_global_flag = gray_goo_empire_set
+			}
+			country_event = {
+				id = mopt_lgate.0
+			}
+		}
+	}
+
+	option = { # 灰蛊
+		name = mopt_lgate.0.switch_to_graygoo
+		allow = {
+			custom_tooltip = {
+				fail_text = mopt_lgate.0.switch_to_graygoo.fail
+				NOT = { has_global_flag = gray_goo_crisis_set }
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = dragon_season }
+				remove_global_flag = dragon_season
+			}
+			if = {
+				limit = { has_global_flag = gray_goo_empire_set }
+				remove_global_flag = gray_goo_empire_set
+			}
+			set_global_flag = gray_goo_crisis_set
+			set_global_flag = active_gray_goo
+
+			country_event = {
+				id = mopt_lgate.0
+			}
+		}
+	}
+
+	option = { # 龙
+		name = mopt_lgate.0.switch_to_dragon
+		allow = {
+			custom_tooltip = {
+				fail_text = mopt_lgate.0.switch_to_dragon.fail
+				NOT = { has_global_flag = dragon_season }
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = gray_goo_crisis_set }
+				remove_global_flag = gray_goo_crisis_set
+				remove_global_flag = active_gray_goo
+			}
+			if = {
+				limit = { has_global_flag = gray_goo_empire_set }
+				remove_global_flag = gray_goo_empire_set
+			}
+			set_global_flag = dragon_season
+
+			country_event = {
+				id = mopt_lgate.0
+			}
+		}
+	}
+
+	option = { # 国家
+		name = mopt_lgate.0.switch_to_empire
+		allow = {
+			custom_tooltip = {
+				fail_text = mopt_lgate.0.switch_to_empire.fail
+				NOT = { has_global_flag = gray_goo_empire_set }
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = gray_goo_crisis_set }
+				remove_global_flag = gray_goo_crisis_set
+				remove_global_flag = active_gray_goo
+			}
+			if = {
+				limit = { has_global_flag = dragon_season }
+				remove_global_flag = dragon_season
+			}
+			set_global_flag = gray_goo_empire_set
+
+			country_event = {
+				id = mopt_lgate.0
+			}
+		}
+	}
+
+	option = {
+		name = mopt_lgate.0.exit
+	}
+}
+
+country_event = { # 
+	id = mopt_lgate.11
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = { is_ai = no }
+
+
+	immediate = {
+		begin_event_chain = { 
+			event_chain = chain_lgate_location
+			target = root
+		}
+		every_system = {
+			limit = { has_star_flag = lgate }
+			save_event_target_as = lgate_system
+
+			enable_special_project = {
+				name = SP_LGATE_POSITION
+				owner = root
+				location = this.star
+			}
+		}
+	}
+}

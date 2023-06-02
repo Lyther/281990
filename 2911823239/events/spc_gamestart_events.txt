@@ -1,0 +1,130 @@
+####################
+# SP mod core
+# 游戏开始时的一些操作
+# version:3.2.*
+# Aya1
+####################
+
+namespace = sp_start
+
+event = {
+	id = sp_start.00
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			country_event = { id = sp_start.01 } # 反作弊(清空flag,重新随机领袖特质等)
+			country_event = { id = sp_start.02 } # 初始科技
+		}
+	}
+}
+
+country_event = {
+	id = sp_start.01
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		### flags ###
+		remove_country_flag = human_1
+		remove_country_flag = human_2
+		remove_country_flag = no_machine_uprising
+		remove_country_flag = has_built_or_repaired_megastructure
+		remove_country_flag = artist_building_patron
+		remove_country_flag = nuumismatic_shrine
+		remove_country_flag = lithoid_crystal_plant
+		remove_country_flag = edict_masters_writings_politics
+		remove_country_flag = edict_masters_writings_diplomacy
+		remove_country_flag = edict_masters_writings_philosophy
+		remove_country_flag = edict_masters_writings_war
+		remove_country_flag = edict_improved_work_environment
+		remove_country_flag = edict_renewable_energy
+		remove_country_flag = edict_super_sensors
+		remove_country_flag = nuumismatic_visualization
+		remove_country_flag = vultaum_world_found
+		remove_country_flag = yuht_world_found
+		remove_country_flag = league_world_found
+		remove_country_flag = irassian_world_found
+		remove_country_flag = cybrex_world_found
+		remove_country_flag = last_zroni_system
+		remove_country_flag = last_baol_system
+		remove_country_flag = relic_last_baol_activated
+		remove_country_flag = artifact_yuht_research_completed
+		remove_country_flag = bought_waste_reprocessing_center
+		remove_country_flag = killed_guardian
+		remove_country_flag = crystalline_refugees_flag
+		remove_country_flag = city_of_bones_completed
+		remove_country_flag = oracle_completed
+		remove_country_flag = has_market_access
+		
+		### leaders ###
+		every_owned_leader = {
+			limit = { leader_class = ruler } ### 只移除了常见的自建国特质(不能开局随机到的)
+			remove_trait = trait_ruler_corvette_focus
+			remove_trait = trait_ruler_destroyer_focus
+			remove_trait = trait_ruler_cruiser_focus
+			remove_trait = trait_ruler_battleship_focus
+			remove_trait = trait_ruler_recruiter
+			remove_trait = trait_ruler_military_pioneer
+			remove_trait = leader_trait_ruler_erudite
+			remove_trait = leader_trait_ruler_cyborg
+			remove_trait = leader_trait_ruler_synthetic
+			remove_trait = leader_trait_ruler_psionic
+			remove_trait = leader_trait_ruler_chosen
+			remove_trait = leader_trait_ruler_brainslug
+			remove_trait = leader_trait_ruler_great_khan
+			remove_trait = leader_trait_ruler_instrument_chosen
+			remove_trait = leader_trait_ruler_composer_chosen
+			remove_trait = leader_trait_ruler_eater_chosen
+			remove_trait = leader_trait_ruler_whisperers_chosen
+		}
+	}
+}
+
+country_event = {
+	id = sp_start.02
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		give_technology = {
+			tech = tech_automated_exploration # 自动探索协议
+			message = no
+		}
+		add_research_option = 
+	}
+}
+
+# 开局首都星球规模(保底20)
+# 小于20的首都会导致前期起工业区划非常吃亏
+planet_event = {
+	id = sp_start.10
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+
+		### deposit ###
+		if = {
+			limit = {
+				owner = {
+					is_ai = no
+				}
+			}
+		}
+		
+		### planet size ###
+		if = {
+			limit = { 
+				NOR = {
+					is_artificial = yes
+					is_planet_class = pc_city
+				}
+				planet_size < 20 # 首都星球至少20格
+			}
+			set_planet_size = 20	
+		}
+	}
+}

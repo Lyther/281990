@@ -1,0 +1,254 @@
+#游戏开始
+on_game_start = {
+	events = {
+		#tc_relic.10
+		tc_start.1 #添加全局标识
+	}
+}
+
+on_game_start_country = {
+	events = {
+		#tc_outer.5 #更新提示事件
+		tc_start.2 #口袋起源初始化
+		tc_start.3 #手册起源初始化
+	}
+}
+
+#游戏中期
+# No scope, like on_game_start
+on_mid_game_pulse = {
+	events = {
+		tc_relic.1
+	}
+}
+
+#游戏末期
+# No scope, like on_game_start
+on_late_game_pulse = {
+	events = {
+	}
+}
+
+#月检测
+# No scope, like on_game_start
+on_monthly_pulse = {
+	events = {
+		tc_relic.1
+		tc_relic.11
+		tc_research_ui.30
+		tc_warp.1
+		tc_warp.3
+	}
+}
+
+#舰队交战
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+on_entering_battle = {
+	events = {
+		tc_weapon.1
+		tc_weapon.12
+	}
+}
+
+#摧毁舰船
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_ship_destroyed_victim = {
+	events = {
+		tc_outer.50 #阶段转换
+		tc_weapon.20 #雷球被摧毁
+	}
+}
+
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+on_ship_destroyed_perp = {
+	events = {
+		tc_weapon.3
+		tc_outer.102 #血腥基地
+		tc_relic.51
+	}
+	random_events = {
+	}
+}
+
+#入侵星球胜利
+# Triggers country_event for the attacker upon victory
+# (Before controller is switched)
+# This = country, leader attacker
+# From = country, planet owner
+# FromFrom = planet
+# IDENTITIES: attacker is the side that "IsHostile" to
+# the planet controller; e.g. spawned monster armies
+# are attackers, but if they win and the player attempts
+# to retake the planet, the player is the attacker
+on_planet_attackers_win = {
+	events = {
+		tc_warp.6
+	}
+}
+
+#轰炸星球
+# Planet has taken damage from orbital bombardment - Damage is applied daily
+# This = Planet
+# From = Bombarder
+on_planet_bombarded = {
+	events = {
+		tc_weapon.10
+	}
+}
+
+#轰炸至无pop
+# Planet has reached 0 pops from orbital bombardment
+# This = Planet
+# From = Bombarder
+on_planet_zero_pops = {
+	events = {
+		tc_weapon.11
+	}
+}
+
+#当星球添加pop
+# Root = pop
+# From = planet
+on_pop_added = {
+	events = {
+
+	}
+}
+
+#当pop增长完成
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+on_pop_grown = {
+	events = {
+	}
+}
+
+#当pop组装完成
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+on_pop_assembled = {
+	events = {
+		tc_planet.1 #傀儡组装完成
+	}
+}
+
+#舰船进入星系
+# Scope = Ship
+# From = System
+# FromFrom = Country
+on_entering_system = {
+	events = {
+		tc_outer.10 # 外域通知事件
+		tc_outer.11 # 外域通知事件
+		tc_outer.12 # 外域通知事件
+		tc_outer.13 # 外域通知事件
+		tc_outer.15 # 外域通知事件
+	}
+	random_events = {
+	}
+}
+
+#舰队进入星系
+# Scope = Fleet
+# From = System
+on_entering_system_fleet = {
+	events = {
+		tc_relic.30 # tempus system
+		tc_outer.25 # BOSS战过程踢走试图进入的舰队
+		tc_mega.43 # 友方暴怒笼激活
+		tc_mega.46 # 摧毁试图离开星系的暴怒笼单位
+	}
+}
+
+#舰船被探测
+# This = country
+# From = Fleet
+on_fleet_detected = {
+	events = {
+		#tc_outer.100 #血腥国家联系建立 -废弃
+	}
+}
+
+#自定义外交事件触发
+# Country scope
+# This = target country (player)
+# From = source country	
+on_custom_diplomacy = {
+	events = {
+		tc_outer.101
+		tc_relic.50
+	}
+}
+
+#当舰队解散
+# This = owner of fleet
+# From = disbanded fleet
+on_fleet_disbanded = {
+	events = {
+		tc_mega.30 		#部署洞穴创造者
+		tc_weapon.8 	#部署防御核心
+		tc_weapon.16 	#回收MCV
+	}
+}
+
+#当恒星基地被摧毁
+# This = starbase being destroyed (not ship!)
+# From = fleet that destroyed the starbase
+on_starbase_destroyed = {
+	events = {
+
+	}
+}
+
+#当建筑升级时
+# This = Planet
+on_building_upgraded = {
+	events = {
+		tc_planet.9 #行星护盾更新
+	}
+}
+
+#当载入存档时 多人游戏不工作
+# No scope, like on_game_start
+# Does not run when loading MP saves due to OOS concerns
+on_single_player_save_game_load = {
+	events = {
+		
+	}
+}
+
+#研发科技时,last_increased_tech
+# A country has increased the level of a tech, use last_increased_tech trigger to check tech and level.
+# This = Country
+on_tech_increased = {
+	events = {
+		tc_tech.1 #傀儡装配
+		tc_tech.2 #魔导透镜
+		tc_tech.3 #自我注魔
+	}
+}
+
+#舰队行动
+# this = planet
+on_tc_test_action = {
+	events = {
+		tc_test.50
+	}
+}
+
+on_tc_test_action_cancel = {
+	events = {
+		
+	}
+}

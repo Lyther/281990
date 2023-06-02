@@ -1,0 +1,377 @@
+@corvette_section_cost = 40
+@destroyer_section_cost = 40
+@cruiser_section_cost = 50
+@battleship_section_cost = 90
+
+#护卫舰corvette
+ship_section_template = {
+	key = "TT_CORVETTE_MID_1"
+	ship_size = corvette
+	fits_on_slot = mid
+	should_draw_components = yes
+	entity = "corvette_S3_entity"
+	icon = "GFX_ship_part_core_mid"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { gunship artillery brawler }
+	component_slot = { name = "S1" template = "small_turret" locatorname = "small_gun_01" }
+	component_slot = { name = "S2" template = "small_turret" locatorname = "small_gun_02" }
+	component_slot = { name = "S3" template = "small_turret" locatorname = "small_gun_03" }
+	small_utility_slots = 3
+	aux_utility_slots = 2
+	ai_weight = {
+		factor = 2
+		modifier = {
+			factor = 10.0
+			OR = {
+				is_preferred_weapons = weapon_type_kinetic
+				is_preferred_weapons = weapon_type_energy
+			}
+		}
+		modifier = {
+			factor = 0.1
+			NOR = {
+				is_preferred_weapons = weapon_type_kinetic
+				is_preferred_weapons = weapon_type_energy
+			}
+		}
+	}
+	resources = {
+		category = ship_sections
+		cost = { alloys = @corvette_section_cost }
+	}
+}
+ship_section_template = {
+	key = "TT_CORVETTE_MID_2"
+	ship_size = corvette
+	fits_on_slot = mid
+	should_draw_components = yes
+	entity = "corvette_S3_entity"
+	icon = "GFX_ship_part_core_mid"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { gunship artillery brawler }
+	component_slot = { name = "P1" template = "point_defence_turret" locatorname = "small_gun_01" }
+	component_slot = { name = "S1" template = "small_turret" locatorname = "small_gun_02" }
+	component_slot = { name = "S2" template = "small_turret" locatorname = "small_gun_03" }
+	small_utility_slots = 3
+	aux_utility_slots = 2
+	ai_weight = {
+		factor = 2
+		modifier = {
+			factor = 10.0
+			is_ai = yes
+			is_preferred_weapons = weapon_type_strike_craft
+			has_technology = tech_cruisers
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { is_preferred_weapons = weapon_type_strike_craft }
+		}
+	}
+	resources = {
+		category = ship_sections
+		cost = { alloys = @corvette_section_cost }
+	}
+}
+
+#frigate
+ship_section_template = {
+	key = "TT_FRIGATE_MID_1"
+	ship_size = frigate
+	fits_on_slot = mid
+	should_draw_components = yes
+	entity = "corvette_M1S1_entity"
+	icon = "GFX_ship_part_core_mid"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { explosive }
+	ai_weight = {
+		factor = 2
+		modifier = {
+			factor = 10.0
+			is_preferred_weapons = weapon_type_explosive
+		}
+		modifier = {
+			factor = 0.1
+			NOT = { is_preferred_weapons = weapon_type_explosive }
+		}
+	}
+	component_slot = { name = "S1" template = "small_turret" locatorname = "small_gun_01" }
+	component_slot = { name = "G1" template = "medium_missile_turret" locatorname = "medium_gun_01" }
+	small_utility_slots = 4
+	aux_utility_slots = 2
+	resources = {
+		category = ship_sections
+		cost = { alloys = @corvette_section_cost }
+	}
+}
+
+#驱逐舰destroyers
+ship_section_template = {
+	key = "TT_DESTROYER_STERN_1"
+	ship_size = destroyer
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "destroyer_stern_S2_entity"
+	icon = "GFX_ship_part_core_stern"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { screen }
+	ai_weight = {
+		factor = 2
+		modifier = {
+			factor = 10.0
+			NOR = {
+				has_ai_personality = peaceful_traders
+				has_ai_personality = slaving_despots
+				has_ai_personality = migrating_flock
+				has_ai_personality = evangelising_zealots
+				has_ai_personality = hive_mind
+			}
+		}
+	}
+	component_slot = { name = "P1" template = "point_defence_turret" locatorname = "small_gun_01" }
+	component_slot = { name = "P2" template = "point_defence_turret" locatorname = "small_gun_02" }
+	aux_utility_slots = 2
+	resources = {
+		category = ship_sections
+		cost = { alloys = @destroyer_section_cost }
+	}
+}
+
+ship_section_template = {
+	key = "TT_DESTROYER_STERN_2"
+	ship_size = destroyer
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "destroyer_stern_S2_entity"
+	icon = "GFX_ship_part_core_stern"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { gunship }
+	ai_weight = {
+		factor = 200
+	}
+	component_slot = { name = "S1" template = "small_turret" locatorname = "small_gun_01" }
+	component_slot = { name = "S2" template = "small_turret" locatorname = "small_gun_02" }
+	aux_utility_slots = 3
+	resources = {
+		category = ship_sections
+		cost = { alloys = @destroyer_section_cost }
+	}
+}
+ship_section_template = {
+	key = "TT_DESTROYER_STERN_3"
+	ship_size = destroyer
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "destroyer_stern_M1_entity"
+	icon = "GFX_ship_part_core_stern"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { artillery }
+	component_slot = { name = "M1" template = "medium_turret" locatorname = "medium_gun_01" }
+	aux_utility_slots = 2
+	resources = {
+		category = ship_sections
+		cost = { alloys = @destroyer_section_cost }
+	}
+}
+
+#巡洋舰cruisers
+ship_section_template = {
+	key = "TT_CRUISER_STERN_1"
+	ship_size = cruiser
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "cruiser_stern_M1_entity"
+	icon = "GFX_ship_part_core_stern"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { artillery }
+	component_slot = { name = "M1" template = "medium_turret" locatorname = "medium_gun_01" }
+	aux_utility_slots = 3
+	resources = {
+		category = ship_sections
+		cost = { alloys = @cruiser_section_cost }
+	}
+}
+ship_section_template = {
+	key = "TT_CRUISER_STERN_2"
+	ship_size = cruiser
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "cruiser_stern_S2_entity"
+	icon = "GFX_ship_part_core_stern"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { gunship }
+	component_slot = { name = "S1" template = "small_turret" locatorname = "small_gun_01" }
+	component_slot = { name = "S2" template = "small_turret" locatorname = "small_gun_02" }
+	aux_utility_slots = 4
+	resources = {
+		category = ship_sections
+		cost = { alloys = @cruiser_section_cost }
+	}
+}
+
+#战列舰battleship
+ship_section_template = {#虚空
+	key = "TT_BATTLESHIP_MID_1"
+	ship_size = battleship
+	fits_on_slot = mid
+	should_draw_components = yes
+	entity = "battleship_mid_L3_entity"
+	icon = "GFX_ship_part_core_mid"
+	ai_weight = { factor = 0 }
+	prerequisites = { tech_tt_new_section_template }
+	resources = {
+		category = ship_sections
+		cost = { alloys = 20 }
+	}
+}
+ship_section_template = {#虚空
+	key = "TT_BATTLESHIP_STERN_1"
+	ship_size = battleship
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "battleship_stern_L1_entity"
+	icon = "GFX_ship_part_core_stern"
+	ai_weight = { factor = 0 }
+	prerequisites = { tech_tt_new_section_template }
+	resources = {
+		category = ship_sections
+		cost = { alloys = 20 }
+	}
+}
+ship_section_template = {
+	key = "TT_BATTLESHIP_STERN_2"
+	ship_size = battleship
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "battleship_stern_L1_entity"
+	icon = "GFX_ship_part_core_stern"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { artillery }
+	component_slot = { name = "L1" template = "large_turret" locatorname = "large_gun_01" }
+	aux_utility_slots = 3
+	resources = {
+		category = ship_sections
+		cost = { alloys = @battleship_section_cost }
+	}
+}
+ship_section_template = {
+	key = "TT_BATTLESHIP_STERN_3"
+	ship_size = battleship
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "battleship_stern_M2_entity"
+	icon = "GFX_ship_part_core_stern"
+	prerequisites = { tech_tt_new_section_template }
+	ai_tags = { gunship }
+	component_slot = { name = "M1" template = "medium_turret" locatorname = "medium_gun_01" }
+	component_slot = { name = "M2" template = "medium_turret" locatorname = "medium_gun_02" }
+	aux_utility_slots = 4
+	resources = {
+		category = ship_sections
+		cost = { alloys = @battleship_section_cost }
+	}
+}
+
+#泰坦titan
+ship_section_template = {
+	key = "TT_TITAN_STERN_1"
+	ship_size = titan
+	fits_on_slot = stern
+	should_draw_components = yes
+	entity = "titan_stern_entity"
+	icon = "GFX_ship_part_core_stern"
+	prerequisites = { tech_tt_new_section_template }
+	component_slot = { name = "L1" template = "large_turret" locatorname = "large_gun_01" }
+	component_slot = { name = "L2" template = "large_turret" locatorname = "large_gun_02" }
+	aux_utility_slots = 4
+	resources = {
+		category = ship_sections
+		cost = { alloys = 170 }
+	}
+}
+
+#主宰juggernaut
+ship_section_template = {
+	key = "TT_JUGGERNAUT_CORE_1"
+	ship_size = juggernaut
+	fits_on_slot = "core"
+	entity = "juggernaut_core_section_entity"
+	icon = "GFX_ship_part_core_mid"
+
+	prerequisites = { tech_tt_new_section_template }
+	ai_weight = {
+		factor = 500
+		modifier = {
+			factor = 0
+			NOT = { has_technology = tech_titans }
+		}
+	}
+	component_slot = { name = "T1" template = "invisible_titanic_fixed" locatorname = "root" }
+	component_slot = { name = "X1" template = "extra_large_turret" locatorname = "xl_gun_01" }
+	component_slot = { name = "X2" template = "extra_large_turret" locatorname = "xl_gun_02" }
+	component_slot = { name = "L1" template = "large_turret" locatorname = "gun_1" }
+	component_slot = { name = "L2" template = "large_turret" locatorname = "gun_2" }
+	component_slot = { name = "L3" template = "large_turret" locatorname = "gun_3" }
+	component_slot = { name = "L4" template = "large_turret" locatorname = "gun_4" }
+	component_slot = { name = "L5" template = "large_turret" locatorname = "gun_5" }
+	large_utility_slots = 21
+	aux_utility_slots = 5
+	resources = {
+		category = ship_sections
+		cost = { alloys = 1000 }
+	}
+}
+ship_section_template = {
+	key = "TT_JUGGERNAUT_CORE_2"
+	ship_size = juggernaut
+	fits_on_slot = "core"
+	entity = "juggernaut_core_section_entity"
+	icon = "GFX_ship_part_core_mid"
+	prerequisites = { tech_tt_new_section_template }
+	ai_weight = {
+		factor = 500
+		modifier = {
+			factor = 0
+			NOT = { has_technology = tech_titans }
+		}
+	}
+	component_slot = { name = "T1" template = "invisible_titanic_fixed" locatorname = "root" }
+	component_slot = { name = "X1" template = "extra_large_turret" locatorname = "xl_gun_01" }
+	component_slot = { name = "X2" template = "extra_large_turret" locatorname = "xl_gun_02" }
+	component_slot = { name = "H1" template = "large_strike_craft" locatorname = "gun_1" }
+	component_slot = { name = "H2" template = "large_strike_craft" locatorname = "gun_2" }
+	component_slot = { name = "H3" template = "large_strike_craft" locatorname = "gun_3" }
+	component_slot = { name = "H4" template = "large_strike_craft" locatorname = "gun_4" }
+	component_slot = { name = "H5" template = "large_strike_craft" locatorname = "gun_5" }
+	large_utility_slots = 21
+	aux_utility_slots = 5
+	resources = {
+		category = ship_sections
+		cost = { alloys = 1000 }
+	}
+}
+
+#巨像colossus
+ship_section_template = {
+	key = "TT_COLOSSUS_SHIP_1"
+	ship_size = colossus
+	fits_on_slot = "ship"
+	entity = "colossus_ship_entity"
+	icon = "GFX_ship_part_core_mid"
+	prerequisites = { tech_tt_new_section_template }
+	component_slot = { name = "W1" template = "invisible_planet_killer_fixed" locatorname = "planet_killer_gun_01" }
+	component_slot = { name = "X1" template = "invisible_extra_large_fixed" locatorname = "planet_killer_gun_01" }
+	component_slot = { name = "X2" template = "invisible_extra_large_fixed" locatorname = "planet_killer_gun_01" }
+	component_slot = { name = "L1" template = "invisible_large_turret" locatorname = "planet_killer_gun_01" }
+	component_slot = { name = "L2" template = "invisible_large_turret" locatorname = "planet_killer_gun_01" }
+	component_slot = { name = "H1" template = "large_strike_craft" locatorname = "planet_killer_gun_01" }
+	component_slot = { name = "H2" template = "large_strike_craft" locatorname = "planet_killer_gun_01" }
+
+	small_utility_slots = 0
+	medium_utility_slots = 0
+	large_utility_slots = 6
+	aux_utility_slots = 2
+	resources = {
+		category = ship_sections
+		cost = { alloys = 500 }
+	}
+}

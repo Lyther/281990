@@ -1,0 +1,200 @@
+namespace = anomaly
+
+# project successful
+country_event = {
+	id = anomaly.3086
+	title = anomaly.3086.name
+	desc = anomaly.3086.desc
+	picture = GFX_evt_throne_room
+	show_sound = event_conversation
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_zofe_compatible = yes
+				has_communications = root
+				NOT = { is_country = root }
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				NOT = { is_xenophobe = yes }
+			}
+			save_event_target_as = book_writer
+		}
+	}
+
+	# read its secrets, gain influence
+	option = {
+		name = anomaly.3086.a
+		add_monthly_resource_mult = {
+			resource = influence
+			value = @tier1influencereward
+			min = @tier1influencemin
+			max = @tier1influencemax
+		}
+	}
+
+	# return to other empire, +credits and +opinion
+	option = {
+		name = anomaly.3086.b
+		trigger = { NOR = { has_ethic = ethic_fanatic_xenophobe has_civic = civic_machine_terminator has_civic = civic_fanatic_purifiers } }
+		country_event = { id = anomaly.3087 }
+	}
+
+	# xenophobe, exterminator or low opinion, opens diplomacy saying their book is terrible, -opinion
+	option = {
+		name = anomaly.3086.c
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+				has_civic = civic_machine_terminator
+				has_civic = civic_fanatic_purifiers
+
+				opinion = {
+					who = event_target:book_writer
+					value < 11
+				}
+			}
+		}
+		country_event = { id = anomaly.3088 }
+	}
+}
+
+# On-action, pirate base destroyed by others, 33/33/33 port to next
+country_event = {
+	id = anomaly.3097
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = faction
+		fromfrom = { has_fleet_flag = ransomeer_base_flag }
+		NOT = { reverse_has_relation_flag = { who = from flag = ransomeer_relation } }
+	}
+
+	immediate = {
+		if = {
+			limit = { from = { is_zofe_compatible = yes has_established_contact = root } }
+			random_list = {
+				50 = {
+					random_country = {
+						limit = {
+							has_relation_flag = {
+								who = root
+								flag = ransomeer_relation
+							}
+						}
+						hidden_effect = { remove_point_of_interest = ransomeer_poi }
+						country_event = { id = anomaly.3098 }
+					}
+				}
+				50 = {
+					random_country = {
+						limit = {
+							has_relation_flag = {
+								who = root
+								flag = ransomeer_relation
+							}
+						}
+						hidden_effect = { remove_point_of_interest = ransomeer_poi }
+						country_event = { id = anomaly.3099 }
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					OR = {
+						NOT = { has_established_contact = root }
+						NOT = { is_zofe_compatible = yes }
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					has_relation_flag = {
+						who = root
+						flag = ransomeer_relation
+					}
+				}
+				hidden_effect = { remove_point_of_interest = ransomeer_poi }
+				country_event = { id = anomaly.3100 }
+			}
+		}
+	}
+}
+
+#story8
+ship_event = {
+	id = anomaly.4012
+	title = PROJECT_COMPLETE
+	desc = "anomaly.4012.desc"
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_conversation
+	location = FROM
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				save_event_target_as = MyCountry
+			}
+			fromfromfrom = {
+				remove_planet_flag = derelict_ship_planet
+				closest_system = {
+					limit = {
+						exists = space_owner
+						space_owner = {
+							is_zofe_compatible = yes
+							NOR = {
+								is_same_value = event_target:MyCountry
+								has_established_contact = event_target:MyCountry
+							}
+						}
+					}
+					min_steps = 10
+					space_owner = {
+						save_event_target_as = contact_empire
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = anomaly.4012.a
+		custom_tooltip = anomaly.4012.a.tooltip
+		hidden_effect = {
+			event_target:contact_empire = {
+				set_timed_relation_flag = { flag = no_coms who = event_target:MyCountry days = 90 }
+				add_opinion_modifier = {
+					who = event_target:MyCountry
+					modifier = opinion_crew_saved
+				}
+			}
+			owner = {
+				set_timed_country_flag = { flag = day_0 days = 7 }
+				#establish_contact = { who = event_target:contact_empire }
+				establish_communications = event_target:contact_empire
+				country_event = { id = action.1 days = 1 }
+			}
+			fromfrom = {
+				destroy_ambient_object = this
+			}
+		}
+	}
+	option = {
+		name = anomaly.4012.b
+		hidden_effect = {
+			fromfrom = {
+				destroy_ambient_object = this
+			}
+		}
+	}
+}

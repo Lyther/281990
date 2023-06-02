@@ -1,0 +1,100 @@
+entity = {
+	name = "tc_nethermind_01_entity"
+	pdxmesh = "nethermind_01_mesh"
+
+	get_state_from_parent = no
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 
+	start_event = { node = "nethermind_light_1" particle = "tc_nitor_effet_particle" trigger_once = yes keep_particle =no }
+	start_event = { node = "nethermind_light_2" particle = "tc_nitor_effet_particle" trigger_once = yes keep_particle =no }
+	start_event = { node = "nethermind_light_3" particle = "tc_nitor_effet_particle" trigger_once = yes keep_particle =no }
+	start_event = { node = "nethermind_light_4" particle = "tc_nitor_effet_particle" trigger_once = yes keep_particle =no }
+	}
+
+	attach = { "nethermind_core" = "nethermind_effect_entity" }
+}
+
+entity = {
+	name = "tc_dimensional_lure_01_entity"
+	pdxmesh = "dimensional_lure_01_mesh"
+
+	get_state_from_parent = no
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 
+	start_event = { }
+	}
+
+	attach = { "dimensional_lure_core" = "nethermind_effect_entity" }
+}
+
+entity = {
+	name = "tc_dimensional_lure_02_entity"
+	pdxmesh = "dimensional_lure_02_mesh"
+
+	default_state = "idle"
+	state = { name = "idle"
+	start_event = { node = "dimensional_lure_light_1" particle = "tc_nitor_effet_particle" trigger_once = yes keep_particle =no }
+	start_event = { node = "dimensional_lure_light_2" particle = "tc_nitor_effet_particle" trigger_once = yes keep_particle =no }
+	start_event = { node = "dimensional_lure_light_3" particle = "tc_nitor_effet_particle" trigger_once = yes keep_particle =no }
+	start_event = { node = "dimensional_lure_light_4" particle = "tc_nitor_effet_particle" trigger_once = yes keep_particle =no }
+	}
+}
+
+entity = {
+	name = "nethermind_effect_entity"
+	pdxmesh = "nethermind_effect_mesh"
+
+	get_state_from_parent = no
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 
+		start_event = { }
+	}
+	
+	game_data = {
+		uv_animation_speed 		= -0.05
+		uv_animation_direction 	= { 0.5 0.0 }
+		bloom_factor = 0.8
+	}
+}
+
+#组合体
+entity = {
+	name = "tc_nethermind_entity"
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { node = "root" particle = "tc_nether_vortex_s_effect_particle" trigger_once = yes keep_particle = yes }
+	}
+
+	attach = { "root" = "tc_nethermind_01_entity" }
+}
+
+entity = {
+	name = "tc_dimensional_lure_entity"
+	locator = { name = "root" position = { 0 0 0 } }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 
+		start_event = { node = "root" particle = "tc_nether_vortex_m_effect_particle" trigger_once = yes keep_particle = yes }
+	}
+
+	attach = { "root" = "tc_nethermind_01_entity" }
+	attach = { "root" = "tc_dimensional_lure_01_entity" }
+}
+
+entity = {
+	name = "tc_dimensional_lure_complet_entity"
+	locator = { name = "root" position = { 0 0 0 } }
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 
+		start_event = { node = "root" particle = "tc_nether_vortex_l_effect_particle" trigger_once = yes keep_particle = yes }
+	}
+
+	attach = { "root" = "tc_nethermind_01_entity" }
+	attach = { "root" = "tc_dimensional_lure_01_entity" }
+	attach = { "root" = "tc_dimensional_lure_02_entity" }
+}

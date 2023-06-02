@@ -1,0 +1,79 @@
+namespace = TT_core
+
+@TT_version = 230514
+
+event = {
+	id = TT_core.1
+	hide_window = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = {
+		set_global_flag = tidy_tradition_active
+		event_target:global_event_country = {#设置版本号
+			set_variable = { which = TT_version value = @TT_version }
+		}
+	}
+}
+
+event = {
+	id = TT_core.2
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_global_flag = tidy_tradition_active
+		if = {
+			limit = {#若没有设置版本号，或者版本号落后，则更新版本号并触发事件
+				event_target:global_event_country = {
+					OR = {
+						NOT = { is_variable_set = TT_version }
+						NOT = { check_variable = { which = TT_version value = @TT_version } }
+					}
+				}
+			}
+			event_target:global_event_country = { set_variable = { which = TT_version value = @TT_version } }
+			every_playable_country = {
+				limit = { is_ai = no }
+				country_event = { id = TT_core.3 }
+			}
+		}
+	}
+}
+country_event = {
+	id = TT_core.3
+	title = TT_core.3.name
+	desc = TT_core.3.desc
+	picture = GFX_evt_unity_symbol
+	show_sound = event_coronation
+	is_triggered_only = yes
+	option = { name = OK }
+}
+
+#on_tradition_picked
+country_event = {
+	id = TT_core.4
+	title = TT_core.4.name
+	desc = TT_core.4.desc
+	picture = GFX_evt_unity_symbol
+	show_sound = event_yellow_alert
+	is_triggered_only = yes
+	trigger = {
+		has_utopia = yes
+		num_tradition_categories = 6
+		NOT = { has_country_flag = TT_flag_CNTR_have_received_warning }
+		NOR = {
+			has_ascension_perk = ap_engineered_evolution
+			has_ascension_perk = ap_mind_over_matter
+			has_ascension_perk = ap_the_flesh_is_weak
+			has_ascension_perk = ap_synthetic_evolution
+			has_ascension_perk = ap_organo_machine_interfacing
+			has_ascension_perk = ap_organo_machine_interfacing_assimilator
+			has_ascension_perk = ap_synthetic_age
+		}
+	}
+	option = {
+		name = OK
+		hidden_effect = {
+			set_country_flag = TT_flag_CNTR_have_received_warning
+		}
+	}
+}

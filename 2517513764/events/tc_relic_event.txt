@@ -1,0 +1,1668 @@
+namespace = tc_relic
+
+#魔导手册坟
+#异常能量波动
+event = {
+	id = tc_relic.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_global_flag = tc_taind_system_discovered }
+		mid_game_years_passed >= 5
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				is_ai = no
+				AND = {
+					NOT = { has_global_flag = tc_taind_system_discovered }
+					NOT = { has_country_flag = tc_arcane_research_origin_country }
+				}
+			}
+			random_controlled_planet = {
+				if = {
+					limit = {
+						OR = {
+							is_planet_class = pc_molten
+							is_planet_class = pc_barren
+							is_planet_class = pc_barren_cold
+							is_planet_class = pc_frozen
+						}
+						has_anomaly = no
+						NOT = { exists = archaeological_site }
+					}
+					enable_special_project = {
+						name = tc_thaum_system_discover
+						location = THIS
+						owner = PREV
+					}
+					set_global_flag = tc_taind_system_discovered
+					solar_system = {
+						owner = {
+							country_event = {
+								id = tc_relic.2
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tc_relic.2
+	title = "tc_relic.2_title"
+	desc = "tc_relic.2_desc"
+	picture = GFX_evt_sapient_AI
+	is_triggered_only = yes
+
+	option = {
+		name = tc_relic.2.a
+	}
+
+	option = {
+		name = tc_relic.2.b
+		trigger = {
+			OR = {
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+
+	option = {
+		name = tc_relic.2.c
+		trigger = {
+			any_owned_leader = {
+				has_trait = trait_psionic
+			}
+		}
+	}
+}
+
+
+#阶段事件
+fleet_event = {
+	id = tc_relic.3
+	title = "tc_relic.3.name"
+	desc = "tc_relic.3.desc"
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = "tc_relic.3.a"
+	}
+}
+
+fleet_event = {
+	id = tc_relic.4
+	title = "tc_relic.4.name"
+	desc = "tc_relic.4.desc"
+	picture = GFX_evt_baol_ruins
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = "tc_relic.4.a"
+	}
+}
+
+fleet_event = {
+	id = tc_relic.5
+	title = "tc_relic.5.name"
+	desc = "tc_relic.5.desc"
+	picture = GFX_evt_discovered_hidden_door
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = "tc_relic.5.a"
+	}
+}
+
+fleet_event = {
+	id = tc_relic.6
+	title = "tc_relic.6.name"
+	desc = "tc_relic.6.desc"
+	picture = GFX_evt_bone_building
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = "tc_relic.6.a"
+		owner = {
+			add_resource = {
+				tc_knowledge_fragment = 64
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = tc_relic.7
+	title = "tc_relic.7.name"
+	desc = "tc_relic.7.desc"
+	picture = GFX_evt_excavation_team
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = "tc_relic.7.a"
+		owner = {
+			add_resource = {
+				tc_knowledge_fragment = 384
+			}
+			add_relic = tc_research_book
+		}
+	}
+}
+
+#星系生成通知
+country_event = {
+	id = tc_relic.9
+	title = "tc_relic.9_title"
+	desc = "tc_relic.9_desc"
+	picture = GFX_evt_binary_stars
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = tc_relic.9.a
+	}
+}
+
+#魔导手册丢失补充
+#on_monthly_pulse
+event = {
+	id = tc_relic.11
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = { }
+
+	immediate = {
+		every_country = {
+			limit = {
+				has_technology = tc_tech_arcane_research
+				NOT = { has_relic = tc_research_book }
+			}
+			add_relic = tc_research_book
+		}
+	}
+}
+
+#透镜发现矿物沉积
+country_event = {
+	id = tc_relic.12
+	title = "tc_relic.12.title"
+	desc = "tc_relic.12.desc"
+	is_triggered_only = yes
+	picture = GFX_evt_mining_operations
+	location = event_target:tc_scanner_chosen_planet
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				habitable_planet = no
+				is_artificial = no
+				NOR = {
+					is_planet_class = pc_ringworld_habitable_damaged
+					is_planet_class = pc_ringworld_tech_damaged
+					is_planet_class = pc_ringworld_tech
+					is_planet_class = pc_ringworld_seam
+					is_planet_class = pc_ringworld_seam_damaged
+				}
+				# check that the random list won't come up empty
+				OR = {
+					energy_candidate = yes
+					mineral_candidate = yes
+					research_candidate = yes
+					alloy_candidate = yes
+					exotic_gas_candidate = yes
+					rare_crystal_candidate = yes
+					volatile_motes_candidate = yes
+					tc_element_shard_candidate = yes
+					ROOT = { is_gestalt = no }
+				}
+			}
+			save_event_target_as = tc_scanner_chosen_planet
+
+			locked_random_list = {
+				# Alloys
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { alloy_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_alloys_3 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { alloy_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_alloys_4 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { alloy_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_alloys_5 }
+				}
+	
+				# Exotic Gas
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { exotic_gas_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_exotic_gases_3 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { exotic_gas_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_exotic_gases_4 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { exotic_gas_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_exotic_gases_5 }
+				}
+	
+				# Rare Crystals
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { rare_crystal_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_rare_crystals_3 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { rare_crystal_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_rare_crystals_4 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { rare_crystal_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_rare_crystals_5 }
+				}
+	
+				# Volatile Motes
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { volatile_motes_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_volatile_motes_3 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { volatile_motes_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_volatile_motes_4 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { volatile_motes_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = d_volatile_motes_5 }
+				}
+	
+				#元素碎片
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { tc_element_shard_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = tc_element_shard_deposit_3 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { tc_element_shard_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = tc_element_shard_deposit_4 }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						event_target:tc_scanner_chosen_planet = { tc_element_shard_candidate = no }
+					}
+					event_target:tc_scanner_chosen_planet = { add_deposit = tc_element_shard_deposit_5 }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+	}
+}
+#宜居星发现奥术矿物沉积通知
+planet_event = {
+	id = tc_relic.13
+	title = "tc_relic.13.title"
+	desc = "tc_relic.13.desc"
+	is_triggered_only = yes
+	picture = GFX_evt_mining_operations
+	location = ROOT
+
+	immediate = {
+		add_deposit = tc_arcane_miner
+	}
+
+	option = {
+		name = EXCELLENT
+	}
+}
+#宜居星发现小型奥术遗迹通知
+planet_event = {
+	id = tc_relic.14
+	title = "tc_relic.14.title"
+	desc = "tc_relic.14.desc"
+	is_triggered_only = yes
+	picture = GFX_evt_archaeological_dig
+	location = ROOT
+
+	immediate = {
+		random_list = {
+			10 = { while = { count = 1 add_deposit = tc_arcane_ruin } }
+			10 = { while = { count = 2 add_deposit = tc_arcane_ruin } }
+			10 = { while = { count = 3 add_deposit = tc_arcane_ruin } }
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+	}
+}
+
+#考古遗址创建提示
+country_event = {
+	id = tc_relic.15
+	title = "tc_relic.15.title"
+	desc = "tc_relic.15.desc"
+	is_triggered_only = yes
+	picture = "GFX_evt_archaeological_dig"
+	location = event_target:tc_archaeological_point_target
+
+	immediate = { }
+
+	option = {
+		name = tc_relic.15.a
+	}
+}
+
+#透镜研究提示事件
+country_event = {
+	id = tc_relic.16
+	title = "tc_relic.16.title"
+	desc = "tc_relic.16.desc"
+	is_triggered_only = yes
+	picture = "GFX_evt_strategic_resources"
+
+	immediate = {
+		add_relic = tc_scanner
+	}
+
+	option = {
+		name = tc_relic.16.a
+	}
+}
+
+#透镜发现新星系
+country_event = {
+	id = tc_relic.17
+	title = "tc_relic.17.title"
+	desc = "tc_relic.17.desc"
+	is_triggered_only = yes
+	picture = "GFX_evt_binary_stars"
+	location = last_created_system
+
+	option = {
+		name = tc_relic.17.a
+	}
+}
+
+#20
+#奥术分解机坟阶段事件
+#1
+fleet_event = {
+	id = tc_relic.21
+	title = tc_relic.21.title
+	desc = tc_relic.21.desc
+	is_triggered_only = yes
+	picture = ""
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.21.a
+	}
+
+}
+#2
+fleet_event = {
+	id = tc_relic.22
+	title = tc_relic.22.title
+	desc = tc_relic.22.desc
+	is_triggered_only = yes
+	picture = ""
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.22.a
+	}
+
+}
+#3
+fleet_event = {
+	id = tc_relic.23
+	title = tc_relic.23.title
+	desc = tc_relic.23.desc
+	is_triggered_only = yes
+	picture = ""
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.23.a
+	}
+
+}
+#4
+fleet_event = {
+	id = tc_relic.24
+	title = tc_relic.24.title
+	desc = tc_relic.24.desc
+	is_triggered_only = yes
+	picture = ""
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.24.a
+	}
+
+}
+#5
+fleet_event = {
+	id = tc_relic.25
+	title = tc_relic.25.title
+	desc = tc_relic.25.desc
+	is_triggered_only = yes
+	picture = ""
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.25.a
+		owner = {
+			add_relic = tc_thaumic_disassembler
+			hidden_effect = {
+				change_variable = {
+					which = tc_relic_point_var
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+#30 tempus system
+#时之沙星系进入通知
+fleet_event = {
+	id = tc_relic.30
+	title = tc_relic.30.title
+	desc = tc_relic.30.desc
+	is_triggered_only = yes
+	picture = "GFX_event_tc_hourglass"
+
+	trigger = {
+		FROM = {
+			has_star_flag = tc_tempus_system
+		}
+		owner = {
+			NOT = {
+				has_country_flag = tc_tempus_system_init
+			}
+			is_ai = no
+		}
+	}
+
+	immediate = {
+		FROM = {
+			random_megastructure = {
+				limit = {
+					is_megastructure_type = tc_magic_hourglass_00
+				}
+				enable_special_project = {
+					name = tc_tempus_hourglass_project
+					location = THIS
+					owner = root.owner
+				}
+			}
+		}
+		owner = {
+			set_country_flag = tc_tempus_system_init
+		}
+	}
+
+	option = {
+		name = tc_relic.30.a
+
+	}
+}
+#时之沙坟阶段事件
+#1
+fleet_event = {
+	id = tc_relic.31
+	title = tc_relic.31.title
+	desc = tc_relic.31.desc
+	is_triggered_only = yes
+	picture = GFX_evt_molten
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.31.a
+	}
+}
+#2
+fleet_event = {
+	id = tc_relic.32
+	title = tc_relic.32.title
+	desc = tc_relic.32.desc
+	is_triggered_only = yes
+	picture = GFX_evt_underground_city
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.32.a
+	}
+	option = {
+		name = tc_relic.32.b
+		owner = {
+			add_resource = {
+				alloys = -2000
+			}
+		}
+		archaeological_site = {
+			add_stage_clues = 3
+		}
+	}
+}
+#3
+fleet_event = {
+	id = tc_relic.33
+	title = tc_relic.33.title
+	desc = tc_relic.33.desc
+	is_triggered_only = yes
+	picture = GFX_evt_generator_powerup
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.33.a
+	}
+}
+#4
+fleet_event = {
+	id = tc_relic.34
+	title = tc_relic.34.title
+	desc = tc_relic.34.desc
+	is_triggered_only = yes
+	picture = GFX_evt_treasure_pile
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.34.a
+		owner = {
+			enable_special_project = {
+				name = tc_tempus_hourglass_research_project
+				owner = this
+				location = this.capital_scope
+			}
+			add_resource = {
+				tc_knowledge_fragment = 384
+			}
+		}
+	}
+	option = {
+		name = tc_relic.34.b
+		owner = {
+			add_resource = {
+				tc_knowledge_fragment = 768
+				tc_element_shard = 256
+			}
+		}
+	}
+}
+#项目完成通知
+country_event = {
+	id = tc_relic.35
+	title = tc_relic.35.title
+	desc = tc_relic.35.desc
+	is_triggered_only = yes
+	picture = "GFX_evt_clocks"
+
+	trigger = {
+		
+	}
+
+	option = {
+		name = tc_relic.35.a
+	}
+}
+#研究完毕通知
+country_event = {
+	id = tc_relic.36
+	title = tc_relic.36.title
+	desc = tc_relic.36.desc
+	is_triggered_only = yes
+	picture = "GFX_evt_clocks"
+
+	trigger = {
+		
+	}
+
+	option = {
+		name = tc_relic.36.a
+	}
+}
+
+
+#40
+#间谍事件 # this = operation; from = target
+#外交请求
+espionage_operation_event = {
+	id = tc_relic.40
+	title = tc_relic.40.title
+	desc = tc_relic.40.desc
+	picture = GFX_evt_analyzing_artifacts
+	show_sound = event_default
+	is_triggered_only = yes
+	espionage_operation = yes
+
+	immediate = {
+		target = {
+			country_event = {
+				id = tc_relic.41
+			}
+		}
+	}
+
+	option = {
+		name = tc_relic.40.a
+	}
+}
+
+country_event = {
+	id = tc_relic.41
+	title = tc_relic.41.title
+	desc = tc_relic.41.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+
+	immediate = { }
+	option = { #白给
+		name = tc_relic.41.a
+
+		FROM = {
+			country_event = {
+				id = tc_relic.42
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				mult = 1.5
+				is_in_federation_with = FROM
+			}
+			modifier = {
+				mult = 1.5
+				is_friendly_to = FROM
+			}
+			modifier = {
+				mult = 0
+				is_hostile_to = FROM
+			}
+		}
+	}
+	option = { #要价
+		name = tc_relic.41.b
+		custom_tooltip = "tc_relic_41_b_text"
+		hidden_effect = {
+			FROM = {
+				country_event = {
+					id = tc_relic.43
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = { #爬
+		name = tc_relic.41.c
+
+		FROM = {
+			country_event = {
+				id = tc_relic.44
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				mult = 0.25
+				is_in_federation_with = FROM
+			}
+			modifier = {
+				mult = 0.5
+				is_friendly_to = FROM
+			}
+			modifier = {
+				mult = 2
+				is_hostile_to = FROM
+			}
+		}
+	}
+}
+
+#回应
+country_event = {
+	id = tc_relic.42
+	title = tc_relic.42.title
+	desc = tc_relic.42.desc
+	picture = GFX_evt_acquire_asset
+	is_triggered_only = yes
+	
+	immediate = { }
+
+	option = {
+		name = tc_relic.42.a
+		hidden_effect = {
+			add_relic = tc_research_book
+			add_resource = {
+				tc_knowledge_fragment = 512
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tc_relic.43
+	title = tc_relic.43.title
+	desc = tc_relic.43.desc
+	picture = GFX_evt_signing
+	is_triggered_only = yes
+	
+	immediate = { }
+
+	option = {
+		name = tc_relic.43.a
+		
+		add_modifier = {
+			modifier = tc_research_sharing_down
+			days = 7200
+		}
+		hidden_effect = {
+			add_relic = tc_research_book
+			add_resource = {
+				tc_knowledge_fragment = 512
+			}
+			FROM = {
+				country_event = {
+					id = tc_relic.45
+					days = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = tc_relic.43.b
+	}
+}
+
+country_event = {
+	id = tc_relic.44
+	title = tc_relic.44.title
+	desc = tc_relic.44.desc
+	picture = GFX_evt_alien_segregation
+	is_triggered_only = yes
+	
+	immediate = { }
+
+	option = {
+		name = tc_relic.44.a
+	}
+}
+
+country_event = {
+	id = tc_relic.45
+	title = tc_relic.45.title
+	desc = tc_relic.45.desc
+	picture = GFX_evt_cargoship_caravan
+	is_triggered_only = yes
+	
+	immediate = { }
+
+	option = {
+		name = tc_relic.45.a
+		add_modifier = {
+			modifier = tc_research_sharing_up
+			days = 7200
+		}
+	}
+}
+
+#盗取
+espionage_operation_event = {
+	id = tc_relic.46
+	title = tc_relic.46.title
+	desc = tc_relic.46.desc
+	picture = GFX_evt_ancient_artifact
+	show_sound = event_default
+	is_triggered_only = yes
+	espionage_operation = yes
+
+	immediate = {
+
+	}
+
+	option = {
+		name = x
+	}
+}
+
+espionage_operation_event = {
+	id = tc_relic.47
+	title = tc_relic.47.title
+	desc = tc_relic.47.desc
+	picture = GFX_evt_decryption
+	show_sound = event_default
+	is_triggered_only = yes
+	espionage_operation = yes
+
+	immediate = {
+
+	}
+
+	option = {
+		name = x
+	}
+}
+
+espionage_operation_event = {
+	id = tc_relic.48
+	title = tc_relic.48.title
+	desc = tc_relic.48.desc
+	picture = GFX_evt_ancient_artifact
+	show_sound = event_default
+	is_triggered_only = yes
+	espionage_operation = yes
+
+	immediate = {
+
+	}
+
+	option = {
+		name = x
+	}
+}
+
+
+#50
+#灵气星系
+#外交窗口
+# Country scope
+# This = target country (player)
+# From = source country	
+country_event = {
+	id = tc_relic.50
+	title = tc_relic.50.title
+	desc = tc_relic.50.desc
+	message_desc = tc_relic.50.desc
+
+	is_triggered_only = yes
+	diplomatic = yes
+	diplomatic_title = BLANK_STRING
+
+	picture_event_data = {
+		portrait = event_target:tc_thaumer_species_target
+		room = crystalline_room
+	}
+
+	trigger = {
+		FROM = {
+			is_same_value = event_target:tc_auram_country_target
+			#is_country_type = tc_crimson_county
+		}
+	}
+	immediate = {
+		
+	}
+
+	option = {
+		name = tc_relic.50.a
+		response_text = tc_relic.50.a.text
+		is_dialog_only = yes
+	}
+	option = {
+		name = tc_relic.50.b
+	}
+}
+
+#摧毁召唤塔
+#摧毁舰船
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+country_event = {
+	id = tc_relic.51
+	title = "tc_relic.51.title"
+	desc = "tc_relic.51.desc"
+	picture = "GFX_evt_debris"
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROMFROM = {
+			is_owned_by = event_target:tc_auram_country_target
+			is_ship_size = tc_starbase
+		}
+	}
+
+	immediate = {
+		FROMFROM.solar_system = {
+			remove_modifier = tc_auram_system_modifier
+			random_ambient_object = {
+				limit = {
+					is_ambient_object_type = tc_planet_shield_gold_object
+				}
+				destroy_ambient_object = this
+			}
+		}
+		event_target:tc_auram_shield_planet = {
+			create_archaeological_site = tc_auram_relic_event_set
+		}
+	}
+
+	option = {
+		name = "tc_relic.51.a"
+	}
+}
+
+#考古阶段事件
+#1
+fleet_event = {
+	id = tc_relic.52
+	title = tc_relic.52.title
+	desc = tc_relic.52.desc
+	is_triggered_only = yes
+	picture = "GFX_evt_barren_dig_site"
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.52.a
+	}
+}
+#2
+fleet_event = {
+	id = tc_relic.53
+	title = tc_relic.53.title
+	desc = tc_relic.53.desc
+	is_triggered_only = yes
+	picture = GFX_evt_underground_city
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.53.a
+	}
+}
+#3
+fleet_event = {
+	id = tc_relic.54
+	title = tc_relic.54.title
+	desc = tc_relic.54.desc
+	is_triggered_only = yes
+	picture = GFX_evt_generator_powerup
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.54.a
+		owner = {
+			add_resource = {
+				tc_knowledge_fragment = 128
+			}
+		}
+	}
+}
+#4
+fleet_event = {
+	id = tc_relic.55
+	title = tc_relic.55.title
+	desc = tc_relic.55.desc
+	is_triggered_only = yes
+	picture = GFX_evt_treasure_pile
+
+	archaeology = yes
+
+	trigger = { }
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	option = {
+		name = tc_relic.55.a
+		owner = {
+			add_tech_progress = {
+				tech = tc_tech_aether_wisp
+				progress = 0.01
+			}
+			add_tech_progress = {
+				tech = tc_tech_nether_wisp
+				progress = 0.01
+			}
+			add_resource = {
+				tc_knowledge_fragment = 384
+			}
+		}
+	}
+	option = {
+		name = tc_relic.55.b
+		owner = {
+			add_resource = {
+				tc_knowledge_fragment = 768
+			}
+		}
+	}
+}
+
+#60
+#
+
+
+#1000
+#荒古矩阵研究
+country_event = {
+	id = tc_relic.1000
+	title = "tc_relic.1000.name"
+	desc = "tc_relic.1000.desc"
+	picture = GFX_event_tc_infuster_broken
+
+	#is_triggered_only = yes
+	mean_time_to_happen = {
+		days = 360
+	}
+
+	trigger = {
+		has_megastructure = tc_infuster_broken
+		has_technology = tc_tech_infusion
+		any_planet_within_border = {
+			is_planet_class = pc_tc_knowledge_stone
+			NOT = { exists = archaeological_site }
+		}
+		NOT = { has_country_flag = tc_infusion_grave_active }
+	}
+	
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_planet_class = pc_tc_knowledge_stone
+			}
+			create_archaeological_site = tc_ancient_infusion_set
+		}
+		set_country_flag = tc_infusion_grave_active
+	}
+	
+	option = {
+		name = "tc_relic.1000.a"
+	}
+	option = {
+		name = "tc_relic.1000.b"
+	}
+}
+
+fleet_event = {
+	id = tc_relic.1001
+	title = "tc_relic.1001.name"
+	desc = "tc_relic.1001.desc"
+	picture = GFX_event_tc_ancient_stone
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = "tc_relic.1001.a"
+	}
+}
+
+fleet_event = {
+	id = tc_relic.1002
+	title = "tc_relic.1002.name"
+	desc = "tc_relic.1002.desc"
+	picture = GFX_event_tc_ancient_stone
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = "tc_relic.1002.a"
+	}
+}
+
+fleet_event = {
+	id = tc_relic.1003
+	title = "tc_relic.1003.name"
+	desc = "tc_relic.1003.desc"
+	picture = GFX_event_tc_ancient_stone
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { 
+			set_site_progress_locked = yes 
+			save_global_event_target_as = tc_infusion_grave_target
+		}
+	}
+
+	after = { #暂停 依赖其他项目启用
+		#from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = "tc_relic.1003.a"
+		owner = {
+			random_owned_megastructure = {
+				limit = {
+					is_megastructure_type = tc_infuster_broken
+				}
+				enable_special_project = {
+					name = tc_ancient_infusion_sample
+					owner = PREV
+					location = THIS
+				}
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = tc_relic.1004
+	title = "tc_relic.1004.name"
+	desc = "tc_relic.1004.desc"
+	picture = GFX_event_tc_ancient_stone
+	show_sound = event_wind_ruins
+	
+	archaeology = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+	
+	option = {
+		name = "tc_relic.1004.a"
+		owner = {
+			add_tech_progress = {
+				tech = tc_tech_ancient_infusion
+				progress = 0.1
+			}	
+		}
+	}
+}
+
+#采集项目完成通知
+country_event = {
+	id = tc_relic.1005
+	title = "tc_relic.1005.name"
+	desc = "tc_relic.1005.desc"
+	picture = GFX_event_tc_infuster_broken
+
+	is_triggered_only = yes
+	
+	immediate = {}
+	
+	option = {
+		name = "tc_relic.1005.a"
+	}
+}
+
+#随机合成表
+country_event = {
+	id = tc_relic.1006
+	title = "tc_relic.1006.name"
+	desc = "tc_relic.1006.desc"
+	picture = GFX_event_tc_ancient_stone
+
+	#is_triggered_only = yes
+	mean_time_to_happen = {
+		days = 360
+	}
+
+	trigger = {
+		has_megastructure = tc_infuster_ancient_03
+		NAND = {
+			has_country_flag = tc_infusion_cruise_project_active
+			has_country_flag = tc_infusion_batter_project_active
+			has_country_flag = tc_infusion_juggernaut_project_active
+			has_country_flag = tc_infusion_batter_project_active
+			has_country_flag = tc_infusion_tower_project_active
+			has_country_flag = tc_infusion_mcv_project_active
+		}
+		any_planet_within_border = {
+			is_planet_class = pc_tc_knowledge_stone
+			NOT = { exists = archaeological_site }
+		}
+	}
+	
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_planet_class = pc_tc_knowledge_stone
+				NOT = { exists = archaeological_site }
+			}
+			random_list = {
+				30 = { #护航舰
+					modifier = {
+						factor = 0
+						ROOT = { has_country_flag = tc_infusion_cruise_project_active }
+					}
+					ROOT = { set_country_flag = tc_infusion_cruise_project_active }
+					enable_special_project = {
+						name = tc_infusion_cruise
+						owner = root
+						location = this
+					}
+				}
+				20 = { #战列舰
+					modifier = {
+						factor = 0
+						ROOT = { has_country_flag = tc_infusion_batter_project_active }
+					}
+					ROOT = { set_country_flag = tc_infusion_batter_project_active }
+					enable_special_project = {
+						name = tc_infusion_batter
+						owner = root
+						location = this
+					}
+				}
+				20 = { #防御塔
+					modifier = {
+						factor = 0
+						ROOT = { has_country_flag = tc_infusion_tower_project_active }
+					}
+					ROOT = { set_country_flag = tc_infusion_tower_project_active }
+					enable_special_project = {
+						name = tc_infusion_tower
+						owner = root
+						location = this
+					}
+				}
+				10 = { #主宰舰
+					modifier = {
+						factor = 0
+						ROOT = { has_country_flag = tc_infusion_juggernaut_project_active }
+					}
+					ROOT = { set_country_flag = tc_infusion_juggernaut_project_active }
+					enable_special_project = {
+						name = tc_infusion_juggernaut
+						owner = root
+						location = this
+					}
+				}
+				10 = { #MCV
+					modifier = {
+						factor = 0
+						ROOT = { has_country_flag = tc_infusion_mcv_project_active }
+					}
+					ROOT = { set_country_flag = tc_infusion_mcv_project_active }
+					enable_special_project = {
+						name = tc_infusion_mcv
+						owner = root
+						location = this
+					}
+				}
+				10 = { #洞穴创造者
+					modifier = {
+						factor = 0
+						ROOT = { has_country_flag = tc_infusion_cave_project_active }
+					}
+					ROOT = { set_country_flag = tc_infusion_cave_project_active }
+					enable_special_project = {
+						name = tc_infusion_cave
+						owner = root
+						location = this
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "tc_relic.1006.a"
+	}
+}
+
+#1101
+country_event = { #护航
+	id = tc_relic.1101
+	title = "tc_relic.1101.name"
+	desc = "tc_relic.1101.desc"
+	picture = GFX_event_tc_ancient_stone
+
+	is_triggered_only = yes
+	
+	immediate = {}
+	
+	option = {
+		name = "tc_relic.1101.a"
+		add_tech_progress = {
+			tech = tc_tech_cruise_ship
+			progress = 0.1
+		}
+	}
+}
+
+#1105
+country_event = { #战列
+	id = tc_relic.1105
+	title = "tc_relic.1105.name"
+	desc = "tc_relic.1105.desc"
+	picture = GFX_event_tc_ancient_stone
+
+	is_triggered_only = yes
+	
+	immediate = {}
+	
+	option = {
+		name = "tc_relic.1105.a"
+		add_tech_progress = {
+			tech = tc_tech_batter_ship
+			progress = 0.1
+		}
+	}
+}
+
+#1109
+country_event = { #主宰
+	id = tc_relic.1109
+	title = "tc_relic.1109.name"
+	desc = "tc_relic.1109.desc"
+	picture = GFX_event_tc_ancient_stone
+
+	is_triggered_only = yes
+	
+	immediate = {}
+	
+	option = {
+		name = "tc_relic.1109.a"
+		add_tech_progress = {
+			tech = tc_tech_juggernaut_ship
+			progress = 0.1
+		}
+	}
+}
+
+#1112
+country_event = { #防御塔
+	id = tc_relic.1112
+	title = "tc_relic.1112.name"
+	desc = "tc_relic.1112.desc"
+	picture = GFX_event_tc_ancient_stone
+
+	is_triggered_only = yes
+	
+	immediate = {}
+	
+	option = {
+		name = "tc_relic.1112.a"
+		add_tech_progress = {
+			tech = tc_tech_defense_tower
+			progress = 0.1
+		}
+	}
+}
+
+#1113
+country_event = { #MCV
+	id = tc_relic.1113
+	title = "tc_relic.1113.name"
+	desc = "tc_relic.1113.desc"
+	picture = GFX_event_tc_ancient_stone
+
+	is_triggered_only = yes
+	
+	immediate = {}
+	
+	option = {
+		name = "tc_relic.1113.a"
+		add_tech_progress = {
+			tech = tc_tech_mobile_base
+			progress = 0.1
+		}
+	}
+}
+
+#1108
+country_event = { #洞穴
+	id = tc_relic.1108
+	title = "tc_relic.1108.name"
+	desc = "tc_relic.1108.desc"
+	picture = GFX_event_tc_ancient_stone
+
+	is_triggered_only = yes
+	
+	immediate = {}
+	
+	option = {
+		name = "tc_relic.1108.a"
+		add_tech_progress = {
+			tech = tc_tech_cave_creater
+			progress = 0.1
+		}
+	}
+}

@@ -1,0 +1,94 @@
+namespace = megumin_siling_events
+
+planet_event = {#逝者转化
+	id = megumin_siling_events.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		exists = fromfrom #crisis.202 can remove the last pop
+		from = {
+			has_valid_civic = civic_reanimated_armies
+		}
+		fromfrom = {
+			or = {
+				has_purge_type = {
+					type = purge_labor_camps
+				}
+				has_purge_type = {
+					type = purge_processing
+				}
+			}
+			
+		}
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				create_pop = {
+					species = FromForm
+				}
+			}
+			4 = {
+			}
+		}
+		
+	}	
+}
+
+
+
+country_event = {
+	id = megumin_siling_events.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = fromfrom
+		fromfrom = {
+			has_origin = origin_necrophage
+		}
+		from = {
+			exists = species
+			species = {
+				is_robotic = no
+			}
+		}
+	}
+
+	immediate = {
+		fromfromfrom = {
+			create_army = {
+				owner = root.fromfrom
+				type = undead_army
+				species = root.from.species
+			}
+		}
+	}
+}
+
+country_event = {
+	id = megumin_siling_events.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_necrophage
+	}
+
+	immediate = {
+		capital_scope = {
+			while = {
+				count = 3
+				create_army = {
+					owner = root
+					type = undead_army
+				}
+			}			
+		}
+		add_modifier = {
+			modifier = death_siling_modifier
+		}
+	}
+}

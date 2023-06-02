@@ -1,0 +1,779 @@
+tc_taind_system = {
+	class = "sc_g"
+	name = "NAME_tc_taind_system"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 145
+	}
+	flags = {
+		tc_taind_system
+	}
+
+	init_effect = {
+		every_system_planet = { #阻止异常
+			prevent_anomaly = yes
+		}
+	}
+
+	planet = {
+		class = "pc_g_star"
+		orbit_distance = 0		#轨道距离
+		orbit_angle = 0			#轨道角度
+		size = 25				#行星规模
+		has_ring = no
+		init_effect = {
+			create_ambient_object = {
+				type = tc_aspect_vitium_object
+				location = this
+				use_3d_location = yes
+			}
+		}
+	}
+
+	planet = {
+		class = "pc_molten"
+		orbit_distance = 20
+		orbit_angle = { max = 180 min = -180 }
+		size = 10
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_tc_taint"
+		name = "NAME_tc_book_planet"
+		orbit_distance = 20
+		orbit_angle = { max = 180 min = -180 }
+		size = 15
+		has_ring = no
+		init_effect = {
+			create_archaeological_site = "tc_taint_planet"
+		}
+	}
+
+	planet = {
+		class = "pc_gas_giant"
+		orbit_distance = 40
+		orbit_angle = { max = 180 min = -180 }
+		size = 30
+		has_ring = yes
+
+		moon = {
+			class = "pc_molten"
+			orbit_distance = 20
+			orbit_angle = { max = 180 min = -180 }
+			size = 10
+			has_ring = no
+		}
+	}
+
+	planet = {
+		class = "pc_gas_giant"
+		orbit_distance = 30
+		orbit_angle = { max = 180 min = -180 }
+		size = 20
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_frozen"
+		orbit_distance = 30
+		orbit_angle = { max = 180 min = -180 }
+		size = 15
+		has_ring = no
+	}
+}
+
+tc_tempus_system = {
+	class = "sc_binary_7"
+	name = "NAME_tc_tempus_system"
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 150
+	}
+	flags = {
+		tc_tempus_system
+	}
+
+	init_effect = {
+		every_system_planet = { #阻止异常
+			prevent_anomaly = yes
+		}
+		spawn_megastructure = {
+			type = "tc_magic_hourglass_00"
+			orbit_distance = 10
+			orbit_angle = 25
+			planet = star
+		}
+		save_global_event_target_as = tc_tempus_system_target
+	}
+
+	planet = {
+		class = "pc_f_star"
+		orbit_distance = 20		#轨道距离
+		orbit_angle = 0			#轨道角度
+		size = 15				#行星规模
+		has_ring = no
+		init_effect = {
+			create_ambient_object = {
+				type = tc_aspect_tempus_object
+				location = this
+				use_3d_location = yes
+			}
+		}
+	}
+
+	planet = {
+		class = "pc_g_star"
+		orbit_distance = 5		
+		orbit_angle = 90		
+		size = 30				
+		has_ring = no
+	}	
+
+	planet = {
+		class = "pc_molten"
+		orbit_distance = 30
+		orbit_angle = { max = 180 min = -180 }
+		size = 12
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_barren_cold"
+		orbit_distance = 20
+		orbit_angle = { max = 180 min = -180 }
+		size = 20
+		has_ring = no
+		flags = {
+			tc_tempus_planet
+		}
+		init_effect = { }
+
+		moon = {
+			class = "pc_barren_cold"
+			orbit_distance = 10
+			orbit_angle = { max = 180 min = -180 }
+			size = 10
+			has_ring = no
+		}
+	}
+
+	planet = {
+		class = "pc_gas_giant"
+		orbit_distance = 30
+		orbit_angle = { max = 180 min = -180 }
+		size = 24
+		has_ring = no
+	}
+}
+
+tc_auram_system = {
+	class = "sc_f"
+	name = "NAME_tc_auram_system"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 180
+	}
+	flags = {
+		tc_auram_system
+	}
+
+	init_effect = {
+		every_system_planet = { #阻止异常
+			prevent_anomaly = yes
+		}
+		add_modifier = { modifier = tc_auram_system_modifier }
+		if = { #创建神秘使种族
+			limit = {
+				NOT = { exists = event_target:tc_thaumer_species_target }
+			}
+			create_species = {
+				class = TC_THAUMIC
+				name = "NAME_thaumer_species"
+				effect = {
+					save_global_event_target_as = tc_thaumer_species_target
+				}
+			}
+		}
+		if = { #生成country
+			limit = {
+				NOT = {
+					has_global_flag = tc_auram_country_spawn
+				}
+			}
+			create_country = {
+				type = tc_space_station_county
+				name = "NAME_tc_auram_country"
+				species = event_target:tc_thaumer_species_target
+				auto_delete = no
+				flag = {
+					icon={
+						category = "tc_hd_aspects"
+						file="hd_auram.dds"
+					}
+					background={
+						category="backgrounds"
+						file="circle.dds"
+					}
+					colors={
+						"light_pink"
+						"pink"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_global_event_target_as = tc_auram_country_target
+					if = {
+						limit = { NOT = { has_country_flag = tc_auram_starbase_design_add } }
+						create_ship_design = { design = NAME_tc_auram_starbase_design }
+						add_ship_design = last_created_design
+						set_country_flag = tc_auram_starbase_design_add
+					}
+				}
+			}
+			set_global_flag = tc_auram_country_spawn
+		}
+		create_starbase = {
+			owner = event_target:tc_auram_country_target
+			size = tc_starbase
+			effect = {
+				set_starbase_module = { slot = 1 module = tc_auram_aether_weapon_module }
+				set_starbase_module = { slot = 2 module = tc_auram_aether_weapon_module }
+				set_starbase_module = { slot = 3 module = tc_auram_aether_weapon_module }
+				set_starbase_module = { slot = 4 module = tc_auram_nether_weapon_module }
+				set_starbase_module = { slot = 5 module = tc_auram_nether_weapon_module }
+				set_starbase_module = { slot = 6 module = tc_auram_nether_weapon_module }
+				set_name = NAME_tc_auram_ship
+			}
+		}
+	}
+
+	planet = {
+		class = "pc_f_star"
+		orbit_distance = 0		#轨道距离
+		orbit_angle = 0			#轨道角度
+		size = 20				#行星规模
+		has_ring = no
+		init_effect = {
+			create_ambient_object = {
+				type = tc_aspect_auram_object
+				location = this
+				use_3d_location = yes
+			}
+		}
+	}
+
+	planet = {
+		class = "pc_molten"
+		orbit_distance = 20
+		orbit_angle = { max = 180 min = -180 }
+		size = 10
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_barren"
+		orbit_distance = 20
+		orbit_angle = { max = 180 min = -180 }
+		size = 15
+		has_ring = no
+		init_effect = {
+			create_ambient_object = {
+				type = "tc_planet_shield_gold_object"
+				entity_scale_to_size = yes
+				scale = 0.125
+				use_3d_location = yes
+				location = THIS
+			}
+			save_global_event_target_as = tc_auram_shield_planet
+		}
+	}
+
+	planet = {
+		class = "pc_gas_giant"
+		orbit_distance = 40
+		orbit_angle = { max = 180 min = -180 }
+		size = 30
+		has_ring = yes
+
+		moon = {
+			class = "pc_barren_cold"
+			orbit_distance = 20
+			orbit_angle = { max = 180 min = -180 }
+			size = 10
+			has_ring = no
+		}
+	}
+
+	planet = {
+		class = "pc_gas_giant"
+		orbit_distance = 30
+		orbit_angle = { max = 180 min = -180 }
+		size = 20
+		has_ring = yes
+	}
+
+	planet = {
+		class = "pc_frozen"
+		orbit_distance = 30
+		orbit_angle = { max = 180 min = -180 }
+		size = 15
+		has_ring = no
+	}
+
+	planet = {
+		class = "pc_barren_cold"
+		orbit_distance = 30
+		orbit_angle = { max = 180 min = -180 }
+		size = 24
+		has_ring = no
+	}
+	#小行星带
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 10
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+}
+
+tc_crimson_cleric_system = {
+	class = "sc_tc_void"
+	name = "MEldritch Obelisk!"
+	asteroid_belt = {
+		type = rocky_asteroid_belt
+		radius = 100
+	}
+	flags = {
+		tc_void_system
+		tc_crimson_cleric_system
+	}
+	init_effect = {
+		every_system_planet = {
+			prevent_anomaly = yes
+		}
+		spawn_megastructure = {
+			type = tc_elder_gate_off
+			planet = star
+			init_effect = {
+				FROMFROM = {
+					set_megastructure_flag = tc_elder_gate_node
+				}
+				activate_gateway = fromfrom
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					exists = event_target:tc_crimson_cleric_country_target
+				}
+			}
+			create_species = {
+				class = TC_CRIMSON
+				name = "NAME_tc_crimson_species"
+				pops_can_be_slaves = no
+				can_generate_leaders = no
+				pops_can_be_colonizers = no
+				pops_have_happiness = no
+				effect = {
+					save_global_event_target_as = tc_crimson_species_target
+				}
+			}
+			create_country = {
+				type = tc_crimson_county
+				name = "oCrimson Sect!"
+				flag = {
+					icon={
+						category = "tc_event"
+						file="tc_crimson_flag.dds"
+					}
+					background={
+						category="backgrounds"
+						file="circle.dds"
+					}
+					colors={
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				species = event_target:tc_crimson_species_target
+				effect = {
+					save_global_event_target_as = tc_crimson_cleric_country_target
+					if = {
+						limit = {
+							NOT = { has_country_flag = tc_crimson_starbase_design_add }
+						}
+						create_ship_design = { design = NAME_tc_crimson_starbase_design }
+						add_ship_design = last_created_design
+						set_country_flag = tc_crimson_starbase_design_add
+					}
+				}
+			}
+		}
+		create_starbase = {
+			owner = event_target:tc_crimson_cleric_country_target
+			size = tc_starbase
+			effect = {
+				set_starbase_module = { slot = 1 module = tc_crimson_t_weapon_module }
+				set_starbase_module = { slot = 2 module = tc_crimson_t_weapon_module }
+				set_starbase_module = { slot = 3 module = tc_crimson_t_weapon_module }
+				set_starbase_module = { slot = 4 module = tc_crimson_x_weapon_module }
+				set_starbase_module = { slot = 5 module = tc_crimson_x_weapon_module }
+				set_starbase_module = { slot = 6 module = tc_crimson_x_weapon_module }
+				set_name = NAME_tc_Crimson_Center
+			}
+		}
+		while = {
+			count = 2
+			random_system_planet = { #防御站生成
+				limit = {
+					is_planet_class = pc_asteroid
+				}
+				create_fleet = { #防御站
+					name = "NAME_tc_crimson_cleric_defender"
+					settings = {
+						is_boss = no
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = event_target:tc_crimson_cleric_country_target
+						create_ship = { name = "NAME_tc_Crimson_Defender" design = "NAME_tc_crimson_military_station_design" }
+						create_ship = { name = "NAME_tc_Crimson_Tower" design = "NAME_tc_crimson_defense_tower_design" }
+						create_ship = { name = "NAME_tc_Crimson_Tower" design = "NAME_tc_crimson_defense_tower_design" }
+						create_ship = { name = "NAME_tc_Crimson_Tower" design = "NAME_tc_crimson_defense_tower_design" }
+						create_ship = { name = "NAME_tc_Crimson_Tower" design = "NAME_tc_crimson_defense_tower_design" }
+						set_fleet_formation = {
+							position = { x = 2 y = 0 }
+							position = { x = 0 y = 2 }
+							position = { x = -2 y = 0 }
+							position = { x = 0 y = -2 }
+							position = { x = 0 y = 0 }
+						}
+						set_location = PREV
+						set_formation_scale = 1
+					}
+				}
+			}
+		}
+		while = {
+			count = 1
+			create_ambient_object = {
+				type = tc_target_locator
+				location = solar_system
+				use_3d_location = no
+				duration = 3
+			}
+			create_fleet = { #舰队生成
+				name = "NAME_tc_crimson_cleric_fleet"
+				settings = {
+					is_boss = no
+					spawn_debris = no
+				}
+				effect = {
+					set_location = last_created_ambient_object
+					set_owner = event_target:tc_crimson_cleric_country_target
+					set_formation_scale = 2
+					while = {
+						count = 5
+						create_ship = { 
+							name = "NAME_tc_Crimson_Batter"
+							design = "NAME_tc_crimson_batter_design"
+						}
+					}
+					while = {
+						count = 10
+						create_ship = { 
+							name = "NAME_tc_Crimson_Cruise"
+							design = "NAME_tc_crimson_cruise_design"
+						}
+					}
+				}
+			}
+		}
+		clear_global_event_target = tc_system_star_target
+	}
+
+	planet = {
+		class = "pc_tc_void"
+		orbit_distance = 0		#轨道距离
+		orbit_angle = 0			#轨道角度
+		size = 25				#行星规模
+		has_ring = no
+		init_effect = {
+			save_global_event_target_as = tc_system_star_target
+		}
+	}
+
+	#边缘小行星带
+		planet = {
+			class = pc_asteroid
+			orbit_distance = 100
+			orbit_angle = { min = 60 max = 90 }
+			size = 5
+			has_ring = no
+		}
+		planet = {
+			class = pc_asteroid
+			orbit_distance = 0
+			orbit_angle = { min = 60 max = 90 }
+			size = 5
+			has_ring = no
+		}
+		planet = {
+			class = pc_asteroid
+			orbit_distance = 0
+			orbit_angle = { min = 60 max = 90 }
+			size = 5
+			has_ring = no
+		}
+		planet = {
+			class = pc_asteroid
+			orbit_distance = 0
+			orbit_angle = { min = 60 max = 90 }
+			size = 5
+			has_ring = no
+		}
+}
+
+tc_test_void_system = {
+	class = "sc_tc_void"
+	name = random
+	asteroid_belt = {
+		type = crystal_asteroid_belt
+		radius = 100
+	}
+	flags = {
+		tc_void_system
+	}
+
+	init_effect = {
+		every_system_planet = {
+			prevent_anomaly = yes
+		}
+		spawn_megastructure = {
+			type = tc_ancient_gate
+			planet = star
+			init_effect = {
+				FROMFROM = {
+					set_megastructure_flag = tc_elder_gate_nexus
+				}
+				activate_gateway = fromfrom
+			}
+		}
+	}
+
+	planet = {
+		class = "pc_tc_void"
+		orbit_distance = 0		#轨道距离
+		orbit_angle = 0			#轨道角度
+		size = 25				#行星规模
+		has_ring = no
+	}
+}
+
+#大小对照
+tc_size_contrast_system = {
+	class = sc_tc_void
+
+	flags = { }
+	init_effect = {
+
+	}
+	planet = {
+		class = pc_tc_void
+		orbit_angle = 0
+		orbit_distance = 0
+		size = 1
+		has_ring = no
+		init_effect = {
+			planet_event = {
+				id = tc_test.5
+			}
+		}
+	}
+
+	planet = {
+		class = pc_barren_cold
+		orbit_angle = 0
+		orbit_distance = 10
+		size = 1
+		has_ring = no
+	}
+	planet = {
+		class = pc_barren_cold
+		orbit_angle = 0
+		orbit_distance = 10
+		size = 1
+		has_ring = no
+	}
+	planet = {
+		class = pc_barren_cold
+		orbit_angle = 0
+		orbit_distance = 10
+		size = 1
+		has_ring = no
+	}
+	planet = {
+		class = pc_barren_cold
+		orbit_angle = 0
+		orbit_distance = 10
+		size = 1
+		has_ring = no
+	}
+	planet = {
+		class = pc_barren_cold
+		orbit_angle = 0
+		orbit_distance = 10
+		size = 1
+		has_ring = no
+	}
+	planet = {
+		class = pc_barren_cold
+		orbit_angle = 0
+		orbit_distance = 10
+		size = 1
+		has_ring = no
+	}
+}
+
+#口袋世界起源
+tc_pocket_planar_origin_system = {
+	class = sc_tc_planar_vortex
+
+	asteroid_belt = {
+		type = icy_asteroid_belt
+		radius = 200
+	}
+
+	usage = origin
+
+	flags = { empire_home_system tc_pocket_planar_origin_system }
+
+	init_effect = {
+		every_system_planet = { #阻止异常
+			prevent_anomaly = yes
+		}
+		spawn_megastructure = {
+			type = tc_stellar_node_generator_07
+			owner = solar_system.owner
+			#coords_from = solar_system.star
+			#planet = solar_system.star
+			init_effect = {
+				set_megastructure_flag = tc_origin_megastructure
+			}
+		}
+	}
+
+	planet = {
+		class = pc_tc_pocket_planar
+		orbit_angle = 0
+		orbit_distance = 0
+		size = 10
+		has_ring = no
+		home_planet = yes
+		flags = { has_megastructure }
+		deposit_blockers = none
+		modifiers = none
+
+		init_effect = {
+			
+		}
+	}
+
+	#小行星带
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 200
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+		planet = {
+			class = pc_ice_asteroid
+			orbit_distance = 0
+			orbit_angle = { max = 180 min = -180 }
+			size = 3
+			has_ring = no
+		}
+}

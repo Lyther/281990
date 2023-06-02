@@ -1,0 +1,789 @@
+namespace = tc_planet
+###傀儡组装完成###
+# This = Planet scope
+# From = Country
+# FromFrom = Pop
+planet_event = {
+	id = tc_planet.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			has_trait = tc_trait_golem
+		}
+	}
+	immediate = {
+		FROMFROM = {
+			#添加规则FLAG
+			set_pop_flag = community_mod_rules_trigger
+			set_pop_flag = community_can_fill_ruler_job_false
+			set_pop_flag = community_can_be_sold_on_slave_market_false
+			set_pop_flag = community_can_colonize_with_pop_false
+			set_pop_flag = community_can_generate_military_leader_from_pop_false
+			set_pop_flag = community_can_fill_drone_job_true
+		}
+	}
+}
+
+#行星护盾状态更新
+planet_event = { 
+	id = tc_planet.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_building = building_tc_rune_shield_t1
+			has_building = building_tc_rune_shield_t2
+			has_building = building_tc_rune_shield_t3
+		}
+	}
+
+	immediate = {
+		tc_rune_planet_shield_change_effect = yes
+	}
+}
+
+###10-99###
+###歼星武器事件###
+# this/root = planet that have been fired upon
+# from = fleet that fired
+###歼星级采掘 开火事件 10
+planet_event = {
+	id = tc_planet.10
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		tc_pk_utilitie_effect = yes
+		#行星类型转变和资源给予
+		if = { #炼金环
+			limit = {
+				is_planet_class = pc_tc_alchemical_ringworld_habitable
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_ringworld_habitable_damaged
+			FROM.owner = { 				
+				add_resource = { tc_thaumium = 7500 } 
+				random_list = {
+					75 = {}
+					25 = { add_resource = { tc_element_shard = 250 } }
+				} 
+			}
+		}
+		else_if = { #高级炼金环
+			limit = {
+				is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_ringworld_habitable_damaged
+			FROM.owner = { 				
+				add_resource = { tc_void_metal = 7500 } 
+				random_list = {
+					75 = {}
+					25 = { add_resource = { tc_element_shard = 250 } }
+				} 
+			}
+		}
+		else_if = { #环世界
+			limit = { 
+				is_ringworld = yes
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_ringworld_habitable_damaged
+			FROM.owner = { add_resource = { alloys = 7500 } }
+		}
+		else_if = { #居住站 和其他非环世界人造星球
+			limit = {
+				is_artificial = yes
+			}
+			remove_planet = yes
+			FROM.owner = {
+				add_resource = { alloys = 5000 }
+			}
+		}
+		else_if = { #炼金球
+			limit = {
+				is_planet_class = pc_tc_alchemical_planet
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7  }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { tc_thaumium = 7500 } 
+				random_list = {
+					75 = {}
+					25 = { add_resource = { tc_element_shard = 250 } }
+				}
+			}
+		}
+		else_if = { #高级炼金球
+			limit = {
+				is_planet_class = pc_tc_alchemical_planet
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7  }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { tc_void_metal = 7500 } 
+				random_list = {
+					75 = {}
+					25 = { add_resource = { tc_element_shard = 250 } }
+				}
+			}
+		}
+		else_if = { #都市 遗迹世界
+			limit = { 
+				OR = {
+					is_planet_class = pc_city
+					is_planet_class = pc_relic
+				}
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7  }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { add_resource = { minerals = 15000 } }
+		}
+		else_if = { #气态巨星
+			limit = { 
+				is_planet_class = pc_gas_giant
+			}
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 12 }
+				change_planet_size = -10
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { 
+					energy = 10000 
+				} 
+				random_list = {
+					50 = {
+						add_resource = { 
+							exotic_gases = 1000
+						}
+					}
+					20 = {
+						add_resource = { 
+							exotic_gases = 1500
+						}
+					}
+					2 = {
+						add_resource = {
+							sr_zro = 200
+						}
+					}
+				}
+			}
+		}
+		else_if = { #熔岩星
+			limit = {
+				is_planet_class = pc_molten
+			}
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7 }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { 
+					minerals = 10000 
+				} 
+				random_list = {
+					50 = {
+						add_resource = { 
+							rare_crystals = 1000
+						}
+					}
+					50 = {
+						add_resource = { 
+							volatile_motes = 1000
+						}
+					}
+					20 = {
+						add_resource = { 
+							rare_crystals = 1500
+						}
+					}
+					20 = {
+						add_resource = { 
+							volatile_motes = 1500
+						}
+					}
+					2 = {
+						add_resource = {
+							sr_living_metal = 200
+						}
+					}
+				}
+			}
+		}
+		else_if = { #纳米球
+			limit = {
+				is_planet_class = pc_gray_goo
+			}
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7 }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { 
+					minerals = 10000 
+				} 
+				random_list = {
+					50 = {
+						add_resource = { 
+							nanites = 1000
+						}
+					}
+					20 = {
+						add_resource = { 
+							nanites = 1500
+						}
+					}
+				}
+			}
+		}
+		else_if = { #以上皆为否
+			limit = { }
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7  }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { 
+					minerals = 10000 
+				} 
+				random_list = {
+					50 = {
+						add_resource = { 
+							rare_crystals = 500
+						}
+					}
+					50 = {
+						add_resource = { 
+							volatile_motes = 500
+						}
+					}
+					50 = {
+						add_resource = { 
+							exotic_gases = 500
+						}
+					}
+					10 = {
+						add_resource = { 
+							tc_element_shard = 200
+						}
+					}
+				}
+			}
+		}
+		from.owner = {
+			country_event = { id = tc_planet.11 }
+		}
+	}
+}
+#通知事件
+country_event = {
+	id = tc_planet.11
+	is_triggered_only = yes
+	title = "tc_planet.11_title"
+	desc = "tc_planet.11_desc"
+	picture = "GFX_evt_exploding_planet"
+
+	option = {
+		name = tc_planet.11.a
+	}
+}
+
+###歼星级腐化风暴 开火事件 20
+planet_event = {
+	id = tc_planet.20
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				exists = owner
+				owner = { NOT = { is_same_value = from.owner } }
+				NOT = { is_planet_class = pc_ai }
+			}
+			from.owner = {
+				country_event = { id = tc_planet.21 }
+			}
+		}
+		tc_pk_utilitie_effect = yes
+		#行星类型转变
+		if = { #移除居住站
+			limit = { is_planet_class = pc_habitat }
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			remove_planet = yes
+		}
+		else_if = { #摧毁环世界
+			limit = {
+				OR = {
+					is_planet_class = pc_ringworld_habitable
+					is_planet_class = pc_tc_alchemical_ringworld_habitable
+					is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+				}
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			change_pc = {
+				class = pc_ringworld_habitable_damaged
+				inherit_entity = yes
+			}
+			set_planet_entity = { entity = pc_tc_tainted_ringworld_01_entity }
+		}
+		else = { #转化为腐化星球
+			change_pc = pc_tc_taint
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+		}
+		clear_deposits = yes #清除资源点
+	}
+}
+#通知事件
+country_event = {
+	id = tc_planet.21
+	title = "tc_planet.21_title"
+	desc = "tc_planet.21_desc"
+	is_triggered_only = yes
+	picture = "GFX_event_tc_taint_world"
+
+	option = {
+		name = tc_planet.21.a
+	}
+}
+
+planet_event = {
+	id = tc_planet.22
+	title = "tc_planet.22_title"
+	desc = "tc_planet.22_desc"
+	is_triggered_only = yes
+	picture = "GFX_event_tc_taint_world"
+	location = THIS
+
+	option = {
+		name = tc_planet.22.a
+	}
+}
+
+###歼星级寒霜 开火事件 30
+planet_event = {
+	id = tc_planet.30
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				exists = owner
+				owner = { NOT = { is_same_value = from.owner } }
+				NOT = { is_planet_class = pc_ai }
+			}
+			from.owner = {
+				country_event = { id = tc_planet.31 }
+			}
+		}
+		tc_pk_utilitie_effect = yes
+		#行星类型转变
+		if = { #移除居住站
+			limit = { is_planet_class = pc_habitat }
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			remove_planet = yes
+		}
+		else_if = { #摧毁环世界
+			limit = {
+				OR = {
+					is_planet_class = pc_ringworld_habitable
+					is_planet_class = pc_tc_alchemical_ringworld_habitable
+					is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+				}
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			change_pc = {
+				class = pc_ringworld_habitable_damaged
+				inherit_entity = yes
+			}
+			set_planet_entity = { entity = pc_tc_frost_ringworld_01_entity }
+		}
+		else = { #转化为冰封星球
+			change_pc = pc_frozen
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+		}
+		clear_deposits = yes #清除资源点
+	}
+}
+#通知事件
+country_event = {
+	id = tc_planet.31
+	title = "tc_planet.31_title"
+	desc = "tc_planet.31_desc"
+	is_triggered_only = yes
+	picture = "GFX_evt_frozen"
+
+	option = {
+		name = tc_planet.31.a
+	}
+}
+
+###歼星级熔析 开火事件 40
+planet_event = {
+	id = tc_planet.40
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				exists = owner
+				owner = { NOT = { is_same_value = from.owner } }
+				NOT = { is_planet_class = pc_ai }
+			}
+			from.owner = {
+				country_event = { id = tc_planet.41 }
+			}
+		}
+		tc_pk_utilitie_effect = yes
+		#行星类型转变
+		if = { #移除居住站
+			limit = { is_planet_class = pc_habitat }
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			remove_planet = yes
+		}
+		else_if = { #摧毁环世界
+			limit = {
+				OR = {
+					is_planet_class = pc_ringworld_habitable
+					is_planet_class = pc_tc_alchemical_ringworld_habitable
+					is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+				}
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			change_pc = {
+				class = pc_ringworld_habitable_damaged
+				inherit_entity = yes
+			}
+			set_planet_entity = { entity = pc_tc_molten_ringworld_01_entity }
+		}
+		else = { #转化为熔融星球
+			change_pc = pc_molten
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+		}
+		clear_deposits = yes #清除资源点
+	}
+}
+#通知事件
+country_event = {
+	id = tc_planet.41
+	title = "tc_planet.41_title"
+	desc = "tc_planet.41_desc"
+	is_triggered_only = yes
+	picture = "GFX_evt_molten"
+
+	option = {
+		name = tc_planet.41.a
+	}
+}
+
+###歼星级解离 开火事件 50
+planet_event = {
+	id = tc_planet.50
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		tc_pk_utilitie_effect = yes
+		#行星类型转变和资源给予
+		if = { #炼金环
+			limit = {
+				is_planet_class = pc_tc_alchemical_ringworld_habitable
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_ringworld_habitable_damaged
+			FROM.owner = { 				
+				add_resource = { tc_essences = 35000 } 
+			}
+		}
+		else_if = { #高级炼金环
+			limit = {
+				is_planet_class = pc_tc_advanced_alchemical_ringworld_habitable
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_ringworld_habitable_damaged
+			FROM.owner = { 				
+				add_resource = { tc_essences = 50000 } 
+			}
+		}
+		else_if = { #环世界
+			limit = { 
+				is_ringworld = yes
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_ringworld_habitable_damaged
+			FROM.owner = { add_resource = { tc_essences = 35000 } }
+		}
+		else_if = { #居住站 和其他非环世界人造星球
+			limit = {
+				is_artificial = yes
+			}
+			remove_planet = yes
+			FROM.owner = {
+				add_resource = { tc_essences = 20000 }
+			}
+		}
+		else_if = { #炼金球
+			limit = {
+				is_planet_class = pc_tc_alchemical_planet
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7  }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { tc_essences = 35000 } 
+			}
+		}
+		else_if = { #高级炼金球
+			limit = {
+				is_planet_class = pc_tc_alchemical_planet
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7  }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { tc_essences = 50000 } 
+			}
+		}
+		else_if = { #都市 遗迹世界
+			limit = { 
+				OR = {
+					is_planet_class = pc_city
+					is_planet_class = pc_relic
+				}
+			}
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7  }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { add_resource = { tc_essences = 20000 } }
+		}
+		else_if = { #气态巨星
+			limit = { 
+				is_planet_class = pc_gas_giant
+			}
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 12 }
+				change_planet_size = -10
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { 
+					tc_essences = 20000
+				} 
+			}
+		}
+		else_if = { #以上皆为否
+			limit = { }
+			remove_all_buildings = yes
+			every_owned_pop = { kill_pop = yes }
+			clear_deposits = yes
+			change_pc = pc_tc_bedrock
+			if = {
+				limit = { planet_size >= 7  }
+				change_planet_size = -5
+			}
+			else = { set_planet_size = 1 }
+			FROM.owner = { 
+				add_resource = { 
+					tc_essences = 20000
+				} 
+			}
+		}
+		from.owner = {
+			country_event = { id = tc_planet.51 }
+		}
+	}
+}
+#通知事件
+country_event = {
+	id = tc_planet.51
+	is_triggered_only = yes
+	title = "tc_planet.51_title"
+	desc = "tc_planet.51_desc"
+	picture = "GFX_evt_exploding_planet"
+
+	option = {
+		name = tc_planet.51.a
+	}
+}
+
+###歼星级守护 开火事件 60
+planet_event = {
+	id = tc_planet.60
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = tc_planet_warding
+				}
+			}
+			add_modifier = {
+				modifier = tc_planet_warding
+				days = -1
+			}
+			from.owner = {
+				country_event = { id = tc_planet.61 }
+			}
+		}
+		else = {
+			remove_modifier = tc_planet_warding
+			from.owner = {
+				country_event = { id = tc_planet.62 }
+			}
+		}
+	}
+}
+#通知事件
+country_event = { #施加守护
+	id = tc_planet.61
+	is_triggered_only = yes
+	title = "tc_planet.61_title"
+	desc = "tc_planet.61_desc"
+	picture = "GFX_evt_shielded_planet"
+
+	option = {
+		name = tc_planet.61.a
+	}
+}
+country_event = { #撤销守护
+	id = tc_planet.62
+	is_triggered_only = yes
+	title = "tc_planet.62_title"
+	desc = "tc_planet.62_desc"
+	picture = "GFX_evt_shielded_planet"
+
+	option = {
+		name = tc_planet.62.a
+	}
+}
+
+###歼星级收容 开火事件 70
+
+###歼星级更替 开火事件 80
+
+###歼星级活化 开火事件 90
+
+###100+
+#炼金星完成通知
+planet_event = {
+	id = tc_planet.100
+	title = tc_planet.100.title
+	desc = tc_planet.100.desc
+	picture = GFX_evt_city_planet
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_tc_alchemical_planet
+	}
+
+	option = {
+		name = tc_planet.100.a
+	}
+}
+
+#炼金环世界完成通知
+planet_event = {
+	id = tc_planet.101
+	title = tc_planet.101.title
+	desc = tc_planet.101.desc
+	picture = GFX_evt_city_planet
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_tc_alchemical_ringworld_habitable
+	}
+
+	option = {
+		name = tc_planet.101.a
+	}
+}

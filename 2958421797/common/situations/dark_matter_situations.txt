@@ -1,0 +1,166 @@
+situation_zofe_dark_matter = {
+	picture = GFX_evt_physics_research
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_meh
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_dark_matter_stage_0_tooltip
+			end = 60
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_dark_matter_stage_1_tooltip
+			on_first_enter = {
+				situation_event = { id = zofe.101 }
+			}
+			end = 90
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_dark_matter_stage_2_tooltip
+			on_first_enter = {
+				situation_event = { id = zofe.102 }
+			}
+			end = 120
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = zofe_dark_matter_stage_3_tooltip
+			on_first_enter = {
+				situation_event = { id = zofe.103 }
+			}
+			end = 150
+		}
+	}
+
+	category = positive
+
+	on_progress_complete = {
+		custom_tooltip = zofe_dark_matter_finish_tooltip
+		
+		hidden_effect = {
+			situation_event = { id = zofe.104 }
+		}
+	}
+	on_start = { }
+	on_fail = {
+		custom_tooltip = zofe_dark_matter_fail_tooltip
+		hidden_effect = { situation_event = { id = situation.1180 } }
+	}
+	
+	start_value = 10
+
+	modifier = {
+		all_technology_research_speed = 0.10
+	}
+	on_monthly = {
+	}
+	approach = {#Low Priority
+		name = approach_dark_matter_low_priority
+		on_select = {
+			custom_tooltip = dark_matter_low_priority_effect
+		}
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 200
+				physics_research = 100
+				society_research = 100
+				engineering_research = 100
+				sr_dark_matter = 10
+			}
+		}
+	}
+	approach = {#Moderate Priority
+		name = approach_dark_matter_moderate_priority
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = dark_matter_moderate_priority_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 400
+				physics_research = 200
+				society_research = 200
+				engineering_research = 200
+				sr_dark_matter = 20
+			}
+		}
+	}
+	approach = {#High Priority
+		name = approach_dark_matter_high_priority
+		on_select = {
+			custom_tooltip = dark_matter_high_priority_effect
+		}
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 1000
+				physics_research = 500
+				society_research = 500
+				engineering_research = 500
+				sr_dark_matter = 50
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 4
+		modifier = {
+			add = 4
+			desc = string_current_approach
+			current_situation_approach = approach_dark_matter_high_priority
+		}
+		modifier = {
+			add = 0
+			desc = string_current_approach
+			current_situation_approach = approach_dark_matter_moderate_priority
+			
+		}
+		modifier = {
+			add = -2
+			desc = string_current_approach
+			current_situation_approach = approach_dark_matter_low_priority
+		}
+	}
+
+	abort_trigger = {
+		OR = {
+			NOT = { exists = root.owner }
+			owner = {
+				OR = {
+					has_technology = tech_dark_matter_power_core
+					has_tech_option = tech_dark_matter_power_core
+				}
+			}
+		}
+	}
+	
+	on_abort = {
+		
+	}
+}

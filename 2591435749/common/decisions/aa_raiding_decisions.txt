@@ -1,0 +1,206 @@
+decision_aa_raiding_target_on = {
+	owned_planets_only = yes
+	resources = {
+		category = decisions
+		cost = { influence = 0 }
+	}
+	
+	potential = {
+		OR = {
+			owner = { has_ascension_perk = ap_nihilistic_acquisition }
+			owner = { has_valid_civic = civic_barbaric_despoilers }		
+		}
+	}
+	
+	allow = {
+		NOT = { has_modifier = aa_raiding_target } 
+	}
+
+	effect = {
+		add_modifier = { modifier = aa_raiding_target days = -1 }
+	}
+	
+	ai_weight = {
+		weight = 0	
+	}
+}
+
+decision_aa_raiding_target_off = {
+	owned_planets_only = yes
+	resources = {
+		category = decisions
+		cost = { influence = 0 }
+	}
+	
+	potential = {
+        has_modifier = aa_raiding_target
+	}
+	
+	effect = {
+		remove_modifier = aa_raiding_target 
+	}
+	
+	ai_weight = {
+		weight = 0	
+	}
+}
+
+decision_mastery_of_nature_new_world = {
+	owned_planets_only = yes
+
+	enactment_time = 3600
+	resources = {
+		category = decisions
+		cost = {
+			influence = 100
+			energy = 20000
+			food = 20000
+			minerals = 5000
+		}
+	}
+
+	potential = {
+		is_artificial = no
+		owner = {
+			has_ascension_perk = ap_mastery_of_nature
+		}
+		#NOT = { has_modifier = mastery_of_nature }
+	}
+
+	effect = {
+		if = {
+			limit = { 
+				planet_size < 25 
+			}
+			set_planet_size = 25
+		}
+		else = {
+			change_planet_size = 5
+		}
+	}
+
+	ai_weight = {
+		weight = 500
+	}
+}
+
+decision_mastery_of_nature_plus_1 = {
+	owned_planets_only = yes
+	enactment_time = 60
+	resources = {
+		category = decisions
+		cost = {
+			influence = 25
+			energy = 200
+		}
+	}
+
+	potential = {
+		is_artificial = no
+		NOT = {
+			is_planet_class = pc_city
+		}
+		owner = {
+			has_ascension_perk = ap_mastery_of_nature
+		}
+		#NOT = { has_modifier = mastery_of_nature_plus }
+	}
+
+	effect = {
+		owner = {
+			set_timed_country_flag = {
+				flag = ai_not_count
+				days = 3600
+			}
+		}		
+		random_list = {
+			1 = {
+				add_modifier = {
+					modifier = dangerous_wildlife
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = weak_magnetic_field
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = unstable_tectonics
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier =  tidal_locked
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = asteroid_impacts
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = strong_magnetic_field
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = wild_storms
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = low_gravity
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = high_gravity
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = mineral_rich
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = natural_beauty
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = atmospheric_aphrodisiac
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = magnetic_research_boost
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = recent_quake
+				}
+			}
+			1 = {
+				add_modifier = {
+					modifier = atmospheric_hallucinogen
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 15
+		modifier = {
+			factor = 0
+			owner = {
+				has_country_flag = ai_not_count
+			}
+			
+		}
+	}
+}
+

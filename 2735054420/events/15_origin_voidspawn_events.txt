@@ -1,0 +1,668 @@
+namespace = origin_voidspawn
+
+situation_event = {
+	id = origin_voidspawn.0
+	title = origin_voidspawn.0.name
+	desc = origin_voidspawn.0.desc
+	picture = GFX_evt_egg_cracked
+	show_sound = event_radio_chatter
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		target = {
+			remove_modifier = origin_voidspawn_modifier_1
+			remove_modifier = origin_voidspawn_modifier_2
+			remove_modifier = origin_voidspawn_modifier_3
+			remove_modifier = origin_voidspawn_modifier_4
+			remove_modifier = origin_voidspawn_modifier_5
+		}
+		destroy_situation = this
+	}
+	
+	option = {
+		name = origin_voidspawn.0.a
+	}
+}
+
+country_event = {
+	id = origin_voidspawn.1
+	title = origin_voidspawn.1.name
+	desc = origin_voidspawn.1.desc
+	picture = GFX_evt_egg_cracked
+	show_sound = event_radio_chatter
+	location = capital_scope
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_voidspawn
+	}
+
+	immediate = {
+		capital_scope = {
+			add_modifier = {
+				modifier = origin_voidspawn_modifier_1
+				days = -1
+			}
+			set_planet_entity = {
+				entity = infected_planet_01_stage_1_entity
+			}
+		}
+		start_situation = {
+			type = situation_origin_voidspawn
+			target = capital_scope
+			effect = {
+				set_situation_approach = approach_origin_voidspawn_default
+				save_global_event_target_as = situation_origin_voidspawn
+			}
+		}
+	}
+
+	option = {
+		name = origin_voidspawn.1.a
+		tooltip = {
+			start_situation = {
+				type = situation_origin_voidspawn
+				target = capital_scope
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = origin_voidspawn.2
+	title = origin_voidspawn.2.name
+	desc = origin_voidspawn.2.desc
+	picture = GFX_evt_egg_cracked
+	show_sound = event_radio_chatter
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+
+	immediate = {
+		target = {
+			remove_modifier = origin_voidspawn_modifier_1
+			add_modifier = {
+				modifier = origin_voidspawn_modifier_2
+				days = -1
+			}
+			set_planet_entity = {
+				entity = infected_planet_01_stage_2_entity
+			}
+		}
+	}
+	
+	after = {
+		target = {
+			add_deposit = d_egg_cracking
+			add_planet_devastation = 20
+		}
+	}
+
+	option = {
+		name = origin_voidspawn.2.a
+	}
+}
+
+situation_event = {
+	id = origin_voidspawn.3
+	title = origin_voidspawn.3.name
+	desc = origin_voidspawn.3.desc
+	picture = GFX_evt_egg_cracked
+	show_sound = event_radio_chatter
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+
+	immediate = {
+		target = {
+			remove_modifier = origin_voidspawn_modifier_2
+			add_modifier = {
+				modifier = origin_voidspawn_modifier_3
+				days = -1
+			}
+		}
+	}
+	
+	after = {
+		target = {
+			add_deposit = d_egg_cracking
+			add_deposit = d_egg_cracking
+			add_planet_devastation = 40
+		}
+	}
+
+	option = {
+		name = origin_voidspawn.3.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = energy
+					amount >= 2000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -2000
+			}
+		}
+		enable_special_project = {
+			name = ORIGIN_VOIDSPAWN_PROJECT_1
+			location = target
+			owner = owner
+		}
+	}
+	
+	option = {
+		name = origin_voidspawn.3.b
+	}
+}
+
+situation_event = {
+	id = origin_voidspawn.4
+	title = origin_voidspawn.4.name
+	desc = {
+		text = origin_voidspawn.4.desc_1
+		trigger = {
+			has_situation_flag = situation_origin_voidspawn_research_1
+		}
+	}
+	desc = {
+		text = origin_voidspawn.4.desc_2
+		trigger = {
+			NOT = { has_situation_flag = situation_origin_voidspawn_research_1 }
+		}
+	}
+	picture = GFX_evt_egg_cracked
+	show_sound = event_radio_chatter
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+
+	immediate = {
+		target = {
+			remove_modifier = origin_voidspawn_modifier_3
+			add_modifier = {
+				modifier = origin_voidspawn_modifier_4
+				days = -1
+			}
+			set_planet_entity = {
+				entity = infected_planet_01_stage_3_entity
+			}
+		}
+		owner = {
+			abort_special_project = {
+				type = ORIGIN_VOIDSPAWN_PROJECT_1
+				location = root.target
+			}
+		}
+	}
+	
+	after = {
+		target = {
+			add_deposit = d_egg_cracking
+			add_deposit = d_egg_cracking
+			add_deposit = d_egg_cracking
+			add_planet_devastation = 60
+		}
+	}
+
+	option = {
+		name = origin_voidspawn.4.a
+	}
+}
+
+situation_event = {
+	id = origin_voidspawn.5
+	title = origin_voidspawn.5.name
+	desc = origin_voidspawn.5.desc
+	picture = GFX_evt_egg_cracked
+	show_sound = event_radio_chatter
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+
+	immediate = {
+		target = {
+			remove_modifier = origin_voidspawn_modifier_4
+			add_modifier = {
+				modifier = origin_voidspawn_modifier_5
+				days = -1
+			}
+		}
+	}
+	
+	after = {
+		target = {
+			add_deposit = d_egg_cracking
+			add_deposit = d_egg_cracking
+			add_deposit = d_egg_cracking
+			add_deposit = d_egg_cracking
+			add_planet_devastation = 80
+		}
+	}
+
+	option = {
+		name = origin_voidspawn.5.a
+		trigger = {
+			has_situation_flag = situation_origin_voidspawn_research_1
+		}
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = energy
+					amount >= 5000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -5000
+			}
+		}
+		enable_special_project = {
+			name = ORIGIN_VOIDSPAWN_PROJECT_2
+			location = target
+			owner = owner
+		}
+	}
+	
+	option = {
+		name = origin_voidspawn.5.b
+	}
+}
+
+situation_event = {
+	id = origin_voidspawn.6
+	title = origin_voidspawn.6.name
+	desc = {
+		text = origin_voidspawn.6.desc_1
+		trigger = {
+			has_situation_flag = situation_origin_voidspawn_research_2
+		}
+	}
+	desc = {
+		text = origin_voidspawn.6.desc_2
+		trigger = {
+			NOT = { has_situation_flag = situation_origin_voidspawn_research_2 }
+		}
+	}
+	picture = GFX_evt_voidspawn
+	show_sound = event_radio_chatter
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			abort_special_project = {
+				type = ORIGIN_VOIDSPAWN_PROJECT_2
+				location = root.target
+			}
+			abort_special_project = {
+				type = ORIGIN_VOIDSPAWN_PROJECT_3
+				location = root.target
+			}
+		}
+		target = {
+			change_pc = pc_egg_cracked
+			create_ambient_object = {
+				type = voidspawn_spawn_animation_object
+				entity_face_object = root.target.star
+			}
+			last_created_ambient_object = {
+				set_location = {
+					target = root
+					distance = 2.2
+					direction = in_system
+				}
+				save_event_target_as = voidspawn_spawn
+			}
+			destroy_colony = yes
+			clear_deposits = yes
+			add_deposit = d_society_10
+			add_deposit = d_society_10
+			remove_modifier = origin_voidspawn_modifier_5
+			solar_system = {
+				random_system_planet = {
+					limit = { is_star = no }
+					save_event_target_as = new_location
+				}
+			}
+			create_country = {
+				name = "NAME_Voidspawn"
+				type = guardian_hatchling
+				flag = {
+					icon = {
+						category = "spherical"
+						file = "flag_spherical_6.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					if = {
+						limit = {
+							NOT = {
+								has_modifier = hatchling_power
+							}
+						}
+						add_modifier = {
+							modifier = hatchling_power
+							days = -1
+						}
+					}
+					set_country_flag = hatchling_country
+					every_playable_country = {
+						establish_communications_no_message = prev
+					}
+					create_fleet = {
+						name = "NAME_Voidspawn"
+						settings = {
+							spawn_debris = no
+							is_boss = yes
+						}
+						effect = {
+							set_owner = prev
+							create_ship = {
+								name = "NAME_Voidspawn"
+								design = "NAME_Voidspawn"
+								effect = {
+									set_ship_flag = hatchling_ship
+									set_disabled = no
+								}
+							}
+							set_location = {
+								target = root.target
+								distance = 0
+								angle = 90
+								direction = in_system
+							}
+							save_global_event_target_as = origin_voidspawn_fleet
+							set_fleet_stance = aggressive
+							set_aggro_range_measure_from = self #or return_point
+							set_aggro_range = 300
+							auto_move_to_planet = {
+								target = event_target:new_location
+								clear_auto_move_on_arrival = yes
+							}
+						}
+					}
+				}
+			}
+			event_target:voidspawn_spawn = { destroy_ambient_object = this }
+		}
+	}
+	
+	option = {
+		name = origin_voidspawn.6.a
+		destroy_situation = this
+	}
+	
+	option = {
+		name = origin_voidspawn.6.b
+		trigger = {
+			has_situation_flag = situation_origin_voidspawn_xenophile
+		}
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = food
+					amount >= 5000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				food = -5000
+			}
+		}
+		enable_special_project = {
+			name = ORIGIN_VOIDSPAWN_PROJECT_XENOPHILE
+			location = target
+			owner = owner
+		}
+		destroy_situation = this
+	}
+}
+
+situation_event = {
+	id = origin_voidspawn.11
+	title = origin_voidspawn.11.name
+	desc = origin_voidspawn.11.desc
+	picture = GFX_evt_egg_cracked
+	show_sound = event_radio_chatter
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+	
+	immediate = {
+		set_situation_flag = situation_origin_voidspawn_research_1
+	}
+	
+	option = {
+		name = origin_voidspawn.11.a
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = origin_voidspawn.11.b
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = origin_voidspawn.12
+	title = origin_voidspawn.12.name
+	desc = origin_voidspawn.12.desc
+	picture = GFX_evt_egg_cracked
+	show_sound = event_radio_chatter
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+	
+	immediate = {
+		set_situation_flag = situation_origin_voidspawn_research_2
+		add_situation_progress = -24
+	}
+	
+	after = {
+		tooltip = {
+			add_situation_progress = -24
+		}
+	}
+	
+	option = {
+		name = origin_voidspawn.12.a
+		allow = {
+			owner = {
+				has_country_resource = {
+					type = rare_crystals
+					amount >= 100
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				rare_crystals = -100
+			}
+		}
+		enable_special_project = {
+			name = ORIGIN_VOIDSPAWN_PROJECT_3
+			location = target
+			owner = owner
+		}
+	}
+	
+	option = {
+		name = origin_voidspawn.12.b
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_xenophile
+				}
+			}
+		}
+		hidden_effect = {
+			set_situation_flag = situation_origin_voidspawn_xenophile
+		}
+	}
+	
+	option = {
+		name = origin_voidspawn.12.c
+	}
+}
+
+situation_event = {
+	id = origin_voidspawn.13
+	title = origin_voidspawn.13.name
+	desc = origin_voidspawn.13.desc
+	picture = GFX_evt_alien_planet
+	show_sound = event_celebration
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+	
+	immediate = {
+		target = {
+			remove_modifier = origin_voidspawn_modifier_5
+			add_modifier = {
+				modifier = origin_voidspawn_modifier_end
+				days = -1
+			}
+			change_pc = pc_nuked
+			every_owned_pop = {
+				limit = {
+					is_robot_pop = no
+				}
+				modify_species = {
+					species = this
+					ideal_planet_class = pc_nuked
+				}
+			}
+			set_planet_flag = nuked_planet_anomalies_disabled
+			reroll_planet = yes
+		}
+		set_situation_locked = yes
+	}
+	
+	after = {
+		tooltip = {
+			target = {
+				add_modifier = {
+					modifier = origin_voidspawn_modifier_end
+					days = -1
+				}
+				change_pc = pc_nuked
+			}
+		}
+		destroy_situation = this
+	}
+	
+	option = {
+		name = origin_voidspawn.13.a
+	}
+}
+
+country_event = {
+	id = origin_voidspawn.14
+	title = origin_voidspawn.14.name
+	desc = origin_voidspawn.14.desc
+	picture = GFX_evt_voidspawn
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = event_target:origin_voidspawn_fleet
+	}
+	
+	immediate = {
+		event_target:origin_voidspawn_fleet = {
+			set_owner = root
+		}
+	}
+	
+	option = {
+		name = origin_voidspawn.14.a
+	}
+}
+
+country_event = {
+	id = origin_voidspawn.15
+	title = origin_voidspawn.15.name
+	desc = origin_voidspawn.15.desc
+	picture = GFX_evt_voidspawn
+	show_sound = event_radio_chatter
+
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = event_target:origin_voidspawn_fleet
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_voidspawn.15.a
+	}
+}
+
+country_event = {
+	id = origin_voidspawn.16
+	title = origin_voidspawn.16.name
+	desc = origin_voidspawn.16.desc
+	picture = GFX_evt_voidspawn
+	show_sound = event_radio_chatter
+
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = {
+			exists = event_target:origin_voidspawn_fleet
+		}
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = origin_voidspawn.16.a
+	}
+}

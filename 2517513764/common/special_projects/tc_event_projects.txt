@@ -1,0 +1,657 @@
+#手册星系
+special_project = {
+	key = tc_thaum_system_discover
+	picture = "GFX_evt_ship_in_orbit"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+	tech_department = physics_technology
+	days_to_research = 240
+
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 3
+	}
+
+	on_success = { 
+		#set_global_flag = tc_taind_system_discovered
+		THIS = {
+			owner = {
+				country_event = {
+					id = tc_relic.9
+				}				
+			}
+		}
+		solar_system = {
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "tc_taind_system"
+			}
+		}
+	}
+}
+#傀儡初始化
+special_project = {
+	key = tc_golem_create
+	picture = "GFX_evt_cybernetics"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_engineering.dds
+	event_scope = country_event
+	days_to_research = 360
+	
+	on_success = {
+		if = {
+			limit = {
+				is_gestalt = no
+			}
+			capital_scope = {
+				create_species = { 
+					class = TC_GOLEM 
+					name = "NAME_tc_golem"
+					pops_can_be_slaves = no
+					can_generate_leaders = no
+					pops_can_be_colonizers = no
+					pops_have_happiness = no
+					can_be_modified = yes
+					effect = {
+						#规则FLAG
+						set_species_flag = community_mod_rules_trigger
+						set_species_flag = community_can_generate_leader_from_species_false
+						set_species_flag = community_can_create_espionage_asset_from_species_false
+						set_species_flag = community_can_generate_military_leader_from_pop_false
+						set_species_flag = community_can_release_vassal_from_species_false 
+						set_species_flag = community_can_generate_army_from_species_false
+						set_species_flag = community_can_colonize_with_species_false
+						set_species_flag = community_species_has_happiness_false
+						set_species_flag = community_can_species_procreate_false
+						set_species_flag = community_can_species_be_assembled_true
+						set_species_flag = community_can_crossbreed_species_false
+						set_species_flag = community_can_modify_species_true
+	
+						set_species_homeworld = PREV
+						#change_species_characteristics = {
+						#	immortal = yes
+						#	portrait = tc_golem_01
+						#}
+						#set_citizenship_type = {
+						#	country = prev.owner
+						#	type = citizenship_limited
+						#	cooldown = yes
+						#}
+						#set_colonization_controls = {
+						#	country = prev.owner
+						#	type = no
+						#	cooldown = yes
+						#}
+						#set_population_controls = {
+						#	country = prev.owner
+						#	type = no
+						#	cooldown = yes
+						#}
+						save_event_target_as = tc_golem_species_target
+					}
+				}
+				while = {
+					create_pop = { 
+						species = event_target:tc_golem_species_target 
+						effect = {
+							#规则FLAG
+							set_pop_flag = community_mod_rules_trigger
+							set_pop_flag = community_can_fill_ruler_job_false
+							set_pop_flag = community_can_be_sold_on_slave_market_false
+							set_pop_flag = community_can_colonize_with_pop_false
+							set_pop_flag = community_can_generate_military_leader_from_pop_false
+							set_pop_flag = community_can_fill_drone_job_true
+						}
+					}
+					count = 3
+				}
+				planet_event = {
+					id = tc_research_ui.51
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_machine_empire = yes
+			}
+			capital_scope = {
+				create_species = { 
+					class = TC_GOLEM_MACHINE
+					name = "NAME_tc_golem"
+					pops_can_be_slaves = no
+					can_generate_leaders = no
+					pops_can_be_colonizers = no
+					pops_have_happiness = no
+					can_be_modified = yes
+					effect = {
+						#规则FLAG
+						set_species_flag = community_mod_rules_trigger
+						set_species_flag = community_can_generate_leader_from_species_false
+						set_species_flag = community_can_create_espionage_asset_from_species_false
+						set_species_flag = community_can_generate_military_leader_from_pop_false
+						set_species_flag = community_can_release_vassal_from_species_false 
+						set_species_flag = community_can_generate_army_from_species_false
+						set_species_flag = community_can_colonize_with_species_false
+						set_species_flag = community_species_has_happiness_false
+						set_species_flag = community_can_species_procreate_false
+						set_species_flag = community_can_species_be_assembled_true
+						set_species_flag = community_can_crossbreed_species_false
+						set_species_flag = community_can_modify_species_true
+
+						set_species_homeworld = PREV
+						#change_species_characteristics = {
+						#	immortal = yes
+						#	portrait = tc_golem_01
+						#}
+						#set_citizenship_type = {
+						#	country = prev.owner
+						#	type = citizenship_full_machine
+						#	cooldown = yes
+						#}
+						#set_colonization_controls = {
+						#	country = prev.owner
+						#	type = no
+						#	cooldown = yes
+						#}
+						#set_population_controls = {
+						#	country = prev.owner
+						#	type = no
+						#	cooldown = yes
+						#}
+						save_event_target_as = tc_golem_species_target
+					}
+				}
+				event_target:tc_golem_species_target = {
+					modify_species = {
+						add_trait = trait_machine_unit
+						effect = {
+							save_event_target_as = tc_golem_machine_species_target
+						}
+					}
+				}
+				while = {
+					create_pop = { 
+						species = event_target:tc_golem_machine_species_target 
+						effect = {
+							#规则FLAG
+							set_pop_flag = community_mod_rules_trigger
+							set_pop_flag = community_can_fill_ruler_job_false
+							set_pop_flag = community_can_be_sold_on_slave_market_false
+							set_pop_flag = community_can_colonize_with_pop_false
+							set_pop_flag = community_can_generate_military_leader_from_pop_false
+							set_pop_flag = community_can_fill_drone_job_true
+						}
+					}
+					count = 3
+				}
+				planet_event = {
+					id = tc_research_ui.51
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_hive_empire = yes
+			}
+			capital_scope = {
+				create_species = { 
+					class = TC_GOLEM_HIVE
+					name = "NAME_tc_golem"
+					pops_can_be_slaves = no
+					can_generate_leaders = no
+					pops_can_be_colonizers = no
+					pops_have_happiness = no
+					can_be_modified = yes
+					effect = {
+						#规则FLAG
+						set_species_flag = community_mod_rules_trigger
+						set_species_flag = community_can_generate_leader_from_species_false
+						set_species_flag = community_can_create_espionage_asset_from_species_false
+						set_species_flag = community_can_generate_military_leader_from_pop_false
+						set_species_flag = community_can_release_vassal_from_species_false 
+						set_species_flag = community_can_generate_army_from_species_false
+						set_species_flag = community_can_colonize_with_species_false
+						set_species_flag = community_species_has_happiness_false
+						set_species_flag = community_can_species_procreate_false
+						set_species_flag = community_can_species_be_assembled_true
+						set_species_flag = community_can_crossbreed_species_false
+						set_species_flag = community_can_modify_species_true
+	
+						set_species_homeworld = PREV
+						#change_species_characteristics = {
+						#	immortal = yes
+						#	portrait = tc_golem_01
+						#}
+						#set_citizenship_type = {
+						#	country = prev.owner
+						#	type = citizenship_full
+						#	cooldown = yes
+						#}
+						#set_colonization_controls = {
+						#	country = prev.owner
+						#	type = no
+						#	cooldown = yes
+						#}
+						#set_population_controls = {
+						#	country = prev.owner
+						#	type = no
+						#	cooldown = yes
+						#}
+						save_event_target_as = tc_golem_species_target
+					}
+				}
+				event_target:tc_golem_species_target = {
+					modify_species = {
+						add_trait = trait_hive_mind
+						effect = {
+							save_event_target_as = tc_golem_hive_species_target
+						}
+					}
+				}
+				event_target:tc_golem_hive_species_target = {
+					set_citizenship_type = {
+						country = prev.owner
+						type = citizenship_full
+						cooldown = no
+					}
+				}
+				while = {
+					create_pop = { 
+						species = event_target:tc_golem_hive_species_target 
+						effect = {
+							#规则FLAG
+							set_pop_flag = community_mod_rules_trigger
+							set_pop_flag = community_can_fill_ruler_job_false
+							set_pop_flag = community_can_be_sold_on_slave_market_false
+							set_pop_flag = community_can_colonize_with_pop_false
+							set_pop_flag = community_can_generate_military_leader_from_pop_false
+							set_pop_flag = community_can_fill_drone_job_true
+						}
+					}
+					count = 3
+				}
+				planet_event = {
+					id = tc_research_ui.51
+				}
+			}
+		}
+	}
+}
+#巨构沙漏
+special_project = {
+	key = tc_tempus_hourglass_project
+	picture = "GFX_event_tc_hourglass"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+	days_to_research = 360
+
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 5
+	}
+
+	on_success = { 
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					has_planet_flag = tc_tempus_planet
+				}
+				change_pc = pc_molten
+				create_archaeological_site = tc_tempus_relic_event_set
+			}
+			random_megastructure = {
+				limit = {
+					is_megastructure_type = tc_magic_hourglass_00
+				}
+				create_ambient_object = {
+					type = tc_explosion_effect_object
+					play_animation_once = yes 
+					location = this
+					duration = 5
+				}
+				remove_megastructure = this
+			}
+			every_fleet_in_system = {
+				if = {
+					limit = {
+						any_owned_ship = {
+							OR = {
+								is_ship_class = shipclass_military_station
+								is_ship_class = shipclass_mining_station
+								is_ship_class = shipclass_starbase	
+							}
+						}
+					}
+					delete_fleet = this
+				}
+				set_mia = mia_return_home
+			}
+		}
+		owner = {
+			country_event = {
+				id = tc_relic.35
+			}
+		}
+	}
+}
+#研究沙漏
+special_project = {
+	key = tc_tempus_hourglass_research_project
+	picture = "GFX_event_tc_hourglass"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_physics.dds
+	event_scope = country_event
+	days_to_research = 1800
+
+	on_success = {
+		add_tech_progress = {
+			tech = tc_tech_tempus_piece
+			progress = 0.01
+		}
+		country_event = {
+			id = tc_relic.36
+		}
+		event_target:tc_tempus_system_target = {
+			spawn_megastructure = {
+				type = "tc_magic_hourglass_01"
+				orbit_distance = 10
+				orbit_angle = 25
+				planet = star
+				owner = solar_system.owner
+				init_effect = {
+					create_ambient_object = {
+						type = tc_explosion_effect_object
+						play_animation_once = yes 
+						location = this
+						duration = 5
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = tc_tempus_planet
+				}
+				change_pc = pc_gaia
+				reroll_deposits = yes
+			}
+		}
+	}
+}
+#血腥基地残骸搜寻
+special_project = {
+	key = tc_crimson_base_wreck_search
+	picture = "GFX_evt_debris"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 240
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 5
+	}
+
+	on_success = {
+		owner = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = tc_crimson_rites_get
+					}
+				}
+				set_country_flag = tc_crimson_rites_get
+				country_event = {
+					id = tc_outer.103
+				}
+				change_variable = { which = tc_crimson_base_search_count_var value = 1 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = tc_crimson_base_search_count_var value < 5 }
+				}
+				country_event = {
+					id = tc_outer.104
+				}
+				change_variable = { which = tc_crimson_base_search_count_var value = 1 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = tc_crimson_base_search_count_var value = 5 }
+				}
+				country_event = {
+					id = tc_outer.105
+				}
+				change_variable = { which = tc_crimson_base_search_count_var value = 1 }
+			}
+		}
+	}
+}
+
+###外域
+#收集石板
+special_project = {
+	key = tc_ol_get_table
+	picture = "GFX_event_tc_runetable"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 240
+	requirements = {
+		shipclass_constructor = 1
+	}
+
+	on_success = {
+		solar_system = {
+			every_system_megastructure = {
+				limit = {
+					is_megastructure_type = tc_runetable_exist
+				}
+				upgrade_megastructure_to = tc_runetable_lost
+			}
+		}
+		owner = {
+			set_country_flag = tc_has_runetable
+			country_event = {
+				id = tc_outer.14
+			}
+		}
+	}
+}
+#开锁
+special_project = {
+	key = tc_ol_open_door
+	picture = "GFX_event_tc_ancient_lock"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 240
+	requirements = {
+		shipclass_constructor = 1
+	}
+
+	on_success = {
+		solar_system = {
+			system_event = {
+				id = tc_outer.20
+			}
+		}
+	}
+}
+#重启BOSS挑战
+special_project = {
+	key = tc_ol_open_door_again
+	picture = "GFX_event_tc_ancient_lock"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 240
+	requirements = {
+		shipclass_constructor = 1
+	}
+
+	on_success = {
+		solar_system = {
+			system_event = {
+				id = tc_outer.20
+			}
+		}
+	}
+}
+#荒古祭坛样本采集
+special_project = {
+	key = tc_ancient_infusion_sample
+	picture = "GFX_event_tc_infuster_broken"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 240
+	requirements = {
+		shipclass_constructor = 1
+	}
+
+	on_success = {
+		event_target:tc_infusion_grave_target = {
+			set_site_progress_locked = no
+		}
+		owner = {
+			country_event = {
+				id = tc_relic.1005
+			}
+		}
+	}
+}
+###合成列表
+#护航
+special_project = {
+	key = tc_infusion_cruise
+	picture = "GFX_event_tc_infuster_ancient"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 360
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 4
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = tc_relic.1101
+			}
+		}
+	}
+}
+#战列
+special_project = {
+	key = tc_infusion_batter
+	picture = "GFX_event_tc_infuster_ancient"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 360
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 4
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = tc_relic.1105
+			}
+		}
+	}
+}
+#主宰
+special_project = {
+	key = tc_infusion_juggernaut
+	picture = "GFX_event_tc_infuster_ancient"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 360
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 4
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = tc_relic.1109
+			}
+		}
+	}
+}
+#防御塔
+special_project = {
+	key = tc_infusion_tower
+	picture = "GFX_event_tc_infuster_ancient"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 360
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 4
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = tc_relic.1112
+			}
+		}
+	}
+}
+#MCV
+special_project = {
+	key = tc_infusion_mcv
+	picture = "GFX_event_tc_infuster_ancient"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 360
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 4
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = tc_relic.1113
+			}
+		}
+	}
+}
+#洞穴创造者
+special_project = {
+	key = tc_infusion_cave
+	picture = "GFX_event_tc_infuster_broken"
+	icon = gfx/interface/icons/situation_log/tc_situation_log_main_quest.dds
+	event_scope = ship_event
+
+	days_to_research = 360
+	requirements = {
+		shipclass_science_ship = 1
+		leader = scientist
+		skill = 4
+	}
+
+	on_success = {
+		owner = {
+			country_event = {
+				id = tc_relic.1108
+			}
+		}
+	}
+}

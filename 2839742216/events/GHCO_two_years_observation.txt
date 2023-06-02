@@ -1,0 +1,182 @@
+namespace = GHCO_two_years_observation
+####################################################################################
+#					两		年		观		察		期	
+####################################################################################
+
+#试图通过两年观察期
+country_event = {	
+	id = GHCO_two_years_observation.1
+	title = "GHCO_event.3.title"	
+	desc = "GHCO_event.3.desc"	
+	is_triggered_only = yes	# any 
+
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	} 
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		root = {
+			nor = {
+				has_country_flag = GHCO_two_years_observation				#还在两年观察期中
+				has_country_flag = GHCO_observed_not_passed_observation		#没有通过两年观察期
+			}
+		}
+	} 
+
+	immediate = {
+		remove_country_flag = GHCO_two_years_observation
+		GHCO_set_trust_level_1 = yes
+	}
+
+	option = {
+		name = "GHCO_event.3.option"
+	}
+}
+
+#GHCO发现被观察者不是服务对象
+country_event = {	
+	id = GHCO_two_years_observation.2	
+	title = "GHCO_event.4.title"	
+	desc = "GHCO_event.4.desc"	
+	is_triggered_only = yes	# GHCO_basic.3
+
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		root = {
+			is_homicidal = yes
+			has_country_flag = GHCO_two_years_observation
+		}
+	}
+
+	immediate = {
+		remove_country_flag = GHCO_two_years_observation	#两年观察期
+		set_country_flag = GHCO_permanent_observation 		#永久观察期，直到该国家转变后来找GHCO移除
+	}
+
+	option = {
+		name = "GHCO_event.4.option"
+	}
+}
+
+#在观察期间未通过，重置两年观察期
+country_event = {	
+	id = GHCO_two_years_observation.3
+	title = "GHCO_event.5.title"
+	is_triggered_only = yes	# any
+
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		root = {
+			has_country_flag = GHCO_two_years_observation
+			has_country_flag = GHCO_observed_not_passed_observation
+		}
+	}
+
+	desc = {
+		trigger = {
+			has_country_flag = GHCO_observation_interrupt_destroy_country_war
+		}
+		text = "GHCO_event.5.desc.destroy_country_war"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = GHCO_observation_interrupt_allows_purge
+		} 
+		text = "GHCO_event.5.desc.allows_purge"
+	}
+
+	immediate = {
+		remove_country_flag = GHCO_two_years_observation
+		set_timed_country_flag = {
+			flag = GHCO_two_years_observation
+			days = 720
+		}
+		country_event = {
+			id = GHCO_two_years_observation.1
+			days = 721
+		}
+	}
+
+	option = {
+		trigger = {
+			has_country_flag = GHCO_observation_interrupt_destroy_country_war
+		}
+		name = "GHCO_event.5.option.destroy_country_war"
+		remove_country_flag = GHCO_observation_interrupt_destroy_country
+		remove_country_flag = GHCO_observed_not_passed_observation
+	}
+	option = {
+		trigger = {
+			has_country_flag = GHCO_observation_interrupt_allows_purge
+		}
+		name = "GHCO_event.5.option.allows_purge"
+		remove_country_flag = GHCO_observation_interrupt_allows_purge
+		remove_country_flag = GHCO_observed_not_passed_observation
+	}
+
+}
+
+#两年观察期中判断是否违规（年检）
+country_event = {	
+	id = GHCO_two_years_observation.4
+	hide_window = yes
+	is_triggered_only = yes	# on_yearly_pulse_country
+
+	trigger = {
+		root = {
+			or = {
+				has_country_flag = GHCO_two_years_observation
+			}
+		}
+	}
+
+	immediate = {
+		if = {	#进行灭国战争
+			limit = {
+				root = {
+					is_at_war = yes
+					any_war = {
+						is_total_war = yes
+						is_war_participant = {
+							who = root
+							side = attackers
+						}
+					}
+				}
+			}
+			set_country_flag = GHCO_observed_not_passed_observation				#没有通过观察期
+			set_country_flag = GHCO_observation_interrupt_destroy_country_war	#没有通过的原因
+			country_event = { id = GHCO_two_years_observation.3 }				#通知没有通过的事件
+		}
+		if = {	#允许灭绝
+			limit = {
+				root = {
+					any_owned_planet = {
+						any_owned_pop = {
+							is_being_purged = yes
+						}
+					}
+				}
+			}
+			set_country_flag = GHCO_observed_not_passed_observation
+			set_country_flag = GHCO_observation_interrupt_allows_purge
+			country_event = { id = GHCO_two_years_observation.3 }
+		}
+	}
+
+}

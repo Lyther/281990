@@ -1,0 +1,1075 @@
+decision_sxx_cultivator_ship_3 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_cultivator_ship
+		UNITY = 100 STATE = jindan LEVEL = 3
+	}
+}
+
+decision_sxx_cultivator_ship_4 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_cultivator_ship
+		UNITY = 300 STATE = yuanying LEVEL = 4
+	}
+}
+
+decision_sxx_cultivator_ship_5 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_cultivator_ship
+		UNITY = 1000 STATE = huashen LEVEL = 5
+	}
+}
+
+decision_sxx_cultivator_ship_6 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_cultivator_ship
+		UNITY = 3000 STATE = lianxu LEVEL = 6
+	}
+}
+
+decision_sxx_cultivator_ship_7 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_cultivator_ship
+		UNITY = 10000 STATE = heti LEVEL = 7
+	}
+}
+
+decision_sxx_cultivator_ship_8 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_cultivator_ship
+		UNITY = 30000 STATE = dacheng LEVEL = 8
+	}
+}
+
+decision_sxx_cultivator_ship_9 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_cultivator_ship
+		UNITY = 100000 STATE = dujie LEVEL = 9
+	}
+}
+
+decision_sxx_heaven_ship_1 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_heaven_ship
+		UNITY = 300000 STATE = zhenxian LEVEL = 1
+	}
+}
+
+decision_sxx_heaven_ship_1_all = {
+	icon = decision_sxx_cultivator_ship
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+		cost = {
+			unity = 30000000
+		}
+	}
+
+	potential = {
+		owner = { is_sxx_heaven_country = yes }
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = decision_sxx_heaven_ship_no_zhenxian
+			any_owned_pop = {
+				has_pop_flag = sxx_zhenxian
+				check_variable = { which = sxx_fairy_pop_xp value >= value:sxx_fairy_pop_xp_cost }
+				is_being_purged = no
+				is_being_assimilated = no
+				is_sapient = yes
+			}
+		}
+		custom_tooltip = {
+			fail_text = decision_sxx_cultivator_ship_controlled
+			controller = {
+				is_same_value = prev.owner
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_create_heaven_ship_1_all
+		hidden_effect = {
+			create_fleet = {
+				name = "NAME_SXX_HEAVEN_Fleet"
+				settings = {
+					is_boss = yes
+				#	can_change_composition = no
+					can_change_leader = no
+					uses_naval_capacity = no
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = PREVPREV.owner
+					prev = {
+						every_owned_pop = {
+							limit = {
+								has_pop_flag = sxx_zhenxian
+								check_variable = { which = sxx_fairy_pop_xp value >= value:sxx_fairy_pop_xp_cost }
+								is_being_purged = no
+								is_being_assimilated = no
+								is_sapient = yes
+							}
+							subtract_variable = { which = sxx_fairy_pop_xp value = value:sxx_fairy_pop_xp_cost }
+							prevprev = {
+								create_ship = {
+									name = "NAME_SXX_Ship_HEAVEN"
+									design = "NAME_SXX_Heaven_1"
+									effect = { add_modifier = { modifier = sxx_fairy_ship_modifier_2 } }
+								}
+							}
+						}
+					}
+					set_location = {
+						target = PREVPREV
+						distance = 5
+						angle = random
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_heaven_ship_2 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_heaven_ship
+		UNITY = 1000000 STATE = xianwang LEVEL = 2
+	}
+}
+
+decision_sxx_heaven_ship_3 = {
+	inline_script = {
+		script = sxx_decisions/sxx_create_heaven_ship
+		UNITY = 3000000 STATE = xiandi LEVEL = 3
+	}
+}
+
+decision_sxx_cultivator_ship_return = {
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = { is_sxx_jindan_country = yes }
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = decision_sxx_cultivator_ship_controlled
+			controller = {
+				is_same_value = prev.owner
+			}
+		}
+		custom_tooltip = {
+			fail_text = decision_sxx_cultivator_ship_return_conditions
+			any_fleet_in_orbit = {
+				exists = owner
+				owner = {
+					is_same_value = prev.controller
+					is_same_value = prevprev.owner
+				}
+				any_owned_ship = { is_ship_size = sxx_cultivator }
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_create_cultivator_pop
+		hidden_effect = {
+			every_fleet_in_orbit = {
+				limit = {
+					exists = owner
+					owner = {
+						is_same_value = prev.controller
+						is_same_value = prevprev.owner
+					}
+					any_owned_ship = { is_ship_size = sxx_cultivator }
+				}
+				if = {
+					limit = {
+						exists = leader
+						NOT = { any_owned_ship = { NOT = { is_ship_size = sxx_cultivator } } }
+					}
+					leader = {
+						unassign_leader = this
+					}
+				}
+				every_owned_ship = {
+					limit = {
+						is_ship_size = sxx_cultivator
+					}
+					event_target:sxx_pool_planet = {
+						random_owned_pop = {
+							limit = {
+								has_pop_flag = sxx_cultivator_of@prevprev
+							}
+							resettle_pop = {
+								pop = this
+								planet = root
+							}
+							remove_pop_flag = sxx_cultivator_of@prevprev
+						}
+					}
+					delete_ship = this
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_call_other_cultivator = {
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+		cost = {
+			unity = 10
+			mult = owner.trigger:empire_size
+		}
+	}
+
+	potential = {
+		owner = { is_sxx_sect = yes }
+	}
+
+	allow = {
+		is_occupied_flag = no
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_call_other_cultivator_tooltip
+		hidden_effect = {
+			owner = {
+				every_owned_pop = {
+					limit = {
+						has_job = sxx_other_cultivator
+						planet = {
+							is_occupied_flag = no
+							NOT = { is_same_value = root }
+						}
+					}
+					resettle_pop = {
+						pop = this
+						planet = root
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_call_mortal = {
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+		cost = {
+			unity = 10
+			mult = owner.trigger:empire_size
+		}
+	}
+
+	potential = {
+		owner = { is_sxx_sect = yes }
+	}
+
+	allow = {
+		is_occupied_flag = no
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_call_mortal_tooltip
+		hidden_effect = {
+			owner = {
+				every_owned_pop = {
+					limit = {
+						is_unemployed = yes
+						planet = {
+							is_occupied_flag = no
+							NOT = { is_same_value = root }
+						}
+					}
+					resettle_pop = {
+						pop = this
+						planet = root
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_xueming = {
+	icon = decision_surreal_visions
+	sound = event_death_cult_01
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = {
+			has_valid_civic = civic_sxx_evil_way
+		}
+		OR = {
+			has_active_building = building_sxx_xuemingbei_0
+			has_active_building = building_sxx_xuemingbei_1
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = decision_sxx_xueming_no_building
+			OR = {
+				has_building = building_sxx_xuemingbei_0
+				has_building = building_sxx_xuemingbei_1
+			}
+		}
+		custom_tooltip = {
+			fail_text = decision_sxx_xueming_not_enough
+			check_variable = {
+				which = sxx_evil_break_count
+				value > 0
+			}
+		}
+		custom_tooltip = {
+			fail_text = decision_sxx_xueming_cooldown
+			NOT = {
+				has_modifier = sxx_xueming_modifier
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_xueming_tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					has_councilor = { COUNCILOR = "councilor_sxx_xuemingmoshi" }
+				}
+				add_modifier = {
+					modifier = sxx_xueming_modifier
+					mult = value:sxx_xuemingmoshi_xueming_mult_value
+					days = 1800
+				}
+			}
+			else = {
+				add_modifier = {
+					modifier = sxx_xueming_modifier
+					mult = sxx_evil_break_count
+					days = 1800
+				}
+			}
+			set_variable = {
+				which = sxx_evil_break_count
+				value = 0
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 200
+	}
+}
+
+decision_sxx_add_linggen = {
+	icon = descision_progenitor_empty
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = {
+			has_origin = origin_sxx_yuhua
+			NOT = { has_country_flag = synthetic_empire }
+		}
+	}
+
+	allow = {
+		any_owned_pop = {
+			NOT = { has_trait = trait_sxx_linggen }
+			custom_tooltip = {
+				text = sxx_pop_is_lianqi
+				has_pop_flag = sxx_lianqi
+			}
+			is_sxx_cultivable = yes
+			NOT = { has_trait = trait_mechanical }
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_add_linggen_tooltip
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					NOT = { has_trait = trait_sxx_linggen }
+					has_pop_flag = sxx_lianqi
+					is_sxx_cultivable = yes
+					NOT = { has_trait = trait_mechanical }
+				}
+				modify_species = {
+					species = this
+					add_trait = trait_sxx_linggen
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 200
+	}
+}
+
+decision_sxx_add_linggen_auto = {
+	icon = descision_progenitor_empty
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = {
+			has_origin = origin_sxx_yuhua
+			NOT = { has_country_flag = synthetic_empire }
+		}
+		NOT = { has_modifier = sxx_add_linggen_modifier }
+	}
+
+	effect = {
+		add_modifier = { modifier = sxx_add_linggen_modifier }
+	}
+
+	ai_weight = {
+		weight = 200
+	}
+}
+
+decision_sxx_add_linggen_auto_delete = {
+	icon = descision_progenitor_empty
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		has_modifier = sxx_add_linggen_modifier
+	}
+
+	effect = {
+		remove_modifier = sxx_add_linggen_modifier
+	}
+
+	ai_weight = {
+		weight = 200
+		modifier = {
+			factor = 0
+			owner = {
+				has_origin = origin_sxx_yuhua
+				NOT = { has_country_flag = synthetic_empire }
+			}
+		}
+	}
+}
+
+decision_sxx_yuhua = {
+	owned_planets_only = yes
+	sound = event_screams
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = {
+			has_origin = origin_sxx_yuhua
+			NOT = { has_country_flag = synthetic_empire }
+		}
+	}
+
+	allow = {
+		any_owned_pop = {
+			has_trait = trait_sxx_linggen
+			sxx_pop_is_not_under_huashen = yes
+			hidden_trigger = {
+				is_sxx_fairy_pop = no
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_yuhua_effect
+		hidden_effect = {
+			every_owned_pop = {
+				limit = {
+					has_trait = trait_sxx_linggen
+					sxx_pop_is_not_under_huashen = yes
+					is_sxx_fairy_pop = no
+				}
+				sxx_pop_die_and_become_yuhuaxian_if_possible = yes
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_upgrade_kuilei = {
+	icon = decision_cybernetics
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = {
+			has_valid_civic = civic_sxx_kuilei
+			NOT = { has_policy_flag = sxx_kuilei_assembly_stop }
+		}
+		NOR = {
+			has_modifier = sxx_kuilei_upgrading_modifier_0
+			has_modifier = sxx_kuilei_upgrading_modifier_1
+			has_modifier = sxx_kuilei_upgrading_modifier_2
+		}
+	}
+
+	allow = {
+		any_owned_pop = {
+			sxx_pop_is_robot_can_be_upgraded = yes
+		}
+		any_owned_pop = {
+			has_job = sxx_elder
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_upgrade_kuilei_effect
+		hidden_effect = {
+			owner = {
+				switch = {
+					trigger = has_policy_flag
+					sxx_kuilei_assembly_0 = {
+						prev = {
+							add_modifier = { modifier = sxx_kuilei_upgrading_modifier_0 }
+							planet_event = { id = sxx_event.130 days = 720 }
+						}
+					}
+					sxx_kuilei_assembly_1 = {
+						prev = {
+							add_modifier = { modifier = sxx_kuilei_upgrading_modifier_1 }
+							planet_event = { id = sxx_event.130 days = 180 }
+						}
+					}
+					sxx_kuilei_assembly_2 = {
+						prev = {
+							add_modifier = { modifier = sxx_kuilei_upgrading_modifier_2 }
+							planet_event = { id = sxx_event.130 days = 45 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 200
+	}
+}
+
+decision_sxx_planet_pop_reborn = {
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = {
+			is_sxx_sect = yes
+			check_variable = { which = sxx_practice_4 value >= 1 }
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = decision_sxx_planet_pop_reborn_no_pop
+			any_owned_pop = {
+				is_sxx_potential_depletion = yes
+				is_sxx_cultivable_cultivator = yes
+				sxx_pop_is_not_under_lianqi = yes
+				NOT = { has_trait = trait_mechanical }
+				if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value = 1 } } }
+					sxx_pop_is_not_under_zhuji = no
+				}
+				else_if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value = 2 } } }
+					sxx_pop_is_not_under_jindan = no
+				}
+				else_if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value = 3 } } }
+					sxx_pop_is_not_under_yuanying = no
+				}
+				else_if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value = 4 } } }
+					sxx_pop_is_not_under_huashen = no
+				}
+				else_if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value = 5 } } }
+					sxx_pop_is_not_under_lianxu = no
+				}
+				else_if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value = 6 } } }
+					sxx_pop_is_not_under_heti = no
+				}
+				else_if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value = 7 } } }
+					sxx_pop_is_not_under_dacheng = no
+				}
+				else_if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value = 8 } } }
+					sxx_pop_is_not_under_dujie = no
+				}
+				else_if = {
+					limit = { owner = { check_variable = { which = sxx_practice_4 value >= 9 } } }
+					is_sxx_fairy_pop = no
+				}
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_planet_pop_reborn_effect
+		hidden_effect = {
+			sxx_owned_pop_reborn_effect = yes
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_tiangong = {
+	owned_planets_only = yes
+
+	enactment_time = 3600
+	resources = {
+		category = decisions
+		cost = {
+			trigger = {
+				owner = { is_ai = no }
+			}
+			influence = 200
+			energy = 5000
+			alloys = 5000
+			sxx_stones = 10000
+		}
+		cost = {
+			trigger = {
+				owner = { is_ai = yes } # 因为没有覆盖原版资源的ai budget
+			}
+			sxx_stones = 10000
+		}
+	}
+
+	potential = {
+		is_planet_class = pc_habitat
+		owner = { is_sxx_huashen_country = yes }
+		NOT = { has_modifier = sxx_tiangong }
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = sxx_not_habitat_2
+			has_planet_flag = advanced_habitat_2
+		}
+		#is_sxx_huashen_planet = yes
+	}
+
+	effect = {
+		add_modifier = { modifier = sxx_tiangong }
+	}
+
+	ai_weight = {
+		weight = 200
+	}
+}
+
+decision_sxx_set_jinshen_array_disk = {
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = {
+			is_sxx_sect = yes
+			check_variable = { which = sxx_array_disk_count value >= 1 }
+		}
+	}
+
+	allow = {
+		NOT = { has_modifier = sxx_array_disk_modifier }
+	}
+
+	effect = {
+		add_modifier = { modifier = sxx_array_disk_modifier }
+		hidden_effect = {
+			owner = { subtract_variable = { which = sxx_array_disk_count value = 1 } }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_build_heaven = {
+	owned_planets_only = yes
+
+	enactment_time = 3600
+	resources = {
+		category = decisions
+		cost = {
+			influence = 1000
+			unity = 1000000
+			energy = 500000
+			minerals = 500000
+			alloys = 200000
+			sxx_stones = 1000000
+		#	minor_artifacts = 100
+		}
+	}
+
+	potential = {
+		owner = {
+			is_sxx_heaven_country = yes
+			NOR = {
+				has_country_flag = sxx_built_heaven
+				has_country_flag = sxx_building_heaven
+			}
+		}
+		NOT = { has_planet_flag = sxx_heaven_planet }
+	}
+
+	allow = {
+		is_planet_class = pc_sxx_blessed_spot
+		planet_size >= 20
+		num_uncleared_blockers < 1
+		is_special_colony_type = no
+	}
+
+	on_queued = {
+		owner = {
+			set_timed_country_flag = {
+				flag =  sxx_building_heaven
+				days = 7200
+			}
+		}
+	}
+
+	on_unqueued = {
+		owner = {
+			remove_country_flag = sxx_building_heaven
+		}
+	}
+
+	effect = {
+		hidden_effect = {
+			owner = {
+				set_country_flag = sxx_built_heaven
+			}
+			solar_system = {
+				set_star_flag = cannot_be_hit_by_aow_starfall_spear
+			}
+			set_planet_flag = sxx_heaven_planet
+			set_planet_flag = cannot_be_hit_by_aow_starfall_spear
+			remove_all_buildings = yes
+			remove_all_districts = yes
+			clear_deposits = yes
+		}
+		
+		change_planet_size = 10
+		change_pc = pc_sxx_heaven
+
+		hidden_effect = {
+			add_building = building_sxx_lingxiao
+			owner = { country_event = { id = sxx_fairy.160 } }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_rebuild_heaven = {
+	icon = decision_sxx_build_heaven
+
+	enactment_time = 3600
+	resources = {
+		category = decisions
+		cost = {
+			influence = 1000
+			unity = 1000000
+			energy = 500000
+			minerals = 500000
+			alloys = 200000
+			sxx_stones = 1000000
+		#	minor_artifacts = 100
+		}
+	}
+
+	potential = {
+		space_owner = {
+			is_sxx_heaven_country = yes
+		}
+		has_planet_flag = sxx_heaven_planet
+		NOT = { is_planet_class = pc_sxx_heaven }
+	}
+
+	allow = {
+		num_uncleared_blockers < 1
+		is_special_colony_type = no
+	}
+
+	effect = {
+		hidden_effect = {
+			remove_all_buildings = yes
+			remove_all_districts = yes
+			clear_deposits = yes
+		}
+		
+		change_pc = pc_sxx_heaven
+
+		hidden_effect = {
+			add_building = building_sxx_lingxiao
+			space_owner = { country_event = { id = sxx_fairy.160 } }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_choose_furnace_build_planet = {
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		exists = space_owner
+		exists = from
+		space_owner = { is_same_value = from }
+		NOT = { exists = owner }
+		NOT = { has_planet_flag = sxx_planet_furnace_build_chosen }
+		from = {
+			has_technology = tech_sxx_star_furnace
+			is_sxx_sect = yes
+			any_owned_megastructure = {
+				OR = {
+					is_megastructure_type = sxx_star_furnace_1
+					is_megastructure_type = sxx_star_furnace_2
+					is_megastructure_type = sxx_star_furnace_3
+					is_megastructure_type = sxx_star_furnace_4
+					is_megastructure_type = sxx_star_furnace_5
+					is_megastructure_type = sxx_star_furnace_6
+					is_megastructure_type = sxx_star_furnace_7
+					is_megastructure_type = sxx_star_furnace_8
+					is_megastructure_type = sxx_star_furnace_9
+				}
+			}
+			NOT = {
+				any_planet_within_border = {
+					has_modifier = sxx_furnace_build_chosen
+				}
+			}
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = sxx_need_regular_planet
+			OR = {
+				uninhabitable_regular_planet = yes
+				habitable_planet = yes
+				is_planet_class = pc_nuked
+				is_planet_class = pc_hive
+				is_planet_class = pc_machine
+			}
+		}
+		planet_size >= 20
+		NOT = { has_moon = yes }
+		NOT = { has_modifier = sxx_furnace_artifice_chosen }
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_choose_furnace_build_planet_effect
+		hidden_effect = {
+			add_modifier = { modifier = sxx_furnace_build_chosen }
+		}
+	}
+
+	ai_weight = {
+		weight = 500
+		modifier = {
+			factor = 0
+			OR = {
+				habitable_planet = yes
+				is_planet_class = pc_nuked
+				is_planet_class = pc_hive
+				is_planet_class = pc_machine
+			}
+		}
+	}
+}
+
+decision_sxx_cancel_furnace_build_planet = {
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		exists = space_owner
+		exists = from
+		space_owner = { is_same_value = from }
+		NOT = { exists = owner }
+		has_modifier = sxx_furnace_build_chosen
+		from = {
+			has_technology = tech_sxx_star_furnace
+			is_sxx_sect = yes
+			any_owned_megastructure = {
+				OR = {
+					is_megastructure_type = sxx_star_furnace_1
+					is_megastructure_type = sxx_star_furnace_2
+					is_megastructure_type = sxx_star_furnace_3
+					is_megastructure_type = sxx_star_furnace_4
+					is_megastructure_type = sxx_star_furnace_5
+					is_megastructure_type = sxx_star_furnace_6
+					is_megastructure_type = sxx_star_furnace_7
+					is_megastructure_type = sxx_star_furnace_8
+					is_megastructure_type = sxx_star_furnace_9
+					is_megastructure_type = sxx_star_furnace_10
+				}
+			}
+		}
+	}
+
+	allow = {
+		always = yes
+	}
+
+	effect = {
+		remove_modifier = sxx_furnace_build_chosen
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_sxx_choose_furnace_artifice_planet = {
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		exists = space_owner
+		exists = from
+		space_owner = { is_same_value = from }
+		NOT = { exists = owner }
+		NOT = { has_planet_flag = sxx_planet_furnace_build_chosen }
+		from = {
+			is_sxx_sect = yes
+			any_owned_megastructure = {
+				is_megastructure_type = sxx_star_furnace_10
+			}
+			NOT = {
+				any_planet_within_border = {
+					has_modifier = sxx_furnace_artifice_chosen
+				}
+			}
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = sxx_need_regular_planet
+			OR = {
+				uninhabitable_regular_planet = yes
+				habitable_planet = yes
+				is_planet_class = pc_nuked
+				is_planet_class = pc_hive
+				is_planet_class = pc_machine
+			}
+		}
+		planet_size > 1
+		NOT = { has_modifier = sxx_furnace_build_chosen }
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_choose_furnace_artifice_planet_effect
+		hidden_effect = {
+			add_modifier = { modifier = sxx_furnace_artifice_chosen }
+			change_pc = pc_molten
+			clear_deposits = yes
+			if = {
+				limit = { has_modifier = holy_planet }
+				planet_event = { id = planet_destruction.605 }
+			}
+			planet_event = { id = sxx_event.250 days = 30 }
+		}
+	}
+
+	ai_weight = {
+		weight = 100
+		modifier = {
+			factor = 0
+			OR = {
+				habitable_planet = yes
+				is_planet_class = pc_nuked
+				is_planet_class = pc_hive
+				is_planet_class = pc_machine
+			}
+		}
+		modifier = {
+			factor = 0
+			from = {
+				NOR = {
+					has_deficit = minerals
+					has_deficit = sxx_pills
+				}
+			}
+		}
+	}
+}

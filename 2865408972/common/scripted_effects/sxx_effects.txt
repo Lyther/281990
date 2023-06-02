@@ -1,0 +1,592 @@
+# 概率触发效果，随修正变化
+# 修正上下限：-100% ~ (CHANCE2/CHANCE1)%
+sxx_chance_happen_effect = {
+	random_list = {
+		$CHANCE1$ = {
+			$EFFECT$ = yes
+			modifier = {
+				add = value:sxx_chance_add|CHANCE1|$CHANCE1$|CHANCE2|$CHANCE2$|MODIFIER|$MODIFIER$|
+			}
+		}
+		$CHANCE2$ = {
+			modifier = {
+				add = value:sxx_chance_subtract|CHANCE1|$CHANCE1$|CHANCE2|$CHANCE2$|MODIFIER|$MODIFIER$|
+			}
+		}
+	}
+}
+
+# 概率触发效果，随修正变化
+# 修正上下限：-100% ~ (CHANCE2/CHANCE1)%
+sxx_chance_happen_effect_2 = {
+	random_list = {
+		$CHANCE1$ = {
+			$EFFECT1$ = yes
+			modifier = {
+				add = value:sxx_chance_add|CHANCE1|$CHANCE1$|CHANCE2|$CHANCE2$|MODIFIER|$MODIFIER$|
+			}
+		}
+		$CHANCE2$ = {
+			$EFFECT2$ = yes
+			modifier = {
+				add = value:sxx_chance_subtract|CHANCE1|$CHANCE1$|CHANCE2|$CHANCE2$|MODIFIER|$MODIFIER$|
+			}
+		}
+	}
+}
+
+sxx_test_add_variable_1_effect = {
+	owner = {
+		change_variable = {
+			which = sxx_test_v
+			value = 1
+		}
+	}
+}
+
+sxx_test_ex = {
+	every_owned_pop = {
+		set_variable = {
+			which = sxx_test_v_add
+			value = value:sxx_chance_add_test|MODIFIER|sxx_break_die_chance_upkeep_mult|
+		}
+		set_variable = {
+			which = sxx_test_v_sub
+			value = value:sxx_chance_subtract_test|MODIFIER|sxx_break_die_chance_upkeep_mult|
+		}
+	}
+}
+
+sxx_test_die = {
+	random_owned_pop = {
+		sxx_chance_happen_effect = { EFFECT = sxx_test_add_variable_1_effect CHANCE1 = 500 CHANCE2 = 500 MODIFIER = sxx_break_die_chance_upkeep_mult }
+	}
+}
+
+sxx_test_die_1 = {
+	sxx_chance_happen_effect = { EFFECT = sxx_test_add_variable_1_effect CHANCE1 = 500 CHANCE2 = 500 MODIFIER = sxx_break_die_chance_upkeep_mult }
+}
+
+sxx_remove_xiuxian_trait = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_lianqi
+		remove_trait = trait_sxx_zhuji
+		remove_trait = trait_sxx_jindan
+		remove_trait = trait_sxx_yuanying
+		remove_trait = trait_sxx_huashen
+		remove_trait = trait_sxx_lianxu
+		remove_trait = trait_sxx_heti
+		remove_trait = trait_sxx_dacheng
+		remove_trait = trait_sxx_dujie
+		remove_trait = trait_sxx_zhenxian
+		remove_trait = trait_sxx_xianwang
+		remove_trait = trait_sxx_xiandi
+	}
+}
+
+sxx_species_break_to_lianqi = {
+	modify_species = {
+		species = this
+		add_trait = trait_sxx_lianqi
+	}
+}
+
+sxx_species_break_to_zhuji = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_lianqi
+		add_trait = trait_sxx_zhuji
+	}
+}
+
+sxx_species_break_to_jindan = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_zhuji
+		add_trait = trait_sxx_jindan
+	}
+}
+
+sxx_species_break_to_yuanying = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_jindan
+		add_trait = trait_sxx_yuanying
+	}
+}
+
+sxx_species_break_to_huashen = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_yuanying
+		add_trait = trait_sxx_huashen
+	}
+}
+
+sxx_species_break_to_lianxu = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_huashen
+		add_trait = trait_sxx_lianxu
+	}
+}
+
+sxx_species_break_to_heti = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_lianxu
+		add_trait = trait_sxx_heti
+	}
+}
+
+sxx_species_break_to_dacheng = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_heti
+		add_trait = trait_sxx_dacheng
+	}
+}
+
+sxx_species_break_to_dujie = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_dacheng
+		add_trait = trait_sxx_dujie
+	}
+}
+
+sxx_species_break_to_zhenxian = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_dujie
+		add_trait = trait_sxx_zhenxian
+	}
+}
+
+sxx_species_break_to_xianwang = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_zhenxian
+		add_trait = trait_sxx_xianwang
+	}
+}
+
+sxx_species_break_to_xiandi = {
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_xianwang
+		add_trait = trait_sxx_xiandi
+	}
+}
+
+sxx_evil_xueji_pop = {
+	set_update_modifiers_batch = begin
+	every_owned_pop = {
+		limit = {
+			is_sxx_fairy_pop = no
+			owner = {
+				switch = {
+					trigger = has_policy_flag
+					sxx_xueji_purge = {
+						prev = { is_pop_category = purge }
+					}
+					sxx_xueji_slave = {
+						prev = {
+							OR = {
+								is_pop_category = purge
+								is_pop_category = slave
+								is_pop_category = criminal
+								is_pop_category = robot_servant
+								is_enslaved = yes
+							}
+						}
+					}
+					sxx_xueji_worker = {
+						prev = {
+							OR = {
+								is_pop_category = purge
+								is_pop_category = slave
+								is_pop_category = criminal
+								is_pop_category = robot_servant
+								is_pop_category = worker
+								is_enslaved = yes
+							}
+						}
+					}
+					sxx_xueji_specialist = {
+						prev = {
+							OR = {
+								is_pop_category = purge
+								is_pop_category = slave
+								is_pop_category = criminal
+								is_pop_category = robot_servant
+								is_pop_category = worker
+								is_pop_category = specialist
+								is_enslaved = yes
+							}
+						}
+					}
+					sxx_xueji_no_citizenship_rights = {
+						prev = {
+							has_citizenship_rights = no
+						}
+					}
+					sxx_xueji_not_cultivable_cultivator = {
+						prev = {
+							has_pop_flag = sxx_cultivator
+							is_sxx_cultivable = no
+						}
+					}
+					sxx_xueji_other_cultivator = {
+						prev = {
+							has_job = sxx_other_cultivator
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = trait_machine_unit
+					has_trait = trait_mechanical
+				}
+			}
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = { planet = { change_variable = { which = sxx_evil_break_count value = 0.1 } } }
+				sxx_zhuji = { planet = { change_variable = { which = sxx_evil_break_count value = 0.2 } } }
+				sxx_jindan = { planet = { change_variable = { which = sxx_evil_break_count value = 0.4 } } }
+				sxx_yuanying = { planet = { change_variable = { which = sxx_evil_break_count value = 0.8 } } }
+				sxx_huashen = { planet = { change_variable = { which = sxx_evil_break_count value = 1.6 } } }
+				sxx_lianxu = { planet = { change_variable = { which = sxx_evil_break_count value = 3.2 } } }
+				sxx_heti = { planet = { change_variable = { which = sxx_evil_break_count value = 6.4 } } }
+				sxx_dacheng = { planet = { change_variable = { which = sxx_evil_break_count value = 12.8 } } }
+				sxx_dujie = { planet = { change_variable = { which = sxx_evil_break_count value = 25.6 } } }
+				default = { planet = { change_variable = { which = sxx_evil_break_count value = 0.1 } } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_trait = trait_zombie
+			}
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = { planet = { change_variable = { which = sxx_evil_break_count value = 0.5 } } }
+				sxx_zhuji = { planet = { change_variable = { which = sxx_evil_break_count value = 1 } } }
+				sxx_jindan = { planet = { change_variable = { which = sxx_evil_break_count value = 2 } } }
+				sxx_yuanying = { planet = { change_variable = { which = sxx_evil_break_count value = 4 } } }
+				sxx_huashen = { planet = { change_variable = { which = sxx_evil_break_count value = 8 } } }
+				sxx_lianxu = { planet = { change_variable = { which = sxx_evil_break_count value = 16 } } }
+				sxx_heti = { planet = { change_variable = { which = sxx_evil_break_count value = 32 } } }
+				sxx_dacheng = { planet = { change_variable = { which = sxx_evil_break_count value = 64 } } }
+				sxx_dujie = { planet = { change_variable = { which = sxx_evil_break_count value = 128 } } }
+				default = { planet = { change_variable = { which = sxx_evil_break_count value = 0.5 } } }
+			}
+		}
+		else = {
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = { planet = { change_variable = { which = sxx_evil_break_count value = 1 } } }
+				sxx_zhuji = { planet = { change_variable = { which = sxx_evil_break_count value = 2 } } }
+				sxx_jindan = { planet = { change_variable = { which = sxx_evil_break_count value = 4 } } }
+				sxx_yuanying = { planet = { change_variable = { which = sxx_evil_break_count value = 8 } } }
+				sxx_huashen = { planet = { change_variable = { which = sxx_evil_break_count value = 16 } } }
+				sxx_lianxu = { planet = { change_variable = { which = sxx_evil_break_count value = 32 } } }
+				sxx_heti = { planet = { change_variable = { which = sxx_evil_break_count value = 64 } } }
+				sxx_dacheng = { planet = { change_variable = { which = sxx_evil_break_count value = 128 } } }
+				sxx_dujie = { planet = { change_variable = { which = sxx_evil_break_count value = 256 } } }
+				default = { planet = { change_variable = { which = sxx_evil_break_count value = 1 } } }
+			}
+		}
+		kill_pop = yes
+	}
+	set_update_modifiers_batch = end
+}
+
+sxx_evil_ai_xueji_pop = {
+	set_update_modifiers_batch = begin
+	every_owned_pop = {
+		limit = {
+			is_sxx_fairy_pop = no
+			from = {
+				switch = {
+					trigger = has_policy_flag
+					sxx_xueji_purge = {
+						prev = { is_pop_category = purge }
+					}
+					sxx_xueji_slave = {
+						prev = {
+							OR = {
+								is_pop_category = purge
+								is_pop_category = slave
+								is_pop_category = criminal
+								is_pop_category = robot_servant
+								is_enslaved = yes
+							}
+						}
+					}
+					sxx_xueji_worker = {
+						prev = {
+							OR = {
+								is_pop_category = purge
+								is_pop_category = slave
+								is_pop_category = criminal
+								is_pop_category = robot_servant
+								is_pop_category = worker
+								is_enslaved = yes
+							}
+						}
+					}
+					sxx_xueji_specialist = {
+						prev = {
+							OR = {
+								is_pop_category = purge
+								is_pop_category = slave
+								is_pop_category = criminal
+								is_pop_category = robot_servant
+								is_pop_category = worker
+								is_pop_category = specialist
+								is_enslaved = yes
+							}
+						}
+					}
+					sxx_xueji_no_citizenship_rights = {
+						prev = {
+							has_citizenship_rights = no
+						}
+					}
+					sxx_xueji_not_cultivable_cultivator = {
+						prev = {
+							has_pop_flag = sxx_cultivator
+							is_sxx_cultivable = no
+						}
+					}
+					sxx_xueji_other_cultivator = {
+						prev = {
+							has_job = sxx_other_cultivator
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_trait = trait_machine_unit
+					has_trait = trait_mechanical
+				}
+			}
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = { planet = { change_variable = { which = sxx_evil_break_count value = 0.1 } } }
+				sxx_zhuji = { planet = { change_variable = { which = sxx_evil_break_count value = 0.2 } } }
+				sxx_jindan = { planet = { change_variable = { which = sxx_evil_break_count value = 0.4 } } }
+				sxx_yuanying = { planet = { change_variable = { which = sxx_evil_break_count value = 0.8 } } }
+				sxx_huashen = { planet = { change_variable = { which = sxx_evil_break_count value = 1.6 } } }
+				sxx_lianxu = { planet = { change_variable = { which = sxx_evil_break_count value = 3.2 } } }
+				sxx_heti = { planet = { change_variable = { which = sxx_evil_break_count value = 6.4 } } }
+				sxx_dacheng = { planet = { change_variable = { which = sxx_evil_break_count value = 12.8 } } }
+				sxx_dujie = { planet = { change_variable = { which = sxx_evil_break_count value = 25.6 } } }
+				default = { planet = { change_variable = { which = sxx_evil_break_count value = 0.1 } } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_trait = trait_zombie
+			}
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = { planet = { change_variable = { which = sxx_evil_break_count value = 0.5 } } }
+				sxx_zhuji = { planet = { change_variable = { which = sxx_evil_break_count value = 1 } } }
+				sxx_jindan = { planet = { change_variable = { which = sxx_evil_break_count value = 2 } } }
+				sxx_yuanying = { planet = { change_variable = { which = sxx_evil_break_count value = 4 } } }
+				sxx_huashen = { planet = { change_variable = { which = sxx_evil_break_count value = 8 } } }
+				sxx_lianxu = { planet = { change_variable = { which = sxx_evil_break_count value = 16 } } }
+				sxx_heti = { planet = { change_variable = { which = sxx_evil_break_count value = 32 } } }
+				sxx_dacheng = { planet = { change_variable = { which = sxx_evil_break_count value = 64 } } }
+				sxx_dujie = { planet = { change_variable = { which = sxx_evil_break_count value = 128 } } }
+				default = { planet = { change_variable = { which = sxx_evil_break_count value = 0.5 } } }
+			}
+		}
+		else = {
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = { planet = { change_variable = { which = sxx_evil_break_count value = 1 } } }
+				sxx_zhuji = { planet = { change_variable = { which = sxx_evil_break_count value = 2 } } }
+				sxx_jindan = { planet = { change_variable = { which = sxx_evil_break_count value = 4 } } }
+				sxx_yuanying = { planet = { change_variable = { which = sxx_evil_break_count value = 8 } } }
+				sxx_huashen = { planet = { change_variable = { which = sxx_evil_break_count value = 16 } } }
+				sxx_lianxu = { planet = { change_variable = { which = sxx_evil_break_count value = 32 } } }
+				sxx_heti = { planet = { change_variable = { which = sxx_evil_break_count value = 64 } } }
+				sxx_dacheng = { planet = { change_variable = { which = sxx_evil_break_count value = 128 } } }
+				sxx_dujie = { planet = { change_variable = { which = sxx_evil_break_count value = 256 } } }
+				default = { planet = { change_variable = { which = sxx_evil_break_count value = 1 } } }
+			}
+		}
+		kill_pop = yes
+	}
+	set_update_modifiers_batch = end
+}
+
+sxx_owned_pop_reborn_effect = {
+	every_owned_pop = {
+		limit = {
+			is_sxx_potential_depletion = yes
+			is_sxx_cultivable_cultivator = yes
+			NOT = { has_trait = trait_mechanical }
+		}
+		switch = {
+			trigger = has_pop_flag
+			sxx_lianqi = { sxx_reborn_effect = { LEVEL = 1 MULT = 1 } }
+			sxx_zhuji = { sxx_reborn_effect = { LEVEL = 2 MULT = 2 } }
+			sxx_jindan = { sxx_reborn_effect = { LEVEL = 3 MULT = 4 } }
+			sxx_yuanying = { sxx_reborn_effect = { LEVEL = 4 MULT = 8 } }
+			sxx_huashen = { sxx_reborn_effect = { LEVEL = 5 MULT = 16 } }
+			sxx_lianxu = { sxx_reborn_effect = { LEVEL = 6 MULT = 32 } }
+			sxx_heti = { sxx_reborn_effect = { LEVEL = 7 MULT = 64 } }
+			sxx_dacheng = { sxx_reborn_effect = { LEVEL = 8 MULT = 128 } }
+			sxx_dujie = { sxx_reborn_effect = { LEVEL = 9 MULT = 256 } }
+		}
+	}
+}
+
+sxx_all_leader_under_certain_state_may_break = {
+	every_owned_leader = {
+		limit = {
+			is_sxx_cultivable_leader = yes
+			species = {
+				sxx_species_is_not_under_$STATE$ = no
+			}
+		}
+		random_list = {
+			10 = { sxx_leader_break_state = yes }
+			70 = {
+				modifier = {
+					add = -40
+					has_global_flag = sxx_break_level_1
+				}
+				modifier = {
+					add = 40
+					has_global_flag = sxx_break_level_3
+				}
+				modifier = {
+					add = 80
+					has_global_flag = sxx_break_level_4
+				}
+			}
+		}
+	}
+}
+
+add_sxx_kuilei_techs = {
+	if = {
+		limit = {
+			has_valid_civic = civic_sxx_kuilei
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_powered_exoskeletons }
+			}
+			give_technology = { message = no tech = tech_powered_exoskeletons }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_robotic_workers }
+			}
+			give_technology = { message = no tech = tech_robotic_workers }
+		}
+	}
+}
+
+give_sxx_huashen_techs = {
+	give_technology = { tech = tech_sxx_lingshi_weapon_1 }
+	give_technology = { tech = tech_sxx_lingshi_weapon_2 }
+	give_technology = { tech = tech_sxx_lingshi_weapon_3 }
+	give_technology = { tech = tech_sxx_lingshi_weapon_4 }
+	give_technology = { tech = tech_sxx_lingshi_weapon_5 }
+	give_technology = { tech = tech_sxx_liandanfang_1 }
+	give_technology = { tech = tech_sxx_liandanfang_2 }
+	give_technology = { tech = tech_sxx_lianqishi_1 }
+	give_technology = { tech = tech_sxx_lianqishi_2 }
+	give_technology = { tech = tech_sxx_stones_plant_1 }
+	give_technology = { tech = tech_sxx_stones_plant_2 }
+	give_technology = { tech = tech_sxx_stones_making_1 }
+	give_technology = { tech = tech_sxx_stones_making_2 }
+	give_technology = { tech = tech_sxx_stones_making_3 }
+	give_technology = { tech = tech_sxx_pills_making_1 }
+	give_technology = { tech = tech_sxx_weapon_refining_1 }
+	give_technology = { tech = tech_sxx_gene_template }
+	give_technology = { tech = tech_sxx_xumi_1 }
+	give_technology = { tech = tech_sxx_xumi_2 }
+	give_technology = { tech = tech_sxx_stones_machine_1 }
+	give_technology = { tech = tech_sxx_stones_machine_2 }
+	give_technology = { tech = tech_sxx_stones_machine_3 }
+	give_technology = { tech = tech_sxx_stones_energy_plant }
+	give_technology = { tech = tech_sxx_lingyao }
+	give_technology = { tech = tech_sxx_pills_processing_center }
+}
+
+sxx_ship_unassign_one_ship_fleet_leader = {
+	if = {
+		limit = {
+			fleet = {
+				exists = leader
+				count_owned_ship = { count = 1 }
+			}
+		}
+		fleet.leader = { unassign_leader = this }
+	}
+}
+
+sxx_collector_surrenders_artifact = {
+	if = {
+		limit = { has_event_chain = "sxx_precursor1_chain" }
+		add_event_chain_counter = {
+			event_chain = "sxx_precursor1_chain"
+			counter = "sxx_precursor1_artifacts"
+			amount = 1
+		}
+		hidden_effect = {
+			country_event = { id = sxx_precursor.97 }
+		}
+		break = yes
+	}
+	if = {
+		limit = { has_event_chain = "sxx_precursor2_chain" }
+		add_event_chain_counter = {
+			event_chain = "sxx_precursor2_chain"
+			counter = "sxx_precursor2_artifacts"
+			amount = 1
+		}
+		hidden_effect = {
+			country_event = { id = sxx_precursor.297 }
+		}
+		break = yes
+	}
+	if = {
+		limit = { has_event_chain = "sxx_precursor3_chain" }
+		add_event_chain_counter = {
+			event_chain = "sxx_precursor3_chain"
+			counter = "sxx_precursor3_artifacts"
+			amount = 1
+		}
+		hidden_effect = {
+			country_event = { id = sxx_precursor.497 }
+		}
+		break = yes
+	}
+	if = {
+		limit = { has_event_chain = "sxx_precursor4_chain" }
+		add_event_chain_counter = {
+			event_chain = "sxx_precursor4_chain"
+			counter = "sxx_precursor4_artifacts"
+			amount = 1
+		}
+		hidden_effect = {
+			country_event = { id = sxx_precursor.697 }
+		}
+		break = yes
+	}
+}

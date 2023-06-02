@@ -1,0 +1,50 @@
+
+namespace = origin_adeptus_mechanicus
+
+country_event = {
+	id = origin_adeptus_mechanicus.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_adeptus_mechanicus
+	}
+	
+	immediate = {
+		create_species = {
+			name = "NAME_Adeptus_Mechanicus_Species"
+			class = ROBOT
+			portrait = random
+			traits = {
+				trait = trait_mechanical
+			}
+			effect = {
+				save_event_target_as = adeptus_mechanicus_species
+			}
+		}
+		event_target:adeptus_mechanicus_species = {
+			set_citizenship_type = {
+				country = root
+				type = citizenship_adeptus_mechanicus
+				cooldown = yes
+			}
+			set_living_standard = {
+				country = root
+				type = living_standard_adeptus_mechanicus
+				cooldown = yes
+			}
+		}
+		capital_scope = {
+			add_building = building_adeptus_mechanicus_1
+			while = {
+				count = 5
+				create_pop = {
+					species = event_target:adeptus_mechanicus_species
+					ethos = {
+						ethic = ethic_spiritualist
+					}
+				}
+			}
+		}
+	}
+}

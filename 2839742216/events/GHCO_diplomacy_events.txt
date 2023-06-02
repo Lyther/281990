@@ -1,0 +1,1325 @@
+namespace = GHCO_diplomacy 
+####################################################################################
+#GHCO的外交界面			!!!本文件注释见 外交界面设计.txt
+####################################################################################
+
+#	主	界	面	############################
+country_event = {
+	id = GHCO_diplomacy.1
+	is_triggered_only = yes	# on_action:on_custom_diplomacy
+	title = "GHCO_diplomacy.1.title"
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	trigger = {
+		this = { is_ai = no }
+		from = { has_country_flag = GHCO }
+	}
+
+	desc = {	#默认
+		trigger = {
+			nor = {
+				is_homicidal = yes
+				has_country_flag = GHCO_trust_level_2
+				has_country_flag = GHCO_trust_level_3
+				has_country_flag = GHCO_trust_level_4
+				has_global_flag = GHCO_special_period
+				has_country_flag = GHCO_standard_sanctions
+				has_country_flag = GHCO_comprehensive_sanctions
+			}
+		}
+		text = "GHCO_diplomacy.1.defaut.desc"
+	}
+	desc = {	#信任等级0 两年观察期
+		trigger = {
+			has_country_flag = GHCO_trust_level_0
+			or = {
+				has_country_flag = GHCO_two_years_observation
+				has_country_flag = GHCO_two_years_observation_
+			}
+			not = { is_homicidal = yes }
+		}
+		text = GHCO_diplomacy.1.two_years_observation.desc
+	}
+	desc = {	#信任等级1
+		trigger = {
+			has_country_flag = GHCO_trust_level_1
+			not = { is_homicidal = yes }
+		}
+		text = GHCO_diplomacy.1.trust_level_1.desc
+	}
+	desc = {	#信任等级2
+		trigger = {
+			has_country_flag = GHCO_trust_level_2
+		}
+		text = "GHCO_diplomacy.1.trust_level_2.desc"
+	}
+	desc = {	#信任等级3
+		trigger = {
+			has_country_flag = GHCO_trust_level_3
+		}
+		text = "GHCO_diplomacy.1.trust_level_3.desc"
+	}
+	desc = {	#信任等级full
+		trigger = {
+			has_country_flag = GHCO_trust_level_full
+		}
+		text = GHCO_diplomacy.1.trust_level_full.desc
+	}
+	desc = {	#常规制裁
+		trigger = {
+			has_country_flag = GHCO_standard_sanctions
+			nor = {
+				is_homicidal = yes
+				has_global_flag = GHCO_special_period
+				has_country_flag = GHCO_comprehensive_sanctions
+			}
+		}
+		text = "GHCO_diplomacy.1.standard_sanctions.desc"
+	}
+	desc = {	#全面制裁
+		trigger = {
+			has_country_flag = GHCO_comprehensive_sanctions
+			nor = {
+				is_homicidal = yes
+				has_global_flag = GHCO_special_period
+				has_country_flag = GHCO_standard_sanctions
+			}
+		}
+		text = "GHCO_diplomacy.1.comprehensive_sanctions.desc"
+	}
+	desc = {	#不是服务对象
+		trigger = {
+			is_homicidal = yes
+		}
+		text = "GHCO_diplomacy.1.is_homicidal.desc"
+	}
+	desc = {	#彩蛋：信任等级4级
+		trigger = {
+			has_country_flag = GHCO_trust_level_4
+			nor = {
+				is_homicidal = yes
+				has_global_flag = GHCO_special_period
+				has_country_flag = GHCO_standard_sanctions
+				has_country_flag = GHCO_comprehensive_sanctions
+			}
+		}
+		text = "GHCO_diplomacy.1.trust_level_4.desc"
+	}
+	desc = {	#特殊时期
+		trigger = {
+			has_global_flag = GHCO_special_period
+			not = { is_homicidal = yes }
+		}
+		text = "GHCO_diplomacy.1.special_period.desc"
+	}
+
+	immediate = {}
+
+	option = {	#我们想申请高超光速通信服务
+		allow = {
+			nor = {
+				has_country_flag = GHCO_standard_sanctions
+				has_country_flag = GHCO_comprehensive_sanctions
+			}
+			fail_text = { 
+				text = "GHCO_diplomacy.1.a.fail"
+			}
+		}
+		trigger = {
+			has_country_flag = GHCO_trust_level_1
+		}
+		name = "GHCO_diplomacy.1.a"
+		country_event = { id = GHCO_diplomacy.2 }
+	}
+	option = {	#我们想为你们提供服务
+		allow = {
+			nor = {
+				has_country_flag = GHCO_standard_sanctions
+				has_country_flag = GHCO_comprehensive_sanctions
+			}
+			fail_text = {
+				text = "GHCO_diplomacy.1.b.fail"
+			}
+		}
+		trigger = {
+			nor = {
+				has_country_flag = GHCO_comprehensive_sanctions
+				has_country_flag = GHCO_standard_sanctions 
+				has_global_flag = GHCO_war_in_heaven_one
+			}
+			has_country_flag = GHCO_trust_level_2
+		}
+		name = "GHCO_diplomacy.1.b"
+		country_event = { id = GHCO_diplomacy.6 }
+	}
+	option = {	#关于信任等级
+		trigger = {
+			has_country_flag = GHCO_trust_level_1
+		}
+		name = "GHCO_diplomacy.1.c"
+		country_event = { id = GHCO_diplomacy.16 }
+	}
+	option = {	#那些在地图上的通信设施
+		trigger = {
+			has_country_flag = has_visited_GHC_ficility_system
+			has_country_flag = GHCO_trust_level_2
+		}
+		name = "GHCO_diplomacy.1.d"
+		country_event = { id = GHCO_diplomacy.17 }
+	}
+	option = {	#我们想了解一些事情
+		name = "GHCO_diplomacy.1.e"
+		country_event = { id = GHCO_diplomacy.19 }
+	}
+	option = {	#再会了
+		name = "GHCO_diplomacy.1.g"
+		default_hide_option = yes
+	}
+	option = {	#那个…本地设施的维护费…
+		trigger = {
+			has_country_flag = bear_local_GHC_cost
+		}
+		name = "GHCO_diplomacy.1.f"
+	}
+
+}
+
+#	GHC	服务	############################
+country_event = {	#申请
+	id = GHCO_diplomacy.2
+	title = "GHCO_diplomacy.2.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		trigger = {
+			has_country_flag = has_GHC_service
+		}
+		text = "GHCO_diplomacy.2.a.desc"
+	}
+	desc = {
+		trigger = { 
+			not = {
+				has_country_flag = has_GHC_service
+			}
+		}
+		text = "GHCO_diplomacy.2.b.desc"
+	}
+
+	option = {	#撤销服务
+		trigger = {
+			has_country_flag = has_GHC_service
+		}
+		name = "GHCO_diplomacy.2.a"
+		country_event = { id = GHCO_diplomacy.3 }
+	}
+	option = {	#基础服务
+		trigger = {
+			not = {
+				has_country_flag = has_GHC_service_standard
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 1000 }
+		}
+		name = "GHCO_diplomacy.2.b"
+		set_country_flag = want_standard_service
+		country_event = { id = GHCO_diplomacy.4 }
+	}
+	option = {	#民用服务
+		trigger = {
+			has_country_flag = GHCO_trust_level_2
+			not = { has_country_flag = has_GHC_service_civil }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 1500 }
+		}
+		name = "GHCO_diplomacy.2.c"
+		set_country_flag = want_civil_service
+		country_event = { id = GHCO_diplomacy.4 }
+	}
+	option = {	#军用服务
+		trigger = {
+			has_country_flag = GHCO_trust_level_3
+			not = { has_country_flag = has_GHC_service_military }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 2000 }
+		}
+		name = "GHCO_diplomacy.2.d"
+		set_country_flag = want_military_service
+		country_event = { id = GHCO_diplomacy.4 }
+	}
+	option = {	#科技服务
+		trigger = {
+			has_country_flag = GHCO_trust_level_3
+			not = { has_country_flag = has_GHC_service_tech }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 3000 }
+		}
+		name = "GHCO_diplomacy.2.e"
+		set_country_flag = want_tech_service
+		country_event = { id = GHCO_diplomacy.4 }
+	}
+	option = { 	#银河高超光速通信网络
+		trigger = {
+			has_country_flag = has_GHC_service_standard
+			not = { has_country_flag = has_GHC_service_GHC }
+		}
+		name = "GHCO_diplomacy.2.GHC"
+		set_country_flag = want_GHC_service
+		country_event = { id = GHCO_diplomacy.4 }
+	}
+	option = {	#关于特殊服务
+		name = "GHCO_diplomacy.2.f"
+		country_event = { id = GHCO_diplomacy.5 }
+	}
+	option = {
+		name = "GHCO_diplomacy.2.g"
+		country_event = { id = GHCO_diplomacy.1 }
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#解除
+	id = GHCO_diplomacy.3
+	title = "GHCO_diplomacy.3.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.3.desc"
+	}
+
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_GHC_service_standard
+			}
+		}
+		name = "GHCO_diplomacy.3.a"
+		hidden_effect = {
+			remove_country_flag = has_GHC_service_standard
+			remove_modifier = GHC_standard_service
+			if = {
+				limit = {
+					nor = {
+						has_country_flag = has_GHC_service_standard
+						has_country_flag = has_GHC_service_civil
+						has_country_flag = has_GHC_service_military
+						has_country_flag = has_GHC_service_tech
+						has_country_flag = has_GHC_service_special
+						has_country_flag = has_GHC_service_GHC
+					}
+				}
+				remove_country_flag = has_GHC_service
+			}
+			country_event = { id = GHCO_diplomacy.2 }
+		}
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_GHC_service_civil
+			}
+		}
+		name = "GHCO_diplomacy.3.b"
+		hidden_effect = {
+			remove_country_flag = has_GHC_service_civil
+			remove_modifier = GHC_civil_service
+			if = {
+				limit = {
+					nor = {
+						has_country_flag = has_GHC_service_standard
+						has_country_flag = has_GHC_service_civil
+						has_country_flag = has_GHC_service_military
+						has_country_flag = has_GHC_service_tech
+						has_country_flag = has_GHC_service_special
+						has_country_flag = has_GHC_service_GHC
+					}
+				}
+				remove_country_flag = has_GHC_service
+			}
+			country_event = { id = GHCO_diplomacy.2 }
+		}
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_GHC_service_military
+			}
+		}
+		name = "GHCO_diplomacy.3.c"
+		hidden_effect = {
+			remove_country_flag = has_GHC_service_military
+			remove_modifier = GHC_military_service
+			if = {
+				limit = {
+					nor = {
+						has_country_flag = has_GHC_service_standard
+						has_country_flag = has_GHC_service_civil
+						has_country_flag = has_GHC_service_military
+						has_country_flag = has_GHC_service_tech
+						has_country_flag = has_GHC_service_special
+						has_country_flag = has_GHC_service_GHC
+					}
+				}
+				remove_country_flag = has_GHC_service
+			}
+			country_event = { id = GHCO_diplomacy.2 }
+		}
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_GHC_service_tech
+			}
+		}
+		name = "GHCO_diplomacy.3.d"
+		hidden_effect = {
+			remove_country_flag = has_GHC_service_tech
+			remove_modifier = GHC_tech_service
+			if = {
+				limit = {
+					nor = {
+						has_country_flag = has_GHC_service_standard
+						has_country_flag = has_GHC_service_civil
+						has_country_flag = has_GHC_service_military
+						has_country_flag = has_GHC_service_tech
+						has_country_flag = has_GHC_service_special
+						has_country_flag = has_GHC_service_GHC
+					}
+				}
+				remove_country_flag = has_GHC_service
+			}
+			country_event = { id = GHCO_diplomacy.2 }
+		}
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_GHC_service_special
+			}
+		}
+		name = "GHCO_diplomacy.3.e"
+		hidden_effect = {
+			remove_country_flag = has_GHC_service_special
+			remove_modifier = GHC_special_service
+			if = {
+				limit = {
+					nor = {
+						has_country_flag = has_GHC_service_standard
+						has_country_flag = has_GHC_service_civil
+						has_country_flag = has_GHC_service_military
+						has_country_flag = has_GHC_service_tech
+						has_country_flag = has_GHC_service_special
+						has_country_flag = has_GHC_service_GHC
+					}
+				}
+				remove_country_flag = has_GHC_service
+			}
+			country_event = { id = GHCO_diplomacy.2 }
+		}
+	}
+	option = {
+		name = "GHCO_diplomacy.3.f"
+		country_event = { id = GHCO_diplomacy.2 }
+		default_hide_option = yes
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_GHC_service_GHC
+			}
+		}
+		name = "GHCO_diplomacy.3.GHC"
+		hidden_effect = {
+			remove_country_flag = has_GHC_service_GHC
+			remove_modifier = Galatic_HFTL_Communication_service
+			if = {
+				limit = {
+					nor = {
+						has_country_flag = has_GHC_service_standard
+						has_country_flag = has_GHC_service_civil
+						has_country_flag = has_GHC_service_military
+						has_country_flag = has_GHC_service_tech
+						has_country_flag = has_GHC_service_special
+						has_country_flag = has_GHC_service_GHC
+					}
+				}
+				remove_country_flag = has_GHC_service
+			}
+			country_event = { id = GHCO_diplomacy.2 }
+		}
+	}
+}
+
+country_event = {	#确认
+	id = GHCO_diplomacy.4
+	title = "GHCO_diplomacy.4.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.4.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.4.a"
+		if = {
+			limit = {
+				has_country_flag = want_standard_service
+			}
+			add_resource = { energy = -1000 }
+			add_modifier = { modifier = GHC_standard_service }
+			hidden_effect = {
+				remove_country_flag = want_standard_service
+				set_country_flag = has_GHC_service
+				set_country_flag = has_GHC_service_standard
+			}
+			event_target:GHCO = {
+				add_trust = {
+					who = root
+					amount = 5
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = want_civil_service
+			}
+			add_resource = { energy = -1500 }
+			add_modifier = { modifier = GHC_civil_service }
+			hidden_effect = {
+				remove_country_flag = want_civil_service
+				set_country_flag = has_GHC_service
+				set_country_flag = has_GHC_service_civil
+			}	
+			event_target:GHCO = {
+				add_trust = {
+					who = root
+					amount = 5
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = want_military_service
+			}
+			add_resource = { energy = -2000 }
+			add_modifier = { modifier = GHC_military_service }
+			hidden_effect = {
+				remove_country_flag = want_military_service
+				set_country_flag = has_GHC_service
+				set_country_flag = has_GHC_service_military
+			}
+			event_target:GHCO = {
+				add_trust = {
+					who = root
+					amount = 5
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = want_tech_service
+			}
+			add_resource = { energy = -3000 }
+			add_modifier = { modifier = GHC_tech_service }
+			hidden_effect = {
+				remove_country_flag = want_tech_service
+				set_country_flag = has_GHC_service
+				set_country_flag = has_GHC_service_tech
+			}
+			event_target:GHCO = {
+				add_trust = {
+					who = root
+					amount = 5
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = want_GHC_service
+			}
+			add_modifier = { modifier = Galatic_HFTL_Communication_service }
+			hidden_effect = {
+				remove_country_flag = want_GHC_service
+				set_country_flag = has_GHC_service
+				set_country_flag = has_GHC_service_GHC
+			}
+			event_target:GHCO = {
+				add_trust = {
+					who = root
+					amount = 10
+				}
+			}
+		}
+		country_event = { id = GHCO_diplomacy.2 }
+	}
+	option = {
+		name = "GHCO_diplomacy.4.b"
+		country_event = { id = GHCO_diplomacy.2 }
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#关于特殊服务
+	id = GHCO_diplomacy.5
+	title = "GHCO_diplomacy.5.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.5.desc"
+	}
+	
+	option = {
+		name = "GHCO_diplomacy.5.b"
+		country_event = { id = GHCO_diplomacy.2 }
+		default_hide_option = yes
+	}
+}
+
+#	深入讨论	############################
+country_event = {	#深入讨论
+	id = GHCO_diplomacy.6
+	is_triggered_only = yes
+	title = "GHCO_diplomacy.6.title"
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.6.desc"
+	}
+
+	option = {
+		allow = {
+			not = {
+				has_country_flag = donated_resource_to_GHCO
+			}
+			fail_text = {
+				text = "GHCO_diplomacy.6.a.fail"
+			}
+		}
+		name = "GHCO_diplomacy.6.a"
+		country_event = { id = GHCO_diplomacy.7 }
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				not = {
+					has_country_flag = has_build_GHC_building_on_capital_planet
+				}
+			}
+		}
+		name = "GHCO_diplomacy.6.b"
+		country_event = { id = GHCO_diplomacy.8 }
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_build_GHC_building_on_capital_planet
+				not = {
+					has_country_flag = has_joined_GHC_network
+				}
+			}
+		}
+		name = "GHCO_diplomacy.6.c"
+		country_event = { id = GHCO_diplomacy.9 }
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_build_GHC_building_on_capital_planet
+				has_country_flag = has_joined_GHC_network
+			}
+		}
+		name = "GHCO_diplomacy.6.d"
+		country_event = { id = GHCO_diplomacy.10 }
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_build_GHC_building_on_capital_planet
+				not = {
+					has_country_flag = provide_computing_power_for_GHCO
+				}
+			}
+		}
+		name = "GHCO_diplomacy.6.e"
+		country_event = { id = GHCO_diplomacy.11 }
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = has_build_GHC_building_on_capital_planet
+				has_country_flag = provide_computing_power_for_GHCO
+			}
+		}
+		name = "GHCO_diplomacy.6.f"
+		country_event = { id = GHCO_diplomacy.12 }
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				not = {
+					has_country_flag = bear_local_GHC_cost
+				}
+			}
+		}
+		name = "GHCO_diplomacy.6.g"
+		country_event = { id = GHCO_diplomacy.13 }
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				has_country_flag = bear_local_GHC_cost
+			}
+		}
+		name = "GHCO_diplomacy.6.h"
+		country_event = { id = GHCO_diplomacy.14 }
+	}
+	option = {
+		trigger = {
+			hidden_trigger = {
+				not = {
+					has_country_flag = can_build_GHC_modules_on_starbase
+				}
+			}
+		}
+		name = "GHCO_diplomacy.6.i"
+		country_event = { id = GHCO_diplomacy.15 }
+	}
+	option = {
+		name = "GHCO_diplomacy.6.j"
+		country_event = { id = GHCO_diplomacy.1 }
+		default_hide_option = yes
+	}
+
+}
+
+country_event = {	#提供资源帮助
+	id = GHCO_diplomacy.7
+	title = "GHCO_diplomacy.7.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.7.desc"
+	}
+
+	option = {
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 5000 }
+		}
+		name = "GHCO_diplomacy.7.a"
+		add_resource = { energy = -5000 }
+		set_timed_country_flag = { flag = donated_resource_to_GHCO days = 1800 }
+		event_target:GHCO = { add_trust = { amount = 5 who = root } }
+		country_event = {id = GHCO_diplomacy.6 }
+	}
+	option = {
+		allow = {
+			resource_stockpile_compare = { resource = alloys value >= 500 }
+		}
+		name = "GHCO_diplomacy.7.b"
+		add_resource = { alloys = -500 }
+		set_timed_country_flag = { flag = donated_resource_to_GHCO days = 1800 }
+		event_target:GHCO = { add_trust = { amount = 5 who = root } }
+		country_event = {id = GHCO_diplomacy.6 }
+	}
+	option = {
+		allow = {
+			resource_stockpile_compare = { resource = minor_artifacts value >= 2 }
+		}
+		name = "GHCO_diplomacy.7.c"
+		add_resource = { minor_artifacts = -2 }
+		set_timed_country_flag = { flag = donated_resource_to_GHCO days = 1800 }
+		event_target:GHCO = { add_trust = { amount = 5 who = root } }
+		country_event = {id = GHCO_diplomacy.6 }
+	}
+	option = {
+		allow = {
+			resource_stockpile_compare = { resource = sr_dark_matter value >= 50 }
+		}
+		name = "GHCO_diplomacy.7.d"
+		add_resource = { sr_dark_matter = -50 }
+		set_timed_country_flag = { flag = donated_resource_to_GHCO days = 1800 }
+		event_target:GHCO = { add_trust = { amount = 5 who = root } }
+		country_event = {id = GHCO_diplomacy.6 }
+	}
+	option = {
+		name = "GHCO_diplomacy.7.e"
+		country_event = {id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+
+}
+
+country_event = {	#在首都建造GHC通信节点
+	id = GHCO_diplomacy.8
+	title = "GHCO_diplomacy.8.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.8.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.8.a"
+		set_country_flag = has_build_GHC_building_on_capital_planet
+		event_target:GHCO = { add_trust = { amount = 10 who = root } }
+		root.capital_scope = {
+			set_planet_flag = has_GHC_building
+		}
+		country_event = { id = GHCO_diplomacy.6 }
+		enable_special_project = { 
+			name = "build_GHC_node_on_capital"
+		}
+	}
+	option = {
+		name = "GHCO_diplomacy.8.b"
+		country_event = { id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#使用提供的高超光速通信网络
+	id = GHCO_diplomacy.9 
+	title = "GHCO_diplomacy.9.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+ 
+	desc = {
+		text = "GHCO_diplomacy.9.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.9.a"
+		set_country_flag = has_joined_GHC_network
+		event_target:GHCO = { add_trust = { amount = 10 who = root } }
+		add_opinion_modifier = {
+			who = event_target:GHCO
+			modifier = opinion_provide_GHC_network 
+		}
+		event_target:GHCO = {
+			add_opinion_modifier = {
+				who = this
+				modifier = opinion_join_GHC_network
+			}
+		}
+		add_modifier = { modifier = GHC_network }
+		country_event = { id = GHCO_diplomacy.6 }
+		enable_special_project = {
+			name = "use_GHCO_hypersonic_FTL_network"
+		}
+	}
+	option = {
+		name = "GHCO_diplomacy.9.b"
+		country_event = { id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#不再使用提供的高超光速通信网络
+	id = GHCO_diplomacy.10
+	title = "GHCO_diplomacy.10.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.10.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.10.a"
+		remove_country_flag = has_joined_GHC_network
+		remove_opinion_modifier = {
+			who = from
+			modifier = opinion_provide_GHC_network 
+		}
+		from = {
+			remove_opinion_modifier = {
+				who = this
+				modifier = opinion_join_GHC_network
+			}
+		}
+		remove_modifier = uses_GHCO_hypersonic_FTL_network 
+		country_event = { id = GHCO_diplomacy.6 }
+	}
+	option = {
+		name = "GHCO_diplomacy.10.b"
+		country_event = { id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#对GHCO提供算力支持
+	id = GHCO_diplomacy.11
+	title = "GHCO_diplomacy.11.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.11.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.11.a"
+		set_country_flag = provide_computing_power_for_GHCO
+		event_target:GHCO = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_provide_computing_power_for_GHCO
+			}
+		}
+		add_modifier = { modifier = provide_computing_power_for_GHCO }
+		country_event = { id = GHCO_diplomacy.6 }
+	}
+	option = {
+		name = "GHCO_diplomacy.11.b"
+		country_event = { id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#撤销算力支持
+	id = GHCO_diplomacy.12
+	title = "GHCO_diplomacy.12.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.12.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.12.a"
+		remove_country_flag = provide_computing_power_for_GHCO
+		from = {
+			remove_opinion_modifier = {
+				who = root
+				modifier = opinion_provide_computing_power_for_GHCO
+			}
+		}
+		remove_modifier = provide_computing_power_for_GHCO 
+		country_event = { id = GHCO_diplomacy.6 }
+	}
+	option = {
+		name = "GHCO_diplomacy.12.b"
+		country_event = { id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#承担本地维护费
+	id = GHCO_diplomacy.13
+	title = "GHCO_diplomacy.13.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.13.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.13.a"
+		custom_tooltip = "GHCO_diplomacy.13.a.tooltip"
+		set_country_flag = bear_local_GHC_cost
+		set_variable = {
+			which = bear_local_GHC_cost_0
+			value = trigger:empire_size
+		}
+		multiply_variable = {
+			which = bear_local_GHC_cost_0
+			value = -0.8
+		}
+		set_variable = {
+			which = bear_local_GHC_cost_need
+			value = bear_local_GHC_cost_0
+		}
+		event_target:GHCO = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_bear_local_GHC_cost
+			}
+		}
+		add_modifier = { modifier = bear_local_GHC_cost }
+		country_event = { id = GHCO_diplomacy.6 }
+	}
+	option = {
+		name = "GHCO_diplomacy.13.b"
+		country_event = { id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+}
+
+country_event = {	#不再承担本地维护费
+	id = GHCO_diplomacy.14
+	title = "GHCO_diplomacy.14.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.14.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.14.a"
+		country_event = { id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+	option = {
+		name = "GHCO_diplomacy.14.b"
+		country_event = { id = GHCO_diplomacy.6 }
+		remove_country_flag = bear_local_GHC_cost
+		remove_modifier = bear_local_GHC_cost 
+		from = {
+			remove_opinion_modifier = {
+				who = root
+				modifier = opinion_bear_local_GHC_cost
+			}
+		}
+	}
+}
+
+country_event = {	#同意在空间站上建造GHC模块	
+	id = GHCO_diplomacy.15
+	title = "GHCO_diplomacy.15.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.15.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.15.a"
+		set_country_flag = can_build_GHC_modules_on_starbase
+		country_event = { id = GHCO_diplomacy.6 }
+	}
+	option = {
+		name = "GHCO_diplomacy.15.b"
+		country_event = { id = GHCO_diplomacy.6 }
+		default_hide_option = yes
+	}
+
+}
+
+#	信任等级	############################
+country_event = {
+	id = GHCO_diplomacy.16
+	title = "GHCO_diplomacy.16.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.16.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.16.a"
+		response_text = "GHCO_diplomacy.16.a.response"
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = "GHCO_diplomacy.16.b"
+		response_text = "GHCO_diplomacy.16.b.response"
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = "GHCO_diplomacy.16.c"
+		response_text = "GHCO_diplomacy.16.c.response"
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = "GHCO_diplomacy.16.d"
+		country_event = { id = GHCO_diplomacy.1 }
+		default_hide_option = yes
+	}
+}
+
+# 地图上的GHC设施 ############################
+country_event = { 
+	id = GHCO_diplomacy.17
+	title = "GHCO_diplomacy.17.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.17.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.17.a"
+		country_event = { id = GHCO_diplomacy.1 }
+		default_hide_option = yes
+	}
+	option = {
+		name = "GHCO_diplomacy.17.b"
+		allow = {
+			hidden_trigger = {
+				has_country_flag = has_visited_GHC_ficility_system
+				any_system_within_border = {
+					has_star_flag = GHCO_system_has_ruined_GHC_ficility
+				}
+			}
+			fail_text = {
+				text = "GHCO_diplomacy.17.b.fail"
+			}
+		}
+		country_event = { id = GHCO_diplomacy.18 }
+	}
+}
+
+country_event = { 
+	id = GHCO_diplomacy.18
+	title = "GHCO_diplomacy.18.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.18.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.18.a"
+		set_country_flag = can_rebuild_GHC_facility
+		country_event = { id = GHCO_diplomacy.1 }
+		begin_event_chain = {
+			event_chain = abandoned_terraforming_chain
+		}
+		enable_special_project = {
+			name = "research_GHC_facility_data"
+		}
+	}
+	option = {
+		name = "GHCO_diplomacy.18.b"
+		country_event = { id = GHCO_diplomacy.1 }
+		default_hide_option = yes
+	}
+}
+
+# 我们想了解一些事情 ############################
+country_event = {
+	id = GHCO_diplomacy.19
+	title = "GHCO_diplomacy.19.title"
+	is_triggered_only = yes
+
+	diplomatic = yes
+	location = event_target:GHCO.capital_scope
+	picture_event_data = {
+		portrait = event_target:GHCO
+		room = enclave_curator_room
+	}
+	custom_gui = "enclave_curator_window"
+
+	desc = {
+		text = "GHCO_diplomacy.19.desc"
+	}
+
+	option = {
+		name = "GHCO_diplomacy.19.a"
+		response_text = "GHCO_diplomacy.19.a.response"
+		is_dialog_only = yes
+	}
+	option = {
+		name = "GHCO_diplomacy.19.b"
+		response_text = "GHCO_diplomacy.19.b.response"
+		is_dialog_only = yes
+	}
+	option = {
+		name = "GHCO_diplomacy.19.c"
+		response_text = "GHCO_diplomacy.19.c.response"
+		is_dialog_only = yes
+	}
+	option = {
+		name = "GHCO_diplomacy.19.d"
+		response_text = "GHCO_diplomacy.19.d.response"
+		is_dialog_only = yes
+	}
+	option = {
+		name = "GHCO_diplomacy.19.e"
+		response_text = "GHCO_diplomacy.19.e.response"
+		is_dialog_only = yes
+	}
+	option = {
+		name = "GHCO_diplomacy.19.f"
+		country_event = { id = GHCO_diplomacy.1 }
+		default_hide_option = yes
+	}
+}
+
+
+##  后来补充的  ########################
+
+# 在首都建设了通讯节点
+country_event = {
+	id = GHCO_diplomacy.100
+	title = "GHCO_diplomacy.100.title"
+	desc = "GHCO_diplomacy.100.desc"
+	picture = GFX_evt_sapient_AI
+
+	is_triggered_only = yes # special_project:build_GHC_node_On_capital
+
+	trigger = {}
+
+	option = {
+		name = "GHCO_diplomacy.100.a"
+	}
+	option = {
+		name = "GHCO_diplomacy.100.b"
+	}
+
+	after = {
+		root.capital_scope = {
+			add_modifier = { modifier = modifier_pm_GHC_node }
+		}
+	}
+}
+
+# 使用GHCO提供的高超光速通信网络
+country_event = {
+	id = GHCO_diplomacy.101
+	title = "GHCO_diplomacy.101.title"
+	desc = "GHCO_diplomacy.101.desc"
+	picture = GFX_evt_metropolis
+
+	is_triggered_only = yes # special_project:use_GHCO_hypersonic_FTL_network
+
+	option = {
+		name = "GHCO_diplomacy.101.name"
+		add_modifier = { modifier = uses_GHCO_hypersonic_FTL_network }
+	}
+}

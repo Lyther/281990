@@ -1,0 +1,467 @@
+#齐心传统：同心协力
+decision_mt_heart = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_unity_symbol
+	resources = {
+		category = decisions
+		cost = {
+			unity = 1000
+		}
+	}
+	potential = {
+		NOT = {
+			has_modifier = modifiers_mt_heart
+		}
+		owner = {
+			has_tradition = tr_mt_heart_4
+		}
+	}
+	effect = {
+		add_modifier = {
+			modifier = modifiers_mt_heart
+			days = 3600
+		}
+		planet_event = {
+			id = mt_planet_event.1
+		}
+	}
+	ai_weight = {
+		weight = 100
+	}
+}
+
+#文物传统：深入探索
+decision_mt_relic = {
+	owned_planets_only = no
+	sound = event_administrative_work
+	icon = decision_archaeological_dig
+	resources = {
+		category = decisions
+		cost = {
+			energy = 1000
+		}
+	}
+	potential = {
+		exists = owner
+		owner = {
+			has_tradition = tr_mt_relic_5
+		}
+		exists = space_owner
+		exists = from
+		space_owner = {
+			is_same_value = from
+		}
+		is_star = no
+		is_artificial = no
+		is_ringworld = no
+	}
+	effect = {
+		create_archaeological_site = random
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#盖亚传统：高级盖亚星球改造决议
+decision_mt_planetexgaia_project = {
+	owned_planets_only = yes
+	icon = decision_arcology_project
+	enactment_time = 1200
+	resources = {
+		category = decisions
+		cost = {
+			influence = 50
+			minerals = 10000
+			food = 10000
+			unity = 1000
+		}
+	}
+	potential = {
+		NOR = {
+			is_planet_class = pc_city
+			is_planet_class = pc_mt_exgaia
+			is_planet_class = pc_relic
+			has_modifier = resort_colony
+			has_modifier = penal_colony
+			has_modifier = slave_colony
+			has_modifier = pm_wenkwort_custodian
+		}
+		is_artificial = no
+		exists = owner
+		owner = {
+			has_tradition = tr_mt_exgaia_adopt
+		}
+	}
+	allow = {
+		num_uncleared_blockers < 1
+	}
+	effect = {
+		custom_tooltip = decision_mt_planetexgaia_project_effects
+		hidden_effect = {
+			clear_deposits = yes
+			change_pc = pc_mt_exgaia
+			set_planet_entity = {
+				entity = "gaia_planet"
+				graphical_culture = owner
+			}
+			while = {
+				count = 5
+				add_district = district_mt_exgaia_city
+			}
+			while = {
+				count = 2
+				add_district = district_mt_exgaia_nature
+			}
+			while = {
+				count = 1
+				add_district = district_mt_exgaia_research
+			}
+			while = {
+				count = 1
+				add_district = district_mt_exgaia_primitive
+			}
+			planet_event = {
+				id = mt_planet_event.2
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+
+#高级盖亚球：一到5号开拓计划
+decision_mt_planetexgaia_develop_1 = {
+	owned_planets_only = yes
+	icon = decision_animal_wildlife
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			minerals = 1000
+			unity = 500
+			influence = 10
+		}
+	}
+	potential = {
+		is_planet_class = pc_mt_exgaia
+		NOT = {
+			has_planet_flag = flag_mt_planetexgaia_develop_1
+		}
+		exists = owner
+		owner = {
+			has_tradition = tr_mt_exgaia_1
+		}
+	}
+	allow = {
+		free_district_slots = 0
+	}
+	effect = {
+		hidden_effect = {
+			set_planet_flag = flag_mt_planetexgaia_develop_1
+		}
+		add_modifier = {
+			modifier = modifiers_mt_planetexgaia_develop_1
+			days = -1
+		}
+		hidden_effect = {
+			planet_event = {
+				id = mt_planet_event.3
+			}
+			random_list = {
+				20 = {
+					planet_event = {
+						id = mt_planet_event.4
+						days = 30
+						random = 60
+					}
+				}
+				20 = {
+					planet_event = {
+						id = mt_planet_event.5
+						days = 30
+						random = 60
+					}
+				}
+				20 = {
+					planet_event = {
+						id = mt_planet_event.6
+						days = 30
+						random = 60
+					}
+				}
+				20 = {
+					planet_event = {
+						id = mt_planet_event.7
+						days = 30
+						random = 60
+					}
+				}
+				20 = {}
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+decision_mt_planetexgaia_develop_2 = {
+	owned_planets_only = yes
+	icon = decision_animal_wildlife
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			minerals = 1000
+			unity = 500
+			influence = 10
+		}
+	}
+	potential = {
+		is_planet_class = pc_mt_exgaia
+		NOT = {
+			has_planet_flag = flag_mt_planetexgaia_develop_2
+		}
+		exists = owner
+		owner = {
+			has_tradition = tr_mt_exgaia_2
+		}
+	}
+	allow = {
+		free_district_slots = 0
+	}
+	effect = {
+		hidden_effect = {
+			set_planet_flag = flag_mt_planetexgaia_develop_2
+		}
+		add_modifier = {
+			modifier = modifiers_mt_planetexgaia_develop_2
+			days = -1
+		}
+		hidden_effect = {
+			planet_event = {
+				id = mt_planet_event.8
+			}
+			random_list = {
+				33 = {
+					planet_event = {
+						id = mt_planet_event.9
+						days = 30
+						random = 60
+					}
+				}
+				33 = {
+					planet_event = {
+						id = mt_planet_event.10
+						days = 30
+						random = 60
+					}
+				}
+				33 = {}
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+decision_mt_planetexgaia_develop_3 = {
+	owned_planets_only = yes
+	icon = decision_animal_wildlife
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			minerals = 1000
+			unity = 500
+			influence = 10
+		}
+	}
+	potential = {
+		is_planet_class = pc_mt_exgaia
+		NOT = {
+			has_planet_flag = flag_mt_planetexgaia_develop_3
+		}
+		exists = owner
+		owner = {
+			has_tradition = tr_mt_exgaia_3
+		}
+	}
+	allow = {
+		free_district_slots = 0
+	}
+	effect = {
+		hidden_effect = {
+			set_planet_flag = flag_mt_planetexgaia_develop_3
+		}
+		add_modifier = {
+			modifier = modifiers_mt_planetexgaia_develop_3
+			days = -1
+		}
+		hidden_effect = {
+			planet_event = {
+				id = mt_planet_event.11
+			}
+			random_list = {
+				50 = {
+					planet_event = {
+						id = mt_planet_event.12
+						days = 30
+						random = 60
+					}
+				}
+				50 = {}
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+decision_mt_planetexgaia_develop_4 = {
+	owned_planets_only = yes
+	icon = decision_animal_wildlife
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			minerals = 1000
+			unity = 500
+			influence = 10
+		}
+	}
+	potential = {
+		is_planet_class = pc_mt_exgaia
+		NOT = {
+			has_planet_flag = flag_mt_planetexgaia_develop_4
+		}
+		exists = owner
+		owner = {
+			has_tradition = tr_mt_exgaia_4
+		}
+	}
+	allow = {
+		free_district_slots = 0
+	}
+	effect = {
+		hidden_effect = {
+			set_planet_flag = flag_mt_planetexgaia_develop_4
+		}
+		add_modifier = {
+			modifier = modifiers_mt_planetexgaia_develop_4
+			days = -1
+		}
+		hidden_effect = {
+			planet_event = {
+				id = mt_planet_event.13
+			}
+			random_list = {
+				50 = {
+					planet_event = {
+						id = mt_planet_event.14
+						days = 30
+						random = 60
+					}
+				}
+				50 = {}
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+decision_mt_planetexgaia_develop_5 = {
+	owned_planets_only = yes
+	icon = decision_animal_wildlife
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			minerals = 1000
+			unity = 500
+			influence = 10
+		}
+	}
+	potential = {
+		is_planet_class = pc_mt_exgaia
+		NOT = {
+			has_planet_flag = flag_mt_planetexgaia_develop_5
+		}
+		exists = owner
+		owner = {
+			has_tradition = tr_mt_exgaia_5
+		}
+	}
+	allow = {
+		free_district_slots = 0
+	}
+	effect = {
+		hidden_effect = {
+			set_planet_flag = flag_mt_planetexgaia_develop_5
+		}
+		add_modifier = {
+			modifier = modifiers_mt_planetexgaia_develop_5
+			days = -1
+		}
+		hidden_effect = {
+			planet_event = {
+				id = mt_planet_event.15
+			}
+			random_list = {
+				50 = {
+					planet_event = {
+						id = mt_planet_event.16
+						days = 30
+						random = 60
+					}
+				}
+				50 = {}
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}
+decision_mt_planetexgaia_develop_6 = {
+	owned_planets_only = yes
+	icon = decision_animal_wildlife
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			minerals = 1000
+			unity = 500
+			influence = 10
+		}
+	}
+	potential = {
+		is_planet_class = pc_mt_exgaia
+		NOT = {
+			has_planet_flag = flag_mt_planetexgaia_develop_6
+		}
+		exists = owner
+		owner = {
+			has_tradition = tr_mt_exgaia_finish
+		}
+	}
+	allow = {
+		free_district_slots = 0
+	}
+	effect = {
+		hidden_effect = {
+			set_planet_flag = flag_mt_planetexgaia_develop_6
+		}
+		hidden_effect = {
+			planet_event = {
+				id = mt_planet_event.17
+			}
+		}
+	}
+	ai_weight = {
+		weight = 0
+	}
+}

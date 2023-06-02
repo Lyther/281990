@@ -1,0 +1,327 @@
+### Shadow System
+
+shadow_system_system_initializer = {
+	name = "NAME_Shadowland"
+	class = "sc_black_hole"
+
+	flags = { shadow_system }
+	usage = origin
+
+	planet = {
+		class = star
+		orbit_distance = 0
+		size = { min = @standard_min max = @standard_max }
+	}
+
+	change_orbit = 45
+	
+	planet = {
+		name = "NAME_Vortex"
+		class = "pc_shattered_ring_habitable"
+		orbit_angle = 30
+		orbit_distance = 0
+
+		deposit_blockers = none
+		modifiers = none
+		starting_planet = yes
+		
+		init_effect = {
+			change_pc = "pc_shattered_ring_habitable"
+			prevent_anomaly = yes
+			trigger_megastructure_icon = yes
+			set_planet_flag = ringworld_start
+			set_planet_flag = megastructure
+		}
+	}
+	planet = {
+		class = "pc_ringworld_tech"
+		name = "NAME_Ring_Section_B"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = {
+
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+		}	
+	}
+	planet = {
+		class = "pc_ringworld_seam"
+		name = "NAME_Ring_Section_C"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = {
+
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+		}	
+	}
+	planet = {
+		class = "pc_shattered_ring_habitable"
+		name = "NAME_Nexus"
+		orbit_angle = 30
+		orbit_distance = 0
+		deposit_blockers = none
+		modifiers = none
+	
+		init_effect = {
+
+			prevent_anomaly = yes
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+	
+			
+			while = {
+				count = 2
+				add_deposit = d_ancestor_ruins
+			}
+			while = {
+				count = 1
+				add_deposit = d_ancestor_mineral_vault
+			}
+		}
+	}
+	planet = {
+		class = "pc_ringworld_tech"
+		name = "NAME_Ring_Section_E"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = {
+
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+		}	
+	}
+	planet = {
+		class = "pc_ringworld_seam"
+		name = "NAME_Ring_Section_F"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = {
+
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+		}	
+	}
+	planet = {
+		class = "pc_shattered_ring_habitable"
+		name = "NAME_Abyss"
+		orbit_angle = 30
+		orbit_distance = 0
+		deposit_blockers = none
+		modifiers = none
+	
+		init_effect = {
+
+			prevent_anomaly = yes
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+
+			while = {
+				count = 2
+				add_deposit = d_ancestor_ruins
+			}
+			while = {
+				count = 1
+				add_deposit = d_ancestor_mineral_vault
+			}	
+		}
+	}
+	planet = {
+		class = "pc_ringworld_tech"
+		name = "NAME_Ring_Section_H"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = {
+
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+		}	
+	}
+	planet = {
+		class = "pc_ringworld_seam"
+		name = "NAME_Ring_Section_I"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = {
+
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+		}	
+	}
+	planet = {
+		class = "pc_shattered_ring_habitable"
+		name = "NAME_Rift"
+		orbit_angle = 30
+		orbit_distance = 0
+		deposit_blockers = none
+		modifiers = none
+	
+		init_effect = {
+
+			prevent_anomaly = yes
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+			
+			while = {
+				count = 2
+				add_deposit = d_ancestor_ruins
+			}
+			while = {
+				count = 1
+				add_deposit = d_ancestor_mineral_vault
+			}
+		}
+	}						
+	planet = {
+		class = "pc_ringworld_tech"
+		name = "NAME_Ring_Section_K"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = {
+
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+		}	
+	}
+	planet = {
+		class = "pc_ringworld_seam"
+		name = "NAME_Ring_Section_L"
+		orbit_angle = 30
+		orbit_distance = 0
+		init_effect = {
+
+			trigger_megastructure_icon = yes
+			set_planet_flag = megastructure
+		}	
+	}
+	neighbor_system = {
+		distance = { min = 0 max = 30 }
+		initializer = "shadow_t1"
+	}
+	neighbor_system = {
+		distance = { min = 0 max = 30 }
+		initializer = "science_nexus_ring_initializer"
+	}
+	neighbor_system = {
+		distance = { min = 0 max = 30 }
+		initializer = "megacorp_matter_decompressor_init_01"
+	}
+}
+
+shadow_t1 = {
+	class = sc_black_hole
+	name = "NAME_Darkness"
+		
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = @standard_min max = @standard_max }
+		has_ring = no
+	}
+	
+	planet = {
+		class = star
+		orbit_distance = 0
+
+		init_effect = {
+			while = {
+				count = 30
+				create_ambient_object = {
+					type = "large_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = { 
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random
+					}
+				}				
+			}
+			while = {
+				count = 20
+				create_ambient_object = {
+					type = "medium_debris_01_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = { 
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random
+					}
+				}				
+			}
+			while = {
+				count = 20
+				create_ambient_object = {
+					type = "medium_debris_02_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = { 
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random
+					}
+				}				
+			}
+			while = {
+				count = 100		
+				create_ambient_object = {
+					type = "small_debris_object"
+					entity_offset_height = { min = -0 max = -25 }
+					location = this
+				}
+				last_created_ambient_object = { 
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random
+					}
+				}	
+			}
+		}
+	}
+	
+	change_orbit = 45
+	
+	init_effect = {
+		every_system_planet = {
+			clear_deposits = yes
+		}
+		while = {
+			count = 30
+			create_ambient_object = {
+				type = "large_debris_object"
+				location = solar_system
+			}			
+		}
+		while = {
+			count = 20
+			create_ambient_object = {
+				type = "medium_debris_01_object"
+				location = solar_system
+			}
+		}
+		while = {
+			count = 20
+			create_ambient_object = {
+				type = "medium_debris_02_object"
+				location = solar_system
+			}
+		}
+		while = {
+			count = 100
+			create_ambient_object = {
+				type = "small_debris_object"
+				location = solar_system
+			}	
+		}
+	}
+}

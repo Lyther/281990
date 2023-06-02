@@ -1,0 +1,864 @@
+#####################################
+#为了拯救濒临破产的银河咖啡厅，你决定和店主达成一项交易————
+#从银河各处获取能够成为服务员的人才，提高咖啡厅的舒适度，吸引各国的客人,赚取更多的资金！
+#####################################
+#领袖目标刷新
+XSKIPER_refresh_leader_target = {
+	event_target:XSKIPER_CAFE_country = {
+		export_trigger_value_to_variable = {
+			trigger = count_owned_leader
+			parameters = { limit = { is_variable_set = XSKIPER_CAFE_leader_ID } }
+			variable = XSKIPER_CAFE_leader_COUNT
+		}
+		XSKIPER_refresh_leader_target_1 = { COUNT = 1 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 2 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 3 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 4 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 5 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 6 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 7 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 8 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 9 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 10 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 11 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 12 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 13 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 14 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 15 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 16 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 17 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 18 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 19 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 20 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 21 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 22 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 23 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 24 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 25 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 26 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 27 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 28 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 29 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 30 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 31 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 32 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 33 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 34 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 35 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 36 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 37 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 38 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 39 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 40 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 41 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 42 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 43 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 44 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 45 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 46 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 47 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 48 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 49 }
+		XSKIPER_refresh_leader_target_1 = { COUNT = 50 }
+		every_owned_leader = {
+			set_variable = { which = XSKIPER_CAFE_leader_has_level value = trigger:has_level }
+		}
+		set_variable = { which = XSKIPER_CAFE_LEADER_TOTAL_RANK value = value:XSKIPER_CAFE_LEADER_TOTAL_RANK }
+		event_target:XSKIPER_empty_leader_portrait = { clear_variable = XSKIPER_CAFE_leader_ID }
+	}
+}
+XSKIPER_refresh_leader_target_1 = {
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_leader_COUNT value >= $COUNT$ } }
+		if = {
+			limit = { any_owned_leader = { check_variable = { which = XSKIPER_CAFE_leader_ID value = $COUNT$ } } }
+			random_owned_leader = {
+				limit = { check_variable = { which = XSKIPER_CAFE_leader_ID value = $COUNT$ } }
+				save_global_event_target_as = XSKIPER_show_leader_$COUNT$
+			}
+		}
+		else = {
+			while = {
+				limit = { NOT = { any_owned_leader = { check_variable = { which = XSKIPER_CAFE_leader_ID value = $COUNT$ } } } }
+				every_owned_leader = { limit = { is_variable_set = XSKIPER_CAFE_leader_ID check_variable = { which = XSKIPER_CAFE_leader_ID value > $COUNT$ } } change_variable = { which = XSKIPER_CAFE_leader_ID value = -1 } }
+			}
+			random_owned_leader = {
+				limit = { check_variable = { which = XSKIPER_CAFE_leader_ID value = $COUNT$ } }
+				save_global_event_target_as = XSKIPER_show_leader_$COUNT$
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { exists = event_target:XSKIPER_show_leader_$COUNT$ }
+			if = {
+				limit = {
+					event_target:XSKIPER_show_leader_$COUNT$ = {
+						NOT = { is_same_value = event_target:XSKIPER_empty_leader_portrait }
+					}
+				}
+				event_target:XSKIPER_empty_leader_portrait = {
+					save_global_event_target_as = XSKIPER_show_leader_$COUNT$
+				}
+			}
+			#else = { clear_global_event_target = XSKIPER_show_leader_$COUNT$ }
+		}
+	}
+}
+XSKIPER_refresh_leader_next_page = {
+	hidden_effect = {
+		event_target:XSKIPER_CAFE_country = {
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 1 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 2 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 3 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 4 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 5 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 6 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 7 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 8 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 9 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 10 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 11 }
+			XSKIPER_refresh_leader_next_page_1 = { COUNT = 12 }
+		}
+		XSKIPER_refresh_leader_target = yes
+	}
+}
+XSKIPER_refresh_leader_next_page_1 = {
+	if = {
+		limit = { 
+			exists = event_target:XSKIPER_show_leader_$COUNT$ 
+			event_target:XSKIPER_show_leader_$COUNT$ = {
+				is_scope_type = leader
+				NOT = { is_same_value = event_target:XSKIPER_empty_leader_portrait }
+			}
+		}
+		event_target:XSKIPER_show_leader_$COUNT$ = {
+			change_variable = {
+				which = XSKIPER_CAFE_leader_ID
+				value = prev.XSKIPER_CAFE_leader_COUNT
+			}
+		}
+	}
+}
+#领袖肖像按钮效果
+XSKIPER_leader_portrait_button = {
+	hidden_effect = {
+		if = {
+			limit = { 
+				exists = event_target:XSKIPER_show_leader_$COUNT$
+				event_target:XSKIPER_show_leader_$COUNT$ = {
+					is_scope_type = leader
+					NOT = {
+						is_same_value = event_target:XSKIPER_empty_leader_portrait
+					}
+				}
+			}
+			custom_tooltip = XSKIPER_CAFE_STAFF_assignment
+			custom_tooltip = XSKIPER_CAFE_STAFF_stuff_data_$COUNT$
+			event_target:XSKIPER_show_leader_$COUNT$ = {
+				save_global_event_target_as = XSKIPER_assignment_leader
+			}
+			from = {
+				country_event = {
+					id = XSKIPER_QQE_basic.7
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				event_target:XSKIPER_CAFE_country = {
+					count_owned_leader = {
+						limit = { is_variable_set = XSKIPER_CAFE_leader_ID }
+						count < XSKIPER_CAFE_MAX_LEADER
+					}
+				}
+			}
+			custom_tooltip = XSKIPER_CAFE_STAFF_submit
+			from = {
+				country_event = {
+					id = XSKIPER_QQE_basic.6
+				}
+			}
+		}
+		else = {
+			custom_tooltip = XSKIPER_CAFE_STAFF_submit_fail
+		}
+	}
+}
+#领袖还回来
+XSKIPER_leader_portrait_return = {
+	if = {
+		limit = { 
+			exists = event_target:XSKIPER_show_leader_$COUNT$
+			event_target:XSKIPER_show_leader_$COUNT$ = {
+				is_scope_type = leader
+				NOT = { is_same_value = event_target:XSKIPER_empty_leader_portrait }
+			}
+		}
+		custom_tooltip = XSKIPER_CAFE_STAFF_return
+		hidden_effect = {
+			event_target:XSKIPER_show_leader_$COUNT$ = {
+				unassign_leader = this
+				set_owner = from
+				remove_trait = XSKIPER_CAFE_STUFF
+				set_age = XSKIPER_CAFE_LEADER_AGE
+				clear_variable = XSKIPER_CAFE_leader_ID
+			}
+			#clear_global_event_target = XSKIPER_show_leader_$COUNT$
+			XSKIPER_refresh_leader_target = yes
+		}
+	}
+}
+#领袖加点
+XSKIPER_leader_portrait_add_point = {
+	if = {
+		limit = { 
+			exists = event_target:XSKIPER_show_leader_$COUNT$
+			event_target:XSKIPER_show_leader_$COUNT$ = {
+				is_scope_type = leader
+				NOT = { is_same_value = event_target:XSKIPER_empty_leader_portrait }
+			}
+		}
+		custom_tooltip = XSKIPER_CAFE_STAFF_upgrade_$COUNT$
+		hidden_effect = {
+			if = {
+				limit = { NOT = { exists = event_target:XSKIPER_UPGRADE_LEADER } }
+				event_target:XSKIPER_show_leader_$COUNT$ = { save_global_event_target_as = XSKIPER_UPGRADE_LEADER }
+				from = {
+					country_event = {
+						id = XSKIPER_QQE_basic.700
+					}
+				}
+			}
+		}
+	}
+}
+#没用的代码
+XSKIPER_CAFE_USELESS = {
+	save_global_event_target_as = XSKIPER_show_leader_1
+	save_global_event_target_as = XSKIPER_show_leader_2
+	save_global_event_target_as = XSKIPER_show_leader_3
+	save_global_event_target_as = XSKIPER_show_leader_4
+	save_global_event_target_as = XSKIPER_show_leader_5
+	save_global_event_target_as = XSKIPER_show_leader_6
+	save_global_event_target_as = XSKIPER_show_leader_7
+	save_global_event_target_as = XSKIPER_show_leader_8
+	save_global_event_target_as = XSKIPER_show_leader_9
+	save_global_event_target_as = XSKIPER_show_leader_10
+	save_global_event_target_as = XSKIPER_show_leader_11
+	save_global_event_target_as = XSKIPER_show_leader_12
+	save_global_event_target_as = XSKIPER_show_leader_13
+	save_global_event_target_as = XSKIPER_show_leader_14
+	save_global_event_target_as = XSKIPER_show_leader_15
+	save_global_event_target_as = XSKIPER_show_leader_16
+	save_global_event_target_as = XSKIPER_show_leader_17
+	save_global_event_target_as = XSKIPER_show_leader_18
+	save_global_event_target_as = XSKIPER_show_leader_19
+	save_global_event_target_as = XSKIPER_show_leader_20
+	save_global_event_target_as = XSKIPER_show_leader_21
+	save_global_event_target_as = XSKIPER_show_leader_22
+	save_global_event_target_as = XSKIPER_show_leader_23
+	save_global_event_target_as = XSKIPER_show_leader_24
+	save_global_event_target_as = XSKIPER_show_leader_25
+	save_global_event_target_as = XSKIPER_show_leader_26
+	save_global_event_target_as = XSKIPER_show_leader_27
+	save_global_event_target_as = XSKIPER_show_leader_28
+	save_global_event_target_as = XSKIPER_show_leader_29
+	save_global_event_target_as = XSKIPER_show_leader_30
+	save_global_event_target_as = XSKIPER_show_leader_31
+	save_global_event_target_as = XSKIPER_show_leader_32
+	save_global_event_target_as = XSKIPER_show_leader_33
+	save_global_event_target_as = XSKIPER_show_leader_34
+	save_global_event_target_as = XSKIPER_show_leader_35
+	save_global_event_target_as = XSKIPER_show_leader_36
+	save_global_event_target_as = XSKIPER_show_leader_37
+	save_global_event_target_as = XSKIPER_show_leader_38
+	save_global_event_target_as = XSKIPER_show_leader_39
+	save_global_event_target_as = XSKIPER_show_leader_40
+	save_global_event_target_as = XSKIPER_show_leader_41
+	save_global_event_target_as = XSKIPER_show_leader_42
+	save_global_event_target_as = XSKIPER_show_leader_43
+	save_global_event_target_as = XSKIPER_show_leader_44
+	save_global_event_target_as = XSKIPER_show_leader_45
+	save_global_event_target_as = XSKIPER_show_leader_46
+	save_global_event_target_as = XSKIPER_show_leader_47
+	save_global_event_target_as = XSKIPER_show_leader_48
+	save_global_event_target_as = XSKIPER_show_leader_49
+	save_global_event_target_as = XSKIPER_show_leader_50
+}
+###############################
+#科技
+###############################
+#研究科技
+XSKIPER_CAFE_RESEARCH_TECH = {
+	tooltip = { event_target:XSKIPER_CAFE_country = { add_resource = { physics_research = $COST$ } } }
+	custom_tooltip = XSKIPER_CAFE_COFFEE_UNLOCK
+	custom_tooltip = XSKIPER_CAFE_RESEARCH_TECH_$COUNT$
+	custom_tooltip = XSKIPER_CAFE_RESEARCH_TECH_$COUNT$_desc
+	custom_tooltip = XSKIPER_CAFE_RESEARCH_TECH_$COUNT$_effect
+	hidden_effect = {
+		set_global_flag = XSKIPER_CAFE_RESEARCH_TECH_$COUNT$_unlocked
+		event_target:XSKIPER_CAFE_country = {
+			change_variable = { which = XSKIPER_CAFE_physics_research_stockpile value = $COST$ }
+			change_variable = { which = XSKIPER_CAFE_research_speed value = 0.0$BUFF$ }
+			change_variable = { which = XSKIPER_CAFE_TECH_UNLOCKED value = 1 }
+		}
+	}
+}
+XSKIPER_CAFE_RESEARCH_TECHv = {
+	custom_tooltip = XSKIPER_CAFE_COFFEE_UNLOCK
+	custom_tooltip = XSKIPER_CAFE_RESEARCH_TECH_$COUNT$
+	custom_tooltip = XSKIPER_CAFE_RESEARCH_TECH_$COUNT$_desc
+	custom_tooltip = XSKIPER_CAFE_RESEARCH_TECH_$COUNT$_effect
+}
+#服务科技
+XSKIPER_CAFE_SERVICE_TECH = {
+	tooltip = { event_target:XSKIPER_CAFE_country = { add_resource = { physics_research = $COST$ } } }
+	custom_tooltip = XSKIPER_CAFE_COFFEE_UNLOCK
+	custom_tooltip = XSKIPER_CAFE_SERVICE_TECH_$COUNT$
+	custom_tooltip = XSKIPER_CAFE_SERVICE_TECH_$COUNT$_desc
+	custom_tooltip = XSKIPER_CAFE_SERVICE_TECH_$COUNT$_effect
+	hidden_effect = {
+		set_global_flag = XSKIPER_CAFE_SERVICE_TECH_$COUNT$_unlocked
+		event_target:XSKIPER_CAFE_country = {
+			change_variable = { which = XSKIPER_CAFE_physics_research_stockpile value = $COST$ }
+			change_variable = { which = XSKIPER_CAFE_happiness_grow_speed value = 0.0$BUFF$ }
+			change_variable = { which = XSKIPER_CAFE_TECH_UNLOCKED value = 1 }
+		}
+	}
+}
+XSKIPER_CAFE_SERVICE_TECHv = {
+	custom_tooltip = XSKIPER_CAFE_COFFEE_UNLOCK
+	custom_tooltip = XSKIPER_CAFE_SERVICE_TECH_$COUNT$
+	custom_tooltip = XSKIPER_CAFE_SERVICE_TECH_$COUNT$_desc
+	custom_tooltip = XSKIPER_CAFE_SERVICE_TECH_$COUNT$_effect
+}
+#工程科技
+XSKIPER_CAFE_CONSTRUCTION_TECH = {
+	tooltip = { event_target:XSKIPER_CAFE_country = { add_resource = { physics_research = $COST$ } } }
+	custom_tooltip = XSKIPER_CAFE_COFFEE_UNLOCK
+	custom_tooltip = XSKIPER_CAFE_CONSTRUCTION_TECH_$COUNT$
+	custom_tooltip = XSKIPER_CAFE_CONSTRUCTION_TECH_$COUNT$_desc
+	custom_tooltip = XSKIPER_CAFE_CONSTRUCTION_TECH_$COUNT$_effect
+	hidden_effect = {
+		set_global_flag = XSKIPER_CAFE_CONSTRUCTION_TECH_$COUNT$_unlocked
+		event_target:XSKIPER_CAFE_country = {
+			change_variable = { which = XSKIPER_CAFE_physics_research_stockpile value = $COST$ }
+			change_variable = { which = XSKIPER_CAFE_construction_speed value = 0.0$BUFF$ }
+			change_variable = { which = XSKIPER_CAFE_TECH_UNLOCKED value = 1 }
+		}
+	}
+}
+XSKIPER_CAFE_CONSTRUCTION_TECHv = {
+	custom_tooltip = XSKIPER_CAFE_COFFEE_UNLOCK
+	custom_tooltip = XSKIPER_CAFE_CONSTRUCTION_TECH_$COUNT$
+	custom_tooltip = XSKIPER_CAFE_CONSTRUCTION_TECH_$COUNT$_desc
+	custom_tooltip = XSKIPER_CAFE_CONSTRUCTION_TECH_$COUNT$_effect
+}
+###############################
+#咖啡效果
+###############################
+#移除修正
+XSKIPER_CAFE_COFFEE_REMOVE_MODIFIER = {
+	hidden_effect = {
+		remove_modifier = XSKIPER_COFFEE_1
+		remove_modifier = XSKIPER_COFFEE_2
+		remove_modifier = XSKIPER_COFFEE_3
+		remove_modifier = XSKIPER_COFFEE_4
+		remove_modifier = XSKIPER_COFFEE_5
+		remove_modifier = XSKIPER_COFFEE_6
+		remove_modifier = XSKIPER_COFFEE_7
+		remove_modifier = XSKIPER_COFFEE_8
+		remove_modifier = XSKIPER_COFFEE_9
+		remove_modifier = XSKIPER_COFFEE_10
+		remove_modifier = XSKIPER_COFFEE_11
+		remove_modifier = XSKIPER_COFFEE_12
+		remove_modifier = XSKIPER_COFFEE_13
+		remove_modifier = XSKIPER_COFFEE_14
+		remove_modifier = XSKIPER_COFFEE_15
+		remove_modifier = XSKIPER_COFFEE_16
+		remove_modifier = XSKIPER_COFFEE_17
+		remove_modifier = XSKIPER_COFFEE_18
+		remove_modifier = XSKIPER_COFFEE_19
+		remove_modifier = XSKIPER_COFFEE_20
+	}
+}
+#移除flag
+XSKIPER_CAFE_COFFEE_REMOVE_flag = {
+	remove_global_flag = XSKIPER_COFFEE_1_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_2_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_3_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_4_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_5_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_6_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_7_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_8_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_9_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_10_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_11_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_12_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_13_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_14_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_15_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_16_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_17_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_18_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_19_$COUNT$
+	remove_global_flag = XSKIPER_COFFEE_20_$COUNT$
+}
+#根据flag添加buff
+#每个国家都会根据咖啡厅供应的咖啡不同获得全局buff
+#哦对后期还会做咖啡效力加成（好吧已经写完了）
+XSKIPER_CAFE_COFFEE_ADD_MODIFIER = {
+	every_playable_country = {
+		XSKIPER_CAFE_COFFEE_REMOVE_MODIFIER = yes
+		XSKIPER_CAFE_COFFEE_ADD_MODIFIER_1 = { COUNT = 1 }
+		XSKIPER_CAFE_COFFEE_ADD_MODIFIER_1 = { COUNT = 2 }
+		XSKIPER_CAFE_COFFEE_ADD_MODIFIER_1 = { COUNT = 3 }
+	}
+}
+XSKIPER_CAFE_COFFEE_ADD_MODIFIER_1 = {
+	switch = {
+		trigger = has_global_flag
+		XSKIPER_COFFEE_1_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_1
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_2_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_2
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_3_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_3
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_4_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_4
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_5_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_5
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_6_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_6
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_7_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_7
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_8_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_8
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_9_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_9
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_10_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_10
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_11_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_11
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_12_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_12
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_13_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_13
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_14_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_14
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_15_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_15
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_16_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_16
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_17_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_17
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_18_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_18
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_19_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_19
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+		XSKIPER_COFFEE_20_$COUNT$ = {
+			add_modifier = {
+				modifier = XSKIPER_COFFEE_20
+				multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective
+			}
+		}
+	}
+}
+#选择咖啡按钮效果
+XSKIPER_CAFE_CHOOSE_COFFEE_BUTTON = {
+	custom_tooltip = XSKIPER_CAFE_CHOOSE_COFFEE custom_tooltip = XSKIPER_COFFEE_$COUNT$ 
+	custom_tooltip = XSKIPER_COFFEE_$COUNT$_desc custom_tooltip = XSKIPER_CAFE_CHOOSE_COFFEE_effect
+	tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_$COUNT$ multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } } 
+	hidden_effect = { from = { country_event = { id = XSKIPER_QQE_basic.900 } } }
+}
+XSKIPER_CAFE_CHOOSE_COFFEE_BUTTON_2 = {
+	custom_tooltip = XSKIPER_CAFE_CHOOSE_COFFEE custom_tooltip = XSKIPER_COFFEE_$COUNT$ 
+	custom_tooltip = XSKIPER_COFFEE_$COUNT$_desc custom_tooltip = XSKIPER_CAFE_CHOOSE_COFFEE_effect
+	tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_$COUNT$ multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } } 
+	hidden_effect = { from = { country_event = { id = XSKIPER_QQE_basic.901 } } }
+}
+XSKIPER_CAFE_CHOOSE_COFFEE_BUTTON_3 = {
+	custom_tooltip = XSKIPER_CAFE_CHOOSE_COFFEE custom_tooltip = XSKIPER_COFFEE_$COUNT$ 
+	custom_tooltip = XSKIPER_COFFEE_$COUNT$_desc custom_tooltip = XSKIPER_CAFE_CHOOSE_COFFEE_effect
+	tooltip = { every_playable_country = { add_modifier = { modifier = XSKIPER_COFFEE_$COUNT$ multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective } } } 
+	hidden_effect = { from = { country_event = { id = XSKIPER_QQE_basic.902 } } }
+}
+#咖啡科技效果
+XSKIPER_CAFE_COFFEE_TECH_EFFECTv = {
+	custom_tooltip = XSKIPER_CAFE_COFFEE_UNLOCKED
+	custom_tooltip = XSKIPER_COFFEE_$COUNT$ 
+	custom_tooltip = XSKIPER_COFFEE_$COUNT$_desc
+	custom_tooltip = XSKIPER_CAFE_CHOOSE_COFFEE_effect
+	tooltip = {
+		every_playable_country = {
+			add_modifier = { modifier = XSKIPER_COFFEE_$COUNT$ multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective }
+		}
+	}
+}
+XSKIPER_CAFE_COFFEE_TECH_EFFECT = {
+	tooltip = { event_target:XSKIPER_CAFE_country = { add_resource = { physics_research = $COST$ } } }
+	custom_tooltip = XSKIPER_CAFE_COFFEE_UNLOCK
+	custom_tooltip = XSKIPER_COFFEE_$COUNT$
+	custom_tooltip = XSKIPER_COFFEE_$COUNT$_desc
+	custom_tooltip = XSKIPER_CAFE_CHOOSE_COFFEE_effect
+	tooltip = {
+		every_playable_country = {
+			add_modifier = { modifier = XSKIPER_COFFEE_$COUNT$ multiplier = event_target:XSKIPER_CAFE_country.XSKIPER_CAFE_effective }
+		}
+	}
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_global_flag = XSKIPER_COFFEE_$COUNT$_unlocked } }
+			set_global_flag = XSKIPER_COFFEE_$COUNT$_unlocked
+			event_target:XSKIPER_CAFE_country = {
+				change_variable = { which = XSKIPER_CAFE_physics_research_stockpile value = $COST$ }
+				change_variable = { which = XSKIPER_CAFE_COFFEE_UNLOCKED value = 1 }
+				change_variable = { which = XSKIPER_CAFE_TECH_UNLOCKED value = 1 }
+			}
+		}
+	}
+}
+###############################
+#咖啡店运营
+###############################
+#初始参数
+XSKIPER_CAFE_BASIC_DATA_INITIALIZE = {
+	#设施等级
+	set_variable = { which = XSKIPER_CAFE_LEVEL_BASIC value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_BASIC_rank_need value = 10 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_REST value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_CONSTRUCTION value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_TECH value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_COFFEE value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_PROPAGANDA value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_INTEL value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_TRAINING value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_SP value = 1 }
+	#升级需求
+	set_variable = { which = XSKIPER_CAFE_LEVEL_BASIC_NEED value = 1000 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_REST_NEED  value = 1000 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_CONSTRUCTION_NEED  value = 1000 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_TECH_NEED  value = 1000 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_COFFEE_NEED  value = 1000 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_PROPAGANDA_NEED  value = 1000 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_INTEL_NEED  value = 1000 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_TRAINING_NEED  value = 1000 }
+	set_variable = { which = XSKIPER_CAFE_LEVEL_SP_NEED  value = 1000 }
+	#领袖回复速度
+	set_variable = { which = XSKIPER_CAFE_LEADER_REST_SPEED value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEADER_DOWN_SPEED value = 1 }
+	#领袖经验获取
+	set_variable = { which = XSKIPER_CAFE_LEADER_EXP_grow_speed value = 1 }
+	set_variable = { which = XSKIPER_CAFE_LEADER_EXP_grow_speed_training value = 2 }
+	#服务
+	set_variable = { which = XSKIPER_CAFE_happiness_stockpile value = 0 }
+	set_variable = { which = XSKIPER_CAFE_SUM_1 value = 0 }		
+	set_variable = { which = XSKIPER_CAFE_happiness_grow_speed value = 1 }	
+	#科研
+	set_variable = { which = XSKIPER_CAFE_physics_research_stockpile value = 0 }
+	set_variable = { which = XSKIPER_CAFE_research_speed value = 1 }
+	set_variable = { which = XSKIPER_CAFE_SUM_2_max value = 200 }
+	set_variable = { which = XSKIPER_CAFE_SUM_2 value = 0 }			
+	set_variable = { which = XSKIPER_CAFE_TECH_UNLOCKED value = 0 }			
+	#工程
+	set_variable = { which = XSKIPER_CAFE_construction_stockpile value = 0 }
+	set_variable = { which = XSKIPER_CAFE_construction_speed value = 1 }
+	set_variable = { which = XSKIPER_CAFE_SUM_3 value = 0 }		
+	set_variable = { which = XSKIPER_CAFE_SUM_3_max value = 200 }
+	#宣传
+	set_variable = { which = XSKIPER_CAFE_SUM_5 value = 0 }
+	set_variable = { which = XSKIPER_CAFE_SUM_5_max value = 40 }
+	#情报
+	set_variable = { which = XSKIPER_CAFE_SUM_6 value = 0 }
+	set_variable = { which = XSKIPER_CAFE_SUM_6_max value = 20 }
+	#领袖
+	set_variable = { which = XSKIPER_CAFE_MAX_LEADER value = 10 }						#领袖上限
+	set_variable = { which = XSKIPER_CAFE_leader_COUNT value = 0 }						#领袖数量
+	#咖啡选择
+	set_variable = { which = XSKIPER_CAFE_effective_con value = 1 }
+	set_variable = { which = XSKIPER_CAFE_effective value = 0.1 }							#咖啡效果强度
+	set_variable = { which = XSKIPER_CAFE_max_coffee_slots value = 1 }					#最大咖啡槽数
+	set_variable = { which = XSKIPER_CAFE_COFFEE_UNLOCKED value = 2 }
+	#初始“科技”
+	set_global_flag = XSKIPER_COFFEE_1_unlocked
+	set_global_flag = XSKIPER_COFFEE_2_unlocked
+}
+#部门参数计算
+XSKIPER_CAFE_DP_CALC = {
+	set_variable = { which = XSKIPER_CAFE_SUM_1 value = 0 }
+	set_variable = { which = XSKIPER_CAFE_SUM_2 value = 0 }
+	set_variable = { which = XSKIPER_CAFE_SUM_3 value = 0 }
+	set_variable = { which = XSKIPER_CAFE_SUM_4 value = 0 }
+	set_variable = { which = XSKIPER_CAFE_SUM_5 value = 0 }
+	set_variable = { which = XSKIPER_CAFE_SUM_6 value = 0 }
+
+	set_variable = { which = XSKIPER_CAFE_empire_size_SUM value = 0 }
+	every_playable_country = { prev = { change_variable = { which = XSKIPER_CAFE_empire_size_SUM value = prev.trigger:empire_size } } }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_empire_size_SUM value > 5000 } }
+		set_variable = { which = XSKIPER_CAFE_empire_size_SUM value = 5000 }
+	}
+
+
+	every_owned_leader = {
+		limit = { is_variable_set = XSKIPER_CAFE_leader_ID }
+		if = {
+			limit = {
+				OR = {
+					check_variable = { which = XSKIPER_CAFE_leader_department value = 0 }
+					has_leader_flag = XSKIPER_CAFE_LEADER_NEED_REST
+				}
+			}
+			if = {
+				limit = { check_variable = { which = XSKIPER_CAFE_LEADER_power value < XSKIPER_CAFE_LEADER_level_fitness } }
+				set_variable = { which = XSKIPER_CAFE_LEADER_power_up value = XSKIPER_CAFE_LEADER_level_fitness }
+				multiply_variable = { which = XSKIPER_CAFE_LEADER_power_up value = 0.05 }
+				change_variable = { which = XSKIPER_CAFE_LEADER_power_up value = 0.05 }
+				multiply_variable = { which = XSKIPER_CAFE_LEADER_power_up value = prev.XSKIPER_CAFE_LEADER_REST_SPEED }
+				change_variable = { which = XSKIPER_CAFE_LEADER_power value = XSKIPER_CAFE_LEADER_power_up }
+				round_variable_to_closest = { which = XSKIPER_CAFE_LEADER_power value = 0.01 }
+				if = {
+					limit = { check_variable = { which = XSKIPER_CAFE_LEADER_power value >= XSKIPER_CAFE_LEADER_level_fitness } }
+					set_variable = { which = XSKIPER_CAFE_LEADER_power value = XSKIPER_CAFE_LEADER_level_fitness }
+					remove_leader_flag = XSKIPER_CAFE_LEADER_NEED_REST
+				}
+			}
+		}
+		else = {
+			set_variable = { which = XSKIPER_CAFE_LEADER_power_down value = -0.1 }
+			multiply_variable = { which = XSKIPER_CAFE_LEADER_power_down value = prev.XSKIPER_CAFE_LEADER_DOWN_SPEED }
+			change_variable = { which = XSKIPER_CAFE_LEADER_power value = XSKIPER_CAFE_LEADER_power_down }
+			round_variable_to_closest = { which = XSKIPER_CAFE_LEADER_power value = 0.01 }
+			if = {
+				limit = { check_variable = { which = XSKIPER_CAFE_LEADER_power value <= 0 } }
+				set_variable = { which = XSKIPER_CAFE_LEADER_power value = 0 }
+				set_leader_flag = XSKIPER_CAFE_LEADER_NEED_REST
+			}
+			#经验计算
+			set_variable = { which = XSKIPER_CAFE_LEADER_EXP_add value = 1 }
+			multiply_variable = { which = XSKIPER_CAFE_LEADER_EXP_add value = prev.XSKIPER_CAFE_LEADER_EXP_grow_speed }
+			if = { limit = { check_variable = { which = XSKIPER_CAFE_leader_department value = 7 } }
+				multiply_variable = { which = XSKIPER_CAFE_LEADER_EXP_add value = prev.XSKIPER_CAFE_LEADER_EXP_grow_speed_training }
+			}
+			change_variable = { which = XSKIPER_CAFE_LEADER_EXP value = XSKIPER_CAFE_LEADER_EXP_add }
+			if = {
+				limit = { check_variable = { which = XSKIPER_CAFE_LEADER_EXP value >= XSKIPER_CAFE_LEADER_LEVEL_NEED } }
+				subtract_variable = { which = XSKIPER_CAFE_LEADER_EXP value = XSKIPER_CAFE_LEADER_LEVEL_NEED }
+				change_variable = { which = XSKIPER_CAFE_LEADER_LEVEL value = 1 }
+				change_variable = { which = XSKIPER_CAFE_LEADER_LEVEL_NEED_data value = 3 }
+				set_variable = { which = XSKIPER_CAFE_LEADER_LEVEL_NEED value = XSKIPER_CAFE_LEADER_LEVEL_NEED_data }
+				multiply_variable = { which = XSKIPER_CAFE_LEADER_LEVEL_NEED value = XSKIPER_CAFE_LEADER_LEVEL_NEED_data }
+				change_variable = { which = XSKIPER_CAFE_LEADER_SKILL_POINT value = XSKIPER_CAFE_LEADER_RANK }
+			}
+			#工作效果
+			if = { limit = { check_variable = { which = XSKIPER_CAFE_leader_department value = 1 } }
+				set_variable = { which = XSKIPER_CAFE_SUM_1 value = XSKIPER_CAFE_LEADER_level_com }
+				change_variable = { which = XSKIPER_CAFE_SUM_1 value = XSKIPER_CAFE_LEADER_level_mental }
+				multiply_variable = { which = XSKIPER_CAFE_SUM_1 value = XSKIPER_CAFE_LEADER_level_appearance }
+				multiply_variable = { which = XSKIPER_CAFE_SUM_1 value = 0.1 }
+				prev = { change_variable = { which = XSKIPER_CAFE_SUM_1 value = prev.XSKIPER_CAFE_SUM_1 } }
+			}
+			else_if = { limit = { check_variable = { which = XSKIPER_CAFE_leader_department value = 2 } }
+				set_variable = { which = XSKIPER_CAFE_SUM_2 value = XSKIPER_CAFE_LEADER_level_tech }
+				multiply_variable = { which = XSKIPER_CAFE_SUM_2 value = XSKIPER_CAFE_LEADER_level_inspiration }
+				prev = { change_variable = { which = XSKIPER_CAFE_SUM_2 value = prev.XSKIPER_CAFE_SUM_2 } }
+			}
+			else_if = { limit = { check_variable = { which = XSKIPER_CAFE_leader_department value = 3 } }
+				set_variable = { which = XSKIPER_CAFE_SUM_3 value = XSKIPER_CAFE_LEADER_level_tech }
+				multiply_variable = { which = XSKIPER_CAFE_SUM_3 value = XSKIPER_CAFE_LEADER_level_fitness }
+				prev = { change_variable = { which = XSKIPER_CAFE_SUM_3 value = prev.XSKIPER_CAFE_SUM_3 } }
+			}
+			else_if = { limit = { check_variable = { which = XSKIPER_CAFE_leader_department value = 4 } }
+				set_variable = { which = XSKIPER_CAFE_SUM_4 value = XSKIPER_CAFE_LEADER_level_mental }
+				change_variable = { which = XSKIPER_CAFE_SUM_4 value = XSKIPER_CAFE_LEADER_level_inspiration }
+				multiply_variable = { which = XSKIPER_CAFE_SUM_4 value = XSKIPER_CAFE_LEADER_level_tech }
+				prev = { change_variable = { which = XSKIPER_CAFE_SUM_4 value = prev.XSKIPER_CAFE_SUM_4 } }
+			}
+			else_if = { limit = { check_variable = { which = XSKIPER_CAFE_leader_department value = 5 } }
+				set_variable = { which = XSKIPER_CAFE_SUM_5 value = XSKIPER_CAFE_LEADER_level_mental }
+				change_variable = { which = XSKIPER_CAFE_SUM_5 value = XSKIPER_CAFE_LEADER_level_appearance }
+				multiply_variable = { which = XSKIPER_CAFE_SUM_5 value = XSKIPER_CAFE_LEADER_level_com }
+				prev = { change_variable = { which = XSKIPER_CAFE_SUM_5 value = prev.XSKIPER_CAFE_SUM_5 } }
+			}
+			else_if = { limit = { check_variable = { which = XSKIPER_CAFE_leader_department value = 6 } }
+				set_variable = { which = XSKIPER_CAFE_SUM_6 value = XSKIPER_CAFE_LEADER_level_inspiration }
+				change_variable = { which = XSKIPER_CAFE_SUM_6 value = XSKIPER_CAFE_LEADER_level_tech }
+				multiply_variable = { which = XSKIPER_CAFE_SUM_6 value = 2 }
+				change_variable = { which = XSKIPER_CAFE_SUM_6 value = XSKIPER_CAFE_LEADER_level_appearance }
+				multiply_variable = { which = XSKIPER_CAFE_SUM_6 value = XSKIPER_CAFE_LEADER_level_com }
+				prev = { change_variable = { which = XSKIPER_CAFE_SUM_6 value = prev.XSKIPER_CAFE_SUM_6 } }
+			}
+		}
+	}
+	#情报
+	multiply_variable = { which = XSKIPER_CAFE_SUM_6 value = 8 }
+	divide_variable = { which = XSKIPER_CAFE_SUM_6 value = XSKIPER_CAFE_empire_size_SUM }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_SUM_6 value > XSKIPER_CAFE_SUM_6_max } }
+		set_variable = { which = XSKIPER_CAFE_SUM_6 value = XSKIPER_CAFE_SUM_6_max }
+	}
+	round_variable = XSKIPER_CAFE_SUM_6
+	set_variable = { which = XSKIPER_CAFE_SUM_6_buff value = XSKIPER_CAFE_SUM_6 }
+	divide_variable = { which = XSKIPER_CAFE_SUM_6_buff value = 500 }
+	change_variable = { which = XSKIPER_CAFE_SUM_6_buff value = 1 }
+	#宣传
+	multiply_variable = { which = XSKIPER_CAFE_SUM_5 value = 40 }
+	divide_variable = { which = XSKIPER_CAFE_SUM_5 value = XSKIPER_CAFE_empire_size_SUM }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_SUM_5 value > XSKIPER_CAFE_SUM_5_max } }
+		set_variable = { which = XSKIPER_CAFE_SUM_5 value = XSKIPER_CAFE_SUM_5_max }
+	}
+	round_variable = XSKIPER_CAFE_SUM_5
+	set_variable = { which = XSKIPER_CAFE_happiness_grow_speed_propaganda value = XSKIPER_CAFE_SUM_5 }
+	divide_variable = { which = XSKIPER_CAFE_happiness_grow_speed_propaganda value = 150 }
+	change_variable = { which = XSKIPER_CAFE_happiness_grow_speed_propaganda value = 1 }
+	#服务
+	multiply_variable = { which = XSKIPER_CAFE_SUM_1 value = XSKIPER_CAFE_happiness_grow_speed }
+	multiply_variable = { which = XSKIPER_CAFE_SUM_1 value = XSKIPER_CAFE_happiness_grow_speed_propaganda }
+	multiply_variable = { which = XSKIPER_CAFE_SUM_1 value = XSKIPER_CAFE_SUM_6_buff }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_SUM_1 value > 999 } }
+		set_variable = { which = XSKIPER_CAFE_SUM_1 value = 999 }
+	}
+	round_variable = XSKIPER_CAFE_SUM_1
+	#开发
+	multiply_variable = { which = XSKIPER_CAFE_SUM_2 value = XSKIPER_CAFE_research_speed }
+	multiply_variable = { which = XSKIPER_CAFE_SUM_2 value = XSKIPER_CAFE_SUM_6_buff }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_SUM_2 value > XSKIPER_CAFE_SUM_2_max } }
+		set_variable = { which = XSKIPER_CAFE_SUM_2 value = XSKIPER_CAFE_SUM_2_max }
+	}
+	round_variable = XSKIPER_CAFE_SUM_2
+	#工程
+	multiply_variable = { which = XSKIPER_CAFE_SUM_3 value = XSKIPER_CAFE_construction_speed }
+	multiply_variable = { which = XSKIPER_CAFE_SUM_3 value = XSKIPER_CAFE_SUM_6_buff }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_SUM_3 value > XSKIPER_CAFE_SUM_3_max } }
+		set_variable = { which = XSKIPER_CAFE_SUM_3 value = XSKIPER_CAFE_SUM_3_max }
+	}
+	round_variable = XSKIPER_CAFE_SUM_3
+	#餐饮
+	multiply_variable = { which = XSKIPER_CAFE_SUM_4 value = XSKIPER_CAFE_effective_con }
+	multiply_variable = { which = XSKIPER_CAFE_SUM_4 value = 0.5 }
+	multiply_variable = { which = XSKIPER_CAFE_SUM_4 value = XSKIPER_CAFE_SUM_6_buff }
+	divide_variable = { which = XSKIPER_CAFE_SUM_4 value = XSKIPER_CAFE_empire_size_SUM }
+	round_variable_to_closest = { which = XSKIPER_CAFE_SUM_4 value = 0.01 }
+	change_variable = { which = XSKIPER_CAFE_SUM_4 value = 0.1 }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_SUM_4 value > 2 } }
+		set_variable = { which = XSKIPER_CAFE_SUM_4 value = 2 }
+	}
+	set_variable = { which = XSKIPER_CAFE_effective value = XSKIPER_CAFE_SUM_4 }
+	XSKIPER_CAFE_COFFEE_ADD_MODIFIER = yes 
+}
+#部门运行
+XSKIPER_CAFE_DP_WORK = {
+	#服务
+	change_variable = { which = XSKIPER_CAFE_happiness_stockpile value = XSKIPER_CAFE_SUM_1 }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_happiness_stockpile value > 99999 } }
+		set_variable = { which = XSKIPER_CAFE_happiness_stockpile value = 99999 }
+	}
+	#技术
+	change_variable = { which = XSKIPER_CAFE_physics_research_stockpile value = XSKIPER_CAFE_SUM_2 }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_physics_research_stockpile value > 99999 } }
+		set_variable = { which = XSKIPER_CAFE_physics_research_stockpile value = 99999 }
+	}
+	#工程
+	change_variable = { which = XSKIPER_CAFE_construction_stockpile value = XSKIPER_CAFE_SUM_3 }
+	if = {
+		limit = { check_variable = { which = XSKIPER_CAFE_construction_stockpile value > 99999 } }
+		set_variable = { which = XSKIPER_CAFE_construction_stockpile value = 99999 }
+	}
+	#情报
+	if = { limit = { has_global_flag = XSKIPER_DP_6_UNLOCKED }
+		every_playable_country = {
+			limit = { is_ai = no }
+			remove_modifier = XSKIPER_CAFE_INTEL_MODIFIER
+			add_modifier = {
+				modifier = XSKIPER_CAFE_INTEL_MODIFIER
+				multiplier = prev.XSKIPER_CAFE_SUM_6
+			}
+		}
+	}
+}

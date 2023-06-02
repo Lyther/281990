@@ -1,0 +1,237 @@
+##############################
+# Colony Events
+# by Maximilian Olbers
+##############################
+
+namespace = colony
+
+#A Change of Heart
+planet_event = {
+	id = colony.2010
+	title = colony.2010.name
+	desc = {
+		trigger = {
+			hidden:owner = {
+				switch = {
+					trigger = has_ethic
+					ethic_fanatic_spiritualist = { text = colony.2010.desc.spirit }
+					ethic_spiritualist = { text = colony.2010.desc.spirit }
+					ethic_fanatic_materialist = { text = colony.2010.desc.material }
+					ethic_materialist = { text = colony.2010.desc.material }
+					default = { text = "ERROR" }
+				}
+			}
+		}
+	}
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_conversation
+	location = root
+
+	pre_triggers = {
+		has_owner = yes
+		is_homeworld = no
+		original_owner = yes
+		is_ai = no
+		has_ground_combat = no
+		is_capital = no
+		is_occupied_flag = no
+	}
+
+	trigger = {
+		owner = {
+			is_zofe_compatible = yes
+			OR = {
+				AND = {
+					OR = {
+						has_ethic = ethic_fanatic_spiritualist
+						has_ethic = ethic_spiritualist
+					}
+					root = {
+						any_owned_pop = {
+							has_ethic = ethic_materialist
+						}
+					}
+				}
+				AND = {
+					OR = {
+						has_ethic = ethic_fanatic_materialist
+						has_ethic = ethic_materialist
+					}
+					root = {
+						any_owned_pop = {
+							has_ethic = ethic_spiritualist
+						}
+					}
+				}
+			}
+			NOT = { has_country_flag = colony_event_ethic_diverge }
+		}
+		count_owned_pop = {
+			limit = { is_non_sapient_robot = no }
+			count > 3
+		}
+		NOR = {
+			has_planet_flag = colony_event
+			is_planet_class = pc_habitat
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_planet_flag = colony_event
+
+		owner = {
+			set_timed_country_flag = { flag = colony_event_ethic_diverge days = 1825 } # 5 years
+		}
+	}
+
+	option = {
+		name = colony.2010.a.material
+		custom_tooltip = colony.2010.a.material.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+		hidden_effect = {
+			#while = {
+			#	limit = {
+			#		any_owned_pop = {
+			#			NOT = {
+			#				has_ethic = ethic_spiritualist
+			#			}
+			#			is_non_sapient_robot = no
+			#		}
+			#	}
+			#	count = 3
+			#	random_owned_pop = {
+			#		limit = {
+			#			NOT = { has_ethic = ethic_spiritualist }
+			#			is_non_sapient_robot = no
+			#		}
+			#		pop_change_ethic = ethic_spiritualist
+			#	}
+			#}
+			add_modifier = {
+			modifier = spiritualist_attraction
+			days = 7200 # 20 years
+			}
+			every_owned_pop = {
+				limit = {
+					is_non_sapient_robot = no
+					has_ethic = ethic_spiritualist
+				}
+				add_modifier = {
+					modifier = opinion_respected
+					days = 7200
+				}
+			}
+		}
+	}
+	option = {
+		name = colony.2010.a.spirit
+		custom_tooltip = colony.2010.a.spirit.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		hidden_effect = {
+			#while = {
+			#	limit = {
+			#		any_owned_pop = {
+			#			NOT = {
+			#				has_ethic = ethic_materialist
+			#			}
+			#			is_non_sapient_robot = no
+			#		}
+			#	}
+			#	count = 3
+			#	random_owned_pop = {
+			#		limit = {
+			#			NOT = { has_ethic = ethic_materialist }
+			#			is_non_sapient_robot = no
+			#		}
+			#		pop_change_ethic = ethic_materialist
+			#	}
+			#}
+			add_modifier = {
+			modifier = materialist_attraction
+			days = 7200 # 20 years
+			}
+			every_owned_pop = {
+				limit = {
+					is_non_sapient_robot = no
+					has_ethic = ethic_materialist
+				}
+				add_modifier = {
+					modifier = opinion_respected
+					days = 7200
+				}
+			}
+		}
+	}
+	option = {
+		name = colony.2010.b
+		custom_tooltip = colony.2010.b.tooltip
+		trigger = {
+			owner = {
+				#NOT = { has_country_flag = deficit }
+				resource_stockpile_compare = { resource = energy value >= 100 }
+				resource_stockpile_compare = { resource = minerals value >= 100 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -100
+				minerals = -100
+			}
+		}
+	}
+
+	option = {
+		name = colony.2010.c.spirit
+		custom_tooltip = colony.2010.c.spirit.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		hidden_effect = {
+			random_list = {
+				40 = { planet_event = { id = colony.2011 days = 160 } } #good results
+				60 = { planet_event = { id = colony.2012 days = 160 } } #bad results
+			}
+			set_planet_flag = event_subjugate_materialists
+		}
+	}
+	option = {
+		name = colony.2010.c.material
+		custom_tooltip = colony.2010.c.material.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+		hidden_effect = {
+			random_list = {
+				40 = { planet_event = { id = colony.2011 days = 160 } } #good results
+				60 = { planet_event = { id = colony.2012 days = 160 } } #bad results
+			}
+			set_planet_flag = event_subjugate_spiritualists
+		}
+	}
+}

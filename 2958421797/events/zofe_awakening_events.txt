@@ -1,0 +1,2195 @@
+#####################################
+#		ZoFE Awakening Events
+#			  By Kolyn
+#####################################
+
+namespace = zofe_awakening
+
+#Spiritualist Fallen Empire Notices an Ascending Empire it doesn't like.
+country_event = {
+	id = zofe_awakening.1
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire_spiritualist = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			has_authority = auth_machine_intelligence
+			#Just to create hurdles for players on higher difficulties
+			OR = {
+				has_global_flag = ai_ascended_empire_vanilla_difficulty
+				has_global_flag = ai_ascended_empire_normal_difficulty
+				AND = {
+					OR = {
+						has_global_flag = ai_ascended_empire_hard_difficulty
+						has_global_flag = ai_ascended_empire_veteran_difficulty
+						has_global_flag = ai_ascended_empire_nightmare_difficulty
+					}
+					is_ai = no 
+				}
+			}
+			#Exceptions
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+				has_relic = r_severed_head
+			}
+			#Not been warned by other Fallen Empires. We don't want a pile-on
+			NOT = { has_country_flag = fallen_empire_warning_received }
+		}
+	}
+
+	#Will change to 3 years
+	mean_time_to_happen = {
+		years = 3
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		every_playable_country = {
+			limit = { 
+				is_ascended_empire = yes
+				NOT = { has_country_flag = new_ascended_empire }
+				has_authority = auth_machine_intelligence
+				#Just to create hurdles for players on higher difficulties
+				OR = {
+					has_global_flag = ai_ascended_empire_vanilla_difficulty
+					has_global_flag = ai_ascended_empire_normal_difficulty
+					AND = {
+						OR = {
+							has_global_flag = ai_ascended_empire_hard_difficulty
+							has_global_flag = ai_ascended_empire_veteran_difficulty
+							has_global_flag = ai_ascended_empire_nightmare_difficulty
+						}
+						is_ai = no 
+					}
+				}
+				NOR = {
+					has_origin = origin_ringworld_empire
+					has_origin = origin_original_people
+					has_relic = r_severed_head
+				}
+				NOT = { has_country_flag = fallen_empire_warning_received }
+			}
+			set_country_flag = fallen_empire_warning_received
+			establish_communications_no_message = event_target:fallen_empire_warner
+			country_event = { id = zofe_awakening.100 }
+		}
+	}
+}
+
+#Spiritualist Fallen Empire Warning
+country_event = {
+	id = zofe_awakening.100
+	title = zofe_awakening.100.name
+	desc = zofe_awakening.100.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Slows Ascension Situation
+	option = {
+		name = zofe_awakening.100.a
+		custom_tooltip = fallen_empire_warning_happy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_accepted_fallen_empire_request } } }
+		set_country_flag = complied_spiritualist_fallen_empire
+	}
+	
+	#Request Denied
+	option = {
+		name = zofe_awakening.100.b
+		custom_tooltip = fallen_empire_warning_unhappy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_refused_fallen_empire_task } } }
+		set_country_flag = defied_spiritualist_fallen_empire
+	}
+}
+
+#Spiritualist Fallen Empire Decide What to do with upstart Ascending Empire
+country_event = {
+	id = zofe_awakening.101
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire_spiritualist = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			has_authority = auth_machine_intelligence
+			#Exceptions
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+				has_relic = r_severed_head
+			}
+			
+			#Warned and been defied
+			has_country_flag = fallen_empire_warning_received
+			has_country_flag = defied_spiritualist_fallen_empire
+			
+			#Fallen Empire not yet decided what to do with them
+			NOT = { has_country_flag = spiritualist_fallen_empire_decision_made }
+			NOR = { 
+				has_country_flag = spiritualist_fallen_empire_decision_1
+				has_country_flag = spiritualist_fallen_empire_decision_2
+				has_country_flag = spiritualist_fallen_empire_decision_3
+			}
+		}
+	}
+
+	#Will change to 10 years.
+	mean_time_to_happen = {
+		years = 10
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		random_playable_country = {
+			limit = { 
+				is_ascended_empire = yes
+				has_authority = auth_machine_intelligence
+				has_country_flag = fallen_empire_warning_received
+				has_country_flag = defied_spiritualist_fallen_empire
+				NOR = { 
+					has_country_flag = spiritualist_fallen_empire_decision_1
+					has_country_flag = spiritualist_fallen_empire_decision_2
+					has_country_flag = spiritualist_fallen_empire_decision_3
+				}
+			}
+			set_country_flag = spiritualist_fallen_empire_decision_made
+			save_event_target_as = spiritualist_fallen_empire_target
+		}
+		#What happens next depends on difficulty settings. Higher difficulty means more likely of an immediate attack.
+		
+		#Nightmare = 50% immediate attack
+		#Veteran = 40% immediate attack
+		#Hard = 30% immediate attack
+		#Normal = 20% immediate attack
+		#Vanilla = 10% immediate attack
+		
+			
+		#Vanilla Difficulty comes with a 10% chance of attack, 10% to wake, 80% chance of doing nothing (empty threats)
+		if = {
+			limit = { has_global_flag = fallen_empire_vanilla_difficulty }
+			random_list = {
+				10 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.102 }
+					}
+				}
+				10 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.103 }
+				}
+				80 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+		
+		#Normal Difficulty comes with a 20% chance of attack, 20% to wake, 60% chance of doing nothing (empty threats)
+		if = {
+			limit = { has_global_flag = fallen_empire_normal_difficulty }
+			random_list = {
+				20 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.102 }
+					}
+				}
+				20 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.103 }
+				}
+				60 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+		
+		#Hard Difficulty comes with a 30% chance of attack, 30% to wake, 40% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_hard_difficulty
+			}
+			random_list = {
+				30 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.102 }
+					}
+				}
+				30 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.103 }
+				}
+				40 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+			
+		#Veteran Difficulty comes with a 40% chance of attack, 40% to wake, 20% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_veteran_difficulty
+			}
+			random_list = {
+				40 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.102 }
+					}
+				}
+				40 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.103 }
+				}
+				20 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+			
+		#Nightmare Difficulty comes with a 50% chance of attack, 50% to wake, 0% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_nightmare_difficulty
+			}
+			random_list = {
+				50 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.102 }
+					}
+				}
+				50 = {
+					event_target:spiritualist_fallen_empire_target = {
+						set_country_flag = spiritualist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.103 }
+				}
+			}
+		}
+	}
+}
+
+#Spiritualist Declaration of War
+country_event = {
+	id = zofe_awakening.102
+	title = zofe_awakening.102.name
+
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	desc = {
+		text = zofe_awakening.102.desc.a
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = fallen_empire }
+		}
+	}
+	desc = {
+		text = zofe_awakening.102.desc.b
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = awakened_fallen_empire }
+		}
+	}
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Fallen Empire
+	option = {
+		name = zofe_awakening.102.a
+		trigger = {
+			has_authority = auth_machine_intelligence
+			event_target:fallen_empire_warner = { is_country_type = fallen_empire }
+		}
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_fe_humiliation"
+			}
+		}
+	}
+	
+	#Awakened Fallen Empire
+	option = {
+		name = zofe_awakening.102.b
+		trigger = {
+			has_authority = auth_machine_intelligence
+			event_target:fallen_empire_warner = { is_country_type = awakened_fallen_empire }
+		}
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_ae_domination"
+			}
+		}
+	}
+}
+
+# Spiritualist Fallen Empire Wakes up
+country_event = {
+	id = zofe_awakening.103
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		
+		if = { 
+			limit = { is_country_type = fallen_empire }
+			
+			set_timed_country_flag = { flag = ai_no_wars days = 7200 }
+			
+			# Notify players
+			country_event = { id = fallen_empires_awakening.3 }
+			every_country = {
+				limit = {
+					is_ai = no		
+				}
+				country_event = { id = fallen_empires_awakening.2 }
+			}
+			observer_event = { id = observer.73 }
+		}
+		
+		if = { 
+			limit = { is_country_type = awakened_fallen_empire }
+			
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+		}
+	}
+}
+
+# Spiritualist Fallen Empire Secretly Helps Spiritualist Ascending Empire
+country_event = {
+	id = zofe_awakening.104
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		is_fallen_empire_spiritualist = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			NOT = { has_country_flag = has_spiritualist_fallen_empire_support }
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_relic = r_severed_head
+			}
+			OR = {
+				AND = {
+					has_country_flag = defied_materialist_fallen_empire
+					has_country_flag = materialist_fallen_empire_decision_1
+					any_war = {
+						any_attacker = {
+							is_fallen_empire_materialist = yes
+						}
+					}
+				}
+				AND = {
+					has_country_flag = defied_xenophobe_fallen_empire
+					has_country_flag = xenophobe_fallen_empire_decision_1
+					any_war = {
+						any_attacker = {
+							is_fallen_empire_xenophobe = yes
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	#Will change to 3 months
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_supporter
+		every_playable_country = {
+			limit = {
+				is_ascended_empire = yes
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_relic = r_severed_head
+				}
+				OR = {
+					AND = {
+						has_country_flag = defied_materialist_fallen_empire
+						has_country_flag = materialist_fallen_empire_decision_1
+						any_war = {
+							any_attacker = {
+								is_fallen_empire_materialist = yes
+							}
+						}
+					}
+					AND = {
+						has_country_flag = defied_xenophobe_fallen_empire
+						has_country_flag = xenophobe_fallen_empire_decision_1
+						any_war = {
+							any_attacker = {
+								is_fallen_empire_xenophobe = yes
+							}
+						}
+					}
+				}
+			}
+			set_country_flag = has_spiritualist_fallen_empire_support
+			establish_communications_no_message = event_target:fallen_empire_supporter
+			country_event = { id = zofe_awakening.105 }
+		}
+	}
+}
+
+#Spiritualist Fallen Empire Sends Aid
+country_event = {
+	id = zofe_awakening.105
+	title = zofe_awakening.105.name
+	desc = zofe_awakening.105.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_supporter
+		planet_background = event_target:fallen_empire_supporter
+		graphical_culture = event_target:fallen_empire_supporter
+		city_level = event_target:fallen_empire_supporter
+		room = event_target:fallen_empire_supporter
+	}
+	
+	#Accepts Volunteer fleet
+	option = {
+		name = zofe_awakening.105.a
+		hidden_effect = {
+			capital_scope = {
+				create_fleet = {
+					name = "NAME_FE_ZEALOTS"
+					effect = {
+						set_owner = event_target:fallen_empire_supporter # For ship names
+						while = {
+							count = 3
+							create_fallen_empire_large_ship = yes
+						}
+						while = {
+							count = 9
+							create_fallen_empire_small_ship = yes
+						}
+						set_location = {
+							target = prev
+							distance = 45
+							angle = random
+						}
+						set_owner = root
+					}
+				}
+			}
+		}
+	}
+	
+	#Deny Help
+	option = {
+		name = zofe_awakening.105.b
+	}
+}
+
+#Materialist Fallen Empire Notices an Ascending Empire it doesn't like.
+country_event = {
+	id = zofe_awakening.2
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire_materialist = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			
+			relative_power = {
+				who = root
+				category = technology
+				value > inferior
+			}
+			
+			#Just to create hurdles for players on higher difficulties
+			OR = {
+				has_global_flag = ai_ascended_empire_vanilla_difficulty
+				has_global_flag = ai_ascended_empire_normal_difficulty
+				AND = {
+					OR = {
+						has_global_flag = ai_ascended_empire_hard_difficulty
+						has_global_flag = ai_ascended_empire_veteran_difficulty
+						has_global_flag = ai_ascended_empire_nightmare_difficulty
+					}
+					is_ai = no 
+				}
+			}
+			#Exceptions
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+			#Not been warned by other Fallen Empires. We don't want a pile-on
+			NOT = { has_country_flag = fallen_empire_warning_received }
+		}
+	}
+
+	#Will change to 3 years.
+	mean_time_to_happen = {
+		years = 3
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		every_playable_country = {
+			limit = { 
+				is_ascended_empire = yes
+				relative_power = {
+					who = root
+					category = technology
+					value > inferior
+				}
+				#Just to create hurdles for players on higher difficulties
+				OR = {
+					has_global_flag = ai_ascended_empire_vanilla_difficulty
+					has_global_flag = ai_ascended_empire_normal_difficulty
+					AND = {
+						OR = {
+							has_global_flag = ai_ascended_empire_hard_difficulty
+							has_global_flag = ai_ascended_empire_veteran_difficulty
+							has_global_flag = ai_ascended_empire_nightmare_difficulty
+						}
+						is_ai = no 
+					}
+				}
+				NOR = {
+					has_origin = origin_ringworld_empire
+					has_origin = origin_original_people
+				}
+				NOT = { has_country_flag = fallen_empire_warning_received }
+			}
+			set_country_flag = fallen_empire_warning_received
+			establish_communications_no_message = event_target:fallen_empire_warner
+			country_event = { id = zofe_awakening.200 }
+		}
+	}
+}
+
+#Materialist Fallen Empire Warning
+country_event = {
+	id = zofe_awakening.200
+	title = zofe_awakening.200.name
+	desc = zofe_awakening.200.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Slows Ascension Situation
+	option = {
+		name = zofe_awakening.200.a
+		custom_tooltip = fallen_empire_warning_happy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_accepted_fallen_empire_request } } }
+		set_country_flag = complied_materialist_fallen_empire
+	}
+	
+	#Request Denied
+	option = {
+		name = zofe_awakening.200.b
+		custom_tooltip = fallen_empire_warning_unhappy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_refused_fallen_empire_task } } }
+		set_country_flag = defied_materialist_fallen_empire
+	}
+}
+
+#Materialist Fallen Empire Decide What to do with upstart Ascending Empire
+country_event = {
+	id = zofe_awakening.201
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire_materialist = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+
+			relative_power = {
+				who = root
+				category = technology
+				value > inferior
+			}
+			
+			#Exceptions
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+			
+			#Warned and been defied
+			has_country_flag = fallen_empire_warning_received
+			has_country_flag = defied_materialist_fallen_empire
+			
+			#Fallen Empire not yet decided what to do with them
+			NOT = { has_country_flag = materialist_fallen_empire_decision_made }
+			NOR = { 
+				has_country_flag = materialist_fallen_empire_decision_1
+				has_country_flag = materialist_fallen_empire_decision_2
+				has_country_flag = materialist_fallen_empire_decision_3
+			}
+		}
+	}
+
+	#Will change to 10 years.
+	mean_time_to_happen = {
+		years = 10
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		random_playable_country = {
+			limit = { 
+				is_ascended_empire = yes
+				relative_power = {
+					who = root
+					category = technology
+					value > inferior
+				}
+				has_country_flag = fallen_empire_warning_received
+				has_country_flag = defied_materialist_fallen_empire
+				NOR = { 
+					has_country_flag = materialist_fallen_empire_decision_1
+					has_country_flag = materialist_fallen_empire_decision_2
+					has_country_flag = materialist_fallen_empire_decision_3
+				}
+			}
+			set_country_flag = materialist_fallen_empire_decision_made
+			save_event_target_as = materialist_fallen_empire_target
+		}
+		#What happens next depends on difficulty settings. Higher difficulty means more likely of an immediate attack.
+		
+		#Nightmare = 50% immediate attack
+		#Veteran = 40% immediate attack
+		#Hard = 30% immediate attack
+		#Normal = 20% immediate attack
+		#Vanilla = 10% immediate attack
+		
+			
+		#Vanilla Difficulty comes with a 10% chance of attack, 10% to wake, 80% chance of doing nothing (empty threats)
+		if = {
+			limit = { has_global_flag = fallen_empire_vanilla_difficulty }
+			random_list = {
+				10 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.202 }
+					}
+				}
+				10 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.203 }
+				}
+				80 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+		
+		#Normal Difficulty comes with a 20% chance of attack, 20% to wake, 60% chance of doing nothing (empty threats)
+		if = {
+			limit = { has_global_flag = fallen_empire_normal_difficulty }
+			random_list = {
+				20 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.202 }
+					}
+				}
+				20 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.203 }
+				}
+				60 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+		
+		#Hard Difficulty comes with a 30% chance of attack, 30% to wake, 40% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_hard_difficulty
+			}
+			random_list = {
+				30 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.202 }
+					}
+				}
+				30 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.203 }
+				}
+				40 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+			
+		#Veteran Difficulty comes with a 40% chance of attack, 40% to wake, 20% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_veteran_difficulty
+			}
+			random_list = {
+				40 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.202 }
+					}
+				}
+				40 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.203 }
+				}
+				20 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+			
+		#Nightmare Difficulty comes with a 50% chance of attack, 50% to wake, 0% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_nightmare_difficulty
+			}
+			random_list = {
+				50 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.202 }
+					}
+				}
+				50 = {
+					event_target:materialist_fallen_empire_target = {
+						set_country_flag = materialist_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.203 }
+				}
+			}
+		}
+	}
+}
+
+#Materialist Declaration of War
+country_event = {
+	id = zofe_awakening.202
+	title = zofe_awakening.202.name
+
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	desc = {
+		text = zofe_awakening.202.desc.a
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = fallen_empire }
+		}
+	}
+	desc = {
+		text = zofe_awakening.202.desc.b
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = awakened_fallen_empire }
+		}
+	}
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Fallen Empire
+	option = {
+		name = zofe_awakening.202.a
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = fallen_empire }
+		}
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_fe_humiliation"
+			}
+		}
+	}
+	
+	#Awakened Fallen Empire
+	option = {
+		name = zofe_awakening.202.b
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = awakened_fallen_empire }
+		}
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_ae_domination"
+			}
+		}
+	}
+}
+
+#Materialist Fallen Empire Wakes up
+country_event = {
+	id = zofe_awakening.203
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		
+		if = { 
+			limit = { is_country_type = fallen_empire }
+			
+			set_timed_country_flag = { flag = ai_no_wars days = 7200 }
+			
+			# Notify players
+			country_event = { id = fallen_empires_awakening.3 }
+			every_country = {
+				limit = {
+					is_ai = no		
+				}
+				country_event = { id = fallen_empires_awakening.2 }
+			}
+			observer_event = { id = observer.73 }
+		}
+		
+		if = { 
+			limit = { is_country_type = awakened_fallen_empire }
+			
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+		}
+	}
+}
+
+# Materialist Fallen Empire Secretly Spites Spiritualist FE
+country_event = {
+	id = zofe_awakening.204
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		is_fallen_empire_materialist = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			NOT = { has_country_flag = has_materialist_fallen_empire_support }
+			#So they don't help Empires they hate.
+			NOT = {
+				relative_power = {
+					who = root
+					category = technology
+					value > inferior
+				}
+			}
+			AND = {
+				has_country_flag = defied_spiritualist_fallen_empire
+				has_country_flag = spiritualist_fallen_empire_decision_1
+				any_war = {
+					any_attacker = {
+						is_fallen_empire_spiritualist = yes
+					}
+				}
+			}
+		}
+	}
+	
+	#Will change to 3 months
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_supporter
+		every_playable_country = {
+			limit = {
+				is_ascended_empire = yes
+				NOT = {
+					relative_power = {
+						who = root
+						category = technology
+						value > inferior
+					}
+				}
+				AND = {
+					has_country_flag = defied_spiritualist_fallen_empire
+					has_country_flag = spiritualist_fallen_empire_decision_1
+					any_war = {
+						any_attacker = {
+							is_fallen_empire_spiritualist = yes
+						}
+					}
+				}
+			}
+			set_country_flag = has_materialist_fallen_empire_support
+			establish_communications_no_message = event_target:fallen_empire_supporter
+			country_event = { id = zofe_awakening.205 }
+		}
+	}
+}
+
+#Materialist Fallen Empire Sends Aid
+country_event = {
+	id = zofe_awakening.205
+	title = zofe_awakening.205.name
+	desc = zofe_awakening.205.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_supporter
+		planet_background = event_target:fallen_empire_supporter
+		graphical_culture = event_target:fallen_empire_supporter
+		city_level = event_target:fallen_empire_supporter
+		room = event_target:fallen_empire_supporter
+	}
+	
+	#Accepts Volunteer fleet
+	option = {
+		name = zofe_awakening.205.a
+		hidden_effect = {
+			capital_scope = {
+				create_fleet = {
+					name = "NAME_FE_SURPLUS_FLEETS"
+					effect = {
+						set_owner = event_target:fallen_empire_supporter # For ship names
+						while = {
+							count = 3
+							create_fallen_empire_large_ship = yes
+						}
+						while = {
+							count = 9
+							create_fallen_empire_small_ship = yes
+						}
+						set_location = {
+							target = prev
+							distance = 45
+							angle = random
+						}
+						set_owner = root
+					}
+				}
+			}
+		}
+	}
+	
+	#Deny Help
+	option = {
+		name = zofe_awakening.205.b
+	}
+}
+
+#Xenophile Fallen Empire Notices an Ascending Empire it doesn't like.
+country_event = {
+	id = zofe_awakening.3
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire_xenophile = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			allows_purge = yes
+			OR = {
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+			
+			#Just to create hurdles for players on higher difficulties
+			OR = {
+				has_global_flag = ai_ascended_empire_vanilla_difficulty
+				has_global_flag = ai_ascended_empire_normal_difficulty
+				AND = {
+					OR = {
+						has_global_flag = ai_ascended_empire_hard_difficulty
+						has_global_flag = ai_ascended_empire_veteran_difficulty
+						has_global_flag = ai_ascended_empire_nightmare_difficulty
+					}
+					is_ai = no 
+				}
+			}
+			#Exceptions
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+			#Not been warned by other Fallen Empires. We don't want a pile-on
+			NOT = { has_country_flag = fallen_empire_warning_received }
+		}
+	}
+
+	#Will change to 3 years.
+	mean_time_to_happen = {
+		years = 3
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		every_playable_country = {
+			limit = { 
+				is_ascended_empire = yes
+				allows_purge = yes
+				OR = {
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+				}
+				#Just to create hurdles for players on higher difficulties
+				OR = {
+					has_global_flag = ai_ascended_empire_vanilla_difficulty
+					has_global_flag = ai_ascended_empire_normal_difficulty
+					AND = {
+						OR = {
+							has_global_flag = ai_ascended_empire_hard_difficulty
+							has_global_flag = ai_ascended_empire_veteran_difficulty
+							has_global_flag = ai_ascended_empire_nightmare_difficulty
+						}
+						is_ai = no 
+					}
+				}
+				NOR = {
+					has_origin = origin_ringworld_empire
+					has_origin = origin_original_people
+				}
+				NOT = { has_country_flag = fallen_empire_warning_received }
+			}
+			set_country_flag = fallen_empire_warning_received
+			establish_communications_no_message = event_target:fallen_empire_warner
+			country_event = { id = zofe_awakening.300 }
+		}
+	}
+}
+
+#Xenophile Fallen Empire Warning
+country_event = {
+	id = zofe_awakening.300
+	title = zofe_awakening.300.name
+	desc = zofe_awakening.300.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Slows Ascension Situation
+	option = {
+		name = zofe_awakening.300.a
+		custom_tooltip = fallen_empire_warning_happy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_accepted_fallen_empire_request } } }
+		set_country_flag = complied_xenophile_fallen_empire
+		set_policy = {
+			policy = purge
+			option = purge_not_allowed
+		}
+	}
+	
+	#Request Denied
+	option = {
+		name = zofe_awakening.300.b
+		custom_tooltip = fallen_empire_warning_unhappy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_refused_fallen_empire_task } } }
+		set_country_flag = defied_xenophile_fallen_empire
+	}
+}
+
+#Xenophile Fallen Empire Decide What to do with upstart Ascending Empire
+country_event = {
+	id = zofe_awakening.301
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire_xenophile = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			
+			OR = {
+				has_valid_civic = civic_machine_terminator
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_fanatic_purifiers
+			}
+			
+			#Exceptions
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+			
+			#Warned and been defied
+			has_country_flag = fallen_empire_warning_received
+			has_country_flag = defied_xenophile_fallen_empire
+			
+			#Fallen Empire not yet decided what to do with them
+			NOT = { has_country_flag = xenophile_fallen_empire_decision_made }
+			NOR = { 
+				has_country_flag = xenophile_fallen_empire_decision_1
+				has_country_flag = xenophile_fallen_empire_decision_2
+				has_country_flag = xenophile_fallen_empire_decision_3
+			}
+		}
+	}
+
+	#Will change to 10 years.
+	mean_time_to_happen = {
+		years = 10
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		random_playable_country = {
+			limit = { 
+				is_ascended_empire = yes
+				OR = {
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+				}
+				has_country_flag = fallen_empire_warning_received
+				has_country_flag = defied_xenophile_fallen_empire
+				NOR = { 
+					has_country_flag = xenophile_fallen_empire_decision_1
+					has_country_flag = xenophile_fallen_empire_decision_2
+					has_country_flag = xenophile_fallen_empire_decision_3
+				}
+			}
+			set_country_flag = xenophile_fallen_empire_decision_made
+			save_event_target_as = xenophile_fallen_empire_target
+		}
+		#What happens next depends on difficulty settings. Higher difficulty means more likely of an immediate attack.
+		
+		#Nightmare = 50% immediate attack
+		#Veteran = 40% immediate attack
+		#Hard = 30% immediate attack
+		#Normal = 20% immediate attack
+		#Vanilla = 10% immediate attack
+		
+			
+		#Vanilla Difficulty comes with a 10% chance of attack, 10% to wake, 80% chance of doing nothing (empty threats)
+		if = {
+			limit = { has_global_flag = fallen_empire_vanilla_difficulty }
+			random_list = {
+				10 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.302 }
+					}
+				}
+				10 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.303 }
+				}
+				80 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+		
+		#Normal Difficulty comes with a 20% chance of attack, 20% to wake, 60% chance of doing nothing (empty threats)
+		if = {
+			limit = { has_global_flag = fallen_empire_normal_difficulty }
+			random_list = {
+				20 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.302 }
+					}
+				}
+				20 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.303 }
+				}
+				60 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+		
+		#Hard Difficulty comes with a 30% chance of attack, 30% to wake, 40% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_hard_difficulty
+			}
+			random_list = {
+				30 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.302 }
+					}
+				}
+				30 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.303 }
+				}
+				40 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+			
+		#Veteran Difficulty comes with a 40% chance of attack, 40% to wake, 20% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_veteran_difficulty
+			}
+			random_list = {
+				40 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.302 }
+					}
+				}
+				40 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.303 }
+				}
+				20 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+			
+		#Nightmare Difficulty comes with a 50% chance of attack, 50% to wake, 0% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_nightmare_difficulty
+			}
+			random_list = {
+				50 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.302 }
+					}
+				}
+				50 = {
+					event_target:xenophile_fallen_empire_target = {
+						set_country_flag = xenophile_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.303 }
+				}
+			}
+		}
+	}
+}
+
+#Xenophile Declaration of War
+country_event = {
+	id = zofe_awakening.302
+	title = zofe_awakening.302.name
+
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	desc = {
+		text = zofe_awakening.302.desc.a
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = fallen_empire }
+		}
+	}
+	desc = {
+		text = zofe_awakening.302.desc.b
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = awakened_fallen_empire }
+		}
+	}
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Fallen Empire
+	option = {
+		name = zofe_awakening.302.a
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = fallen_empire }
+		}
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_fe_humiliation"
+			}
+		}
+	}
+	
+	#Awakened Fallen Empire
+	option = {
+		name = zofe_awakening.302.b
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = awakened_fallen_empire }
+		}
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_ae_domination"
+			}
+		}
+	}
+}
+
+#Xenophile Fallen Empire Wakes up
+country_event = {
+	id = zofe_awakening.303
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		
+		if = { 
+			limit = { is_country_type = fallen_empire }
+			
+			set_timed_country_flag = { flag = ai_no_wars days = 7200 }
+			
+			# Notify players
+			country_event = { id = fallen_empires_awakening.3 }
+			every_country = {
+				limit = {
+					is_ai = no		
+				}
+				country_event = { id = fallen_empires_awakening.2 }
+			}
+			observer_event = { id = observer.73 }
+		}
+		
+		if = { 
+			limit = { is_country_type = awakened_fallen_empire }
+			
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+		}
+	}
+}
+
+# Xenophile Fallen Empire Secretly Helps Xenophile Ascending Empire
+country_event = {
+	id = zofe_awakening.304
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		is_fallen_empire_xenophile = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			NOT = { has_country_flag = has_xenophile_fallen_empire_support }
+			has_ethic = ethic_fanatic_xenophile
+			OR = {
+				AND = {
+					has_country_flag = defied_materialist_fallen_empire
+					has_country_flag = materialist_fallen_empire_decision_1
+					any_war = {
+						any_attacker = {
+							is_fallen_empire_materialist = yes
+						}
+					}
+				}
+				AND = {
+					has_country_flag = defied_xenophobe_fallen_empire
+					has_country_flag = xenophobe_fallen_empire_decision_1
+					any_war = {
+						any_attacker = {
+							is_fallen_empire_xenophobe = yes
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	#Will change to 3 months
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_supporter
+		every_playable_country = {
+			limit = {
+				is_ascended_empire = yes
+				has_ethic = ethic_fanatic_xenophile
+				OR = {
+					AND = {
+						has_country_flag = defied_materialist_fallen_empire
+						has_country_flag = materialist_fallen_empire_decision_1
+						any_war = {
+							any_attacker = {
+								is_fallen_empire_materialist = yes
+							}
+						}
+					}
+					AND = {
+						has_country_flag = defied_xenophobe_fallen_empire
+						has_country_flag = xenophobe_fallen_empire_decision_1
+						any_war = {
+							any_attacker = {
+								is_fallen_empire_xenophobe = yes
+							}
+						}
+					}
+				}
+			}
+			set_country_flag = has_xenophile_fallen_empire_support
+			establish_communications_no_message = event_target:fallen_empire_supporter
+			country_event = { id = zofe_awakening.305 }
+		}
+	}
+}
+
+#Xenophile Fallen Empire Sends Aid
+country_event = {
+	id = zofe_awakening.305
+	title = zofe_awakening.305.name
+	desc = zofe_awakening.305.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_supporter
+		planet_background = event_target:fallen_empire_supporter
+		graphical_culture = event_target:fallen_empire_supporter
+		city_level = event_target:fallen_empire_supporter
+		room = event_target:fallen_empire_supporter
+	}
+	
+	#Accepts Volunteer fleet
+	option = {
+		name = zofe_awakening.305.a
+		hidden_effect = {
+			capital_scope = {
+				create_fleet = {
+					name = "NAME_FE_VOLUNTEERS"
+					effect = {
+						set_owner = event_target:fallen_empire_supporter # For ship names
+						while = {
+							count = 3
+							create_fallen_empire_large_ship = yes
+						}
+						while = {
+							count = 9
+							create_fallen_empire_small_ship = yes
+						}
+						set_location = {
+							target = prev
+							distance = 45
+							angle = random
+						}
+						set_owner = root
+					}
+				}
+			}
+		}
+	}
+	
+	#Deny Help
+	option = {
+		name = zofe_awakening.305.b
+	}
+}
+
+#Xenophobe Fallen Empire Notices an Ascending Empire it doesn't like.
+country_event = {
+	id = zofe_awakening.4
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire_xenophobe = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+			
+			relative_power = {
+				who = root
+				category = fleet
+				value > inferior
+			}
+			
+			#Just to create hurdles for players on higher difficulties
+			OR = {
+				has_global_flag = ai_ascended_empire_vanilla_difficulty
+				has_global_flag = ai_ascended_empire_normal_difficulty
+				AND = {
+					OR = {
+						has_global_flag = ai_ascended_empire_hard_difficulty
+						has_global_flag = ai_ascended_empire_veteran_difficulty
+						has_global_flag = ai_ascended_empire_nightmare_difficulty
+					}
+					is_ai = no 
+				}
+			}
+			#Exceptions
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+			#Not been warned by other Fallen Empires. We don't want a pile-on
+			NOT = { has_country_flag = fallen_empire_warning_received }
+		}
+	}
+
+	#Will change to 3 years.
+	mean_time_to_happen = {
+		years = 3
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		every_playable_country = {
+			limit = { 
+				is_ascended_empire = yes
+				relative_power = {
+					who = root
+					category = fleet
+					value > inferior
+				}
+				#Just to create hurdles for players on higher difficulties
+				OR = {
+					has_global_flag = ai_ascended_empire_vanilla_difficulty
+					has_global_flag = ai_ascended_empire_normal_difficulty
+					AND = {
+						OR = {
+							has_global_flag = ai_ascended_empire_hard_difficulty
+							has_global_flag = ai_ascended_empire_veteran_difficulty
+							has_global_flag = ai_ascended_empire_nightmare_difficulty
+						}
+						is_ai = no 
+					}
+				}
+				NOR = {
+					has_origin = origin_ringworld_empire
+					has_origin = origin_original_people
+				}
+				NOT = { has_country_flag = fallen_empire_warning_received }
+			}
+			set_country_flag = fallen_empire_warning_received
+			establish_communications_no_message = event_target:fallen_empire_warner
+			country_event = { id = zofe_awakening.400 }
+		}
+	}
+}
+
+#Xenophobe Fallen Empire Warning
+country_event = {
+	id = zofe_awakening.400
+	title = zofe_awakening.400.name
+	desc = zofe_awakening.400.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Slows Ascension Situation
+	option = {
+		name = zofe_awakening.400.a
+		custom_tooltip = fallen_empire_warning_happy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_accepted_fallen_empire_request } } }
+		set_country_flag = complied_xenophobe_fallen_empire
+		
+		every_owned_fleet = {
+			limit = {
+				any_owned_ship = {
+					is_ship_class = shipclass_military
+				}
+			}
+			set_owner = event_target:fallen_empire_warner
+			set_fleet_flag = surrendered_fleet
+		}
+		
+		hidden_effect = {
+			event_target:fallen_empire_warner = { country_event = { id = zofe_awakening.404 days = 3 } }
+		}
+			
+	}
+	
+	#Request Denied
+	option = {
+		name = zofe_awakening.400.b
+		custom_tooltip = fallen_empire_warning_unhappy_tooltip
+		hidden_effect = { event_target:fallen_empire_warner = { add_opinion_modifier = { who = root modifier = opinion_refused_fallen_empire_task } } }
+		set_country_flag = defied_xenophobe_fallen_empire
+	}
+}
+
+#Xenophobe Fallen Empire Decide What to do with upstart Ascending Empire
+country_event = {
+	id = zofe_awakening.401
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_fallen_empire_xenophobe = yes
+		is_at_war = no
+		any_country = {
+			is_ascended_empire = yes
+
+			relative_power = {
+				who = root
+				category = fleet
+				value > inferior
+			}
+			
+			#Exceptions
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+			
+			#Warned and been defied
+			has_country_flag = fallen_empire_warning_received
+			has_country_flag = defied_xenophobe_fallen_empire
+			
+			#Fallen Empire not yet decided what to do with them
+			NOT = { has_country_flag = xenophobe_fallen_empire_decision_made }
+			NOR = { 
+				has_country_flag = xenophobe_fallen_empire_decision_1
+				has_country_flag = xenophobe_fallen_empire_decision_2
+				has_country_flag = xenophobe_fallen_empire_decision_3
+			}
+		}
+	}
+
+	#Will change to 10 years.
+	mean_time_to_happen = {
+		years = 10
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		save_event_target_as = fallen_empire_warner
+		random_playable_country = {
+			limit = { 
+				is_ascended_empire = yes
+				relative_power = {
+					who = root
+					category = technology
+					value > inferior
+				}
+				has_country_flag = fallen_empire_warning_received
+				has_country_flag = defied_xenophobe_fallen_empire
+				NOR = { 
+					has_country_flag = xenophobe_fallen_empire_decision_1
+					has_country_flag = xenophobe_fallen_empire_decision_2
+					has_country_flag = xenophobe_fallen_empire_decision_3
+				}
+			}
+			set_country_flag = xenophobe_fallen_empire_decision_made
+			save_event_target_as = xenophobe_fallen_empire_target
+		}
+		#What happens next depends on difficulty settings. Higher difficulty means more likely of an immediate attack.
+		
+		#Nightmare = 50% immediate attack
+		#Veteran = 40% immediate attack
+		#Hard = 30% immediate attack
+		#Normal = 20% immediate attack
+		#Vanilla = 10% immediate attack
+		
+			
+		#Vanilla Difficulty comes with a 10% chance of attack, 10% to wake, 80% chance of doing nothing (empty threats)
+		if = {
+			limit = { has_global_flag = fallen_empire_vanilla_difficulty }
+			random_list = {
+				10 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.402 }
+					}
+				}
+				10 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.403 }
+				}
+				80 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+		
+		#Normal Difficulty comes with a 20% chance of attack, 20% to wake, 60% chance of doing nothing (empty threats)
+		if = {
+			limit = { has_global_flag = fallen_empire_normal_difficulty }
+			random_list = {
+				20 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.402 }
+					}
+				}
+				20 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.403 }
+				}
+				60 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+		
+		#Hard Difficulty comes with a 30% chance of attack, 30% to wake, 40% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_hard_difficulty
+			}
+			random_list = {
+				30 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.402 }
+					}
+				}
+				30 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.403 }
+				}
+				40 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+			
+		#Veteran Difficulty comes with a 40% chance of attack, 40% to wake, 20% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_veteran_difficulty
+			}
+			random_list = {
+				40 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.402 }
+					}
+				}
+				40 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.403 }
+				}
+				20 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_3
+					}
+				}
+			}
+		}
+			
+		#Nightmare Difficulty comes with a 50% chance of attack, 50% to wake, 0% chance of doing nothing (empty threats)
+		if = {
+			limit = {
+				has_global_flag = fallen_empire_nightmare_difficulty
+			}
+			random_list = {
+				50 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_1
+						country_event = { id = zofe_awakening.402 }
+					}
+				}
+				50 = {
+					event_target:xenophobe_fallen_empire_target = {
+						set_country_flag = xenophobe_fallen_empire_decision_2
+					}
+					country_event = { id = zofe_awakening.403 }
+				}
+			}
+		}
+	}
+}
+
+#Xenophobe Declaration of War
+country_event = {
+	id = zofe_awakening.402
+	title = zofe_awakening.402.name
+
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	desc = {
+		text = zofe_awakening.402.desc.a
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = fallen_empire }
+		}
+	}
+	desc = {
+		text = zofe_awakening.402.desc.b
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = awakened_fallen_empire }
+		}
+	}
+	
+	picture_event_data = {
+		portrait = event_target:fallen_empire_warner
+		planet_background = event_target:fallen_empire_warner
+		graphical_culture = event_target:fallen_empire_warner
+		city_level = event_target:fallen_empire_warner
+		room = event_target:fallen_empire_warner
+	}
+	
+	#Fallen Empire
+	option = {
+		name = zofe_awakening.402.a
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = fallen_empire }
+		}
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_fe_humiliation"
+			}
+		}
+	}
+	
+	#Awakened Fallen Empire
+	option = {
+		name = zofe_awakening.402.b
+		trigger = {
+			event_target:fallen_empire_warner = { is_country_type = awakened_fallen_empire }
+		}
+		event_target:fallen_empire_warner = {
+			declare_war = {
+				target = root
+				attacker_war_goal = "wg_ae_domination"
+			}
+		}
+	}
+}
+
+#Xenophobe Fallen Empire Wakes up
+country_event = {
+	id = zofe_awakening.403
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		
+		if = { 
+			limit = { is_country_type = fallen_empire }
+			
+			set_timed_country_flag = { flag = ai_no_wars days = 7200 }
+			
+			# Notify players
+			country_event = { id = fallen_empires_awakening.3 }
+			every_country = {
+				limit = {
+					is_ai = no		
+				}
+				country_event = { id = fallen_empires_awakening.2 }
+			}
+			observer_event = { id = observer.73 }
+		}
+		
+		if = { 
+			limit = { is_country_type = awakened_fallen_empire }
+			
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+		}
+	}
+}
+
+#Xenophobe Fallen Empire Scuttles surrendered fleets
+country_event = {
+	id = zofe_awakening.404
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		every_owned_fleet = {
+			limit = { has_fleet_flag = surrendered_fleet }
+			destroy_fleet = this
+		}
+	}
+}

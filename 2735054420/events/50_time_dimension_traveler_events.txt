@@ -1,0 +1,5142 @@
+
+namespace = dimension_traveler
+
+country_event = {
+	id = dimension_traveler.0
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_white_hole
+	}
+	
+	immediate = {
+		set_country_flag = first_meet_white_hole
+		capital_scope = {
+			add_deposit = d_white_hole
+			save_global_event_target_as = white_hole_home_planet
+			solar_system = {
+				set_name = "NAME_white_hole_5"
+			}
+		}
+	}
+}
+
+# 时之螶：旅者
+
+fleet_event = {
+	id = dimension_traveler.1
+	title = dimension_traveler.1.name
+	desc = dimension_traveler.1.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_alien_signal
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = { has_country_flag = worm_events_available }
+			NOT = { has_country_flag = first_meet_white_hole }
+			NOT = { has_origin = origin_white_hole }
+		}
+		solar_system = {
+			OR = {
+				is_star_class = sc_white_hole
+				is_star_class = sc_time_white_hole
+			}
+		}
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = first_meet_white_hole
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.1.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = dimension_traveler.2
+	title = dimension_traveler.2.name
+	desc = {
+		text = dimension_traveler.2.desc_1
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = first_meet_white_hole }
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.2.desc_2
+		trigger = {
+			owner = {
+				has_country_flag = first_meet_white_hole
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.2.desc_3
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+	}
+	picture = GFX_evt_wormhole
+	show_sound = event_alien_signal
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = worm_events_available
+			NOT = { has_country_flag = first_meet_dimension_traveler }
+		}
+		solar_system = {
+			is_star_class = sc_time_white_hole
+		}
+		OR = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+			solar_system = {
+				has_star_flag = time_white_hole_system
+			}
+		}
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = first_meet_dimension_traveler
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_time_white_hole
+				}
+				save_global_event_target_as = dimension_traveler_planet
+			}
+			save_global_event_target_as = dimension_traveler_system
+		}
+	}
+	
+	after = {
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = first_meet_white_hole }
+				}
+				set_country_flag = first_meet_white_hole
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.2.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+				is_homicidal = no
+			}
+		}
+		begin_event_chain = {
+			event_chain = DIMENSION_TRAVELER_CHAIN_1
+			target = root.owner
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_1
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = first_meet_white_hole }
+				}
+				add_monthly_resource_mult = {
+					resource = physics_research
+					value = @tier3researchreward
+					min = @tier3researchmin
+					max = @tier3researchmax
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.2.b
+		trigger = {
+			owner = {
+				OR = {
+					NOT = { has_origin = origin_white_hole }
+					is_homicidal = yes
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+			if = {
+				limit = {
+					NOT = { has_country_flag = first_meet_white_hole }
+				}
+				add_monthly_resource_mult = {
+					resource = physics_research
+					value = @tier3researchreward
+					min = @tier3researchmin
+					max = @tier3researchmax
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.2.c
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+				is_homicidal = no
+			}
+		}
+		begin_event_chain = {
+			event_chain = DIMENSION_TRAVELER_CHAIN_1
+			target = root.owner
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_1
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = dimension_traveler.3
+	title = dimension_traveler.3.name
+	desc = dimension_traveler.3.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_alien_signal
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		leader = {
+			add_experience = 100
+		}
+	}
+	
+	after = {
+		tooltip = {
+			leader = {
+				add_experience = 100
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.3.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_2
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.3.b
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+		owner = {
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.3.c
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_2
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = dimension_traveler.4
+	title = dimension_traveler.4.name
+	desc = dimension_traveler.4.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_alien_signal
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		leader = {
+			add_experience = 100
+		}
+	}
+	
+	after = {
+		tooltip = {
+			leader = {
+				add_experience = 100
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.4.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_3
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.4.b
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+		owner = {
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.4.c
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_3
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = dimension_traveler.5
+	title = dimension_traveler.5.name
+	desc = dimension_traveler.5.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_alien_signal
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		leader = {
+			add_experience = 200
+		}
+	}
+	
+	after = {
+		tooltip = {
+			leader = {
+				add_experience = 200
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.5.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_4
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.5.b
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+		owner = {
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier2influencereward
+				min = @tier2influencemin
+				max = @tier2influencemax
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.5.c
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_4
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = dimension_traveler.6
+	title = dimension_traveler.6.name
+	desc = dimension_traveler.6.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_alien_signal
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		destroy_fleet = {
+			target = root
+			kill_leader = yes
+		}
+	}
+	
+	after = {
+		tooltip = {
+			destroy_fleet = {
+				target = root
+				kill_leader = yes
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.6.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_5
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.6.b
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+		owner = {
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.6.c
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = DIMENSION_TRAVELER_PROJECT_5
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+fleet_event = {
+	id = dimension_traveler.7
+	title = dimension_traveler.7.name
+	desc = dimension_traveler.7.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_alien_signal
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		save_global_event_target_as = dimension_traveler_fleet_1
+		set_event_locked = yes
+		leader = {
+			add_experience = 300
+			save_global_event_target_as = time_white_hole_leader
+			exile_leader_as = time_white_hole_leader
+		}
+	}
+	
+	after = {
+		tooltip = {
+			leader = {
+				add_experience = 300
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.7.a
+		custom_tooltip = "dimension_traveler.7.a.tooltip"
+		hidden_effect = {
+			create_species = {
+				name = "NAME_Dimension_Traveler"
+				class = HUM
+				namelist = TIME0
+				portrait = dimension_traveler_portrait
+				homeworld = event_target:dimension_traveler_planet
+				traits = {
+					trait = "trait_dimension_traveler"
+				}
+				gender = female
+				immortal = yes
+				
+				effect = { save_global_event_target_as = dimension_traveler_species }
+			}
+			create_country = {
+				name = "NAME_Dimension_Traveler"
+				type = dimension_traveler
+				species = last_created_species
+				flag = {
+					icon={
+						category="domination"
+						file="domination_13.dds"
+					}
+					background={
+						category="backgrounds"
+						file="triangle_split.dds"
+					}
+					colors={
+						"white"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				save_global_event_target_as = dimension_traveler_country
+			}
+			owner = {
+				country_event = { id = dimension_traveler.8 }
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.7.b
+		custom_tooltip = "dimension_traveler.7.b.tooltip"
+		hidden_effect = {
+			create_species = {
+				name = "NAME_Dimension_Traveler"
+				class = MAM
+				namelist = TIME0
+				portrait = mam3
+				homeworld = event_target:dimension_traveler_planet
+				traits = {
+					trait = "trait_dimension_traveler"
+				}
+				gender = female
+				immortal = yes
+				
+				effect = { save_global_event_target_as = dimension_traveler_species }
+			}
+			create_country = {
+				name = "NAME_Dimension_Traveler"
+				type = dimension_traveler
+				species = last_created_species
+				flag = {
+					icon={
+						category="blocky"
+						file="flag_blocky_5.dds"
+					}
+					background={
+						category="backgrounds"
+						file="horizontal.dds"
+					}
+					colors={
+						"white"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				save_global_event_target_as = dimension_traveler_country
+			}
+			owner = {
+				country_event = { id = dimension_traveler.8 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.8
+	title = dimension_traveler.name
+	desc = dimension_traveler.8.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.8.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.9 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.9
+	title = dimension_traveler.name
+	desc = dimension_traveler.9.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.9.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.10 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.10
+	title = dimension_traveler.name
+	desc = dimension_traveler.10.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.10.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.11 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.11
+	title = dimension_traveler.name
+	desc = dimension_traveler.11.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.11.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.12 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.12
+	title = dimension_traveler.name
+	desc = dimension_traveler.12.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.12.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.13 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.13
+	title = dimension_traveler.name
+	desc = dimension_traveler.13.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.13.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.14 }
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.13.b
+		hidden_effect = {
+			country_event = { id = dimension_traveler.15 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.14
+	title = dimension_traveler.name
+	desc = dimension_traveler.14.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = event_dimension_traveler_14
+	}
+	
+	after = {
+		hidden_effect = {
+			remove_global_flag = event_dimension_traveler_14
+		}
+	}
+
+	option = {
+		name = dimension_traveler.14.a
+		if = {
+			limit = {
+				NOT = { has_global_flag = event_dimension_traveler_true }
+			}
+			start_situation = {
+				type = situation_dimension_traveler_1
+				target = event_target:dimension_traveler_fleet_1
+				effect = {
+					set_situation_approach = approach_dimension_traveler_nature_0
+				}
+			}
+		}
+		else = {
+			start_situation = {
+				type = situation_dimension_traveler_true
+				target = event_target:dimension_traveler_fleet_1
+				effect = {
+					set_situation_approach = approach_dimension_traveler_true
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.15
+	title = dimension_traveler.name
+	desc = dimension_traveler.15.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.15.a
+		custom_tooltip = "dimension_traveler.15.a.tooltip"
+		hidden_effect = {
+			event_target:dimension_traveler_fleet_1 = {
+				fleet_event = { id = dimension_traveler.16 days = 30 }
+			}
+		}
+	}
+}
+
+# 遗憾结局（永不再见）
+fleet_event = {
+	id = dimension_traveler.16
+	title = dimension_traveler.16.name
+	desc = dimension_traveler.16.desc
+	picture = GFX_evt_vortex
+	show_sound = event_alien_signal_04
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		set_event_locked = no
+		set_leader = event_target:time_white_hole_leader
+	}
+	
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier5researchreward
+				min = @tier5researchmin
+				max = @tier5researchmax
+			}
+			hidden_effect = {
+				set_country_flag = time_akx_dimension_traveler_end_1
+				create_message = {
+					type = DIMENSION_TRAVELER_END_1
+					localization = DIMENSION_TRAVELER_END_1_DESC
+					days = 30
+					target = event_target:dimension_traveler_planet
+				}
+			}
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.16.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.16.b
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		event_target:white_hole_home_planet = {
+			remove_deposit = d_white_hole
+			add_deposit = d_white_hole_2
+			hidden_effect = {
+				set_planet_flag = white_hole_2
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.20
+	title = dimension_traveler.20.name
+	desc = dimension_traveler.20.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_ship_thrusters
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_approach = approach_dimension_traveler_nature
+		set_situation_locked = yes
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = dimension_traveler.20.a
+		icon = {
+			icon = GFX_situation_approach_fleet
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		tooltip = {
+			set_situation_approach = approach_dimension_traveler_out
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_dimension_traveler_2
+					target = root.target
+					effect = {
+						set_situation_approach = approach_dimension_traveler_out
+						add_situation_progress = 20
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.20.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		tooltip = {
+			set_situation_approach = approach_dimension_traveler_nature
+		}
+		hidden_effect = {
+			owner = {
+				start_situation = {
+					type = situation_dimension_traveler_2
+					target = root.target
+					effect = {
+						set_situation_approach = approach_dimension_traveler_nature
+						add_situation_progress = 20
+					}
+				}
+			}
+			destroy_situation = this
+		}
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.21
+	title = dimension_traveler.21.name
+	desc = dimension_traveler.21.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_ship_thrusters
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = dimension_traveler_1
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = dimension_traveler.21.a
+		icon = {
+			icon = GFX_situation_approach_fleet
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		set_situation_approach = approach_dimension_traveler_out
+	}
+	
+	option = {
+		name = dimension_traveler.21.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		set_situation_approach = approach_dimension_traveler_nature
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.22
+	title = dimension_traveler.22.name
+	desc = dimension_traveler.22.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_ship_thrusters
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = dimension_traveler_2
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = dimension_traveler.22.a
+		icon = {
+			icon = GFX_situation_approach_fleet
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		set_situation_approach = approach_dimension_traveler_out
+	}
+	
+	option = {
+		name = dimension_traveler.22.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		set_situation_approach = approach_dimension_traveler_nature
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.23
+	title = dimension_traveler.23.name
+	desc = dimension_traveler.23.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_ship_thrusters
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_flag = dimension_traveler_3
+		owner = {
+			country_event = { id = dimension_traveler.24 days = 121 }
+		}
+	}
+	
+	after = {
+	}
+	
+	option = {
+		name = dimension_traveler.23.a
+		icon = {
+			icon = GFX_situation_approach_fleet
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		set_situation_approach = approach_dimension_traveler_out
+	}
+	
+	option = {
+		name = dimension_traveler.23.b
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		set_situation_approach = approach_dimension_traveler_nature
+	}
+}
+
+country_event = {
+	id = dimension_traveler.24
+	title = dimension_traveler.name
+	desc = dimension_traveler.24.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+	
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_dimension_traveler_2
+			}
+			set_situation_locked = yes
+		}
+	}
+	
+	after = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_dimension_traveler_2
+			}
+			set_situation_locked = no
+		}
+	}
+
+	option = {
+		name = dimension_traveler.24.a
+		random_situation = {
+			limit = {
+				is_situation_type = situation_dimension_traveler_2
+			}
+			if = {
+				limit = {
+					NOT = { current_situation_approach = approach_dimension_traveler_out }
+				}
+				set_situation_approach = approach_dimension_traveler_out
+			}
+		}
+		hidden_effect = {
+			country_event = { id = dimension_traveler.25 days = 150 }
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.24.b
+		hidden_effect = {
+			random_situation = {
+				limit = {
+					is_situation_type = situation_dimension_traveler_2
+				}
+				set_situation_flag = dimension_traveler_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.25
+	title = dimension_traveler.name
+	desc = dimension_traveler.25.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+	
+	immediate = {
+		random_situation = {
+			limit = {
+				is_situation_type = situation_dimension_traveler_2
+			}
+			set_situation_locked = yes
+		}
+		play_sound = time_dimension_traveler
+	}
+
+	option = {
+		name = dimension_traveler.25.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.26 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.26
+	title = dimension_traveler.name
+	desc = dimension_traveler.26.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.26.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.27 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.27
+	title = dimension_traveler.name
+	desc = dimension_traveler.27.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.27.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.28 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.28
+	title = dimension_traveler.name
+	desc = dimension_traveler.28.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.28.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.29 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.29
+	title = dimension_traveler.name
+	desc = dimension_traveler.29.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.29.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.30 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.30
+	title = dimension_traveler.name
+	desc = dimension_traveler.30.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.30.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.31 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.31
+	title = dimension_traveler.name
+	desc = dimension_traveler.31.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.31.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.32 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.32
+	title = dimension_traveler.name
+	desc = dimension_traveler.32.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.32.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.33 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.33
+	title = dimension_traveler.name
+	desc = dimension_traveler.33.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.33.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.34 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.34
+	title = dimension_traveler.name
+	desc = dimension_traveler.34.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.34.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.35 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.35
+	title = dimension_traveler.name
+	desc = dimension_traveler.35.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		any_situation = {
+			is_situation_type = situation_dimension_traveler_2
+		}
+	}
+
+	option = {
+		name = dimension_traveler.35.a
+		hidden_effect = {
+			random_situation = {
+				limit = {
+					is_situation_type = situation_dimension_traveler_2
+				}
+				situation_event = { id = dimension_traveler.43 }
+			}
+		}
+	}
+}
+
+# 坠毁结局（毁灭）
+situation_event = {
+	id = dimension_traveler.41
+	title = dimension_traveler.41.name
+	desc = dimension_traveler.41.desc
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		target = {
+			set_leader = event_target:time_white_hole_leader
+		}
+		destroy_fleet = {
+			target = target
+			kill_leader = yes
+		}
+	}
+	
+	after = {
+		tooltip = {
+			destroy_fleet = {
+				target = target
+				kill_leader = yes
+			}
+		}
+		owner = {
+			hidden_effect = {
+				set_country_flag = time_akx_dimension_traveler_end_2
+				create_message = {
+					type = DIMENSION_TRAVELER_END_2
+					localization = DIMENSION_TRAVELER_END_2_DESC
+					days = 30
+					target = event_target:dimension_traveler_planet
+				}
+			}
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+		}
+		destroy_situation = this
+	}
+	
+	option = {
+		name = dimension_traveler.41.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.41.b
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		event_target:white_hole_home_planet = {
+			remove_deposit = d_white_hole
+			add_deposit = d_white_hole_1
+			hidden_effect = {
+				set_planet_flag = white_hole_1
+			}
+		}
+	}
+}
+
+# 幸存结局（终结）
+situation_event = {
+	id = dimension_traveler.42
+	title = dimension_traveler.42.name
+	desc = dimension_traveler.42.desc
+	picture = GFX_evt_ship_travel
+	show_sound = event_alien_signal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		target = {
+			set_event_locked = no
+			set_leader = event_target:time_white_hole_leader
+		}
+	}
+	
+	after = {
+		event_target:dimension_traveler_planet = {
+			hidden_effect = {
+				clear_deposits = yes
+			}
+			add_deposit = d_physics_10
+			add_deposit = d_society_10
+			add_deposit = d_engineering_10
+		}
+		owner = {
+			hidden_effect = {
+				set_country_flag = time_akx_dimension_traveler_end_3
+				create_message = {
+					type = DIMENSION_TRAVELER_END_3
+					localization = DIMENSION_TRAVELER_END_3_DESC
+					days = 30
+					target = event_target:dimension_traveler_planet
+				}
+			}
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+		}
+		destroy_situation = this
+	}
+	
+	option = {
+		name = dimension_traveler.42.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.42.b
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		event_target:white_hole_home_planet = {
+			remove_deposit = d_white_hole
+			add_deposit = d_white_hole_3
+			hidden_effect = {
+				set_planet_flag = white_hole_3
+			}
+		}
+	}
+}
+
+# 再见结局（原点）
+situation_event = {
+	id = dimension_traveler.43
+	title = dimension_traveler.43.name
+	desc = dimension_traveler.43.desc
+	picture = GFX_evt_supernova
+	show_sound = event_super_explosion
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			country_event = { id = dimension_traveler.44 days = 3600 }
+			set_country_flag = dimension_traveler_black_hole_end
+		}
+	}
+	
+	after = {
+		target = {
+			set_mia = mia_return_home
+		}
+		event_target:dimension_traveler_planet = {
+			change_pc = pc_black_hole
+		}
+		hidden_effect = {
+			target = {
+				set_event_locked = no
+				set_leader = event_target:time_white_hole_leader
+			}
+			event_target:dimension_traveler_planet = {
+				clear_deposits = yes
+				add_deposit = d_dark_matter_deposit_10
+				create_ambient_object = {
+					type = "star_explosion"
+					play_animation_once = yes
+					location = this
+				}
+				solar_system = {
+					set_star_class = sc_black_hole
+				}
+			}
+		}
+		owner = {
+			hidden_effect = {
+				set_country_flag = time_akx_dimension_traveler_end_4
+				create_message = {
+					type = DIMENSION_TRAVELER_END_4
+					localization = DIMENSION_TRAVELER_END_4_DESC
+					days = 30
+					target = event_target:dimension_traveler_planet
+				}
+			}
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+		}
+		destroy_situation = this
+	}
+	
+	option = {
+		name = dimension_traveler.43.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.43.b
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		event_target:white_hole_home_planet = {
+			remove_deposit = d_white_hole
+			add_deposit = d_white_hole_4
+			hidden_effect = {
+				set_planet_flag = white_hole_4
+			}
+		}
+	}
+}
+
+# 时之螶：再见
+
+country_event = {
+	id = dimension_traveler.44
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	immediate = {
+		begin_event_chain = {
+			event_chain = DIMENSION_TRAVELER_CHAIN_2
+			target = root
+		}
+		event_target:dimension_traveler_system = {
+			if = {
+				limit = {
+					any_fleet_in_system = {
+						is_owned_by = root
+					}
+				}
+				random_fleet_in_system = {
+					limit = {
+						is_owned_by = root
+					}
+					fleet_event = { id = dimension_traveler.50 }
+				}
+			}
+		}
+	}
+}
+
+# 视界边缘
+fleet_event = {
+	id = dimension_traveler.50
+	title = dimension_traveler.50.name
+	desc = dimension_traveler.50.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	location = root.star
+	
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_event_chain = DIMENSION_TRAVELER_CHAIN_2
+			NOT = { has_country_flag = second_meet_white_hole }
+		}
+		solar_system = {
+			is_same_value = event_target:dimension_traveler_system
+		}
+	}
+	
+	immediate = {
+		owner = {
+			set_country_flag = second_meet_white_hole
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.50.a
+		star = {
+			add_anomaly = {
+				category = dimension_traveler_categories
+				target = root.owner
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.50.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier3influencereward
+				min = @tier3influencemin
+				max = @tier3influencemax
+			}
+			hidden_effect = {
+				end_event_chain = DIMENSION_TRAVELER_CHAIN_2
+			}
+		}
+	}
+}
+
+# 终会再见
+ship_event = {
+	id = dimension_traveler.51
+	title = dimension_traveler.51.name
+	desc = dimension_traveler.51.desc
+	picture = GFX_evt_clocks
+	is_triggered_only = yes
+	location = FROMFROMFROM
+
+	immediate = {
+		create_fleet = {
+			name = "NAME_Traveler"
+			effect = {
+				create_ship = {
+					name = "NAME_Traveler"
+					design = "NAME_Traveler"
+					graphical_culture = "extra_dimensional_01"
+					prefix = no
+					upgradable = no
+				}
+				set_owner = event_target:dimension_traveler_country
+				set_location = event_target:dimension_traveler_planet
+				save_global_event_target_as = dimension_traveler_fleet_2
+				set_event_locked = yes
+			}
+		}
+	}
+
+	option = {
+		name = dimension_traveler.51.a
+		hidden_effect = {
+			owner = {
+				country_event = { id = dimension_traveler.52 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.52
+	title = dimension_traveler.name.2
+	desc = dimension_traveler.52.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	option = {
+		name = dimension_traveler.52.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.53 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.53
+	title = dimension_traveler.name.2
+	desc = dimension_traveler.53.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	option = {
+		name = dimension_traveler.53.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.54 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.54
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.54.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+
+	option = {
+		name = dimension_traveler.54.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.55 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.55
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.55.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	after = {
+		hidden_effect = {
+			country_event = { id = dimension_traveler.56 }
+		}
+	}
+
+	option = {
+		name = dimension_traveler.55.a
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.55.b
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.55.c
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.55.d
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier3unityreward
+			min = @tier3unitymin
+			max = @tier3unitymax
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.56
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.56.desc
+	show_sound = dimension_traveler_normal
+
+	diplomatic = yes
+	force_open = yes
+	
+	event_window_type = leader_recruit
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+		room = "crisis_room"
+	}
+	picture = GFX_leader_recruitment_bg_legendary_keides
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_dimension_traveler_event_portrait = yes
+		if = {
+			limit = {
+				event_target:dimension_traveler_species = { is_species_class = HUM }
+			}
+			event_target:dimension_traveler_portrait_leader = {
+				change_leader_portrait = dimension_traveler_event_portrait
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.56.a
+		is_dialog_only = yes
+		response_text = dimension_traveler.56.a.response
+	}
+	
+	option = {
+		name = dimension_traveler.56.b
+		is_dialog_only = yes
+		response_text = dimension_traveler.56.b.response
+	}
+
+	option = {
+		name = dimension_traveler.56.hire
+		tag = hire_leader
+		custom_tooltip = dimension_traveler.56.hire.tooltip
+		hidden_effect = {
+			country_event = { id = dimension_traveler.57 }
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.56.dismiss
+		tag = dismiss_leader
+		custom_tooltip = dimension_traveler.56.dismiss.tooltip
+		hidden_effect = {
+			country_event = { id = dimension_traveler.58 }
+		}
+	}
+}
+
+# 接受界旅者
+country_event = {
+	id = dimension_traveler.57
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.57.desc
+	
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	after = {
+		hidden_effect = {
+			event_target:dimension_traveler_country = {
+				establish_communications_no_message = root
+			}
+			event_target:dimension_traveler_fleet_2 = {
+				set_owner = root
+				set_event_locked = no
+			}
+			save_global_event_target_as = dimension_traveler_owner
+			add_opinion_modifier = {
+				modifier = opinion_dimension_traveler
+				who = event_target:dimension_traveler_country
+			}
+			add_opinion_modifier = {
+				modifier = opinion_dimension_traveler
+				who = event_target:dimension_traveler_country
+			}
+			set_variable = {
+				which = dimension_traveler_level
+				value = 1
+			}
+			set_variable = {
+				which = dimension_traveler_experience
+				value = 0
+			}
+		}
+	}
+
+	option = {
+		name = dimension_traveler.57.a
+		response_text = dimension_traveler.57.response
+		trigger = {
+			NOT = { has_origin = origin_white_hole }
+		}
+		hidden_effect = {
+			set_country_flag = time_akx_dimension_traveler_end_5
+			create_message = {
+				type = DIMENSION_TRAVELER_END_5
+				localization = DIMENSION_TRAVELER_END_5_DESC
+				days = 30
+				target = event_target:dimension_traveler_planet
+			}
+		}
+		end_event_chain = DIMENSION_TRAVELER_CHAIN_2
+	}
+	
+	option = {
+		name = dimension_traveler.57.b
+		response_text = dimension_traveler.57.response
+		trigger = {
+			has_origin = origin_white_hole
+		}
+		if = {
+			limit = {
+				is_gestalt = no
+			}
+			force_add_civic = civic_origin_white_hole
+		}
+		else = {
+			force_add_civic = civic_origin_white_hole_gestalt
+		}
+		event_target:white_hole_home_planet = {
+			remove_deposit = d_white_hole_4
+			add_deposit = d_white_hole_5
+			hidden_effect = {
+				remove_planet_flag = white_hole_4
+				set_planet_flag = white_hole_5
+			}
+		}
+		hidden_effect = {
+			set_country_flag = time_akx_dimension_traveler_end_5
+			create_message = {
+				type = DIMENSION_TRAVELER_END_5
+				localization = DIMENSION_TRAVELER_END_5_DESC
+				days = 30
+				target = event_target:dimension_traveler_planet
+			}
+		}
+		end_event_chain = DIMENSION_TRAVELER_CHAIN_2
+	}
+}
+
+# 拒绝界旅者
+country_event = {
+	id = dimension_traveler.58
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.58.desc
+	
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	after = {
+		hidden_effect = {
+			event_target:dimension_traveler_fleet_2 = {
+				delete_fleet = this
+			}
+		}
+	}
+
+	option = {
+		name = dimension_traveler.58.a
+		trigger = {
+			NOT = { has_origin = origin_white_hole }
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = @tier3influencereward
+			min = @tier3influencemin
+			max = @tier3influencemax
+		}
+		end_event_chain = DIMENSION_TRAVELER_CHAIN_2
+	}
+	
+	option = {
+		name = dimension_traveler.58.b
+		trigger = {
+			has_origin = origin_white_hole
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = @tier4influencereward
+			min = @tier4influencemin
+			max = @tier4influencemax
+		}
+		end_event_chain = DIMENSION_TRAVELER_CHAIN_2
+	}
+}
+
+# 触发通讯
+country_event = {
+	id = dimension_traveler.59
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		from = { is_country_type = dimension_traveler }
+		is_same_value = event_target:dimension_traveler_owner
+		NOT = { has_country_flag = dimension_traveler_returning }
+		NOT = { has_country_flag = dimension_traveler_diplomacy_engaged }
+		OR = {
+			any_owned_leader = {
+				is_dimension_traveler = yes
+			}
+			NOR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+		}
+	}
+	
+	immediate = {
+		country_event = { id = dimension_traveler.60 }
+	}
+}
+
+# 正常时界面
+country_event = {
+	id = dimension_traveler.60
+	title = dimension_traveler.name.3
+	desc = {
+		text = dimension_traveler.60.desc
+		trigger = {
+			NOR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_a
+		trigger = {
+			has_country_flag = dimension_traveler_governor_active
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_b
+		trigger = {
+			has_country_flag = dimension_traveler_scientist_active
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_c
+		trigger = {
+			has_country_flag = dimension_traveler_admiral_active
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_d
+		trigger = {
+			has_country_flag = dimension_traveler_general_active
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_e
+		trigger = {
+			OR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_f
+		trigger = {
+			OR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_g
+		trigger = {
+			OR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+			NOT = { has_country_flag = dimension_traveler_end }
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_g_end
+		trigger = {
+			OR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+			has_country_flag = dimension_traveler_end
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_h
+		trigger = {
+			OR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_i
+		trigger = {
+			OR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.60.desc_egg
+		trigger = {
+			OR = {
+				has_country_flag = dimension_traveler_governor_active
+				has_country_flag = dimension_traveler_scientist_active
+				has_country_flag = dimension_traveler_admiral_active
+				has_country_flag = dimension_traveler_general_active
+			}
+		}
+	}
+	show_sound = dimension_traveler_normal
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = dimension_traveler_diplomacy_engaged }
+			}
+			set_country_flag = dimension_traveler_diplomacy_engaged
+		}
+		set_dimension_traveler_event_portrait = yes
+		remove_country_flag = has_play_dimension_traveler_response_sound
+	}
+	
+	after = {
+		hidden_effect = {
+			play_dimension_traveler_response_sound = yes
+			if = {
+				limit = {
+					has_country_flag = dimension_traveler_governor_active
+				}
+				event_target:dimension_traveler_governor = {
+					remove_dimension_traveler_gle_other_trait = yes
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = dimension_traveler_admiral_active
+				}
+				event_target:dimension_traveler_admiral = {
+					dimension_traveler_als_effect = yes
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.60.a
+		response_text = dimension_traveler.60.a.response
+		trigger = {
+			NOT = { has_country_flag = dimension_traveler_governor_active }
+		}
+		custom_tooltip = dimension_traveler.60.a.tooltip
+		hidden_effect = {
+			create_dimension_traveler_leader = { CLASS = governor }
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.60.b
+		response_text = dimension_traveler.60.b.response
+		trigger = {
+			NOT = { has_country_flag = dimension_traveler_scientist_active }
+		}
+		custom_tooltip = dimension_traveler.60.b.tooltip
+		hidden_effect = {
+			create_dimension_traveler_leader = { CLASS = scientist }
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.60.c
+		response_text = dimension_traveler.60.c.response
+		trigger = {
+			NOT = { has_country_flag = dimension_traveler_admiral_active }
+		}
+		custom_tooltip = dimension_traveler.60.c.tooltip
+		hidden_effect = {
+			create_dimension_traveler_leader = { CLASS = admiral }
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.60.d
+		response_text = dimension_traveler.60.d.response
+		trigger = {
+			NOT = { has_country_flag = dimension_traveler_general_active }
+		}
+		custom_tooltip = dimension_traveler.60.d.tooltip
+		hidden_effect = {
+			create_dimension_traveler_leader = { CLASS = general }
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.60.governor
+		trigger = {
+			has_country_flag = dimension_traveler_governor_active
+			OR = {
+				any_owned_leader = {
+					has_leader_flag = gle_leader
+				}
+				has_country_flag = dimension_traveler_gle
+			}
+		}
+		custom_tooltip = dimension_traveler.60.governor.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = dimension_traveler_gle }
+				}
+				set_country_flag = dimension_traveler_gle
+			}
+			country_event = { id = dimension_traveler.110 }
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.60.scientist
+		trigger = {
+			has_country_flag = dimension_traveler_scientist_active
+			OR = {
+				any_owned_leader = {
+					has_leader_flag = sls_have_traits
+				}
+				has_country_flag = dimension_traveler_sls
+			}
+			event_target:dimension_traveler_scientist = {
+				has_skill >= 5
+			}
+		}
+		custom_tooltip = dimension_traveler.60.scientist.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = dimension_traveler_sls }
+				}
+				set_country_flag = dimension_traveler_sls
+			}
+			country_event = { id = dimension_traveler.120 }
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.60.e
+		response_text = dimension_traveler.60.e.response
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+}
+
+# 回归时界面
+country_event = {
+	id = dimension_traveler.61
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.61.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		from = { is_country_type = dimension_traveler }
+		is_same_value = event_target:dimension_traveler_owner
+		has_country_flag = dimension_traveler_returning
+		NOT = { has_country_flag = dimension_traveler_diplomacy_engaged }
+	}
+	
+	immediate = {
+		set_dimension_traveler_event_portrait = yes
+		set_country_flag = dimension_traveler_diplomacy_engaged
+	}
+
+	option = {
+		name = dimension_traveler.61.a
+		response_text = dimension_traveler.61.a.response
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+}
+
+# 紧急时空跃迁（死亡）
+country_event = {
+	id = dimension_traveler.62
+	title = dimension_traveler.62.name
+	desc = dimension_traveler.62.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_yellow_alert
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			# 必须与旗帜对应，避免因切换而触发
+			AND = {
+				has_country_flag = dimension_traveler_governor_active
+				from = { is_same_value = event_target:dimension_traveler_governor }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_scientist_active
+				from = { is_same_value = event_target:dimension_traveler_scientist }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_admiral_active
+				from = { is_same_value = event_target:dimension_traveler_admiral }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_general_active
+				from = { is_same_value = event_target:dimension_traveler_general }
+			}
+		}
+		NOT = { has_country_flag = dimension_traveler_returning }
+	}
+	
+	immediate = {
+		set_country_flag = dimension_traveler_returning
+		remove_country_flag = dimension_traveler_governor_active
+		remove_country_flag = dimension_traveler_scientist_active
+		remove_country_flag = dimension_traveler_admiral_active
+		remove_country_flag = dimension_traveler_general_active
+		from = {
+			check_dimension_traveler_level = yes
+		}
+		country_event = { id = dimension_traveler.63 days = 720 random = 2880 }
+	}
+
+	option = {
+		name = dimension_traveler.62.a
+	}
+}
+
+# 界旅者回归
+country_event = {
+	id = dimension_traveler.63
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.63.desc
+	
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_dimension_traveler_event_portrait = yes
+		remove_country_flag = dimension_traveler_returning
+		set_country_flag = dimension_traveler_diplomacy_engaged
+	}
+
+	option = {
+		name = dimension_traveler.63.a
+		response_text = dimension_traveler.63.a.response
+		default_hide_option = yes
+		hidden_effect = {
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+}
+
+# 界旅者升级
+country_event = {
+	id = dimension_traveler.64
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		from = {
+			is_dimension_traveler = yes
+		}
+	}
+	
+	immediate = {
+		from = {
+			check_dimension_traveler_level = yes
+			dimension_traveler_level_up = yes
+		}
+	}
+}
+
+# 紧急时空跃迁（月度检测）
+country_event = {
+	id = dimension_traveler.65
+	title = dimension_traveler.65.name
+	desc = dimension_traveler.65.desc
+	picture = GFX_evt_wormhole
+	show_sound = event_yellow_alert
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			# 必须与旗帜对应，避免因切换而触发
+			AND = {
+				has_country_flag = dimension_traveler_governor_active
+				NOT = { exists = event_target:dimension_traveler_governor }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_scientist_active
+				NOT = { exists = event_target:dimension_traveler_scientist }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_admiral_active
+				NOT = { exists = event_target:dimension_traveler_admiral }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_general_active
+				NOT = { exists = event_target:dimension_traveler_general }
+			}
+		}
+		NOT = { has_country_flag = dimension_traveler_returning }
+	}
+	
+	immediate = {
+		set_country_flag = dimension_traveler_returning
+		remove_country_flag = dimension_traveler_governor_active
+		remove_country_flag = dimension_traveler_scientist_active
+		remove_country_flag = dimension_traveler_admiral_active
+		remove_country_flag = dimension_traveler_general_active
+		country_event = { id = dimension_traveler.63 days = 720 random = 2880 }
+	}
+
+	option = {
+		name = dimension_traveler.65.a
+	}
+}
+
+# 刷新界旅者（年度检测）
+country_event = {
+	id = dimension_traveler.66
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		is_same_value = event_target:dimension_traveler_owner
+		exists = event_target:dimension_traveler_leader
+	}
+	
+	immediate = {
+		event_target:dimension_traveler_leader = {
+			refresh_dimension_traveler = yes
+		}
+	}
+}
+
+# 解雇界旅者
+country_event = {
+	id = dimension_traveler.67
+	title = dimension_traveler.67.name
+	desc = dimension_traveler.67.desc
+	picture = GFX_evt_wormhole
+
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			# 必须与旗帜对应，避免因切换而触发
+			AND = {
+				has_country_flag = dimension_traveler_governor_active
+				from = { is_same_value = event_target:dimension_traveler_governor }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_scientist_active
+				from = { is_same_value = event_target:dimension_traveler_scientist }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_admiral_active
+				from = { is_same_value = event_target:dimension_traveler_admiral }
+			}
+			AND = {
+				has_country_flag = dimension_traveler_general_active
+				from = { is_same_value = event_target:dimension_traveler_general }
+			}
+		}
+		NOT = { has_country_flag = dimension_traveler_returning }
+	}
+	
+	immediate = {
+		remove_country_flag = dimension_traveler_governor_active
+		remove_country_flag = dimension_traveler_scientist_active
+		remove_country_flag = dimension_traveler_admiral_active
+		remove_country_flag = dimension_traveler_general_active
+		from = {
+			check_dimension_traveler_level = yes
+		}
+		set_country_flag = dimension_traveler_diplomacy_engaged
+	}
+
+	option = {
+		name = dimension_traveler.67.a
+		hidden_effect = {
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+}
+
+# 强制召回界旅者（防放逐）
+country_event = {
+	id = dimension_traveler.70
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.70.desc
+
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		room = "no_video_feed_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		from = { is_country_type = dimension_traveler }
+		is_same_value = event_target:dimension_traveler_owner
+		NOT = { has_country_flag = dimension_traveler_returning }
+		NOT = { has_country_flag = dimension_traveler_diplomacy_engaged }
+		OR = {
+			has_country_flag = dimension_traveler_governor_active
+			has_country_flag = dimension_traveler_scientist_active
+			has_country_flag = dimension_traveler_admiral_active
+			has_country_flag = dimension_traveler_general_active
+		}
+		NOT = {
+			any_owned_leader = {
+				is_dimension_traveler = yes
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = dimension_traveler_diplomacy_engaged
+	}
+	
+	after = {
+		hidden_effect = {
+			remove_country_flag = dimension_traveler_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = dimension_traveler.70.a
+		custom_tooltip = dimension_traveler.70.a.tooltip
+		hidden_effect = {
+			set_country_flag = dimension_traveler_returning
+			remove_country_flag = dimension_traveler_governor_active
+			remove_country_flag = dimension_traveler_scientist_active
+			remove_country_flag = dimension_traveler_admiral_active
+			remove_country_flag = dimension_traveler_general_active
+			if = {
+				limit = {
+					exists = event_target:dimension_traveler_leader
+				}
+				event_target:dimension_traveler_leader = {
+					check_dimension_traveler_level = yes
+					kill_leader = { show_notification = no }
+				}
+			}
+			country_event = { id = dimension_traveler.63 days = 720 random = 2880 }
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.70.b
+		default_hide_option = yes
+	}
+}
+
+# 天籁之音特殊地块保护机制
+planet_event = {
+	id = dimension_traveler.100
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_same_value = event_target:white_hole_home_planet
+		NOR = {
+			has_deposit = d_white_hole
+			has_deposit = d_white_hole_1
+			has_deposit = d_white_hole_2
+			has_deposit = d_white_hole_3
+			has_deposit = d_white_hole_4
+			has_deposit = d_white_hole_5
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_planet_flag = white_hole_5
+			}
+			add_deposit = d_white_hole_5
+		}
+		else_if = {
+			limit = {
+				has_planet_flag = white_hole_4
+			}
+			add_deposit = d_white_hole_4
+		}
+		else_if = {
+			limit = {
+				has_planet_flag = white_hole_3
+			}
+			add_deposit = d_white_hole_3
+		}
+		else_if = {
+			limit = {
+				has_planet_flag = white_hole_2
+			}
+			add_deposit = d_white_hole_2
+		}
+		else_if = {
+			limit = {
+				has_planet_flag = white_hole_1
+			}
+			add_deposit = d_white_hole_1
+		}
+		else = {
+			add_deposit = d_white_hole
+		}
+	}
+}
+
+# 时间原点
+country_event = {
+	id = dimension_traveler.200
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.200.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	immediate = {
+		play_sound = time_dimension_traveler_end
+		random_owned_planet = {
+			limit = {
+				is_variable_set = paragon_memory_vault
+			}
+			change_variable = {
+				which = paragon_memory_vault
+				value = 1
+			}
+		}
+	}
+
+	option = {
+		name = dimension_traveler.200.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.201 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.201
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.201.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.201.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.202 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.202
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.202.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.202.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.203 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.203
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.203.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.203.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.204 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.204
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.204.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.204.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.205 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.205
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.205.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.205.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.206 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.206
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.206.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.206.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.207 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.207
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.207.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.207.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.208 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.208
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.208.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.208.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.209 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.209
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.209.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.209.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.210 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.210
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.210.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.210.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.211 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.211
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.211.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.211.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.212 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.212
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.212.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.212.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.213 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.213
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.213.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = dimension_traveler.213.a
+		hidden_effect = {
+			country_event = { id = dimension_traveler.214 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.214
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.214.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			1 = {
+				country_event = { id = dimension_traveler.301 days = 720 random = 2880 }
+			}
+			1 = {
+				country_event = { id = dimension_traveler.302 days = 720 random = 2880 }
+			}
+			1 = {
+				country_event = { id = dimension_traveler.303 days = 720 random = 2880 }
+			}
+		}
+	}
+
+	option = {
+		name = dimension_traveler.214.a
+		response_text = dimension_traveler.214.a.response
+		hidden_effect = {
+			set_country_flag = time_akx_dimension_traveler_end_6
+			create_message = {
+				type = DIMENSION_TRAVELER_END_HIDE
+				localization = DIMENSION_TRAVELER_END_HIDE_DESC
+				days = 30
+				target = event_target:dimension_traveler_planet
+			}
+		}
+	}
+}
+
+# 世界线变动
+event = {
+	id = dimension_traveler.300
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		has_global_flag = event_dimension_traveler_14
+		NOT = { has_global_flag = event_dimension_traveler_true }
+	}
+	
+	immediate = {
+		set_global_flag = event_dimension_traveler_true
+	}
+}
+
+# 界旅者密码项目
+country_event = {
+	id = dimension_traveler.301
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = { has_policy_flag = horror_dimension_traveler }
+	}
+	
+	immediate = {
+		enable_special_project = {
+			name = DIMENSION_TRAVELER_PROJECT_END_1
+			location = root.capital_scope
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.302
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = { has_policy_flag = horror_dimension_traveler }
+	}
+	
+	immediate = {
+		enable_special_project = {
+			name = DIMENSION_TRAVELER_PROJECT_END_2
+			location = root.capital_scope
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.303
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = { has_policy_flag = horror_dimension_traveler }
+	}
+	
+	immediate = {
+		enable_special_project = {
+			name = DIMENSION_TRAVELER_PROJECT_END_3
+			location = root.capital_scope
+			owner = root
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.311
+	title = dimension_traveler.311.name
+	desc = {
+		text = dimension_traveler.311.desc_a
+		trigger = {
+			exists = event_target:dimension_traveler_leader
+			if = {
+				limit = {
+					is_gestalt = no
+				}
+				# 非格式塔需担任科研主管
+				event_target:dimension_traveler_leader = {
+					is_councilor_type = councilor_research
+				}
+			}
+			else = {
+				# 格式塔需管理首都
+				event_target:dimension_traveler_leader = {
+					exists = planet
+					planet = { is_capital = yes }
+				}
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.311.desc_b
+		trigger = {
+			NAND = {
+				exists = event_target:dimension_traveler_leader
+				if = {
+					limit = {
+						is_gestalt = no
+					}
+					# 非格式塔需担任科研主管
+					event_target:dimension_traveler_leader = {
+						is_councilor_type = councilor_research
+					}
+				}
+				else = {
+					# 格式塔需管理首都
+					event_target:dimension_traveler_leader = {
+						exists = planet
+						planet = { is_capital = yes }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_clocks
+	show_sound = event_activating_unknown_technology
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		set_country_flag = unlock_time_help_dimension_traveler_hide
+		begin_event_chain = {
+			event_chain = DIMENSION_TRAVELER_CHAIN_END_1
+			target = root
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.311.a
+	}
+}
+
+country_event = {
+	id = dimension_traveler.312
+	title = dimension_traveler.312.name
+	desc = {
+		text = dimension_traveler.312.desc_a
+		trigger = {
+			exists = event_target:dimension_traveler_leader
+			if = {
+				limit = {
+					is_gestalt = no
+				}
+				# 非格式塔需担任科研主管
+				event_target:dimension_traveler_leader = {
+					is_councilor_type = councilor_research
+				}
+			}
+			else = {
+				# 格式塔需管理首都
+				event_target:dimension_traveler_leader = {
+					exists = planet
+					planet = { is_capital = yes }
+				}
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.312.desc_b
+		trigger = {
+			NAND = {
+				exists = event_target:dimension_traveler_leader
+				if = {
+					limit = {
+						is_gestalt = no
+					}
+					# 非格式塔需担任科研主管
+					event_target:dimension_traveler_leader = {
+						is_councilor_type = councilor_research
+					}
+				}
+				else = {
+					# 格式塔需管理首都
+					event_target:dimension_traveler_leader = {
+						exists = planet
+						planet = { is_capital = yes }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_vortex
+	show_sound = event_activating_unknown_technology
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		set_country_flag = unlock_time_help_dimension_traveler_hide
+		begin_event_chain = {
+			event_chain = DIMENSION_TRAVELER_CHAIN_END_2
+			target = root
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.312.a
+	}
+}
+
+country_event = {
+	id = dimension_traveler.313
+	title = dimension_traveler.313.name
+	desc = {
+		text = dimension_traveler.313.desc_a
+		trigger = {
+			exists = event_target:dimension_traveler_leader
+			if = {
+				limit = {
+					is_gestalt = no
+				}
+				# 非格式塔需担任科研主管
+				event_target:dimension_traveler_leader = {
+					is_councilor_type = councilor_research
+				}
+			}
+			else = {
+				# 格式塔需管理首都
+				event_target:dimension_traveler_leader = {
+					exists = planet
+					planet = { is_capital = yes }
+				}
+			}
+		}
+	}
+	desc = {
+		text = dimension_traveler.313.desc_b
+		trigger = {
+			NAND = {
+				exists = event_target:dimension_traveler_leader
+				if = {
+					limit = {
+						is_gestalt = no
+					}
+					# 非格式塔需担任科研主管
+					event_target:dimension_traveler_leader = {
+						is_councilor_type = councilor_research
+					}
+				}
+				else = {
+					# 格式塔需管理首都
+					event_target:dimension_traveler_leader = {
+						exists = planet
+						planet = { is_capital = yes }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_supernova
+	show_sound = event_activating_unknown_technology
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		set_country_flag = unlock_time_help_dimension_traveler_hide
+		begin_event_chain = {
+			event_chain = DIMENSION_TRAVELER_CHAIN_END_3
+			target = root
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.313.a
+	}
+}
+
+# 超越因果
+situation_event = {
+	id = dimension_traveler.321
+	title = dimension_traveler.321.name
+	desc = dimension_traveler.321.desc
+	picture = GFX_evt_surreal_visions
+	show_sound = event_alien_signal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+		owner = {
+			set_dimension_traveler_event_portrait = yes
+		}
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = dimension_traveler.320.a
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_1_a
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.b
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_1_b
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.c
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_1_c
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.d
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_1_d
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.e
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_1_e
+		}
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.322
+	title = dimension_traveler.322.name
+	desc = dimension_traveler.322.desc
+	picture = GFX_evt_surreal_visions
+	show_sound = event_alien_signal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = dimension_traveler.320.a
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_2_a
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.b
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_2_b
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.c
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_2_c
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.d
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_2_d
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.e
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_2_e
+		}
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.323
+	title = dimension_traveler.323.name
+	desc = dimension_traveler.323.desc
+	picture = GFX_evt_surreal_visions
+	show_sound = event_alien_signal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	
+	after = {
+		set_situation_locked = no
+	}
+	
+	option = {
+		name = dimension_traveler.320.a
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_3_a
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.b
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_3_b
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.c
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_3_c
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.d
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_3_d
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.320.e
+		hidden_effect = {
+			set_situation_flag = dimension_traveler_true_3_e
+		}
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.324
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				has_situation_flag = dimension_traveler_true_1_c
+				has_situation_flag = dimension_traveler_true_2_e
+				has_situation_flag = dimension_traveler_true_3_b
+			}
+			situation_event = { id = dimension_traveler.325 }
+		}
+		else = {
+			set_situation_flag = dimension_traveler_false
+		}
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.325
+	title = dimension_traveler.325.name
+	desc = dimension_traveler.325.desc
+	picture = GFX_evt_surreal_visions
+	show_sound = event_alien_signal
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+	}
+
+	trigger = {
+	}
+
+	immediate = {
+		play_sound = time_dimension_traveler_true
+		set_situation_locked = yes
+	}
+	
+	after = {
+		save_global_event_target_as = situation_dimension_traveler_true
+		hidden_effect = {
+			owner = {
+				country_event = { id = dimension_traveler.326 }
+			}
+		}
+	}
+	
+	#故意五个相同的选项
+	option = {
+		name = dimension_traveler.325.a
+	}
+	
+	option = {
+		name = dimension_traveler.325.a
+	}
+	
+	option = {
+		name = dimension_traveler.325.a
+	}
+	
+	option = {
+		name = dimension_traveler.325.a
+	}
+	
+	option = {
+		name = dimension_traveler.325.a
+	}
+}
+
+country_event = {
+	id = dimension_traveler.326
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.326.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		hidden_effect = {
+			country_event = { id = dimension_traveler.327 }
+		}
+	}
+
+	option = {
+		name = dimension_traveler.326.a
+		icon = {
+			icon = GFX_situation_approach_heart
+			icon_background = GFX_situation_approach_bg_green
+			text = dimension_traveler_326_icon_text
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.326.b
+		icon = {
+			icon = GFX_situation_approach_heart
+			icon_background = GFX_situation_approach_bg_green
+			text = dimension_traveler_326_icon_text
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.327
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.327.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	after = {
+		event_target:situation_dimension_traveler_true = {
+			set_situation_locked = no
+		}
+	}
+
+	option = {
+		name = dimension_traveler.327.a
+		default_hide_option = yes
+		hidden_effect = {
+			set_country_flag = dimension_traveler_true_4
+			country_event = { id = dimension_traveler.340 days = 5 }
+		}
+	}
+}
+
+# 隐藏结局
+situation_event = {
+	id = dimension_traveler.330
+	title = dimension_traveler.330.name
+	desc = dimension_traveler.330.desc
+	picture = GFX_evt_supernova
+	show_sound = event_super_explosion
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+		destroy_fleet = {
+			target = target
+			kill_leader = yes
+		}
+	}
+	
+	after = {
+		tooltip = {
+			destroy_fleet = {
+				target = target
+				kill_leader = yes
+			}
+		}
+		event_target:dimension_traveler_planet = {
+			change_pc = pc_black_hole
+		}
+		hidden_effect = {
+			event_target:dimension_traveler_planet = {
+				clear_deposits = yes
+				add_deposit = d_dark_matter_deposit_10
+				create_ambient_object = {
+					type = "star_explosion"
+					play_animation_once = yes
+					location = this
+				}
+				solar_system = {
+					set_star_class = sc_black_hole
+				}
+			}
+		}
+		owner = {
+			hidden_effect = {
+				set_country_flag = time_akx_dimension_traveler_end_7
+				create_message = {
+					type = DIMENSION_TRAVELER_END_BAD
+					localization = DIMENSION_TRAVELER_END_BAD_DESC
+					days = 30
+					target = event_target:dimension_traveler_planet
+				}
+			}
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+		}
+		destroy_situation = this
+	}
+	
+	option = {
+		name = dimension_traveler.330.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.330.b
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		event_target:white_hole_home_planet = {
+			remove_deposit = d_white_hole
+			add_deposit = d_white_hole_4
+			hidden_effect = {
+				set_planet_flag = white_hole_4
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = dimension_traveler.331
+	title = dimension_traveler.331.name
+	desc = dimension_traveler.331.desc
+	picture = GFX_evt_vortex
+	show_sound = event_activating_unknown_technology
+	location = target
+	situation = this
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		set_situation_locked = yes
+		play_sound = time_dimension_traveler_true_end
+		target = {
+			set_event_locked = no
+			set_leader = event_target:time_white_hole_leader
+		}
+		owner = {
+			end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+			random_owned_planet = {
+				limit = {
+					is_variable_set = paragon_memory_vault
+				}
+				change_variable = {
+					which = paragon_memory_vault
+					value = 1
+				}
+			}
+		}
+	}
+	
+	after = {
+		tooltip = {
+			owner = {
+				end_event_chain = DIMENSION_TRAVELER_CHAIN_1
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					is_gestalt = yes
+				}
+			}
+			owner = {
+				if = {
+					limit = {
+						has_authority = auth_machine_intelligence
+					}
+					add_modifier = { modifier = dimension_traveler_horror_secret_true_modifier_machine_intelligence }
+				}
+				else = {
+					add_modifier = { modifier = dimension_traveler_horror_secret_true_modifier_hive_mind }
+				}
+			}
+		}
+		destroy_situation = this
+		hidden_effect = {
+			owner = {
+				country_event = { id = dimension_traveler.332 }
+			}
+			event_target:dimension_traveler_planet = {
+				clear_deposits = yes
+				add_deposit = d_zro_deposit_5
+				create_ambient_object = {
+					type = "star_explosion"
+					play_animation_once = yes
+					location = this
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.331.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_white_hole }
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.331.b
+		trigger = {
+			owner = {
+				has_origin = origin_white_hole
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					is_gestalt = no
+				}
+				force_add_civic = civic_origin_white_hole
+			}
+			else = {
+				force_add_civic = civic_origin_white_hole_gestalt
+			}
+		}
+		event_target:white_hole_home_planet = {
+			remove_deposit = d_white_hole
+			add_deposit = d_white_hole_5
+			hidden_effect = {
+				set_planet_flag = white_hole_5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.332
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.332.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.332.a
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = { id = dimension_traveler.333 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.333
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.333.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.333.a
+		default_hide_option = yes
+		hidden_effect = {
+			country_event = { id = dimension_traveler.334 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.334
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.334.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_country_flag = dimension_traveler_end
+	}
+	
+	after = {
+		hidden_effect = {
+			event_target:dimension_traveler_country = {
+				establish_communications_no_message = root
+			}
+			save_global_event_target_as = dimension_traveler_owner
+			add_opinion_modifier = {
+				modifier = opinion_dimension_traveler
+				who = event_target:dimension_traveler_country
+			}
+			add_opinion_modifier = {
+				modifier = opinion_dimension_traveler
+				who = event_target:dimension_traveler_country
+			}
+			set_variable = {
+				which = dimension_traveler_level
+				value = 5
+			}
+			set_variable = {
+				which = dimension_traveler_experience
+				value = 0
+			}
+			set_country_flag = dimension_traveler_trait_time_secret
+			set_country_flag = dimension_traveler_trait_circle_secret
+			set_country_flag = dimension_traveler_trait_dimension_secret
+		}
+	}
+
+	option = {
+		name = dimension_traveler.334.a
+		default_hide_option = yes
+		response_text = dimension_traveler.334.response
+		hidden_effect = {
+			set_country_flag = time_akx_dimension_traveler_end_8
+			create_message = {
+				type = DIMENSION_TRAVELER_END_TRUE
+				localization = DIMENSION_TRAVELER_END_TRUE_DESC
+				days = 30
+				target = event_target:dimension_traveler_planet
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.340
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.340.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.340.a
+		default_hide_option = yes
+		response_text = dimension_traveler.340.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.341 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.341
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.341.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.341.a
+		default_hide_option = yes
+		response_text = dimension_traveler.341.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.342 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.342
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.342.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.342.a
+		default_hide_option = yes
+		response_text = dimension_traveler.342.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.343 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.343
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.343.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.343.a
+		default_hide_option = yes
+		response_text = dimension_traveler.343.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.344 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.344
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.344.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.344.a
+		default_hide_option = yes
+		response_text = dimension_traveler.344.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.345 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.345
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.345.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.345.a
+		default_hide_option = yes
+		response_text = dimension_traveler.345.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.346 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.346
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.346.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.346.a
+		default_hide_option = yes
+		response_text = dimension_traveler.346.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.347 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.347
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.347.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.347.a
+		default_hide_option = yes
+		response_text = dimension_traveler.347.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.348 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.348
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.348.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.348.a
+		default_hide_option = yes
+		response_text = dimension_traveler.348.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.349 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.349
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.349.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.349.a
+		default_hide_option = yes
+		response_text = dimension_traveler.349.response
+		hidden_effect = {
+			country_event = { id = dimension_traveler.350 days = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = dimension_traveler.350
+	title = dimension_traveler.name.3
+	desc = dimension_traveler.350.desc
+	
+	diplomatic_title = DIMENSION_TRAVELER_TITLE_TRUE
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_species
+		room = "crisis_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_event_chain = DIMENSION_TRAVELER_CHAIN_1
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dimension_traveler.350.a
+		default_hide_option = yes
+		response_text = dimension_traveler.350.response
+	}
+}
+
+# 负相奥秘飞升
+country_event = {
+	id = dimension_traveler.500
+	title = dimension_traveler.name.3
+	desc = {
+		text = dimension_traveler.500.desc.1
+		trigger = {
+			NOT = { has_country_flag = dimension_traveler_end }
+		}
+	}
+	desc = {
+		text = dimension_traveler.500.desc.2
+		trigger = {
+			has_country_flag = dimension_traveler_end
+		}
+	}
+	
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_dimension_traveler_event_portrait = yes
+	}
+
+	option = {
+		name = dimension_traveler.500.a
+		trigger = {
+			NOT = { has_country_flag = dimension_traveler_end }
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.500.b
+		trigger = {
+			has_country_flag = dimension_traveler_end
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier4researchreward
+			min = @tier4researchmin
+			max = @tier4researchmax
+		}
+	}
+}
+
+# 时空因果飞升
+country_event = {
+	id = dimension_traveler.510
+	title = dimension_traveler.name.3
+	desc = {
+		text = dimension_traveler.510.desc.1
+		trigger = {
+			NOT = { has_country_flag = dimension_traveler_end }
+		}
+	}
+	desc = {
+		text = dimension_traveler.510.desc.2
+		trigger = {
+			has_country_flag = dimension_traveler_end
+		}
+	}
+	
+	diplomatic = yes
+	force_open = yes
+
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+		room = "ship_room"
+	}
+
+	is_triggered_only = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_dimension_traveler_event_portrait = yes
+	}
+
+	option = {
+		name = dimension_traveler.510.a
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = @tier5researchreward
+			min = @tier5researchmin
+			max = @tier5researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier5researchreward
+			min = @tier5researchmin
+			max = @tier5researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = engineering_research
+			value = @tier5researchreward
+			min = @tier5researchmin
+			max = @tier5researchmax
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier5researchreward
+			min = @tier5researchmin
+			max = @tier5researchmax
+		}
+	}
+}
+
+# 始终因果/超越因果
+event = {
+	id = dimension_traveler.1000
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		if = {
+			limit = {
+				exists = event_target:dimension_traveler_owner
+			}
+			event_target:dimension_traveler_owner = {
+				if = {
+					limit = {
+						has_country_flag = dimension_traveler_trait_time_secret
+						has_country_flag = dimension_traveler_trait_circle_secret
+						has_country_flag = dimension_traveler_trait_dimension_secret
+						NOT = { has_country_flag = dimension_traveler_horror_cooldown }
+						is_gestalt = no # 格式塔下没有命定特质
+					}
+					exists = event_target:dimension_traveler_leader
+					event_target:dimension_traveler_leader = {
+						is_owned_by = event_target:dimension_traveler_owner
+						is_councilor = yes
+					}
+				}
+				else = {
+					always = no
+				}
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+	
+	immediate = {
+		event_target:dimension_traveler_owner = {
+			random_list = {
+				39 = {
+					modifier = {
+						subtract = 1
+						has_policy_flag = horror_dimension_traveler
+					}
+					# 无事发生
+				}
+				1 = {
+					modifier = {
+						add = 1
+						has_policy_flag = horror_dimension_traveler
+					}
+					country_event = { id = dimension_traveler.1001 }
+				}
+			}
+		}
+	}
+}
+
+# 因果爆发
+country_event = {
+	id = dimension_traveler.1001
+	title = dimension_traveler.1001.name
+	desc = {
+		text = dimension_traveler.1001.desc.1
+		trigger = {
+			NOT = { has_country_flag = know_dimension_traveler_horror_modifier }
+		}
+	}
+	desc = {
+		text = dimension_traveler.1001.desc.2
+		trigger = {
+			has_country_flag = know_dimension_traveler_horror_modifier
+			has_country_flag = know_dimension_traveler_horror_modifier_bad
+		}
+	}
+	desc = {
+		text = dimension_traveler.1001.desc.3
+		trigger = {
+			has_country_flag = know_dimension_traveler_horror_modifier
+			NOT = { has_country_flag = know_dimension_traveler_horror_modifier_bad }
+		}
+	}
+	picture = {
+		trigger = {
+			has_country_flag = dimension_traveler_horror_governor
+		}
+		picture = GFX_evt_vortex
+	}
+	picture = {
+		trigger = {
+			has_country_flag = dimension_traveler_horror_scientist
+		}
+		picture = GFX_evt_clocks
+	}
+	picture = {
+		trigger = {
+			has_country_flag = dimension_traveler_horror_admiral
+		}
+		picture = GFX_evt_supernova
+	}
+	picture = {
+		trigger = {
+			has_country_flag = dimension_traveler_horror_general
+		}
+		picture = GFX_evt_zro_2
+	}
+	show_sound = event_activating_unknown_technology
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+	}
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_dimension_traveler_event_portrait = yes
+		# 事先锁定修正类型（因果过载应与因果爆发相同）
+		switch = {
+			trigger = has_country_flag
+			dimension_traveler_governor_active = {
+				set_country_flag = dimension_traveler_horror_governor
+			}
+			dimension_traveler_scientist_active = {
+				set_country_flag = dimension_traveler_horror_scientist
+			}
+			dimension_traveler_admiral_active = {
+				set_country_flag = dimension_traveler_horror_admiral
+			}
+			dimension_traveler_general_active = {
+				set_country_flag = dimension_traveler_horror_general
+			}
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			set_country_flag = know_dimension_traveler_horror_modifier
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.1001.a
+		give_dimension_traveler_horror_modifier_good = yes
+	}
+	
+	option = {
+		name = dimension_traveler.1001.b
+		hidden_effect = {
+			# 清除标识
+			remove_country_flag = dimension_traveler_horror_governor
+			remove_country_flag = dimension_traveler_horror_scientist
+			remove_country_flag = dimension_traveler_horror_admiral
+			remove_country_flag = dimension_traveler_horror_general
+			# 冷却
+			set_timed_country_flag = {
+				flag = dimension_traveler_horror_cooldown
+				days = 360
+			}
+		}
+	}
+}
+
+# 因果过载
+country_event = {
+	id = dimension_traveler.1002
+	title = dimension_traveler.1002.name
+	desc = dimension_traveler.1002.desc
+	picture = {
+		trigger = {
+			has_country_flag = dimension_traveler_horror_governor
+		}
+		picture = GFX_evt_vortex
+	}
+	picture = {
+		trigger = {
+			has_country_flag = dimension_traveler_horror_scientist
+		}
+		picture = GFX_evt_clocks
+	}
+	picture = {
+		trigger = {
+			has_country_flag = dimension_traveler_horror_admiral
+		}
+		picture = GFX_evt_supernova
+	}
+	picture = {
+		trigger = {
+			has_country_flag = dimension_traveler_horror_general
+		}
+		picture = GFX_evt_zro_2
+	}
+	show_sound = event_activating_unknown_technology
+	
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	event_picture_background = "GFX_leader_recruitment_bg_legendary_keides"
+	picture_event_data = {
+		portrait = event_target:dimension_traveler_portrait_leader
+	}
+	
+	trigger = {
+	}
+	
+	immediate = {
+		set_dimension_traveler_event_portrait = yes
+		give_dimension_traveler_horror_modifier = { TYPE = bad }
+		set_country_flag = know_dimension_traveler_horror_modifier_bad
+		# 界旅者暂时无法担任职务
+		if = {
+			limit = {
+				NOT = { has_country_flag = dimension_traveler_returning }
+			}
+			set_country_flag = dimension_traveler_returning
+			remove_country_flag = dimension_traveler_governor_active
+			remove_country_flag = dimension_traveler_scientist_active
+			remove_country_flag = dimension_traveler_admiral_active
+			remove_country_flag = dimension_traveler_general_active
+			country_event = { id = dimension_traveler.63 days = 180 random = 180 }
+			if = {
+				limit = {
+					exists = event_target:dimension_traveler_leader
+				}
+				event_target:dimension_traveler_leader = {
+					check_dimension_traveler_level = yes
+					kill_leader = { show_notification = no }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = dimension_traveler.1002.a
+		custom_tooltip = dimension_traveler.1002.a.tooltip
+		tooltip = {
+			give_dimension_traveler_horror_modifier = { TYPE = bad }
+		}
+		hidden_effect = {
+			# 清除标识
+			remove_country_flag = dimension_traveler_horror_governor
+			remove_country_flag = dimension_traveler_horror_scientist
+			remove_country_flag = dimension_traveler_horror_admiral
+			remove_country_flag = dimension_traveler_horror_general
+		}
+	}
+}

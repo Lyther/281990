@@ -1,0 +1,4522 @@
+#Tooltips will be generated from these rules when they fail. Use of custom_tooltip is recommended
+#There are still multiple hard-coded rules that apply in addition to these.
+#If rules here evaluate to true, there might still be other rules that make the action unavailable.
+#If a rule here evaluates to false the action will become unavailable
+
+#########################################################################################################
+
+#       通用判断扳机flag / Universal Judgment Trigger flag:  community_mod_rules_trigger
+
+#		运行机制:同时拥有前置条件flag和任意判定flag时将flag所在对象踢出原版判定条件,并应用flag所设定的规则.
+#		各规则flag使用  "community_[规则名称]_<true/false>" flag 作为判定依据. 部分条目可能有些许变化,依照实际为准.
+#		Operating mechanism: When there is a precondition flag and an arbitrary judgment flag at the same time, 
+#		the object where the flag is located is kicked out of the original judgment condition, and the rules set by the flag are applied.
+#		Each rule flag uses "community_[rule name]_<true/false>" flag as the judgment basis.
+
+#########################################################################################################
+
+#Root = target country
+#This = country
+is_valid_rival = { #有效竞争对手
+	custom_tooltip = {
+		fail_text = INVALID_RIVAL_DESC
+		root = {
+			OR = {
+				prev = { NOT = { is_country_type = default } }
+				AND = {
+					relative_power = { who = prev value >= inferior }
+					relative_power = { who = prev value <= superior }
+				}
+			}
+		}
+	}
+}
+
+
+# Root = claimer
+# This = system
+can_add_claim = { #可宣称
+	hidden_trigger = {
+		if = {
+			limit = {
+				root = { NOT = { is_country_type = default } }
+			}
+			always = yes
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_POLICY
+		OR = {
+			root = { has_policy_flag = unrestricted_wars }
+			AND = {
+				exists = owner
+				owner = { is_gestalt = yes }
+			}
+			AND = {
+				exists = owner
+				owner = {
+					any_war = {
+						any_attacker = { is_same_value = prevprev }
+						any_defender = { is_same_value = root }
+					}
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_NOT_VALID_EMPIRE
+		NAND = {
+			exists = owner
+			owner = {
+				NOR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_DEVOURING_SWARM
+		NAND = {
+			root = { has_valid_civic = civic_hive_devouring_swarm }
+			root = { is_lithoid_empire = no }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_DEVOURING_SWARM_LITHOID
+		NAND = {
+			root = { has_valid_civic = civic_hive_devouring_swarm }
+			root = { is_lithoid_empire = yes }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_ASSIMILATOR
+		NOT = { root = { has_valid_civic = civic_machine_assimilator } }
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_PURIFIERS
+		NAND = {
+			exists = owner
+			root = { has_valid_civic = civic_fanatic_purifiers }
+			NOT = {	owner = { is_same_species = root } }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_EXTERMINATOR
+		NAND = {
+			exists = owner
+			root = { has_valid_civic = civic_machine_terminator }
+			owner = {
+				NOR = {
+					is_same_species = root
+					has_country_flag = synthetic_empire
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_THEY_THREAT
+		NAND = {
+			exists = owner
+			owner = {
+				OR = {
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_machine_assimilator
+				}
+			}
+			root = {
+				NOR = {
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_machine_assimilator
+				}
+			}
+		}
+	}
+}
+
+# Root = taker country
+# This = giver country
+can_get_claim_from_lost_system = { #可获得丢失星系的宣称
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_NOT_VALID_EMPIRE
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		root = {
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_DEVOURING_SWARM
+		NOT = { has_valid_civic = civic_hive_devouring_swarm }
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_ASSIMILATOR
+		NOT = { has_valid_civic = civic_machine_assimilator }
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_PURIFIERS
+		NAND = {
+			has_valid_civic = civic_fanatic_purifiers
+			NOT = {	is_same_species = root }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_EXTERMINATOR
+		NAND = {
+			has_valid_civic = civic_machine_terminator
+			NOR = {
+				is_same_species = root
+				has_country_flag = synthetic_empire
+				has_authority = auth_machine_intelligence
+			}
+		}
+	}
+}
+
+# Root = Bombarding country
+# This = Receiving country
+should_surrender_planets_to = { #应该吧轰炸的行星拥有者交给到目标
+	OR = {
+		AND = { #香草 vanilla
+			OR = {
+				NAND = { #排除条件 Exclusions
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_should_surrender_planets_Receiving_true
+						has_country_flag = community_should_surrender_planets_Receiving_false
+					}
+				}
+				NAND = { #排除条件 Exclusions
+					root = {
+						has_country_flag = community_mod_rules_trigger
+						has_country_flag = community_should_surrender_planets_Bombarding_false
+					}
+				}
+			}
+			#
+			is_country_type = default
+			is_gestalt = no
+			is_homicidal = no
+			is_crisis_faction = no
+			is_primitive = no
+			root = {
+				is_homicidal = no
+				is_crisis_faction = no
+				is_primitive = no
+				is_country_type = default
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_should_surrender_planets_Receiving_true
+				NOT = { has_country_flag = community_should_surrender_planets_Receiving_false }
+			}
+			root = {
+				NOT = { has_country_flag = community_mod_rules_trigger }
+				NOT = { has_country_flag = community_should_surrender_planets_Bombarding_false }
+			}
+		}
+	}
+}
+
+#Root = country
+#This = species
+species_has_citizenship = { #物种拥有公民身份
+	has_citizenship_type = { type = citizenship_full country = root }
+}
+
+#Root = country
+#This = pop
+should_abduct_pop = { #应该绑架pop
+	planet = {
+		exists = owner
+		owner = { is_hostile = root }
+	}
+	NAND = {
+		has_citizenship_type = { type = citizenship_purge country = root }
+		NOR = {
+			has_purge_type = { type = purge_matrix country = root }
+			has_purge_type = { type = purge_processing country = root }
+			has_purge_type = { type = purge_labor_camps country = root }
+			has_purge_type = { type = purge_necrophage country = root }
+		}
+	}
+}
+
+#Root = planet
+#This = species
+species_can_live_on_planet = { #物种可生活在行星
+	exists = root #somehow this appeared in the error log. No idea how!
+	NAND = {
+		root = { is_planet_class = pc_machine }
+		NOR = {
+			has_trait = trait_machine_unit
+			has_trait = trait_mechanical
+			AND = {
+				has_trait = trait_cybernetic
+				exists = root.owner
+				root.owner = {
+					has_authority = auth_machine_intelligence
+					has_civic = civic_machine_assimilator # Assimilator empire
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			root = { is_planet_class = pc_hive }
+		}
+		OR = {
+			has_trait = trait_hive_mind
+			AND = { #Necrophage Hive Mind can have Necrophytes
+				exists = root.owner
+				root.owner = {
+					is_hive_empire = yes
+					has_origin = origin_necrophage
+					prev = { species_can_be_necrophaged = yes }
+				}
+			}
+		}
+	}
+}
+
+#Note: this is also used in pop faction support calculations
+#Root = country
+#This = pop
+can_vote_in_democratic_election = { #可在民主选举中投票
+	has_citizenship_rights = yes
+	is_sapient = yes
+	is_enslaved = no
+	is_being_purged = no
+}
+
+#This = leader
+should_pay_for_leader_upkeep = { #应当支付领袖维护
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_leader_flag = community_mod_rules_trigger
+				OR = {
+					has_leader_flag = community_should_pay_for_leader_upkeep_true
+					has_leader_flag = community_should_pay_for_leader_upkeep_false
+				}
+			}
+			#
+			NOT = {
+				AND = {
+					exists = owner
+					owner = {
+						is_gestalt = yes
+					}
+					is_councilor = yes
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_leader_flag = community_mod_rules_trigger
+			AND = {
+				has_leader_flag = community_should_pay_for_leader_upkeep_true
+				NOT = { has_leader_flag = community_should_pay_for_leader_upkeep_false }
+			}
+		}
+	}
+}
+
+#Checks whether any leaders (scientists etc) can be formed from this pop
+#Root = country
+#This = pop
+can_generate_leader_from_pop = { #可从pop中生成领袖
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_can_generate_leader_from_pop_true
+					has_pop_flag = community_can_generate_leader_from_pop_false
+				}
+			}
+			#
+			has_citizenship_rights = yes
+			NOT = { has_trait = trait_syncretic_proles }
+			can_think = yes
+			OR = {
+				is_robot_pop = no
+				root = {
+					OR = {
+						has_technology = tech_synthetic_leaders
+						has_authority = auth_machine_intelligence
+						is_mechanical_empire = yes
+					}
+				}
+			}
+			OR = {
+				is_same_species = root
+				root = {
+					NAND = {
+						has_origin = origin_necrophage
+						has_trait = trait_necrophage
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_can_generate_leader_from_pop_true
+				NOT = { has_pop_flag = community_can_generate_leader_from_pop_false }
+			}
+		}
+	}
+}
+
+#Checks whether this species is eligible to become rulers through elections
+#Root = country
+#This = species
+can_generate_leader_from_species = { #可从物种中生成领导人
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_species_flag = community_mod_rules_trigger
+				OR = {
+					has_species_flag = community_can_generate_leader_from_species_true
+					has_species_flag = community_can_generate_leader_from_species_false
+				}
+			}
+			#
+			is_sapient = yes
+			OR = {
+				NAND = {
+					NOT = { root = { has_technology = "tech_synthetic_leaders" } }
+					has_trait = "trait_mechanical"
+				}
+				has_citizenship_type = { type = citizenship_full country = root }
+			}
+		}
+		AND = { #国防部 MOD
+			has_species_flag = community_mod_rules_trigger
+			AND = {
+				has_species_flag = community_can_generate_leader_from_species_true
+				NOT = { has_species_flag = community_can_generate_leader_from_species_false }
+			}
+		}
+	}
+}
+
+#Checks whether this species can become espionage assets (note that some checks are also done in code)
+#Root = country
+#This = species
+can_create_espionage_asset_from_species = { #可从物种创建间谍
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_species_flag = community_mod_rules_trigger
+				OR = {
+					has_species_flag = community_can_create_espionage_asset_from_species_true
+					has_species_flag = community_can_create_espionage_asset_from_species_false
+				}
+			}
+			#
+			OR = {
+				NOT = { has_trait = "trait_mechanical" }
+				root = { has_technology = "tech_droid_workers" }
+			}
+		}
+		AND = {	#国防部 MOD
+			has_species_flag = community_mod_rules_trigger
+			AND = {
+				has_species_flag = community_can_create_espionage_asset_from_species_true
+				NOT = { has_species_flag = community_can_create_espionage_asset_from_species_false }
+			}
+		}
+	}
+}
+
+#Root = country
+#This = pop
+can_generate_military_leader_from_pop = { #可从pop创建军事领袖
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_can_generate_military_leader_from_pop_true
+					has_pop_flag = community_can_generate_military_leader_from_pop_false
+				}
+			}
+			#
+			can_be_military_leader = yes
+			OR = {
+				is_robot_pop = no
+				root = {
+					OR = {
+						has_technology = tech_synthetic_leaders
+						has_authority = auth_machine_intelligence
+						is_mechanical_empire = yes
+					}
+				}
+			}
+			OR = {
+				is_same_species = root
+				root = {
+					NAND = {
+						has_origin = origin_necrophage
+						has_trait = trait_necrophage
+					}
+				}
+			}
+
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_can_generate_military_leader_from_pop_true
+				NOT = { has_pop_flag = community_can_generate_military_leader_from_pop_false }
+			}
+		}
+	}
+}
+
+#Root = species
+#This = planet
+can_generate_army_from_planet = { #可从星球生成陆军
+	any_owned_species = {
+		is_same_species = root
+		can_be_soldier = yes
+	}
+}
+
+#Root = planet
+#This = country
+can_release_vassal = { #可以释放附庸
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_release_vassal_true
+					has_country_flag = community_can_release_vassal_false
+				}
+			}
+			#
+			custom_tooltip = {
+				fail_text = default
+				NOT = { has_valid_civic = civic_fanatic_purifiers }
+			}
+			custom_tooltip = {
+				fail_text = default
+				NOT = { has_valid_civic = civic_machine_terminator }
+			}
+			custom_tooltip = {
+				fail_text = default
+				NOT = { has_valid_civic = civic_machine_assimilator }
+			}
+			custom_tooltip = {
+				fail_text = default
+				NOT = { has_valid_civic = civic_hive_devouring_swarm }
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_release_vassal_true
+				NOT = { has_country_flag = community_can_release_vassal_false }
+			}
+		}
+	}
+}
+
+#Root = species
+#This = country
+can_release_vassal_from_species = { #可以从物种释放附庸
+	OR = {
+		AND = { #香草 vanilla
+			root = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions
+					has_species_flag = community_mod_rules_trigger
+					OR = {
+						has_species_flag = community_can_release_vassal_from_species_true
+						has_species_flag = community_can_release_vassal_from_species_false
+					}
+				}
+			}
+			#
+			root = {
+				is_sapient = yes
+				NOR = {
+					has_trait = trait_machine_unit
+					AND = {
+						has_trait = trait_hive_mind
+						NOT = { prev.this = { has_origin = origin_progenitor_hive } }
+					}
+					AND = {
+						NOT = { has_trait = trait_hive_mind }
+						prev.this = { has_authority = auth_hive_mind }
+					}
+					has_trait = trait_mechanical
+					can_think = no
+					has_trait = trait_clone_soldier_infertile
+					has_trait = trait_clone_soldier_infertile_full_potential
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			root = { 
+				has_species_flag = community_mod_rules_trigger
+				AND = {
+					has_species_flag = community_can_release_vassal_from_species_true
+					NOT = { has_species_flag = community_can_release_vassal_from_species_false }
+				}
+			}
+		}
+	}
+}
+
+# Root = species
+# This = country
+can_generate_army_from_species = { #可从物种产生陆军
+	OR = {
+		AND = { #香草 vanilla
+			root = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions
+					has_species_flag = community_mod_rules_trigger
+					OR = {
+						has_species_flag = community_can_generate_army_from_species_true
+						has_species_flag = community_can_generate_army_from_species_false
+					}
+				}
+			}
+			#
+			root = {
+				OR = {
+					has_military_service_type = { type = military_service_full country = prev }
+					has_military_service_type = { type = military_service_limited country = prev }
+					AND = {
+						exists = prev
+						prev = {
+							is_primitive = yes
+						}
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			root = { 
+				has_species_flag = community_mod_rules_trigger
+				AND = {
+					has_species_flag = community_can_generate_army_from_species_true
+					NOT = { has_species_flag = community_can_generate_army_from_species_false }
+				}
+			}
+		}
+	}
+}
+
+# Root = country
+# This = species
+#标记-此处可能存在问题
+can_modify_species = { #可以修饰物种
+	OR = {
+		AND = { #香草 vanilla
+			root = { #排除条件 Exclusions
+				NAND = {
+					has_species_flag = community_mod_rules_trigger
+					OR = {
+						has_species_flag = community_can_generate_army_from_species_true
+						has_species_flag = community_can_generate_army_from_species_false
+					}
+				}
+			}
+			#
+			OR = {
+				NOT = { has_trait = trait_self_modified }
+				is_same_species = root
+			}
+		}
+		AND = { #国防部 MOD
+			root = {
+				has_species_flag = community_mod_rules_trigger
+				AND = {
+					has_species_flag = community_can_generate_army_from_species_true
+					NOT = { has_species_flag = community_can_generate_army_from_species_false }
+				}
+			}
+		}
+	}
+}
+
+#This = country, suject
+#Root = country, overlord
+#From = target solar system
+#This rule is a condition for when subjects that normally cannot colonize outside their borders are allowed to
+subject_can_expand = { #附庸国可以扩张
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_subject_can_expand_true
+					has_country_flag = community_subject_can_expand_false
+				}
+			}
+			#
+			root = { has_valid_civic = civic_feudal_realm }
+			NAND = {
+				is_ai = yes
+				AND = {
+					exists = overlord
+					overlord = { has_origin = origin_imperial_vassal_overlord }
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_subject_can_expand_true
+				NOT = { has_country_flag = community_subject_can_expand_false }
+			}
+		}
+	}
+}
+
+#Root = country, attacker
+#This = country, target
+#This rule is a condition for taking hostile actions towards neutral targets. Such as landing troops or attacking their fleets
+can_take_hostile_actions = { #可采取敌对行动
+	if = {
+		limit = {
+			ROOT = {
+				NOT = { has_policy_flag = first_contact_attack_allowed }
+			}
+			NOT = {
+				is_hostile = ROOT
+				has_communications = ROOT
+			}
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_FIRST_CONTACT_PROTOCOL"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_flag = fotd_seperatist_country@ROOT
+			ROOT = {
+				has_origin = origin_fear_of_the_dark
+			}
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_FOTD"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			AND = {
+				NOT = { has_country_flag = hostile_to_nomads }
+				ROOT = {
+					is_country_type = nomad
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_FIRST_CONTACT_PROTOCOL"
+			always = no
+		}
+	}
+	else_if = {
+		#attacking primitives with non-interference
+		limit = {
+			ROOT = {
+				is_country_type = default
+				NOT = {
+					has_policy_flag = interference_aggressive
+				}
+			}
+			is_primitive = yes
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_NATIVE_INTERFERENCE"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			is_primitive = yes
+			ROOT = { is_country_type = default }
+			capital_scope = {
+				root = {
+					NOT = {
+						any_planet_within_border = {
+							is_same_value = prevprev
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = ""
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			ROOT = { any_agreement = { agreement_preset = preset_satrapy } }
+			is_country_type = faction
+			root = {
+				any_owned_planet = {
+					exists = controller
+					controller = {
+						is_same_value = prevprevprev
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = ""
+			always = yes
+		}
+	}
+	else_if = {
+		limit = {
+			exists = overlord
+			ROOT = { any_agreement = { agreement_preset = preset_satrapy } }
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_SATRAPY"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			exists = overlord
+			overlord = { is_same_value = root }
+			ROOT = { any_agreement = { agreement_preset = preset_satrapy } }
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_OVERLORD"
+			always = no
+		}
+	}
+	else = {
+		always = yes
+	}
+}
+
+#Root = country, attacker
+#This = country, target
+#This rule is a condition for declaring war
+can_declare_war = { #可以宣战
+	custom_tooltip = {
+		fail_text = "ACTION_DECLARE_WAR_OVERLORD_ON_SUBJECT"
+		NOT = {
+			has_overlord = ROOT
+		}
+	}
+	if = {
+		limit = {
+			exists = root
+			ROOT = {
+				has_policy_flag = no_wars
+				OR = {
+					is_subject = no
+					overlord = {
+						is_same_value = root
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "CAN_DECLARE_WAR_POLICY"
+			always = no
+		}
+	}
+	if = {
+		limit = {
+			exists = root
+			ROOT = {
+				is_ai = yes
+			}
+		}
+		ROOT = {
+			is_at_war = no
+		}
+	}
+}
+
+#Root = country
+#This = planet
+can_colonize_planet = { #可以殖民星球
+	always = yes
+}
+
+#Root = country
+#This = planet
+can_colonize_outside_borders = { #可殖民境外星球
+	always = no
+}
+
+#Root = country
+#This = planet
+can_terraform_planet = { #可改造星球
+	custom_tooltip = {
+		fail_text = terraform_fail_no_presapient_protection_or_no_presapients
+		NAND = {
+			AND = {
+				exists = root
+				root = { has_policy_flag = pre_sapients_protect }
+			}
+			any_owned_species = { is_sapient = no }
+		}
+	}
+	custom_tooltip = {
+		fail_text = "requires_actor_not_devouring_swarm_lithoid"
+		exists = root
+		root = { is_lithoid_devouring_swarm = no }
+	}
+	custom_tooltip = {
+		fail_text = "legendary_leader_planet_no_terraform"
+		exists = root
+		this = {
+			NOT = { has_planet_flag = legendary_leader_planet }
+		}
+	}
+
+	custom_tooltip = {
+		fail_text = requires_not_relentless_industrialists_situation
+		NOT = {
+		any_targeting_situation = {
+			is_situation_type = relentless_industrialists_situation
+			}
+		}
+	}
+}
+
+#Root = country
+#This = pop
+can_colonize_with_pop = { #可殖民星球的pop
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_can_colonize_with_pop_true
+					has_pop_flag = community_can_colonize_with_pop_false
+				}
+			}
+			#
+			has_colonization_control = {
+				type = colonization_control_no
+				country = root
+			}
+			OR = {
+				NOT = { has_trait = trait_self_modified }
+				is_same_species = root
+			}
+			if = {
+				limit = {
+					OR = {
+						is_sapient = no
+						has_trait = trait_zombie
+					}
+				}
+				custom_tooltip = {
+					always = no
+				}
+			}
+			else = {
+				always = yes
+			}
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_can_colonize_with_pop_true
+				NOT = { has_pop_flag = community_can_colonize_with_pop_false }
+			}
+		}
+	}
+}
+
+#Root = country
+#This = species
+can_colonize_with_species = { #可殖民星球的物种
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_species_flag = community_mod_rules_trigger
+				OR = {
+					has_species_flag = community_can_colonize_with_species_true
+					has_species_flag = community_can_colonize_with_species_false
+				}
+			}
+			has_colonization_control = {
+				type = colonization_control_no
+				country = root
+			}
+			OR = {
+				NOT = { has_trait = trait_self_modified }
+				is_same_species = root
+			}
+			if = {
+				limit = {
+					OR = {
+						is_sapient = no
+						has_trait = trait_zombie
+					}
+				}
+				custom_tooltip = {
+					always = no
+				}
+			}
+			else_if = {
+				limit = { has_trait = trait_hive_mind }
+				root = { is_hive_empire = yes }
+			}
+			else_if = {
+				limit = { has_trait = trait_machine_unit }
+				root = { is_machine_empire = yes }
+			}
+			else = {
+				always = yes
+			}
+		}
+		AND = { #国防部 MOD
+			has_species_flag = community_mod_rules_trigger
+			AND = {
+				has_species_flag = community_can_colonize_with_species_true
+				NOT = { has_species_flag = community_can_colonize_with_species_false }
+			}
+		}
+	}
+}
+
+# Root = Pop
+# From = Country
+# This = Pop
+# NOTE: species_has_happiness is also checked for this
+pop_has_random_ethics = { #pop有随机思潮
+	exists = from
+	NOT = {
+		has_citizenship_type = {
+			country = from
+			type = citizenship_organic_trophy
+		}
+	}
+}
+
+# Root = Species
+# From = Country
+# This = Species
+species_has_happiness = { #物种拥有幸福度
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_species_flag = community_mod_rules_trigger
+				OR = {
+					has_species_flag = community_species_has_happiness_true
+					has_species_flag = community_species_has_happiness_false
+				}
+			}
+			#
+			NOR = {
+				has_trait = trait_machine_unit
+				has_trait = trait_hive_mind
+				can_think = no
+				AND = {
+					has_trait = trait_mechanical
+					OR = {
+						NOT = { exists = from }
+						from = { has_authority = auth_machine_intelligence }
+						from = { NOT = { has_technology = tech_synthetic_workers } }
+						from = { has_policy_flag = ai_outlawed }
+					}
+				}
+				AND = {
+					has_trait = trait_cybernetic
+					exists = from
+					from = {
+						has_authority = auth_machine_intelligence
+						has_civic = civic_machine_assimilator # Assimilator empire
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_species_flag = community_mod_rules_trigger
+			AND = {
+				has_species_flag = community_species_has_happiness_true
+				NOT = { has_species_flag = community_species_has_happiness_false }
+			}
+		}
+	}
+}
+
+#Root = country, us
+#This = country, them
+#This rule is a condition for determining if a country is hostile towards another. not to be confused with can_take_hostile_action
+can_be_hostile_towards = { #可敌对
+	if = {
+		limit = { is_primitive = yes }
+		ROOT = {
+			NOR = {
+				has_policy_flag = interference_not_allowed
+				has_policy_flag = interference_subtle
+			}
+		}
+	}
+	else_if = {
+		limit = { ROOT = { is_primitive = yes } }
+		NOR = {
+			has_policy_flag = interference_not_allowed
+			has_policy_flag = interference_subtle
+		}
+	}
+	else_if = {
+		limit = { is_country_type = ratlings }
+		always = yes
+	}
+}
+
+# Checks if a pop can procreate
+# This = Species
+# Root = Planet
+can_species_procreate = { #可繁殖物种
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_species_flag = community_mod_rules_trigger
+				OR = {
+					has_species_flag = community_can_species_procreate_true
+					has_species_flag = community_can_species_procreate_false
+				}
+			}
+			#
+			is_sapient = yes
+			NOR = {
+				has_trait = trait_machine_unit
+				has_trait = trait_mechanical
+			}
+			NAND = {
+				root = { has_modifier = slave_colony }
+				NOT = { has_citizenship_type = { type = citizenship_slavery country = root.owner } }
+			}
+			if = {
+				limit = {
+					has_trait = trait_necrophage
+				}
+				NOT = {
+					root = {
+						any_owned_species = {
+							has_population_control = { country = root.owner type = no }
+							species_can_be_necrophaged = yes
+						}
+					}
+				}
+			}
+			NOT = { has_species_flag = nivlac_no_procreation }
+		}
+		AND = { #国防部 MOD
+			has_species_flag = community_mod_rules_trigger
+			AND = {
+				has_species_flag = community_can_species_procreate_true
+				NOT = { has_species_flag = community_can_species_procreate_false }
+			}
+		}
+	}
+}
+
+# Checks if a pop can be assembled
+# This = Species
+# Root = Planet
+can_species_be_assembled = { #可组装物种
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_species_flag = community_mod_rules_trigger
+				OR = {
+					has_species_flag = community_can_species_be_assembled_true
+					has_species_flag = community_can_species_be_assembled_false
+				}
+			}
+			#
+			is_sapient = yes
+			OR = {
+				AND = {
+					is_robotic = yes
+					root = {
+						check_modifier_value = {
+							modifier = planet_pop_assembly_add
+							value > 0
+						}
+					}
+				}
+				AND = {
+					is_organic_species = yes
+					if = {
+						limit = {
+							root.owner = { is_hive_empire = yes }
+						}
+						has_trait = trait_hive_mind
+					}
+					else_if = {
+						limit = { has_budding_trait = yes }
+						root = {
+							any_owned_species = { is_exact_same_species = prevprev }
+						}
+					}
+					else_if = {
+						limit = { has_trait = trait_tiyanki }
+						root = {
+							any_owned_species = { is_exact_same_species = prevprev }
+						}
+					}
+					else_if = {
+						limit = {
+							root.owner = {
+								has_tradition = tr_cybernetics_assembly_standards
+								has_policy_flag = roboticist_output_build_cyborgs
+							}
+						}
+						has_trait = trait_cybernetic
+					}
+					else_if = {
+						limit = {
+							OR = {
+								has_trait = trait_clone_soldier_infertile
+								has_trait = trait_clone_soldier_infertile_full_potential
+							}
+						}
+						root = {
+							# Event 'clones.3' should cover this, but extra safety check.
+							has_building = building_clone_army_clone_vat
+							NOT = {
+								check_variable = {
+									which = clone_pops_missing
+									value = 0
+								}
+							}
+						}
+					}
+					else = {
+						root = {
+							OR = {
+								has_building = building_clone_vats
+								has_modifier = tiyanki_trophy
+								owner = { has_modifier = syamelles_curse }
+								AND = {
+									has_building = building_posthumous_employment_center
+									owner = { has_civic = civic_permanent_employment }
+								}
+								has_planet_flag = can_organic_assemble_flag #for mod compatibility
+							}
+						}
+					}
+				}
+			}
+			has_population_control = {
+				type = no
+				country = root.owner
+			}
+		}
+		AND = { #国防部 MOD
+			has_species_flag = community_mod_rules_trigger
+			AND = {
+				has_species_flag = community_can_species_be_assembled_true
+				NOT = { has_species_flag = community_can_species_be_assembled_false }
+			}
+		}
+	}
+}
+
+#This rule is a condition for bombarding planets
+#Root = fleet, potential attacker
+#From = planet, potential target
+can_orbital_bombard = { #可以轨道轰炸
+	OR = {
+		AND = { #香草
+			NAND = { #排除条件 Exclusions
+				ROOT.CONTROLLER = {
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_can_orbital_bombard_true
+						has_country_flag = community_can_orbital_bombard_false
+					}
+				}
+			}
+			#
+			exists = FROM.OWNER
+			NOT = {
+				any_controlled_ship = {
+					is_ship_size = colossus
+				}
+			}
+			OR = {
+				AND = {
+					ROOT.CONTROLLER = {
+						NOT = { has_communications = FROM.OWNER }
+					}
+					FROM.OWNER = {
+						NOT = { is_country_type = primitive }
+					}
+				}
+				AND = {
+					ROOT.CONTROLLER = {
+						NOR = {
+							has_policy_flag = interference_not_allowed
+							has_policy_flag = interference_subtle
+						}
+					}
+					FROM.OWNER = { is_country_type = primitive }
+				}
+				ROOT.CONTROLLER = { is_at_war_with = FROM.CONTROLLER }
+				FROM = { is_planet_class = pc_infested }
+				FROM.CONTROLLER = {
+					OR = {
+						is_country_type = swarm
+						is_country_type = ai_empire
+						is_country_type = cybrex_empire
+						AND = {
+							is_country_type = awakened_marauders
+							ROOT.CONTROLLER = { is_hostile = prev }
+						}
+					}
+				}
+				ROOT.CONTROLLER = {
+					OR = {
+						is_country_type = extradimensional
+						is_country_type = extradimensional_2
+						is_country_type = extradimensional_3
+						is_country_type = swarm
+						is_country_type = ai_empire
+						is_country_type = cybrex_empire
+						is_country_type = dormant_marauders
+						is_country_type = marauder_raiders
+						is_country_type = ruined_marauders
+						is_country_type = debt_collectors
+						is_country_type = gray_goo
+						is_country_type = vol
+						AND = {
+							is_country_type = awakened_marauders
+							FROM.CONTROLLER = { is_hostile = prev }
+						}
+					}
+				}
+				AND = {
+					from.controller = {
+						is_country_type = faction
+						NOT = { is_same_value = ROOT.CONTROLLER }
+					}
+					from.owner = {
+						is_same_value = ROOT.CONTROLLER
+					}
+				}
+			}
+		}
+		AND = { #国防部
+			exists = FROM.OWNER
+			ROOT.CONTROLLER = {
+				has_country_flag = community_mod_rules_trigger
+				AND = {
+					has_country_flag = community_can_orbital_bombard_true
+					NOT = { has_country_flag = community_can_orbital_bombard_false }
+				}
+			}
+			FROM = {
+				NOT = { has_planet_flag = community_can_orbital_bombard_exclude }
+			}
+		}
+	}
+}
+
+#Check if it is possible to build orbital stations on this planet
+#this: planet
+#root: country
+can_planet_support_orbital_station = { #可建设行星轨道站
+	custom_tooltip = {
+		fail_text = "ORBITAL_STATION_ALREADY_EXISTS"
+		has_any_megastructure = no
+		NOT = { has_planet_flag = has_megastructure }
+	}
+}
+
+# Check if full sensor range in entire galaxy
+# root: country
+has_full_sensor_range = { #拥有全图
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_has_full_sensor_range_true
+					has_country_flag = community_has_full_sensor_range_false
+				}
+			}
+			#
+			OR = {
+				has_megastructure = spy_orb_4
+				has_megastructure = spy_orb_restored
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_has_full_sensor_range_true
+				NOT = { has_country_flag = community_has_full_sensor_range_false }
+			}
+		}
+	}
+}
+
+# Determines if notification messages should be sent after a ground combat
+# this: planet
+# from: winner
+# root: loser
+show_notification_for_ground_combat = { #显示地面作战通知
+	NOT = { has_planet_flag = slave_revolt }
+}
+
+# Determines if the "per_neighbor_rival" static modifier should be applied to an empire
+# this: country
+should_apply_neighbor_rival_modifier = { #应当应用邻居敌对修正 #此项当前永久为否
+	#has_tradition = tr_supremacy_great_game
+	always = no
+}
+
+#Root: Rebelling against country
+#This: Rebel country
+are_rebels_hostile = { #叛乱分子是敌对的
+	is_country_type = rebel	#Rebels change country type after taking their initial planet (action.30)
+}
+
+#Root: planet
+should_colony_be_destroyed_on_pc_change = { #应当在更改星球类型时摧毁殖民地
+	is_planet_class = pc_infested
+}
+
+# Is the given fleet the portal for given extradimensional country
+# root: country (ED)
+# this: fleet
+is_extradimensional_portal = { # is this portal mine #是异次元传送门
+	is_ship_size = dimensional_portal_ed
+	OR = {
+		owner = { is_same_value = root } # owner is me
+		OR = {
+			AND = { # portal is unbidden and I am unbidden
+				root = { is_country_type = extradimensional }
+				any_controlled_ship = { has_ship_flag = unbidden_portal }
+			}
+			AND = { # portal is aberrant and I am aberrant
+				root = { is_country_type = extradimensional_2 }
+				any_controlled_ship = { has_ship_flag = aberrant_portal }
+			}
+			AND = { # portal is vehement and I am vehement
+				root = { is_country_type = extradimensional_3 }
+				any_controlled_ship = { has_ship_flag = vehement_portal }
+			}
+		}
+	}
+}
+
+# Is the given fleet an anchor for given extradimensional country
+# root: country (ED)
+# this: fleet
+is_extradimensional_anchor = { #是异次元锚
+	root = {
+		OR = {
+			is_country_type = extradimensional
+			is_country_type = extradimensional_2
+			is_country_type = extradimensional_3
+		}
+	}
+	any_controlled_ship = { is_ship_size = starbase_exd }
+	owner = { is_same_value = root }
+}
+
+# Will colonizing this planet tick off a fallen empire?
+# Root = fallen empire
+# This = planet
+will_anger_fallen_empire = { #会激怒堕落帝国
+	OR = {
+		AND = {
+			root = { has_ai_personality_behaviour = demands_clear_borders }
+			is_neighbor_of = root
+		}
+		AND = {
+			root = { has_ai_personality_behaviour = holy_planets }
+			has_modifier = "holy_planet"
+			space_owner = {
+				NOT = { has_relic = r_severed_head }
+			}
+		}
+	}
+}
+
+# Can the country have robot pop
+# root: country
+can_have_robot_pops = { #可拥有机器人pop
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_have_robot_pops_true
+					has_country_flag = community_can_have_robot_pops_false
+				}
+			}
+			#
+			exists = this
+			NOT = { has_authority = auth_hive_mind }
+			NOT = { has_policy_flag = robots_outlawed }
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_have_robot_pops_true
+				NOT = { has_country_flag = community_can_have_robot_pops_false }
+			}
+		}
+	}
+}
+
+# Can purge/disassembly be individually stopped by owner
+# scope: pop
+can_stop_purge_pop_manually = { #可手动停止清除pop
+	custom_tooltip = {
+		fail_text = "ENTIRE_SPECIES_BEING_PURGED"
+		NOT = { has_citizenship_type = { type = citizenship_purge country = owner } }
+	}
+}
+
+# Can the pop be purged/disassembled individually by its owner
+# scope: pop
+can_purge_pop_manually = { #可手动清除pop
+	custom_tooltip = {
+		fail_text = "ALREADY_BEING_PURGED"
+		NOT = { has_citizenship_type = { type = citizenship_purge country = owner } }
+	}
+	custom_tooltip = {
+		fail_text = "ACTION_CANNOT_PURGE_CITIZEN"
+		exists = owner
+		OR = {
+			is_robot_pop = yes
+			is_sapient = no
+			owner = { has_authority = auth_hive_mind }
+			has_citizenship_type = { type = citizenship_slavery country = owner }
+			has_citizenship_type = { type = citizenship_full_machine country = owner }
+		}
+	}
+	custom_tooltip = {
+		fail_text = "ACTION_CANNOT_PURGE_POLICY"
+		exists = owner
+		OR = {
+			is_robot_pop = yes
+			AND = {
+				is_sapient = no
+				owner = { NOT = { has_policy_flag = pre_sapients_protect } }
+			}
+			owner = { has_ethic = ethic_gestalt_consciousness }
+			owner = { has_policy_flag = purge_allowed }
+		}
+	}
+	custom_tooltip = {
+		fail_text = "ACTION_DISASSEMBLE_SYNTHETICS"
+		exists = owner
+		OR = {
+			is_robot_pop = no
+			owner = { has_authority = auth_hive_mind }
+			NAND = {
+				has_trait = trait_mechanical
+				owner = { has_policy_flag = ai_full_rights }
+			}
+		}
+	}
+}
+
+# THIS = Fleet
+fleet_uses_templates = { #舰队使用模板
+	is_ship_class = shipclass_military
+	is_designable = yes
+	is_alliance_fleet = no
+}
+
+# this = starbase, megastructure or planet
+can_orbitable_repair_ships = { #可维修在轨船只
+	OR = {
+		AND = { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions
+					is_scope_type = starbase
+					has_starbase_flag = community_mod_rules_trigger
+					OR = {
+						has_starbase_flag = community_can_orbitable_repair_ships_true
+						has_starbase_flag = community_can_orbitable_repair_ships_false
+					}
+				}
+				NAND = { #排除条件 Exclusions
+					is_scope_type = megastructure
+					has_megastructure_flag = community_mod_rules_trigger
+					OR = {
+						has_megastructure_flag = community_can_orbitable_repair_ships_true
+						has_megastructure_flag = community_can_orbitable_repair_ships_false
+					}
+				}
+				NAND = { #排除条件 Exclusions
+					is_scope_type = planet
+					has_planet_flag = community_mod_rules_trigger
+					OR = {
+						has_planet_flag = community_can_orbitable_repair_ships_true
+						has_planet_flag = community_can_orbitable_repair_ships_false
+					}
+				}
+			}
+			#
+			OR = {
+				AND = {
+					is_scope_type = starbase
+					OR = {
+						has_starbase_size >= starbase_starport
+						has_starbase_size = juggernaut
+						has_starbase_size = enclave_mercenary_station
+					}
+					fleet = {
+						is_disabled = no
+					}
+				}
+				AND = {
+					is_scope_type = megastructure
+					OR = {
+						is_megastructure_type = mega_shipyard_1
+						is_megastructure_type = mega_shipyard_2
+						is_megastructure_type = mega_shipyard_3
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			OR = {
+				AND = {
+					is_scope_type = starbase
+					has_starbase_flag = community_mod_rules_trigger
+					AND = {
+						has_starbase_flag = community_can_orbitable_repair_ships_true
+						NOT = { has_starbase_flag = community_can_orbitable_repair_ships_false }
+					}
+				}
+				AND = {
+					is_scope_type = megastructure
+					has_megastructure_flag = community_mod_rules_trigger
+					AND = {
+						has_megastructure_flag = community_can_orbitable_repair_ships_true
+						NOT = { has_megastructure_flag = community_can_orbitable_repair_ships_false }
+					}
+				}
+				AND = {
+					is_scope_type = planet
+					has_planet_flag = community_mod_rules_trigger
+					AND = {
+						has_planet_flag = community_can_orbitable_repair_ships_true
+						NOT = { has_planet_flag = community_can_orbitable_repair_ships_false }
+					}
+				}
+			}
+		}
+	}
+}
+
+# this = ship
+# root = country that kills ship
+can_spawn_debris = { #会产生残骸
+	root = { is_country_type = default }
+	exists = owner
+	owner = { NOT = { has_ascension_perk = ap_enigmatic_engineering } }
+}
+
+# this = system
+# root = country
+# Determines if AI-controlled empires should restrict (and thus avoid) a system
+# Used by regular empires, fallen empires & crises
+ai_should_restrict_system = { #AI限制系统
+	OR = {
+		AND = {
+			root = { is_country_type = fallen_empire }
+			exists = owner
+			owner = { is_country_type = awakened_marauders }
+		}
+		AND = {
+			root = { is_country_type = awakened_marauders }
+			exists = owner
+			owner = { is_country_type = fallen_empire }
+		}
+		AND = {
+			root = {
+				OR = {
+					is_country_type = fallen_empire
+					is_country_type = awakened_marauders
+				}
+			}
+			has_star_flag = guardian
+			any_fleet_in_system = {
+				exists = owner
+				owner = {
+					is_guardian_country = yes
+				}
+			}
+		}
+		AND = {
+			root = {
+				OR = {
+					is_crisis_faction = yes
+					is_country_type = awakened_fallen_empire
+				}
+			}
+			has_star_flag = guardian
+			any_fleet_in_system = {
+				exists = owner
+				owner = {
+					is_country_type = guardian_fortress
+				}
+			}
+		}
+	}
+}
+
+# this = country
+can_subjugate_empires = { #可以征服帝国
+	always = yes
+}
+
+# this = leader
+can_leader_get_council_trait = { #领袖可以获得委员会特质
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_leader_flag = community_mod_rules_trigger
+				OR = {
+					has_leader_flag = community_can_leader_get_council_trait_true
+					has_leader_flag = community_can_leader_get_council_trait_false
+				}
+			}
+			#
+			NAND = {
+				exists = owner
+				owner = { is_gestalt = yes }
+				is_councilor = no
+			}
+		}
+		AND = { #国防部 MOD
+			has_leader_flag = community_mod_rules_trigger
+			AND = {
+				has_leader_flag = community_can_leader_get_council_trait_true
+				NOT = { has_leader_flag = community_can_leader_get_council_trait_false }
+			}
+		}
+	}
+}
+
+# this = leader
+can_leader_get_normal_trait = { #领袖可以获得普通特质
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_leader_flag = community_mod_rules_trigger
+				OR = {
+					has_leader_flag = community_can_leader_get_normal_trait_true
+					has_leader_flag = community_can_leader_get_normal_trait_false
+				}
+			}
+			#
+			NOR = {
+				AND = {
+					exists = owner
+					owner = { is_gestalt = yes }
+					is_councilor = yes
+				}
+				AND = {
+					is_ruler = yes
+					exists = owner
+					owner = {
+						OR = {
+							has_authority = auth_dictatorial
+							has_authority = auth_imperial
+						}
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_leader_flag = community_mod_rules_trigger
+			AND = {
+				has_leader_flag = community_can_leader_get_normal_trait_true
+				NOT = { has_leader_flag = community_can_leader_get_normal_trait_false }
+			}
+		}
+	}
+}
+
+# this = leader
+can_leader_get_subclass_trait = { #领袖可以获得次类型？特质
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_leader_flag = community_mod_rules_trigger
+				OR = {
+					has_leader_flag = community_can_leader_get_subclass_trait_true
+					has_leader_flag = community_can_leader_get_subclass_trait_false
+				}
+			}
+			#
+			NAND = {
+				exists = owner
+				owner = { is_gestalt = yes }
+				is_councilor = yes
+			}
+			has_any_subclass = no
+		}
+		AND = { #国防部 MOD
+			has_leader_flag = community_mod_rules_trigger
+			AND = {
+				has_leader_flag = community_can_leader_get_subclass_trait_true
+				NOT = { has_leader_flag = community_can_leader_get_subclass_trait_false }
+			}
+		}
+	}
+}
+
+# this = leader
+can_leader_get_destiny_trait = { #领袖可以获得命运特质
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_leader_flag = community_mod_rules_trigger
+				OR = {
+					has_leader_flag = community_can_leader_get_destiny_trait_true
+					has_leader_flag = community_can_leader_get_destiny_trait_false
+				}
+			}
+			#
+			NAND = {
+				exists = owner
+				owner = { is_gestalt = yes }
+			}
+		}
+		AND = { #国防部 MOD
+			has_leader_flag = community_mod_rules_trigger
+			AND = {
+				has_leader_flag = community_can_leader_get_destiny_trait_true
+				NOT = { has_leader_flag = community_can_leader_get_destiny_trait_false }
+			}
+		}
+	}
+}
+
+# this = country
+has_extra_council_position = { #拥有额外委员会位置
+	country_has_extra_council_position = yes
+}
+
+# THIS = Fleet
+can_jump_drive = { #可以跃迁
+	custom_tooltip = {
+		fail_text = "SUGL_can_jump_drive_fasle_tip"
+		OR = {
+			AND = { #香草 vanilla
+				AND = { #排除条件 Exclusions
+					NAND = { #排除条件 Exclusions
+						has_fleet_flag = community_mod_rules_trigger
+						OR = {
+							has_fleet_flag = community_can_jump_drive_true
+							has_fleet_flag = community_can_jump_drive_false
+						}
+					}
+					solar_system = {
+						NAND = { #排除条件 Exclusions
+							has_star_flag = community_mod_rules_trigger
+							OR = {
+								has_star_flag = community_can_jump_drive_true
+								has_star_flag = community_can_jump_drive_false
+							}
+						}
+					}
+					owner = {
+						NAND = {
+							has_country_flag = community_mod_rules_trigger
+							OR = {
+								has_country_flag = community_can_jump_drive_true
+								has_country_flag = community_can_jump_drive_false
+							}
+						}
+					}
+				}
+				#
+				#always = yes	# Moved cooldown to code
+			}
+			AND = { #国防部 MOD
+				OR = {
+					AND = { #舰队判定 
+						has_fleet_flag = community_mod_rules_trigger
+						AND = {
+							has_fleet_flag = community_can_jump_drive_true
+							NOT = { has_fleet_flag = community_can_jump_drive_false }
+						}
+					}
+					solar_system = { #星系判定
+						has_star_flag = community_mod_rules_trigger
+						AND = {
+							has_star_flag = community_can_jump_drive_true
+							NOT = { has_star_flag = community_can_jump_drive_false }
+						}			
+					}
+					owner = { #国家判定
+						has_country_flag = community_mod_rules_trigger
+						AND = {
+							has_country_flag = community_can_jump_drive_true
+							NOT = { has_country_flag = community_can_jump_drive_false }
+						}
+					}
+				}
+			} 
+		}
+	}
+}
+
+# this = country
+can_spawn_occupation_armies = { #可以产生占领陆军
+	OR = {
+		is_country_type = default
+		is_country_type = fallen_empire
+		is_country_type = awakened_fallen_empire
+	}
+}
+
+# this = system
+# root = country
+system_blocks_sensors = { #阻断探测星系
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_star_flag = community_mod_rules_trigger
+				OR = {
+					has_star_flag = community_system_blocks_sensors_true
+					has_star_flag = community_system_blocks_sensors_false
+				}
+			}
+			#
+			OR = {
+				is_inside_nebula = yes
+				has_modifier = space_storm
+				has_modifier = zroni_storm
+				has_star_flag = lcluster
+				has_star_flag = sealed_system
+			}
+		}
+		AND = { #国防部 MOD
+			has_star_flag = community_mod_rules_trigger
+			AND = {
+				has_star_flag = community_system_blocks_sensors_true
+				NOT = { has_star_flag = community_system_blocks_sensors_false }
+			}
+		}
+	}
+}
+
+# Root = country attempting to target system for movement
+# This = system being targeted
+can_enter_system_by_jump = { #可跃迁进入星系
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_star_flag = community_mod_rules_trigger
+				OR = {
+					has_star_flag = community_can_enter_system_by_jump_true
+					has_star_flag = community_can_enter_system_by_jump_false
+				}
+			}
+			#
+			custom_tooltip = {
+			#	success_text = "debug: can jump"
+				fail_text = cannot_jump_to_system
+		
+				# Sealed system
+				OR = {
+					NOT = { has_star_flag = sealed_system }
+					AND = {
+						root = { has_country_flag = entered_sealed_system }
+						has_star_flag = sealed_system
+					}
+				}
+		
+				# L-Cluster
+				NOT = { has_star_flag = lcluster }
+			}
+		}
+		AND = { #国防部 MOD
+			has_star_flag = community_mod_rules_trigger
+			AND = {
+				has_star_flag = community_can_enter_system_by_jump_true
+				NOT = { has_star_flag = community_can_enter_system_by_jump_false }
+			}
+		}
+	}
+}
+
+
+# This = pop
+can_resettle_pop = { #可以重新安置pop
+	# Self-modified Pops won't leave
+	custom_tooltip = {
+		fail_text = "self_modified_refuse"
+		NOT = { has_trait = trait_self_modified }
+	}
+	custom_tooltip = {
+		fail_text = "origin_egalitarian_refuse"
+		NAND = {
+			pop_has_ethic = ethic_egalitarian
+			is_enslaved = no
+			planet = { has_modifier = paragon_origin_reformists }
+		}
+	}
+	if = { #Done as an IF/ELSE so the tooltip isn't hideous and unreadable
+		limit = { is_shackled_robot = yes }
+		always = yes
+	}
+	else_if = {
+		limit = {
+			planet = {
+				is_doomsday_planet = yes
+			}
+		}
+		always = yes
+	}
+	else_if = {
+		limit = {
+			planet = {
+				has_modifier = planet_culture_shock
+			}
+		}
+		OR = {
+			is_same_species = planet.owner
+			planet = {
+				NOT = { has_modifier = planet_culture_shock }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			owner = {
+				is_gestalt = yes
+			}
+		}
+		always = yes
+	}
+	else = {
+		custom_tooltip = {
+			fail_text = RESETTLEMENT_POLICY_FAIL
+			owner = {
+				has_policy_flag = resettlement_allowed
+			}
+		}
+	}
+}
+
+can_country_resettle = { #可重新安置pop的国家类型
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_country_resettle_true
+					has_country_flag = community_can_country_resettle_false
+				}
+			}
+			#
+			OR = {
+				has_policy_flag = resettlement_allowed
+				is_gestalt = yes
+				custom_tooltip = {
+					text = owns_non_sapient_robots
+					country_has_shackled_robots = yes
+				}
+				hidden_trigger = { #don't need to show this as tooltip only shown when all game rule fails, and this is a special case
+					any_owned_planet = {
+						is_doomsday_planet = yes
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_country_resettle_true
+				NOT = { has_country_flag = community_can_country_resettle_false }
+			}
+		}
+	}
+}
+
+# This = Planet
+can_resettle_planet = { #可重新安置pop的行星类型
+	owner = {
+		OR = {
+			has_policy_flag = resettlement_allowed
+			is_gestalt = yes
+			country_has_shackled_robots = yes
+			any_owned_planet = {
+				is_doomsday_planet = yes
+			}
+		}
+	}
+	is_controlled_by = owner
+	has_ground_combat = no
+	has_orbital_bombardment = no
+	custom_tooltip = {
+		text = "RESETTLE_PLANET_UNDER_COLONIZATION"
+		exists = this
+		is_under_colonization = no
+	}
+}
+
+can_resettle_planet_no_owner_check = { ##可重新安置pop的行星类型 但没有所有者检查
+	is_controlled_by = owner
+	has_ground_combat = no
+	has_orbital_bombardment = no
+	custom_tooltip = {
+		text = "RESETTLE_PLANET_UNDER_COLONIZATION"
+		exists = this
+		is_under_colonization = no
+	}
+}
+
+# This = Planet
+should_spawn_deposits = { #应该生成地块
+	is_artificial = no
+}
+
+# This = Planet
+is_new_colony = { #是新殖民地
+	colony_age < 180
+	num_pops < 10
+}
+
+# This = pop
+pop_generates_crime = { #pop产生犯罪度
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_pop_generates_crime_true
+					has_pop_flag = community_pop_generates_crime_false
+				}
+			}
+			#
+			is_sapient = yes
+			is_non_sapient_robot = no
+			is_being_assimilated = no
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_pop_generates_crime_true
+				NOT = { has_pop_flag = community_pop_generates_crime_false }
+			}
+		}
+	}
+}
+
+# This = planet
+can_pops_grow_on_planet = { #pop可生长的行星
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_planet_flag = community_mod_rules_trigger
+				OR = {
+					has_planet_flag = community_can_pops_grow_on_planet_true
+					has_planet_flag = community_can_pops_grow_on_planet_false
+				}
+			}
+			#
+			NOR = {
+				has_modifier = planet_population_control
+				has_modifier = planet_population_control_gestalt
+				AND = { # conquered by crisis
+					exists = controller
+					controller = {
+						OR = {
+							is_country_type = ai_empire
+							is_country_type = swarm
+						}
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_planet_flag = community_mod_rules_trigger
+			AND = {
+				has_planet_flag = community_can_pops_grow_on_planet_true
+				NOT = { has_planet_flag = community_can_pops_grow_on_planet_false }
+			}
+		}
+	}
+}
+
+# This = planet
+can_pops_assemble_on_planet = { #pop可组装的行星
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_planet_flag = community_mod_rules_trigger
+				OR = {
+					has_planet_flag = community_can_pops_assemble_on_planet_true
+					has_planet_flag = community_can_pops_assemble_on_planet_false
+				}
+			}
+			#
+			NOR = {
+				has_modifier = planet_robot_assembly_control
+				has_modifier = planet_population_control_gestalt
+				AND = { # conquered by crisis
+					exists = controller
+					controller = {
+						OR = {
+							is_country_type = ai_empire
+							is_country_type = swarm
+						}
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_planet_flag = community_mod_rules_trigger
+			AND = {
+				has_planet_flag = community_can_pops_assemble_on_planet_true
+				NOT = { has_planet_flag = community_can_pops_assemble_on_planet_false }
+			}
+		}
+	}
+}
+
+# This = planet
+can_pops_decline_on_planet = { #pop可灭绝的行星
+	always = yes
+}
+
+# This = planet
+# Root = country
+can_force_grow_on_planet = { #可强制生长的行星
+	custom_tooltip = {
+		fail_text = FORCE_GROWTH_NEEDS_POP_CONTROLS
+		exists = owner
+		owner = { NOT = { has_policy_flag = population_controls_not_allowed } }
+	}
+}
+
+# This = planet
+# Root = country
+can_force_decline_on_planet = { #可强制灭绝的行星
+	custom_tooltip = {
+		fail_text = FORCE_DECLINE_NEEDS_POP_CONTROLS
+		exists = owner
+		owner = { NOT = { has_policy_flag = population_controls_not_allowed } }
+	}
+	custom_tooltip = {
+		fail_text = FORCED_DECLINE_ALREADY_PURGING
+		NOT = {
+			any_owned_species = {
+				has_citizenship_type = { type = citizenship_purge country = root }
+				NOT = { has_purge_type = { country = root type = purge_neutering } }
+			}
+		}
+	}
+}
+
+# This = species
+# Root = country
+can_force_decline_species = { #可强制灭绝的物种
+	OR = {
+		has_citizenship_type = { country = root type = citizenship_slavery }
+		has_citizenship_type = { country = root type = citizenship_robot_servitude }
+	}
+}
+
+## If this returns true, the species will be set to decline even if it is not being purged
+# This = species
+# From = planet
+## Note: success text tooltips are shown in alert_pops_declining alert.
+should_force_decline_species = { #应该被强制灭绝的物种
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_species_flag = community_mod_rules_trigger
+				OR = {
+					has_species_flag = community_should_force_decline_species_true
+					has_species_flag = community_should_force_decline_species_false
+				}
+			}
+			#
+			# Infertile Clone Army pops should decline if in Country that can't have Vats, or there is a Vat shortage.
+			custom_tooltip = {
+				success_text = CLONE_ARMY_FORCE_DECLINE
+				OR = {
+					has_trait = trait_clone_soldier_infertile
+					has_trait = trait_clone_soldier_infertile_full_potential
+				}
+				from = {
+					OR = {
+						# Check if country is unable to build Vats for this species.
+						AND = {
+							exists = owner
+							owner = {
+								OR = {
+									NOT = { has_origin = origin_clone_army }					# Can't have Vats.
+									has_country_flag = clone_army_fertility_unlocked			# Can't have Vats anymore.
+									NOT = { owner_main_species = { is_same_species = root } }	# Our Vats can't build this species.
+								}
+							}
+						}
+						# Vats check out, but are there more pops than Vats support?
+						check_variable = { which = clone_pops_missing value < 0 }
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_species_flag = community_mod_rules_trigger
+			AND = {
+				has_species_flag = community_should_force_decline_species_true
+				NOT = { has_species_flag = community_should_force_decline_species_false }
+			}
+		}
+	}
+}
+
+# This = country
+can_build_branch_offices = { #可建立分部
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_build_branch_offices_true
+					has_country_flag = community_can_build_branch_offices_false
+				}
+			}
+			#
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_NOT_MEGACORP
+				OR = {
+					has_authority = auth_corporate
+					has_civic = civic_galactic_sovereign_megacorp
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_build_branch_offices_true
+				NOT = { has_country_flag = community_can_build_branch_offices_false }
+			}
+		}
+	}
+}
+
+# This = country
+can_support_branch_offices = { #可被建立分部
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_support_branch_offices_true
+					has_country_flag = community_can_support_branch_offices_false
+				}
+			}
+			#
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_NOT_FALLEN_EMPIRES
+				NOR = {
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+				}
+			}
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_NOT_ON_MEGACORP_PLANET
+				NOR = {
+					has_authority = auth_corporate
+					has_civic = civic_galactic_sovereign_megacorp
+				}
+			}
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_NOT_REGULAR_EMPIRE
+				is_gestalt = no
+			}
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_NOT_ADVANCED_PRE_FTL
+				if = {
+					limit = {
+						is_primitive = yes
+						is_gestalt = no
+					}
+					OR = {
+						has_pre_ftl_age = atomic_age
+						has_pre_ftl_age = early_space_age
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_support_branch_offices_true
+				NOT = { has_country_flag = community_can_support_branch_offices_false }
+			}
+		}
+	}
+}
+
+# This = planet
+# Root = country
+can_build_branch_office_on_planet = { #可建立分部的行星
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_planet_flag = community_mod_rules_trigger
+				OR = {
+					has_planet_flag = community_can_build_branch_office_on_planet_true
+					has_planet_flag = community_can_build_branch_office_on_planet_false
+				}
+			}
+			#
+			custom_tooltip = {
+				fail_text = requires_recipient_not_fanatic_purifiers
+				exists = owner
+				owner = {
+					OR = {
+						is_same_species = root
+						NOT = { has_civic = civic_fanatic_purifiers }
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_NO_OBSERVATION_OUTPOST
+				if = {
+					limit = {
+						root = { is_criminal_syndicate = yes }
+						owner = { is_primitive = yes }
+					}
+					has_observation_outpost = yes
+					observation_outpost_owner = {
+						is_same_value = root
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_NOT_COMMERCIAL_PACT
+				exists = owner
+				OR = {
+					root = { is_criminal_syndicate = yes }
+					owner = { has_commercial_pact = root }
+					owner = { is_in_federation_with = root }
+					AND = {
+						has_observation_outpost = yes
+						observation_outpost = {
+							has_modifier = preftl_action_trade_pact
+						}
+					}
+				
+					# allow branch offices in subsidiaries and vice versa (and fellow subjects)
+					root = {
+						is_subject = yes
+						OR = {
+							has_authority = auth_corporate
+							has_civic = civic_galactic_sovereign_megacorp
+						}
+						overlord = {
+							OR = {
+								is_same_value = prevprev.owner
+								is_same_value = prevprev.owner.overlord
+							}
+						}
+					}
+					owner = {
+						is_subject = yes
+						overlord = {
+							OR = {
+								is_same_value = root
+								is_same_value = root.overlord
+							}
+							OR = {
+								has_authority = auth_corporate
+								has_civic = civic_galactic_sovereign_megacorp
+							}
+						}
+					}
+					AND = {
+						root = { has_civic = civic_galactic_sovereign_megacorp }
+						owner = { is_galactic_community_member = yes }
+					}
+					AND = {
+						root = { has_modifier = imperial_charter }
+						owner = { is_galactic_community_member = yes }
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_MEGACORP_OVERLORD
+				exists = owner
+				# failure message for having a corporate overlord
+			
+				if = {
+					limit = {
+						OR = {
+							# Not valid if you aren't a subject.
+							root = {
+								is_subject = no
+							}
+							# Or if your overlord isn't a megacorp.
+							root = {
+								is_subject = yes
+								overlord = {
+									NOR = {
+										has_authority = auth_corporate
+										has_civic = civic_galactic_sovereign_megacorp
+									}
+								}
+							}
+						}
+					}
+					always = yes
+				}
+				else = {
+					AND = {
+						root = {
+							is_subject = yes
+							overlord = {
+								OR = {
+									has_authority = auth_corporate
+									has_civic = civic_galactic_sovereign_megacorp
+								}
+							}
+						}
+						owner = {
+							OR = {
+								is_subject = no
+								AND = {
+									is_subject = yes
+									overlord = { NOT = { is_same_value = root.overlord } }
+								}
+							}
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_CRIMINAL_HERITAGE_HAS_TRUCE
+				exists = owner
+				OR = {
+					root = { is_criminal_syndicate = no }
+					owner = {
+						NOR = {
+							has_truce = root
+							is_at_war_with = root
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = BRANCH_OFFICE_CRIMINAL_COOLDOWN
+				exists = owner
+				OR = {
+					root = { is_criminal_syndicate = no }
+					AND = {
+						root = { is_criminal_syndicate = yes }
+						NOT = { has_planet_flag = criminal_branch_closed_cooldown_planet@root }
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_planet_flag = community_mod_rules_trigger
+			AND = {
+				has_planet_flag = community_can_build_branch_office_on_planet_true
+				NOT = { has_planet_flag = community_can_build_branch_office_on_planet_false }
+			}
+		}
+	}
+}
+
+# This = country
+# Checked by is_criminal_syndicate trigger
+is_criminal_syndicate_rule = { #遵循犯罪集团规则
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_is_criminal_syndicate_rule_true
+					has_country_flag = community_is_criminal_syndicate_rule_false
+				}
+			}
+			#
+			OR = {
+				has_authority = auth_corporate
+				has_valid_civic = civic_galactic_sovereign_megacorp
+			}
+			has_valid_civic = civic_criminal_heritage
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_is_criminal_syndicate_rule_true
+				NOT = { has_country_flag = community_is_criminal_syndicate_rule_false }
+			}
+		}
+	}
+}
+
+# This = planet
+can_crossbreed_species_on_planet = { #可杂交物种的行星
+	exists = owner
+	owner = { has_ascension_perk = ap_xeno_compatibility }
+	count_species = {
+		limit = {
+			is_crossbreeding_possible = yes
+		}
+		count >= 2
+	}
+}
+
+# This = species one
+# Root = species two
+can_crossbreed_species = { #可杂交的物种
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_species_flag = community_mod_rules_trigger
+				OR = {
+					has_species_flag = community_can_crossbreed_species_true
+					has_species_flag = community_can_crossbreed_species_false
+				}
+			}
+			#
+			is_crossbreeding_possible = yes
+			root = { is_crossbreeding_possible = yes }
+			NOR = {
+				is_subspecies = root
+				root = { is_subspecies = prev }
+			}
+		}
+		AND = { #国防部 MOD
+			has_species_flag = community_mod_rules_trigger
+			AND = {
+				has_species_flag = community_can_crossbreed_species_true
+				NOT = { has_species_flag = community_can_crossbreed_species_false }
+			}
+		}
+	}
+}
+
+# No scope
+can_win_timed_victory = { #可以赢得定时胜利
+	custom_tooltip = {
+		fail_text = VICTORY_CONDITION_CRISIS_IN_PROGRESS
+		NOT = {
+			any_country = {
+				is_crisis_faction = yes
+				NOT = { is_country_type = awakened_marauders }
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = VICTORY_CONDITION_WAR_IN_HEAVEN_IN_PROGRESS
+		NOT = { has_global_flag = war_in_heaven_ongoing }
+	}
+}
+
+# This = country
+can_use_galactic_market = { #可以使用银河市场
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_use_galactic_market_true
+					has_country_flag = community_can_use_galactic_market_false
+				}
+			}
+			#
+			is_country_type = default
+			NOR = {
+				has_civic = civic_fanatic_purifiers
+				has_civic = civic_hive_devouring_swarm
+				has_civic = civic_machine_terminator
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_use_galactic_market_true
+				NOT ={ has_country_flag = community_can_use_galactic_market_false }
+			}
+		}
+	}
+}
+
+# ROOT = country
+# THIS = pop
+can_be_sold_on_slave_market = { #可在奴隶市场出售
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_can_be_sold_on_slave_market_true
+					has_pop_flag = community_can_be_sold_on_slave_market_false
+				}
+			}
+			#
+			exists = owner
+			OR = {
+				is_enslaved = yes
+				is_non_sapient_robot = yes
+				is_shackled_robot = yes
+			}
+			OR ={
+				ROOT = { is_ai = no }
+				has_citizenship_rights = no
+				AND = {
+					is_unemployed = yes
+					planet = {
+						num_unemployed > 3
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = organic_slave_trade_banned_flag
+				}
+				is_organic_species = no
+			}
+			if = {
+				limit = {
+					has_global_flag = sentient_slave_trade_banned_flag
+				}
+				is_sapient = no
+			}
+			NOR = {
+				# Since they can't reproduce, they die out too fast for anyone to want to buy them.
+				has_trait = trait_clone_soldier_infertile
+				has_trait = trait_clone_soldier_infertile_full_potential
+			}
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_can_be_sold_on_slave_market_true
+				NOT = { has_pop_flag = community_can_be_sold_on_slave_market_false }
+			}
+		}
+	}
+}
+
+# This = country
+can_be_part_of_galactic_community = { #可成为银河社区成员
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_be_part_of_galactic_community_true
+					has_country_flag = community_can_be_part_of_galactic_community_false
+				}
+			}
+			#
+			custom_tooltip = {
+				fail_text = "community_default_failtext"
+				is_country_type = default
+			}
+			custom_tooltip = {
+				fail_text = "community_homicidal_failtext"
+				NOR = {
+					has_civic = civic_fanatic_purifiers
+					has_civic = civic_hive_devouring_swarm
+					has_civic = civic_machine_terminator
+				}
+			}
+			custom_tooltip = {
+				fail_text = "community_declared_crisis_failtext"
+				has_been_declared_crisis = no
+			}
+			custom_tooltip = {
+				fail_text = "community_declared_crisis_failtext"
+				#fail_text = "community_overlord_declared_crisis_failtext"
+				OR = {
+					NOT = { exists = overlord }
+					overlord = { has_been_declared_crisis = no }
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_be_part_of_galactic_community_true
+				NOT = { has_country_flag = community_can_be_part_of_galactic_community_false }
+			}
+		}
+	}
+}
+
+# This = country
+can_be_part_of_galactic_empire = { #可成为银河帝国的一部分
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_be_part_of_galactic_empire_true
+					has_country_flag = community_can_be_part_of_galactic_empire_false
+				}
+			}
+			#
+			custom_tooltip = {
+				fail_text = "community_default_failtext"
+				is_country_type = default
+			}
+			custom_tooltip = {
+				fail_text = "community_homicidal_failtext"
+				NOR = {
+					has_civic = civic_fanatic_purifiers
+					has_civic = civic_hive_devouring_swarm
+					has_civic = civic_machine_terminator
+				}
+			}
+			custom_tooltip = {
+				fail_text = "community_declared_crisis_failtext"
+				has_been_declared_crisis = no
+			}
+			custom_tooltip = {
+				fail_text = "community_declared_crisis_failtext"
+				#fail_text = "community_overlord_declared_crisis_failtext"
+				OR = {
+					NOT = { exists = overlord }
+					overlord = { has_been_declared_crisis = no }
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_be_part_of_galactic_empire_true
+				NOT = { has_country_flag = community_can_be_part_of_galactic_empire_false }
+			}
+		}
+	}
+}
+
+# This = country
+can_see_galactic_community = { #可以看到银河社区
+	OR = {
+		has_country_flag = galcom_form_aye
+		has_country_flag = galcom_form_nay
+		is_galactic_community_member = yes
+	}
+}
+
+# This = country
+can_be_part_of_galactic_council = { #可成为银河理事会成员
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_be_part_of_galactic_council_true
+					has_country_flag = community_can_be_part_of_galactic_council_false
+				}
+			}
+			#
+			is_country_type = default
+			NOR = {
+				has_civic = civic_fanatic_purifiers
+				has_civic = civic_hive_devouring_swarm
+				has_civic = civic_machine_terminator
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_be_part_of_galactic_council_true
+				NOT = { has_country_flag = community_can_be_part_of_galactic_council_false }
+			}
+		}
+	}
+}
+
+# If, 'yes', forces an empire to be advanced at game start (overrides game settings)
+# This = country
+must_be_advanced_empire = { #一定是高级帝国
+	OR = {
+		has_country_flag = lost_colony_parent
+		has_country_flag = MSI
+	}
+}
+
+# If 'no', blocks an empire from being advanced at game start (overrides 'must_be_advanced_empire' above)
+# This = country
+is_allowed_to_be_advanced_empire = { #可以作为高级帝国生成
+	always = yes
+}
+
+# This = planet
+has_enough_pops_for_necrophage_on_planet = { #有足够pop可尸化的行星?
+	owner = { has_origin = origin_necrophage }
+	has_available_jobs = necro_apprentice
+	if = {
+		limit = {
+			has_planet_flag = necrophage_alert_timer
+		}
+		count_owned_species = {
+			count = 0
+			limit = { species_can_be_necrophaged = yes }
+		}
+	}
+	else = {
+		NOT = { any_owned_pop = { can_work_specific_job = necro_apprentice } }
+	}
+}
+
+# Root = current planet
+# This = pop
+# Purge, Sapience, Migration Controls policy (ignored by Gestalts and Synths), and target habitability are checked in code.
+can_pop_auto_migrate = { #可自动迁移的pop
+	hidden_trigger = { is_unemployed = yes } #this is always true where this tooltip is called
+	custom_tooltip = {
+		fail_text = AUTO_MIGRATE_ASSIMILATED
+		is_being_assimilated = no
+	}
+	if = {
+		limit = {
+			OR = {
+				is_shackled_robot = yes
+				is_enslaved = yes
+			}
+		}
+		custom_tooltip = {
+			fail_text = AUTO_MIGRATE_SLAVE_PROCESSING
+			OR = {
+				planet = {
+					OR = {
+						has_building = building_slave_processing
+						AND = {
+							exists = orbital_defence
+							orbital_defence = {
+								exists = starbase
+								starbase = {
+									has_starbase_building = ring_slave_processing_facility
+								}
+							}
+						}
+					}
+				}
+				solar_system = {
+					count_starbase_buildings = {
+						type = transit_hub
+						count >= 1
+						include_being_constructed = no
+					}
+				}
+			}
+		}
+	}
+}
+
+# This = planet
+# Checked before can_pop_auto_migrate to save performance
+can_planet_auto_migrate = { #可自动迁移的行星
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_planet_flag = community_mod_rules_trigger
+				OR = {
+					has_planet_flag = community_can_planet_auto_migrate_true
+					has_planet_flag = community_can_planet_auto_migrate_false
+				}
+			}
+			#
+			custom_tooltip = {
+				fail_text = AUTO_MIGRATE_CULTURE_SHOCK
+				NOT = { has_modifier = planet_culture_shock }
+			}
+			custom_tooltip = {
+				fail_text = AUTO_MIGRATE_COLONY_TOO_NEW
+				OR = {
+					colony_age > 60
+					is_capital = yes # Don't break Doomsday!
+				}
+			}
+			custom_tooltip = {
+				fail_text = AUTO_MIGRATE_ONLY_HAS_ONE_POP
+				num_sapient_pops > 1 
+			}
+			hidden_trigger = {
+				exists = owner
+				owner = {
+					OR = {
+						is_country_type = default
+						is_country_type = awakened_fallen_empire
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_planet_flag = community_mod_rules_trigger
+			AND = {
+				has_planet_flag = community_can_planet_auto_migrate_true
+				NOT = { has_planet_flag = community_can_planet_auto_migrate_false }
+			}
+		}
+	}
+}
+
+can_planet_receive_auto_migration = { #可接受自动迁移的行星
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_planet_flag = community_mod_rules_trigger
+				OR = {
+					has_planet_flag = community_can_planet_receive_auto_migration_true
+					has_planet_flag = community_can_planet_receive_auto_migration_false
+				}
+			}
+			#
+			NOR = {
+				planet_devastation >= 10
+				has_modifier = planet_culture_shock
+				is_doomsday_planet = yes
+			}
+		}
+		AND = { #国防部 MOD
+			has_planet_flag = community_mod_rules_trigger
+			AND = {
+				has_planet_flag = community_can_planet_receive_auto_migration_true
+				NOT = { has_planet_flag = community_can_planet_receive_auto_migration_false }
+			}
+		}
+	}
+}
+
+#This, root = country
+can_gene_mod_habitability = { #基因修饰宜居性
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_gene_mod_habitability_true
+					has_country_flag = community_can_gene_mod_habitability_false
+				}
+			}
+			#
+			has_technology = tech_glandular_acclimation
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_gene_mod_habitability_true
+				NOT = { has_country_flag = community_can_gene_mod_habitability_false }
+			}
+		}
+	}
+}
+
+#This, root = country
+can_add_advanced_traits = { #可以添加高级特质
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_add_advanced_traits_true
+					has_country_flag = community_can_add_advanced_traits_false
+				}
+			}
+			#
+			has_utopia = yes
+			has_tradition = tr_genetics_creation
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_add_advanced_traits_true
+				NOT = { has_country_flag = community_can_add_advanced_traits_false }
+			}
+		}
+	}
+}
+
+#This, root = country
+can_add_negative_traits_organic = { #可以添加有机负面特质
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_add_negative_traits_organic_true
+					has_country_flag = community_can_add_negative_traits_organic_false
+				}
+			}	
+			#	
+			has_utopia = yes
+			OR = {
+				has_tradition = tr_genetics_resequencing
+				has_tradition = tr_cybernetics_integrated_anatomy
+				has_tradition = tr_cybernetics_assimilator_integrated_anatomy
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_add_negative_traits_organic_true
+				NOT = { has_country_flag = community_can_add_negative_traits_organic_false }
+			}
+		}
+	}
+}
+
+#This, root = country
+can_remove_positive_traits_organic = { #可以移除正面有机特质
+	OR = {
+		AND = { #香草 vanilla
+			OR = {
+				NAND = { #排除条件 Exclusions
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_can_remove_positive_traits_organic_true
+						has_country_flag = community_can_remove_positive_traits_organic_false
+					}
+				}			
+				#	
+				AND = {
+					has_utopia = yes
+					OR = {
+						has_tradition = tr_genetics_resequencing
+						has_tradition = tr_cybernetics_integrated_anatomy
+						has_tradition = tr_cybernetics_assimilator_integrated_anatomy
+					}
+				}
+				AND = {
+					has_toxoids = yes
+					has_origin = origin_overtuned
+				}
+				has_technology = tech_epigenetic_triggers
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_remove_positive_traits_organic_true
+				NOT = { has_country_flag = community_can_remove_positive_traits_organic_false }
+			}
+		}
+	}
+}
+
+#This, root = country
+can_modify_organic_portraits = { #可以修改有机肖像
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_modify_organic_portraits_true
+					has_country_flag = community_can_modify_organic_portraits_false
+				}
+			}		
+			#	
+			has_utopia = yes
+			has_tradition = tr_genetics_enhanced_expression
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_modify_organic_portraits_true
+				NOT = { has_country_flag = community_can_modify_organic_portraits_false }
+			}
+		}
+	}
+}
+
+# This = country contacting
+# From = target country
+## Final check for whether there should be a first contact site spawned. Main check is via country type contact_rule, in code.
+can_have_first_contact = { #可以有第一次接触
+	if = {
+		limit = { from = { is_amoeba_country_type = yes } }
+		NOT = {
+			any_active_first_contact = {
+				contact_country = { is_amoeba_country_type = yes }
+			}
+		}
+	}
+	else_if = {
+		limit = { from = { is_tiyanki_country_type = yes } }
+		NOT = {
+			any_active_first_contact = {
+				contact_country = { is_tiyanki_country_type = yes }
+			}
+		}
+	}
+	else_if = {
+		limit = { from = { is_crystal_country_type = yes } }
+		NOT = {
+			any_active_first_contact = {
+				contact_country = {
+					is_crystal_country_type = yes
+					NOT = { has_country_flag = queued_to_destroy }
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { from = { is_drone_country_type = yes } }
+		NOT = {
+			any_active_first_contact = {
+				contact_country = {
+					is_drone_country_type = yes
+					NOT = { has_country_flag = queued_to_destroy }
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { from = { is_country_type = cloud } }
+		NOT = {
+			any_active_first_contact = {
+				contact_country = { is_country_type = cloud }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			from = {
+				OR = {
+					is_country_type = caravaneer_fleet
+					is_country_type = caravaneer_home
+				}
+			}
+		}
+		NOT = {
+			any_active_first_contact = {
+				contact_country = {
+					OR = {
+						is_country_type = caravaneer_fleet
+						is_country_type = caravaneer_home
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			from = {
+				is_country_type = dragon_dummy
+			}
+		}
+		has_origin = origin_here_be_dragons
+		from = { has_country_flag = dragon_of@prev }
+	}
+	else_if = {
+		limit = {
+			from = {
+				is_country_type = jaunting_traveler_dummy
+			}
+		}
+		from = { has_country_flag = jaunting_traveler_of@prev }
+	}
+}
+
+# Root = Country with envoys to send
+# This = Imperium leader country
+can_use_envoys_to_raise_imperial_authority = { #可利用特使提高帝国权威
+	always = yes
+}
+
+# Root = Country with envoys to send
+# This = Imperium leader country
+can_use_envoys_to_lower_imperial_authority = { #可利用特使降低帝国权威
+	custom_tooltip = {
+		fail_text = cannot_lower_authority_emperor
+		root = { is_galactic_emperor = no }
+	}
+	custom_tooltip = {
+		fail_text = cannot_lower_authority_espionage_operation
+		root = {
+			NOT = { has_modifier = undermining_efforts_stalled }
+		}
+	}
+}
+
+#this/root = pop
+#checked if job's possible_precalc = can_fill_drone_job
+can_fill_drone_job = { #可作为格式塔子个体的pop
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_can_fill_drone_job_true
+					has_pop_flag = community_can_fill_drone_job_false
+				}
+			}			
+			#
+			custom_tooltip = DRONE_JOB_TRIGGER
+			hidden_trigger = {
+				exists = owner
+				owner = { is_gestalt = yes }
+				is_being_purged = no
+				is_enslaved = no
+				is_being_assimilated = no
+				NOT = { has_citizenship_type = { type = citizenship_organic_trophy country = owner } }
+			}
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_can_fill_drone_job_true
+				NOT = { has_pop_flag = community_can_fill_drone_job_false }
+			}
+		}
+	}
+}
+
+#this/root = pop
+#checked if job's possible_precalc = can_fill_worker_job
+can_fill_worker_job = { #可作为工人的pop
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_can_fill_worker_job_true
+					has_pop_flag = community_can_fill_worker_job_false
+				}
+			}		
+			#		
+			custom_tooltip = WORKER_JOB_TRIGGER
+			hidden_trigger = {
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+				exists = owner
+				is_being_purged = no
+				is_being_assimilated = no
+				NOT = { has_citizenship_type = { type = citizenship_organic_trophy country = owner } }
+				NAND = {
+					has_citizenship_type = { type = citizenship_slavery }
+					OR = {
+						has_slavery_type = { type = slavery_livestock }
+						has_slavery_type = { type = slavery_matrix }
+					}
+				}
+				if = {
+					limit = {
+						divinity_right_to_work_job_check_trigger_exempt = no
+					}
+					divinity_right_to_work_job_check_trigger_worker = yes
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_can_fill_worker_job_true
+				NOT = { has_pop_flag = community_can_fill_worker_job_false }
+			}
+		}
+	}
+}
+
+#this/root = pop
+#checked if job's possible_precalc = can_fill_specialist_job
+can_fill_specialist_job = { #可作为专家的pop #奇妙的条件?
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_can_fill_specialist_job_true
+					has_pop_flag = community_can_fill_specialist_job_false
+				}
+			}		
+			#	
+			can_fill_specialist_job = yes 
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_can_fill_specialist_job_true
+				NOT = { has_pop_flag = community_can_fill_specialist_job_false }
+			}
+		}
+	}
+}
+#this/root = pop
+#checked if job's possible_precalc = can_fill_ruler_job
+can_fill_ruler_job = { #可作为统治者的pop
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_pop_flag = community_mod_rules_trigger
+				OR = {
+					has_pop_flag = community_can_fill_ruler_job_true
+					has_pop_flag = community_can_fill_ruler_job_false
+				}
+			}	
+			#		
+			if = {
+				limit = {
+					exists = owner
+					owner = {
+						has_origin = origin_necrophage
+						has_trait = trait_necrophage
+					}
+				}
+				custom_tooltip = {
+					text = RULER_JOB_NECROPHAGE_TRIGGER
+					has_trait = trait_necrophage
+					is_enslaved = no
+					is_being_purged = no
+					is_being_assimilated = no
+				}
+			}
+			else = {
+				custom_tooltip = RULER_JOB_TRIGGER
+				hidden_trigger = {
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+					exists = owner
+					is_enslaved = no
+					is_being_purged = no
+					is_being_assimilated = no
+					NOT = { has_trait = trait_syncretic_proles }
+					can_think = yes
+					OR = {
+						NOT = { has_trait = trait_mechanical }
+						AND = {
+							owner = { has_technology = tech_synthetic_workers }
+							owner = { has_policy_flag = ai_full_rights }
+						}
+					}
+					NOT = { has_citizenship_type = { type = citizenship_organic_trophy country = owner } }
+					if = {
+						limit = {
+							divinity_right_to_work_job_check_trigger_exempt = no
+						}
+						divinity_right_to_work_job_check_trigger_ruler = yes
+					}
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_pop_flag = community_mod_rules_trigger
+			AND = {
+				has_pop_flag = community_can_fill_ruler_job_true
+				NOT = { has_pop_flag = community_can_fill_ruler_job_false }
+			}
+		}
+	}
+}
+
+# Checks whether the game should try and build a building or district on a planet via scripts in common/colony_automation
+# Does not apply to "crisis building" (colony_automation_exceptions) or sector automation (sector_focuses)
+# this = planet
+should_planetary_automate = { #可自动建设的行星
+	OR = {
+		free_jobs < 3
+		num_unemployed > 0
+	}
+	has_building_construction = no
+}
+
+#暂不考虑对此的兼容 仅作文本保留
+	##开除领袖花费
+	#dismiss_leader_cost = {
+	#	base = 0
+	#	modifier = {
+	#		owner = { has_valid_civic = civic_feudal_realm }
+	#		add = 100
+	#	}
+	#	modifier = {
+	#		owner = { has_valid_civic = civic_feudal_realm }
+	#		factor = value:feudal_realm_civic_dimissal_cost #Multiplier for Feudal dismissal
+	#	}
+	#}
+#
+
+# this = leader
+can_dismiss_leader = { #可以开除领袖
+	OR = {
+		AND = { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions
+					has_leader_flag = community_mod_rules_trigger
+					OR = {
+						has_leader_flag = community_can_dismiss_leader_true
+						has_leader_flag = community_can_dismiss_leader_false
+					}
+				}
+				NAND = { #排除条件 Exclusions
+					exists = owner
+					owner = {
+						has_country_flag = community_mod_rules_trigger
+						OR = {
+							has_country_flag = community_can_dismiss_leader_country_true
+							has_country_flag = community_can_dismiss_leader_country_false
+						}
+					}
+				}
+			}		
+			#	
+			if = {
+				limit = {
+					leader_class = admiral
+					is_idle = no
+					# Rulers and heirs can't be dismissed any way and can be non-idle
+					is_ruler = no
+					is_heir = no
+				}
+				custom_tooltip = {
+					fail_text = "requires_fleet_control"
+					exists = fleet
+					fleet = {
+						controller = {
+							is_same_value = prev.owner
+							is_same_value = prevprev.owner
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						is_heir = yes
+						is_ruler = yes
+					}
+				}
+				custom_tooltip = {
+					always = no
+					fail_text = "can_not_dismiss_rulers"
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			OR = {
+				AND = {
+					has_leader_flag = community_mod_rules_trigger
+					AND = {
+						has_leader_flag = community_can_dismiss_leader_true
+						NOT = { has_leader_flag = community_can_dismiss_leader_false }
+					}
+				}
+				AND = {
+					owner = {
+						has_country_flag = community_mod_rules_trigger
+						AND = {
+							has_country_flag = community_can_dismiss_leader_country_true
+							NOT = { has_country_flag = community_can_dismiss_leader_country_false }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# this = country
+can_country_change_councilors = { #是否可变更委员会委员
+	is_gestalt = no
+}
+
+# this = leader
+should_count_towards_leader_cap = { #是否占用领袖数量
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_leader_flag = community_mod_rules_trigger
+				OR = {
+					has_leader_flag = community_should_count_towards_leader_cap_true
+					has_leader_flag = community_should_count_towards_leader_cap_false
+				}
+			}
+			#
+			NOR = {
+				leader_class = envoy
+				AND = {
+					owner = { is_gestalt = yes }
+					is_councilor = yes
+					# We count all rulers as well
+					NOT = { is_ruler = yes }
+				}
+				has_leader_flag = marauder_merc_leader
+				has_leader_flag = hired_admiral_merc_leader
+				has_leader_flag = legendary_leader
+				AND = {
+					has_trait_tier1or2 = { TRAIT = leader_trait_eager }
+					has_skill < 4
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_leader_flag = community_mod_rules_trigger
+			AND = {
+				has_leader_flag = community_should_count_towards_leader_cap_true
+				NOT = { has_leader_flag = community_should_count_towards_leader_cap_false }
+			}
+		}
+	}
+}
+
+# From = country, country that tries to connect using relay network
+# ROOT/This = country, target country to connect to using relay network
+can_country_connect_to_relay_network = { #可连接星际铁路的国家
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_can_country_connect_to_relay_network_true
+					has_country_flag = community_can_country_connect_to_relay_network_false
+				}
+			}		
+			#	
+			AND = {
+				is_primitive = no
+				OR = {
+					is_country_type = default
+					is_subject = yes
+					is_overlord = yes
+				}
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_can_country_connect_to_relay_network_true
+				NOT = { has_country_flag = community_can_country_connect_to_relay_network_false }
+			}
+		}
+	}
+}
+
+# this = planet
+should_ai_build_stronghold_on_vulnerable_planet = { #AI应该建造要塞的容易被攻陷的行星
+	planet_stability > 50
+	OR = {
+		AND = {
+			num_pops <= 5
+			num_buildings = { type = building_stronghold value < 1 }
+		}
+		AND = {
+			num_pops <= 10
+			num_buildings = { type = building_stronghold value < 2  }
+		}
+		AND = {
+			num_pops <= 15
+			num_buildings = { type = building_stronghold value < 3  }
+		}
+		AND = {
+			num_pops <= 25
+			num_buildings = { type = building_stronghold value < 4  }
+		}
+	}
+
+	exists = sector
+	sector = {
+		NOT = { has_sector_type = core_sector }
+	}
+
+	IF = {
+		LIMIT = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		NOT = { has_available_jobs = warrior_drone }
+		any_owned_pop = { 
+			is_unemployed = yes
+			can_work_specific_job = warrior_drone 
+		}
+	}
+	ELSE = {
+		NOT = { has_available_jobs = soldier }
+		any_owned_pop = { 
+			is_unemployed = yes
+			can_work_specific_job = soldier 
+		}
+	}
+}
+
+# This = leader
+will_leader_retire = { #领导人是否会退休
+	exists = owner
+	not = { has_leader_flag = use_unspecific_death_reason }
+	owner = {
+		not = { has_ethic = ethic_gestalt_consciousness }
+	}
+	has_leader_flag = retirement_is_default # Randomized retirement instead of death in paragon.590
+}
+
+# This = country, Country that wants to get an external leader
+# From = country, country that we are trying to get from
+can_get_external_leader_pool_candidate = { #可以得到外部领袖候选池
+	OR = {
+		has_diplo_migration_treaty = from
+		is_in_federation_with = from
+		is_overlord_to = from
+	}
+	# Both empires must be regular empires, machine intelligences or hive-minds.
+	OR = {
+		AND = {
+			ROOT = {
+				is_regular_empire = yes
+			}
+			FROM = {
+				is_regular_empire = yes
+			}
+		}
+		AND = {
+			ROOT = {
+				has_authority = auth_machine_intelligence
+			}
+			FROM = {
+				has_authority = auth_machine_intelligence
+			}
+		}
+		AND = {
+			ROOT = {
+				has_authority = auth_hive_mind
+			}
+			FROM = {
+				has_authority = auth_hive_mind
+			}
+		}
+	}
+}
+
+# This = leader, leader we'd like to trade
+# Root = country, country that owns the leader currently
+# From = country, country that would receive the leader
+can_trade_leader = { #可交易的领导者
+	OR = {
+		AND = { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #所有者域 owner
+					ROOT = {
+						has_country_flag = community_mod_rules_trigger
+						OR = {
+							has_country_flag = community_can_trade_leader_true
+							has_country_flag = community_can_trade_leader_false
+						}
+					}
+				}
+				NAND = { #领袖域 leader
+					has_leader_flag = community_mod_rules_trigger
+					OR = {
+						has_leader_flag = community_can_trade_leader_true
+						has_leader_flag = community_can_trade_leader_false
+					}
+				}
+				#NAND = { #接收者域 receive
+				#	FROM = {
+				#		has_country_flag = community_mod_rules_trigger
+				#		OR = {
+				#			has_country_flag = community_can_trade_leader_receive_true
+				#			has_country_flag = community_can_trade_leader_receive_false
+				#		}
+				#	}
+				#}
+			}		
+			#	
+			# The leader must have a trait from a specialist subject type.
+			this = { has_specialist_subject_leader_trait = yes }
+			# The subject and overlord must both be regular empires, machine intelligences or hive-minds.
+			OR = {
+				AND = {
+					ROOT = {
+						is_regular_empire = yes
+					}
+					FROM = {
+						is_regular_empire = yes
+					}
+				}
+				AND = {
+					ROOT = {
+						has_authority = auth_machine_intelligence
+					}
+					FROM = {
+						has_authority = auth_machine_intelligence
+					}
+				}
+				AND = {
+					ROOT = {
+						has_authority = auth_hive_mind
+					}
+					FROM = {
+						has_authority = auth_hive_mind
+					}
+				}
+			}
+			# The overlord can't be a fallen or awakened empire.
+			ROOT = {
+				NAND = {
+					is_overlord = yes
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+				}
+			}
+			NOR = { 
+				has_trait = leader_trait_fotd_scientist
+				has_trait = leader_trait_fotd_admiral
+			}
+		}
+		AND = { #国防部 MOD
+			OR = {
+				NAND = { #领袖域 leader
+					has_leader_flag = community_mod_rules_trigger
+					AND = {
+						has_leader_flag = community_can_trade_leader_true
+						NOT = { has_leader_flag = community_can_trade_leader_false }
+					}
+				}
+				NAND = { #所有者域 owner
+					ROOT = {
+						has_country_flag = community_mod_rules_trigger
+						AND = {
+							has_country_flag = community_can_trade_leader_true
+							NOT = { has_country_flag = community_can_trade_leader_false }
+						}
+					}
+				}
+				#NAND = { #接收者域 receive
+				#	FROM = {
+				#		has_country_flag = community_mod_rules_trigger
+				#		AND = {
+				#			has_country_flag = community_can_trade_leader_receive_true
+				#			NOT = { has_country_flag = community_can_trade_leader_receive_false }
+				#		}
+				#	}
+				#}
+			}
+		}
+	}
+}
+
+# This = fleet, fleet we'd like to trade
+# Root = country, country that owns the fleet currently
+# From = country, country that would receive the fleet
+can_trade_fleet = { #可交易的舰队
+	OR = {
+		AND = { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				AND = { #拥有者域 owner
+					ROOT = {
+						has_country_flag = community_mod_rules_trigger
+						OR = {
+							has_country_flag = community_can_trade_fleet_true
+							has_country_flag = community_can_trade_fleet_false
+						}
+					}
+				}
+				AND = { #舰队域 fleet
+					has_fleet_flag = community_mod_rules_trigger
+					OR = {
+						has_fleet_flag = community_can_trade_fleet_true
+						has_fleet_flag = community_can_trade_fleet_false
+					}
+				}
+				#AND = { #接收者域 receive
+				#	FROM = {
+				#		has_country_flag = community_mod_rules_trigger
+				#		OR = {
+				#			has_country_flag = community_can_trade_fleet_receive_true
+				#			has_country_flag = community_can_trade_fleet_receive_false
+				#		}
+				#	}
+				#}
+			}		
+			#	
+			ROOT = {
+				NAND = {
+					is_overlord = yes
+					OR = {
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+				}
+			}
+
+
+		}
+		AND = { #国防部 MOD
+			OR = {
+				AND = { #舰队域 fleet
+					has_fleet_flag = community_mod_rules_trigger
+					AND = {
+						has_fleet_flag = community_can_trade_fleet_true
+						NOT = { has_fleet_flag = community_can_trade_fleet_false }
+					}
+				}
+				AND = { #拥有者域 owner
+					ROOT = {
+						has_country_flag = community_mod_rules_trigger
+						AND = {
+							has_country_flag = community_can_trade_fleet_true
+							NOT = { has_country_flag = community_can_trade_fleet_false }
+						}
+					}
+				}
+				#AND = { #接收者域 receive
+				#	FROM = {
+				#		has_country_flag = community_mod_rules_trigger
+				#		AND = {
+				#			has_country_flag = community_can_trade_fleet_receive_true
+				#			NOT = { has_country_flag = community_can_trade_fleet_receive_false }
+				#		}
+				#	}
+				#}
+			}
+		}
+	}
+}
+
+#暂不考虑对此的兼容 仅作文本保留
+	##领袖池大小控制
+	#chance_for_external_leader_pool = {
+	#	base = 10
+	#	modifier = {
+	#		is_xenophile = yes
+	#		add = 30
+	#	}
+	#	modifier = {
+	#		is_xenophobe = yes
+	#		mult = 0.5
+	#	}
+	#}
+
+	## this = country scope
+	##委员会议程激活成本
+	#council_agenda_early_activation_cost = {
+	#	# At 10% progress, returns 1, 2000 * Empire Size
+	#	# At 50% progress, returns 0.12, Or 250 * Empire Size
+	#	# At 70% progress, returns 0.03. Cost tweaked to be 64 * Empire Size
+	#	# At 90% progress, returns 0.015. Or 30 * Empire Size
+	#	# Cost = MIN(EmpireSize - 100, 10) * 2000 * (0.008 + 1 / (POW(progress * 3, 5) + 1.008))
+	#	base = -100
+	#	add = trigger:empire_size
+	#	min = 0
+	#	add = 10
+	#	mult = 0.1	# Ceil up to even 10.
+	#	ceiling = yes
+	#	mult = 10
+	#	mult = 2000	# Tweaked multiplier.
+	#	
+	#	# Apply curve multiplier, depending on current Agenda's progress.
+	#	mult = value:council_agenda_early_activation_cost_curve
+	#	
+	#	# Rounded to closest 100
+	#	divide = 100
+	#	round = yes
+	#	mult = 100
+	#}
+
+	## this = leader scope
+	## from = country scope
+	##钦定领袖当选花费
+	#leader_election_elect_cost = {
+	#	# Cost = (1 + election_cost_mult) * empire_size * 10
+	#	base = 1
+	#	add = modifier:country_election_cost_mult
+	#	mult = from.trigger:empire_size
+	#
+	#	# Rounded to closest 10, by applying x10 last.
+	#	round = yes
+	#	mult = 10
+	#}
+
+	## this = country scope
+	##紧急选举花费
+	#emergency_election_cost_rule = {
+	#	# Cost = (1 + election_cost_mult) * empire_size * 5
+	#	base = 1
+	#	add = modifier:country_election_cost_mult
+	#	mult = trigger:empire_size
+	#	mult = 5
+	#
+	#	# Rounded to closest 50.
+	#	divide = 50
+	#	round = yes
+	#	mult = 50
+	#}
+
+	## this = leader scope (not valid in UI if no leader is selected)
+	## from = country scope
+	##领袖支持花费
+	#leader_election_support_cost = {
+	#	# Cost = (1 + election_cost_mult) * empire_size * 4 * (1 + TimesSupported * 0.5)
+	#	base = 1
+	#	add = modifier:country_election_cost_mult
+	#	mult = from.trigger:empire_size
+	#	mult = 4
+	#
+	#	# Rounded to closest 10; before applying TimesSupported, so player understands better how it increases.
+	#	divide = 10
+	#	round = yes
+	#	mult = 10
+	#
+	#	# If there's a Valid leader, cost increases if they're already Supported.
+	#	modifier = {
+	#		exists = this
+	#		mult = value:leader_election_candidate_supported_mult
+	#	}
+	#}
+
+	# # this = leader scope
+	# #领袖当选权重
+	# leader_election_weight = {
+	# 	base = 0
+	#
+	# 	# Multiply by Faction support.
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.faction_support
+	# 			owner = { has_country_flag = first_faction }
+	# 		}
+	# 		add = value:leader_faction_support_election_bonus
+	# 	}
+	#
+	# 	# If no Factions formed, fake faction support based on if it's an Empire ethic or not.
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.no_faction_empire_ethic
+	# 			NOT = { owner = { has_country_flag = first_faction } }
+	# 			leader_has_empire_ethic = yes
+	# 		}
+	# 		add = 50
+	# 	}
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.no_faction_not_empire_ethic
+	# 			NOT = { owner = { has_country_flag = first_faction } }
+	# 			leader_has_empire_ethic = no
+	# 		}
+	# 		add = 25
+	# 	}
+	#
+	# 	# Not changing Ruler should be slightly preferred.
+	# 	modifier = {
+	# 		is_ruler = yes
+	# 		mult = 1.1
+	# 	}
+	#
+	# 	# Bonus if Leader was Councilor when election started. Or if no Election, is a Councilor now.
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.iswas_councilor
+	# 			if = {
+	# 				limit = {
+	# 					owner = { has_country_flag = election_under_way }
+	# 				}
+	# 				has_leader_flag = councilor_at_election_start
+	# 			}
+	# 			else = {
+	# 				is_councilor = yes
+	# 				is_ruler = no
+	# 			}
+	# 		}
+	# 		mult = 1.05
+	# 	}
+	#
+	# 	# Governments (based on Ethics and Civics) might prefer certain Leader classes. Hide if +/- 0%.
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.leader_class_government_approves
+	# 			check_variable_arithmetic = {
+	# 				which = value:leader_class_government_match_bonus_mult
+	# 				value != 1
+	# 			}
+	# 		}
+	# 		mult = value:leader_class_government_match_bonus_mult
+	# 	}
+	#
+	# 	# Extra bonus for Councilor Subclass (which is a Trait).
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.leader_councilor_subclass
+	# 			has_council_subclass = yes
+	# 		}
+	# 		mult = 1.2
+	# 	}
+	#
+	# 	# Penalty for Non-Councilor Subclass (which is a Trait).
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.leader_councilor_subclass
+	# 			has_non_council_subclass = yes
+	# 		}
+	# 		mult = 0.8
+	# 	}
+	#	
+	# 	# Bonus/penalty from Traits.
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.leader_traits
+	# 			check_variable_arithmetic = {
+	# 				which = value:leader_traits_election_bonus_mult
+	# 				value != 1
+	# 			}
+	# 		}
+	# 		mult = value:leader_traits_election_bonus_mult
+	# 	}
+	#
+	# 	# Bonus from Skill level.
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.leader_skill
+	# 			check_variable_arithmetic = {
+	# 				which = value:leader_skill_election_bonus_mult
+	# 				value != 1
+	# 			}
+	# 		}
+	# 		mult = value:leader_skill_election_bonus_mult
+	# 	}
+	#
+	# 	# Penalty from old Age, unless already ruler or immortal.
+	# 	modifier = {
+	# 		custom_tooltip = {
+	# 			success_text = election_weight.leader_age
+	# 			is_immortal = no
+	# 			is_ruler = no
+	# 			check_variable_arithmetic = {
+	# 				which = value:leader_age_percentage_of_lifespan
+	# 				value > 0.9
+	# 			}
+	# 		}
+	# 		mult = 0.5
+	# 	}
+	# }
+#
+
+# Determines if pre-ftl country is unaware of alien life
+# this: pre-ftl country
+are_pre_ftls_unaware = { #确定前FTL土著是否不知道外星生命
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_country_flag = community_mod_rules_trigger
+				OR = {
+					has_country_flag = community_are_pre_ftls_unaware_true
+					has_country_flag = community_are_pre_ftls_unaware_false
+				}
+			}		
+			#	
+			NOT = {
+				current_awareness_level = full
+			}
+		}
+		AND = { #国防部 MOD
+			has_country_flag = community_mod_rules_trigger
+			AND = {
+				has_country_flag = community_are_pre_ftls_unaware_true
+				NOT = { has_country_flag = community_are_pre_ftls_unaware_false }
+			}
+		}
+	}
+}
+
+##TERRAFORMING CANDIDATES
+
+# This = planet
+# Checked if planet is a terraforming candidate
+is_terraforming_candidate = { #可进行地貌改造-只控制图标显示
+	OR = {
+		AND = { #香草 vanilla
+			NAND = { #排除条件 Exclusions
+				has_planet_flag = community_mod_rules_trigger
+				OR = {
+					has_planet_flag = community_is_terraforming_candidate_true
+					has_planet_flag = community_is_terraforming_candidate_false
+				}
+			}		
+			#	
+			OR = { 
+				has_modifier = terraforming_candidate
+				has_modifier = frozen_terraforming_candidate
+				has_modifier = toxic_terraforming_candidate
+			}
+		}
+		AND = { #国防部 MOD
+			has_planet_flag = community_mod_rules_trigger
+			AND = {
+				has_planet_flag = community_is_terraforming_candidate_true
+				NOT = { has_planet_flag = community_is_terraforming_candidate_false }
+			}
+		}
+	}
+}
+
+# Root = country
+# This = planet
+# Checked if the planet is special terraforming candidate and the country has the required matching ascension perk to do it
+has_ascension_for_terraforming_candidate = { #三种不同类型改造的飞升限制 怎么这东西还要靠ruler实现
+	exists = root
+	OR = {
+		AND = {
+			#No ascension perk required for terraforming_candidate modifier
+			has_modifier = terraforming_candidate
+		}
+		AND = {
+			root = { has_ascension_perk = ap_detox }
+			has_modifier = toxic_terraforming_candidate
+		}
+		AND = {
+			root = { has_ascension_perk = ap_hydrocentric }
+			has_modifier = frozen_terraforming_candidate
+		}
+	}
+}
+
+# This = country that tries to rename
+# Root = country owning the planet
+# From = planet
+# Checks if the planet (from) can be renamed by the country (this) that contains it in its borders, even if it has a different owner (Root)
+# Renaming is never possible if the planet is not in your borders; and it is always possible if it is in your borders but the owner is yourself/no-one
+# 是否可被重命名，即便不是行星所有者，要求行星在边界内
+can_be_renamed_by = {
+	OR = {
+		AND	= { #香草 vanilla
+			FROM = {
+				NAND = { #排除条件 Exclusions
+					has_planet_flag = community_mod_rules_trigger
+					OR = {
+						has_planet_flag = community_can_be_renamed_by_true
+						has_planet_flag = community_can_be_renamed_by_false
+					}
+				}		
+				#
+				exists = owner
+				owner = {
+					is_same_species = root
+				}
+				has_planet_flag = haven_flag
+			
+			}
+		}
+		AND = { #国防部 MOD
+			FROM = {
+				has_planet_flag = community_mod_rules_trigger
+				AND = {
+					has_planet_flag = community_can_be_renamed_by_true
+					NOT = { has_planet_flag = community_can_be_renamed_by_false }
+				}
+			}
+		}
+	}
+}
+
+# Root/this = country
+# From = planet
+# Checks if the country is allowed to build any orbital station around this planet/star
+can_build_station_around = { #是否可建造轨道站
+	OR = {
+		AND	= { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions country
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_can_build_station_around_true
+						has_country_flag = community_can_build_station_around_false
+					}
+				}
+				FROM = { #排除条件 Exclusions planet
+					NAND = { 
+						has_planet_flag = community_mod_rules_trigger
+						OR = {
+							has_planet_flag = community_can_build_station_around_true
+							has_planet_flag = community_can_build_station_around_false
+						}
+					}	
+				}
+			}
+			#
+			exists = root
+			always = yes
+		}
+		AND = { #国防部 MOD
+			has_planet_flag = community_mod_rules_trigger
+			AND = {
+				has_planet_flag = community_can_build_station_around_true
+				NOT = { has_planet_flag = community_can_build_station_around_false }
+			}
+		}
+	}
+}
+
+# Root/this = country
+# From = planet
+# Checks if the country is allowed to build a mining station around this planet/star
+can_build_mining_station_around = { #是否可建造采矿站
+	OR = {
+		AND	= { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions country
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_can_build_mining_station_around_true
+						has_country_flag = community_can_build_mining_station_around_false
+					}
+				}
+				FROM = { #排除条件 Exclusions planet
+					NAND = { 
+						has_planet_flag = community_mod_rules_trigger
+						OR = {
+							has_planet_flag = community_can_build_mining_station_around_true
+							has_planet_flag = community_can_build_mining_station_around_false
+						}
+					}	
+				}
+			}
+			#
+			exists = root
+			always = yes
+		}
+		OR = {
+			AND = { #国防部 MOD planet
+				FROM = {
+					has_planet_flag = community_mod_rules_trigger
+					AND = {
+						has_planet_flag = community_can_build_mining_station_around_true
+						NOT = { has_planet_flag = community_can_build_mining_station_around_false }
+					}
+				}
+			}
+			AND = { #国防部 MOD country
+				has_country_flag = community_mod_rules_trigger
+				AND = {
+					has_country_flag = community_can_build_mining_station_around_true
+					NOT = { has_country_flag = community_can_build_mining_station_around_false }
+				}
+			}
+		}
+	}
+}
+
+# Root/this = country
+# From = planet
+# Checks if the country is allowed to build a research station around this planet/star
+can_build_research_station_around = { #是否可建造研究站
+	OR = {
+		AND	= { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions country
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_can_build_research_station_around_true
+						has_country_flag = community_can_build_research_station_around_false
+					}
+				}
+				FROM = { #排除条件 Exclusions planet
+					NAND = { 
+						has_planet_flag = community_mod_rules_trigger
+						OR = {
+							has_planet_flag = community_can_build_research_station_around_true
+							has_planet_flag = community_can_build_research_station_around_false
+						}
+					}	
+				}
+			}
+			#
+			exists = root
+			always = yes
+		}
+		OR = {
+			AND = { #国防部 MOD planet
+				FROM = {
+					has_planet_flag = community_mod_rules_trigger
+					AND = {
+						has_planet_flag = community_can_build_research_station_around_true
+						NOT = { has_planet_flag = community_can_build_research_station_around_false }
+					}
+				}
+			}
+			AND = { #国防部 MOD country
+				has_country_flag = community_mod_rules_trigger
+				AND = {
+					has_country_flag = community_can_build_research_station_around_true
+					NOT = { has_country_flag = community_can_build_research_station_around_false }
+				}
+			}
+		}
+	}
+}
+
+# Root/this = country
+# From = planet
+# Checks if the country is allowed to build a military station around this planet/star
+can_build_military_station_around = { #是否可建造防御站
+	OR = {
+		AND	= { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions country
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_can_build_military_station_around_true
+						has_country_flag = community_can_build_military_station_around_false
+					}
+				}
+				FROM = { #排除条件 Exclusions planet
+					NAND = { 
+						has_planet_flag = community_mod_rules_trigger
+						OR = {
+							has_planet_flag = community_can_build_military_station_around_true
+							has_planet_flag = community_can_build_military_station_around_false
+						}
+					}	
+				}
+			}
+			#
+			exists = root
+			always = yes
+		}
+		OR = {
+			AND = { #国防部 MOD planet
+				FROM = {
+					has_planet_flag = community_mod_rules_trigger
+					AND = {
+						has_planet_flag = community_can_build_military_station_around_true
+						NOT = { has_planet_flag = community_can_build_military_station_around_false }
+					}
+				}
+			}
+			AND = { #国防部 MOD country
+				has_country_flag = community_mod_rules_trigger
+				AND = {
+					has_country_flag = community_can_build_military_station_around_true
+					NOT = { has_country_flag = community_can_build_military_station_around_false }
+				}
+			}
+		}
+	}
+}
+
+# Root/this = country
+# From = planet
+# Checks if the country is allowed to build an observation station around this planet/star
+can_build_observation_station_around = { #是否可建造观测站
+	OR = {
+		AND	= { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions country
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_can_build_observation_station_around_true
+						has_country_flag = community_can_build_observation_station_around_false
+					}
+				}
+				FROM = { #排除条件 Exclusions planet
+					NAND = { 
+						has_planet_flag = community_mod_rules_trigger
+						OR = {
+							has_planet_flag = community_can_build_observation_station_around_true
+							has_planet_flag = community_can_build_observation_station_around_false
+						}
+					}	
+				}
+			}
+			#
+			exists = root
+			FROM = {
+				NOR = {
+					has_planet_flag = haven_flag #FotD
+					has_planet_flag = no_observation #Solarpunk
+				}
+			}
+		}
+		OR = {
+			AND = { #国防部 MOD planet
+				FROM = {
+					has_planet_flag = community_mod_rules_trigger
+					AND = {
+						has_planet_flag = community_can_build_observation_station_around_true
+						NOT = { has_planet_flag = community_can_build_observation_station_around_false }
+					}
+				}
+			}
+			AND = { #国防部 MOD country
+				has_country_flag = community_mod_rules_trigger
+				AND = {
+					has_country_flag = community_can_build_observation_station_around_true
+					NOT = { has_country_flag = community_can_build_observation_station_around_false }
+				}
+			}
+		}
+	}
+}
+
+# Root/this = country
+# From = planet
+# Checks if the country is allowed to build a starbase around this planet/star
+can_build_starbase_around = { #是否可建造恒星基地
+	OR = {
+		AND	= { #香草 vanilla
+			OR = { #排除条件 Exclusions
+				NAND = { #排除条件 Exclusions country
+					has_country_flag = community_mod_rules_trigger
+					OR = {
+						has_country_flag = community_can_build_starbase_station_around_true
+						has_country_flag = community_can_build_starbase_station_around_false
+					}
+				}
+				FROM = { #排除条件 Exclusions planet
+					NAND = { 
+						has_planet_flag = community_mod_rules_trigger
+						OR = {
+							has_planet_flag = community_can_build_starbase_station_around_true
+							has_planet_flag = community_can_build_starbase_station_around_false
+						}
+					}	
+				}
+			}
+			#
+			exists = root
+			always = yes
+		}
+		OR = {
+			AND = { #国防部 MOD planet
+				FROM = {
+					has_planet_flag = community_mod_rules_trigger
+					AND = {
+						has_planet_flag = community_can_build_starbase_station_around_true
+						NOT = { has_planet_flag = community_can_build_starbase_station_around_false }
+					}
+				}
+			}
+			AND = { #国防部 MOD country
+				has_country_flag = community_mod_rules_trigger
+				AND = {
+					has_country_flag = community_can_build_starbase_station_around_true
+					NOT = { has_country_flag = community_can_build_starbase_station_around_false }
+				}
+			}
+		}
+	}
+}

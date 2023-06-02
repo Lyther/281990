@@ -1,0 +1,275 @@
+mopt_lgate_content = {
+	icon = "GFX_edict_type_time"
+	length = 1
+
+	potential = {
+		is_ai = no
+		NOT = { has_global_flag = l_cluster_opened }
+		any_system = { any_megastructure = { is_megastructure_type = lgate_base } }
+	}
+
+	effect = {
+		hidden_effect = {
+			country_event = {
+				id = mopt_lgate.0
+			}
+		}
+	}
+
+	ai_weight = { base = 0 }
+}
+
+mopt_lgate_location = {
+	icon = "GFX_edict_type_time"
+	length = 1
+
+	potential = {
+		is_ai = no
+		NOT = { has_event_chain = chain_lgate_location }
+		any_system = { any_megastructure = { is_megastructure_type = lgate_base } }
+	}
+
+	effect = {
+		hidden_effect = {
+			country_event = {
+				id = mopt_lgate.11
+			}
+		}
+	}
+
+	ai_weight = { base = 0 }
+}
+
+mopt_lgate_location_disable = {
+	icon = "GFX_edict_type_time"
+	length = 1
+
+	potential = {
+		is_ai = no
+		has_event_chain = chain_lgate_location
+		any_system = { any_megastructure = { is_megastructure_type = lgate_base } }
+	}
+
+	effect = {
+		hidden_effect = {
+			end_event_chain = chain_lgate_location
+		}
+	}
+
+	ai_weight = { base = 0 }
+}
+
+mopt_amoeba_pacification_project = {
+	icon = "GFX_resource_society"
+	length = 1
+
+	potential = {
+		OR = {
+			has_modifier = flagellating_movement
+
+			has_tech_option = tech_regenerative_hull_tissue
+			has_technology = tech_regenerative_hull_tissue
+
+			has_tech_option = tech_amoeba_strike_craft_1
+			has_technology = tech_amoeba_strike_craft_1
+		}
+		is_homicidal = no
+		NOR = {
+			has_modifier = pacified_amoebas
+			has_modifier = amoeba_hunting_buff
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			NOT = { has_special_project = AMOEBAS_PACIFICATION_PROJECT }
+			fail_text = mopt_amoeba_pacification_project_fail_tooltip
+		}
+	}
+
+	effect = {
+		capital_scope = {
+			enable_special_project = {
+				name = "AMOEBAS_PACIFICATION_PROJECT"
+				location = this
+				owner = root
+			}
+		}
+	}
+
+	ai_weight = { base = 0 }
+}
+
+mopt_force_end_truce = {
+	icon = "GFX_station_icon"
+	length = 1
+
+	potential = {
+		is_ai = no
+	}
+
+	allow = {
+		hidden_trigger = { is_ai = no }
+
+		custom_tooltip = {
+			fail_text = mopt_has_truce
+			any_country = { has_truce = root }
+		}
+	}
+
+	effect = {
+		custom_tooltip = edict_mopt_force_end_truce_effect
+		hidden_effect = {
+			country_event = {
+				id = mopt_edicts.1000
+			}
+		}
+		
+	}
+
+	ai_weight = { base = 0 }
+}
+
+mopt_spawn_horizonsignal = {
+	icon = "GFX_planet_type_black_hole"
+	length = 1
+
+	potential = {
+		is_ai = no
+		NOT = { has_global_flag =  g_flag_mopt_horizonsignal_spawned }
+	}
+
+	allow = {
+		hidden_trigger = { is_ai = no }
+	}
+
+	effect = {
+		hidden_effect = {
+			set_global_flag = g_flag_mopt_horizonsignal_spawned
+			begin_event_chain = {
+				event_chain = chain_horizonsignal_location
+				target = this
+			}
+			random_system = {
+				limit = {
+					is_star_class = sc_black_hole
+					is_fe_cluster = no
+					NOR = {
+						exists = starbase
+						has_star_flag = guardian
+						has_star_flag = empire_cluster
+					}
+				}
+				set_star_flag = horizonsignal_spawn
+				star = { save_event_target_as = horizonsignal_blackhole }
+			}
+			create_point_of_interest = {
+				id = poi_mopt_horizonsignal
+				name = poi_mopt_horizonsignal_name
+				desc = poi_mopt_horizonsignal_desc
+				event_chain = chain_horizonsignal_location
+				location = event_target:horizonsignal_blackhole
+			}
+		}
+	}
+}
+
+mopt_horizonsignal_location = {
+	icon = "GFX_planet_type_black_hole"
+	length = 1
+
+	potential = {
+		is_ai = no
+		NOT = { has_event_chain = chain_horizonsignal_location }
+		has_global_flag = g_flag_mopt_horizonsignal_spawned
+	}
+
+	allow = {
+		hidden_trigger = { is_ai = no }
+	}
+
+	effect = {
+		hidden_effect = {
+			begin_event_chain = {
+				event_chain = chain_horizonsignal_location
+				target = this
+			}
+			random_system = {
+				limit = { has_star_flag = horizonsignal_spawn }
+				star = { save_event_target_as = horizonsignal_blackhole }
+			}
+			create_point_of_interest = {
+				id = poi_mopt_horizonsignal
+				name = poi_mopt_horizonsignal_name
+				desc = poi_mopt_horizonsignal_desc
+				event_chain = chain_horizonsignal_location
+				location = event_target:horizonsignal_blackhole
+			}
+		}
+	}
+
+	ai_weight = { base = 0 }
+}
+
+mopt_horizonsignal_location_disable = {
+	icon = "GFX_planet_type_black_hole"
+	length = 1
+
+	potential = {
+		is_ai = no
+		has_event_chain = chain_horizonsignal_location
+	}
+
+	allow = {
+		hidden_trigger = { is_ai = no }
+	}
+
+	effect = {
+		hidden_effect = {
+			random_system = {
+				limit = {
+					has_star_flag = horizonsignal_spawn
+					star = {
+						is_point_of_interest = {
+							id = poi_mopt_horizonsignal
+							event_chain = chain_horizonsignal_location
+							owner = root
+						}
+					}
+				}
+			}
+			remove_point_of_interest = poi_mopt_horizonsignal
+			end_event_chain = chain_horizonsignal_location
+		}
+	}
+
+	ai_weight = { base = 0 }
+}
+
+mopt_launch_judgement = {
+	icon = "GFX_species_right_purge_type"
+	length = 1
+
+	potential = {
+		is_ai = no
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = mopt_judgement_only_one
+			NOT = { has_global_flag = g_flag_mopt_ongoing_judgement }
+		}
+		hidden_trigger = { is_ai = no }
+	}
+
+	effect = {
+		custom_tooltip = edict_mopt_launch_judgement_effect
+		hidden_effect = {
+			country_event = { id = mopt_judgement.0 }
+		}
+	}
+
+	ai_weight = { base = 0 }
+
+
+}

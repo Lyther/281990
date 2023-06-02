@@ -1,0 +1,744 @@
+namespace = origin
+
+# Scion Setup
+country_event = {
+	id = origin.5
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = first_contact_event
+		set_country_flag = Story2 # Already encountered spacefarers
+		# Spawn mini-FE if player turned off Fallen Empires but picked this Origin anyway...
+		if = {
+			limit = {
+				NOT = {
+					any_country = {
+						OR = {
+							is_country_type = fallen_empire
+							is_country_type = awakened_fallen_empire
+							has_origin = origin_ofe_fallen_empire
+						}
+					}
+				}
+			}
+			set_country_flag = scion_needs_fe
+			if = {
+				limit = { is_spiritualist = yes }
+				random_system = {
+					limit = { has_owner = no }
+					spawn_system = { initializer = "scion_fallen_2" }
+				}
+			}
+			else_if = {
+				limit = { is_materialist = yes }
+				random_system = {
+					limit = { has_owner = no }
+					spawn_system = { initializer = "scion_fallen_1" }
+				}
+			}
+			else_if = {
+				random_list = {
+					10 = {
+						random_system = {
+							limit = { has_owner = no }
+							spawn_system = { initializer = "scion_fallen_1" }
+						}
+					}
+					10 = {
+						random_system = {
+							limit = { has_owner = no }
+							spawn_system = { initializer = "scion_fallen_2" }
+						}
+					}
+				}
+			}
+			add_extra_hyperlane_to_spawned_system_effect = yes
+		}
+
+		else_if = {
+			limit = {
+				is_spiritualist = yes
+				any_country = {
+					OR = {
+						has_country_flag = fallen_empire_2
+						AND = {
+							has_origin = origin_ofe_fallen_empire
+							has_ethic = ethic_fanatic_spiritualist
+						}
+					}
+					
+				}
+			}
+			random_country = {
+				limit = { 
+					OR = {
+						has_country_flag = fallen_empire_2
+						AND = {
+							has_origin = origin_ofe_fallen_empire
+							has_ethic = ethic_fanatic_spiritualist
+						}
+					}
+				}
+				set_country_flag = scion_master
+				save_event_target_as = scion_master
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_scion
+				}
+				country_event = { id = origin.20 days = 9000 random = 9000 }
+				root = {
+					establish_communications_no_message = event_target:scion_master
+					set_subject_of = {
+						who = event_target:scion_master
+						preset = preset_scion
+					}
+					add_opinion_modifier = {
+						who = event_target:scion_master
+						modifier = opinion_scion
+					}
+					country_event = { id = origin.10 days = 3 }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_materialist = yes
+				any_country = {
+					OR = {
+						has_country_flag = fallen_empire_1
+						AND = {
+							has_origin = origin_ofe_fallen_empire
+							has_ethic = ethic_fanatic_materialist
+						}
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					OR = {
+						has_country_flag = fallen_empire_1
+						AND = {
+							has_origin = origin_ofe_fallen_empire
+							has_ethic = ethic_fanatic_materialist
+						}
+					}
+				}
+				set_country_flag = scion_master
+				save_event_target_as = scion_master
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_scion
+				}
+				country_event = { id = origin.20 days = 9000 random = 9000 }
+				root = {
+					establish_communications_no_message = event_target:scion_master
+					set_subject_of = {
+						who = event_target:scion_master
+						preset = preset_scion
+					}
+					add_opinion_modifier = {
+						who = event_target:scion_master
+						modifier = opinion_scion
+					}
+					country_event = { id = origin.10 days = 3 }
+				}
+			}
+			country_event = { id = origin.20 days = 5 }
+		}
+		else_if = {
+			random_country = {
+				limit = {
+					OR = {
+						has_country_flag = fallen_empire_1
+						has_country_flag = fallen_empire_2
+						AND = {
+							has_origin = origin_ofe_fallen_empire
+							has_ethic = ethic_fanatic_spiritualist
+						}
+						AND = {
+							has_origin = origin_ofe_fallen_empire
+							has_ethic = ethic_fanatic_materialist
+						}
+					}
+				}
+				set_country_flag = scion_master
+				save_event_target_as = scion_master
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_scion
+				}
+				country_event = { id = origin.20 days = 9000 random = 9000 }
+				root = {
+					establish_communications_no_message = event_target:scion_master
+					set_subject_of = {
+						who = event_target:scion_master
+						preset = preset_scion
+					}
+					add_opinion_modifier = {
+						who = event_target:scion_master
+						modifier = opinion_scion
+					}
+					country_event = { id = origin.10 days = 3 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:scion_master
+			}
+			create_scion_wormhole_link = yes
+		}
+		###### mod新增补充 #####
+		random_agreement = {
+			limit = {
+				owner = { is_same_value = event_target:scion_master } 
+				target = { is_same_value = root }
+			}
+			add_loyalty = 125
+		}
+	}
+}
+
+# Scion Tasks
+event = {
+	id = origin.25
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			is_subject = yes
+			any_agreement = {
+				agreement_preset = preset_scion
+			}
+		}
+	}
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				is_subject = yes
+			    any_agreement = {
+				    agreement_preset = preset_scion
+			    }
+				NAND = {
+					has_country_flag = scion_requested_leader
+					has_country_flag = scion_gave_leader
+					has_country_flag = scion_gave_ships
+				}
+			}
+			save_event_target_as = ScionTasked
+			random_list = {
+				300 = {
+					modifier = {
+						factor = 0.5
+						mid_game_years_passed >= 0
+					}
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_country_flag = scion_requested_leader
+							NOT = {
+								any_owned_leader = {
+									NOR = {
+										leader_class = ruler
+										has_leader_flag = fe_gifted_leader
+									}
+									has_skill >= 5
+								}
+							}
+						}
+					}
+					overlord = { country_event = { id = ofe_other.201 } }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = scion_gave_leader
+					}
+					overlord = { country_event = { id = ofe_other.203 } }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						has_country_flag = scion_gave_ships
+					}
+					overlord = { country_event = { id = ofe_other.205 } }
+				}
+			}
+		}
+	}
+}
+
+# Task: Surrender Leader
+country_event = {
+	id = origin.26
+	title = TRANSMISSION
+	desc = "origin.26.desc"
+
+	diplomatic = yes
+
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:scion_master
+		planet_background = event_target:scion_master
+		graphical_culture = event_target:scion_master
+		city_level = event_target:scion_master
+		room = event_target:scion_master
+	}
+
+	immediate = {
+		overlord = { save_event_target_as = scion_master }
+		if = {
+			limit = {
+				any_owned_leader = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 10
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 10
+				}
+				save_event_target_as = desired_leader
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_leader = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 9
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 9
+				}
+				save_event_target_as = desired_leader
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_leader = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 8
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 8
+				}
+				save_event_target_as = desired_leader
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_leader = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 7
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 7
+				}
+				save_event_target_as = desired_leader
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_leader = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 6
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 6
+				}
+				save_event_target_as = desired_leader
+			}
+		}
+		else_if = {
+			limit = {
+				any_owned_leader = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 5
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					NOR = {
+						leader_class = ruler
+						has_leader_flag = fe_gifted_leader
+					}
+					has_skill = 5
+				}
+				save_event_target_as = desired_leader
+			}
+		}
+		set_country_flag = scion_requested_leader
+	}
+
+	option = {
+		name = origin.26.a
+		response_text = origin.26.a.response
+		custom_tooltip = origin.26.a.tooltip
+		hidden_effect = {
+			event_target:scion_master = {
+				clone_leader = {
+					target = event_target:desired_leader
+				}
+			}
+			event_target:desired_leader = {
+				kill_leader = { show_notification = no }
+			}
+		}
+	}
+	option = {
+		name = origin.26.b
+		response_text = origin.26.b.response
+		hidden_effect = {
+			event_target:scion_master = {
+				country_event = { id = ofe_other.202 }
+			}
+		}
+	}
+}
+
+# Reward: Receive Leader
+country_event = {
+	id = origin.27
+	title = TRANSMISSION
+	desc = "origin.27.desc"
+
+	diplomatic = yes
+
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:scion_master
+		planet_background = event_target:scion_master
+		graphical_culture = event_target:scion_master
+		city_level = event_target:scion_master
+		room = event_target:scion_master
+	}
+
+	immediate = {
+		overlord = {
+			save_event_target_as = scion_master
+			owner_species = { save_event_target_as = fe_species }
+		}
+		set_country_flag = scion_gave_leader
+	}
+
+	option = {
+		name = origin.27.a
+		response_text = origin.27.a.response
+		locked_random_list = {
+			10 = {
+				create_leader = {
+					class = admiral
+					species = event_target:fe_species
+					name = random
+					skill = 7
+					traits = {
+						trait = random_trait
+					}
+					effect = {
+						set_leader_flag = fe_gifted_leader
+					}
+				}
+				custom_tooltip = origin.27.admiral
+			}
+			10 = {
+				create_leader = {
+					class = governor
+					species = event_target:fe_species
+					name = random
+					skill = 7
+					traits = {
+						trait = random_trait
+					}
+					effect = {
+						set_leader_flag = fe_gifted_leader
+					}
+				}
+				custom_tooltip = origin.27.governor
+			}
+			10 = {
+				create_leader = {
+					class = scientist
+					species = event_target:fe_species
+					name = random
+					skill = 7
+					traits = {
+						trait = random_trait
+					}
+					effect = {
+						set_leader_flag = fe_gifted_leader
+					}
+				}
+				custom_tooltip = origin.27.scientist
+			}
+			10 = {
+				create_leader = {
+					class = general
+					species = event_target:fe_species
+					name = random
+					skill = 7
+					traits = {
+						trait = random_trait
+					}
+					effect = {
+						set_leader_flag = fe_gifted_leader
+					}
+				}
+				custom_tooltip = origin.27.general
+			}
+		}
+	}
+	option = {
+		name = origin.27.b
+		response_text = origin.27.b.response
+		hidden_effect = {
+			event_target:scion_master = {
+				country_event = { id = ofe_other.204 }
+			}
+		}
+	}
+}
+
+# 介入战争
+event = {
+	id = origin.50
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_playable_country = {
+			is_at_war = yes
+			is_subject = yes
+			overlord = { is_at_war = no }
+			any_agreement = {
+				agreement_preset = preset_scion
+			}
+			NOT = { has_country_flag = scion_war_help }
+			OR = {
+				any_war = {
+					any_defender = {
+						is_same_value = prevprev
+					}
+					any_attacker = {
+						OR = {
+							relative_power = {
+								who = prevprev
+								category = fleet
+								value = overwhelming
+							}
+							relative_power = {
+								who = prevprev
+								category = fleet
+								value = superior
+							}
+						}
+					}
+					defender_war_exhaustion > 0.7
+					attacker_war_exhaustion < 0.6
+				}
+				any_war = {
+					any_attacker = {
+						is_same_value = prevprev
+					}
+					any_defender = {
+						OR = {
+							relative_power = {
+								who = prevprev
+								category = fleet
+								value = overwhelming
+							}
+							relative_power = {
+								who = prevprev
+								category = fleet
+								value = superior
+							}
+						}
+					}
+					attacker_war_exhaustion > 0.7
+					defender_war_exhaustion < 0.6
+				}
+			}
+		}
+	}
+
+	immediate = {
+		random_playable_country = {
+			limit = {
+				is_at_war = yes
+				is_subject = yes
+				overlord = { is_at_war = no }
+				any_agreement = {
+					agreement_preset = preset_scion
+				}
+				NOT = { has_country_flag = scion_war_help }
+				OR = {
+					any_war = {
+						any_defender = {
+							is_same_value = prevprev
+						}
+						any_attacker = {
+							OR = {
+								relative_power = {
+									who = prevprev
+									category = fleet
+									value = overwhelming
+								}
+								relative_power = {
+									who = prevprev
+									category = fleet
+									value = superior
+								}
+							}
+						}
+						defender_war_exhaustion > 0.7
+						attacker_war_exhaustion < 0.6
+					}
+					any_war = {
+						any_attacker = {
+							is_same_value = prevprev
+						}
+						any_defender = {
+							OR = {
+								relative_power = {
+									who = prevprev
+									category = fleet
+									value = overwhelming
+								}
+								relative_power = {
+									who = prevprev
+									category = fleet
+									value = superior
+								}
+							}
+						}
+						attacker_war_exhaustion > 0.7
+						defender_war_exhaustion < 0.6
+					}
+				}
+			}
+			save_event_target_as = scion_need_help
+			overlord = { country_event = { id = ofe_other.206 } }
+		}
+	}
+}
+
+# FE Fleet Lost
+country_event = {
+	id = origin.52
+	title = "origin.52.name"
+	desc = "origin.52.desc"
+	picture = GFX_evt_exploding_ship
+	show_sound = event_space_battle
+
+	is_triggered_only = yes
+
+	trigger = {
+		fromfrom = { has_fleet_flag = scion_borrowed_fleet }
+		exists = overlord
+	}
+
+	immediate = {
+		overlord = {
+			save_event_target_as = scion_master
+			owner_species = { save_event_target_as = fe_species }
+		}
+		remove_country_flag = borrowed_fleet_from@event_target:scion_master
+	}
+
+	option = {
+		name = DISCONCERTING
+		hidden_effect = {
+			country_event = { id = origin.53 days = 5 }
+			overlord = { country_event = { id = ofe_other.207 days = 3 } }
+		}
+	}
+}
+
+# FE Fleet Reclaimed
+country_event = {
+	id = origin.54
+	title = TRANSMISSION
+	desc = "origin.54.desc"
+
+	diplomatic = yes
+
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:scion_master
+		planet_background = event_target:scion_master
+		graphical_culture = event_target:scion_master
+		city_level = event_target:scion_master
+		room = event_target:scion_master
+	}
+
+	immediate = {
+		overlord = { save_event_target_as = scion_master }
+		random_owned_fleet = {
+			limit = { has_fleet_flag = scion_borrowed_fleet }
+			set_owner = event_target:scion_master
+			remove_fleet_flag = scion_borrowed_fleet
+		}
+		remove_country_flag = borrowed_fleet_from@event_target:scion_master
+		overlord = { country_event = { id = ofe_other.208 } }
+	}
+
+	option = {
+		name = origin.54.a
+	}
+}

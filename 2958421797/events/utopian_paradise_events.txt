@@ -1,0 +1,729 @@
+namespace = utopian_paradise
+
+
+###Situation Trigger
+country_event = { 
+	id = utopian_paradise.1
+	title = utopian_paradise.1.name
+
+	picture = GFX_evt_city_planet
+	show_sound = event_cityscape
+	location = root
+		
+	desc = {
+		trigger = { 
+			OR = {
+				has_country_flag = fallen_materialist_archive_digsite_completed
+				has_country_flag = fallen_pacifist_colony_digsite_completed
+			}
+		}
+		text = "utopian_paradise.1.desc"
+	}
+	
+	desc = {
+		trigger = { 
+			NOR = {
+				has_country_flag = fallen_materialist_archive_digsite_completed
+				has_country_flag = fallen_pacifist_colony_digsite_completed
+			}
+		}
+		text = "utopian_paradise.1.desc.01"	
+	}
+
+	
+	trigger = {
+		is_ascended_empire = yes
+		is_ai = no
+		OR = {
+			AND = {
+				OR = {
+					is_gestalt = no
+					has_valid_civic = civic_machine_servitor
+				}
+				has_technology = tech_fe_class_5_singularity
+				has_technology = tech_fe_dimensional_harvester
+				has_technology = tech_fe_gourmet_center
+				has_technology = tech_fe_opulent_plaza
+				has_technology = tech_fe_nano_forge_2
+			}
+			AND = {
+				has_authority = auth_hive_mind
+				has_technology = tech_fe_class_5_singularity
+				has_technology = tech_fe_dimensional_harvester
+				has_technology = tech_fe_gourmet_center
+				has_technology = tech_fe_nano_forge_2
+			}
+			AND = {
+				has_authority = auth_machine_intelligence
+				NOT = { has_valid_civic = civic_machine_servitor }
+				has_technology = tech_fe_class_5_singularity
+				has_technology = tech_fe_dimensional_harvester
+				has_technology = tech_fe_nano_forge_2
+			}
+		}
+		automated_industries = yes
+		engineering_perfection = yes
+		NOT = { has_country_flag = utopian_worlds_unlocked }
+		NOT = { has_country_flag = utopian_world_situation_available }
+		NOR = {
+			has_technology = tech_paradise_creation
+			has_tech_option = tech_paradise_creation
+			has_technology = tech_paradise_creation_machine
+			has_tech_option = tech_paradise_creation_machine
+			has_technology = tech_paradise_creation_hive
+			has_tech_option = tech_paradise_creation_hive
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 20
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_country_flag = fallen_materialist_archive_digsite_completed
+		}
+		modifier = {
+			factor = 0.1
+			has_country_flag = fallen_pacifist_colony_digsite_completed
+		}
+		modifier = {
+			factor = 0.25
+			has_country_flag = great_crusade_1_digsite_completed
+		}
+		modifier = {
+			factor = 0.25
+			has_country_flag = great_crusade_2_digsite_completed
+		}
+		modifier = {
+			factor = 0.25
+			has_country_flag = great_crusade_3_digsite_completed
+		}
+		modifier = {
+			factor = 0.25
+			has_country_flag = great_crusade_4_digsite_completed
+		}
+		modifier = {
+			factor = 0.25
+			has_country_flag = great_crusade_5_digsite_completed
+		}
+		modifier = {
+			factor = 0.25
+			has_country_flag = great_crusade_6_digsite_completed
+		}
+		modifier = {
+			factor = 0.25
+			has_country_flag = ringworld_empire_archive_digsite_completed
+		}
+		modifier = {
+			factor = 0.1
+			any_subject = { is_country_type = fallen_empire }
+		}
+		modifier = {
+			factor = 0.1
+			any_owned_planet = { has_planet_flag = fallen_empire_world }
+		}
+		modifier = {
+			factor = 0.1
+			is_galactic_custodian = yes
+		}
+		modifier = {
+			factor = 0.1
+			is_galactic_emperor = yes
+		}
+		modifier = {
+			factor = 0.1
+			end_game_years_passed > 0
+		}
+	}
+	
+	immediate = {
+		set_country_flag = utopian_world_situation_available
+	}
+	
+	
+	option = {
+		name = utopian_paradise.1.a
+		set_country_flag = utopian_world_situation_started
+		start_situation = {
+			type = situation_utopian_paradise
+			target = root.capital_scope
+		}
+	}
+	
+	option = {
+		name = "utopian_paradise.1.b"
+		add_resource = { influence = 500 }
+	}
+}
+
+situation_event = {
+	id = utopian_paradise.2
+	title = utopian_paradise.2.name
+	desc = utopian_paradise.2.desc
+	picture = GFX_evt_physics_research
+	is_triggered_only = yes
+	situation = this
+	location = target
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+	option = { #Apply pressure to the team
+		name = utopian_paradise.2.a
+		hidden_effect = {
+			owner = {
+				random_list = {
+					40 = {
+						random_owned_leader = {
+							limit = {
+								is_researching_area = physics
+							}
+							kill_leader = { 
+								show_notification = yes 
+								type = scientist 
+							}
+						}
+					
+					}
+					40 = {
+						random_owned_leader = {
+							limit = {
+								is_researching_area = engineering 	
+							}
+							kill_leader = { 
+								show_notification = yes 
+								type = scientist 
+							}
+						}
+					}
+					30 = {}
+				}
+			}
+		}
+	}
+	option = { #Raise the cash
+		name = utopian_paradise.2.b
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 50000
+				}
+			}
+		}
+		owner = {
+			add_resource = { energy = -50000 }
+		}
+	}
+	option = { #Look for new team members
+		name = utopian_paradise.2.c
+		add_situation_progress = -30
+		ai_chance = {
+			weight = 100
+		}
+	}
+	option = { #Ignore them
+		name = utopian_paradise.2.d
+		hidden_effect = {
+			owner = {
+				add_modifier = {
+					modifier = scientists_strike
+					days = 180
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = utopian_paradise.3
+	title = utopian_paradise.3.name
+	desc = utopian_paradise.3.desc
+	picture = GFX_evt_mining_station
+	is_triggered_only = yes
+	situation = this
+	location = target
+
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+	option = { #Study the Statue
+		name = utopian_paradise.3.a
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_researching_area = engineering 	
+				}
+				kill_leader = { 
+					show_notification = yes 
+					type = scientist 
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier5researchreward
+				min = @tier5researchmin
+				max = @tier5researchmax
+			}
+		}
+		
+	}
+	option = { #Blow up the Statue
+		name = utopian_paradise.3.b
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_researching_area = engineering 	
+				}
+				kill_leader = { 
+					show_notification = yes 
+					type = scientist 
+				}
+			}
+		}
+		owner = {
+			add_resource = { sr_living_metal = 100 }
+		}
+	}
+	option = { #Take Precautions
+		name = utopian_paradise.3.c
+		add_situation_progress = -30
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_researching_area = engineering 	
+				}
+				kill_leader = { 
+					show_notification = yes 
+					type = scientist 
+				}
+			}
+		}
+		owner = {
+			add_resource = { unity = 10000 }
+		}
+	}
+	option = { #Find out more via ancient relics
+		name = utopian_paradise.3.d
+		add_situation_progress = 15
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = minor_artifacts
+					value >= 25
+				}
+			}
+		}
+		owner = {
+			random_owned_leader = {
+				limit = {
+					is_researching_area = engineering 	
+				}
+				kill_leader = { 
+					show_notification = yes 
+					type = scientist 
+				}
+			}
+		}
+		owner = {
+			add_resource = { minor_artifacts = -25 }
+		}
+	}
+}
+
+situation_event = {
+	id = utopian_paradise.4
+	title = utopian_paradise.4.name
+	desc = utopian_paradise.4.desc
+	picture = GFX_evt_metropolis
+	is_triggered_only = yes
+	situation = this
+	location = target
+
+	immediate = {
+		set_situation_locked = yes
+		save_event_target_as = living_metal_experiment_situation
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+	option = { #Barren Planet
+		name = utopian_paradise.4.a
+		owner = {
+			random_planet_within_border = {
+				limit = {
+					OR = {
+						is_planet_class = pc_barren
+						is_planet_class = pc_barren_cold
+					}
+					NOT = { exists = archaeological_site }
+					NOT = { has_planet_flag = suppress_archaeological_sites }
+				}
+				save_event_target_as = living_metal_experiment_planet
+			}
+		}
+		custom_tooltip = living_metal_planet_experiment_tooltip
+		hidden_effect = {
+			owner = {
+				country_event = { id = utopian_paradise.41 days = 15 }
+			}
+		}
+	}
+	option = { #Molten Planet
+		name = utopian_paradise.4.b
+		owner = {
+			random_planet_within_border = {
+				limit = {
+					is_planet_class = pc_molten
+					NOT = { exists = archaeological_site }
+					NOT = { has_planet_flag = suppress_archaeological_sites }
+				}
+				save_event_target_as = living_metal_experiment_planet
+			}
+		}
+		custom_tooltip = living_metal_planet_experiment_tooltip
+		hidden_effect = {
+			owner = {
+				country_event = { id = utopian_paradise.41 days = 15 }
+			}
+		}			
+	}
+	option = { #Frozen Planet
+		name = utopian_paradise.4.c
+		owner = {
+			random_planet_within_border = {
+				limit = {
+					is_planet_class = pc_frozen
+					NOT = { exists = archaeological_site }
+					NOT = { has_planet_flag = suppress_archaeological_sites }
+				}
+				save_event_target_as = living_metal_experiment_planet
+			}
+		}
+		custom_tooltip = living_metal_planet_experiment_tooltip
+		hidden_effect = {
+			owner = {
+				country_event = { id = utopian_paradise.41 days = 15 }
+			}
+		}	
+	}
+	option = { #Colony
+		name = utopian_paradise.4.d
+		owner = {
+			random_owned_planet = {
+				limit = {
+					is_artificial = no
+					is_colony = yes
+					NOT = { exists = archaeological_site }
+					NOT = { has_planet_flag = suppress_archaeological_sites }
+				}
+				save_event_target_as = living_metal_experiment_planet
+			}
+		}
+		custom_tooltip = living_metal_planet_experiment_tooltip
+		hidden_effect = {
+			owner = {
+				country_event = { id = utopian_paradise.41 days = 15 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = utopian_paradise.41
+	title = utopian_paradise.41.name
+	desc = utopian_paradise.41.desc
+	picture = GFX_evt_exploding_planet
+	is_triggered_only = yes
+	location = event_target:living_metal_experiment_planet
+	
+	immediate = {
+		random_planet_within_border = {
+			limit = { is_same_value = event_target:living_metal_experiment_planet }
+			change_pc = pc_shattered
+			destroy_colony = yes
+			clear_deposits = yes
+			add_deposit = d_living_metal_deposit
+		}
+	}
+
+	option = { 
+		name = utopian_paradise.41.a
+		event_target:living_metal_experiment_situation = {
+			add_situation_progress = -30
+		}
+		hidden_effect = {
+			random_list = {
+				25 = {
+					random_owned_leader = {
+						limit = {
+							is_researching_area = physics
+						}
+						kill_leader = { 
+							show_notification = yes 
+							type = scientist 
+						}
+					}
+				}
+				25 = {
+					add_resource = { unity = -10000 }
+				}
+				25 = {
+					add_resource = { minerals = 10000 }
+				}
+				25 = {}
+			}
+		}
+	}
+}
+
+
+situation_event = {
+	id = utopian_paradise.5
+	title = utopian_paradise.5.name
+	desc = utopian_paradise.5.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	situation = this
+	location = target
+	
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+
+	option = { 
+		name = utopian_paradise.5.a
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						is_gestalt = no
+						has_valid_civic = civic_machine_servitor
+					}
+				}
+			}
+			owner = {
+				add_research_option = tech_paradise_creation
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					AND = {
+						has_authority = auth_machine_intelligence
+						NOT = { has_valid_civic = civic_machine_servitor }
+					}
+				}
+			}
+			owner = {
+				add_research_option = tech_paradise_creation_machine
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_authority = auth_hive_mind
+				}
+			}
+			owner = {
+				add_research_option = tech_paradise_creation_hive
+			}
+		}		
+	}
+}
+	
+
+
+#Utopian Paradise Complete (Gaia)
+planet_event = {
+	id = utopian_paradise.100
+	title = utopian_paradise.100.name
+	desc = utopian_paradise.100.desc
+	picture = GFX_evt_gaia
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_utopian_gaia
+	}
+
+	option = {
+		name = utopian_paradise.100.a
+	}
+}
+
+#Utopian Paradise Complete (City)
+planet_event = {
+	id = utopian_paradise.200
+	title = utopian_paradise.200.name
+	desc = utopian_paradise.200.desc
+	picture = GFX_evt_city_planet
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_utopian_city
+	}
+
+	option = {
+		name = utopian_paradise.200.a
+	}
+}
+
+#Utopian Paradise Complete (Ringworld)
+planet_event = {
+	id = utopian_paradise.300
+	title = utopian_paradise.300.name
+	desc = utopian_paradise.300.desc
+	picture = GFX_evt_ringworld
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_utopian_ringworld
+	}
+
+	option = {
+		name = utopian_paradise.300.a
+	}
+}
+
+#Utopian Paradise Machine Complete (Machine)
+planet_event = {
+	id = utopian_paradise.400
+	title = utopian_paradise.400.name
+	desc = utopian_paradise.400.desc
+	picture = GFX_evt_ai_planet
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_utopian_machine
+	}
+
+	option = {
+		name = utopian_paradise.400.a
+	}
+}
+
+#Utopian Paradise Machine Complete (Ringworld)
+planet_event = {
+	id = utopian_paradise.500
+	title = utopian_paradise.500.name
+	desc = utopian_paradise.500.desc
+	picture = GFX_evt_ringworld
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_utopian_machine_ringworld
+	}
+
+	option = {
+		name = utopian_paradise.500.a
+	}
+}
+
+#Utopian Paradise Hive Complete (Hive)
+planet_event = {
+	id = utopian_paradise.600
+	title = utopian_paradise.600.name
+	desc = utopian_paradise.600.desc
+	picture = GFX_evt_infested
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_utopian_hive
+	}
+
+	option = {
+		name = utopian_paradise.600.a
+	}
+}
+
+#Utopian Paradise Hive Complete (Ringworld)
+planet_event = {
+	id = utopian_paradise.700
+	title = utopian_paradise.700.name
+	desc = utopian_paradise.700.desc
+	picture = GFX_evt_ringworld
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_utopian_hive_ringworld
+	}
+
+	option = {
+		name = utopian_paradise.700.a
+	}
+}
+
+
+#Utopian Paradise Complete (Habitat)
+planet_event = {
+	id = utopian_paradise.800
+	title = utopian_paradise.800.name
+	desc = utopian_paradise.800.desc
+	picture = GFX_evt_habitat
+	show_sound = event_cityscape
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_planet_class = pc_utopian_habitat
+	}
+
+	option = {
+		name = utopian_paradise.800.a
+	}
+}

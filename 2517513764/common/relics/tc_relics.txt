@@ -1,0 +1,194 @@
+#奥术分解机
+tc_thaumic_disassembler = {
+	activation_duration = 3600
+	portrait = "GFX_relic_tc_thaumic_disassembler"
+	sound = "relic_activation_cybrex_war_forge"
+	
+	score = 1000
+	
+	resources = {
+		category = relics
+		cost = {
+			tc_essences = 2560
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		planet_miners_produces_mult = 0.25
+	}
+
+	active_effect = {
+		add_resource = {
+			minerals = 10000
+		}
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = 3600
+			}
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+		
+	ai_weight = {
+		weight = 100
+	}
+}
+#魔导手册
+tc_research_book = {
+	activation_duration = 0
+	portrait = "GFX_relic_tc_research_book"
+	sound = "tc_open_book"
+	
+	score = 1000
+	
+	resources = {
+		category = relics
+		cost = { }
+	}
+
+	active_effect = {
+		if = {
+			limit = { 
+				NOT = {
+					has_technology = tc_tech_arcane_research
+				}
+			}
+			give_technology = { tech = tc_tech_arcane_research }
+		}
+		#初始科技
+		if = {
+			limit = { 
+				NOR = {
+					has_technology = tc_tech_brain_jar
+					has_technology = tc_tech_essence_distil_t1
+					has_technology = tc_tech_alchemical_t1
+				}
+			}
+			give_technology = { tech = tc_tech_brain_jar }
+			give_technology = { tech = tc_tech_essence_distil_t1 }
+			give_technology = { tech = tc_tech_alchemical_t1 }
+		}
+		#第一次使用 创建扭曲变量
+		if = {
+			limit = {
+				NOT = { has_country_flag = tc_warp_initialization }
+				NOT = { is_variable_set = tc_warp }
+			}
+			set_variable = { which = tc_warp value = 0 }
+			set_country_flag = tc_warp_initialization
+		}
+		#激活研究窗口
+		country_event = {
+			id = tc_research_ui.1
+		}
+	}
+
+	possible = {
+
+	}
+		
+	ai_weight = {
+		weight = 100
+	}
+}
+#魔导透镜
+tc_scanner = {
+	activation_duration = 360
+	portrait = "GFX_relic_tc_scanner"
+	sound = "relic_activation_the_surveyor"
+	
+	score = 1000
+	
+	resources = {
+		category = relics
+		cost = {
+			tc_essences = 500
+		}
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		ship_sensor_range_add = 2
+
+	}
+
+	active_effect = {
+		tc_relic_scanner_active_effect = yes
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "tc_scanner_cooldown"
+			NOT = { has_modifier = tc_scanner_cooldown }
+		}
+	}
+		
+	ai_weight = {
+		weight = 100
+	}
+}
+#极元始珍珠
+tc_ex_primordial_pearl = {
+	activation_duration = 3600
+	portrait = "GFX_relic_tc_ex_primordial_pearl"
+	sound = "relic_activation_the_surveyor"
+	
+	score = 5000
+	
+	resources = {
+		category = relics
+		cost = {
+			tc_essences = 2560
+		}
+	}
+
+	triggered_country_modifier = {
+
+	}
+
+	active_effect = {
+		custom_tooltip = relic_triumph_cooldown
+		if = {
+			limit = {
+				NOT = {
+					has_technology = tc_tech_primordial_pearl
+				}
+			}
+			give_technology = { tech = tc_tech_primordial_pearl }
+		}
+		add_modifier = {
+			modifier = tc_ex_primordial_pearl_active
+			days = 1800
+		}
+		hidden_effect = {
+			add_modifier = {
+				modifier = "relic_activation_cooldown"
+				days = 3600
+			}
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = relic_activation_cooldown }
+		}
+	}
+		
+	ai_weight = {
+		weight = 100
+	}
+}

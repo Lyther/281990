@@ -1,0 +1,451 @@
+namespace = mopt_judgement
+
+country_event = {
+	id = mopt_judgement.0
+	title = mopt_judgement.0.name
+	desc = mopt_judgement.0.desc
+
+	is_triggered_only = yes
+
+	diplomatic = yes
+	diplomatic_title = "BLANK_STRING"
+	force_open = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+
+	trigger = {
+		is_ai = no
+		NOT = { has_global_flag = g_flag_mopt_ongoing_judgement }
+	}
+
+	immediate = {
+		set_global_flag = g_flag_mopt_ongoing_judgement
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_country_type = default
+				has_communications = root
+				mopt_is_judgement_target_country = no
+			}
+			mopt_mark_judgement_target_country = { index = 1 }
+		}
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_country_type = default
+				has_communications = root
+				mopt_is_judgement_target_country = no
+			}
+			mopt_mark_judgement_target_country = { index = 2 }
+		}
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_country_type = default
+				has_communications = root
+				mopt_is_judgement_target_country = no
+			}
+			mopt_mark_judgement_target_country = { index = 3 }
+		}
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_country_type = default
+				has_communications = root
+				mopt_is_judgement_target_country = no
+			}
+			mopt_mark_judgement_target_country = { index = 4 }
+		}
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_country_type = default
+				has_communications = root
+				mopt_is_judgement_target_country = no
+			}
+			mopt_mark_judgement_target_country = { index = 5 }
+		}
+		random_country = {
+			limit = {
+				is_ai = yes
+				is_country_type = default
+				has_communications = root
+				mopt_is_judgement_target_country = no
+			}
+			mopt_mark_judgement_target_country = { index = 6 }
+		}
+	}
+
+	option = {
+		name = mopt_judgement.0.a
+		trigger = { exists = event_target:mopt_judgement_target_country_1 }
+		hidden_effect = { mopt_set_judgement_target = { index = 1 } }
+	}
+	option = {
+		name = mopt_judgement.0.b
+		trigger = { exists = event_target:mopt_judgement_target_country_2 }
+		hidden_effect = { mopt_set_judgement_target = { index = 2 } }
+	}
+	option = {
+		name = mopt_judgement.0.c
+		trigger = { exists = event_target:mopt_judgement_target_country_3 }
+		hidden_effect = { mopt_set_judgement_target = { index = 3 } }
+	}
+	option = {
+		name = mopt_judgement.0.d
+		trigger = { exists = event_target:mopt_judgement_target_country_4 }
+		hidden_effect = { mopt_set_judgement_target = { index = 4 } }
+	}
+	option = {
+		name = mopt_judgement.0.e
+		trigger = { exists = event_target:mopt_judgement_target_country_5 }
+		hidden_effect = { mopt_set_judgement_target = { index = 5 } }
+	}
+	option = {
+		name = mopt_judgement.0.f
+		trigger = { exists = event_target:mopt_judgement_target_country_6 }
+		hidden_effect = { mopt_set_judgement_target = { index = 6 } }
+	}
+
+
+	option = {
+		name = mopt_judgement.0.cancel
+		hidden_effect = { remove_global_flag = g_flag_mopt_ongoing_judgement }
+	}
+}
+
+country_event = {
+	id = mopt_judgement.1
+	title = mopt_judgement.1.name
+	desc = mopt_judgement.1.desc
+
+	is_triggered_only = yes
+
+	diplomatic = yes
+	diplomatic_title = "BLANK_STRING"
+	force_open = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		city_level = root
+		graphical_culture = root
+		room = root
+	}
+
+	trigger = { is_ai = no }
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { is_variable_set = v_mopt_judgement_planet_pop_max_threshold }
+			}
+			set_variable = {
+				which = v_mopt_judgement_planet_pop_max_threshold
+				value = 20
+			}
+		}
+	}
+
+	option = {
+		name = mopt_judgement.1.confirm
+		if = {
+			limit = {
+				any_country = {
+					is_ai = no
+					NOT = { is_same_value = root }
+				}
+			}
+			custom_tooltip = mopt_judgement.1.confirm.multiplayer_tooltip
+		}
+		allow = {
+			check_variable = {
+				which = v_mopt_judgement_planet_pop_max_threshold
+				value > 0
+			}
+		}
+		add_resource = {
+			influence = -500
+		}
+
+		hidden_effect = {
+			set_country_flag = flag_mopt_judgement_participant
+			if = {
+				limit = {
+					# 存在其他人类玩家，则发起投票
+					any_country = {
+						is_ai = no
+						NOT = { is_same_value = root }
+					}
+				}
+				event_target:mopt_judgement_target = {
+					export_trigger_value_to_variable = {
+						trigger = count_playable_country
+						parameters = {
+							limit = {
+								is_ai = no
+								NOT = { is_same_value = event_target:mopt_judgement_initiator }
+							}
+						}
+						variable = v_mopt_judgement_voter_cnt
+					}
+					set_variable = {
+						which = v_mopt_judgement_voters_agreed
+						value = 0
+					}
+				}
+				random_country = {
+					limit = {
+						is_ai = no
+						NOT = { is_same_value = event_target:mopt_judgement_initiator }
+					}
+					country_event = { id = mopt_judgement.100 }
+				}
+			}
+			else = {
+				# 否则直接执行
+				event_target:mopt_judgement_target = {
+					country_event = { id = mopt_judgement.999 }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mopt_judgement.1.add_1
+		change_variable = {
+			which = v_mopt_judgement_planet_pop_max_threshold
+			value = 1
+		}
+		hidden_effect = {
+			country_event = { id = mopt_judgement.1 }
+		}
+	}
+	option = {
+		name = mopt_judgement.1.add_5
+		change_variable = {
+			which = v_mopt_judgement_planet_pop_max_threshold
+			value = 5
+		}
+		hidden_effect = {
+			country_event = { id = mopt_judgement.1 }
+		}
+	}
+	option = {
+		name = mopt_judgement.1.sub_5
+		allow = {
+			check_variable_arithmetic = {
+				which = v_mopt_judgement_planet_pop_max_threshold
+				subtract = -5
+				value > 0
+			}
+		}
+		change_variable = {
+			which = v_mopt_judgement_planet_pop_max_threshold
+			value = -5
+		}
+		hidden_effect = {
+			country_event = { id = mopt_judgement.1 }
+		}
+	}
+	option = {
+		name = mopt_judgement.1.sub_1
+		allow = {
+			check_variable_arithmetic = {
+				which = v_mopt_judgement_planet_pop_max_threshold
+				subtract = -1
+				value > 0
+			}
+		}
+		change_variable = {
+			which = v_mopt_judgement_planet_pop_max_threshold
+			value = -1
+		}
+		hidden_effect = {
+			country_event = { id = mopt_judgement.1 }
+		}
+	}
+
+	option = {
+		name = mopt_judgement.1.return
+
+		hidden_effect = {
+			remove_global_flag = g_flag_mopt_ongoing_judgement
+			country_event = { id = mopt_judgement.0 }
+		}
+	}
+}
+
+country_event = {
+	id = mopt_judgement.100
+	title = mopt_judgement.100.name
+	desc = mopt_judgement.100.desc
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = flag_mopt_judgement_participant
+	}
+
+	option = {
+		name = mopt_judgement.100.agree
+		hidden_effect = {
+			set_country_flag = flag_mopt_judgement_agreed
+			event_target:mopt_judgement_target = {
+				change_variable = {
+					which = v_mopt_judgement_voters_agreed
+					value = 1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mopt_judgement.100.disagree
+	}
+	option = {
+		name = mopt_judgement.100.abstain
+	}
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = {
+					any_country = {
+						is_ai = no
+						NOT = { has_country_flag = flag_mopt_judgement_participant }
+					}
+				}
+				
+				random_country = {
+					limit = {
+						is_ai = no
+						NOT = { has_country_flag = flag_mopt_judgement_participant }
+					}
+					country_event = { id = mopt_judgement.100 }
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						event_target:mopt_judgement_target = {
+							check_variable_arithmetic = {
+								which = v_mopt_judgement_voters_agreed
+								multiply = 2
+								value >= v_mopt_judgement_voter_cnt
+							}
+						}
+					}
+					country_event = { id = mopt_judgement.999 }
+				}
+				else = {
+					event_target:mopt_judgement_initiator = {
+						country_event = { id = mopt_judgement.101 }
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = mopt_judgement.101
+	title = mopt_judgement.101.name
+	desc = mopt_judgement.101.desc
+
+	is_triggered_only = yes
+
+	immediate = {
+		mopt_cleanup_judgement_evt = yes
+	}
+	
+	option = {
+		name = mopt_judgement.101.a
+	}
+}
+
+country_event = {
+	id = mopt_judgement.999
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		save_event_target_as = mopt_judgement_target_capital
+		every_owned_planet = {
+			limit = {
+				count_owned_pop = {
+					count <= event_target:mopt_judgement_initiator.v_mopt_judgement_planet_pop_max_threshold
+				}
+			}
+			every_owned_pop = { kill_pop = yes }
+			remove_all_buildings = yes
+			change_pc = pc_shattered
+			set_planet_flag = flag_mopt_judgement_target
+		}
+		remove_global_flag = g_flag_mopt_ongoing_judgement
+		every_country = {
+			limit = { is_ai = no }
+			country_event = {
+				id = mopt_judgement.1000
+			}
+		}
+	}
+}
+
+country_event = {
+	id = mopt_judgement.1000
+	title = mopt_judgement.1000.name
+	desc = mopt_judgement.1000.desc
+
+	# location = event_target:mopt_judgement_target
+	location = event_target:mopt_judgement_target_capital
+
+	is_triggered_only = yes
+
+	immediate = {
+		export_trigger_value_to_variable = {
+			trigger = count_galaxy_planet
+			parameters = {
+				limit = { has_planet_flag = flag_mopt_judgement_target }
+			}
+			variable = v_mopt_destroyed_planet_count
+		}
+	}
+	
+	option = {
+		name = {
+			text = mopt_judgement.1000.ok
+			trigger = {
+				OR = {
+					is_same_value = event_target:mopt_judgement_initiator
+					has_country_flag = flag_mopt_judgement_agreed
+				}
+			}
+		}
+		name = {
+			text = mopt_judgement.1000.omg
+			trigger = {
+				NOR = {
+					is_same_value = event_target:mopt_judgement_initiator
+					has_country_flag = flag_mopt_judgement_agreed
+				}
+			}
+		}
+		
+		custom_tooltip = mopt_destroyed_planet_count_tooltip
+		hidden_effect = {
+			remove_country_flag = flag_mopt_judgement_agreed
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			clear_variable = v_mopt_destroyed_planet_count
+		}
+	}
+}

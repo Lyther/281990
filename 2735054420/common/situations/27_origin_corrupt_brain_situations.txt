@@ -1,0 +1,140 @@
+situation_origin_corrupt_brain = {
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	complete_icon = GFX_situation_outcome_bankrupcy
+	picture = GFX_evt_spymaster
+	
+	stages = {
+		stage_corrupt_brain_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 2000
+			modifier = {
+				planet_jobs_produces_mult = -0.05
+			}
+		}
+		stage_corrupt_brain_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			on_first_enter = {
+				situation_event = { id = origin_corrupt_brain.11 }
+			}
+			end = 4000
+			modifier = {
+				planet_jobs_produces_mult = -0.1
+			}
+		}
+		stage_corrupt_brain_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			on_first_enter = {
+				situation_event = { id = origin_corrupt_brain.12 }
+			}
+			end = 6000
+			modifier = {
+				planet_jobs_produces_mult = -0.2
+			}
+		}
+		stage_corrupt_brain_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			on_first_enter = {
+				situation_event = { id = origin_corrupt_brain.13 }
+			}
+			end = 8000
+			modifier = {
+				planet_jobs_produces_mult = -0.4
+			}
+		}
+		stage_corrupt_brain_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_red
+			on_first_enter = {
+				situation_event = { id = origin_corrupt_brain.14 }
+			}
+			end = 10000
+			modifier = {
+				planet_jobs_produces_mult = -0.8
+			}
+		}
+	}
+	
+	on_progress_complete = {
+		custom_tooltip = situation_origin_corrupt_brain_complete_effect
+		hidden_effect = {
+			situation_event = { id = origin_corrupt_brain.15 }
+		}
+	}
+	
+	approach = {
+		name = approach_origin_corrupt_brain_default
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = situation_origin_corrupt_brain_default_effect
+			hidden_effect = {
+				owner = {
+					refresh_corrupt_brain_value = yes
+				}
+			}
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				trigger = {
+					current_stage = stage_corrupt_brain_1
+				}
+				unity = 10
+			}
+			upkeep = {
+				trigger = {
+					current_stage = stage_corrupt_brain_2
+				}
+				unity = 20
+			}
+			upkeep = {
+				trigger = {
+					current_stage = stage_corrupt_brain_3
+				}
+				unity = 40
+			}
+			upkeep = {
+				trigger = {
+					current_stage = stage_corrupt_brain_4
+				}
+				unity = 80
+			}
+			upkeep = {
+				trigger = {
+					current_stage = stage_corrupt_brain_5
+				}
+				unity = 160
+			}
+		}
+	}
+	
+	approach = {
+		name = approach_origin_corrupt_brain_discourage
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = situation_origin_corrupt_brain_discourage_effect
+			hidden_effect = {
+				owner = {
+					refresh_corrupt_brain_value = yes
+				}
+			}
+		}
+	}
+	
+	monthly_progress = {
+		modifier = {
+			desc = string_origin_corrupt_brain
+			add = owner.num_corrupt_brain_value
+		}
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = approach_origin_corrupt_brain_default
+			factor = 0.8
+		}
+	}
+}

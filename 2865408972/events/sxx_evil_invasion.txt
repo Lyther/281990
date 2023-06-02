@@ -1,0 +1,706 @@
+namespace = sxx_evil_invasion
+
+# 建立联系
+first_contact_event = {
+	id = sxx_evil_invasion.5
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			owner = {
+				has_origin = origin_sxx_evil_invasion
+			}
+			from = {
+				has_origin = origin_sxx_evil_invasion
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					has_origin = origin_sxx_evil_invasion
+				}
+			}
+			from = {
+				country_event = {
+					id = sxx_evil_invasion.10
+					days = 2
+					scopes = { from = root.owner }
+				}
+			}
+		}
+		else = {
+			owner = {
+				country_event = {
+					id = sxx_evil_invasion.10
+					days = 2
+					scopes = { from = from }
+				}
+			}
+		}
+	}
+}
+
+# 建立联系弹窗
+country_event = {
+	id = sxx_evil_invasion.10
+	title = sxx_evil_invasion.10.name
+	desc = {
+		text = sxx_evil_invasion.10.desc_not_sect
+		trigger = {
+			is_sxx_sect = no
+		}
+	}
+	desc = {
+		text = sxx_evil_invasion.10.desc_sect
+		trigger = {
+			is_sxx_sect = yes
+		}
+	}
+	picture = GFX_evt_conclave
+	location = from
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_evil_invasion.10.a
+		trigger = {
+			NOT = { has_valid_civic = civic_sxx_evil_way }
+		}
+	}
+	option = {
+		name = sxx_evil_invasion.10.b
+		trigger = {
+			has_valid_civic = civic_sxx_evil_way
+		}
+	}
+}
+
+# 觉醒
+country_event = {
+	id = sxx_evil_invasion.15
+
+	hide_window = yes
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		years = 50
+		modifier = {
+			factor = 0.75
+			has_modifier = sxx_dacheng_country
+		}
+		modifier = {
+			factor = 0.5
+			has_modifier = sxx_dujie_country
+		}
+		modifier = {
+			factor = 0.25
+			has_modifier = sxx_fairy_country
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = sxx_break_level_1
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = sxx_break_level_3
+		}
+		modifier = {
+			factor = 2
+			has_global_flag = sxx_break_level_4
+		}
+		modifier = {
+			factor = 0.5
+			mid_game_years_passed >= 20
+		}
+		modifier = {
+			factor = 0.01
+			has_global_flag = sxx_rew_test
+		}
+	}
+
+	trigger = {
+		exists = event_target:sxx_evil_invasion_country
+		is_same_value = event_target:sxx_evil_invasion_country
+		is_at_war = no
+		OR = {
+			AND = {
+				is_sxx_heti_country = yes
+				mid_game_years_passed >= 0
+			}
+			AND = {
+				has_global_flag = sxx_rew_test
+				has_global_flag = galactic_community_founded
+			}
+		}
+	}
+
+	immediate = {
+		remove_modifier = sxx_evil_invasion_modifier
+		remove_country_flag = ai_no_wars
+
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = sxx_evil_invasion.20 }
+		}
+		
+		if = {
+			limit = {
+				is_subject = no
+				has_global_flag = galactic_community_founded
+				NOR = {
+					has_global_flag = sleepers_awake_rival_waking
+					has_global_flag = galactic_crisis_happened
+					has_global_flag = sxx_outer_demon_invasion_happened
+				}
+				event_target:sxx_evil_invasion_homeland = {
+					owner = { is_same_value = root }
+					is_occupied_flag = no
+				}
+				count_country = {
+					count >= 3
+					limit = {
+						NOT = { is_same_value = root }
+						is_country_type = default
+					}
+				}
+			}
+
+			random_list = {
+				25 = {
+					modifier = {
+						factor = 2
+						is_sxx_dacheng_country = yes
+					}
+					modifier = {
+						factor = 2
+						is_sxx_dujie_country = yes
+					}
+
+					every_country = {
+						limit = {
+							has_valid_civic = civic_sxx_evil_way
+						}
+						country_event = { id = sxx_evil_invasion.30 days = 90 }
+					}
+			
+					country_event = { id = sxx_evil_invasion.40 days = 180 random = 180 }
+				}
+				50 = {
+					modifier = {
+						factor = 0
+						is_sxx_fairy_country = yes
+					}
+					modifier = {
+						factor = 0
+						has_global_flag = sxx_rew_test
+					}
+				}
+			}
+		}
+	}
+}
+
+# 觉醒弹窗
+country_event = {
+	id = sxx_evil_invasion.20
+	title = sxx_evil_invasion.20.name
+	desc = sxx_evil_invasion.20.desc
+	picture = GFX_evt_conclave
+	location = from
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_evil_invasion.20.a
+	}
+	option = {
+		name = sxx_evil_invasion.20.b
+	}
+}
+
+# 结盟邀请
+country_event = {
+	id = sxx_evil_invasion.30
+	title = TRANSMISSION
+	desc = sxx_evil_invasion.30.desc
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_at_war_with = from }
+		is_galactic_emperor = no
+		is_galactic_custodian = no
+	}
+	
+	option = {
+		name = sxx_evil_invasion.30.a
+		hidden_effect = {
+			set_country_flag = sxx_join_the_evil_invasion
+			from = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_sxx_join_the_evil_invasion
+				}
+			}
+		}
+
+		ai_chance = {
+			weight = 10
+		}
+	}
+	option = {
+		name = sxx_evil_invasion.30.b
+		hidden_effect = {
+			from = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_sxx_reject_the_evil_invasion
+				}
+			}
+		}
+	}
+}
+
+# 宣战
+country_event = {
+	id = sxx_evil_invasion.40
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = sxx_evil_invasion.45 }
+		}
+		country_event = { id = sxx_evil_invasion.50 days = 5 }
+	}
+}
+
+# 魔道宣战通讯
+country_event = {
+	id = sxx_evil_invasion.45
+	title = TRANSMISSION
+	desc = {
+		text = sxx_evil_invasion.45.desc.a
+		trigger = {
+			NOT = { has_country_flag = sxx_join_the_evil_invasion }
+		}
+	}
+	desc = {
+		text = sxx_evil_invasion.45.desc.b
+		trigger = {
+			has_country_flag = sxx_join_the_evil_invasion
+		}
+	}
+	location = from
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_evil_invasion.45.a
+		trigger = {
+			NOT = { has_country_flag = sxx_join_the_evil_invasion }
+		}
+	}
+	option = {
+		name = sxx_evil_invasion.45.b
+		trigger = {
+			NOT = { has_country_flag = sxx_join_the_evil_invasion }
+		}
+	}
+	option = {
+		name = sxx_evil_invasion.45.c
+		trigger = {
+			NOT = { has_country_flag = sxx_join_the_evil_invasion }
+		}
+	}
+	option = {
+		name = sxx_evil_invasion.45.d
+		trigger = {
+			has_country_flag = sxx_join_the_evil_invasion
+		}
+	}
+}
+
+# 宣战
+country_event = {
+	id = sxx_evil_invasion.50
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { is_galactic_community_member = yes }
+			remove_from_galactic_community = yes
+		}
+		if = {
+			limit = {
+				is_galactic_council_established = yes
+				is_part_of_galactic_council = yes
+			}
+			remove_from_galactic_council = yes
+		}
+		every_subject = {
+			if = {
+				limit = { is_galactic_community_member = yes }
+				remove_from_galactic_community = yes
+			}
+			if = {
+				limit = {
+					is_galactic_council_established = yes
+					is_part_of_galactic_council = yes
+				}
+				remove_from_galactic_council = yes
+			}
+		}
+		#set_country_flag = declared_crisis
+		save_event_target_as = new_crisis
+		#country_event = { id = crisis.4105 }
+
+		if = {
+			limit = { has_galactic_custodian = yes }
+			galactic_custodian = {
+				save_event_target_as = community_war_leader
+				if = {
+					limit = { is_in_federation_with = event_target:new_crisis }
+					event_target:new_crisis = {
+						leave_alliance = { override_requirements = yes }
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { has_galactic_emperor = yes }
+			galactic_emperor = {
+				save_event_target_as = community_war_leader
+			}
+		}
+		else = {
+			random_playable_country = {
+				limit = {
+					is_galactic_community_member = yes
+					NOT = { is_in_federation_with = event_target:new_crisis }
+					NOT = { has_country_flag = sxx_join_the_evil_invasion }
+				}
+				weights = {
+					base = 1
+					modifier = {
+						add = 10000
+						galactic_community_rank = 1
+					}
+					modifier = {
+						add = 1000
+						galactic_community_rank = 2
+					}
+					modifier = {
+						add = 100
+						galactic_community_rank = 3
+					}
+					modifier = {
+						add = 10
+						is_galactic_council_established = yes
+						is_part_of_galactic_council = yes
+					}
+				}
+				save_event_target_as = community_war_leader
+			}
+		}
+
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = yes
+					NOR = {
+						has_country_flag = declared_crisis
+						is_in_federation_with = event_target:new_crisis
+					}
+				}
+				if = {
+					limit = {
+						any_war = {
+							any_war_participant = {
+								is_same_value = event_target:new_crisis
+							}
+						}
+					}
+					every_war = {
+						limit = {
+							any_war_participant = {
+								is_same_value = event_target:new_crisis
+							}
+						}
+						remove_war_participant = event_target:new_crisis
+					}
+				}
+				every_playable_country = {
+					limit = {
+						is_galactic_community_member = yes
+						NOR = {
+							is_same_value = prev
+							has_country_flag = declared_crisis
+							is_in_federation_with = event_target:new_crisis
+							has_country_flag = sxx_join_the_evil_invasion
+						}
+					}
+					set_closed_borders = {
+						who = prev
+						status = no
+					}
+				}
+			}
+			event_target:new_crisis = {
+				declare_war = {
+					target = event_target:community_war_leader
+					name = "Name_SXX_Right_Evil_War"
+					attacker_war_goal = wg_sxx_evil
+					effect = { save_event_target_as = crisis_war }
+				}
+			}
+			
+			event_target:community_war_leader = {
+				country_event = { id = sxx_evil_invasion.60 }
+			}
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = yes
+					NOR = {
+						is_same_value = event_target:community_war_leader
+						is_in_federation_with = event_target:new_crisis
+						has_country_flag = sxx_join_the_evil_invasion
+					}
+				}
+		
+				join_war_on_side = {
+					war = event_target:crisis_war
+					side = event_target:community_war_leader
+				}
+
+				country_event = { id = sxx_evil_invasion.60 }
+			}
+			every_country = {
+				limit = {
+					has_country_flag = sxx_join_the_evil_invasion
+				}
+				join_war_on_side = {
+					war = event_target:crisis_war
+					side = event_target:new_crisis
+				}
+				country_event = { id = sxx_evil_invasion.65 }
+			}
+	}
+}
+
+country_event = {
+	id = sxx_evil_invasion.60
+	title = sxx_evil_invasion.60.name
+	desc = {
+		trigger = {
+			is_same_value = event_target:community_war_leader
+		}
+		text = sxx_evil_invasion.60.desc.a
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				is_same_value = event_target:community_war_leader
+			}
+		}
+		text = sxx_evil_invasion.60.desc.b
+	}
+	picture = GFX_evt_crisis_declared
+	show_sound = event_announcement
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_evil_invasion.60.a
+	}
+	option = {
+		name = sxx_evil_invasion.60.b
+		trigger = {
+			has_valid_civic = civic_sxx_evil_way
+		}
+	}
+}
+
+country_event = {
+	id = sxx_evil_invasion.65
+	title = sxx_evil_invasion.65.name
+	desc = sxx_evil_invasion.65.desc
+	picture = GFX_evt_crisis_declared
+	show_sound = event_announcement
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_evil_invasion.65.a
+	}
+}
+
+# 修仙堕落惩罚
+event = {
+	id = sxx_evil_invasion.100
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:sxx_evil_invasion_country
+		event_target:sxx_evil_invasion_country = {
+			galaxy_percentage >= 0.30
+			is_sxx_dujie_country = no
+			NOT = { has_modifier = sxx_evil_invasion_modifier }
+			#is_at_war = yes
+			#is_war_leader = yes
+		}
+		exists = event_target:sxx_fallen_1
+		event_target:sxx_fallen_1 = {
+			NOT = { has_country_flag = has_declared_war_to_evil_invasion }
+			is_at_war = no
+			count_owned_ship = {
+				count >= 3
+				limit = {
+					has_modifier = sxx_cultivator_ship_modifier_9
+				}
+			}
+		}
+		any_war = {
+			using_war_goal = {
+				type = wg_sxx_evil
+				owner = event_target:sxx_evil_invasion_country
+			}
+			any_attacker = {
+				is_same_value = event_target:sxx_evil_invasion_country
+			}
+		}
+	}
+
+	immediate = {
+		random_list = {
+			5 = {
+				modifier = {
+					factor = 2
+					event_target:sxx_evil_invasion_country = {
+						galaxy_percentage >= 0.40
+					}
+				}
+				modifier = {
+					factor = 2
+					event_target:sxx_evil_invasion_country = {
+						galaxy_percentage >= 0.50
+					}
+				}
+				event_target:sxx_fallen_1 = {
+					country_event = { id = sxx_evil_invasion.105 days = 30 random = 300 }
+				}
+			}
+			100 = {}
+		}
+	}
+}
+
+# 修仙堕落宣战血杀
+country_event = {
+	id = sxx_evil_invasion.105
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:sxx_evil_invasion_country
+		event_target:sxx_evil_invasion_country = {
+			galaxy_percentage >= 0.30
+			is_sxx_dujie_country = no
+			#is_at_war = yes
+			#is_war_leader = yes
+		}
+		NOT = { has_country_flag = has_declared_war_to_evil_invasion }
+		is_at_war = no
+		count_owned_ship = {
+			count >= 3
+			limit = {
+				has_modifier = sxx_cultivator_ship_modifier_9
+			}
+		}
+		any_war = {
+			using_war_goal = {
+				type = wg_sxx_evil
+				owner = event_target:sxx_evil_invasion_country
+			}
+			any_attacker = {
+				is_same_value = event_target:sxx_evil_invasion_country
+			}
+		}
+	}
+
+	immediate = {
+		set_country_flag = has_declared_war_to_evil_invasion
+		declare_war = {
+			target = event_target:sxx_evil_invasion_country
+			attacker_war_goal = wg_sxx_fe1_humiliation
+		}
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = sxx_evil_invasion.110 }
+		}
+	}
+}
+
+# 修仙堕落宣战血杀弹窗
+country_event = {
+	id = sxx_evil_invasion.110
+	title = sxx_evil_invasion.110.name
+	desc = sxx_evil_invasion.110.desc
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_communications = event_target:sxx_fallen_1
+		has_communications = event_target:sxx_evil_invasion_country
+	}
+
+	option = {
+		name = sxx_evil_invasion.110.a
+	}
+	option = {
+		name = sxx_evil_invasion.110.a
+		trigger = {
+			has_valid_civic = civic_sxx_evil_way
+		}
+	}
+}

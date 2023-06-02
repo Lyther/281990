@@ -1,0 +1,359 @@
+###主阶段
+#荒古
+tc_infuster_ancient_01 = {
+	entity = "tc_infuster_01_entity"
+	construction_entity = "tc_infuster_01_entity"
+	place_entity_on_planet_plane = no
+	portrait = "GFX_megastructure_tc_infuster_complete"
+
+	build_time = 960
+	construction_blocks_and_blocked_by = self_type
+
+	possible = { 
+		always = no
+	}
+	potential = { 
+		always = no
+	}
+
+	on_build_start = { }
+	on_build_cancel = { }
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+tc_infuster_ancient_02 = {
+	entity = "tc_infuster_02_entity"
+	construction_entity = "tc_infuster_02_entity"
+	place_entity_on_planet_plane = no
+	portrait = "GFX_megastructure_tc_infuster_complete"
+
+	upgrade_from = { tc_infuster_ancient_01 }
+	build_time = 960
+
+	construction_blocks_and_blocked_by = self_type
+
+	possible = { }
+	potential = { }
+
+	on_build_start = { }
+	on_build_cancel = { }
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+tc_infuster_ancient_03 = {
+	entity = "tc_infuster_03_frame_entity"
+	construction_entity = "tc_infuster_matrix_stop_entity"
+	place_entity_on_planet_plane = no
+	portrait = "GFX_megastructure_tc_infuster_complete"
+
+	upgrade_from = { tc_infuster_ancient_02 tc_infuster_broken }
+	prerequisites = { tc_tech_ancient_infusion }
+
+	build_time = 1800
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 3840
+			tc_essences = 5120
+			tc_element_shard = 640
+		}
+
+		upkeep = {
+		}
+	}
+
+	construction_blocks_and_blocked_by = self_type
+
+	possible = {  }
+	potential = {  }
+
+	on_build_start = { }
+	on_build_cancel = { }
+	on_build_complete = {
+		
+	}
+}
+
+tc_infuster_ancient_start = { #启动
+	entity = ""
+	construction_entity = ""
+	place_entity_on_planet_plane = no
+	portrait = "GFX_megastructure_tc_infuster_complete"
+
+	upgrade_from = { tc_infuster_ancient_03 }
+	build_time = 0
+	prerequisites = { tc_tech_ancient_infusion }
+
+	construction_blocks_and_blocked_by = self_type
+
+	possible = {  }
+	potential = {  }
+
+	on_build_start = { 
+		save_global_event_target_as = tc_infusion_system
+		FROMFROM = {
+			set_halted = -1
+			save_global_event_target_as = tc_infusion_mega
+			create_ambient_object = {
+				type = "tc_infuster_start_object"
+				location = THIS
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				entity_offset = 0
+				use_3d_location = no
+			}
+		}
+		FROMFROM.owner = {
+			save_global_event_target_as = tc_infusion_owner
+			country_event = { id = tc_mega.1000 }
+		}
+	}
+	on_build_cancel = { }
+	on_build_complete = {
+		spawn_megastructure = {
+			type = tc_infuster_ancient_03
+			planet = FROMFROM.planet
+			owner = FROM
+		}
+		FROM = {
+			create_message = {
+				type = TC_INFUSION_COMPLETE
+				localization = tc_infusion_complete_desc
+				days = 60
+				target = FROMFROM.solar_system
+			}
+		}
+		every_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_infuster_start_object
+			}
+			destroy_ambient_object = this
+		}
+		#system_event = {
+		#	id = tc_mega.1001
+		#}
+		remove_megastructure = FROMFROM
+	}
+}
+
+###损毁巨构
+tc_infuster_broken = {
+	entity = "tc_infuster_broken_entity"
+	construction_entity = ""
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_infuster_broken"
+
+	construction_blocks_and_blocked_by = self_type
+
+	possible = {
+		always = no
+	}
+	potential = {
+		always = no
+	}
+
+	on_build_start = { }
+	on_build_cancel = { }
+	on_build_complete = { }
+}
+
+##产物巨构
+tc_infusion_construction = { #建造动画
+	entity = "tc_infusion_construction_entity"
+	construction_entity = "tc_infusion_construction_entity"
+	place_entity_on_planet_plane = no
+	build_time = 0
+
+	possible = { always = no }
+	potential = { always = no }
+	
+	on_build_complete = {
+		switch = {
+			trigger = has_star_flag
+			tc_infusion_select_01 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_01 } }
+			#tc_infusion_select_02 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_02 } }
+			#tc_infusion_select_03 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_03 } }
+			tc_infusion_select_04 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_04 } }
+			tc_infusion_select_05 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_05 } }
+			#tc_infusion_select_06 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_06 } }
+			#tc_infusion_select_07 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_07 } }
+			tc_infusion_select_08 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_08 } }
+			tc_infusion_select_09 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_09 } }
+			#tc_infusion_select_10 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_10 } }
+			#tc_infusion_select_11 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_11 } }
+			tc_infusion_select_12 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_12 } }
+			tc_infusion_select_13 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_13 } }
+			#tc_infusion_select_14 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_14 } }
+			#tc_infusion_select_15 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_15 } }
+			#tc_infusion_select_16 = { FROMFROM = { upgrade_megastructure_to = tc_infusion_construction_16 } }
+		}
+		
+	}
+}
+tc_infusion_construction_01 = { #神秘巡航舰
+	entity = "tc_infuster_cruise_entity"
+	construction_entity = "tc_infuster_cruise_entity"
+	place_entity_on_planet_plane = no
+	build_time = 240
+	upgrade_from = { tc_infusion_construction }
+
+	possible = { always = no }
+	potential = { always = no }
+	
+	on_build_complete = {
+		tc_infusion_complete_01 = yes
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_infuster_ancient_03
+			}
+			set_halted = 0
+		}
+		FROMFROM = { remove_megastructure = this }
+	}
+}
+tc_infusion_construction_05 = { #神秘战列舰
+	entity = "tc_infuster_batter_entity"
+	construction_entity = "tc_infuster_batter_entity"
+	place_entity_on_planet_plane = no
+	build_time = 480
+	upgrade_from = { tc_infusion_construction }
+
+
+	possible = { always = no }
+	potential = { always = no }
+	
+	on_build_complete = {
+		tc_infusion_complete_05 = yes
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_infuster_ancient_03
+			}
+			set_halted = 0
+		}
+		FROMFROM = {
+			remove_megastructure = this
+		}
+	}
+}
+tc_infusion_construction_09 = { #神秘主宰舰
+	entity = "tc_infuster_juggernaut_entity"
+	construction_entity = "tc_infuster_juggernaut_entity"
+	place_entity_on_planet_plane = no
+	build_time = 1200
+	upgrade_from = { tc_infusion_construction }
+
+
+	possible = { always = no }
+	potential = { always = no }
+	
+	on_build_complete = {
+		tc_infusion_complete_09 = yes
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_infuster_ancient_03
+			}
+			set_halted = 0
+		}
+		FROMFROM = {
+			remove_megastructure = this
+		}
+	}
+}
+tc_infusion_construction_12 = { #防御核心
+	entity = "tc_infuster_tower_entity"
+	construction_entity = "tc_infuster_tower_entity"
+	place_entity_on_planet_plane = no
+	build_time = 240
+	upgrade_from = { tc_infusion_construction }
+
+
+	possible = { always = no }
+	potential = { always = no }
+	
+	on_build_complete = {
+		tc_infusion_complete_12 = yes
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_infuster_ancient_03
+			}
+			set_halted = 0
+		}
+		FROMFROM = {
+			remove_megastructure = this
+		}
+	}
+}
+tc_infusion_construction_13 = { #MCV
+	entity = "tc_infuster_mcv_entity"
+	construction_entity = "tc_infuster_mcv_entity"
+	place_entity_on_planet_plane = no
+	build_time = 720
+	upgrade_from = { tc_infusion_construction }
+
+
+	possible = { always = no }
+	potential = { always = no }
+	
+	on_build_complete = {
+		tc_infusion_complete_13 = yes
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_infuster_ancient_03
+			}
+			set_halted = 0
+		}
+		FROMFROM = {
+			remove_megastructure = this
+		}
+	}
+}
+tc_infusion_construction_04 = { #洞穴创造者
+	entity = "tc_infuster_cave_creater_entity"
+	construction_entity = "tc_infuster_cave_creater_entity"
+	place_entity_on_planet_plane = no
+	build_time = 1200
+	upgrade_from = { tc_infusion_construction }
+
+
+	possible = { always = no }
+	potential = { always = no }
+	
+	on_build_complete = {
+		tc_infusion_complete_04 = yes
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_infuster_ancient_03
+			}
+			set_halted = 0
+		}
+		FROMFROM = {
+			remove_megastructure = this
+		}
+	}
+}
+tc_infusion_construction_08 = { #洞穴标记
+	entity = "tc_infuster_cave_target_entity"
+	construction_entity = "tc_infuster_cave_target_entity"
+	place_entity_on_planet_plane = no
+	build_time = 60
+	upgrade_from = { tc_infusion_construction }
+
+
+	possible = { always = no }
+	potential = { always = no }
+	
+	on_build_complete = {
+		tc_infusion_complete_08 = yes
+		random_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_infuster_ancient_03
+			}
+			set_halted = 0
+		}
+		FROMFROM = {
+			remove_megastructure = this
+		}
+	}
+}

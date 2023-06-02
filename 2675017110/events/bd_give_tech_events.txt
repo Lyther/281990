@@ -1,0 +1,91 @@
+namespace = bd_give_tech
+###星门科技
+country_event = {
+	id = bd_give_tech.0
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			has_origin = bd_origin_outside
+		}
+	}
+	immediate = {
+		add_research_option = tech_gateway_activation
+		give_technology = {
+			tech = tech_jump_drive_1
+			message = no
+		}
+		#set_country_flag = encountered_first_wormhole
+		#add_seen_bypass_type = wormhole
+	}
+}
+
+###眺望者星门科技
+country_event = {
+	id = bd_give_tech.1
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			has_origin = bd_origin_watcher
+		}
+	}
+	immediate = {
+		give_technology = {
+			tech = tech_bd_can_active_gate
+			message = no
+		}
+	}
+}
+
+###眺望者星门科技(占领)
+country_event = {
+	id = bd_give_tech.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		root = {
+			OR = {
+				has_origin = bd_origin_watcher
+				has_technology = tech_bd_can_active_gate
+			}
+		}
+	}
+	immediate = {
+		from = {
+			give_technology = {
+				tech = tech_bd_can_active_gate
+				message = no
+			}
+		}
+	}
+}
+
+###眺望者星门科技(结盟)
+country_event = {
+	id = bd_give_tech.3
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		federation = {
+			any_member = {
+				has_technology = tech_bd_can_active_gate
+			}
+		}
+	}
+	immediate = {
+		federation = {
+			every_member = {
+				limit = {
+					NOT = {
+						has_technology = tech_bd_can_active_gate
+					}
+				}
+				give_technology = {
+					tech = tech_bd_can_active_gate
+					message = no
+				}
+			}
+		}
+	}
+}

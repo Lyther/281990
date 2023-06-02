@@ -1,0 +1,52 @@
+namespace = TT_ascension_breakthrough_ai
+#AI专属飞升突破，强制AI点
+country_event = {
+	id = TT_ascension_breakthrough_ai.0
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		always = no
+		#is_ai = yes
+		#has_technology = tech_ascension_theory
+	}
+	immediate = {
+		if = {
+			limit = { NOT = { is_variable_set = TT_var_ascension_breakthrough_times } }
+			set_variable = { which = TT_var_ascension_breakthrough_times value = 1 }
+		}
+		else_if = {
+			limit = {
+				is_variable_set = TT_var_ascension_breakthrough_times
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 25000
+					mult = TT_var_ascension_breakthrough_times
+				}
+			}
+			add_resource = {
+				unity = -5000
+				mult = TT_var_ascension_breakthrough_times
+			}
+			remove_modifier = TT_mod_ascension_breakthrough
+			remove_modifier = TT_mod_ascension_breakthrough_EACI
+			if = {#原版加凝聚力
+				limit = { NOT = { has_global_flag = cultural_overhaul_active } }
+				add_modifier = {
+					modifier = TT_mod_ascension_breakthrough
+					multiplier = TT_var_ascension_breakthrough_times
+					days = -1
+				}
+			}
+			else_if = {#无限思潮mod加行政管理
+				limit = { has_global_flag = cultural_overhaul_active }
+				add_modifier = {
+					modifier = TT_mod_ascension_breakthrough_EACI
+					multiplier = TT_var_ascension_breakthrough_times
+					days = -1
+				}
+			}
+			change_variable = { which = TT_var_ascension_breakthrough_times value = 1 }
+		}
+		else = {}
+	}
+}

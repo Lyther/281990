@@ -1,0 +1,283 @@
+## Categories used in this file must have use_for_ai_budget = yes defined in economic_categories ##
+## It is possible to have multiple entries with the same category and resource ##
+
+#################
+## Expenditure ##
+#################
+
+sxx_stones_expenditure_buffer = { # Buffer, will not be spent
+	resource = sxx_stones
+	type = expenditure
+	category = buffer
+
+	potential = {
+		is_sxx_sect = yes
+	}
+
+	weight = {
+		weight = 0.1
+	}
+}
+
+sxx_stones_expenditure_planets_low = {
+	resource = sxx_stones
+	type = expenditure
+	category = planets
+
+	potential = {
+		has_technology = tech_sxx_lingyao
+	}
+
+	weight = {
+		weight = 0.1
+	}
+
+	desired_min = {
+		base = 500
+	}
+
+	desired_max = {
+		base = 1000
+	}
+}
+
+sxx_stones_expenditure_ships = {
+	resource = sxx_stones
+	type = expenditure
+	category = ships
+
+	potential = {
+		is_sxx_sect = yes
+	}
+
+	weight = {
+		weight = 0.6
+
+		# spend more sxx_stones building ships while at war
+		modifier = {
+			factor = 2
+			OR = {
+				recently_lost_war = yes
+				is_at_war = yes
+			}
+		}
+
+		# spend less sxx_stones on ships if over capacity
+		modifier = {
+			factor = 0.5
+			used_naval_capacity_percent >= 1.0
+		}
+
+		modifier = {
+			factor = 5
+			used_naval_capacity_percent < 1.0
+			OR = {
+				any_neighbor_country = {
+					has_ascension_perk = ap_become_the_crisis
+				}
+				any_country = {
+					is_crisis_faction = yes
+				}
+			}
+		}
+	}
+}
+
+sxx_stones_expenditure_ship_upgrades = {
+	resource = sxx_stones
+	type = expenditure
+	category = ship_upgrades
+
+	potential = {
+		is_sxx_sect = yes
+		is_at_war = no
+		any_owned_fleet = {
+			controller = { is_same_value = root }
+			can_be_upgraded = yes
+		}
+	}
+
+	weight = {
+		weight = 0.2
+
+		# spend more on ship upgrades if at capacity
+		modifier = {
+			factor = 2.5
+			used_naval_capacity_percent >= 1.0
+		}
+	}
+}
+
+sxx_stones_expenditure_megastructures = {
+	resource = sxx_stones
+	type = expenditure
+	category = megastructures
+
+	potential = {
+		is_sxx_sect = yes
+		OR = {
+			is_at_war = no
+			used_naval_capacity_percent > 0.90
+		}
+		has_technology = tech_sxx_star_furnace
+		any_owned_megastructure = {
+			is_megastructure_type = sxx_star_furnace_0
+		}
+	}
+
+	weight = {
+		weight = 0.4
+	}
+
+	desired_min = {
+		base = 5000
+	}
+
+	desired_max = {
+		base = 10000
+	}
+}
+
+sxx_stones_expenditure_terraforming = {
+	resource = sxx_stones
+	type = expenditure
+	category = terraforming
+
+	potential = {
+		is_sxx_sect = yes
+		has_technology = tech_terrestrial_sculpting
+		is_sxx_huashen_country = yes
+	}
+
+	weight = {
+		weight = 0.3
+		modifier = {
+			factor = 0.5
+			end_game_years_passed > 0 #Probably not relevant anymore
+		}
+	}
+
+	desired_min = {
+		base = 5000
+	}
+
+	desired_max = { #never any need for more than that for a single planet
+		base = 10000
+	}
+}
+
+sxx_stones_expenditure_decisions = {
+	resource = sxx_stones
+	type = expenditure
+	category = decisions
+	potential = {
+		is_sxx_sect = yes
+		is_sxx_huashen_country = yes
+		any_owned_planet = {
+			is_planet_class = pc_habitat
+			has_planet_flag = advanced_habitat_2
+			NOT = { has_modifier = sxx_tiangong }
+		}
+	}
+	weight = {
+		weight = 0.5
+	}
+
+	desired_min = {
+		base = 10000
+	}
+
+	# based on habitat / restore ring
+	desired_max = {
+		base = 15000
+	}
+}
+
+############
+## Upkeep ##
+############
+sxx_stones_upkeep_buffer = {	# Buffer, will not be spent
+	resource = sxx_stones
+	type = upkeep
+	category = buffer
+
+	potential = {
+		is_sxx_sect = yes
+	}
+
+	weight = {
+		weight = 0.3
+	}
+}
+
+sxx_stones_upkeep_planets = {
+	resource = sxx_stones
+	type = upkeep
+	category = planets
+
+	potential = {
+		is_sxx_sect = yes
+	}
+
+	weight = {
+		weight = 0.7
+		modifier = {
+			factor = 1.5
+			has_modifier = sxx_heti_country
+		}
+		modifier = {
+			factor = 2.0
+			has_modifier = sxx_dacheng_country
+		}
+		modifier = {
+			factor = 2.5
+			has_modifier = sxx_dujie_country
+		}
+		modifier = {
+			factor = 3.0
+			is_sxx_final_country = yes
+		}
+	}
+}
+
+sxx_stones_upkeep_ships = {
+	resource = sxx_stones
+	type = upkeep
+	category = ships
+
+	potential = {
+		is_sxx_sect = yes
+	}
+
+	weight = {
+		weight = 0.5
+		modifier = {
+			factor = 1.5
+			OR = {
+				is_at_war = yes
+				resource_income_compare = {
+					resource = sxx_stones
+					value > 1000
+				}
+			}
+		}
+	}
+}
+
+sxx_stones_upkeep_edicts = {
+	resource = sxx_stones
+	type = upkeep
+	category = edicts
+
+	potential = {
+		is_sxx_sect = yes
+	}
+
+	weight = {
+		weight = 0.1
+	}
+
+	desired_min = {
+		base = 10
+	}
+}

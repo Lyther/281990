@@ -1,0 +1,1174 @@
+situation_zofe_decadence = {
+	picture = GFX_evt_fallen_empire
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_negative
+	complete_icon_frame = GFX_situation_outcome_frame_red
+
+	start_value = 120
+	progress_direction = bidirectional
+	complete_category = negative
+	fail_category = positive
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_0_tooltip
+			end = 40
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.02
+				country_subject_power_penalty_mult = 0.1
+				ship_weapon_damage = -0.02
+				ship_hull_mult = -0.02
+				ship_armor_mult = -0.02
+				ship_shield_mult = -0.02
+			}
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_1_tooltip
+			end = 80
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.05
+				country_subject_power_penalty_mult = 0.2
+				ship_weapon_damage = -0.03
+				ship_hull_mult = -0.03
+				ship_armor_mult = -0.03
+				ship_shield_mult = -0.03
+			}
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_2_tooltip
+			end = 120
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.08
+				country_subject_power_penalty_mult = 0.3
+				ship_weapon_damage = -0.04
+				ship_hull_mult = -0.04
+				ship_armor_mult = -0.04
+				ship_shield_mult = -0.04
+			}
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_3_tooltip
+			end = 160
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.11
+				country_subject_power_penalty_mult = 0.4
+				ship_weapon_damage = -0.05
+				ship_hull_mult = -0.05
+				ship_armor_mult = -0.05
+				ship_shield_mult = -0.05
+			}
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_4_tooltip
+			end = 200
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.22
+				country_subject_power_penalty_mult = 0.8
+				ship_weapon_damage = -0.10
+				ship_hull_mult = -0.10
+				ship_armor_mult = -0.10
+				ship_shield_mult = -0.10
+			}
+		}
+		stage_6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_5_tooltip
+			end = 240
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.33
+				country_subject_power_penalty_mult = 1.2
+				ship_weapon_damage = -0.15
+				ship_hull_mult = -0.15
+				ship_armor_mult = -0.15
+				ship_shield_mult = -0.15
+			}
+		}
+		stage_7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_6_tooltip
+			end = 280
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.44
+				country_subject_power_penalty_mult = 1.6
+				ship_weapon_damage = -0.20
+				ship_hull_mult = -0.20
+				ship_armor_mult = -0.20
+				ship_shield_mult = -0.20
+			}
+		}
+		stage_8 = {
+			icon = GFX_situation_stage_8
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_7_tooltip
+			end = 320
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.66
+				country_subject_power_penalty_mult = 2.0
+				ship_weapon_damage = -0.25
+				ship_hull_mult = -0.25
+				ship_armor_mult = -0.25
+				ship_shield_mult = -0.25
+			}
+		}
+	}
+
+	category = negative
+
+	on_progress_complete = {
+		hidden_effect = { owner = { remove_country_flag = decadence_ongoing } }
+		if = {
+			limit = { 
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_lost_empire"
+			custom_tooltip = "describe_lost_empire"
+		}
+		if = {
+			limit = { 
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_lost_hive_mind"
+			custom_tooltip = "describe_lost_hive_mind"
+		}
+		if = {
+			limit = { 
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_lost_machine"
+			custom_tooltip = "describe_lost_machine"
+		}
+		
+		hidden_effect = {
+			owner = {
+				country_event = { id = lost_empire.1000 }
+			}
+		}
+	}
+	on_start = { 
+		set_situation_flag = decadence_situation
+		hidden_effect = { owner = { set_country_flag = decadence_ongoing } }
+	}
+	on_fail = {
+		custom_tooltip = zofe_decadence_fail_tooltip
+		hidden_effect = { situation_event = { id = situation.1180 } }
+		hidden_effect = { 
+			owner = { 
+				remove_country_flag = decadence_ongoing 
+				set_timed_country_flag = { flag = recent_decadence_situation days = 3600 }
+			} 
+		}
+	}
+
+	modifier = {
+	}
+	on_monthly = {
+	}
+	approach = {#Low Priority
+		name = approach_decadence_low_priority
+		on_select = {
+			custom_tooltip = decadence_low_priority_effect
+		}
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 0.2
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	approach = {#Moderate Priority
+		name = approach_decadence_moderate_priority
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = decadence_moderate_priority_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 1
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	approach = {#High Priority
+		name = approach_decadence_high_priority
+		on_select = {
+			custom_tooltip = decadence_high_priority_effect
+		}
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 3
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 2
+		modifier = {
+			add = -4
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_high_priority
+		}
+		modifier = {
+			add = 0
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_moderate_priority
+		}
+		modifier = {
+			add = 4
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_low_priority
+		}
+		modifier = {
+			factor = 0
+			desc = war_during_decadence
+			owner = { is_at_war = yes }
+		}
+		modifier = {
+			add = 4
+			desc = does_not_meet_ascension_fleet_power_requirement
+			OR = {
+				AND = {
+					owner = { fleet_power < 125000 }
+					has_global_flag = ascended_empire_min_navy_enabled_1 
+				}
+				AND = {
+					owner = { fleet_power < 250000 }
+					has_global_flag = ascended_empire_min_navy_enabled_2
+				}
+				AND = {
+					owner = { fleet_power < 500000 }
+					has_global_flag = ascended_empire_min_navy_enabled_3
+				}
+				AND = {
+					owner = { fleet_power < 750000 }
+					has_global_flag = ascended_empire_min_navy_enabled_4
+				}
+				AND = {
+					owner = { fleet_power < 1000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_5
+				}
+				AND = {
+					owner = { fleet_power < 2000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_6
+				}
+			}
+		}
+	}
+
+	abort_trigger = {
+		owner = {
+			NOT = { is_country_type = ascended_empire }
+		}
+	}
+	
+	on_abort = {
+		hidden_effect = { owner = { remove_country_flag = decadence_ongoing } }
+	}
+}
+
+situation_zofe_decadence_machine = {
+	picture = GFX_evt_fallen_empire
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_negative
+	complete_icon_frame = GFX_situation_outcome_frame_red
+
+	start_value = 120
+	progress_direction = bidirectional
+	complete_category = negative
+	fail_category = positive
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_0_tooltip
+			end = 40
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.02
+				country_subject_power_penalty_mult = 0.1
+				ship_weapon_damage = -0.02
+				ship_hull_mult = -0.02
+				ship_armor_mult = -0.02
+				ship_shield_mult = -0.02
+			}
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_1_tooltip
+			end = 80
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.05
+				country_subject_power_penalty_mult = 0.2
+				ship_weapon_damage = -0.03
+				ship_hull_mult = -0.03
+				ship_armor_mult = -0.03
+				ship_shield_mult = -0.03
+			}
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_2_tooltip
+			end = 120
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.08
+				country_subject_power_penalty_mult = 0.3
+				ship_weapon_damage = -0.04
+				ship_hull_mult = -0.04
+				ship_armor_mult = -0.04
+				ship_shield_mult = -0.04
+			}
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_3_tooltip
+			end = 160
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.11
+				country_subject_power_penalty_mult = 0.4
+				ship_weapon_damage = -0.05
+				ship_hull_mult = -0.05
+				ship_armor_mult = -0.05
+				ship_shield_mult = -0.05
+			}
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_4_tooltip
+			end = 200
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.22
+				country_subject_power_penalty_mult = 0.8
+				ship_weapon_damage = -0.10
+				ship_hull_mult = -0.10
+				ship_armor_mult = -0.10
+				ship_shield_mult = -0.10
+			}
+		}
+		stage_6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_5_tooltip
+			end = 240
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.33
+				country_subject_power_penalty_mult = 1.2
+				ship_weapon_damage = -0.15
+				ship_hull_mult = -0.15
+				ship_armor_mult = -0.15
+				ship_shield_mult = -0.15
+			}
+		}
+		stage_7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_6_tooltip
+			end = 280
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.44
+				country_subject_power_penalty_mult = 1.6
+				ship_weapon_damage = -0.20
+				ship_hull_mult = -0.20
+				ship_armor_mult = -0.20
+				ship_shield_mult = -0.20
+			}
+		}
+		stage_8 = {
+			icon = GFX_situation_stage_8
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_7_tooltip
+			end = 320
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.66
+				country_subject_power_penalty_mult = 2.0
+				ship_weapon_damage = -0.25
+				ship_hull_mult = -0.25
+				ship_armor_mult = -0.25
+				ship_shield_mult = -0.25
+			}
+		}
+	}
+
+	category = negative
+
+	on_progress_complete = {
+		hidden_effect = { owner = { remove_country_flag = decadence_machine_ongoing } }
+		if = {
+			limit = { 
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_lost_empire"
+			custom_tooltip = "describe_lost_empire"
+		}
+		if = {
+			limit = { 
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_lost_hive_mind"
+			custom_tooltip = "describe_lost_hive_mind"
+		}
+		if = {
+			limit = { 
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_lost_machine"
+			custom_tooltip = "describe_lost_machine"
+		}
+		
+		hidden_effect = {
+			owner = {
+				country_event = { id = lost_empire.1100 }
+			}
+		}
+	}
+	on_start = { 
+		set_situation_flag = decadence_situation
+		hidden_effect = { owner = { set_country_flag = decadence_machine_ongoing } }
+	}
+	on_fail = {
+		custom_tooltip = zofe_decadence_machine_fail_tooltip
+		hidden_effect = { situation_event = { id = situation.1180 } }
+		hidden_effect = { owner = { remove_country_flag = decadence_machine_ongoing } }
+	}
+
+	modifier = {
+	}
+	on_monthly = {
+	}
+	approach = {#Low Priority
+		name = approach_decadence_machine_low_priority
+		on_select = {
+			custom_tooltip = decadence_machine_low_priority_effect
+		}
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 0.2
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	approach = {#Moderate Priority
+		name = approach_decadence_machine_moderate_priority
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = decadence_machine_moderate_priority_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 1
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	approach = {#High Priority
+		name = approach_decadence_machine_high_priority
+		on_select = {
+			custom_tooltip = decadence_machine_high_priority_effect
+		}
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 3
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 2
+		modifier = {
+			add = -4
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_machine_high_priority
+		}
+		modifier = {
+			add = 0
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_machine_moderate_priority
+		}
+		modifier = {
+			add = 4
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_machine_low_priority
+		}
+		modifier = {
+			factor = 0
+			desc = war_during_decadence_machine
+			owner = { is_at_war = yes }
+		}
+		modifier = {
+			add = 4
+			desc = does_not_meet_ascension_fleet_power_requirement
+			OR = {
+				AND = {
+					owner = { fleet_power < 125000 }
+					has_global_flag = ascended_empire_min_navy_enabled_1 
+				}
+				AND = {
+					owner = { fleet_power < 250000 }
+					has_global_flag = ascended_empire_min_navy_enabled_2
+				}
+				AND = {
+					owner = { fleet_power < 500000 }
+					has_global_flag = ascended_empire_min_navy_enabled_3
+				}
+				AND = {
+					owner = { fleet_power < 750000 }
+					has_global_flag = ascended_empire_min_navy_enabled_4
+				}
+				AND = {
+					owner = { fleet_power < 1000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_5
+				}
+				AND = {
+					owner = { fleet_power < 2000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_6
+				}
+			}
+		}
+	}
+
+	abort_trigger = {
+		owner = {
+			NOT = { is_country_type = ascended_empire }
+		}
+	}
+	
+	on_abort = {
+		hidden_effect = { owner = { remove_country_flag = decadence_machine_ongoing } }
+	}
+}
+
+situation_zofe_decadence_hive = {
+	picture = GFX_evt_fallen_empire
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_negative
+	complete_icon_frame = GFX_situation_outcome_frame_red
+
+	start_value = 120
+	progress_direction = bidirectional
+	complete_category = negative
+	fail_category = positive
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_0_tooltip
+			end = 40
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.02
+				country_subject_power_penalty_mult = 0.1
+				ship_weapon_damage = -0.02
+				ship_hull_mult = -0.02
+				ship_armor_mult = -0.02
+				ship_shield_mult = -0.02
+			}
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_1_tooltip
+			end = 80
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.05
+				country_subject_power_penalty_mult = 0.2
+				ship_weapon_damage = -0.03
+				ship_hull_mult = -0.03
+				ship_armor_mult = -0.03
+				ship_shield_mult = -0.03
+			}
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_2_tooltip
+			end = 120
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.08
+				country_subject_power_penalty_mult = 0.3
+				ship_weapon_damage = -0.04
+				ship_hull_mult = -0.04
+				ship_armor_mult = -0.04
+				ship_shield_mult = -0.04
+			}
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_3_tooltip
+			end = 160
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.11
+				country_subject_power_penalty_mult = 0.4
+				ship_weapon_damage = -0.05
+				ship_hull_mult = -0.05
+				ship_armor_mult = -0.05
+				ship_shield_mult = -0.05
+			}
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_4_tooltip
+			end = 200
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.22
+				country_subject_power_penalty_mult = 0.8
+				ship_weapon_damage = -0.10
+				ship_hull_mult = -0.10
+				ship_armor_mult = -0.10
+				ship_shield_mult = -0.10
+			}
+		}
+		stage_6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_5_tooltip
+			end = 240
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.33
+				country_subject_power_penalty_mult = 1.2
+				ship_weapon_damage = -0.15
+				ship_hull_mult = -0.15
+				ship_armor_mult = -0.15
+				ship_shield_mult = -0.15
+			}
+		}
+		stage_7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_6_tooltip
+			end = 280
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.44
+				country_subject_power_penalty_mult = 1.6
+				ship_weapon_damage = -0.20
+				ship_hull_mult = -0.20
+				ship_armor_mult = -0.20
+				ship_shield_mult = -0.20
+			}
+		}
+		stage_8 = {
+			icon = GFX_situation_stage_8
+			icon_background = GFX_situation_stage_frame_red
+#			custom_tooltip = zofe_decadence_stage_7_tooltip
+			end = 320
+			on_first_enter = {
+			}
+			modifier = {
+				planet_jobs_produces_mult = -0.66
+				country_subject_power_penalty_mult = 2.0
+				ship_weapon_damage = -0.25
+				ship_hull_mult = -0.25
+				ship_armor_mult = -0.25
+				ship_shield_mult = -0.25
+			}
+		}
+	}
+
+	category = negative
+
+	on_progress_complete = {
+		hidden_effect = { owner = { remove_country_flag = decadence_hive_ongoing } }
+		if = {
+			limit = { 
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_lost_empire"
+			custom_tooltip = "describe_lost_empire"
+		}
+		if = {
+			limit = { 
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_lost_hive_mind"
+			custom_tooltip = "describe_lost_hive_mind"
+		}
+		if = {
+			limit = { 
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_lost_machine"
+			custom_tooltip = "describe_lost_machine"
+		}
+		
+		hidden_effect = {
+			owner = {
+				country_event = { id = lost_empire.1200 }
+			}
+		}
+	}
+	on_start = { 
+		set_situation_flag = decadence_situation
+		hidden_effect = { owner = { set_country_flag = decadence_hive_ongoing } }
+	}
+	on_fail = {
+		custom_tooltip = zofe_decadence_hive_fail_tooltip
+		hidden_effect = { situation_event = { id = situation.1180 } }
+		hidden_effect = { owner = { remove_country_flag = decadence_hive_ongoing } }
+	}
+
+	modifier = {
+	}
+	on_monthly = {
+	}
+	approach = {#Low Priority
+		name = approach_decadence_hive_low_priority
+		on_select = {
+			custom_tooltip = decadence_hive_low_priority_effect
+		}
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 0.2
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	approach = {#Moderate Priority
+		name = approach_decadence_hive_moderate_priority
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = decadence_hive_moderate_priority_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 1
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	approach = {#High Priority
+		name = approach_decadence_hive_high_priority
+		on_select = {
+			custom_tooltip = decadence_hive_high_priority_effect
+		}
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 0
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 3
+				multiplier = owner.trigger:num_pops
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 2
+		modifier = {
+			add = -4
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_hive_high_priority
+		}
+		modifier = {
+			add = 0
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_hive_moderate_priority
+		}
+		modifier = {
+			add = 4
+			desc = string_current_approach
+			current_situation_approach = approach_decadence_hive_low_priority
+		}
+		modifier = {
+			factor = 0
+			desc = war_during_decadence_hive
+			owner = { is_at_war = yes }
+		}
+		modifier = {
+			add = 4
+			desc = does_not_meet_ascension_fleet_power_requirement
+			OR = {
+				AND = {
+					owner = { fleet_power < 125000 }
+					has_global_flag = ascended_empire_min_navy_enabled_1 
+				}
+				AND = {
+					owner = { fleet_power < 250000 }
+					has_global_flag = ascended_empire_min_navy_enabled_2
+				}
+				AND = {
+					owner = { fleet_power < 500000 }
+					has_global_flag = ascended_empire_min_navy_enabled_3
+				}
+				AND = {
+					owner = { fleet_power < 750000 }
+					has_global_flag = ascended_empire_min_navy_enabled_4
+				}
+				AND = {
+					owner = { fleet_power < 1000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_5
+				}
+				AND = {
+					owner = { fleet_power < 2000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_6
+				}
+			}
+		}
+	}
+
+	abort_trigger = {
+		owner = {
+			NOT = { is_country_type = ascended_empire }
+		}
+	}
+	
+	on_abort = {
+		hidden_effect = { owner = { remove_country_flag = decadence_hive_ongoing } }
+	}
+}
+
+situation_zofe_descension = {
+	picture = GFX_evt_fallen_empire
+	fail_icon = GFX_situation_outcome_meh
+	fail_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_negative
+	complete_icon_frame = GFX_situation_outcome_frame_red
+
+	start_value = 15
+
+	stages = {
+		deficit_first = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			end = 25
+			on_first_enter = {
+			}
+			modifier = {
+				starbases_upkeep_mult = 0.1
+				ships_upkeep_mult = 0.1
+				starbase_shipyard_build_cost_mult = 0.1
+				starbase_shipyard_build_speed_mult = -0.1
+				country_naval_cap_mult = -0.1
+			}
+		}
+		deficit_second = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_red
+			end = 50
+			on_first_enter = {
+			}
+			modifier = {
+				starbases_upkeep_mult = 0.2
+				ships_upkeep_mult = 0.2
+				starbase_shipyard_build_cost_mult = 0.2
+				starbase_shipyard_build_speed_mult = -0.2
+				country_naval_cap_mult = -0.2
+			}
+		}
+		deficit_third = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_red
+			end = 75
+			on_first_enter = {
+			}
+			modifier = {
+				starbases_upkeep_mult = 0.33
+				ships_upkeep_mult = 0.33
+				starbase_shipyard_build_cost_mult = 0.33
+				starbase_shipyard_build_speed_mult = -0.33
+				country_naval_cap_mult = -0.33
+			}
+		}
+		deficit_fourth = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_red
+			end = 100
+			on_first_enter = {
+			}
+			modifier = {
+				starbases_upkeep_mult = 0.5
+				ships_upkeep_mult = 0.5
+				starbase_shipyard_build_cost_mult = 0.5
+				starbase_shipyard_build_speed_mult = -0.5
+				country_naval_cap_mult = -0.5
+			}
+		}
+	}
+
+	category = negative
+
+	on_progress_complete = {
+		hidden_effect = { owner = { remove_country_flag = descension_ongoing } }
+		if = {
+			limit = { 
+				owner = {
+					NOR = {
+						has_authority = "auth_hive_mind"
+						has_authority = "auth_machine_intelligence"
+					}
+				}
+			}		
+			custom_tooltip = "become_lost_empire"
+			custom_tooltip = "describe_lost_empire"
+		}
+		if = {
+			limit = { 
+				owner = { has_authority = "auth_hive_mind" }
+			}		
+			custom_tooltip = "become_lost_hive_mind"
+			custom_tooltip = "describe_lost_hive_mind"
+		}
+		if = {
+			limit = { 
+				owner = { has_authority = "auth_machine_intelligence" }
+			}		
+			custom_tooltip = "become_lost_machine"
+			custom_tooltip = "describe_lost_machine"
+		}
+		
+		hidden_effect = {
+			owner = {
+				country_event = { id = lost_empire.1000 }
+			}
+		}
+	}
+	on_start = { 
+		set_situation_flag = descension_situation
+		hidden_effect = { owner = { set_country_flag = descension_ongoing } }
+	}
+	on_fail = {
+		custom_tooltip = zofe_descension_fail_tooltip
+		hidden_effect = { destroy_situation = this }
+		hidden_effect = { owner = { remove_country_flag = descension_ongoing } }
+	}
+
+	monthly_progress = {
+		base = 0
+
+		modifier = {
+			add = 4
+			desc = does_not_meet_ascension_fleet_power_requirement
+			owner = { is_at_war = no }
+			OR = {
+				AND = {
+					owner = { fleet_power < 125000 }
+					has_global_flag = ascended_empire_min_navy_enabled_1 
+				}
+				AND = {
+					owner = { fleet_power < 250000 }
+					has_global_flag = ascended_empire_min_navy_enabled_2
+				}
+				AND = {
+					owner = { fleet_power < 500000 }
+					has_global_flag = ascended_empire_min_navy_enabled_3
+				}
+				AND = {
+					owner = { fleet_power < 750000 }
+					has_global_flag = ascended_empire_min_navy_enabled_4
+				}
+				AND = {
+					owner = { fleet_power < 1000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_5
+				}
+				AND = {
+					owner = { fleet_power < 2000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_6
+				}
+			}
+		}
+		modifier = {
+			subtract = 4
+			desc = meet_ascension_fleet_power_requirement
+			owner = { is_at_war = no }
+			OR = {
+				AND = {
+					owner = { fleet_power > 125000 }
+					has_global_flag = ascended_empire_min_navy_enabled_1 
+				}
+				AND = {
+					owner = { fleet_power > 250000 }
+					has_global_flag = ascended_empire_min_navy_enabled_2
+				}
+				AND = {
+					owner = { fleet_power > 500000 }
+					has_global_flag = ascended_empire_min_navy_enabled_3
+				}
+				AND = {
+					owner = { fleet_power > 750000 }
+					has_global_flag = ascended_empire_min_navy_enabled_4
+				}
+				AND = {
+					owner = { fleet_power > 1000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_5
+				}
+				AND = {
+					owner = { fleet_power > 2000000 }
+					has_global_flag = ascended_empire_min_navy_enabled_6
+				}
+			}
+		}
+	}
+	
+	approach = {
+		name = deficit_approach_do_nothing
+		icon = GFX_situation_approach_this_is_fine
+		icon_background = GFX_situation_approach_bg_red
+		default = yes
+		on_select = {
+			custom_tooltip = deficit_approach_do_nothing_tooltip
+		}
+		ai_weight = {
+			base = 1
+		}
+	}
+	approach = {
+		name = deficit_approach_rebuild_navy
+		icon = GFX_situation_approach_fleet
+		icon_background = GFX_situation_approach_bg_green
+		
+		modifier = {
+			starbase_shipyard_build_cost_mult = 0.50
+			starbase_shipyard_build_speed_mult = 0.50
+		}
+
+		ai_weight = {
+			base = 0
+			modifier = {
+				add = 2
+				current_stage = deficit_third
+			}
+			modifier = {
+				add = 2
+				current_stage = deficit_fourth
+			}
+		}
+	}
+	
+	abort_trigger = {
+		owner = {
+			NOT = { is_country_type = ascended_empire }
+		}
+	}
+	
+	on_abort = {
+		hidden_effect = { owner = { remove_country_flag = descension_ongoing } }
+	}
+}

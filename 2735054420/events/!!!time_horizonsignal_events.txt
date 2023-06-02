@@ -1,0 +1,1720 @@
+namespace = akx
+
+# 原版选择时虫星系（我有我自己的选择方式）
+# Designate Horizon Signal system
+event = {
+	id = akx.8000
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+	}
+}
+
+# 触发时虫事件链（允许格式塔）
+# triggered by on_entering_system_fleet
+# chance to trigger the first time a player enters a black hole system
+fleet_event = {
+	id = akx.9000
+	title = akx.9000.name
+	desc = akx.9000.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_alien_signal
+	location = event_target:horizonsignal_black_hole
+	trackable = yes
+
+	is_triggered_only = yes
+
+	fire_only_once = yes
+
+	trigger = {
+		NOT = { has_global_flag = akx.9000.fired }
+		owner = {
+			is_ai = no
+		}
+		from = { # solar system scope
+			is_star_class = sc_black_hole
+			NOT = { has_star_flag = guardian }
+			has_star_flag = horizonsignal_spawn
+		}
+		exists = leader
+		leader = {
+			leader_class = scientist
+		}
+	}
+
+	immediate = {
+		set_global_flag = akx.9000.fired
+		solar_system = {
+			set_star_flag = horizonsignal_system
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				save_global_event_target_as = horizonsignal_black_hole
+			}
+			save_global_event_target_as = horizonsignal_system
+		}
+		owner = { observer_event = { id = observer.70 } }
+		if = {
+			limit = {
+				any_playable_country = {
+					has_event_chain = PC_TIME_END_CHAIN
+				}
+			}
+			every_playable_country = {
+				limit = {
+					has_event_chain = PC_TIME_END_CHAIN
+				}
+				end_event_chain = PC_TIME_END_CHAIN
+			}
+		}
+	}
+
+	option = {
+		name = OK
+		from = {
+			random_system_planet = {
+				limit = {
+					is_star = yes
+				}
+				enable_special_project = {
+					name = HORIZON_SIGNAL_PROJECT
+					location = this
+					owner = root.owner
+				}
+			}
+		}
+	}
+}
+
+# 吃第二个领袖（不吃统治者、继承人、事件领袖、传奇领袖、格式塔节点）
+country_event = {
+	id = akx.9010
+	title = akx.9010.name
+	desc = akx.9010.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_ship_bridge
+	location = event_target:horizonsignal_system
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_leader = {
+			is_ruler = no
+			is_heir = no
+			is_event_leader = no
+			is_gestalt_node = no
+			NOT = { has_leader_flag = legendary_leader }
+		}
+	}
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				is_ruler = no
+				is_heir = no
+				is_event_leader = no
+				is_gestalt_node = no
+				NOT = { has_leader_flag = legendary_leader }
+			}
+			set_leader_flag = horizonsignal_secondleader
+			save_global_event_target_as = horizonsignal_secondleader
+		}
+	}
+
+	option = {
+		name = akx.9010.a.collective
+		custom_tooltip = akx.9010.a.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		# Update event chain with PoI
+		hidden_effect = {
+			set_country_flag = secondleader_sent
+			event_target:horizonsignal_secondleader = {
+				exile_leader_as = exiled_horizonsignal_secondleader
+			}
+			country_event = { id = akx.9011 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9010.a.notcollective
+		custom_tooltip = akx.9010.a.tooltip
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		# Update event chain with PoI
+		hidden_effect = {
+			set_country_flag = secondleader_sent
+			event_target:horizonsignal_secondleader = {
+				exile_leader_as = exiled_horizonsignal_secondleader
+			}
+			country_event = { id = akx.9011 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9010.b.collective
+		custom_tooltip = akx.9010.a.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		# Update event chain with PoI
+		hidden_effect = {
+			set_country_flag = secondleader_bomb
+			event_target:horizonsignal_secondleader = {
+				exile_leader_as = exiled_horizonsignal_secondleader
+			}
+			country_event = { id = akx.9012 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9010.b.notcollective
+		custom_tooltip = akx.9010.a.tooltip
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_authoritarian
+			}
+		}
+		# Update event chain with PoI
+		hidden_effect = {
+			set_country_flag = secondleader_bomb
+			event_target:horizonsignal_secondleader = {
+				exile_leader_as = exiled_horizonsignal_secondleader
+			}
+			country_event = { id = akx.9012 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9010.c
+		hidden_effect = {
+			country_event = { id = akx.9013 }
+		}
+	}
+}
+
+# 吃第三个领袖（不吃统治者、继承人、事件领袖、传奇领袖、格式塔节点）
+country_event = {
+	id = akx.9020
+	title = akx.9020.name
+	desc = akx.9020.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_mystic_reveal
+	location = event_target:horizonsignal_black_hole
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				is_ruler = no
+				is_heir = no
+				is_event_leader = no
+				is_gestalt_node = no
+				NOT = { has_leader_flag = legendary_leader }
+			}
+			save_global_event_target_as = horizonsignal_thirdleader
+		}
+	}
+
+	option = {
+		name = akx.9020.a
+		custom_tooltip = akx.9020.a.tooltip
+		hidden_effect = {
+			set_country_flag = thirdleader_sent
+			event_target:horizonsignal_thirdleader = {
+				exile_leader_as = exiled_horizonsignal_thirdleader
+			}
+			country_event = { id = akx.9021 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9020.b
+		custom_tooltip = akx.9020.a.tooltip
+		hidden_effect = {
+			set_country_flag = thirdleader_bomb
+			event_target:horizonsignal_thirdleader = {
+				exile_leader_as = exiled_horizonsignal_thirdleader
+			}
+			country_event = { id = akx.9022 days = 30 }
+		}
+	}
+
+	option = {
+		name = akx.9020.c
+		hidden_effect = {
+			country_event = { id = akx.9023 }
+		}
+	}
+}
+
+# 环形神殿（不同思潮不同修正）
+planet_event = {
+	id = akx.9101
+	title = akx.9101.name
+	desc = akx.9101.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = root
+
+	is_triggered_only = yes
+
+	option = {
+		name = akx.9101.a.materialist
+		custom_tooltip = akx.9101.a.materialist.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_materialist
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_materialist
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+
+	option = {
+		name = akx.9101.a.spiritualist
+		custom_tooltip = akx.9101.a.spiritualist.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_spiritualist
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+	
+	option = {
+		name = akx.9101.a.militarist
+		custom_tooltip = akx.9101.a.militarist.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_militarist
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_militarist
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+	
+	option = {
+		name = akx.9101.a.pacifist
+		custom_tooltip = akx.9101.a.pacifist.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_pacifist
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_pacifist
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+	
+	option = {
+		name = akx.9101.a.xenophile
+		custom_tooltip = akx.9101.a.xenophile.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_xenophile
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_xenophile
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+	
+	option = {
+		name = akx.9101.a.xenophobe
+		custom_tooltip = akx.9101.a.xenophobe.tooltip
+		trigger = {
+			owner = {
+					OR = {
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophobe
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_xenophobe
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+	
+	option = {
+		name = akx.9101.a.egalitarian
+		custom_tooltip = akx.9101.a.egalitarian.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_egalitarian
+					has_ethic = ethic_egalitarian
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_egalitarian
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+	
+	option = {
+		name = akx.9101.a.authoritarian
+		custom_tooltip = akx.9101.a.authoritarian.tooltip
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_authoritarian
+				}
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_authoritarian
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+	
+	option = {
+		name = akx.9101.a.hive_mind
+		custom_tooltip = akx.9101.a.hive_mind.tooltip
+		trigger = {
+			owner = {
+				has_authority = auth_hive_mind
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_hive_mind
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+	
+	option = {
+		name = akx.9101.a.machine_intelligence
+		custom_tooltip = akx.9101.a.machine_intelligence.tooltip
+		trigger = {
+			owner = {
+				has_authority = auth_machine_intelligence
+			}
+		}
+		add_modifier = {
+			modifier = happy_with_open_loop_temple_machine_intelligence
+			days = -1
+		}
+		owner = {
+			akx_9101_option_effect = yes
+		}
+	}
+
+	option = {
+		name = akx.9101.b
+		custom_tooltip = akx.9101.b.tooltip
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = 4
+				min = 300
+				max = 2000
+			}
+			akx_9101_option_effect = yes
+		}
+	}
+
+	option = {
+		name = akx.9101.c
+		custom_tooltip = akx.9101.c.tooltip
+		owner = {
+			end_event_chain = WORM_CHAIN_1
+			add_monthly_resource_mult = {
+				resource = influence
+				value = 3
+				min = 100
+				max = 600
+			}
+		}
+	}
+}
+
+# 触发信使（禁止格式塔）
+# on_entering_system
+fleet_event = {
+	id = akx.9200
+	title = akx.9200.name
+	desc = akx.9200.desc
+	picture = GFX_evt_space_debris
+	show_sound = event_ship_bridge
+	location = event_target:horizon_pod
+	trackable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_ai = no
+			has_country_flag = worm_events_available
+			NOT = { has_country_flag = messenger_pod_found }
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		from = {
+			NOR = {
+				has_star_flag = guardian
+				has_star_flag = hostile_system
+			}
+		}
+	}
+
+	immediate = {
+		owner = { set_country_flag = messenger_pod_found }
+		create_ambient_object = {
+			type = loop_debris_02_object
+			location = from
+		}
+		last_created_ambient_object = {
+			save_event_target_as = horizon_pod
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		event_target:horizon_pod = {
+			enable_special_project = {
+				name = MESSENGER_POD_PROJECT_1
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# 崭新曙光（军国转和平）
+country_event = {
+	id = akx.9211
+	title = akx.9211.name
+	desc = akx.9211.desc
+	picture = GFX_evt_genetic_modification
+	location = capital_scope
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { exists = event_target:researchingscientist }
+			# nothing
+		}
+		else = {
+			random_owned_leader = {
+				limit = { leader_class = scientist }
+				save_global_event_target_as = researchingscientist
+			}
+			event_target:researchingscientist = {
+				make_unleashed_messenger = yes
+			}
+		}
+	}
+
+	option = {
+		name = akx.9211.a
+		custom_tooltip = akx.9211.a.tooltip
+		hidden_effect = {
+			capital_scope = {
+				every_owned_pop = {
+					limit = { is_same_species = root }
+					wipe_pop_ethos = yes
+					make_intelligent = yes
+					make_akx_waiting_world = yes
+					make_unleashed_messenger = yes
+					pop_change_ethic = ethic_pacifist
+					set_timed_pop_flag = { flag = changed_pop days = 2 }
+				}
+				random_owned_pop = {
+					limit = { has_pop_flag = changed_pop }
+					root = { change_dominant_species = { species = prev } }
+				}
+			}
+			set_country_flag = akx_messenger_end
+		}
+	}
+
+	option = {
+		name = akx.9211.b
+		custom_tooltip = akx.9211.b.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		hidden_effect = {
+			capital_scope = {
+				while = {
+					limit = {
+						count_owned_pop = {
+							limit = { is_same_species = root }
+							count > 1
+						}
+					}
+					random_owned_pop = {
+						kill_pop = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9211.c
+		custom_tooltip = akx.9211.c.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				limit = { is_same_species = root }
+				make_unleashed_messenger = yes
+			}
+			every_owned_pop = {
+				limit = { is_same_species = root }
+				wipe_pop_ethos = yes
+				make_unleashed_messenger = yes
+				make_intelligent = yes
+				make_akx_waiting_world = yes
+				pop_change_ethic = ethic_pacifist
+				set_timed_pop_flag = { flag = changed_pop days = 2 }
+			}
+			random_owned_pop = {
+				limit = { has_pop_flag = changed_pop }
+				root = { change_dominant_species = { species = prev } }
+			}
+			set_country_flag = akx_messenger_end
+		}
+	}
+}
+
+# 夜幕降临（非军国转军国）
+country_event = {
+	id = akx.9221
+	title = akx.9221.name
+	desc = akx.9221.desc
+	picture = GFX_evt_genetic_modification
+	location = capital_scope
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { exists = event_target:researchingscientist9220 }
+		}
+		else = {
+			random_owned_leader = {
+				limit = { leader_class = scientist }
+				save_global_event_target_as = researchingscientist9220
+			}
+			event_target:researchingscientist9220 = {
+				make_leashed_messenger = yes
+			}
+		}
+	}
+
+	option = {
+		name = akx.9221.a
+		custom_tooltip = akx.9221.a.tooltip
+		hidden_effect = {
+			capital_scope = {
+				every_owned_pop = {
+					limit = { is_same_species = root }
+					wipe_pop_ethos = yes
+					make_resilient = yes
+					make_akx_waiting_world = yes
+					make_leashed_messenger = yes
+					pop_change_ethic = ethic_militarist
+					set_timed_pop_flag = { flag = changed_pop days = 2 }
+				}
+				random_owned_pop = {
+					limit = { has_pop_flag = changed_pop }
+					root = { change_dominant_species = { species = prev } }
+				}
+			}
+			set_country_flag = akx_messenger_end
+		}
+	}
+
+	option = {
+		name = akx.9221.b
+		custom_tooltip = akx.9221.b.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		hidden_effect = {
+			capital_scope = {
+				while = {
+					limit = {
+						count_owned_pop = {
+							limit = { is_same_species = root }
+							count > 1
+						}
+					}
+					random_owned_pop = {
+						kill_pop = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9221.c
+		custom_tooltip = akx.9221.c.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				limit = { is_same_species = root }
+				make_leashed_messenger = yes
+			}
+			every_owned_pop = {
+				limit = { is_same_species = root }
+				wipe_pop_ethos = yes
+				make_resilient = yes
+				make_akx_waiting_world = yes
+				make_leashed_messenger = yes
+				pop_change_ethic = ethic_militarist
+				set_timed_pop_flag = { flag = changed_pop days = 2 }
+			}
+			random_owned_pop = {
+				limit = { has_pop_flag = changed_pop }
+				root = { change_dominant_species = { species = prev } }
+			}
+			set_country_flag = akx_messenger_end
+		}
+	}
+}
+
+# 防止被非官方补丁MOD覆盖，导致界旅者无法被选为明日船长
+# 防止统治者、格式塔节点被选为明日船长
+# on fleet entering system
+fleet_event = {
+	id = akx.9300
+	title = akx.9300.name
+	desc = akx.9300.desc
+	picture = GFX_evt_metropolis
+	show_sound = event_ship_bridge
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_country_flag = worm_events_available
+			NOT = { has_country_flag = syzygy_encountered }
+			any_owned_leader = {
+				leader_class = admiral
+				is_ruler = no
+				is_gestalt_node = no
+			}
+		}
+	}
+
+	immediate = {
+		from = { save_global_event_target_as = syzygy_system }
+		owner = {
+			random_owned_leader = {
+				limit = {
+					leader_class = admiral
+					is_ruler = no
+					is_gestalt_node = no
+				}
+				save_global_event_target_as = mirrored_syzygy_admiral
+			}
+			set_country_flag = syzygy_encountered
+		}
+	}
+
+	option = {
+		name = akx.9300.a.admiralabsent
+		custom_tooltip = akx.9300.a.admiralabsent.tooltip
+		trigger = {
+			OR = {
+				NOT = { exists = leader }
+				NOT = {
+					leader = {
+						is_same_value = event_target:mirrored_syzygy_admiral
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			owner = { country_event = { id = akx.9310 } }
+		}
+	}
+
+	option = {
+		name = akx.9300.a.admiralpresent
+		custom_tooltip = akx.9300.a.admiralabsent.tooltip
+		trigger = {
+			exists = leader
+			leader = {
+				is_same_value = event_target:mirrored_syzygy_admiral
+			}
+		}
+		hidden_effect = {
+			owner = { country_event = { id = akx.9310 } }
+		}
+	}
+
+	option = {
+		name = akx.9300.b
+		hidden_effect = {
+			owner = { country_event = { id = akx.9315 } }
+		}
+	}
+}
+
+# 明日舰长死亡（不因界旅者替换而触发）
+# on leader death
+country_event = {
+	id = akx.9330
+	title = akx.9330.name
+	desc = akx.9330.desc
+	picture = GFX_evt_star_chart
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = worm_events_available
+		NOT = { has_country_flag = akx_9330_triggered }
+		from = {
+			has_trait = leader_trait_foredoomed_to_a_rendezvous
+			NOR = {
+				is_same_value = event_target:gray_governor
+				is_same_value = event_target:gray_admiral
+				is_same_value = event_target:gray_general
+				is_same_value = event_target:dimension_traveler_governor
+				is_same_value = event_target:dimension_traveler_scientist
+				is_same_value = event_target:dimension_traveler_admiral
+				is_same_value = event_target:dimension_traveler_general
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = akx_9330_triggered
+	}
+
+	option = {
+		name = akx.9330.a
+	}
+	option = {
+		name = akx.9330.b
+	}
+}
+
+# observation missions
+planet_event = {
+	id = akx.9399
+	hide_window = yes
+
+	pre_triggers = {
+		has_owner = yes
+	}
+
+	trigger = {
+		has_observation_outpost = yes
+		owner = {
+			is_country_type = primitive
+			OR = {
+				has_country_flag = renaissance_age
+				has_country_flag = steam_age
+				has_country_flag = industrial_age
+				has_country_flag = machine_age
+				has_country_flag = atomic_age
+				has_country_flag = early_space_age
+			}
+		}
+		observation_outpost_owner = {
+			is_ai = no
+			has_country_flag = worm_events_available
+			NOT = { has_country_flag = coils_of_god }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 120
+	}
+
+	immediate = {
+		save_global_event_target_as = coils_planet
+		observation_outpost_owner = {
+			set_country_flag = coils_of_god
+			country_event = { id = akx.9400 }
+		}
+	}
+}
+
+# 迷城远航
+country_event = {
+	id = akx.9480
+	title = akx.9480.name
+	desc = akx.9480.desc
+	picture = GFX_evt_medieval_alien_civilization
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+
+	immediate = {
+		set_country_flag = coils_god_end
+		fromfrom = {
+			save_event_target_as = coils_planet
+			every_owned_pop = {
+				limit = {
+					owner = {
+						is_same_value = event_target:coils_planet.owner
+					}
+				}
+				kill_pop = yes
+			}
+			observation_outpost = {
+				dismantle = yes
+			}
+			owner = {
+				destroy_country = yes
+			}
+		}
+		from = {
+			leader = {
+				kill_leader = { type = scientist show_notification = no }
+			}
+			fleet = {
+				delete_fleet = this
+			}
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				has_technology = tech_akx_worm_2
+			}
+		}
+		else = {
+			add_tech_progress = {
+				tech = tech_akx_worm_2
+				progress = 0.3
+			}
+			if = {
+				limit = {
+					NOT = {
+						has_tech_option = tech_akx_worm_2
+					}
+				}
+				add_research_option = tech_akx_worm_2
+			}
+		}
+	}
+
+	option = {
+		name = akx.9480.a
+		custom_tooltip = akx.9480.a.tooltip
+	}
+
+	option = {
+		name = akx.9480.b
+		custom_tooltip = akx.9480.a.tooltip
+	}
+}
+
+# 空寂神庙
+country_event = {
+	id = akx.9490
+	title = akx.9490.name
+	desc = akx.9490.desc
+	picture = GFX_evt_medieval_alien_civilization
+	location = event_target:coils_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = coils_god_halted
+		}
+		event_target:coils_planet = {
+			exists = owner
+			owner = {
+				is_country_type = primitive
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = coils_god_end
+	}
+
+	after = {
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = 12
+			min = 600
+			max = 3000
+		}
+		hidden_effect = {
+			event_target:coils_planet = {
+				every_owned_pop = {
+					limit = {
+						owner = {
+							is_same_value = event_target:coils_planet.owner
+						}
+					}
+					kill_pop = yes
+				}
+				observation_outpost = {
+					dismantle = yes
+				}
+				owner = {
+					destroy_country = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9490.a
+		custom_tooltip = akx.9490.a.tooltip
+	}
+
+	option = {
+		name = akx.9490.b
+		custom_tooltip = akx.9490.a.tooltip
+	}
+}
+
+# 时螶之界（殖民时空黑洞时不应触发）
+planet_event = {
+	id = akx.9499
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	pre_triggers = {
+		has_owner = yes
+	}
+
+	trigger = {
+		NOR = {
+			is_planet_class = pc_habitat
+			is_planet_class = pc_ringworld_habitable
+			is_planet_class = pc_shattered_ring_habitable
+			is_planet_class = pc_city
+			is_planet_class = pc_relic
+			is_artificial = yes
+		}
+		owner = {
+			has_country_flag = worm_events_available
+			NOT = {
+				has_country_flag = waiting_world
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = waiting_world
+		}
+		planet_event = { id = akx.9500 days = 30 }
+	}
+}
+
+# 光的质量（结局1）
+ship_event = {
+	id = akx.9535
+	title = akx.9535.name
+	desc = akx.9535.desc
+	picture = GFX_evt_colony_settlement
+	location = fromfrom
+
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			set_country_flag = akx_waiting_world_end_1
+		}
+	}
+
+	option = {
+		name = OK
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 8
+				min = 200
+				max = 1000
+			}
+			if = {
+				limit = {
+					has_technology = tech_akx_worm_1
+				}
+				# nothing
+			}
+			else = {
+				add_tech_progress = {
+					tech = tech_akx_worm_1
+					progress = 0.1
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_tech_option = tech_akx_worm_1
+						}
+					}
+					add_research_option = tech_akx_worm_1
+				}
+			}
+		}
+	}
+}
+
+# 殖民地独立（结局4）
+# 检测event_target:manifold_country
+
+# 无人生还（结局2）
+planet_event = {
+	id = akx.9541
+	title = akx.9541.name
+	desc = akx.9541.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		# Other empires react to purge according to action.21
+		random_owned_pop = {
+			limit = {
+				exists = planet
+				planet = { is_same_value = root }
+			}
+			save_event_target_as = purged_species
+		}
+		every_country = {
+			limit = {
+				has_communications = root.owner
+				NOT = { is_country = root.owner }
+				NOT = { is_same_species = root.owner }
+				NOT = { has_ai_personality_behaviour = purger }
+				OR = {
+					is_country_type = default
+					has_ai_personality = awakened_fallen_empire_xenophile
+				}
+			}
+			add_opinion_modifier = { who = root.owner modifier = opinion_genocidal }
+		}
+		every_country = {
+			limit = {
+				has_communications = root.owner
+				NOT = { is_country = root.owner }
+				is_same_species = event_target:purged_species
+			}
+			add_opinion_modifier = { who = root.owner modifier = opinion_genocidal_our_species }
+		}
+		owner = {
+			set_country_flag = akx_waiting_world_end_2
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			every_owned_pop = {
+				kill_pop = yes
+			}
+			remove_all_buildings = yes
+			destroy_colony = yes
+		}
+	}
+
+	option = {
+		name = akx.9541.a
+		owner = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier3unityreward
+			}
+		}
+	}
+
+	option = {
+		name = akx.9541.b
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = 24
+				min = 200
+				max = 1000
+			}
+			add_modifier = {
+				modifier = unity_reduction_akx_9541
+				days = 1800
+			}
+		}
+	}
+}
+
+#万物归虚（结局3）
+planet_event = {
+	id = akx.9545
+	title = akx.9545.name
+	desc = akx.9545.desc
+	picture = GFX_evt_colony_settlement
+	location = root
+
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			set_country_flag = akx_waiting_world_end_3
+		}
+	}
+
+	after = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = 8
+				min = 200
+				max = 1000
+			}
+			if = {
+				limit = {
+					has_technology = tech_akx_worm_1
+				}
+				# nothing
+			}
+			else = {
+				add_tech_progress = {
+					tech = tech_akx_worm_1
+					progress = 0.1
+				}
+				if = {
+					limit = {
+						NOT = {
+							has_tech_option = tech_akx_worm_1
+						}
+					}
+					add_research_option = tech_akx_worm_1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = akx.9545.a
+	}
+	option = {
+		name = akx.9545.b
+	}
+}
+
+# 圣仆结局（增强奖励）
+fleet_event = {
+	id = akx.9620
+	title = akx.9620.name
+	desc = {
+		text = akx.9620.desc
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_time }
+			}
+		}
+	}
+	desc = {
+		text = akx.9620.desc_time
+		trigger = {
+			owner = {
+				has_origin = origin_time
+			}
+		}
+	}
+	picture = GFX_evt_technosphere
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = {
+		solar_system = {
+			random_system_planet = {
+				limit = { is_star = yes }
+				save_global_event_target_as = hole_pets
+			}
+		}
+	}
+
+	option = {
+		name = akx.9620.a
+		trigger = {
+			owner = {
+				NOT = { has_origin = origin_time }
+			}
+		}
+		hidden_effect = {
+			event_target:technosphere_ship = {
+				# explosion ambient object?
+				destroy_fleet = this
+			}
+		}
+		event_target:hole_pets = {
+			clear_deposits = yes
+			add_deposit = d_physics_10
+			add_deposit = d_society_10
+			add_deposit = d_engineering_10
+		}
+	}
+	
+	option = {
+		name = akx.9620.b
+		trigger = {
+			owner = {
+				has_origin = origin_time
+			}
+		}
+		hidden_effect = {
+			event_target:technosphere_ship = {
+				# explosion ambient object?
+				destroy_fleet = this
+			}
+		}
+		event_target:hole_pets = {
+			change_pc = pc_time
+			hidden_effect = {
+				reroll_pc_time_deposits = yes
+				add_deposit = d_brief
+				set_planet_flag = colony_event
+			}
+		}
+	}
+}
+
+# 召唤时虫（修改选项中时虫的舰船设计）
+planet_event = {
+	id = akx.10010
+	title = akx.10010.name
+	desc = akx.10010.desc
+	picture = GFX_evt_dimensional_horror
+	location = root
+
+	is_triggered_only = yes
+
+	option = {
+		name = akx.10010.a
+		hidden_effect = {
+			planet_event = { id = akx.10020 }
+		}
+	}
+
+	option = {
+		name = akx.10010.b
+		hidden_effect = {
+			solar_system = {
+				random_system_planet = {
+					limit = { is_star = yes }
+					save_event_target_as = local_star
+				}
+				create_country = {
+					name = "NAME_The_Loop"
+					type = faction
+					auto_delete = no
+					flag = {
+						icon= {
+							category = "special"
+							file = "extradimensional_02.dds"
+						}
+						background= {
+							category = "backgrounds"
+							file = "circle.dds"
+						}
+						colors={
+							"black"
+							"red"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						add_modifier = {
+							modifier = time_worm_manifestation
+							days = -1
+						}
+						establish_communications_no_message = root.owner
+						establish_contact = { who = root.owner location = root }
+						save_global_event_target_as = worm_enemy
+						create_fleet = {
+							name = "NAME_TIME_IS_SIGHT_GRAVITY_IS_DESIRE"
+							settings = {
+								spawn_debris = no
+								is_boss = yes
+							}
+							effect = {
+								set_owner = event_target:worm_enemy
+								create_ship_design = {
+									design = "NAME_Time_Dimensional_Horror"
+								}
+								create_ship = {
+									design = last_created_design
+									name = "NAME_Worm_in_Waiting"
+								}
+								set_location = {
+									target = event_target:local_star
+									distance = 30
+								}
+							}
+						}
+					}
+				}
+			}
+			owner = {
+				observer_event = { id = observer.72 }
+			}
+		}
+	}
+}
+
+# 接受时虫的爱（不变时空黑洞，提示玩家解锁飞升）
+planet_event = {
+	id = akx.10020
+	title = akx.10020.name
+	desc = akx.10020.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_activating_unknown_technology
+	location = root
+
+	is_triggered_only = yes
+
+	pre_triggers = {
+		is_ai = no
+	}
+
+	immediate = {
+		solar_system = {
+			every_system_planet = {
+				limit = {
+					NOR = {
+						is_planet_class = pc_gas_giant
+						is_planet_class = pc_ringworld_habitable
+						is_planet_class = pc_ringworld_habitable_damaged
+						is_planet_class = pc_ringworld_tech
+						is_planet_class = pc_ringworld_tech_damaged
+						is_planet_class = pc_ringworld_seam
+						is_planet_class = pc_ringworld_seam_damaged
+						is_planet_class = pc_habitat
+						is_planet_class = pc_asteroid
+						is_planet_class = pc_ice_asteroid
+						is_planet_class = pc_city
+						is_planet_class = pc_relic
+						is_planet_class = pc_gaia
+						is_planet_class = pc_hive
+						is_planet_class = pc_machine
+						is_planet_class = pc_gas_colony
+						is_planet_class = pc_psionic
+						is_planet_class = pc_nanites
+						is_star = yes
+						is_artificial = yes
+					}
+				}
+				every_owned_pop = {
+					limit = {
+						is_robot_pop = no
+						is_sapient = yes
+					}
+					if = {
+						limit = { NOT = { has_trait = trait_natural_physicists } }
+						# remove opposite traits
+						if = {
+							limit = { has_trait = trait_natural_engineers }
+							modify_species = {
+								species = this
+								remove_trait = trait_natural_engineers
+							}
+						}
+						if = {
+							limit = { has_trait = trait_natural_sociologists }
+							modify_species = {
+								species = this
+								remove_trait = trait_natural_sociologists
+							}
+						}
+						if = {
+							limit = { has_trait = trait_nerve_stapled }
+							modify_species = {
+								species = this
+								remove_trait = trait_nerve_stapled
+							}
+						}
+						# add trait
+						modify_species = {
+							species = this
+							add_trait = trait_natural_physicists
+						}
+					}
+					if = {
+						limit = { NOT = { has_trait = trait_repugnant } }
+						# remove opposite traits
+						if = {
+							limit = { has_trait = trait_charismatic }
+							modify_species = {
+								species = this
+								remove_trait = trait_charismatic
+							}
+						}
+						modify_species = {
+							species = this
+							add_trait = trait_repugnant
+						}
+					}
+					modify_species = {
+						species = this
+						ideal_planet_class = pc_nuked
+					}
+				}
+				change_pc = pc_nuked
+				set_planet_flag = nuked_planet_anomalies_disabled
+				reroll_planet = yes
+			}
+			every_system_planet = {
+				limit = {
+					is_planet_class = pc_time
+				}
+				every_owned_pop = {
+					limit = {
+						is_robot_pop = no
+						is_sapient = yes
+					}
+					if = {
+						limit = { NOT = { has_trait = trait_natural_physicists } }
+						# remove opposite traits
+						if = {
+							limit = { has_trait = trait_natural_engineers }
+							modify_species = {
+								species = this
+								remove_trait = trait_natural_engineers
+							}
+						}
+						if = {
+							limit = { has_trait = trait_natural_sociologists }
+							modify_species = {
+								species = this
+								remove_trait = trait_natural_sociologists
+							}
+						}
+						if = {
+							limit = { has_trait = trait_nerve_stapled }
+							modify_species = {
+								species = this
+								remove_trait = trait_nerve_stapled
+							}
+						}
+						# add trait
+						modify_species = {
+							species = this
+							add_trait = trait_natural_physicists
+						}
+					}
+					if = {
+						limit = { NOT = { has_trait = trait_repugnant } }
+						# remove opposite traits
+						if = {
+							limit = { has_trait = trait_charismatic }
+							modify_species = {
+								species = this
+								remove_trait = trait_charismatic
+							}
+						}
+						modify_species = {
+							species = this
+							add_trait = trait_repugnant
+						}
+					}
+					modify_species = {
+						species = this
+						ideal_planet_class = pc_nuked
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_time_black_hole_star_class = no
+				}
+				every_system_planet = {
+					limit = {
+						is_star = yes
+						is_time_black_hole_planet_class = no
+					}
+					change_pc = pc_black_hole
+				}
+				set_star_class = sc_black_hole
+			}
+		}
+		add_modifier = {
+			modifier = kiss_from_worm
+			days = -1
+		}
+		owner = {
+			observer_event = { id = observer.71 }
+			set_country_flag = horrific_celebration # 禁用恐怖负相物质游行
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			owner = {
+				remove_country_flag = worm_events_available
+				set_country_flag = worm_awaited
+				set_country_flag = worm_tomb_ending
+				country_event = { id = time_akx.1 days = 360 random = 720 } # 时虫事件后续拓展
+			}
+		}
+	}
+
+	option = {
+		name = akx.10020.a
+		custom_tooltip = akx.10020.a.tooltip
+		owner = {
+			end_event_chain = WORM_CHAIN_2
+		}
+	}
+}
+
+# 击败时虫（添加attack_worm的flag）
+# on fleet destroyed perp
+country_event = {
+	id = akx.10030
+	title = akx.10021.name
+	desc = akx.10021.desc
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = worm_events_available
+		exists = event_target:worm_enemy
+		from = {
+			is_same_value = event_target:worm_enemy
+		}
+	}
+
+	immediate = {
+		event_target:worm_enemy = {
+			destroy_country = yes
+		}
+		remove_country_flag = worm_events_available
+		set_country_flag = worm_awaited
+		set_country_flag = attack_worm
+		set_country_flag = gain_tradition_horror
+	}
+
+	after = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = horrific_celebration }
+			}
+			set_country_flag = horrific_celebration
+			generate_parade_city = yes
+			start_situation = {
+				type = leviathan_celebration_opportunity
+				target = event_target:parade_city
+				effect = {
+					set_situation_flag = celebration_worm
+					set_situation_flag = standard_unity_reward
+				}
+			}
+		}
+		custom_tooltip = "time.501.a.tooltip"
+	}
+
+	option = {
+		name = akx.10021.a
+		end_event_chain = WORM_CHAIN_2
+		add_monthly_resource_mult = {
+			resource = energy
+			value = 24
+			min = 1500
+			max = 3000
+		}
+		add_monthly_resource_mult = {
+			resource = physics_research
+			value = 36
+			min = 1000
+			max = 8000
+		}
+		if = {
+			limit = { has_ancrel = yes }
+			add_relic = r_worm_scales
+		}
+	}
+}

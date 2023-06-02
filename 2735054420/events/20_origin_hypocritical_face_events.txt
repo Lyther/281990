@@ -1,0 +1,63 @@
+
+namespace = origin_hypocritical_face
+
+country_event = {
+	id = origin_hypocritical_face.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_hypocritical_face
+	}
+	
+	immediate = {
+		refresh_origin_hypocritical_face_value = yes
+		start_situation = {
+			type = situation_origin_hypocritical_face
+			target = root
+			effect = {
+				set_situation_approach = approach_origin_hypocritical_face_default
+				save_global_event_target_as = situation_origin_hypocritical_face_of@root
+			}
+		}
+		country_event = { id = origin_hypocritical_face.10 days = 29 }
+	}
+}
+
+situation_event = {
+	id = origin_hypocritical_face.2
+	title = origin_hypocritical_face.2.name
+	desc = origin_hypocritical_face.2.desc
+	picture = GFX_evt_black_market
+	show_sound = event_radio_chatter
+	situation = this
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			set_country_flag = lost_hypocritical_face
+		}
+	}
+	
+	option = {
+		name = origin_hypocritical_face.2.a
+		destroy_situation = this
+	}
+}
+
+# 更新数值
+country_event = {
+	id = origin_hypocritical_face.10
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = { has_country_flag = lost_hypocritical_face }
+	}
+	
+	immediate = {
+		country_event = { id = origin_hypocritical_face.10 days = 30 }
+		refresh_origin_hypocritical_face_value = yes
+	}
+}

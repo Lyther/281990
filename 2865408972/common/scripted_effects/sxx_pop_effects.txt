@@ -1,0 +1,596 @@
+pop_sxx_remove_xiuxian_flag_and_trait = {
+	remove_pop_flag = sxx_lianqi
+	remove_pop_flag = sxx_zhuji
+	remove_pop_flag = sxx_jindan
+	remove_pop_flag = sxx_yuanying
+	remove_pop_flag = sxx_huashen
+	remove_pop_flag = sxx_lianxu
+	remove_pop_flag = sxx_heti
+	remove_pop_flag = sxx_dacheng
+	remove_pop_flag = sxx_dujie
+	remove_pop_flag = sxx_zhenxian
+	remove_pop_flag = sxx_xianwang
+	remove_pop_flag = sxx_xiandi
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_lianqi
+		remove_trait = trait_sxx_zhuji
+		remove_trait = trait_sxx_jindan
+		remove_trait = trait_sxx_yuanying
+		remove_trait = trait_sxx_huashen
+		remove_trait = trait_sxx_lianxu
+		remove_trait = trait_sxx_heti
+		remove_trait = trait_sxx_dacheng
+		remove_trait = trait_sxx_dujie
+		remove_trait = trait_sxx_zhenxian
+		remove_trait = trait_sxx_xianwang
+		remove_trait = trait_sxx_xiandi
+	}
+}
+
+sxx_pop_set_potential_depletion = {
+	add_modifier = { modifier = sxx_pop_potential_depletion }
+	if = {
+		limit = {
+			owner = { has_country_flag = add_trait_sxx_potential_depletion }
+		}
+		modify_species = {
+			species = this
+			add_trait = trait_sxx_potential_depletion
+		}
+	}
+	set_pop_flag = sxx_potential_depletion
+}
+
+sxx_pop_remove_potential_depletion = {
+	remove_modifier = sxx_pop_potential_depletion
+	modify_species = {
+		species = this
+		remove_trait = trait_sxx_potential_depletion
+	}
+	remove_pop_flag = sxx_potential_depletion
+}
+
+sxx_pop_become_zombie = {
+	modify_species = {
+		species = this
+		add_trait = trait_zombie
+		remove_trait = trait_sxx_linggen
+	}
+	sxx_pop_remove_potential_depletion = yes
+}
+
+sxx_pop_become_zombie_or_be_killed = {
+	if = {
+		limit = {
+			sxx_pop_can_become_zombie = yes
+		}	
+		sxx_pop_become_zombie = yes
+	}
+	else = {
+		kill_pop = yes
+	}
+}
+
+sxx_pop_die_and_become_yuhuaxian_if_possible = {
+	if = {
+		limit = {
+			owner = {
+				has_origin = origin_sxx_yuhua
+				NOT = { has_country_flag = synthetic_empire }
+			}
+			has_trait = trait_sxx_linggen
+			sxx_pop_is_not_under_huashen = yes
+			is_sxx_fairy_pop = no
+		}
+		owner = { country_event = { id = sxx_origin.6 } } # 确保先觉醒
+		planet = { create_pop = { species = owner_main_species effect = { set_pop_flag = sxx_cultivator } } }
+		last_created_pop = {
+			set_pop_flag = sxx_cultivator # 有时候不执行
+			pop_sxx_remove_xiuxian_flag_and_trait = yes # 有时候不执行，现在应该修好了
+			prev = {
+				switch = {
+					trigger = has_pop_flag
+					sxx_huashen = {
+						prev = {
+							set_pop_flag = sxx_huashen
+							modify_species = {
+								species = this
+								add_trait = trait_sxx_huashen
+							}
+						}
+					}
+					sxx_lianxu = {
+						prev = {
+							set_pop_flag = sxx_lianxu
+							modify_species = {
+								species = this
+								add_trait = trait_sxx_lianxu
+							}
+						}
+					}
+					sxx_heti = {
+						prev = {
+							set_pop_flag = sxx_heti
+							modify_species = {
+								species = this
+								add_trait = trait_sxx_heti
+							}
+						}
+					}
+					sxx_dacheng = {
+						prev = {
+							set_pop_flag = sxx_dacheng
+							modify_species = {
+								species = this
+								add_trait = trait_sxx_dacheng
+							}
+						}
+					}
+				}
+			}
+			#set_pop_flag = sxx_cultivator # 有时候不执行，再写一遍
+		}
+		owner = { country_event = { id = sxx_origin.7 } }
+	}
+	sxx_pop_become_zombie_or_be_killed = yes
+}
+
+sxx_pop_down_state = {
+	set_variable = { which = sxx_pop_xp value = 0 }
+	if = {
+		limit = {
+			has_trait = trait_sxx_yuhua
+		}
+		switch = {
+			trigger = has_pop_flag
+			sxx_lianxu = {
+				remove_pop_flag = sxx_lianxu
+				set_pop_flag = sxx_huashen
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_lianxu
+					add_trait = trait_sxx_huashen
+				}
+			}
+			sxx_heti = {
+				remove_pop_flag = sxx_heti
+				set_pop_flag = sxx_lianxu
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_heti
+					add_trait = trait_sxx_lianxu
+				}
+			}
+			sxx_dacheng = {
+				remove_pop_flag = sxx_dacheng
+				set_pop_flag = sxx_heti
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_dacheng
+					add_trait = trait_sxx_heti
+				}
+			}
+			sxx_dujie = {
+				remove_pop_flag = sxx_dujie
+				set_pop_flag = sxx_dacheng
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_dujie
+					add_trait = trait_sxx_dacheng
+				}
+			}
+			default = {
+				sxx_pop_die_and_become_yuhuaxian_if_possible = yes
+			}
+		}
+	}
+	else = {
+		switch = {
+			trigger = has_pop_flag
+			sxx_zhuji = {
+				remove_pop_flag = sxx_zhuji
+				set_pop_flag = sxx_lianqi
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_zhuji
+					add_trait = trait_sxx_lianqi
+				}
+			}
+			sxx_jindan = {
+				remove_pop_flag = sxx_jindan
+				set_pop_flag = sxx_zhuji
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_jindan
+					add_trait = trait_sxx_zhuji
+				}
+			}
+			sxx_yuanying = {
+				remove_pop_flag = sxx_yuanying
+				set_pop_flag = sxx_jindan
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_yuanying
+					add_trait = trait_sxx_jindan
+				}
+			}
+			sxx_huashen = {
+				remove_pop_flag = sxx_huashen
+				set_pop_flag = sxx_yuanying
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_huashen
+					add_trait = trait_sxx_yuanying
+				}
+			}
+			sxx_lianxu = {
+				remove_pop_flag = sxx_lianxu
+				set_pop_flag = sxx_huashen
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_lianxu
+					add_trait = trait_sxx_huashen
+				}
+			}
+			sxx_heti = {
+				remove_pop_flag = sxx_heti
+				set_pop_flag = sxx_lianxu
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_heti
+					add_trait = trait_sxx_lianxu
+				}
+			}
+			sxx_dacheng = {
+				remove_pop_flag = sxx_dacheng
+				set_pop_flag = sxx_heti
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_dacheng
+					add_trait = trait_sxx_heti
+				}
+			}
+			sxx_dujie = {
+				remove_pop_flag = sxx_dujie
+				set_pop_flag = sxx_dacheng
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_dujie
+					add_trait = trait_sxx_dacheng
+				}
+			}
+			default = {
+				sxx_pop_become_zombie_or_be_killed = yes
+			}
+		}
+	}
+}
+
+sxx_new_cultivator_spawn_effect = {
+	set_timed_pop_flag = { flag = sxx_new_cultivator days = 62 } # 刚创建岗位权重读不出修正？用flag控制
+	sxx_pop_break_to_lianqi = yes
+	if = {
+		limit = {
+			owner = {
+				has_edict = sxx_more_special_body
+			}
+		}
+		random_list = {
+			10 = {
+				add_modifier = { modifier = sxx_honglianjingti }
+			}
+			100 = {
+				random_list = {
+					10 = { add_modifier = { modifier = sxx_xiantiandaoti } }
+					10 = { add_modifier = { modifier = sxx_ziyanglingti } }
+					10 = { add_modifier = { modifier = sxx_liulishenti } }
+					10 = { add_modifier = { modifier = sxx_huanggushengti } }
+				}
+			}
+			99890 = {}
+		}
+	}
+	else = {
+		random_list = {
+			1 = {
+				add_modifier = { modifier = sxx_honglianjingti }
+			}
+			10 = {
+				random_list = {
+					10 = { add_modifier = { modifier = sxx_xiantiandaoti } }
+					10 = { add_modifier = { modifier = sxx_ziyanglingti } }
+					10 = { add_modifier = { modifier = sxx_liulishenti } }
+					10 = { add_modifier = { modifier = sxx_huanggushengti } }
+				}
+			}
+			99989 = {}
+		}
+	}
+
+	if = {
+		limit = {
+			planet = { has_modifier = sxx_add_linggen_modifier }
+			is_sxx_cultivable = yes
+			NOT = { has_trait = trait_mechanical }
+		}
+		modify_species = {
+			species = this
+			add_trait = trait_sxx_linggen
+		}
+	}
+}
+
+sxx_pop_may_spawn_cultivator = {
+	switch = {
+		trigger = is_pop_category
+		ruler = {
+			if = {
+				limit = {
+					has_modifier = sxx_pop_recently_spawned_cultivator
+				}
+				random_list = {
+					99 = {}
+					1 = {
+						remove_modifier = sxx_pop_recently_spawned_cultivator
+						add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+						planet = {
+							create_pop = {
+								species = prev
+								effect = { sxx_new_cultivator_spawn_effect = yes }
+							}
+						}
+					}
+				}
+			}
+			else = {
+				add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+				planet = {
+					create_pop = {
+						species = prev
+						effect = { sxx_new_cultivator_spawn_effect = yes }
+					}
+				}
+			}
+		}
+		specialist = {
+			random_list = {
+				40 = {}
+				60 = {
+					if = {
+						limit = {
+							has_modifier = sxx_pop_recently_spawned_cultivator
+						}
+						random_list = {
+							99 = {}
+							1 = {
+								remove_modifier = sxx_pop_recently_spawned_cultivator
+								add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+								planet = {
+									create_pop = {
+										species = prev
+										effect = { sxx_new_cultivator_spawn_effect = yes }
+									}
+								}
+							}
+						}
+					}
+					else = {
+						add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+						planet = {
+							create_pop = {
+								species = prev
+								effect = { sxx_new_cultivator_spawn_effect = yes }
+							}
+						}
+					}
+				}
+			}
+		}
+		worker = {
+			random_list = {
+				80 = {}
+				20 = {
+					if = {
+						limit = {
+							has_modifier = sxx_pop_recently_spawned_cultivator
+						}
+						random_list = {
+							99 = {}
+							1 = {
+								remove_modifier = sxx_pop_recently_spawned_cultivator
+								add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+								planet = {
+									create_pop = {
+										species = prev
+										effect = { sxx_new_cultivator_spawn_effect = yes }
+									}
+								}
+							}
+						}
+					}
+					else = {
+						add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+						planet = {
+							create_pop = {
+								species = prev
+								effect = { sxx_new_cultivator_spawn_effect = yes }
+							}
+						}
+					}
+				}
+			}
+		}
+		default = {
+			random_list = {
+				90 = {}
+				10 = {
+					if = {
+						limit = {
+							has_modifier = sxx_pop_recently_spawned_cultivator
+						}
+						random_list = {
+							99 = {}
+							1 = {
+								remove_modifier = sxx_pop_recently_spawned_cultivator
+								add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+								planet = {
+									create_pop = {
+										species = prev
+										effect = { sxx_new_cultivator_spawn_effect = yes }
+									}
+								}
+							}
+						}
+					}
+					else = {
+						add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+						planet = {
+							create_pop = {
+								species = prev
+								effect = { sxx_new_cultivator_spawn_effect = yes }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+sxx_vassal_pop_may_spawn_cultivator = {
+	switch = {
+		trigger = is_pop_category
+		ruler = {
+			if = {
+				limit = {
+					has_modifier = sxx_pop_recently_spawned_cultivator
+				}
+				random_list = {
+					99 = {}
+					1 = {
+						remove_modifier = sxx_pop_recently_spawned_cultivator
+						add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+						root.overlord.capital_scope = {
+							create_pop = {
+								species = prev
+								effect = { sxx_new_cultivator_spawn_effect = yes }
+							}
+						}
+					}
+				}
+			}
+			else = {
+				add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+				root.overlord.capital_scope = {
+					create_pop = {
+						species = prev
+						effect = { sxx_new_cultivator_spawn_effect = yes }
+					}
+				}
+			}
+		}
+		specialist = {
+			random_list = {
+				40 = {}
+				60 = {
+					if = {
+						limit = {
+							has_modifier = sxx_pop_recently_spawned_cultivator
+						}
+						random_list = {
+							99 = {}
+							1 = {
+								remove_modifier = sxx_pop_recently_spawned_cultivator
+								add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+								root.overlord.capital_scope = {
+									create_pop = {
+										species = prev
+										effect = { sxx_new_cultivator_spawn_effect = yes }
+									}
+								}
+							}
+						}
+					}
+					else = {
+						add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+						root.overlord.capital_scope = {
+							create_pop = {
+								species = prev
+								effect = { sxx_new_cultivator_spawn_effect = yes }
+							}
+						}
+					}
+				}
+			}
+		}
+		worker = {
+			random_list = {
+				80 = {}
+				20 = {
+					if = {
+						limit = {
+							has_modifier = sxx_pop_recently_spawned_cultivator
+						}
+						random_list = {
+							99 = {}
+							1 = {
+								remove_modifier = sxx_pop_recently_spawned_cultivator
+								add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+								root.overlord.capital_scope = {
+									create_pop = {
+										species = prev
+										effect = { sxx_new_cultivator_spawn_effect = yes }
+									}
+								}
+							}
+						}
+					}
+					else = {
+						add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+						root.overlord.capital_scope = {
+							create_pop = {
+								species = prev
+								effect = { sxx_new_cultivator_spawn_effect = yes }
+							}
+						}
+					}
+				}
+			}
+		}
+		default = {
+			random_list = {
+				90 = {}
+				10 = {
+					if = {
+						limit = {
+							has_modifier = sxx_pop_recently_spawned_cultivator
+						}
+						random_list = {
+							99 = {}
+							1 = {
+								remove_modifier = sxx_pop_recently_spawned_cultivator
+								add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+								root.overlord.capital_scope = {
+									create_pop = {
+										species = prev
+										effect = { sxx_new_cultivator_spawn_effect = yes }
+									}
+								}
+							}
+						}
+					}
+					else = {
+						add_modifier = { modifier = sxx_pop_recently_spawned_cultivator days = 3600 }
+						root.overlord.capital_scope = {
+							create_pop = {
+								species = prev
+								effect = { sxx_new_cultivator_spawn_effect = yes }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

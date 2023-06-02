@@ -1,0 +1,147 @@
+
+namespace = new_country
+
+country_event = {
+	id = new_country.0
+	title = new_country.0.name
+	desc = new_country.0.desc
+	picture = GFX_evt_ship_in_orbit_3
+	show_sound = event_primitive_civilization
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		any_playable_country = {
+			has_origin = origin_new_country
+			is_ai = yes
+		}
+	}
+	
+	option = {
+		name = new_country.0.a
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					has_origin = origin_new_country
+					is_ai = yes
+				}
+				set_country_flag = allow_origin_new_country
+				country_event = { id = new_country.1 }
+			}
+		}
+	}
+	
+	option = {
+		name = new_country.0.b
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					has_origin = origin_new_country
+					is_ai = yes
+				}
+				set_origin_default_effect = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = new_country.1
+	title = new_country.1.name
+	desc = new_country.1.desc
+	picture = GFX_evt_ship_in_orbit_3
+	show_sound = event_primitive_civilization
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_new_country
+		OR = {
+			is_ai = no
+			has_country_flag = allow_origin_new_country
+		}
+	}
+	
+	immediate = {
+		set_global_flag = galcom_founding_begun
+		set_global_flag = galactic_community_founded
+		every_playable_country = {
+			limit = {
+				NOT = { has_origin = origin_new_country }
+			}
+			country_event = { id = new_country.2 }
+		}
+		random_country = {
+			limit = { is_country_type = global_event }
+			country_event = { id = galcom.15 days = 20 }
+		}
+	}
+
+	option = {
+		name = new_country.1.a
+		add_modifier = {
+			modifier = new_country_modifier
+			days = 7200
+		}
+	}
+}
+
+country_event = {
+	id = new_country.2
+	title = new_country.2.name
+	desc = new_country.2.desc
+	picture = GFX_evt_ship_in_orbit_3
+	show_sound = event_primitive_civilization
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = new_country_2 }
+	}
+	
+	immediate = {
+		set_country_flag = new_country_2
+		if = {
+			limit = {
+				is_homicidal = no
+			}
+			set_country_flag = galcom_form_aye
+			set_country_flag = league_of_nations_achievement
+			add_to_galactic_community_no_message = yes
+		}
+		else = {
+			set_country_flag = galcom_form_nay
+			set_country_flag = whatever_it_is_im_against_it_rejected_community
+		}
+
+		give_physics_tech_tier_1_effect_no_message = yes
+		give_physics_tech_tier_2_effect_no_message = yes
+		give_society_tech_tier_1_effect_no_message = yes
+		give_society_tech_tier_2_effect_no_message = yes
+		give_engineering_tech_tier_1_effect_no_message = yes
+		give_engineering_tech_tier_2_effect_no_message = yes
+
+		add_resource = {
+			energy = 10000
+			minerals = 10000
+			food = 10000
+			alloys = 5000
+			consumer_goods = 5000
+			volatile_motes = 500
+			rare_crystals = 500
+			exotic_gases = 500
+			unity = 50000
+			influence = 500
+		}
+		
+		add_modifier = {
+			modifier = new_country_others_modifier
+			days = 1800
+		}
+	}
+
+	option = {
+		name = new_country.2.a
+	}
+}

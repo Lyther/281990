@@ -1,0 +1,5416 @@
+#早期屎山代码,懒得重做(
+#预设值
+@tc_knowledge_cost_t1 = -128
+@tc_knowledge_cost_t2 = -256
+@tc_knowledge_cost_t3 = -512
+@tc_knowledge_cost_t4 = -1024
+@tc_knowledge_cost_t5 = -2048
+@tc_knowledge_cost_t6 = -4096
+
+@tc_knowledge_detect_t1 = 128
+@tc_knowledge_detect_t2 = 256
+@tc_knowledge_detect_t3 = 512
+@tc_knowledge_detect_t4 = 1024
+@tc_knowledge_detect_t5 = 2048
+@tc_knowledge_detect_t6 = 4096
+
+@tc_warp_risk_1 = 1
+@tc_warp_risk_2 = 2
+@tc_warp_risk_3 = 3
+@tc_warp_risk_4 = 4
+@tc_warp_risk_5 = 5
+
+#引导页面按钮效果
+tc_ui_research_hint_button_effect = {
+	potential = { always = yes }
+	allow = { always = yes }
+	effect = {
+		FROM = {
+			hidden_effect = {
+				country_event = {
+					id = tc_research_ui.2
+				}
+			}
+		}
+	}
+}
+#扭曲和污染页面
+tc_warp_page_button_effect = {
+	potential = { always = yes }
+	allow = { always = yes }
+	effect = {
+		FROM = {
+			hidden_effect = {
+				country_event = {
+					id = tc_research_ui.3
+				}
+			}
+		}
+	}
+}
+#扭曲计效果
+tc_warp_meter_main_effect = {
+	potential = { FROM = { has_technology = "tc_tech_sanity_checker" } }
+	allow = { FROM = { has_technology = "tc_tech_sanity_checker" } }
+}
+tc_warp_meter_exceed_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 100
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 100
+			}
+		} } }
+tc_warp_meter_bar_100_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 90
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 90
+			}
+		} } }
+tc_warp_meter_bar_90_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 80
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 80
+			}
+		} } }
+tc_warp_meter_bar_80_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 70
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 70
+			}
+		} } }
+tc_warp_meter_bar_70_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 60
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 60
+			}
+		} } }
+tc_warp_meter_bar_60_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 50
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 50
+			}
+		} } }
+tc_warp_meter_bar_50_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 40
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 40
+			}
+		} } }
+tc_warp_meter_bar_40_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 30
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 30
+			}
+		} } }
+tc_warp_meter_bar_30_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 20
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 20
+			}
+		} } }
+tc_warp_meter_bar_20_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 10
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 10
+			}
+		} } }
+tc_warp_meter_bar_10_effect = {
+	potential = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 0
+			} }
+	}
+	allow = { FROM = {
+			has_technology = "tc_tech_sanity_checker"
+			check_variable = {
+				which = tc_warp
+				value > 0
+			}
+		} } }
+
+#科技树按钮效果
+tc_tech_advanced_alchemical_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_primordial_pearl"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_advanced_alchemical
+		custom_tooltip = tc_decision_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_essence_distil_t3"
+			has_technology = "tc_tech_primordial_pearl"
+			OR = { 
+				has_technology = "tc_tech_advanced_alchemical"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+			} 
+		}
+	effect = { 
+		custom_tooltip = tc_tech_advanced_alchemical
+		custom_tooltip = tc_decision_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = { 
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_advanced_alchemical"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_advanced_alchemical 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_4
+			}
+			add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }	
+			}
+		else = { } }
+		}
+	}
+tc_tech_advanced_golem_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_golem_upgrade"
+		has_technology = "tc_tech_golem_core"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_advanced_golem
+		custom_tooltip = tc_tech_advanced_golem_tip
+		FROM = {
+			has_technology = "tc_tech_golem_upgrade"
+			has_technology = "tc_tech_golem_core"
+			OR = { 
+				has_technology = "tc_tech_advanced_golem"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+			} 
+		}
+	effect = { 
+		custom_tooltip = tc_tech_advanced_golem
+		custom_tooltip = tc_tech_advanced_golem_tip
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_advanced_golem"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_advanced_golem 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_5
+			}
+			add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_alchemical_copy_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_alchemical_copy
+		custom_tooltip = tc_buff_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+		OR = { 
+			has_technology = "tc_tech_alchemical_copy"
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_alchemical_copy
+		custom_tooltip = tc_buff_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_alchemical_copy"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_alchemical_copy 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_alchemical_t1_effect = {
+	potential = { FROM = { 
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_alchemical_t1
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			OR = { 
+				has_technology = "tc_tech_alchemical_t1"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+			} 
+		}
+	effect = { 
+		custom_tooltip = tc_tech_alchemical_t1
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_alchemical_t1"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_alchemical_t1 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_alchemical_t2_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_alchemical_t2
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_alchemical_t2"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		}
+	}
+	effect = { 
+		custom_tooltip = tc_tech_alchemical_t2
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_alchemical_t2"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_alchemical_t2 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_alchemical_t3_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t2"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_alchemical_t3
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t2"
+			OR = {  
+				has_technology = "tc_tech_alchemical_t3"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_alchemical_t3
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_alchemical_t3"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_alchemical_t3 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_alchemical_train_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_copy"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_alchemical_train
+		custom_tooltip = tc_buff_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_copy"
+			OR = {  
+				has_technology = "tc_tech_alchemical_train"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_alchemical_train
+		custom_tooltip = tc_buff_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_alchemical_train"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_alchemical_train 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_amulet_emergency_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_rune_shield_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_amulet_emergency
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+			has_technology = "tc_tech_rune_shield_t1"
+			OR = {  
+				has_technology = "tc_tech_amulet_emergency"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_amulet_emergency
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_amulet_emergency"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_amulet_emergency 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+#tc_tech_arcane_research_effect = {
+	#	potential = { FROM = { 
+	#	OR = {
+	#		}
+	#	allow 
+	#	}= { 
+	#	}
+	#	effect = { 
+	#		if = { 
+	#			limit = { 
+	#				NOT = { 
+	#					has_technology = "tc_tech_arcane_research"
+	#				}
+	#			OR = {  
+	#			has_technology = ""
+	#			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+	#			}
+	#			create_message = {
+	#			type = "TC_MESSAGE_RESEARCH"
+	#			localization = "tc_message_research_complete"
+	#			days = 1
+	#			target = THIS
+	#		} 
+	#			give_technology = { 
+	#				tech = tc_tech_arcane_research 
+	#				message = no 
+	#			}
+	#				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+	#			}
+	#		else = { } }
+	#		}
+	#	}
+tc_tech_arcane_stope_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_infusion"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_arcane_stope
+		custom_tooltip = tc_building_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_infusion"
+			OR = {  
+				has_technology = "tc_tech_arcane_stope"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_arcane_stope
+		custom_tooltip = tc_building_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_arcane_stope"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_arcane_stope 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_blood_alchemy_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_train"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_blood_alchemy
+		custom_tooltip = tc_buff_tech_desc
+			FROM = {
+			has_technology = "tc_tech_alchemical_train"
+			OR = {  
+				has_technology = "tc_tech_blood_alchemy"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		}
+	}
+	effect = { 
+		custom_tooltip = tc_tech_blood_alchemy
+		custom_tooltip = tc_buff_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_blood_alchemy"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_blood_alchemy 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_brain_jar_effect = {
+	potential = { FROM = { 
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_brain_jar
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			OR = {  
+				has_technology = "tc_tech_brain_jar"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_brain_jar
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_brain_jar"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_brain_jar 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_building_research_t1_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_brain_jar"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_building_research_t1
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_building_research_t1"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_building_research_t1
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_building_research_t1"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_building_research_t1 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_building_research_t2_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_building_research_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_building_research_t2
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_building_research_t1"
+			OR = {  
+				has_technology = "tc_tech_building_research_t2"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_building_research_t2
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_building_research_t2"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_building_research_t2 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_building_research_t3_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_building_research_t2"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_building_research_t3
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_building_research_t2"
+			OR = {  
+				has_technology = "tc_tech_building_research_t3"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_building_research_t3
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_building_research_t3"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_building_research_t3 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_building_research_t4_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_building_research_t3"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_building_research_t4
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_building_research_t3"
+			OR = {  
+				has_technology = "tc_tech_building_research_t4"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_building_research_t4
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_building_research_t4"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_building_research_t4 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_celestial_gateway_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_ichor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_celestial_gateway
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_ichor"
+			has_technology = "tech_mega_engineering"
+			OR = {  
+				has_technology = "tc_tech_celestial_gateway"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_celestial_gateway
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_celestial_gateway"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_celestial_gateway 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_charged_ring_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_rune_shield_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_charged_ring
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+			has_technology = "tc_tech_rune_shield_t1"
+			OR = {  
+				has_technology = "tc_tech_charged_ring"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_charged_ring
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_charged_ring"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_charged_ring 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_crimson_rites_effect = {
+	potential = { FROM = { 
+		has_country_flag = tc_crimson_rites_get
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_crimson_rites
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			#has_technology = "tc_tech_eldritch_major"
+			has_country_flag = tc_crimson_rites_get
+			#特殊条件
+			OR = {  
+				has_technology = "tc_tech_crimson_rites"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_crimson_rites
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_crimson_rites"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_crimson_rites 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_5
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_crystal_eye_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t2"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_crystal_eye
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t2"
+			OR = {  
+				has_technology = "tc_tech_crystal_eye"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_crystal_eye
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_crystal_eye"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_crystal_eye 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_crystalline_brain_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t2"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_crystalline_brain
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t2"
+			OR = {  
+				has_technology = "tc_tech_crystalline_brain"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_crystalline_brain
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_crystalline_brain"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_crystalline_brain 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_curative_vat_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_blood_alchemy"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_curative_vat
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_blood_alchemy"
+			OR = {  
+				has_technology = "tc_tech_curative_vat"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_curative_vat
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_curative_vat"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_curative_vat 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_dimensional_lure_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_nethermind"
+		}
+	} }
+	allow = {
+		custom_tooltip = tc_tech_dimensional_lure 
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_nethermind"
+			OR = {  
+				has_technology = "tc_tech_dimensional_lure"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_dimensional_lure
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_dimensional_lure"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_dimensional_lure 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_4
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_eldritch_major_effect = {
+	potential = { FROM = { 
+		#特殊条件
+		OR = {
+			has_technology = "tc_tech_eldritch_minor"
+			has_country_flag = tc_tech_eldritch_major_unlock
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_eldritch_major
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			#特殊条件
+			OR = {
+				AND = {
+					has_technology = "tc_tech_eldritch_minor"
+					has_country_flag = tc_tech_eldritch_major_unlock
+					resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 }
+				}
+				AND= {  
+					has_technology = "tc_tech_eldritch_major"
+				}
+			}
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_eldritch_major
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_eldritch_major"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_eldritch_major 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_eldritch_minor_effect = {
+	potential = { FROM = { 
+		#特殊条件
+		OR = {
+			has_country_flag = tc_tech_eldritch_minor_unlock		
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_eldritch_minor
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			#特殊条件
+			OR = {
+				AND = {
+					has_technology = "tc_tech_alchemical_t2"
+					has_country_flag = tc_tech_eldritch_minor_unlock
+					resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 }
+				}
+				AND = {  
+					has_technology = "tc_tech_eldritch_minor"
+				}
+			}
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_eldritch_minor
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_eldritch_minor"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_eldritch_minor 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_entityl_eye_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_crystal_eye"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_entityl_eye
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_crystal_eye"
+			OR = {  
+				has_technology = "tc_tech_entityl_eye"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_entityl_eye
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_entityl_eye"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_entityl_eye 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_essence_distil_t1_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_essence_distil_t1
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			OR = {  
+				has_technology = "tc_tech_essence_distil_t1"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_essence_distil_t1
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_essence_distil_t1"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_essence_distil_t1 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_essence_distil_t2_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_essence_distil_t1"
+		has_technology = "tc_tech_thaumium_armor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_essence_distil_t2
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_thaumium_armor"
+			OR = {  
+				has_technology = "tc_tech_essence_distil_t2"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_essence_distil_t2
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_essence_distil_t2"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_essence_distil_t2 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_essence_distil_t3_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_essence_distil_t2"
+		has_technology = "tc_tech_void_armor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_essence_distil_t3
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_essence_distil_t2"
+			has_technology = "tc_tech_void_armor"
+			OR = {  
+				has_technology = "tc_tech_essence_distil_t3"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_essence_distil_t3
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_essence_distil_t3"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_essence_distil_t3 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_essentia_condenser_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_essentia_reservoir"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_essentia_condenser
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_essentia_reservoir"
+			OR = {  
+				has_technology = "tc_tech_essentia_condenser"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_essentia_condenser
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_essentia_condenser"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_essentia_condenser 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_essentia_crystallizer_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_essence_distil_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_essentia_crystallizer
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_essentia_crystallizer"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_essentia_crystallizer
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_essentia_crystallizer"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_essentia_crystallizer 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_essentia_dynamo_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_essence_distil_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_essentia_dynamo
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_essentia_dynamo"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_essentia_dynamo
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_essentia_dynamo"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_essentia_dynamo
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_essentia_reservoir_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_void_metal"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_essentia_reservoir
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_void_metal"
+			OR = {  
+				has_technology = "tc_tech_essentia_reservoir"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_essentia_reservoir
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_essentia_reservoir"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_essentia_reservoir 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_1
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_ethereal_bloom_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_ethereal_bloom
+		custom_tooltip = tc_decision_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			OR = {  
+				has_technology = "tc_tech_ethereal_bloom"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_ethereal_bloom
+		custom_tooltip = tc_decision_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_ethereal_bloom"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_ethereal_bloom 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_1
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_golem_core_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_thaum_golem"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_golem_core
+		custom_tooltip = tc_trait_tech_desc
+		FROM = {
+			has_technology = "tc_tech_thaum_golem"
+			OR = {  
+				has_technology = "tc_tech_golem_core"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_golem_core
+		custom_tooltip = tc_trait_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_golem_core"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_golem_core 
+				message = no 
+			}
+			add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_golem_upgrade_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_thaum_golem"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_golem_upgrade
+		custom_tooltip = tc_trait_tech_desc
+		FROM = {
+			has_technology = "tc_tech_thaum_golem"
+			OR = {  
+				has_technology = "tc_tech_golem_upgrade"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_golem_upgrade
+		custom_tooltip = tc_trait_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_golem_upgrade"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_golem_upgrade 
+				message = no 
+			}
+			add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_ichor_effect = {
+	potential = { FROM = { 
+		has_technology = tc_tech_advanced_golem
+		has_technology = tc_tech_alchemical_copy
+		has_technology = tc_tech_alchemical_t1
+		has_technology = tc_tech_alchemical_t2
+		has_technology = tc_tech_alchemical_t3
+		has_technology = tc_tech_alchemical_train
+		has_technology = tc_tech_amulet_emergency
+		has_technology = tc_tech_arcane_stope
+		has_technology = tc_tech_blood_alchemy
+		has_technology = tc_tech_brain_jar
+		has_technology = tc_tech_building_research_t1
+		has_technology = tc_tech_building_research_t2
+		has_technology = tc_tech_building_research_t3
+		has_technology = tc_tech_building_research_t4
+		has_technology = tc_tech_charged_ring
+		has_technology = tc_tech_crystal_eye
+		has_technology = tc_tech_crystalline_brain
+		has_technology = tc_tech_curative_vat
+		has_technology = tc_tech_dimensional_lure
+		has_technology = tc_tech_entityl_eye
+		has_technology = tc_tech_essence_distil_t1
+		has_technology = tc_tech_essence_distil_t2
+		has_technology = tc_tech_essentia_crystallizer
+		has_technology = tc_tech_ethereal_bloom
+		has_technology = tc_tech_golem_core
+		has_technology = tc_tech_golem_upgrade
+		has_technology = tc_tech_infernal_blast_furnace
+		has_technology = tc_tech_infernal_furnace
+		has_technology = tc_tech_infusion
+		has_technology = tc_tech_inspiratron
+		has_technology = tc_tech_kinetic_girdle
+		has_technology = tc_tech_nethermind
+		has_technology = tc_tech_node_stabilizer
+		has_technology = tc_tech_node_transducer
+		has_technology = tc_tech_revitalizing_ring
+		has_technology = tc_tech_rune_shield_t1
+		has_technology = tc_tech_rune_shield_t2
+		has_technology = tc_tech_self_Infusion
+		has_technology = tc_tech_thaum_golem
+		has_technology = tc_tech_thaumium_armor
+		has_technology = tc_tech_think_tank
+		has_technology = tc_tech_vis_storage
+		has_technology = tc_tech_wand_focus_blink
+		has_technology = tc_tech_wand_focus_containment
+		has_technology = tc_tech_wand_focus_crafting
+		has_technology = tc_tech_wand_focus_disintegration
+		has_technology = tc_tech_wand_focus_dislocation
+		has_technology = tc_tech_wand_focus_distortion
+		has_technology = tc_tech_wand_focus_efreet_flame
+		has_technology = tc_tech_wand_focus_ender_rift
+		has_technology = tc_tech_wand_focus_equal_trade
+		has_technology = tc_tech_wand_focus_excavation
+		has_technology = tc_tech_wand_focus_fire
+		has_technology = tc_tech_wand_focus_frost
+		has_technology = tc_tech_wand_focus_illumination
+		has_technology = tc_tech_wand_focus_liquefaction
+		has_technology = tc_tech_wand_focus_lumos
+		has_technology = tc_tech_wand_focus_mage_mace
+		has_technology = tc_tech_wand_focus_mending
+		has_technology = tc_tech_wand_focus_nine_hells
+		has_technology = tc_tech_wand_focus_pech_curse
+		has_technology = tc_tech_wand_focus_portable_hole
+		has_technology = tc_tech_wand_focus_shock
+		has_technology = tc_tech_wand_focus_tainted_blast
+		has_technology = tc_tech_wand_focus_tainted_storm
+		has_technology = tc_tech_wand_focus_telekinesis
+		has_technology = tc_tech_wand_focus_uprising
+		has_technology = tc_tech_wand_focus_vis_shard
+		has_technology = tc_tech_wand_focus_warding
+		has_technology = tc_tech_wand_focus_wrench
+		has_technology = tc_tech_osmotic_enchanter
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_ichor
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			custom_tooltip = {
+				fail_text = "tc_tech_ichor_allow"
+				AND = {
+					has_technology = tc_tech_advanced_golem
+					has_technology = tc_tech_alchemical_copy
+					has_technology = tc_tech_alchemical_t1
+					has_technology = tc_tech_alchemical_t2
+					has_technology = tc_tech_alchemical_t3
+					has_technology = tc_tech_alchemical_train
+					has_technology = tc_tech_amulet_emergency
+					has_technology = tc_tech_arcane_stope
+					has_technology = tc_tech_blood_alchemy
+					has_technology = tc_tech_brain_jar
+					has_technology = tc_tech_building_research_t1
+					has_technology = tc_tech_building_research_t2
+					has_technology = tc_tech_building_research_t3
+					has_technology = tc_tech_building_research_t4
+					has_technology = tc_tech_charged_ring
+					has_technology = tc_tech_crystal_eye
+					has_technology = tc_tech_crystalline_brain
+					has_technology = tc_tech_curative_vat
+					has_technology = tc_tech_dimensional_lure
+					has_technology = tc_tech_entityl_eye
+					has_technology = tc_tech_essence_distil_t1
+					has_technology = tc_tech_essence_distil_t2
+					has_technology = tc_tech_essentia_crystallizer
+					has_technology = tc_tech_ethereal_bloom
+					has_technology = tc_tech_golem_core
+					has_technology = tc_tech_golem_upgrade
+					has_technology = tc_tech_infernal_blast_furnace
+					has_technology = tc_tech_infernal_furnace
+					has_technology = tc_tech_infusion
+					has_technology = tc_tech_inspiratron
+					has_technology = tc_tech_kinetic_girdle
+					has_technology = tc_tech_nethermind
+					has_technology = tc_tech_node_stabilizer
+					has_technology = tc_tech_node_transducer
+					has_technology = tc_tech_revitalizing_ring
+					has_technology = tc_tech_rune_shield_t1
+					has_technology = tc_tech_rune_shield_t2
+					has_technology = tc_tech_self_Infusion
+					has_technology = tc_tech_thaum_golem
+					has_technology = tc_tech_thaumium_armor
+					has_technology = tc_tech_think_tank
+					has_technology = tc_tech_vis_storage
+					has_technology = tc_tech_wand_focus_blink
+					has_technology = tc_tech_wand_focus_containment
+					has_technology = tc_tech_wand_focus_crafting
+					has_technology = tc_tech_wand_focus_disintegration
+					has_technology = tc_tech_wand_focus_dislocation
+					has_technology = tc_tech_wand_focus_distortion
+					has_technology = tc_tech_wand_focus_efreet_flame
+					has_technology = tc_tech_wand_focus_ender_rift
+					has_technology = tc_tech_wand_focus_equal_trade
+					has_technology = tc_tech_wand_focus_excavation
+					has_technology = tc_tech_wand_focus_fire
+					has_technology = tc_tech_wand_focus_frost
+					has_technology = tc_tech_wand_focus_illumination
+					has_technology = tc_tech_wand_focus_liquefaction
+					has_technology = tc_tech_wand_focus_lumos
+					has_technology = tc_tech_wand_focus_mage_mace
+					has_technology = tc_tech_wand_focus_mending
+					has_technology = tc_tech_wand_focus_nine_hells
+					has_technology = tc_tech_wand_focus_pech_curse
+					has_technology = tc_tech_wand_focus_portable_hole
+					has_technology = tc_tech_wand_focus_shock
+					has_technology = tc_tech_wand_focus_tainted_blast
+					has_technology = tc_tech_wand_focus_tainted_storm
+					has_technology = tc_tech_wand_focus_telekinesis
+					has_technology = tc_tech_wand_focus_uprising
+					has_technology = tc_tech_wand_focus_vis_shard
+					has_technology = tc_tech_wand_focus_warding
+					has_technology = tc_tech_wand_focus_wrench
+					has_technology = tc_tech_osmotic_enchanter
+				}
+			}
+			OR = {  
+				has_technology = "tc_tech_ichor"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_ichor
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_ichor"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_ichor 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_5
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_ichor_cloth_armor_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_ichor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_ichor_cloth_armor
+		custom_tooltip = tc_armor_tech_desc
+		FROM = {
+			has_technology = "tc_tech_ichor"
+			has_technology = "tc_tech_void_armor"
+			OR = {  
+				has_technology = "tc_tech_ichor_cloth_armor"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_ichor_cloth_armor
+		custom_tooltip = tc_armor_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_ichor_cloth_armor"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_ichor_cloth_armor 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_infernal_blast_furnace_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_infernal_furnace"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_infernal_blast_furnace
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_infernal_furnace"
+			OR = {  
+				has_technology = "tc_tech_infernal_blast_furnace"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_infernal_blast_furnace
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_infernal_blast_furnace"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_infernal_blast_furnace 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_infernal_furnace_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_essence_distil_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_infernal_furnace
+		custom_tooltip = tc_building_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_infernal_furnace"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_infernal_furnace
+		custom_tooltip = tc_building_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_infernal_furnace"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_infernal_furnace 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_1
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_infusion_effect = {
+	potential = { FROM = { 
+		has_technology = "tc_tech_alchemical_t1"
+		has_technology = "tc_tech_essence_distil_t1"
+		has_technology = "tc_tech_brain_jar"
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_infusion
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_infusion"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_infusion
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_infusion"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_infusion 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_inspiratron_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_think_tank"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_inspiratron
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_think_tank"
+			OR = {  
+				has_technology = "tc_tech_inspiratron"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_inspiratron
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_inspiratron"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_inspiratron 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_kami_helm_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_ichor_cloth_armor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_kami_helm
+		custom_tooltip = tc_army_tech_desc
+		FROM = {
+			has_technology = "tc_tech_ichor_cloth_armor"
+			OR = {  
+				has_technology = "tc_tech_kami_helm"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_kami_helm
+		custom_tooltip = tc_army_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_kami_helm"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_kami_helm 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_kinetic_girdle_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_rune_shield_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_kinetic_girdle
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+			has_technology = "tc_tech_rune_shield_t1"
+			OR = {  
+				has_technology = "tc_tech_kinetic_girdle"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_kinetic_girdle
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_kinetic_girdle"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_kinetic_girdle 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_nethermind_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_crystalline_brain"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_nethermind
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_crystalline_brain"
+			has_technology = "tc_tech_infusion"
+			has_technology = "tech_mega_engineering"
+			OR = {  
+				has_technology = "tc_tech_nethermind"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_nethermind
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_nethermind"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_nethermind 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_node_stabilizer_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_infusion"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_node_stabilizer
+		custom_tooltip = tc_key_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_infusion"
+			OR = {  
+				has_technology = "tc_tech_node_stabilizer"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_node_stabilizer
+		custom_tooltip = tc_key_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_node_stabilizer"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_node_stabilizer 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_node_transducer_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_node_stabilizer"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_node_transducer
+		custom_tooltip = tc_utilitie_tech_desc
+		custom_tooltip = tc_building_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_node_stabilizer"
+			OR = {  
+				has_technology = "tc_tech_node_transducer"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_node_transducer
+		custom_tooltip = tc_utilitie_tech_desc
+		custom_tooltip = tc_building_tech_desc
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_node_transducer"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_node_transducer 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_opening_eye_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_crimson_rites"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_opening_eye
+		custom_tooltip = tc_tech_opening_eye_tip
+		FROM = {
+			has_technology = "tc_tech_crimson_rites"
+			has_technology = "tc_tech_void_metal"
+			OR = {  
+				has_technology = "tc_tech_opening_eye"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_opening_eye
+		custom_tooltip = tc_tech_opening_eye_tip
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_opening_eye"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_opening_eye 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_5
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_outer_lands_effect = {
+	potential = { FROM = { 
+		has_country_flag = tc_ol_ancient_gate_detection
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_outer_lands
+		custom_tooltip = tc_buff_tech_desc
+		FROM = {
+			has_technology = "tc_tech_opening_eye"
+			OR = {  
+				has_technology = "tc_tech_outer_lands"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_outer_lands
+		custom_tooltip = tc_buff_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_outer_lands"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_outer_lands 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_planar_vortex_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_vortex_attenuator"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_planar_vortex
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_vortex_attenuator"
+			OR = {  
+				has_technology = "tc_tech_planar_vortex"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_planar_vortex
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_planar_vortex"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_planar_vortex
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_primordial_helm_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_primordial_pearl"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_primordial_helm
+		custom_tooltip = tc_army_tech_desc
+		FROM = {
+			has_technology = "tc_tech_primordial_pearl"
+			has_technology = "tc_tech_void_armor"
+			OR = {  
+				has_technology = "tc_tech_primordial_helm"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_primordial_helm
+		custom_tooltip = tc_army_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_primordial_helm"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_primordial_helm 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_primordial_pearl_effect = {
+	potential = { FROM = { 
+		OR = {
+			AND = {
+				has_country_flag = "tc_has_primal_pearl"
+				has_technology = "tc_tech_opening_eye"
+			}
+			has_technology = "tc_tech_primordial_pearl"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_primordial_pearl
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			has_technology = "tc_tech_opening_eye"
+			OR = {  
+				has_technology = "tc_tech_primordial_pearl"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_primordial_pearl
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_primordial_pearl"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_primordial_pearl 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_1
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_revitalizing_ring_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_rune_shield_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_revitalizing_ring
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+			has_technology = "tc_tech_rune_shield_t1"
+			OR = {  
+				has_technology = "tc_tech_revitalizing_ring"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_revitalizing_ring
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_revitalizing_ring"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_revitalizing_ring 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_rune_shield_t1_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_infusion"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_rune_shield_t1
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+			has_technology = "tc_tech_infusion"
+			OR = {  
+				has_technology = "tc_tech_rune_shield_t1"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_rune_shield_t1
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_rune_shield_t1"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_rune_shield_t1 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_rune_shield_t2_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_rune_shield_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_rune_shield_t2
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+			has_technology = "tc_tech_rune_shield_t1"
+			OR = {  
+				has_technology = "tc_tech_rune_shield_t2"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_rune_shield_t2
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_rune_shield_t2"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_rune_shield_t2 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_rune_shield_t3_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_rune_shield_t2"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_rune_shield_t3
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+			has_technology = "tc_tech_rune_shield_t2"
+			has_technology = "tc_tech_void_metal"
+			has_technology = "tc_tech_primordial_pearl"
+			OR = {  
+				has_technology = "tc_tech_rune_shield_t3"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_rune_shield_t3
+		custom_tooltip = tc_shield_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_rune_shield_t3"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_rune_shield_t3 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_4
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_self_Infusion_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_curative_vat"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_self_Infusion
+		custom_tooltip = tc_trait_tech_desc
+		FROM = {
+			has_technology = "tc_tech_curative_vat"
+			has_technology = "tc_tech_infusion"
+			OR = {  
+				has_technology = "tc_tech_self_Infusion"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_self_Infusion
+		custom_tooltip = tc_trait_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_self_Infusion"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_self_Infusion 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_5
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_shard_of_creation_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_primordial_pearl"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_shard_of_creation
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			has_technology = "tc_tech_primordial_pearl"
+			OR = {  
+				has_technology = "tc_tech_shard_of_creation"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_shard_of_creation
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_shard_of_creation"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_shard_of_creation 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_4
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_thaum_golem_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_thaum_golem
+		custom_tooltip = tc_tech_thaum_golem_tip
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_thaum_golem"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_thaum_golem
+		custom_tooltip = tc_tech_thaum_golem_tip
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_thaum_golem"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_thaum_golem 
+				message = no 
+			}
+			#country_event = { #转移至action
+			#	id = tc_research_ui.50
+			#	days = 1
+			#}
+			add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_thaumium_armor_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_thaumium_armor
+		custom_tooltip = tc_armor_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_thaumium_armor"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_thaumium_armor
+		custom_tooltip = tc_armor_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_thaumium_armor"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_thaumium_armor 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_think_tank_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_brain_jar"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_think_tank
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t1"
+			has_technology = "tc_tech_essence_distil_t1"
+			has_technology = "tc_tech_brain_jar"
+			OR = {  
+				has_technology = "tc_tech_think_tank"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_think_tank
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_think_tank"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_think_tank 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_transduction_amplifier_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_node_transducer"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_transduction_amplifier
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_node_transducer"
+			has_technology = "tc_tech_void_metal"
+			OR = {  
+				has_technology = "tc_tech_transduction_amplifier"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_transduction_amplifier
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_transduction_amplifier"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_transduction_amplifier 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_vis_storage_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_node_transducer"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_vis_storage
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_node_transducer"
+			OR = {  
+				has_technology = "tc_tech_vis_storage"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_vis_storage
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_vis_storage"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_vis_storage 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_void_armor_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_void_metal"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_void_armor
+		custom_tooltip = tc_armor_tech_desc
+		FROM = {
+			has_technology = "tc_tech_void_metal"
+			has_technology = "tc_tech_thaumium_armor"
+			OR = {  
+				has_technology = "tc_tech_void_armor"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_void_armor
+		custom_tooltip = tc_armor_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_void_armor"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_void_armor 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_void_metal_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_eldritch_minor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_void_metal
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			has_technology = "tc_tech_eldritch_minor"
+			has_technology = "tc_tech_alchemical_t1"
+			OR = {  
+				has_technology = "tc_tech_void_metal"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_void_metal
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_void_metal"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_void_metal 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_1
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_vortex_attenuator_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_transduction_amplifier"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_vortex_attenuator
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_transduction_amplifier"
+			OR = {  
+				has_technology = "tc_tech_vortex_attenuator"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_vortex_attenuator
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_vortex_attenuator"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_vortex_attenuator 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_animation_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_primordial_pearl"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_animation
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_primordial_pearl"
+			has_technology = "tc_tech_wand_focus_primal"
+			has_technology = "tc_tech_curative_vat"
+			has_technology = "tc_tech_thaum_golem"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_animation"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_animation
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_animation"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_animation 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_4
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_blink_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_portable_hole"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_blink
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_portable_hole"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_blink"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_blink
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_blink"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_blink 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_containment_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_portable_hole"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_containment
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_portable_hole"
+			has_technology = "tc_tech_curative_vat"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_containment"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_containment
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_containment"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_containment 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_crafting_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_mending"
+		has_technology = "tc_tech_wand_focus_wrench"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_crafting
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_mending"
+			has_technology = "tc_tech_wand_focus_wrench"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_crafting"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_crafting
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_crafting"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_crafting 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_disintegration_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_frost"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_disintegration
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_frost"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_disintegration"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_disintegration
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_disintegration"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_disintegration 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_dislocation_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_telekinesis"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_dislocation
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_telekinesis"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_dislocation"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_dislocation
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_dislocation"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_dislocation 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_distortion_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_telekinesis"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_distortion
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_telekinesis"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_distortion"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_distortion
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_distortion"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_distortion 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_1
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_efreet_flame_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_excavation"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_efreet_flame
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_excavation"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_efreet_flame"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_efreet_flame
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_efreet_flame"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_efreet_flame 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_eldritch_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_primordial_pearl"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_eldritch
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_primordial_pearl"
+			has_technology = "tc_tech_wand_focus_primal"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_eldritch"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_eldritch
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_eldritch"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_eldritch 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_4
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_ender_rift_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_portable_hole"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_ender_rift
+		custom_tooltip = tc_starbase_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_portable_hole"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_ender_rift"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_ender_rift
+		custom_tooltip = tc_starbase_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_ender_rift"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_ender_rift 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_1
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_equal_trade_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_fire"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_equal_trade
+		custom_tooltip = tc_aux_tech_desc
+		custom_tooltip = tc_starbase_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_equal_trade"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_equal_trade
+		custom_tooltip = tc_aux_tech_desc
+		custom_tooltip = tc_starbase_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_equal_trade"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_equal_trade 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_excavation_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_fire"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_excavation
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_excavation"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_excavation
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_excavation"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_excavation 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_experience_drain_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_ichor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_experience_drain
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_equal_trade"
+			has_technology = "tc_tech_ichor"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_experience_drain"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_experience_drain
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_experience_drain"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_experience_drain 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_fire_effect = {
+	potential = { FROM = { 
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_fire
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_infusion"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_fire"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_fire
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_fire"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_fire 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_frost_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_fire"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_frost
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_frost"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_frost
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_frost"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_frost 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_illumination_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_fire"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_illumination
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_illumination"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_illumination
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_illumination"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_illumination 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_liquefaction_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_efreet_flame"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_liquefaction
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_efreet_flame"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_liquefaction"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_liquefaction
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_liquefaction"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_liquefaction 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_lumos_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_illumination"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_lumos
+		custom_tooltip = tc_aura_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_illumination"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_lumos"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		}
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_lumos
+		custom_tooltip = tc_aura_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_lumos"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_lumos 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_mage_mace_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_frost"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_mage_mace
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_frost"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_mage_mace"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_mage_mace
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_mage_mace"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_mage_mace 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_mending_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_pech_curse"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_mending
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_pech_curse"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_mending"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_mending
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_mending"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_mending 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_nine_hells_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_fire"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_nine_hells
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_nine_hells"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_nine_hells
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_nine_hells"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_nine_hells 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_pech_curse_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_fire"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_pech_curse
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_pech_curse"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_pech_curse
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_pech_curse"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_pech_curse 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_portable_hole_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_fire"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_portable_hole
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_portable_hole"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_portable_hole
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_portable_hole"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_portable_hole 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_primal_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_eldritch_minor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_primal
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_eldritch_minor"
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_primal"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		}
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_primal
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_primal"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_primal 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_recall_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_celestial_gateway"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_recall
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_blink"
+			has_technology = "tc_tech_celestial_gateway"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_recall"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_recall
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_recall"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_recall 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_shadowbeam_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_ichor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_shadowbeam
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_ichor"
+			has_technology = "tc_tech_wand_focus_primal"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_shadowbeam"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		}
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_shadowbeam
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_shadowbeam"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_shadowbeam 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_4
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_shock_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_fire"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_shock
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_fire"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_shock"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_shock
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_shock"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t3 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_shock 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t3 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_tainted_blast_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_tainted_storm"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_tainted_blast
+		custom_tooltip = tc_aura_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_tainted_storm"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_tainted_blast"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_tainted_blast
+		custom_tooltip = tc_aura_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_tainted_blast"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_tainted_blast 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_tainted_storm_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_pech_curse"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_tainted_storm
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_pech_curse"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_tainted_storm"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_tainted_storm
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_tainted_storm"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_tainted_storm 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_telekinesis_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_shock"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_telekinesis
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_shock"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_telekinesis"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_telekinesis
+		custom_tooltip = tc_utilitie_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_telekinesis"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_telekinesis 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_time_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_shard_of_creation"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_time
+		custom_tooltip = tc_aura_tech_desc
+		FROM = {
+			has_technology = "tc_tech_shard_of_creation"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_time"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_time
+		custom_tooltip = tc_aura_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_time"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_time 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_5
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_uprising_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_telekinesis"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_uprising
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_telekinesis"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_uprising"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_uprising
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_uprising"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_uprising 
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_vis_shard_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_frost"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_vis_shard
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_frost"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_vis_shard"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_vis_shard
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_vis_shard"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_vis_shard 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_1
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_warding_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_warded_arcana"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_warding
+		custom_tooltip = tc_aux_tech_desc
+		custom_tooltip = tc_starbase_tech_desc
+		FROM = {
+			has_technology = "tc_tech_warded_arcana"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_warding"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_warding
+		custom_tooltip = tc_aux_tech_desc
+		custom_tooltip = tc_starbase_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_warding"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_warding 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_2
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_weather_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_shard_of_creation"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_weather
+		custom_tooltip = tc_aura_tech_desc
+		FROM = {
+			has_technology = "tc_tech_shard_of_creation"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_weather"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		}
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_weather
+		custom_tooltip = tc_aura_tech_desc
+		FROM = {
+		if = { 
+			limit = { 
+				NOT = { 
+					has_technology = "tc_tech_wand_focus_weather"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_weather 
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_5
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_wand_focus_wrench_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_wand_focus_equal_trade"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_wand_focus_wrench
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+			has_technology = "tc_tech_wand_focus_equal_trade"
+			OR = {  
+				has_technology = "tc_tech_wand_focus_wrench"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_wand_focus_wrench
+		custom_tooltip = tc_aux_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_wand_focus_wrench"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_wand_focus_wrench
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_warded_arcana_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_thaumium_armor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_warded_arcana
+		custom_tooltip = tc_buff_tech_desc
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+			has_technology = "tc_tech_thaumium_armor"
+			OR = {  
+				has_technology = "tc_tech_warded_arcana"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = { 
+		custom_tooltip = tc_tech_warded_arcana
+		custom_tooltip = tc_buff_tech_desc
+		custom_tooltip = tc_key_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_warded_arcana"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_warded_arcana
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_osmotic_enchanter_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_infusion"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_osmotic_enchanter
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tech_mega_engineering"
+			has_technology = "tc_tech_infusion"
+			OR = {  
+				has_technology = "tc_tech_osmotic_enchanter"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_osmotic_enchanter
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_osmotic_enchanter"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_osmotic_enchanter
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_thauminite_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_thaumium_armor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_thauminite
+		custom_tooltip = tc_hull_tech_desc
+		FROM = {
+			has_technology = "tc_tech_thaumium_armor"
+			OR = {  
+				has_technology = "tc_tech_thauminite"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_thauminite
+		custom_tooltip = tc_hull_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_thauminite"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			}
+			give_technology = { 
+				tech = tc_tech_thauminite
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+
+tc_tech_shadow_metal_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_void_armor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_shadow_metal
+		custom_tooltip = tc_hull_tech_desc
+		FROM = {
+			has_technology = "tc_tech_void_armor"
+			OR = {  
+				has_technology = "tc_tech_shadow_metal"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_shadow_metal
+		custom_tooltip = tc_hull_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_shadow_metal"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_shadow_metal
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_3
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_sanity_checker_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_eldritch_minor"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_sanity_checker
+		custom_tooltip = tc_tech_sanity_checker_tip
+		FROM = {
+			has_technology = "tc_tech_eldritch_minor"
+			OR = {  
+				has_technology = "tc_tech_sanity_checker"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		}
+	}
+	effect = {
+		custom_tooltip = tc_tech_sanity_checker
+		custom_tooltip = tc_tech_sanity_checker_tip
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_sanity_checker"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_sanity_checker
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_purifying_bath_salts_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_alchemical_t2"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_purifying_bath_salts
+		custom_tooltip = tc_edict_tech_desc
+		FROM = {
+			has_technology = "tc_tech_alchemical_t2"
+			OR = {  
+				has_technology = "tc_tech_purifying_bath_salts"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_purifying_bath_salts
+		custom_tooltip = tc_edict_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_purifying_bath_salts"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_purifying_bath_salts
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_flux_scrubber_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_essence_distil_t1"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_flux_scrubber
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+			has_technology = "tc_tech_essence_distil_t1"
+			OR = {  
+				has_technology = "tc_tech_flux_scrubber"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_flux_scrubber
+		custom_tooltip = tc_building_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_flux_scrubber"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_flux_scrubber
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_scanner_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_building_research_t1"
+		has_technology = "tc_tech_brain_jar"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_scanner
+		custom_tooltip = tc_tech_scanner_tip
+		FROM = {
+			has_technology = "tc_tech_building_research_t1"
+			OR = {  
+				has_technology = "tc_tech_scanner"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_scanner
+		custom_tooltip = tc_tech_scanner_tip
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_scanner"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t2 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_scanner
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t2 }
+			#country_event = { #转移至action
+			#	id = tc_relic.16
+			#	days = 10
+			#}
+			}
+		else = { } }
+		}
+	}
+tc_tech_order_mind_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_crystalline_brain"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_order_mind
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_crystalline_brain"
+			has_technology = "tc_tech_building_research_t2"
+			has_technology = "tech_mega_engineering"
+			OR = {  
+				has_technology = "tc_tech_order_mind"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_order_mind
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_order_mind"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t4 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_order_mind
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t4 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_pocket_planar_effect = {
+	potential = { FROM = { 
+		has_technology = "tc_tech_planar_vortex"
+		has_technology = "tc_tech_primordial_pearl"
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_pocket_planar
+		custom_tooltip = tc_tech_pocket_planar_tip
+		FROM = {
+			has_technology = "tc_tech_planar_vortex"
+			has_technology = "tc_tech_primordial_pearl"
+			OR = {  
+				has_technology = "tc_tech_pocket_planar"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_pocket_planar
+		custom_tooltip = tc_tech_pocket_planar_tip
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_pocket_planar"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t6 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_pocket_planar
+				message = no 
+			}
+			change_variable = {
+				which = tc_warp
+				value = @tc_warp_risk_4
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t6 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_auto_bow_effect = {
+	potential = { FROM = { 
+		OR = {
+		has_technology = "tc_tech_infusion"
+		}
+	} }
+	allow = { 
+		custom_tooltip = tc_tech_auto_bow
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+			has_technology = "tc_tech_infusion"
+			OR = {  
+				has_technology = "tc_tech_auto_bow"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } }
+		} 
+	}
+	effect = {
+		custom_tooltip = tc_tech_auto_bow
+		custom_tooltip = tc_weapon_tech_desc
+		FROM = {
+		if = {
+			limit = {
+				NOT = {
+					has_technology = "tc_tech_auto_bow"
+				}
+			resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t1 } 
+			}
+			create_message = {
+				type = "TC_MESSAGE_RESEARCH"
+				localization = "tc_message_research_complete"
+				days = 1
+				target = THIS
+			} 
+			give_technology = { 
+				tech = tc_tech_auto_bow
+				message = no 
+			}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t1 }
+			}
+		else = { } }
+		}
+	}
+tc_tech_weath_cage_effect = {
+	potential = { FROM = {
+		has_technology = "tech_mega_engineering"
+		has_technology = "tc_tech_void_metal"
+	} }
+	allow = {
+		custom_tooltip = tc_tech_weath_cage
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			has_technology = "tc_tech_void_metal"
+			OR = {
+				has_technology = "tc_tech_weath_cage"
+				resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 } }
+		}
+	}
+	effect = {
+		custom_tooltip = tc_tech_weath_cage
+		custom_tooltip = tc_megastructure_tech_desc
+		FROM = {
+			if = {
+				limit = {
+					NOT = {
+						has_technology = "tc_tech_weath_cage"
+					}
+					resource_stockpile_compare = { resource = "tc_knowledge_fragment" value >= @tc_knowledge_detect_t5 }
+				}
+				create_message = {
+					type = "TC_MESSAGE_RESEARCH"
+					localization = "tc_message_research_complete"
+					days = 1
+					target = THIS
+				}
+				give_technology = {
+					tech = tc_tech_weath_cage
+					message = no
+				}
+				add_resource = { tc_knowledge_fragment = @tc_knowledge_cost_t5 }
+			}
+			else = { } }
+	}
+}

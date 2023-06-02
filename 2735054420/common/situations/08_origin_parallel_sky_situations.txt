@@ -1,0 +1,151 @@
+situation_parallel_sky_holiday = {
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_negative
+	picture = GFX_evt_shroud_tunnel
+	
+	abort_trigger = {
+		NAND = {
+			exists = event_target:parallel_sky_country
+			event_target:parallel_sky_country = {
+				NOT = {
+					has_country_flag = parallel_sky_war
+				}
+			}
+			owner = {
+				any_owned_planet = {
+					is_same_value = event_target:parallel_sky_planet
+					is_colony = yes
+				}
+			}
+		}
+	}
+	
+	on_abort = {
+		hidden_effect = {
+			situation_event = { id = parallel_sky.97 }
+		}
+	}
+	
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 20
+		}
+		stage_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = parallel_sky.92 }
+			}
+			end = 40
+		}
+		stage_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = parallel_sky.93 }
+			}
+			end = 60
+		}
+		stage_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = parallel_sky.94 }
+			}
+			end = 80
+		}
+		stage_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			on_first_enter = {
+				situation_event = { id = parallel_sky.95 }
+			}
+			end = 100
+		}
+	}
+	
+	on_progress_complete = {
+		custom_tooltip = situation_parallel_sky_complete_effect
+		hidden_effect = {
+			situation_event = { id = parallel_sky.96 }
+		}
+	}
+	
+	on_fail = {
+		custom_tooltip = situation_parallel_sky_fail_effect
+		hidden_effect = {
+			situation_event = { id = parallel_sky.97 }
+		}
+	}
+	
+	approach = {
+		name = approach_default
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = leviathan_celebration_do_nothing_effect
+		}
+		ai_weight = {
+			base = 5
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 5
+			}
+		}
+	}
+	
+	approach = {
+		name = approach_encourage
+		icon = GFX_situation_approach_amenities
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = leviathan_celebration_encourage_effect
+		}
+		ai_weight = {
+			base = 10
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 25
+			}
+		}
+	}
+	
+	approach = {
+		name = approach_discourage
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = leviathan_celebration_discourage_effect
+		}
+		ai_weight = {
+			base = 1
+		}
+	}
+	
+	monthly_progress = {
+		base = 4
+		modifier = {
+			add = 2
+			desc = string_current_approach
+			current_situation_approach = approach_encourage
+		}
+		modifier = {
+			add = -8
+			desc = string_current_approach
+			current_situation_approach = approach_discourage
+		}
+	}
+}

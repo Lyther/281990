@@ -1,0 +1,49 @@
+dimension_traveler_horror_modifier_time = {
+	# good为30，bad为15
+	base = @dimension_traveler_horror_modifier_$TYPE$
+	modifier = {
+		multiply = 2
+		# 负相界旅者：x2
+		has_policy_flag = horror_dimension_traveler
+	}
+	modifier = {
+		multiply = 2
+		# 超越因果+负相奥秘：2倍
+		has_country_flag = dimension_traveler_end
+		has_ascension_perk = ap_horror
+	}
+	modifier = {
+		multiply = 1.5
+		# 超越因果+负相奥秘+时空因果：3倍
+		has_country_flag = dimension_traveler_end
+		has_ascension_perk = ap_time
+	}
+	modifier = {
+		multiply = 2
+		# 始终因果：2倍
+		NOT = { has_country_flag = dimension_traveler_end }
+	}
+}
+
+messenger_network_value = {
+	base = 1
+	add = modifier:messenger_network
+	min = 1
+}
+
+dimension_traveler_trait_skill_value = {
+	base = 1
+	multiply = trigger:has_skill
+	multiply = owner.value:messenger_network_value
+}
+
+dimension_traveler_trait_horror_secret_value = {
+	base = 1
+	multiply = owner.value:messenger_network_value
+}
+
+dimension_traveler_trait_horror_secret_true_value = {
+	base = 1
+	multiply = value:num_akx_leader_trait_value
+	multiply = owner.value:messenger_network_value
+}

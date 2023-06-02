@@ -1,0 +1,1599 @@
+namespace = tc_weapon
+###综合战斗事件触发
+#战斗开始 添加标签并触发判断事件
+# on_entering_battle
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = tc_weapon.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+
+	immediate = {
+		FROMFROM = {
+			every_owned_ship = {
+				limit = {
+					is_in_combat = yes
+					OR = {
+						has_component = TC_WAND_FOCUS_TAINTED_BLAST_TITAN 
+						has_component = TC_WAND_FOCUS_TAINTED_BLAST 
+						has_component = TC_REVITALIZING_RING
+						has_component = TC_REVITALIZING_RING_STRENG
+						has_component = TC_REVITALIZING_RING_VOID
+						has_component = TC_AMULET_EMERGENCY	
+						has_component = TC_AMULET_EMERGENCY_STRENG
+						has_component = TC_AMULET_EMERGENCY_VOID
+						has_component = TC_KINETIC_GIRDLE
+						has_component = TC_KINETIC_GIRDLE_STRENG
+						has_component = TC_KINETIC_GIRDLE_VOID
+						has_component = TC_WAND_FOCUS_TIME
+						has_component = TC_WAND_FOCUS_WEATHER
+						has_component = TC_WAND_FOCUS_ELDRITCH
+						has_component = TC_LIGHTING_SPHERE
+						AND = {
+							is_ship_class = shipclass_starbase
+							starbase = {
+								has_starbase_building = tc_wand_focus_warding_building
+							}
+						}
+						is_ship_size = tc_juggernaut_ship
+					}
+				}
+				set_ship_flag = tc_combat_ship
+				ship_event = {
+					id = tc_weapon.2
+				}
+			}
+		}
+	}
+}
+
+#战斗中 循环判断条件
+ship_event = {
+	id = tc_weapon.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+
+	immediate = {
+		#循环触发
+		if = {
+			limit = {
+				has_ship_flag = tc_combat_ship
+			}
+			ship_event = {
+				id = tc_weapon.2
+				days = 1
+			}
+		}
+		#腐化冲击-泰坦
+		if = {
+			limit = {
+				has_component = TC_WAND_FOCUS_TAINTED_BLAST_TITAN
+				NOT = {
+					has_ship_flag = tc_tainted_blast_titan_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_tainted_blast_titan_cooldown
+				days = 30
+			}
+			owner = {
+				create_fleet = {
+					name = "NAME_tc_tainted_blast"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = ROOT.owner
+						create_ship = {
+							name = "NAME_tc_tainted_blast"
+							design = "NAME_tc_tainted_blast_aura_titan"
+							prefix = no
+						}
+						set_event_locked = yes
+						set_location = ROOT
+						fleet_event = {
+							id = tc_weapon.5
+							days = 3
+						}
+					}
+				}					
+			}
+		}
+		#腐化冲击-主宰
+		if = {
+			limit = {
+				has_component = TC_WAND_FOCUS_TAINTED_BLAST
+				NOT = {
+					has_ship_flag = tc_tainted_blast_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_tainted_blast_cooldown
+				days = 30
+			}
+			owner = {
+				create_fleet = {
+					name = "NAME_tc_tainted_blast"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = ROOT.owner
+						create_ship = {
+							name = "NAME_tc_tainted_blast"
+							design = "NAME_tc_tainted_blast_aura"
+							prefix = no
+						}
+						set_event_locked = yes
+						set_location = ROOT
+						fleet_event = {
+							id = tc_weapon.5
+							days = 3
+						}
+					}
+				}					
+			}
+		}
+		#再充能护盾
+		if = {
+			limit = {
+				OR = {
+					has_component = TC_REVITALIZING_RING
+					has_component = TC_REVITALIZING_RING_STRENG
+					has_component = TC_REVITALIZING_RING_VOID
+				}
+				has_hp_percentage < 0.95
+				NOT = {
+					has_ship_flag = tc_revitalizing_ring_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_revitalizing_ring_cooldown
+				days = 120
+			}
+			add_modifier = {
+				modifier = tc_revitalizing_ring_modifier
+				days = 10
+			}
+		}
+		#应急护盾
+		if = {
+			limit = {
+				OR = {
+					has_component = TC_AMULET_EMERGENCY	
+					has_component = TC_AMULET_EMERGENCY_STRENG
+					has_component = TC_AMULET_EMERGENCY_VOID	
+				}
+
+				has_hp_percentage < 0.95
+				NOT = {
+					has_ship_flag = tc_amulet_emergency_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_amulet_emergency_cooldown
+				days = 120
+			}
+			add_modifier = {
+				modifier = tc_amulet_emergency_modifier
+				days = 10
+			}
+		}
+		#冲击护盾
+		if = {
+			limit = {
+				OR = {
+					has_component = TC_KINETIC_GIRDLE
+					has_component = TC_KINETIC_GIRDLE_STRENG
+					has_component = TC_KINETIC_GIRDLE_VOID					
+				}
+
+				has_hp_percentage < 0.95
+				NOT = {
+					has_ship_flag = tc_kinetic_girdle_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_kinetic_girdle_cooldown
+				days = 120
+			}
+			owner = {
+				create_fleet = {
+					name = "NAME_tc_kinetic_girdle_aura"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = ROOT.owner
+						create_ship = {
+							name = "NAME_tc_kinetic_girdle_aura"
+							design = "NAME_tc_kinetic_girdle_aura"
+							prefix = no
+						}
+						set_event_locked = yes
+						fleet_event = {
+							id = tc_weapon.5
+							days = 3
+						}
+						set_location = ROOT
+					}
+				}					
+			}
+		}
+		#守护核心模块
+		if = {
+			limit = {
+				is_ship_class = shipclass_starbase
+				is_in_combat = yes
+				#OR = {
+				#	is_ship_size = starbase_outpost
+				#	is_ship_size = starbase_starport
+				#	is_ship_size = starbase_starhold
+				#	is_ship_size = starbase_starfortress
+				#	is_ship_size = starbase_citadel
+				#}
+				has_component = TC_WAND_FOCUS_WARDING_AURA_STARBASE
+				#starbase = {
+				#	has_starbase_building = tc_wand_focus_warding_building
+				#}
+				fleet = {
+					any_owned_ship = {
+						is_ship_class = shipclass_military_station
+						is_disabled = no
+					}
+				}
+			}
+			repair_ship = yes
+		}
+		#邪术核心
+		if = {
+			limit = {
+				has_component = TC_WAND_FOCUS_ELDRITCH
+				NOT = {
+					has_ship_flag = tc_eldritch_shadow_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_eldritch_shadow_cooldown
+				days = 30
+			}
+			owner = {
+				create_fleet = {
+					name = "-"
+					settings = {
+						spawn_debris = no
+						can_upgrade = no
+						can_change_leader = no
+						uses_naval_capacity = no
+					}
+					effect = {
+						set_owner = ROOT.owner
+						set_fleet_stance = aggressive
+						create_ship = {
+							name = "NAME_tc_eldritch_shadow"
+							design = "NAME_tc_eldritch_shadow"
+							prefix = no
+							effect = {
+								#set_disable_at_health = 0.01
+								add_modifier = {
+									modifier = tc_not_flee
+								}
+								set_ship_flag = tc_not_animation_target
+							}
+						}
+						fleet_event = {
+							id = tc_weapon.5
+							days = 30
+						}
+						set_location = ROOT
+					}
+				}					
+			}
+		}
+		#时间光环
+		if = {
+			limit = {
+				has_component = TC_WAND_FOCUS_TIME
+				NOT = {
+					has_ship_flag = tc_wand_focus_time_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_wand_focus_time_cooldown
+				days = 60
+			}
+			owner = {
+				create_fleet = {
+					name = "NAME_tc_time_freeze"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = ROOT.owner
+						create_ship = {
+							name = "NAME_tc_time_freeze"
+							design = "NAME_tc_time_freeze"
+							prefix = no
+						}
+						set_event_locked = yes
+						set_location = ROOT
+						fleet_event = {
+							id = tc_weapon.5
+							days = 10
+						}
+					}
+				}					
+			}
+		}
+		#闪电风暴
+		if = {
+			limit = {
+				has_component = TC_WAND_FOCUS_WEATHER
+				NOT = {
+					has_ship_flag = tc_wand_focus_weather_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_wand_focus_weather_cooldown
+				days = 15
+			}
+			solar_system = {
+				every_ship_in_system = {
+					limit = {
+						owner = {
+							NOT = { is_same_value = ROOT.owner }
+						}
+						NOT = { is_ship_class = shipclass_colonizer }
+						NOT = { is_ship_class = shipclass_science_ship }
+						NOT = { is_ship_class = shipclass_constructor }
+						NOT = { is_ship_class = shipclass_mining_station }
+						NOT = { is_ship_class = shipclass_research_station }
+					}
+					random_list = {
+						33 = {
+							create_fleet = {
+								name = "NAME_tc_lighting_storm"
+								settings = {
+									spawn_debris = no
+								}
+								effect = {
+									set_owner = ROOT.owner
+									create_ship = {
+										name = "NAME_tc_lighting_storm"
+										design = "NAME_tc_lighting_storm"
+										prefix = no
+									}
+									set_location = PREV
+									set_event_locked = yes
+									fleet_event = {
+										id = tc_weapon.5
+										days = 5
+									}
+								}
+							}
+						}
+						66 = { }
+					}
+				}
+			}
+		}
+		#雷鸣法球
+		if = {
+			limit = {
+				has_component = TC_LIGHTING_SPHERE
+				NOT = {
+					has_ship_flag = tc_lighting_sphere_cooldown
+				}
+			}
+			set_timed_ship_flag = {
+				flag = tc_lighting_sphere_cooldown
+				days = 30
+			}
+			owner = {
+				create_fleet = {
+					name = "NAME_tc_magnet_sphere"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = ROOT.owner
+						create_ship = {
+							name = "NAME_tc_magnet_sphere"
+							design = "NAME_tc_magnet_sphere"
+							prefix = no
+							effect = {
+								ship_event = {
+									id = tc_weapon.21
+									days = 20
+								}
+							}
+						}
+						#fleet_event = {
+						#	id = tc_weapon.5
+						#	days = 20
+						#}
+						set_fleet_stance = aggressive
+						set_location = ROOT
+					}
+				}
+			}
+		}
+		#非战斗状态 移除标签
+		if = {
+			limit = {
+				is_in_combat = no
+				has_ship_flag = tc_combat_ship
+			}
+			remove_ship_flag = tc_combat_ship
+		}
+		#作战结束-送回招来的舰队
+		if = {
+			limit = {
+				is_ship_size = tc_juggernaut_ship
+				NOT = { has_ship_flag = tc_combat_ship }
+			}
+			owner = {
+				country_event = {
+					id = tc_weapon.13
+				}
+			}
+		}
+	}
+}
+
+#摧毁舰船触发
+# on_ship_destroyed_perp
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1 (combatant)
+# FromFromFrom = ship 2 (destroyed)
+country_event = {
+	id = tc_weapon.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			OR = {
+				OR = {
+					has_component = "TC_WAND_FOCUS_FROST_S"
+					has_component = "TC_WAND_FOCUS_FROST_M"
+					has_component = "TC_WAND_FOCUS_FROST_L"
+				}
+				OR = {
+					has_component = "TC_WAND_FOCUS_EXCAVATION_S"
+					has_component = "TC_WAND_FOCUS_EXCAVATION_M"
+					has_component = "TC_WAND_FOCUS_EXCAVATION_L"
+				}
+				OR = {
+					has_component = "TC_WAND_FOCUS_PECH_CURSE_S"
+					has_component = "TC_WAND_FOCUS_PECH_CURSE_M"
+					has_component = "TC_WAND_FOCUS_PECH_CURSE_L"
+				}
+				OR = {
+					has_component = "TC_WAND_FOCUS_SHADOWBEAM"
+					has_component = "TC_REFRACT_SHADOWBEAM"
+				}
+				has_component = "TC_WAND_FOCUS_DISINTEGRATION"
+				has_component = "TC_WAND_FOCUS_LIQUEFACTION"
+				has_component = "TC_WAND_FOCUS_TAINTED_STORM"
+				has_component = "TC_WAND_FOCUS_ELDRITCH"
+				has_component = "TC_WAND_FOCUS_ANIMATION"
+			}
+		}
+	}
+	immediate = {
+		FROMFROM = {
+			if = { #寒霜
+				limit = {
+					OR = {
+						has_component = "TC_WAND_FOCUS_FROST_S"
+						has_component = "TC_WAND_FOCUS_FROST_M"
+						has_component = "TC_WAND_FOCUS_FROST_L"
+					}
+				}
+				ROOT.FROMFROMFROM = {
+					fleet = {
+						every_owned_ship = {
+							#limit = {
+							#	NOT = { has_modifier = tc_focus_frost_effect }
+							#}
+							random_list = {
+								75 = {}
+								25 = {
+									add_modifier = {
+										modifier = tc_focus_frost_effect
+										days = 30
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if = { #采掘
+				limit = {
+					OR = {
+						has_component = "TC_WAND_FOCUS_EXCAVATION_S"
+						has_component = "TC_WAND_FOCUS_EXCAVATION_M"
+						has_component = "TC_WAND_FOCUS_EXCAVATION_L"
+					}
+				}
+				random_list = {
+					10 = {
+						add_resource = {
+							minerals = 1
+							mult = 500
+						}
+					}
+					10 = {
+						add_resource = {
+							minerals = 1
+							mult = 250
+						}
+					}
+					10 = {
+						add_resource = {
+							minerals = 1
+							mult = 100
+						}
+					}
+					1 = {
+						add_resource = {
+							minerals = 1
+							mult = 2000
+						}
+					}
+
+					10 = {
+						add_resource = {
+							alloys = 1
+							mult = 500
+						}
+					}
+					10 = {
+						add_resource = {
+							alloys = 1
+							mult = 250
+						}
+					}
+					10 = {
+						add_resource = {
+							alloys = 1
+							mult = 100
+						}
+					}
+					1 = {
+						add_resource = {
+							alloys = 1
+							mult = 2000
+						}
+					}
+				}
+			}
+			if = { #岩精诅咒
+				limit = {
+					OR = {
+						has_component = "TC_WAND_FOCUS_PECH_CURSE_S"
+						has_component = "TC_WAND_FOCUS_PECH_CURSE_M"
+						has_component = "TC_WAND_FOCUS_PECH_CURSE_L"
+					}
+				}
+				ROOT.FROMFROMFROM = {
+					fleet = {
+						every_owned_ship = {
+							#limit = {
+							#	NOT = { has_modifier = tc_focus_pech_curse_effect }
+							#}
+							random_list = {
+								75 = {}
+								25 = {
+									add_modifier = {
+										modifier = tc_focus_pech_curse_effect
+										days = 30
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if = { #解离
+				limit = {
+					has_component = "TC_WAND_FOCUS_DISINTEGRATION"
+				}
+				random_list = {
+					10 = {
+						add_resource = {
+							tc_essences = 1
+							mult = 500
+						}
+					}
+					10 = {
+						add_resource = {
+							tc_essences = 1
+							mult = 250
+						}
+					}
+					10 = {
+						add_resource = {
+							tc_essences = 1
+							mult = 100
+						}
+					}
+					1 = {
+						add_resource = {
+							tc_essences = 1
+							mult = 2000
+						}
+					}
+				}
+			}
+			if = { #熔析
+				limit = {
+					has_component = "TC_WAND_FOCUS_LIQUEFACTION"
+				}
+				random_list = {
+					50 = { }
+					50 = {
+						create_fleet = {
+							name = "NAME_tc_molten_area"
+							settings = {
+								spawn_debris = no
+							}
+							effect = {
+								set_owner = ROOT
+								create_ship = {
+									name = "NAME_tc_molten_area"
+									design = "NAME_tc_molten_area"
+									prefix = no
+								}
+								set_event_locked = yes
+								fleet_event = {
+									id = tc_weapon.5
+									days = 15
+								}
+								set_location = FROMFROMFROM
+							}
+						}
+					}
+				}
+			}
+			if = { #腐化风暴
+				limit = {
+					has_component = "TC_WAND_FOCUS_TAINTED_STORM"
+				}
+				ROOT.FROMFROMFROM = {
+					fleet = {
+						every_owned_ship = {
+							#limit = {
+							#	NOT = { has_modifier = tc_focus_tainted_storm_effect }
+							#}
+							random_list = {
+								75 = {}
+								25 = {
+									add_modifier = {
+										modifier = tc_focus_tainted_storm_effect
+										days = 45
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if = { #邪术
+				limit = {
+					has_component = "TC_WAND_FOCUS_ELDRITCH"
+				}
+				random_list = {
+					75 = { }
+					25 = {
+						create_fleet = {
+							name = "-"
+							settings = {
+								spawn_debris = no
+								can_upgrade = no
+								can_change_leader = no
+								uses_naval_capacity = no
+							}
+							effect = {
+								set_owner = ROOT.owner
+								create_ship = {
+									name = "NAME_tc_eldritch_shadow"
+									design = "NAME_tc_eldritch_shadow"
+									prefix = no
+									effect = {
+										#set_disable_at_health = 0.01
+										add_modifier = {
+											modifier = tc_not_flee
+										}
+										set_ship_flag = tc_not_animation_target
+									}
+								}
+								fleet_event = {
+									id = tc_weapon.5
+									days = 30
+								}
+								set_location = ROOT.FROMFROM
+							}
+						}	
+					}
+				}
+			}
+			if = { #阴影之束
+				limit = {
+					OR = {
+						has_component = "TC_WAND_FOCUS_SHADOWBEAM"
+						has_component = "TC_REFRACT_SHADOWBEAM"
+					}
+				}
+				create_fleet = {
+					name = "NAME_tc_refract_shadowbeam"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = ROOT
+						create_ship = {
+							name = "NAME_tc_refract_shadowbeam"
+							design = "NAME_tc_refract_shadowbeam"
+							prefix = no
+						}
+						fleet_event = {
+							id = tc_weapon.5
+							days = 3
+						}
+						set_location = FROMFROMFROM
+					}
+				}
+			}
+			if = { #活化
+				limit = {
+					has_component = "TC_WAND_FOCUS_ANIMATION"
+				}
+				FROMFROMFROM = {
+					if = {
+						limit = {
+							is_ship_class = shipclass_military
+							NOT = { has_ship_flag = cant_copy_design }
+							NOT = { has_ship_flag = tc_not_animation_target }
+						}
+						save_event_target_as = tc_focus_animation_target
+						create_fleet = {
+							name = "-"
+							settings = {
+								spawn_debris = no
+								can_upgrade = no
+								can_change_leader = no
+								uses_naval_capacity = no
+							}
+							effect = {
+								set_location = event_target:tc_focus_animation_target
+								set_owner = ROOT.this
+								create_ship = {
+									name = "-"
+									design = event_target:tc_focus_animation_target
+									graphical_culture = event_target:tc_focus_animation_target
+									effect = {
+										set_disable_at_health = 0.01
+										add_modifier = {
+											modifier = tc_not_flee
+										}
+										set_ship_flag = tc_not_animation_target
+									}
+								}
+								fleet_event = {
+									id = tc_weapon.5 #通用删船事件
+									days = 30
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#事件摧毁舰船
+ship_event = {
+	id = tc_weapon.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		destroy_ship = this
+	}
+}
+
+#移除事件生成舰船
+fleet_event = {
+	id = tc_weapon.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		destroy_fleet = {
+			target = this
+			destroy_template = yes
+		}
+	}
+}
+
+#通用锁舰队事件
+fleet_event = {
+	id = tc_weapon.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_event_locked = yes
+	}
+}
+#通用舰队解锁事件
+fleet_event = {
+	id = tc_weapon.7
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_event_locked = no
+	}
+}
+
+###部署防御核心
+#当舰队解散
+# This = owner of fleet
+# From = disbanded fleet
+country_event = {
+	id = tc_weapon.8
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			any_owned_ship = {
+				is_ship_size = tc_defense_move
+			}
+		}
+	}
+	immediate = {
+		FROM = {
+			save_event_target_as = tc_defense_move_target
+			owner = {
+				random_owned_fleet = {
+					limit = {
+						any_owned_ship = {
+							is_ship_class = shipclass_starbase
+						}
+						exists = starbase
+						starbase = {
+							any_fleet_in_orbit = {
+								is_same_value = event_target:tc_defense_move_target
+							}
+						}
+					}
+					while = {
+						if = {
+							limit = {
+								FROM = {
+									any_owned_ship = {
+										is_ship_size = tc_defense_move
+									}
+								}
+							}
+							FROM = {
+								random_owned_ship = {
+									limit = {
+										is_ship_size = tc_defense_move
+									}
+									delete_ship = THIS
+								}
+							}
+							starbase = {
+								create_ship = {
+									name = "NAME_tc_defence_tower"
+									random_existing_design = tc_defense_tower
+									effect = {
+										add_modifier = {
+											modifier = tc_thaumic_ship_upkeep_clear
+										}
+									}
+								}
+							}
+						}
+					}
+					starbase = {
+						create_ship = {
+							name = "NAME_tc_defence_tower"
+							random_existing_design = tc_defense_tower
+							effect = {
+								delete_ship = this
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#10
+#收容轰炸事件
+planet_event = {
+	id = tc_weapon.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_orbital_bombardment_stance = tc_containment_bomb
+	}
+
+	immediate = {
+		random_list = {
+			95 = {}
+			5 = {
+				FROM.owner = {
+					random_owned_planet = {
+						if = {
+							limit = {
+								num_unemployed < 1 
+								num_housing > 0
+							}
+							save_event_target_as = tc_containment_bomb_transfer_target
+						}
+						else = {
+							prev = {
+								random_owned_planet = {
+									save_event_target_as = tc_containment_bomb_transfer_target
+								}
+							}
+						}
+					}
+				}
+				random_owned_pop = {
+					resettle_pop = {
+						pop = THIS
+						planet = event_target:tc_containment_bomb_transfer_target
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				num_pops = 0
+			}
+			FROM.owner = {
+				country_event = {
+					id = tc_weapon.11
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = tc_weapon.11
+	title = "tc_weapon.11.title"
+	desc = "tc_weapon.11.desc"
+	is_triggered_only = yes
+	location = FROM
+	picture = "GFX_evt_alien_abduction"
+
+	trigger = { }
+	option = {
+		name = tc_weapon.11.a
+	}
+}
+
+#12
+###折跃透镜舰队传送
+#舰队交战
+# This = owner of fleet 1
+# From = owner of fleet 2
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = tc_weapon.12
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			any_owned_ship = { is_ship_size = tc_juggernaut_ship }
+		}
+		any_owned_megastructure = {
+			is_megastructure_type = tc_jump_lens
+		}
+	}
+
+	immediate = {
+		random_owned_megastructure = {
+			limit = {
+				is_megastructure_type = tc_jump_lens
+			}
+			solar_system = {
+				every_fleet_in_system = {
+					limit = {
+						owner = {
+							is_same_value = ROOT
+						}
+						NOT = { any_owned_ship = { NOT = { is_ship_class = shipclass_military } } }
+						distance = {
+							source = PREVPREV
+							min_distance >= 0
+							max_distance <= 50
+							type = euclidean
+							same_solar_system = yes
+						}
+					}
+					set_fleet_flag = tc_jump_lens_fleet
+					set_location = FROMFROM
+				}
+			}
+		}
+	}
+}
+
+#送回
+country_event = {
+	id = tc_weapon.13
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		random_owned_megastructure = {
+			limit = {
+				is_megastructure_type = tc_jump_lens
+			}
+			save_event_target_as = tc_jump_lens_back
+		}
+		every_owned_fleet = {
+			limit = {
+				has_fleet_flag = tc_jump_lens_fleet
+			}
+			remove_fleet_flag = tc_jump_lens_fleet
+			set_location = event_target:tc_jump_lens_back
+			queue_actions = {
+				move_to = event_target:tc_jump_lens_back
+			}
+		}
+	}
+}
+
+#14
+###MCV部署
+# this/root = planet that have been fired upon
+# from = fleet that fired
+planet_event = {
+	id = tc_weapon.14
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+	immediate = {
+		FROM.owner = {
+			if = {
+				limit = { 
+					NOT = { has_country_flag = tc_mcv_base_design_create }
+				}
+				set_country_flag = tc_mcv_base_design_create
+				create_ship_design = { design = "TC_MCV_BASE_DESIGN" }
+				add_ship_design = last_created_design
+			}
+		}
+		if = { #本土部署
+			limit = {
+				solar_system = {
+					exists = owner
+					owner = { is_same_value = FROM.owner }
+				}
+			}
+			solar_system.star.starbase.fleet = { #移除现有基地
+				destroy_fleet = this
+			}
+			solar_system = { #创建恒星基地
+				create_starbase = {
+					owner = FROM.owner
+					size = tc_mcv_base
+					effect = {
+						if = { #集成船坞模块
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_SHIPYARD_MODULE }
+								}
+							}
+							set_starbase_module = { slot = 1 module = tc_shipyard_module }
+							set_starbase_module = { slot = 2 module = tc_shipyard_module }
+							set_starbase_module = { slot = 3 module = tc_shipyard_module }
+							set_starbase_module = { slot = 4 module = tc_shipyard_module }
+							set_starbase_module = { slot = 5 module = tc_shipyard_module }
+							set_starbase_module = { slot = 6 module = tc_shipyard_module }
+							set_starbase_module = { slot = 7 module = tc_shipyard_module }
+							set_starbase_module = { slot = 8 module = tc_shipyard_module }
+						}
+						else_if = { #集成锚地模块
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_ANCHORAGE_MODULE }
+								}
+							}
+							set_starbase_module = { slot = 1 module = tc_anchorage_module }
+							set_starbase_module = { slot = 2 module = tc_anchorage_module }
+							set_starbase_module = { slot = 3 module = tc_anchorage_module }
+							set_starbase_module = { slot = 4 module = tc_anchorage_module }
+							set_starbase_module = { slot = 5 module = tc_anchorage_module }
+							set_starbase_module = { slot = 6 module = tc_anchorage_module }
+							set_starbase_module = { slot = 7 module = tc_anchorage_module }
+							set_starbase_module = { slot = 8 module = tc_anchorage_module }
+						}
+						else_if = { #集成生产模块
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_RESOURCE_MODULE }
+								}
+							}
+							set_starbase_module = { slot = 1 module = tc_resource_module }
+							set_starbase_module = { slot = 2 module = tc_resource_module }
+							set_starbase_module = { slot = 3 module = tc_resource_module }
+							set_starbase_module = { slot = 4 module = tc_resource_module }
+							set_starbase_module = { slot = 5 module = tc_resource_module }
+							set_starbase_module = { slot = 6 module = tc_resource_module }
+							set_starbase_module = { slot = 7 module = tc_resource_module }
+							set_starbase_module = { slot = 8 module = tc_resource_module }
+						}
+						if = { #便携防御核心
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_DEFENCE_MODULE }
+								}
+							}
+							while = {
+								count = 12
+								create_ship = {
+									name = "NAME_tc_defence_tower"
+									random_existing_design = tc_defense_tower
+									effect = {
+										add_modifier = {
+											modifier = tc_thaumic_ship_upkeep_clear
+										}
+									}
+								}
+							}
+							create_ship = {
+								name = "NAME_tc_defence_tower"
+								random_existing_design = tc_defense_tower
+								effect = {
+									delete_ship = this
+								}
+							}
+						}
+						if = { #临时仙域门
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_GATEWAY_MODULE }
+								}
+								PREV = {
+									NOT = {
+										any_system_megastructure = {
+											OR = {
+												is_megastructure_type = tc_temp_celestial_gateway
+												is_megastructure_type = tc_celestial_gateway
+											}
+										}
+									}
+								}
+							}
+							solar_system = {
+								spawn_megastructure = {
+									type = tc_temp_celestial_gateway
+									owner = FROM.owner
+									coords_from = PREV.fleet
+								}
+							}
+						}
+						if = { #采矿站部署
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_MINING_MODULE }
+								}
+							}
+							PREV = {
+								every_system_planet = {
+									limit = {
+										has_deposit_for = shipclass_mining_station
+										has_mining_station = no
+									}
+									create_mining_station = {
+										owner = FROM.owner
+									}
+								}
+								every_system_planet = {
+									limit = {
+										has_deposit_for = shipclass_research_station
+										has_mining_station = no
+									}
+									create_research_station = {
+										owner = FROM.owner
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			FROM = { #摧毁舰船
+				fleet_event = { id = tc_weapon.5 }
+			}
+		}
+		else_if = { #境外部署
+			limit = {
+				solar_system = {
+					NOT = { exists = owner }
+				}
+				FROM.owner = { resource_stockpile_compare = { resource = "influence" value >= 300 } }
+			}
+			FROM.owner = { #扣除影响力
+				add_resource = {
+					influence = -300
+				}
+			}
+			solar_system = { #创建恒星基地
+				create_starbase = {
+					owner = FROM.owner
+					size = tc_mcv_base
+					effect = {
+						if = { #集成船坞模块
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_SHIPYARD_MODULE }
+								}
+							}
+							set_starbase_module = { slot = 1 module = tc_shipyard_module }
+							set_starbase_module = { slot = 2 module = tc_shipyard_module }
+							set_starbase_module = { slot = 3 module = tc_shipyard_module }
+							set_starbase_module = { slot = 4 module = tc_shipyard_module }
+							set_starbase_module = { slot = 5 module = tc_shipyard_module }
+							set_starbase_module = { slot = 6 module = tc_shipyard_module }
+							set_starbase_module = { slot = 7 module = tc_shipyard_module }
+							set_starbase_module = { slot = 8 module = tc_shipyard_module }
+						}
+						else_if = { #集成锚地模块
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_ANCHORAGE_MODULE }
+								}
+							}
+							set_starbase_module = { slot = 1 module = tc_anchorage_module }
+							set_starbase_module = { slot = 2 module = tc_anchorage_module }
+							set_starbase_module = { slot = 3 module = tc_anchorage_module }
+							set_starbase_module = { slot = 4 module = tc_anchorage_module }
+							set_starbase_module = { slot = 5 module = tc_anchorage_module }
+							set_starbase_module = { slot = 6 module = tc_anchorage_module }
+							set_starbase_module = { slot = 7 module = tc_anchorage_module }
+							set_starbase_module = { slot = 8 module = tc_anchorage_module }
+						}
+						else_if = { #集成生产模块
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_RESOURCE_MODULE }
+								}
+							}
+							set_starbase_module = { slot = 1 module = tc_resource_module }
+							set_starbase_module = { slot = 2 module = tc_resource_module }
+							set_starbase_module = { slot = 3 module = tc_resource_module }
+							set_starbase_module = { slot = 4 module = tc_resource_module }
+							set_starbase_module = { slot = 5 module = tc_resource_module }
+							set_starbase_module = { slot = 6 module = tc_resource_module }
+							set_starbase_module = { slot = 7 module = tc_resource_module }
+							set_starbase_module = { slot = 8 module = tc_resource_module }
+						}
+						if = { #便携防御核心
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_DEFENCE_MODULE }
+								}
+							}
+							while = {
+								count = 12
+								create_ship = {
+									name = "NAME_tc_defence_tower"
+									random_existing_design = tc_defense_tower
+									effect = {
+										add_modifier = {
+											modifier = tc_thaumic_ship_upkeep_clear
+										}
+									}
+								}
+							}
+							create_ship = {
+								name = "NAME_tc_defence_tower"
+								random_existing_design = tc_defense_tower
+								effect = {
+									delete_ship = this
+								}
+							}
+						}
+						if = { #临时仙域门
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_GATEWAY_MODULE }
+								}
+								PREV = {
+									NOT = {
+										any_system_megastructure = {
+											OR = {
+												is_megastructure_type = tc_temp_celestial_gateway
+												is_megastructure_type = tc_celestial_gateway
+											}
+										}
+									}
+								}
+							}
+							solar_system = {
+								spawn_megastructure = {
+									type = tc_temp_celestial_gateway
+									owner = FROM.owner
+									coords_from = PREV.fleet
+								}
+							}
+						}
+						if = { #采矿站部署
+							limit = {
+								FROM = {
+									any_owned_ship = { has_component = TC_MCV_MINING_MODULE }
+								}
+							}
+							PREV = {
+								every_system_planet = {
+									limit = {
+										has_deposit_for = shipclass_mining_station
+										has_mining_station = no
+									}
+									create_mining_station = {
+										owner = FROM.owner
+									}
+								}
+								every_system_planet = {
+									limit = {
+										has_deposit_for = shipclass_research_station
+										has_mining_station = no
+									}
+									create_research_station = {
+										owner = FROM.owner
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			FROM = { #摧毁舰船
+				fleet_event = { id = tc_weapon.5 }
+			}
+		}
+		else = { #失败通知
+			FROM.owner = {
+				country_event = {
+					id = tc_weapon.15
+				}
+			}
+		}
+	}
+}
+
+#部署失败通知
+country_event = {
+	id = tc_weapon.15
+	title = "tc_weapon.15.title"
+	desc = "tc_weapon.15.desc"
+	picture = ""
+	location = FROMFROM
+	is_triggered_only = yes
+
+	option = {
+		name = "tc_weapon.15.a"
+	}
+}
+
+#回收基地
+system_event = {
+	id = tc_weapon.16
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+
+	immediate = {
+		starbase = {
+			create_ambient_object = {
+				type = tc_mcv_recovery_object
+				location = THIS
+				entity_offset_angle = 0
+				entity_offset_height = 0
+				entity_offset = 0
+				use_3d_location = no
+				duration = 15
+			}
+			owner = {
+				save_event_target_as = tc_mcv_base_owner_target
+			}
+			fleet = {
+				destroy_fleet = this
+			}
+		}
+		every_system_megastructure = {
+			limit = {
+				is_megastructure_type = tc_temp_celestial_gateway
+			}
+			set_halted = 0
+		}
+		system_event = {
+			id = tc_weapon.17
+			days = 15
+		}
+		create_starbase = {
+			owner = ROOT.owner
+			size = starbase_outpost
+		}
+	}
+}
+
+system_event = {
+	id = tc_weapon.17
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { }
+
+	immediate = {
+		random_system_ambient_object = {
+			limit = {
+				is_ambient_object_type = tc_mcv_recovery_object
+			}
+			create_fleet = {
+				name = "NAME_tc_mcv_fleet"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:tc_mcv_base_owner_target
+					set_location = PREV
+					create_ship = {
+						name = "NAME_tc_mcv_ship"
+						random_existing_design = tc_mcv_ship
+						effect = {
+							add_modifier = {
+								modifier = tc_thaumic_ship_upkeep_clear
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#20
+#雷球被摧毁或到时
+#摧毁舰船
+# This = owner of ship 1 (destroyed)
+# From = owner of ship 2 (combatant)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+#on_ship_destroyed_victim
+country_event = {
+	id = tc_weapon.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROMFROM = {
+			is_ship_size = tc_magnet_sphere
+		}
+	}
+	immediate = {
+		create_fleet = {
+			name = "NAME_tc_magnet_explosion"
+			settings = {
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = ROOT
+				create_ship = {
+					name = "NAME_tc_magnet_explosion"
+					design = "NAME_tc_magnet_explosion"
+					prefix = no
+				}
+				set_location = FROMFROM
+				set_event_locked = yes
+				fleet_event = {
+					id = tc_weapon.5
+					days = 3
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_tc_magnet_cloud"
+			settings = {
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = ROOT
+				create_ship = {
+					name = "NAME_tc_magnet_cloud"
+					design = "NAME_tc_magnet_cloud"
+					prefix = no
+				}
+				set_location = FROMFROM
+				set_event_locked = yes
+				fleet_event = {
+					id = tc_weapon.5
+					days = 30
+				}
+			}
+		}
+	}
+}
+#事件激活
+ship_event = {
+	id = tc_weapon.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ship_size = tc_magnet_sphere
+	}
+	immediate = {
+		create_fleet = {
+			name = "NAME_tc_magnet_explosion"
+			settings = {
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = ROOT.owner
+				create_ship = {
+					name = "NAME_tc_magnet_explosion"
+					design = "NAME_tc_magnet_explosion"
+					prefix = no
+				}
+				set_location = ROOT
+				set_event_locked = yes
+				fleet_event = {
+					id = tc_weapon.5
+					days = 3
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_tc_magnet_cloud"
+			settings = {
+				spawn_debris = no
+			}
+			effect = {
+				set_owner = ROOT.owner
+				create_ship = {
+					name = "NAME_tc_magnet_cloud"
+					design = "NAME_tc_magnet_cloud"
+					prefix = no
+				}
+				set_location = ROOT
+				set_event_locked = yes
+				fleet_event = {
+					id = tc_weapon.5
+					days = 30
+				}
+			}
+		}
+		destroy_ship = this
+	}
+}

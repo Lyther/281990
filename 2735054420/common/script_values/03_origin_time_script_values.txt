@@ -1,0 +1,431 @@
+district_time_upkeep_value = {
+	base = 1.05
+	complex_trigger_modifier = {
+		trigger = num_districts
+		parameters = {
+			type = district_time
+		}
+		multiplier = 0.01
+		mode = subtract
+	}
+	min = 0.6
+	max = 1
+}
+
+num_endless_time_value = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = num_assigned_jobs
+		parameters = {
+			job = black_hole_researcher
+		}
+		multiplier = 1
+		mode = add
+	}
+	complex_trigger_modifier = {
+		trigger = num_assigned_jobs
+		parameters = {
+			job = black_hole_brain
+		}
+		multiplier = 1
+		mode = add
+	}
+	complex_trigger_modifier = {
+		trigger = num_assigned_jobs
+		parameters = {
+			job = time_researcher
+		}
+		multiplier = 1
+		mode = add
+	}
+	complex_trigger_modifier = {
+		trigger = num_assigned_jobs
+		parameters = {
+			job = time_brain
+		}
+		multiplier = 1
+		mode = add
+	}
+}
+
+num_col_time_value = {
+	base = 1
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|col_time_mult|
+	modifier = {
+		multiply = 2
+		owner = {
+			has_origin = origin_time
+		}
+	}
+	modifier = {
+		multiply = 2
+		has_modifier = timesingularity
+	}
+	modifier = {
+		multiply = 3
+		is_planet_class = pc_endless_time
+	}
+}
+
+num_civic_origin_time_value_1 = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = check_modifier_value
+		parameters = {
+			modifier = job_head_researcher_add
+		}
+		multiplier = 1
+		mode = add
+	}
+}
+
+num_civic_origin_time_value_2 = {
+	base = 0
+	complex_trigger_modifier = {
+		trigger = check_modifier_value
+		parameters = {
+			modifier = job_head_researcher_per_pop
+		}
+		multiplier = 1
+		mode = add
+	}
+}
+
+councilor_origin_time_1_level = {
+	base = 0.5
+	modifier = {
+		multiply = 2
+		planet.owner = {
+			has_ethic = ethic_fanatic_materialist
+		}
+	}
+	complex_trigger_modifier = {
+		trigger = get_councilor_level
+		trigger_scope = planet.owner
+		parameters = {
+			type = councilor_origin_time_1
+		}
+		multiplier = 0.1
+		mode = add
+	}
+}
+
+councilor_origin_time_2_level = {
+	base = 0.5
+	modifier = {
+		multiply = 2
+		planet.owner = {
+			has_ethic = ethic_fanatic_materialist
+		}
+	}
+	complex_trigger_modifier = {
+		trigger = get_councilor_level
+		trigger_scope = planet.owner
+		parameters = {
+			type = councilor_origin_time_2
+		}
+		multiplier = 0.1
+		mode = add
+	}
+}
+
+
+
+num_time_researcher_produces_decay = {
+	base = 1.01
+	subtract = planet.modifier:time_researcher_produces_decay
+	min = value:num_time_researcher_produces_decay_min
+	max = 1
+}
+
+num_time_researcher_produces_decay_min = {
+	base = 0.5
+	modifier = {
+		add = 0.1
+		planet = {
+			has_district = district_endless_time
+			check_variable = {
+				which = district_time_level_up
+				value = 1
+			}
+		}
+	}
+	modifier = {
+		add = 0.2
+		planet = {
+			has_district = district_endless_time
+			check_variable = {
+				which = district_time_level_up
+				value = 2
+			}
+		}
+	}
+	modifier = {
+		add = 0.3
+		planet = {
+			has_district = district_endless_time
+			check_variable = {
+				which = district_time_level_up
+				value >= 3
+			}
+		}
+	}
+}
+
+num_time_researcher_produces_modifier = {
+	base = 1
+	add = planet.modifier:$MODIFIER$
+	min = 0
+}
+
+num_time_researcher_energy = {
+	base = 1
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_energy_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_resource
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_resource
+				}
+			}
+		}
+	}
+}
+
+num_time_researcher_minerals = {
+	base = 1
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_minerals_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_resource
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_resource
+				}
+			}
+		}
+	}
+}
+
+num_time_researcher_food = {
+	base = 1
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_food_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_resource
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_resource
+				}
+			}
+		}
+	}
+}
+
+num_time_researcher_consumer_goods = {
+	base = 1
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_consumer_goods_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_manufacturing
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_manufacturing
+				}
+			}
+		}
+	}
+}
+
+num_time_researcher_alloys = {
+	base = 1
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_alloys_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_manufacturing
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_manufacturing
+				}
+			}
+		}
+	}
+}
+
+num_time_researcher_unity = {
+	base = 1
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_unity_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_unity
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_unity
+				}
+			}
+		}
+	}
+}
+
+num_time_researcher_physics_research = {
+	base = 1
+	modifier = {
+		add = 0.5
+		planet = {
+			has_modifier = pm_extradimensional_experimentation
+		}
+	}
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_physics_research_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_research
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_research
+				}
+			}
+		}
+	}
+}
+
+num_time_researcher_society_research = {
+	base = 1
+	modifier = {
+		add = 0.5
+		planet = {
+			has_modifier = pm_extradimensional_experimentation
+		}
+	}
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_society_research_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_research
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_research
+				}
+			}
+		}
+	}
+}
+
+num_time_researcher_engineering_research = {
+	base = 1
+	modifier = {
+		add = 0.5
+		planet = {
+			has_modifier = pm_extradimensional_experimentation
+		}
+	}
+	multiply = value:num_time_researcher_produces_decay
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_engineering_research_produces_mult|
+	multiply = value:num_time_researcher_produces_modifier|MODIFIER|time_researcher_produces_mult|
+	modifier = {
+		multiply = 2
+		planet = {
+			owner = {
+				has_policy_flag = policy_origin_time_research
+			}
+		}
+	}
+	modifier = {
+		multiply = 0.5
+		planet = {
+			owner = {
+				NOR = {
+					has_policy_flag = policy_origin_time_balance
+					has_policy_flag = policy_origin_time_research
+				}
+			}
+		}
+	}
+}

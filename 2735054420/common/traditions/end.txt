@@ -1,0 +1,159 @@
+tr_end_adopt = {
+	possible = {
+		has_tradition = tr_time_finish
+	}
+	modifier = {
+		country_physics_research_produces_mult = 0.15
+		country_society_research_produces_mult = 0.15
+		country_engineering_research_produces_mult = 0.15
+	}
+}
+
+tr_end_finish = {
+	custom_tooltip = tr_end_finish_desc
+	unlocks_agenda = agenda_tradition_end
+	modifier = {
+		country_unity_produces_mult = 0.15
+		ascension_perks_add = 1
+	}
+	on_enabled = {
+		randomly_choose_horror_time_relic = yes
+		country_event = { id = time.504 }
+	}
+
+	tradition_swap = {
+		name = tr_end_finish_origin_time
+		inherit_icon = yes
+		custom_tooltip = tr_end_finish_origin_time_desc
+		trigger = {
+			tr_end_finish_swap_trigger = yes
+		}
+		modifier = {
+			country_unity_produces_mult = 0.15
+			ascension_perks_add = 1
+		}
+		on_enabled = {
+			random_owned_planet = {
+				limit = {
+					is_planet_class = pc_time
+					has_planet_flag = time_home_planet_of@root
+				}
+				save_event_target_as = situation_origin_time_planet
+			}
+			start_situation = {
+				type = situation_origin_time
+				target = event_target:situation_origin_time_planet
+				effect = {
+					if = {
+						limit = {
+							target = {
+								has_modifier = timesingularity
+								free_district_slots < 1
+							}
+							owner = {
+								has_country_resource = {
+									type = sr_dark_matter
+									amount >= 20
+								}
+							}
+						}
+						set_situation_approach = approach_origin_time_default
+					}
+					else = {
+						set_situation_approach = approach_origin_time_discourage
+					}
+				}
+			}
+		}
+		weight = {
+			factor = 1
+		}
+	}
+}
+
+tr_end_1 = {
+	possible = {
+		has_technology = tech_time_shield
+	}
+	modifier = {
+		category_horror_time_research_speed_mult = 0.15
+		category_horror_time_draw_chance_mult = 0.15
+	}
+	on_enabled = {
+		add_research_option = tech_end_1_a_1
+		add_research_option = tech_end_1_b_1
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+tr_end_2 = {
+	possible = {
+		has_technology = tech_time_armor
+	}
+	modifier = {
+		category_horror_time_research_speed_mult = 0.15
+		category_horror_time_draw_chance_mult = 0.15
+	}
+	on_enabled = {
+		add_research_option = tech_end_2_a_1
+		add_research_option = tech_end_2_b_1
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+tr_end_3 = {
+	possible = {
+		has_technology = tech_time_modifier
+	}
+	modifier = {
+		category_horror_time_research_speed_mult = 0.15
+		category_horror_time_draw_chance_mult = 0.15
+	}
+	on_enabled = {
+		add_research_option = tech_end_3_a_1
+		add_research_option = tech_end_3_b_1
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+tr_end_4 = {
+	possible = {
+		has_tradition = tr_end_1
+		has_tradition = tr_end_2
+		has_technology = tech_time_beam
+	}
+	modifier = {
+		category_horror_time_research_speed_mult = 0.15
+		category_horror_time_draw_chance_mult = 0.15
+	}
+	on_enabled = {
+		add_research_option = tech_end_4_a_1
+		add_research_option = tech_end_4_b_1
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}
+
+tr_end_5 = {
+	possible = {
+		has_tradition = tr_end_3
+		has_technology = tech_time_trait
+	}
+	modifier = {
+		category_horror_time_research_speed_mult = 0.15
+		category_horror_time_draw_chance_mult = 0.15
+	}
+	on_enabled = {
+		add_research_option = tech_end_dimension
+	}
+	ai_weight = {
+		factor = 1000
+	}
+}

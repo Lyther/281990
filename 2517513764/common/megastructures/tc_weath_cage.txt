@@ -1,0 +1,326 @@
+tc_weath_cage_0 = {
+    entity = "construction_platform_entity"
+    construction_entity = "construction_platform_entity"
+    portrait = "GFX_megastructure_tc_weath_cage"
+    place_entity_on_planet_plane = no
+
+    prerequisites = { tech_mega_engineering tc_tech_weath_cage }
+
+    build_time = 720
+    resources = {
+        category = megastructures
+        cost = {
+            tc_void_metal = 1280
+            unity = 1024
+        }
+    }
+
+    possible = {
+        exists = starbase
+        custom_tooltip = {
+            fail_text = "requires_inside_border"
+            is_inside_border = from
+        }
+        custom_tooltip = {
+            fail_text = "requires_no_existing_tc_weath_cage"
+            NOR = {
+                has_megastructure = tc_weath_cage_0
+                has_megastructure = tc_weath_cage_1
+                has_megastructure = tc_weath_cage_2
+                has_megastructure = tc_weath_cage_3
+            }
+        }
+    }
+
+    placement_rules = {
+        planet_possible = {
+            custom_tooltip = {
+                fail_text = "requires_no_anomaly"
+                NOT = { has_anomaly = yes }
+            }
+            custom_tooltip = {
+                fail_text = "requires_not_minor_planetary_body"
+                NOR = {
+                    is_asteroid = yes
+                    is_moon = yes
+                }
+            }
+            custom_tooltip = {
+                fail_text = "requires_no_existing_megastructure"
+                NOR = {
+                    has_planet_flag = megastructure
+                    has_planet_flag = has_megastructure
+                    solar_system = {
+                        has_star_flag = ring_world_built
+                    }
+                    is_artificial = yes
+                }
+            }
+        }
+    }
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {
+        tc_megastructure_message = yes
+        FROMFROM.planet = {
+            set_planet_flag = has_megastructure
+        }
+    }
+}
+
+tc_weath_cage_1 = {
+    entity = "tc_wrath_cage_tier_1_entity"
+    construction_entity = "tc_wrath_cage_1_entity"
+    portrait = "GFX_megastructure_tc_weath_cage"
+    place_entity_on_planet_plane = no
+
+    prerequisites = { tech_mega_engineering tc_tech_weath_cage }
+    upgrade_from = { tc_weath_cage_0 }
+
+    build_time = 720
+    resources = {
+        category = megastructures
+        cost = {
+            tc_void_metal = 1280
+            unity = 1024
+        }
+    }
+
+    possible = {
+        exists = starbase
+        custom_tooltip = {
+            fail_text = "requires_inside_border"
+            is_inside_border = from
+        }
+    }
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {
+        tc_megastructure_message = yes
+    }
+}
+
+tc_weath_cage_2 = {
+    entity = "tc_wrath_cage_tier_2_entity"
+    construction_entity = "tc_wrath_cage_2_entity"
+    portrait = "GFX_megastructure_tc_weath_cage"
+    place_entity_on_planet_plane = no
+
+    prerequisites = { tech_mega_engineering tc_tech_weath_cage }
+    upgrade_from = { tc_weath_cage_1 }
+
+    build_time = 720
+    resources = {
+        category = megastructures
+        cost = {
+            tc_void_metal = 2560
+            unity = 1024
+        }
+    }
+
+    possible = {
+        exists = starbase
+        custom_tooltip = {
+            fail_text = "requires_inside_border"
+            is_inside_border = from
+        }
+        any_system_megastructure = {
+            is_megastructure_type = tc_weath_cage_1
+            any_fleet_in_orbit = {
+                is_owned_by = FROM
+                custom_tooltip = {
+                    fail_text = "tc_wc_only_one_ship"
+                    count_owned_ship = { count = 1 }
+                }
+                custom_tooltip = {
+                    fail_text = "tc_wc_only_shipclass_military"
+                    any_owned_ship = {
+                        is_ship_class = shipclass_military
+                    }
+                }
+            }
+        }
+    }
+
+    on_build_start = {
+        FROMFROM = {
+            random_fleet_in_orbit = {
+                limit = {
+                    count_owned_ship = { count = 1 }
+                    any_owned_ship = { is_ship_class = shipclass_military }
+                }
+                set_fleet_flag = tc_wc_copy_target
+                set_event_locked = yes
+                queue_actions = {
+                    move_to = PREV
+                }
+            }
+        }
+        FROM = { #生成托管国家
+            if = {
+                limit = {
+                    NOT = { has_global_flag = tc_wc_crystal_country_spawn }
+                }
+            }
+            country_event = { id = tc_mega.40 }
+        }
+        #转移所有权
+        system_event = { id = tc_mega.41  }
+    }
+    on_build_cancel = {}
+    on_build_complete = {
+        tc_megastructure_message = yes
+        FROMFROM = {
+            random_fleet_in_orbit = {
+                set_event_locked = yes
+                queue_actions = {
+                    move_to = PREV
+                }
+            }
+        }
+    }
+}
+
+tc_weath_cage_3 = {
+    entity = "tc_wrath_cage_tier_3_entity"
+    construction_entity = "tc_wrath_cage_3_entity"
+    portrait = "GFX_megastructure_tc_weath_cage"
+    place_entity_on_planet_plane = no
+
+    prerequisites = { tech_mega_engineering tc_tech_weath_cage }
+    upgrade_from = { tc_weath_cage_2 }
+
+    build_time = 720
+    resources = {
+        category = megastructures
+        cost = {
+            tc_void_metal = 1280
+            tc_element_shard = 512
+            unity = 1024
+        }
+    }
+
+    possible = {
+        exists = starbase
+        custom_tooltip = {
+            fail_text = "requires_inside_border"
+            is_inside_border = from
+        }
+    }
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {
+        tc_megastructure_message = yes
+    }
+}
+
+tc_weath_cage_friendly = {
+    entity = "tc_wrath_cage_tier_3_entity"
+    construction_entity = ""
+    portrait = "GFX_megastructure_tc_weath_cage"
+    place_entity_on_planet_plane = no
+
+    construction_blocks_and_blocked_by = self_type
+
+    prerequisites = { tech_mega_engineering tc_tech_weath_cage }
+    upgrade_from = { tc_weath_cage_3 }
+
+    build_time = 60
+    resources = {
+        category = megastructures
+        upkeep = {
+            tc_essences = 100
+        }
+    }
+
+    possible = {
+        exists = starbase
+        custom_tooltip = {
+            fail_text = "requires_inside_border"
+            is_inside_border = from
+        }
+    }
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {
+        tc_megastructure_message = yes
+    }
+}
+tc_weath_cage_hostile = {
+    entity = "tc_wrath_cage_tier_3_entity"
+    construction_entity = ""
+    portrait = "GFX_megastructure_tc_weath_cage"
+    place_entity_on_planet_plane = no
+
+    construction_blocks_and_blocked_by = self_type
+
+    prerequisites = { tech_mega_engineering tc_tech_weath_cage }
+    upgrade_from = { tc_weath_cage_3 }
+
+    build_time = 60
+    resources = {
+        category = megastructures
+        upkeep = {
+            tc_essences = 100
+        }
+    }
+
+    possible = {
+        exists = starbase
+        custom_tooltip = {
+            fail_text = "requires_inside_border"
+            is_inside_border = from
+        }
+    }
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {
+        tc_megastructure_message = yes
+        system_event = {
+            id = tc_mega.42
+        }
+    }
+}
+
+tc_weath_cage_remove = {
+    entity = ""
+    construction_entity = ""
+    portrait = "GFX_megastructure_tc_weath_cage"
+    place_entity_on_planet_plane = no
+
+    construction_blocks_and_blocked_by = self_type
+
+    prerequisites = { tech_mega_engineering tc_tech_weath_cage }
+    upgrade_from = { tc_weath_cage_hostile tc_weath_cage_friendly }
+
+    build_time = 120
+
+    possible = {
+        exists = starbase
+        custom_tooltip = {
+            fail_text = "requires_inside_border"
+            is_inside_border = from
+        }
+    }
+
+    on_build_start = {}
+    on_build_cancel = {}
+    on_build_complete = {
+        random_fleet_in_system = {
+            limit = {
+                has_fleet_flag = tc_wc_copy_target
+            }
+            set_event_locked = no
+            remove_fleet_flag = tc_wc_copy_target
+            set_owner = FROMFROM.owner
+        }
+        FROMFROM = {
+            remove_megastructure = this
+        }
+    }
+}

@@ -1,0 +1,397 @@
+
+namespace = gas
+
+country_event = {
+	id = gas.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_origin = origin_gas_colony
+	}
+	
+	immediate = {
+		give_technology = { tech = "tech_mine_volatile_motes" message = no }
+		give_technology = { tech = "tech_mine_exotic_gases" message = no }
+		give_technology = { tech = "tech_mine_rare_crystals" message = no }
+		give_technology = { tech = "tech_genome_mapping" message = no }
+		give_technology = { tech = "tech_cloning" message = no }
+		give_technology = { tech = "tech_epigenetic_triggers" message = no }
+		if = {
+			limit = {
+				is_ai = yes
+			}
+			country_event = { id = gas.1000 days = 1800 random = 3600 }
+		}
+		capital_scope = {
+			set_planet_size = 45
+			reroll_pc_gas_colony_deposits = yes
+			while = {
+				limit = {
+					has_district = district_city
+				}
+				remove_district = district_city
+				add_district = district_gas_city
+			}
+			while = {
+				limit = {
+					has_district = district_hive
+				}
+				remove_district = district_hive
+				add_district = district_gas_hive
+			}
+			while = {
+				limit = {
+					has_district = district_industrial
+				}
+				remove_district = district_industrial
+				add_district = district_gas_industrial
+			}
+			while = {
+				limit = {
+					has_district = district_generator
+				}
+				remove_district = district_generator
+				add_district = district_gas_generator
+			}
+			while = {
+				limit = {
+					has_district = district_mining
+				}
+				remove_district = district_mining
+				add_district = district_gas_mining
+			}
+			while = {
+				limit = {
+					has_district = district_farming
+				}
+				remove_district = district_farming
+				add_district = district_gas_farming
+			}
+			time_repair_ruined_buildings = yes
+		}
+	}
+}
+
+country_event = {
+	id = gas.2
+	title = gas.2.name
+	desc = gas.2.desc
+	picture = GFX_evt_atmospheric_flight
+	show_sound = event_scanner
+	location = signal_gasgiant_category_planet
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+	option = {
+		name = gas.2.a
+		random_planet_within_border = {
+			limit = {
+				is_planet_class = pc_gas_giant
+				has_anomaly = no
+			}
+			save_event_target_as = signal_gasgiant_category_planet
+			add_anomaly = {
+				category = signal_gasgiant_category
+				target = root
+			}
+		}
+	}
+}
+
+event = {
+	id = gas.3
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		NOT = { has_global_flag = anomaly_5000_triggered }
+		any_playable_country = {
+			has_origin = origin_gas_colony
+			any_planet_within_border = {
+				is_planet_class = pc_gas_giant
+				has_anomaly = no
+			}
+		}
+	}
+	
+	immediate = {
+		random_playable_country = {
+			limit = {
+				has_origin = origin_gas_colony
+				any_planet_within_border = {
+					is_planet_class = pc_gas_giant
+					has_anomaly = no
+				}
+			}
+			country_event = { id = gas.2 }
+		}
+	}
+}
+
+ship_event = {
+	id = gas.10
+	title = gas.10.name
+	desc = gas.10.desc
+	picture = GFX_evt_gas_giant_station
+	show_sound = event_scanner
+	is_triggered_only = yes
+	location = FROM
+
+	immediate = {
+	}
+
+	option = {
+		name = gas.10.a
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_gestalt_consciousness
+				}
+			}
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = energy
+					amount >= 500
+				}
+			}
+		}
+		owner = {
+			add_resource = { energy = -500 }
+		}
+		FROM = {
+			enable_special_project = {
+				name  = GAS_COLONY_CHANGE_PROJECT
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+
+	option = {
+		name = gas.10.b
+		trigger = {
+			owner = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+		}
+		allow = {
+			owner = {
+				has_resource = {
+					type = energy
+					amount >= 500
+				}
+			}
+		}
+		owner = {
+			add_resource = { energy = -500 }
+		}
+		FROM = {
+			enable_special_project = {
+				name  = GAS_COLONY_CHANGE_PROJECT
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+
+	option = {
+		name = gas.10.c
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_gestalt_consciousness
+				}
+			}
+		}
+	}
+
+	option = {
+		name = gas.10.d
+		trigger = {
+			owner = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = gas.20
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_planet_class = pc_gas_colony
+	}
+
+	immediate = {
+		from = {
+			country_event = { id = gas.21 }
+		}
+	}
+}
+
+country_event = {
+	id = gas.21
+	title = gas.21.name
+	desc = gas.21.desc
+	picture = GFX_evt_gas_giant_station
+	show_sound = event_airlock
+	is_triggered_only = yes
+	location = from
+
+	trigger = {
+		has_origin = origin_gas_colony
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = gas.21.a
+	}
+}
+
+planet_event = {
+	id = gas.100
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		is_planet_class = pc_gas_colony
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				planet_size < 25
+			}
+			set_planet_size = 25
+		}
+		else_if = {
+			limit = {
+				planet_size > 40
+			}
+			set_planet_size = 40
+		}
+		reroll_pc_gas_colony_deposits = yes
+	}
+}
+
+ship_event = {
+	id = gas.200
+	title = gas.200.name
+	desc = gas.200.desc
+	picture = GFX_evt_gas_giant_station
+	show_sound = event_airlock
+	is_triggered_only = yes
+	location = FROMFROMFROM
+
+	immediate = {
+	}
+
+	option = {
+		name = gas.200.a
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_gestalt_consciousness
+				}
+			}
+		}
+	}
+
+	option = {
+		name = gas.200.b
+		trigger = {
+			owner = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = gas.300
+	title = gas.300.name
+	desc = gas.300.desc
+	picture = GFX_evt_gas_giant_station
+	show_sound = event_airlock
+	is_triggered_only = yes
+	location = FROMFROMFROM
+
+	immediate = {
+	}
+
+	option = {
+		name = gas.300.a
+		trigger = {
+			owner = {
+				NOT = {
+					has_ethic = ethic_gestalt_consciousness
+				}
+			}
+		}
+	}
+
+	option = {
+		name = gas.300.b
+		trigger = {
+			owner = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+		}
+	}
+}
+
+country_event = {
+	id = gas.1000
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_origin = origin_gas_colony
+		is_ai = yes
+	}
+	
+	immediate = {
+		country_event = { id = gas.1000 days = 1800 random = 3600 }
+		if = {
+			limit = {
+				any_planet_within_border = {
+					is_planet_class = pc_gas_giant
+					is_terraforming = no
+				}
+				has_country_resource = {
+					type = energy
+					amount >= 5000
+				}
+			}
+			random_planet_within_border = {
+				limit = {
+					is_planet_class = pc_gas_giant
+					is_terraforming = no
+				}
+				change_pc = pc_gas_colony
+				planet_event = { id = gas.100 }
+				create_colony = {
+					owner = root
+					species = root.owner_main_species
+				}
+			}
+			add_resource = {
+				energy = -5000
+			}
+		}
+	}
+}

@@ -1,0 +1,328 @@
+namespace = TT_tr_liberation
+
+planet_event = {
+	id = TT_tr_liberation.1
+	is_triggered_only = yes
+	hide_window = yes
+	pre_triggers = {
+		has_owner = yes
+		has_ground_combat = no
+	}
+	trigger = {
+		exists = owner
+		owner = { has_tradition = tr_tt_liberation_1 }
+		happiness_planet <= 0.40
+		num_pops >= 10
+		has_orbital_bombardment = no
+		exists = owner
+		owner = {
+			is_country_type = default
+			NOT = {
+				any_situation = {
+					is_situation_type = situation_planetary_revolt
+				}
+			}
+		}
+		NOR = {
+			has_planet_flag = 3_year_owner_change_flag
+			has_planet_flag = recent_revolt_attempt
+		}
+		is_doomsday_planet = no
+		exists = controller
+		controller = { is_same_value = root.owner }
+		OR = {
+			owner = { is_gestalt = yes }
+			any_owned_species = { species_has_happiness_with_owner = root.owner }
+		}
+		NOT = {
+			owner = {
+				has_active_event = { unrest.55 }
+			}
+		}
+		check_variable_arithmetic = { #will the revolt actually tick up?
+			which = value:potential_revolt_situation_monthly_progress_estimation
+			value > 0
+		}
+	}
+
+	immediate = {
+		set_timed_planet_flag = { flag = unrest_timer days = 360 }
+		if = { #Getting an impossible to prevent revolt due to culture shock is a bit harsh. (Planet can start with no jobs, for instance)
+			limit = { has_culture_shock = yes }
+			planet_event = { id = TT_tr_liberation.2 days = 60 random = 60 }
+		}
+		else = {
+			planet_event = { id = TT_tr_liberation.2 days = 30 random = 30 }
+		}
+	}
+}
+planet_event = {
+	id = TT_tr_liberation.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	pre_triggers = {
+		has_owner = yes
+		has_ground_combat = no
+	}
+
+	trigger = {
+		exists = owner
+		owner = { has_tradition = tr_tt_liberation_1 }
+		happiness_planet <= 0.40
+		num_pops >= 10
+		has_orbital_bombardment = no
+		exists = owner
+		owner = {
+			is_country_type = default
+			NOT = {
+				any_situation = {
+					is_situation_type = situation_planetary_revolt
+				}
+			}
+		}
+		NOR = {
+			has_planet_flag = 3_year_owner_change_flag
+			has_planet_flag = recent_revolt_attempt
+		}
+		exists = controller
+		controller = { is_same_value = root.owner }
+		OR = {
+			owner = { is_gestalt = yes }
+			any_owned_species = { species_has_happiness_with_owner = root.owner }
+		}
+		check_variable_arithmetic = { #will the revolt actually tick up?
+			which = value:potential_revolt_situation_monthly_progress_estimation
+			value > 0
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { #Extra safety because it's possible for two planets to fire this delayed event on the same day and it will check the trigger before either of them can fire (as of March 2022)
+				NOT = {
+					owner = {
+						any_situation = {
+							is_situation_type = situation_planetary_revolt
+						}
+					}
+				}
+			}
+			owner = { #Generally, one would expect the strongest planet to be the center of the revolt
+				#Use case here is if you conquer a whole bunch of enemy planets at once.
+				ordered_owned_planet = {
+					position = 0
+					order_by = trigger:num_pops
+					limit = {
+						has_planet_flag = unrest_timer
+						happiness_planet <= 0.40
+						has_orbital_bombardment = no
+						has_ground_combat = no
+						NOR = {
+							has_planet_flag = 3_year_owner_change_flag
+							has_planet_flag = recent_revolt_attempt
+						}
+						exists = controller
+						controller = { is_same_value = root.owner }
+						OR = {
+							owner = { is_gestalt = yes }
+							any_owned_species = { species_has_happiness_with_owner = root.owner }
+						}
+						check_variable_arithmetic = { #will the revolt actually tick up?
+							which = value:potential_revolt_situation_monthly_progress_estimation
+							value > 0
+						}
+					}
+					planet_event = { id = unrest.55 }
+				}
+			}
+		}
+	}
+}
+
+#on_yearly_pulse_country = {
+country_event = {
+	id = TT_tr_liberation.100
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = { #不能加入星海命运共同体的，移除修正
+			limit = { TT_trgr_CNTR_can_join_csfg = no }
+			remove_modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy
+		}
+		if = { #更新倍数
+			limit = { has_modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy }
+			remove_modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy
+			add_modifier = {
+				modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy
+				multiplier = value:TT_var_num_multiples_of_csfg
+				days = -1
+			}
+		}
+		if = { #AI判定自己是否加入星海命运共同体
+			limit = {
+				is_ai = yes
+				TT_trgr_CNTR_can_join_csfg = yes
+				any_relation = {
+					has_tradition = tr_tt_liberation_finish
+					TT_trgr_CNTR_can_join_csfg = yes
+				}
+			}
+			random_list = {
+				1 = { #加入
+					modifier = { factor = 0	has_modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy }
+					modifier = { factor = 1.5	has_ethic = ethic_egalitarian }
+					modifier = { factor = 2.0	has_ethic = ethic_fanatic_egalitarian }
+					modifier = { factor = 1.5	has_ethic = ethic_xenophile }
+					modifier = { factor = 2	has_ethic = ethic_fanatic_xenophile }
+					modifier = { factor = 1.5	has_ethic = ethic_pacifist }
+					modifier = { factor = 2.0	has_ethic = ethic_fanatic_pacifist }
+					modifier = { factor = 0.5	has_ethic = ethic_authoritarian }
+					modifier = { factor = 0.1	has_ethic = ethic_fanatic_authoritarian }
+					modifier = { factor = 0.5	has_ethic = ethic_xenophobe }
+					modifier = { factor = 0.1	has_ethic = ethic_fanatic_xenophobe }
+					modifier = { factor = 0.75	has_ethic = ethic_militarist }
+					modifier = { factor = 0.5	has_ethic = ethic_fanatic_militarist }
+					add_modifier = {
+						modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy
+						multiplier = value:TT_var_num_multiples_of_csfg
+						days = -1
+					}
+				}
+				1 = { #退出
+					modifier = { factor = 0.5	has_ethic = ethic_egalitarian }
+					modifier = { factor = 0.1	has_ethic = ethic_fanatic_egalitarian }
+					modifier = { factor = 0.5	has_ethic = ethic_xenophile }
+					modifier = { factor = 0.1	has_ethic = ethic_fanatic_xenophile }
+					modifier = { factor = 0.5	has_ethic = ethic_pacifist }
+					modifier = { factor = 0.1	has_ethic = ethic_fanatic_pacifist }
+					modifier = { factor = 1.5	has_ethic = ethic_authoritarian }
+					modifier = { factor = 2.0	has_ethic = ethic_fanatic_authoritarian }
+					modifier = { factor = 1.5	has_ethic = ethic_xenophobe }
+					modifier = { factor = 2.0	has_ethic = ethic_fanatic_xenophobe }
+					modifier = { factor = 1.25	has_ethic = ethic_militarist }
+					modifier = { factor = 1.5	has_ethic = ethic_fanatic_militarist }
+					remove_modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = TT_tr_liberation.101
+	title = TT_tr_liberation.101.name
+	desc = TT_tr_liberation.101.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+	trigger = {
+		TT_trgr_CNTR_can_join_csfg = yes
+		NOT = { has_modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy }
+		NOT = { has_country_flag = TT_flag_CNTR_declined_csfg }
+	}
+	option = {
+		name = TT_tr_liberation.101.a
+		custom_tooltip = TT_tr_liberation.101.tooltip
+		allow = { #宿敌不能接受
+			NOT = { has_rival = from }
+			NOT = { from = { has_rival = root } }
+		}
+		add_modifier = {
+			modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy
+			multiplier = value:TT_var_num_multiples_of_csfg
+			days = -1
+		}
+		hidden_effect = {
+			set_country_flag = TT_flag_CNTR_a_community_with_a_shared_future_for_the_galaxy
+		}
+		ai_chance = {
+			factor = 1
+			modifier = { factor = 1.5	opinion_level = { who = from level >= excellent } }
+			modifier = { factor = 1.25	opinion_level = { who = from level >= good } }
+			modifier = { factor = 1.5	has_ethic = ethic_egalitarian }
+			modifier = { factor = 2.0	has_ethic = ethic_fanatic_egalitarian }
+			modifier = { factor = 1.5	has_ethic = ethic_xenophile }
+			modifier = { factor = 2.0	has_ethic = ethic_fanatic_xenophile }
+			modifier = { factor = 1.5	has_ethic = ethic_pacifist }
+			modifier = { factor = 2.0	has_ethic = ethic_fanatic_pacifist }
+			modifier = { factor = 0.5	has_ethic = ethic_authoritarian }
+			modifier = { factor = 0.1	has_ethic = ethic_fanatic_authoritarian }
+			modifier = { factor = 0.5	has_ethic = ethic_xenophobe }
+			modifier = { factor = 0.1	has_ethic = ethic_fanatic_xenophobe }
+			modifier = { factor = 0.75	has_ethic = ethic_militarist }
+			modifier = { factor = 0.5	has_ethic = ethic_fanatic_militarist }
+		}
+	}
+	option = {
+		name = TT_tr_liberation.101.b
+		custom_tooltip = TT_tr_liberation.101.tooltip
+		hidden_effect = {
+			set_country_flag = TT_flag_CNTR_a_community_with_a_shared_future_for_the_galaxy
+			if = {
+				limit = { is_ai = no }
+				set_country_flag = TT_flag_CNTR_declined_csfg
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = { factor = 1.25	opinion_level = { who = from level <= poor } }
+			modifier = { factor = 1.5	opinion_level = { who = from level <= terrible } }
+			modifier = { factor = 0.5	is_in_federation_with = from }
+			modifier = { factor = 0.5	is_subject = yes overlord = { is_same_value = root.from } }
+			modifier = { factor = 0.5	has_ethic = ethic_egalitarian }
+			modifier = { factor = 0.1	has_ethic = ethic_fanatic_egalitarian }
+			modifier = { factor = 0.5	has_ethic = ethic_xenophile }
+			modifier = { factor = 0.1	has_ethic = ethic_fanatic_xenophile }
+			modifier = { factor = 0.5	has_ethic = ethic_pacifist }
+			modifier = { factor = 0.1	has_ethic = ethic_fanatic_pacifist }
+			modifier = { factor = 1.5	has_ethic = ethic_authoritarian }
+			modifier = { factor = 2.0	has_ethic = ethic_fanatic_authoritarian }
+			modifier = { factor = 1.5	has_ethic = ethic_xenophobe }
+			modifier = { factor = 2.0	has_ethic = ethic_fanatic_xenophobe }
+			modifier = { factor = 1.25	has_ethic = ethic_militarist }
+			modifier = { factor = 1.5	has_ethic = ethic_fanatic_militarist }
+		}
+	}
+}
+#星海命运共同体协议
+country_event = {
+	id = TT_tr_liberation.102
+	title = TT_tr_liberation.102.name
+	desc = TT_tr_liberation.102.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+		portrait = root
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root.ruler
+	}
+	option = {
+		name = TT_tr_liberation.102.a
+		allow = {
+			NOT = { has_modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy }
+		}
+		add_modifier = {
+			modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy
+			multiplier = value:TT_var_num_multiples_of_csfg
+			days = -1
+		}
+	}
+	option = {
+		name = TT_tr_liberation.102.b
+		allow = {
+			NOT = { has_tradition = tr_tt_liberation_finish }
+		}
+		remove_modifier = TT_mod_CNTR_a_community_with_a_shared_future_for_the_galaxy
+	}
+	option = {
+		name = TT_tr_liberation.102.c
+	}
+}

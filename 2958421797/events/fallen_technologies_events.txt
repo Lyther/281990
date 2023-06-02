@@ -1,0 +1,4965 @@
+###########################################
+#     	 Fallen Technologies Events
+#		  		  By Kolyn
+###########################################
+
+namespace = fallen_technologies
+
+#Eventually need to change country flags here to origin checks for OE and RE
+
+# Begins the Ascension Situation from Ascension Perk
+country_event = {
+	id = fallen_technologies.1
+	title = fallen_technologies.1.name
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_celebration
+	location = from
+	
+	desc = {
+		trigger = { 
+			NOR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_fanatic_egalitarian
+				has_authority = "auth_hive_mind"
+				has_authority = "auth_machine_intelligence"
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		text = "fallen_technologies.1.desc"
+	}
+	desc = {
+		trigger = { 
+			has_ethic = ethic_fanatic_spiritualist
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.spiritualist"
+	}
+	desc = { 
+		trigger = {
+			has_ethic = ethic_fanatic_materialist
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.materialist"
+	}
+	desc = { 
+		trigger = { 
+			has_ethic = ethic_fanatic_xenophile
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.xenophile"
+	}
+	desc = {
+		trigger = {
+			has_ethic = ethic_fanatic_xenophobe
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.xenophobe"
+	}
+	desc = {
+		trigger = {
+			has_ethic = ethic_fanatic_militarist
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.militarist"
+	}
+	desc = { 
+		trigger = {
+			has_ethic = ethic_fanatic_pacifist
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.pacifist"
+	}
+	desc = { 
+		trigger = {
+			has_ethic = ethic_fanatic_authoritarian
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.authoritarian"
+	}
+	desc = { 
+		trigger = {
+			has_ethic = ethic_fanatic_egalitarian
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.egalitarian"
+	}
+	desc = { 
+		trigger = {
+			has_authority = "auth_hive_mind"
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.hive_mind"
+	}
+	desc = { 
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.machine"
+	}
+	desc = { 
+		trigger = { has_origin = origin_ringworld_empire }
+		text = "fallen_technologies.1.desc.ringworld"
+	}
+	desc = { 
+		trigger = { has_origin = origin_original_people }
+		text = "fallen_technologies.1.desc.original"
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	
+		#Marks the country as Ascending
+		set_country_flag = ascending_empire
+	
+		#New Ascended Empire are protected from DoW somewhat
+		set_timed_country_flag = { flag = new_ascended_empire years = 10 }
+		
+		#Decadence Flags
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_1 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 100 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_2 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 150 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_3 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 200 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_4 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 250 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_5 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 300 }
+		}
+	}
+
+	#Default Response
+	option = {
+		name = fallen_technologies.1.default	
+		trigger = { 
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_machine_terminator
+				has_ascension_perk = ap_become_the_crisis
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Purifier Response
+	option = {
+		name = fallen_technologies.1.purifier	
+		trigger = { 
+			has_valid_civic = civic_fanatic_purifiers
+			NOR = { 
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Devouring Swarm Response
+	option = {
+		name = fallen_technologies.1.swarm	
+		trigger = { 
+			is_ai = no
+			has_valid_civic = civic_hive_devouring_swarm
+			NOR = { 
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Terminator Response
+	option = {
+		name = fallen_technologies.1.terminator	
+		trigger = { 
+			has_valid_civic = civic_machine_terminator
+			NOR = { 
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Crisis Aspirant Response
+	option = {
+		name = fallen_technologies.1.crisis	
+		trigger = { 
+			has_ascension_perk = ap_become_the_crisis
+			NOR = { 
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Ringworld Empire Response
+	option = {
+		name = fallen_technologies.1.ringworld	
+		trigger = { has_origin = origin_ringworld_empire }
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_re_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Original People Response
+	option = {
+		name = fallen_technologies.1.original	
+		trigger = { has_origin = origin_original_people }
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_oe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+}
+
+# Begins the Ascension Situation without the Ascension Perk
+country_event = {
+	id = fallen_technologies.10
+	title = fallen_technologies.1.name
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_celebration
+	location = root
+	
+	trigger = {
+		is_country_type = default
+		has_global_flag = galactic_ascendancy_ap_disabled
+		NOT = { has_country_flag = ascension_triggered_without_ap }
+		is_ai = no
+		NOT = { has_country_flag = ascension_failed }
+		OR = {
+			is_subject = no
+			AND = {
+				is_subject = yes
+				subject_ascension = yes
+			}
+		}
+		AND = {
+			has_technology = tech_dark_matter_power_core
+			has_technology = tech_mega_engineering
+			has_technology = tech_ascension_theory	
+		}
+		OR = {
+			has_global_flag = ascended_empire_min_navy_disabled
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_1 
+				fleet_power > 125000
+			}
+			AND = { 
+				has_global_flag = ascended_empire_min_navy_enabled_2
+				fleet_power > 250000
+			}
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_3
+				fleet_power > 500000
+			}
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_4
+				fleet_power > 750000
+			}
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_5
+				fleet_power > 1000000
+			}
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_6
+				fleet_power > 2000000
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 20
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+	
+	desc = {
+		trigger = { 
+			NOR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_fanatic_egalitarian
+				has_authority = "auth_hive_mind"
+				has_authority = "auth_machine_intelligence"
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		text = "fallen_technologies.1.desc"
+	}
+	desc = {
+		trigger = { 
+			has_ethic = ethic_fanatic_spiritualist
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.spiritualist"
+	}
+	desc = { 
+		trigger = {
+			has_ethic = ethic_fanatic_materialist
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.materialist"
+	}
+	desc = { 
+		trigger = { 
+			has_ethic = ethic_fanatic_xenophile
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.xenophile"
+	}
+	desc = {
+		trigger = {
+			has_ethic = ethic_fanatic_xenophobe
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.xenophobe"
+	}
+	desc = {
+		trigger = {
+			has_ethic = ethic_fanatic_militarist
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.militarist"
+	}
+	desc = { 
+		trigger = {
+			has_ethic = ethic_fanatic_pacifist
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.pacifist"
+	}
+	desc = { 
+		trigger = {
+			has_ethic = ethic_fanatic_authoritarian
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.authoritarian"
+	}
+	desc = { 
+		trigger = {
+			has_ethic = ethic_fanatic_egalitarian
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.egalitarian"
+	}
+	desc = { 
+		trigger = {
+			has_authority = "auth_hive_mind"
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.hive_mind"
+	}
+	desc = { 
+		trigger = {
+			has_authority = "auth_machine_intelligence"
+			NOR = { 
+				has_origin = origin_original_people
+				has_origin = origin_ringworld_empire
+			}
+		}
+		text = "fallen_technologies.1.desc.machine"
+	}
+	desc = { 
+		trigger = { has_origin = origin_ringworld_empire }
+		text = "fallen_technologies.1.desc.ringworld"
+	}
+	desc = { 
+		trigger = { has_origin = origin_original_people }
+		text = "fallen_technologies.1.desc.original"
+	}
+	
+	immediate = {
+		set_country_flag = ascension_triggered_without_ap
+	
+		#Marks the country as Ascending
+		set_country_flag = ascending_empire
+	
+		#New Ascended Empire are protected from DoW somewhat
+		set_timed_country_flag = { flag = new_ascended_empire years = 10 }
+		
+		#Decadence Flags
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_1 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 100 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_2 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 150 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_3 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 200 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_4 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 250 }
+		}
+		if = {
+			limit = { has_global_flag = ascended_empire_decadence_enabled_5 }
+			set_timed_country_flag = { flag = ascended_empire_no_decadence years = 300 }
+		}
+	}
+
+	#Default Response
+	option = {
+		name = fallen_technologies.1.default	
+		trigger = { 
+			NOR = {
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_machine_terminator
+				has_ascension_perk = ap_become_the_crisis
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Purifier Response
+	option = {
+		name = fallen_technologies.1.purifier	
+		trigger = { 
+			has_valid_civic = civic_fanatic_purifiers
+			NOR = { 
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Devouring Swarm Response
+	option = {
+		name = fallen_technologies.1.swarm	
+		trigger = { 
+			is_ai = no
+			has_valid_civic = civic_hive_devouring_swarm
+			NOR = { 
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Terminator Response
+	option = {
+		name = fallen_technologies.1.terminator	
+		trigger = { 
+			has_valid_civic = civic_machine_terminator
+			NOR = { 
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Crisis Aspirant Response
+	option = {
+		name = fallen_technologies.1.crisis	
+		trigger = { 
+			has_ascension_perk = ap_become_the_crisis
+			NOR = { 
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Ringworld Empire Response
+	option = {
+		name = fallen_technologies.1.ringworld	
+		trigger = { has_origin = origin_ringworld_empire }
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+	
+	#Original People Response
+	option = {
+		name = fallen_technologies.1.original	
+		trigger = { has_origin = origin_original_people }
+		
+		#Starts Ascension Situation
+		start_situation = {
+			type = situation_zofe_ascension
+			target = root.capital_scope	
+		}
+		
+		hidden_effect = {
+			every_country = {					# Notify Players
+				limit = {
+					NOT = { is_same_value = root }
+					is_ai = no			
+				}
+				country_event = { id = fallen_technologies.2 }
+			}
+		}
+	}
+}
+
+# AI Ascends without AP slot
+country_event = {
+	id = fallen_technologies.100
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {	
+		NOT = { has_country_flag = ai_debug_ascend }
+		NOT = { has_country_flag = ascension_failed }
+		AND = {
+			is_country_type = default
+			is_ascended_empire = no
+		}
+		is_ai = yes
+		OR = {
+			is_subject = no
+			AND = {
+				is_subject = yes
+				subject_ascension = yes
+			}
+		}
+		galactic_ascendancy_ap = yes
+		num_ascension_perks > 7
+		OR = {
+			has_global_flag = ascended_empire_min_navy_disabled
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_1 
+				fleet_power > 125000
+			}
+			AND = { 
+				has_global_flag = ascended_empire_min_navy_enabled_2
+				fleet_power > 250000
+			}
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_3
+				fleet_power > 500000
+			}
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_4
+				fleet_power > 750000
+			}
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_5
+				fleet_power > 1000000
+			}
+			AND = {
+				has_global_flag = ascended_empire_min_navy_enabled_6
+				fleet_power > 2000000
+			}
+		}
+		OR = {
+			has_global_flag = ai_ascension_enabled
+			AND = {
+				has_global_flag = ai_ascension_enabled_1
+				count_country = {
+					limit = { 
+						is_ascended_empire = yes
+						is_ai = yes
+					}
+					count < 1
+				}
+			}
+			AND = {
+				has_global_flag = ai_ascension_enabled_2
+				count_country = {
+					limit = { 
+						is_ascended_empire = yes
+						is_ai = yes
+					}
+					count < 2
+				}
+			}
+			AND = {
+				has_global_flag = ai_ascension_enabled_3
+				count_country = {
+					limit = { 
+						is_ascended_empire = yes
+						is_ai = yes
+					}
+					count < 3
+				}
+			}
+			AND = {
+				has_global_flag = ai_ascension_enabled_4
+				count_country = {
+					limit = { 
+						is_ascended_empire = yes
+						is_ai = yes
+					}
+					count < 4
+				}
+			}
+			AND = {
+				has_global_flag = ai_ascension_enabled_5
+				count_country = {
+					limit = { 
+						is_ascended_empire = yes
+						is_ai = yes
+					}
+					count < 5
+				}
+			}
+		}
+		AND = {
+			has_technology = tech_dark_matter_power_core
+			has_technology = tech_mega_engineering
+			has_technology = tech_ascension_theory	
+		}
+		OR = {
+			has_ethic = ethic_fanatic_spiritualist
+			has_ethic = ethic_fanatic_materialist
+			has_ethic = ethic_fanatic_xenophile
+			has_ethic = ethic_fanatic_xenophobe
+			has_ethic = ethic_fanatic_militarist
+			has_ethic = ethic_fanatic_pacifist
+			has_ethic = ethic_fanatic_authoritarian
+			has_ethic = ethic_fanatic_egalitarian
+			has_authority = "auth_hive_mind"
+			has_authority = "auth_machine_intelligence"
+			has_authority = "auth_corporate"
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 20
+		modifier = {
+			factor = 2.0
+			has_global_flag = ai_ascended_empire_vanilla_difficulty			
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = ai_ascended_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = ai_ascended_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = ai_ascended_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = ai_ascended_empire_nightmare_difficulty
+		}
+	}
+	
+	immediate = {
+		set_country_flag = ai_debug_ascend
+		country_event = { id = fallen_technologies.1 }
+	}
+}
+
+# Fallen Technologies 1 (FE Buildings) Completed
+situation_event = {
+	id = fallen_technologies.101
+	title = fallen_technologies.101.name
+	desc = fallen_technologies.101.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_administrative_work
+	location = from
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			set_country_flag = fallen_technologies_1_completed
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.101.a
+		trigger = { automated_industries = yes }
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_1 }
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_class_4_singularity
+				add_tech_progress = {
+					tech = tech_fe_class_4_singularity
+					progress = 0.50
+				}
+				add_research_option = tech_fe_dimensional_fabricator
+				add_tech_progress = {
+					tech = tech_fe_dimensional_fabricator
+					progress = 0.50
+				}
+				add_research_option = tech_fe_nourishment_center
+				add_tech_progress = {
+					tech = tech_fe_nourishment_center
+					progress = 0.50
+				}
+				add_research_option = tech_fe_affluence_center
+				add_tech_progress = {
+					tech = tech_fe_affluence_center
+					progress = 0.50
+				}
+				add_research_option = tech_fe_nano_forge
+				add_tech_progress = {
+					tech = tech_fe_nano_forge
+					progress = 0.50
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.101.b
+		add_situation_progress = 30
+		if = {
+			limit = { 
+				owner = {
+					NOR = {
+						has_technology = tech_mine_living_metal
+						has_tech_option = tech_mine_living_metal
+					}
+				}
+			}
+			owner = { add_research_option = tech_mine_living_metal }
+		}
+		if = {
+			limit = { 
+				owner = {
+					OR = {
+						has_technology = tech_mine_living_metal
+						has_tech_option = tech_mine_living_metal
+					}
+				}
+			}
+			owner = { add_resource = { engineering_research = 50000 } }
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.101.c
+		trigger = { automated_industries = yes }
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_1 }
+		}
+		add_situation_progress = -30
+		if = {
+			limit = { 
+				owner = {
+					NOR = {
+						has_technology = tech_mine_living_metal
+						has_tech_option = tech_mine_living_metal
+					}
+				}
+			}
+			owner = { add_research_option = tech_mine_living_metal }
+		}
+		if = {
+			limit = { 
+				owner = {
+					OR = {
+						has_technology = tech_mine_living_metal
+						has_tech_option = tech_mine_living_metal
+					}
+				}
+			}
+			owner = { add_resource = { engineering_research = 50000 } }
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_class_4_singularity
+				add_tech_progress = {
+					tech = tech_fe_class_4_singularity
+					progress = 0.50
+				}
+				add_research_option = tech_fe_dimensional_fabricator
+				add_tech_progress = {
+					tech = tech_fe_dimensional_fabricator
+					progress = 0.50
+				}
+				add_research_option = tech_fe_nourishment_center
+				add_tech_progress = {
+					tech = tech_fe_nourishment_center
+					progress = 0.50
+				}
+				add_research_option = tech_fe_affluence_center
+				add_tech_progress = {
+					tech = tech_fe_affluence_center
+					progress = 0.50
+				}
+				add_research_option = tech_fe_nano_forge
+				add_tech_progress = {
+					tech = tech_fe_nano_forge
+					progress = 0.50
+				}
+			}
+		}
+	}
+}
+
+# Fallen Technologies 2 Completed (Societal Buildings)
+situation_event = {
+	id = fallen_technologies.102
+	title = fallen_technologies.102.name
+	desc = fallen_technologies.102.desc
+	picture = GFX_evt_city_planet
+	show_sound = event_cityscape
+	location = target
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = {
+			set_country_flag = fallen_technologies_2_completed
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.102.a
+		trigger = { societal_ascendance = yes }
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_2 }
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.102.b
+		add_situation_progress = 30
+		if = {
+			limit = { 
+				host_has_dlc = "Megacorp"
+				owner = {
+					is_regular_empire = yes
+					NOT = {
+						has_ascension_perk = ap_arcology_project
+					}
+				}
+			}
+			owner = {
+				add_research_option = tech_arcology_project
+			}
+		}
+		if = {
+			limit = { 
+				host_has_dlc = "Megacorp"
+				owner = {
+					is_regular_empire = yes
+					has_ascension_perk = ap_arcology_project
+				}
+			}
+			owner = {
+				add_resource = { unity = 50000 }
+			}
+		}
+	}
+	option = {
+		name = fallen_technologies.102.c
+		trigger = {
+			societal_ascendance = yes
+			host_has_dlc = "Megacorp"
+			owner = {
+				is_regular_empire = yes
+				NOT = { has_ascension_perk = ap_arcology_project }
+			}
+		}
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_2 }
+		}
+		add_situation_progress = -30
+		if = {
+			limit = { 
+				host_has_dlc = "Megacorp"
+				owner = {
+					is_regular_empire = yes
+					NOT = { has_ascension_perk = ap_arcology_project }
+				}
+			}
+			owner = {
+				add_research_option = tech_arcology_project
+			}
+		}
+	}
+}
+
+# Fallen Technologies 3 (FE Ships) Completed
+situation_event = {
+	id = fallen_technologies.103
+	title = fallen_technologies.103.name
+
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	location = target
+	
+	desc = {
+		text = fallen_technologies.103.desc
+		trigger = {
+			owner = {
+				NOR = {
+					has_origin = origin_ringworld_empire
+					has_origin = origin_original_people
+				}
+			}
+		}
+	}
+	desc = {
+		text = fallen_technologies.103.desc.ringworld
+		trigger = {
+			owner = {
+				has_origin = origin_ringworld_empire
+			}
+		}
+	}
+	desc = {
+		text = fallen_technologies.103.desc.original
+		trigger = {
+			owner = {
+				has_origin = origin_original_people
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = { set_country_flag = fallen_technologies_3_completed }
+	}
+
+	option = {
+		name = fallen_technologies.103.spiritualist
+		trigger = {
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_spiritualist
+				set_city_graphical_culture = fallen_spiritualist
+				room_name_override = "fallen_spiritualist_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_ethic = ethic_fanatic_spiritualist
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.materialist
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_ethic = ethic_materialist
+					has_ethic = ethic_fanatic_materialist
+				}	
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_materialist
+				set_city_graphical_culture = fallen_materialist
+				room_name_override = "fallen_materialist_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_ethic = ethic_fanatic_materialist
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.xenophile
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}	
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_xenophile
+				set_city_graphical_culture = fallen_xenophile
+				room_name_override = "fallen_xenophile_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.xenophobe
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_xenophobe
+				set_city_graphical_culture = fallen_xenophobe
+				room_name_override = "fallen_xenophobe_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_ethic = ethic_fanatic_xenophobe
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.purifier
+		exclusive_trigger = { 
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_ascension_perk = ap_become_the_crisis
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_xenophobe_02
+				set_city_graphical_culture = fallen_xenophobe_02
+				room_name_override = "fallen_xenophobe_02_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					OR = {
+						has_valid_civic = civic_fanatic_purifiers
+						has_ascension_perk = ap_become_the_crisis
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.militarist
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_militarist
+				set_city_graphical_culture = fallen_militarist
+				room_name_override = "fallen_militarist_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.pacifist
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+				}	
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_pacifist
+				set_city_graphical_culture = fallen_pacifist
+				room_name_override = "fallen_pacifist_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_ethic = ethic_fanatic_pacifist
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.perfection
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				has_valid_civic = civic_inwards_perfection
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_spiritualist_02
+				set_city_graphical_culture = fallen_spiritualist_02
+				room_name_override = "fallen_spiritualist_02_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_valid_civic = civic_inwards_perfection
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.authoritarian
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_fanatic_authoritarian
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_authoritarian
+				set_city_graphical_culture = fallen_authoritarian
+				room_name_override = "fallen_authoritarian_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_ethic = ethic_fanatic_authoritarian
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.egalitarian
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				OR = {
+					has_ethic = ethic_egalitarian
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_egalitarian_02
+				set_city_graphical_culture = fallen_egalitarian_02
+				room_name_override = "fallen_egalitarian_02_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.hive_mind
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				has_authority = auth_hive_mind	
+				NOT = { has_valid_civic = civic_hive_devouring_swarm }
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_hive_mind
+				set_city_graphical_culture = fallen_hive_mind
+				room_name_override = "fallen_hive_mind_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_authority = auth_hive_mind	
+					NOT = { has_valid_civic = civic_hive_devouring_swarm }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.swarm
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				has_authority = auth_hive_mind	
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_hive_mind_02
+				set_city_graphical_culture = fallen_hive_mind_02
+				room_name_override = "fallen_hive_mind_02_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_authority = auth_hive_mind	
+					has_valid_civic = civic_hive_devouring_swarm
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.machine
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				has_authority = auth_machine_intelligence
+				NOT = {
+					has_valid_civic = civic_machine_terminator
+				}
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_machine
+				set_city_graphical_culture = fallen_machine
+				room_name_override = "fallen_machine_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_authority = auth_machine_intelligence	
+					NOT = { has_valid_civic = civic_machine_terminator }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.terminator
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				has_authority = auth_machine_intelligence
+				has_valid_civic = civic_machine_terminator
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_machine_02
+				set_city_graphical_culture = fallen_machine_02
+				room_name_override = "fallen_machine_02_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_authority = auth_machine_intelligence	
+					has_valid_civic = civic_machine_terminator
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.megacorp
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				has_authority = auth_corporate
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_militarist_02
+				set_city_graphical_culture = fallen_militarist_02
+				room_name_override = "fallen_militarist_02_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_authority = auth_corporate	
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.original
+		trigger = { 
+			question_of_style = yes
+			owner = {
+				has_origin = origin_original_people
+			}
+		}
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}
+			add_research_option = tech_fe_escorts
+			add_tech_progress = {
+				tech = tech_fe_escorts
+				progress = 0.75
+			}
+			add_research_option = tech_fe_battlecruisers
+			add_tech_progress = {
+				tech = tech_fe_battlecruisers
+				progress = 0.50
+			}
+			add_research_option = tech_fe_titans
+			add_tech_progress = {
+				tech = tech_fe_titans
+				progress = 0.25
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = original_empire_01
+				set_city_graphical_culture = original_empire_01
+				room_name_override = "original_empire_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 10
+				owner = {
+					has_origin = origin_original_people
+				}
+			}
+		}
+	}
+
+	option = {
+		name = fallen_technologies.103.national
+		trigger = { question_of_style = yes }
+		owner = {
+			add_resource = { influence = 100 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				set_graphical_culture = fallen_materialist_02
+				set_city_graphical_culture = fallen_materialist_02
+				room_name_override = "fallen_materialist_02_room"
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 100
+			modifier = {
+				factor = 10
+				owner = {
+					NOR = {
+						has_ethic = ethic_fanatic_spiritualist
+						has_ethic = ethic_fanatic_materialist
+						has_ethic = ethic_fanatic_xenophile
+						has_ethic = ethic_fanatic_xenophobe
+						has_ethic = ethic_fanatic_militarist
+						has_ethic = ethic_fanatic_pacifist
+						has_ethic = ethic_fanatic_authoritarian
+						has_ethic = ethic_fanatic_egalitarian
+						has_authority = auth_hive_mind
+						has_authority = auth_machine_intelligence
+						has_authority = auth_corporate
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.redesign
+		trigger = { question_of_style = yes }
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = influence value >= 250 }
+			}
+		}
+		owner = {
+			add_resource = { influence = -250 }
+			give_technology = { tech = tech_fallen_technologies_3 message = no }
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		if = {
+			limit = {
+				owner = { has_origin = origin_original_people }
+			}
+			owner = {
+				add_research_option = tech_fe_escorts
+				add_tech_progress = {
+					tech = tech_fe_escorts
+					progress = 0.75
+				}
+				add_research_option = tech_fe_battlecruisers
+				add_tech_progress = {
+					tech = tech_fe_battlecruisers
+					progress = 0.50
+				}
+				add_research_option = tech_fe_titans
+				add_tech_progress = {
+					tech = tech_fe_titans
+					progress = 0.25
+				}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				country_event = { id = zofe_debug.2 }
+			}
+		}
+		ai_chance = {										
+			factor = 0			
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.103.none
+		if = {
+			limit = { question_of_style = yes }
+			custom_tooltip = "fe_ships_graphical_bugs"
+			owner = {
+				add_resource = { influence = -250 }
+				give_technology = { tech = tech_fallen_technologies_3 message = no }
+			}
+		}
+		owner = {
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_propulsion
+						has_tech_option = tech_dark_matter_propulsion
+					}
+				}
+				give_technology = { tech = tech_dark_matter_propulsion message = no }
+			}	
+		}
+		
+		ai_chance = {										
+			factor = 0			
+		}
+	}
+}
+
+# Fallen Technologies 4 (Masters of Warfare) Completed
+situation_event = {
+	id = fallen_technologies.104
+	title = fallen_technologies.104.name
+
+	picture = GFX_evt_engineering_research
+	show_sound = event_solar_fusion
+	location = target
+	
+	desc = {
+		text = fallen_technologies.104.desc
+		trigger = {
+			owner = {
+				NOR = {
+					has_origin = origin_ringworld_empire
+					has_origin = origin_original_people
+				}
+			}
+		}
+	}
+	desc = {
+		text = fallen_technologies.104.desc.ringworld
+		trigger = {
+			owner = {
+				has_origin = origin_ringworld_empire
+			}
+		}
+	}
+	desc = {
+		text = fallen_technologies.104.desc.original
+		trigger = {
+			owner = {
+				has_origin = origin_original_people
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = { set_country_flag = fallen_technologies_4_completed }
+	}
+	
+	option = {
+		name = fallen_technologies.104.a
+		trigger = { masters_of_warfare = yes}
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_4 }
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.104.b
+		add_situation_progress = 30
+		owner = {
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_deflector
+						has_tech_option = tech_dark_matter_deflector
+					}
+				}
+				add_research_option = tech_dark_matter_deflector
+			}
+		}
+		owner = {
+			if = {
+				limit = { 
+					OR = {
+						has_technology = tech_dark_matter_deflector
+						has_tech_option = tech_dark_matter_deflector
+					}
+				}
+				owner = {
+					add_resource = { physics_research = 50000 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.104.c
+		trigger = { masters_of_warfare = yes}
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_4 }
+		}
+		add_situation_progress = -30
+		owner = {
+			if = {
+				limit = { 
+					NOR = {
+						has_technology = tech_dark_matter_deflector
+						has_tech_option = tech_dark_matter_deflector
+					}
+				}
+				add_research_option = tech_dark_matter_deflector
+			}
+		}
+		owner = {
+			if = {
+				limit = { 
+					OR = {
+						has_technology = tech_dark_matter_deflector
+						has_tech_option = tech_dark_matter_deflector
+					}
+				}
+				owner = {
+					add_resource = { physics_research = 50000 }
+				}
+			}
+		}
+	}
+}
+
+# Fallen Technologies 5 (Ambitions of Power) Completed
+situation_event = {
+	id = fallen_technologies.105
+	title = fallen_technologies.105.name
+	desc = fallen_technologies.105.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_conversation
+	location = target
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = { set_country_flag = fallen_technologies_5_completed }
+	}
+	
+	option = {
+		name = fallen_technologies.105.a
+		trigger = { ambitions_of_power = yes }
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_5 }
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.105.b
+		add_situation_progress = 30
+		owner = {
+			if = {
+				limit = { 
+					host_has_dlc = "Apocalypse"
+					has_technology = tech_titans
+					NOT = {
+						has_ascension_perk = ap_colossus
+					}
+				}
+				hidden_effect = {
+					country_event = { id = apoc.100 }
+				}
+			}
+			if = {
+				limit = { 
+					host_has_dlc = "Apocalypse"
+					has_technology = tech_titans
+					has_ascension_perk = ap_colossus
+				}
+				give_technology = { tech = tech_colossus_hull_1 }
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.105.c
+		trigger = {
+			ambitions_of_power = yes
+			host_has_dlc = "Apocalypse"
+			owner = {
+				has_technology = tech_titans
+				NOT = {
+					has_ascension_perk = ap_colossus
+				}
+			}
+		}
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_5 }
+		}
+		add_situation_progress = -30
+		owner = {
+			if = {
+				limit = { 
+					host_has_dlc = "Apocalypse"
+					has_technology = tech_titans
+					NOT = {
+						has_ascension_perk = ap_colossus
+					}
+				}
+				hidden_effect = {
+					country_event = { id = apoc.100 }
+				}
+			}
+			if = {
+				limit = { 
+					host_has_dlc = "Apocalypse"
+					has_technology = tech_titans
+					has_ascension_perk = ap_colossus
+				}
+				give_technology = { tech = tech_colossus_hull_1 }
+			}
+		}
+	}
+}
+
+# Fallen Technologies 6 (Engineering Perfection) Completed
+situation_event = {
+	id = fallen_technologies.106
+	title = fallen_technologies.106.name
+	desc = fallen_technologies.106.desc
+	picture = GFX_evt_ringworld
+	show_sound = event_construction
+	location = target
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		owner = { set_country_flag = fallen_technologies_6_completed }
+	}
+	
+	option = {
+		name = fallen_technologies.106.a
+		trigger = { engineering_perfection = yes }
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_6 }
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.106.b
+		add_situation_progress = 30
+		owner = {
+			if = {
+				limit = { 
+					host_has_dlc = "Utopia"
+					NOR = {
+						has_technology = tech_ring_world
+						has_tech_option = tech_ring_world
+					}
+				}
+				add_research_option = tech_ring_world
+			}
+			if = {
+				limit = { 
+					host_has_dlc = "Utopia"
+					NOR = {
+						has_technology = tech_dyson_sphere
+						has_tech_option = tech_dyson_sphere
+					}
+				}
+				add_research_option = tech_dyson_sphere
+			}
+			if = {
+				limit = { 
+					host_has_dlc = "Megacorp"
+					NOR = {
+						has_technology = tech_matter_decompressor
+						has_tech_option = tech_matter_decompressor
+					}
+				}
+				add_research_option = tech_matter_decompressor
+			}
+			if = {
+				limit = { 
+					host_has_dlc = "Utopia"
+					OR = {
+						has_technology = tech_ring_world
+						has_technology = tech_dyson_sphere
+						has_technology = tech_matter_decompressor
+					}
+				}
+				add_resource = { engineering_research = 50000 }
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.106.c
+		trigger = { engineering_perfection = yes }
+		owner = {
+			give_technology = { tech = tech_fallen_technologies_6 }
+		}
+		add_situation_progress = -30
+		owner = {
+			if = {
+				limit = { 
+					host_has_dlc = "Utopia"
+					NOR = {
+						has_technology = tech_ring_world
+						has_tech_option = tech_ring_world
+					}
+				}
+				add_research_option = tech_ring_world
+			}
+			if = {
+				limit = { 
+					host_has_dlc = "Utopia"
+					NOR = {
+						has_technology = tech_dyson_sphere
+						has_tech_option = tech_dyson_sphere
+					}
+				}
+				add_research_option = tech_dyson_sphere
+			}
+			if = {
+				limit = { 
+					host_has_dlc = "Megacorp"
+					NOR = {
+						has_technology = tech_matter_decompressor
+						has_tech_option = tech_matter_decompressor
+					}
+				}
+				add_research_option = tech_matter_decompressor
+			}
+			if = {
+				limit = { 
+					host_has_dlc = "Utopia"
+					OR = {
+						has_technology = tech_ring_world
+						has_technology = tech_dyson_sphere
+						has_technology = tech_matter_decompressor
+					}
+				}
+				add_resource = { engineering_research = 50000 }
+			}
+		}
+	}
+}
+
+# Ascension Complete
+country_event = {
+	id = fallen_technologies.1000
+	title = fallen_technologies.1000.name
+	
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_celebration
+	location = root.capital_scope
+	
+	desc = {
+		text = fallen_technologies.1000.desc
+		trigger = {
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+	}
+	desc = {
+		text = fallen_technologies.1000.desc.ringworld
+		trigger = {
+			has_origin = origin_ringworld_empire
+		}
+	}
+	desc = {
+		text = fallen_technologies.1000.desc.original
+		trigger = {
+			has_origin = origin_original_people
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		# Flag as an Ascended Empire
+		set_country_flag = ascended_empire
+
+		#Export country resource variables.
+		if = {
+			limit = { zofe_sandbox = yes }
+
+			check_default_country_energy = yes
+			check_default_country_minerals = yes
+			check_default_country_food = yes
+			check_default_country_consumer_goods = yes
+			check_default_country_alloys = yes
+			check_default_country_unity = yes
+			check_default_country_volatile_motes = yes
+			check_default_country_exotic_gases = yes
+			check_default_country_rare_crystals = yes
+			check_default_country_sr_dark_matter = yes
+			check_default_country_sr_zro = yes
+			check_default_country_sr_living_metal = yes
+			check_default_country_nanites = yes
+			check_default_country_minor_artifacts = yes	
+			check_default_country_influence = yes
+		}
+	}
+
+	option = {
+		name = fallen_technologies.1000.superpower						# Galactic Superpower
+		trigger = {
+			is_gestalt = no
+		}
+		custom_tooltip = "galactic_superpower"
+		add_resource = { unity = 200000 }
+		force_add_civic = civic_galactic_superpower
+		set_country_flag = ascended_galactic_superpower
+		if = {
+			limit = { zofe_sandbox = yes }
+			set_country_type = ascended_empire
+		}
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			
+			add_ascended_empire_energy = yes
+			add_ascended_empire_minerals = yes
+			add_ascended_empire_food = yes
+			add_ascended_empire_consumer_goods = yes
+			add_ascended_empire_alloys = yes
+			add_ascended_empire_unity = yes
+			add_ascended_empire_volatile_motes = yes
+			add_ascended_empire_exotic_gases = yes
+			add_ascended_empire_rare_crystals = yes
+			add_ascended_empire_sr_dark_matter = yes
+			add_ascended_empire_sr_zro = yes
+			add_ascended_empire_sr_living_metal = yes
+			add_ascended_empire_nanites = yes
+			add_ascended_empire_minor_artifacts = yes			
+			add_ascended_empire_influence = yes
+			
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.200 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2000 }
+				}
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 20
+				has_ethic = ethic_fanatic_militarist
+			}
+			modifier = {
+				factor = 20
+				has_ascension_perk = ap_galactic_contender
+			}
+			modifier = {
+				factor = 10
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 10
+				has_ascension_perk = ap_defender_of_the_galaxy
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_spiritualist	
+			}
+			modifier = {
+				factor = 5
+				has_ascension_perk = ap_galactic_force_projection
+			}
+		}
+	}
+
+	option = {
+		name = fallen_technologies.1000.prosperity						# Beacon of Prosperity
+		trigger = {
+			is_gestalt = no
+		}
+		custom_tooltip = "economic_prosperity"	
+		add_resource = { unity = 200000 }
+		force_add_civic = civic_beacon_of_prosperity
+		set_country_flag = ascended_beacon_of_prosperity
+		if = {
+			limit = { zofe_sandbox = yes }
+			set_country_type = ascended_empire
+		}
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			
+			add_ascended_empire_energy = yes
+			add_ascended_empire_minerals = yes
+			add_ascended_empire_food = yes
+			add_ascended_empire_consumer_goods = yes
+			add_ascended_empire_alloys = yes
+			add_ascended_empire_unity = yes
+			add_ascended_empire_volatile_motes = yes
+			add_ascended_empire_exotic_gases = yes
+			add_ascended_empire_rare_crystals = yes
+			add_ascended_empire_sr_dark_matter = yes
+			add_ascended_empire_sr_zro = yes
+			add_ascended_empire_sr_living_metal = yes
+			add_ascended_empire_nanites = yes
+			add_ascended_empire_minor_artifacts = yes			
+			add_ascended_empire_influence = yes
+			
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.200 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2000 }
+				}
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 20
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			modifier = {
+				factor = 20
+				has_ascension_perk = ap_shared_destiny
+			}
+			modifier = {
+				factor = 10
+				has_ethic = ethic_fanatic_xenophile
+			}
+			modifier = {
+				factor = 10
+				has_ascension_perk = ap_imperial_prerogative
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_materialist
+			}
+			modifier = {
+				factor = 5
+				has_ascension_perk = ap_technological_ascendancy	
+			}
+		}
+	}
+
+	option = {
+		name = fallen_technologies.1000.industrial						# Industrial Juggernaut
+		trigger = {
+			is_gestalt = no
+		}
+		custom_tooltip = "industrial_juggernaut"
+		add_resource = { unity = 200000 }
+		force_add_civic = civic_industrial_juggernaut
+		set_country_flag = ascended_industrial_juggernaut
+		if = {
+			limit = { zofe_sandbox = yes }
+			set_country_type = ascended_empire
+		}
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			
+			add_ascended_empire_energy = yes
+			add_ascended_empire_minerals = yes
+			add_ascended_empire_food = yes
+			add_ascended_empire_consumer_goods = yes
+			add_ascended_empire_alloys = yes
+			add_ascended_empire_unity = yes
+			add_ascended_empire_volatile_motes = yes
+			add_ascended_empire_exotic_gases = yes
+			add_ascended_empire_rare_crystals = yes
+			add_ascended_empire_sr_dark_matter = yes
+			add_ascended_empire_sr_zro = yes
+			add_ascended_empire_sr_living_metal = yes
+			add_ascended_empire_nanites = yes
+			add_ascended_empire_minor_artifacts = yes			
+			add_ascended_empire_influence = yes
+			
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.200 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2000 }
+				}
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 20
+				has_ethic = ethic_fanatic_materialist
+			}
+			modifier = {
+				factor = 20
+				has_ascension_perk = ap_technological_ascendancy
+			}
+			modifier = {
+				factor = 10
+				has_ethic = ethic_fanatic_militarist
+			}
+			modifier = {
+				factor = 10
+				has_ascension_perk = ap_arcology_project
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_xenophobe		
+			}
+			modifier = {
+				factor = 5
+				has_ascension_perk = ap_executive_vigor	
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.1000.architect						# World Architect
+		trigger = {
+			is_gestalt = no
+		}
+		custom_tooltip = "world_architect"
+		add_resource = { unity = 200000 }
+		force_add_civic = civic_world_architect
+		set_country_flag = ascended_world_architect
+		if = {
+			limit = { zofe_sandbox = yes }
+			set_country_type = ascended_empire
+		}
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			
+			add_ascended_empire_energy = yes
+			add_ascended_empire_minerals = yes
+			add_ascended_empire_food = yes
+			add_ascended_empire_consumer_goods = yes
+			add_ascended_empire_alloys = yes
+			add_ascended_empire_unity = yes
+			add_ascended_empire_volatile_motes = yes
+			add_ascended_empire_exotic_gases = yes
+			add_ascended_empire_rare_crystals = yes
+			add_ascended_empire_sr_dark_matter = yes
+			add_ascended_empire_sr_zro = yes
+			add_ascended_empire_sr_living_metal = yes
+			add_ascended_empire_nanites = yes
+			add_ascended_empire_minor_artifacts = yes			
+			add_ascended_empire_influence = yes
+			
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.200 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2000 }
+				}
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 20
+				has_ethic = ethic_fanatic_pacifist
+			}
+			modifier = {
+				factor = 20
+				OR = {
+					has_ascension_perk = ap_galactic_wonders_utopia
+					has_ascension_perk = ap_galactic_wonders_megacorp
+				}
+			}
+			modifier = {
+				factor = 10
+				has_ethic = ethic_fanatic_authoritarian
+			}
+			modifier = {
+				factor = 10
+				OR = {
+					has_ascension_perk = ap_world_shaper
+					has_ascension_perk = ap_master_builders	
+				}
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_spiritualist		
+			}
+			modifier = {
+				factor = 5
+				has_ascension_perk = ap_mastery_of_nature	
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.1000.spymaster						# Spymaster
+		trigger = {
+			is_gestalt = no
+			NOT = { has_authority = auth_corporate }
+		}
+		custom_tooltip = "spy_master"	
+		add_resource = { unity = 200000 }
+		force_add_civic = civic_spymaster
+		set_country_flag = ascended_spymaster
+		if = {
+			limit = { zofe_sandbox = yes }
+			set_country_type = ascended_empire
+		}
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			
+			add_ascended_empire_energy = yes
+			add_ascended_empire_minerals = yes
+			add_ascended_empire_food = yes
+			add_ascended_empire_consumer_goods = yes
+			add_ascended_empire_alloys = yes
+			add_ascended_empire_unity = yes
+			add_ascended_empire_volatile_motes = yes
+			add_ascended_empire_exotic_gases = yes
+			add_ascended_empire_rare_crystals = yes
+			add_ascended_empire_sr_dark_matter = yes
+			add_ascended_empire_sr_zro = yes
+			add_ascended_empire_sr_living_metal = yes
+			add_ascended_empire_nanites = yes
+			add_ascended_empire_minor_artifacts = yes			
+			add_ascended_empire_influence = yes
+			
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.200 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2000 }
+				}
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+			modifier = {
+				factor = 20
+				has_ethic = ethic_fanatic_xenophile
+			}
+			modifier = {
+				factor = 20
+				has_ascension_perk = ap_enigmatic_engineering
+			}
+			modifier = {
+				factor = 10
+				has_ethic = ethic_fanatic_pacifist
+			}
+			modifier = {
+				factor = 10
+				has_ascension_perk = ap_nihilistic_acquisition		
+			}
+			modifier = {
+				factor = 5
+				has_ethic = ethic_fanatic_authoritarian	
+			}
+			modifier = {
+				factor = 5
+				has_ascension_perk = ap_eternal_vigilance	
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.1000.hive						# All Seeing Eye
+		trigger = {
+			has_authority = auth_hive_mind
+		}
+		custom_tooltip = "all_seeing_eye"
+			add_resource = { unity = 200000 }
+			force_add_civic = civic_all_seeing_eye
+			set_country_flag = ascended_mind
+			if = {
+				limit = { zofe_sandbox = yes }
+				set_country_type = ascended_empire
+			}
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			
+			add_ascended_empire_energy = yes
+			add_ascended_empire_minerals = yes
+			add_ascended_empire_food = yes
+			add_ascended_empire_consumer_goods = yes
+			add_ascended_empire_alloys = yes
+			add_ascended_empire_unity = yes
+			add_ascended_empire_volatile_motes = yes
+			add_ascended_empire_exotic_gases = yes
+			add_ascended_empire_rare_crystals = yes
+			add_ascended_empire_sr_dark_matter = yes
+			add_ascended_empire_sr_zro = yes
+			add_ascended_empire_sr_living_metal = yes
+			add_ascended_empire_nanites = yes
+			add_ascended_empire_minor_artifacts = yes			
+			add_ascended_empire_influence = yes
+			
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.200 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2000 }
+				}
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000			
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.1000.machine						# All Seeing Machine
+		trigger = {
+			has_authority = auth_machine_intelligence
+		}
+		custom_tooltip = "all_seeing_machine"
+		add_resource = { unity = 200000 }
+		force_add_civic = civic_all_seeing_machine
+		set_country_flag = ascended_mind
+		if = {
+			limit = { zofe_sandbox = yes }
+			set_country_type = ascended_empire
+		}
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			
+			add_ascended_empire_energy = yes
+			add_ascended_empire_minerals = yes
+			add_ascended_empire_food = yes
+			add_ascended_empire_consumer_goods = yes
+			add_ascended_empire_alloys = yes
+			add_ascended_empire_unity = yes
+			add_ascended_empire_volatile_motes = yes
+			add_ascended_empire_exotic_gases = yes
+			add_ascended_empire_rare_crystals = yes
+			add_ascended_empire_sr_dark_matter = yes
+			add_ascended_empire_sr_zro = yes
+			add_ascended_empire_sr_living_metal = yes
+			add_ascended_empire_nanites = yes
+			add_ascended_empire_minor_artifacts = yes			
+			add_ascended_empire_influence = yes
+			
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.200 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2000 }
+				}
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 1000			
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.1000.x						# No National Focus Selected	
+			add_resource = { unity = 200000 }
+			set_country_flag = no_national_focus
+			if = {
+				limit = { zofe_sandbox = yes }
+				set_country_type = ascended_empire
+			}
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			
+			add_ascended_empire_energy = yes
+			add_ascended_empire_minerals = yes
+			add_ascended_empire_food = yes
+			add_ascended_empire_consumer_goods = yes
+			add_ascended_empire_alloys = yes
+			add_ascended_empire_unity = yes
+			add_ascended_empire_volatile_motes = yes
+			add_ascended_empire_exotic_gases = yes
+			add_ascended_empire_rare_crystals = yes
+			add_ascended_empire_sr_dark_matter = yes
+			add_ascended_empire_sr_zro = yes
+			add_ascended_empire_sr_living_metal = yes
+			add_ascended_empire_nanites = yes
+			add_ascended_empire_minor_artifacts = yes			
+			add_ascended_empire_influence = yes
+			
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.200 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2000 }
+				}
+			}
+		}
+		ai_chance = {										# AI chance
+			factor = 10			
+		}
+	}
+
+	after = {
+		remove_country_flag = ascending_empire
+	}
+}
+
+# New Ascending Empire Player Notification
+country_event = {
+	id = fallen_technologies.2
+	title = fallen_technologies.2.name
+	desc = fallen_technologies.2.desc
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = fallen_technologies.2.a			
+	}
+}
+
+# Ascension Failure
+country_event = {
+	id = fallen_technologies.21
+	title = fallen_technologies.21.name
+	
+	picture = GFX_evt_fallen_empire
+	show_sound = event_planetary_riot
+	location = root.capital_scope
+	
+	desc = {
+		text = fallen_technologies.21.desc
+		trigger = {
+			NOR = {
+				has_origin = origin_ringworld_empire
+				has_origin = origin_original_people
+			}
+		}
+	}
+	desc = {
+		text = fallen_technologies.21.desc.ringworld
+		trigger = {
+			has_origin = origin_ringworld_empire
+		}
+	}
+	desc = {
+		text = fallen_technologies.21.desc.original
+		trigger = {
+			has_origin = origin_original_people
+		}
+	}
+	
+	is_triggered_only = yes
+	
+#	immediate = {
+#		
+#	}
+
+	option = {
+		name = fallen_technologies.21.a						
+		
+		hidden_effect = {
+			from = {
+				destroy_situation = this
+			}
+			if = {
+				limit = { zofe_vanilla = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.201 }
+				}
+			}
+			if = {
+				limit = { zofe_sandbox = yes }
+				every_country = {					# Notify Players
+					limit = {
+						NOT = { is_same_value = root }
+						is_ai = no			
+					}
+					country_event = { id = fallen_technologies.2001 }
+				}
+			}
+		}
+	}
+}
+
+# New Ascendancy Player Notification (Vanilla Mode)
+country_event = {
+	id = fallen_technologies.200
+	title = fallen_technologies.200.name
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	location = from
+	
+	desc = {
+		trigger = {
+			from = {
+				NOR = {
+					has_ethic = ethic_fanatic_spiritualist 
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_xenophobe 
+					has_ethic = ethic_fanatic_militarist 
+					has_ethic = ethic_fanatic_pacifist 
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_fanatic_egalitarian 
+					has_authority = "auth_hive_mind"
+					has_authority = "auth_machine_intelligence"
+				}
+			} 
+		}
+		text = "fallen_technologies.200.desc"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		text = "fallen_technologies.200.desc.spiritualist"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_materialist  }
+		}
+		text = "fallen_technologies.200.desc.materialist"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_xenophile }
+		}
+		text = "fallen_technologies.200.desc.xenophile"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		text = "fallen_technologies.200.desc.xenophobe"
+	}
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_fanatic_purifiers }
+		}
+		text = "fallen_technologies.200.desc.purifier"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_militarist }
+		}
+		text = "fallen_technologies.200.desc.militarist"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_pacifist }
+		}
+		text = "fallen_technologies.200.desc.pacifist"
+	}
+	desc = {
+		trigger = {
+			from = { has_valid_civic = civic_inwards_perfection }
+		}
+		text = "fallen_technologies.200.desc.perfection"
+	}	
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_authoritarian }
+		}
+		text = "fallen_technologies.200.desc.authoritarian"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_egalitarian }
+		}
+		text = "fallen_technologies.200.desc.egalitarian"
+	}
+	desc = {
+		trigger = {
+			from = { has_valid_civic = civic_barbaric_despoilers }
+		}
+		text = "fallen_technologies.200.desc.despoiler"
+	}	
+	desc = {
+		trigger = {
+			from = { has_authority = auth_hive_mind }
+		}
+		text = "fallen_technologies.200.desc.hive_mind"
+	}	
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_hive_devouring_swarm }
+		}
+		text = "fallen_technologies.200.desc.swarm"
+	}
+	desc = {
+		trigger = {
+			from = { has_authority = auth_machine_intelligence }
+		}
+		text = "fallen_technologies.200.desc.machine"
+	}
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_machine_servitor }
+		}
+		text = "fallen_technologies.200.desc.servitor"
+	}	
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_machine_assimilator }
+		}
+		text = "fallen_technologies.200.desc.assimilator"
+	}
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_machine_terminator }
+		}
+		text = "fallen_technologies.200.desc.terminator"
+	}	
+	
+	is_triggered_only = yes
+
+	option = {
+		name = fallen_technologies.200.a			
+	}
+}
+
+# New Ascendancy Failure Player Notification (Vanilla Mode)
+country_event = {
+	id = fallen_technologies.201
+	title = fallen_technologies.201.name
+	desc = fallen_technologies.201.desc
+	picture = GFX_evt_fallen_empire
+	show_sound = event_planetary_riot
+	location = from
+	
+	is_triggered_only = yes
+
+	option = {
+		name = fallen_technologies.201.a			
+	}
+}
+
+# New Ascended Empire Player Notification
+country_event = {
+	id = fallen_technologies.2000
+	title = fallen_technologies.2000.name
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	location = from
+	
+	desc = {
+		trigger = {
+			from = {
+				NOR = {
+					has_ethic = ethic_fanatic_spiritualist 
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_xenophobe 
+					has_ethic = ethic_fanatic_militarist 
+					has_ethic = ethic_fanatic_pacifist 
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_fanatic_egalitarian 
+					has_authority = "auth_hive_mind"
+					has_authority = "auth_machine_intelligence"
+				}
+			} 
+		}
+		text = "fallen_technologies.2000.desc"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		text = "fallen_technologies.2000.desc.spiritualist"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_materialist  }
+		}
+		text = "fallen_technologies.2000.desc.materialist"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_xenophile }
+		}
+		text = "fallen_technologies.2000.desc.xenophile"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		text = "fallen_technologies.2000.desc.xenophobe"
+	}
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_fanatic_purifiers }
+		}
+		text = "fallen_technologies.2000.desc.purifier"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_militarist }
+		}
+		text = "fallen_technologies.2000.desc.militarist"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_pacifist }
+		}
+		text = "fallen_technologies.2000.desc.pacifist"
+	}
+	desc = {
+		trigger = {
+			from = { has_valid_civic = civic_inwards_perfection }
+		}
+		text = "fallen_technologies.2000.desc.perfection"
+	}	
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_authoritarian }
+		}
+		text = "fallen_technologies.2000.desc.authoritarian"
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_egalitarian }
+		}
+		text = "fallen_technologies.2000.desc.egalitarian"
+	}
+	desc = {
+		trigger = {
+			from = { has_valid_civic = civic_barbaric_despoilers }
+		}
+		text = "fallen_technologies.2000.desc.despoiler"
+	}	
+	desc = {
+		trigger = {
+			from = { has_authority = auth_hive_mind }
+		}
+		text = "fallen_technologies.2000.desc.hive_mind"
+	}	
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_hive_devouring_swarm }
+		}
+		text = "fallen_technologies.2000.desc.swarm"
+	}
+	desc = {
+		trigger = {
+			from = { has_authority = auth_machine_intelligence }
+		}
+		text = "fallen_technologies.2000.desc.machine"
+	}
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_machine_servitor }
+		}
+		text = "fallen_technologies.2000.desc.servitor"
+	}	
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_machine_assimilator }
+		}
+		text = "fallen_technologies.2000.desc.assimilator"
+	}
+	desc = {
+		exclusive_trigger = {
+			from = { has_valid_civic = civic_machine_terminator }
+		}
+		text = "fallen_technologies.2000.desc.terminator"
+	}	
+	
+	is_triggered_only = yes
+
+	option = {
+		name = fallen_technologies.200.a			
+	}
+}
+
+# New Ascended Empire Failure Player Notification
+country_event = {
+	id = fallen_technologies.2001
+	title = fallen_technologies.2001.name
+	desc = fallen_technologies.2001.desc
+	picture = GFX_evt_fallen_empire
+	show_sound = event_planetary_riot
+	location = event_target:planet_former_owner
+	
+	is_triggered_only = yes
+
+	option = {
+		name = fallen_technologies.2001.a			
+	}
+}
+
+#Path to Fanaticism (Requires Societal Ascendance)
+country_event = {
+	id = fallen_technologies.3
+	title = fallen_technologies.3.name
+	picture = GFX_evt_city_planet
+	show_sound = event_celebration
+	location = from
+	
+	desc = {
+		trigger = { 
+			NOR = {
+				has_valid_civic = civic_galactic_superpower
+				has_valid_civic = civic_beacon_of_prosperity
+				has_valid_civic = civic_industrial_juggernaut
+				has_valid_civic = civic_world_architect
+				has_valid_civic = civic_spymaster
+			}
+		}
+		text = "fallen_technologies.3.desc"
+	}
+	
+	desc = {
+		trigger = { has_valid_civic = civic_galactic_superpower }
+		text = "fallen_technologies.3.desc.superpower"
+	}
+	
+	desc = {
+		trigger = { has_valid_civic = civic_beacon_of_prosperity }
+		text = "fallen_technologies.3.desc.prosperity"
+	}
+	
+	desc = {
+		trigger = { has_valid_civic = civic_industrial_juggernaut }
+		text = "fallen_technologies.3.desc.industrial"
+	}
+	
+	desc = {
+		trigger = { has_valid_civic = civic_world_architect }
+		text = "fallen_technologies.3.desc.architect"
+	}
+	
+	desc = {
+		trigger = { has_valid_civic = civic_spymaster }
+		text = "fallen_technologies.3.desc.spymaster"
+	}
+	
+	trigger = {
+		zofe_sandbox = yes
+		has_country_flag = ascended_empire
+		societal_ascendance = yes
+		has_technology = tech_ascended_society_2
+		NOT = { has_country_flag = fanaticism_possible }
+		OR = {
+			has_ethic = ethic_fanatic_spiritualist
+			has_ethic = ethic_fanatic_materialist
+			has_ethic = ethic_fanatic_xenophile
+			has_ethic = ethic_fanatic_xenophobe
+			has_ethic = ethic_fanatic_militarist
+			has_ethic = ethic_fanatic_pacifist
+			has_ethic = ethic_fanatic_authoritarian
+			has_ethic = ethic_fanatic_egalitarian
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 20
+	}
+	
+	immediate = {
+		set_country_flag = fanaticism_possible 
+	}
+	
+	option = {
+		name = fallen_technologies.3.spiritualist
+		trigger = {
+			has_ethic = ethic_fanatic_spiritualist
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "PROJECT_ASCENDED_SOCIETY"
+				location = this
+				owner = root
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.3.materialist
+		trigger = {
+			has_ethic = ethic_fanatic_materialist
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "PROJECT_ASCENDED_SOCIETY"
+				location = this
+				owner = root
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.3.xenophile
+		trigger = {
+			has_ethic = ethic_fanatic_xenophile
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "PROJECT_ASCENDED_SOCIETY"
+				location = this
+				owner = root
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.3.xenophobe
+		trigger = {
+			has_ethic = ethic_fanatic_xenophobe
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "PROJECT_ASCENDED_SOCIETY"
+				location = this
+				owner = root
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.3.militarist
+		trigger = {
+			has_ethic = ethic_fanatic_militarist
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "PROJECT_ASCENDED_SOCIETY"
+				location = this
+				owner = root
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.3.pacifist
+		trigger = {
+			has_ethic = ethic_fanatic_pacifist
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "PROJECT_ASCENDED_SOCIETY"
+				location = this
+				owner = root
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.3.authoritarian
+		trigger = {
+			has_ethic = ethic_fanatic_authoritarian
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "PROJECT_ASCENDED_SOCIETY"
+				location = this
+				owner = root
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.3.egalitarian
+		trigger = {
+			has_ethic = ethic_fanatic_egalitarian
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "PROJECT_ASCENDED_SOCIETY"
+				location = this
+				owner = root
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.3.b
+	}
+}
+	
+#Fanatical Society
+country_event = {
+	id = fallen_technologies.300
+	title = fallen_technologies.300.name
+	picture = GFX_evt_city_planet
+	show_sound = event_celebration
+	location = from
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { has_ethic = ethic_fanatic_spiritualist }
+		text = "fallen_technologies.300.desc.spiritualist"
+	}
+	desc = {
+		trigger = { has_ethic = ethic_fanatic_materialist }
+		text = "fallen_technologies.300.desc.materialist"
+	}
+	desc = { 
+		trigger = { has_ethic = ethic_fanatic_xenophile }
+		text = "fallen_technologies.300.desc.xenophile"
+	}
+	desc = { 
+		trigger = { has_ethic = ethic_fanatic_xenophobe }
+		text = "fallen_technologies.300.desc.xenophobe"
+	}
+	desc = {
+		trigger = { has_ethic = ethic_fanatic_militarist }
+		text = "fallen_technologies.300.desc.militarist"
+	}
+	desc = {
+		trigger = { has_ethic = ethic_fanatic_pacifist }
+		text = "fallen_technologies.300.desc.pacifist"
+	}
+	desc = { 
+		trigger = { has_ethic = ethic_fanatic_authoritarian }
+		text = "fallen_technologies.300.desc.authoritarian"
+	}
+	desc = { 
+		trigger = { has_ethic = ethic_fanatic_egalitarian }
+		text = "fallen_technologies.300.desc.egalitarian"
+	}
+	
+	option = {
+		name = fallen_technologies.300.spiritualist
+		trigger = {
+			owner = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		owner = {			
+			if = {
+				limit = { has_ethic = "ethic_xenophile" }
+				country_remove_ethic = "ethic_xenophile"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophobe" }
+				country_remove_ethic = "ethic_xenophobe"
+			}
+			if = {
+				limit = { has_ethic = "ethic_militarist" }
+				country_remove_ethic = "ethic_militarist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_pacifist" }
+				country_remove_ethic = "ethic_pacifist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_authoritarian" }
+				country_remove_ethic = "ethic_authoritarian"
+			}
+			if = {
+				limit = { has_ethic = "ethic_egalitarian" }
+				country_remove_ethic = "ethic_egalitarian"
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_spiritualist" }
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.300.materialist
+		trigger = {
+			owner = { has_ethic = ethic_fanatic_materialist }
+		}
+		owner = {			
+			if = {
+				limit = { has_ethic = "ethic_xenophile" }
+				country_remove_ethic = "ethic_xenophile"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophobe" }
+				country_remove_ethic = "ethic_xenophobe"
+			}
+			if = {
+				limit = { has_ethic = "ethic_militarist" }
+				country_remove_ethic = "ethic_militarist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_pacifist" }
+				country_remove_ethic = "ethic_pacifist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_authoritarian" }
+				country_remove_ethic = "ethic_authoritarian"
+			}
+			if = {
+				limit = { has_ethic = "ethic_egalitarian" }
+				country_remove_ethic = "ethic_egalitarian"
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_materialist" }
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.300.xenophile
+		trigger = {
+			owner = { has_ethic = ethic_fanatic_xenophile }
+		}
+		owner = {			
+			if = {
+				limit = { has_ethic = "ethic_spiritualist" }
+				country_remove_ethic = "ethic_spiritualist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_materialist" }
+				country_remove_ethic = "ethic_materialist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_militarist" }
+				country_remove_ethic = "ethic_militarist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_pacifist" }
+				country_remove_ethic = "ethic_pacifist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_authoritarian" }
+				country_remove_ethic = "ethic_authoritarian"
+			}
+			if = {
+				limit = { has_ethic = "ethic_egalitarian" }
+				country_remove_ethic = "ethic_egalitarian"
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_xenophile" }
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.300.xenophobe
+		trigger = {
+			owner = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		owner = {			
+			if = {
+				limit = { has_ethic = "ethic_spiritualist" }
+				country_remove_ethic = "ethic_spiritualist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_materialist" }
+				country_remove_ethic = "ethic_materialist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_militarist" }
+				country_remove_ethic = "ethic_militarist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_pacifist" }
+				country_remove_ethic = "ethic_pacifist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_authoritarian" }
+				country_remove_ethic = "ethic_authoritarian"
+			}
+			if = {
+				limit = { has_ethic = "ethic_egalitarian" }
+				country_remove_ethic = "ethic_egalitarian"
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_xenophobe" }
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.300.militarist
+		trigger = {
+			owner = { has_ethic = ethic_fanatic_militarist }
+		}
+		owner = {			
+			if = {
+				limit = { has_ethic = "ethic_spiritualist" }
+				country_remove_ethic = "ethic_spiritualist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_materialist" }
+				country_remove_ethic = "ethic_materialist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophile" }
+				country_remove_ethic = "ethic_xenophile"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophobe" }
+				country_remove_ethic = "ethic_xenophobe"
+			}
+			if = {
+				limit = { has_ethic = "ethic_authoritarian" }
+				country_remove_ethic = "ethic_authoritarian"
+			}
+			if = {
+				limit = { has_ethic = "ethic_egalitarian" }
+				country_remove_ethic = "ethic_egalitarian"
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_militarist" }
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.300.pacifist
+		trigger = {
+			owner = { has_ethic = ethic_fanatic_pacifist }
+		}
+		owner = {			
+			if = {
+				limit = { has_ethic = "ethic_spiritualist" }
+				country_remove_ethic = "ethic_spiritualist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_materialist" }
+				country_remove_ethic = "ethic_materialist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophile" }
+				country_remove_ethic = "ethic_xenophile"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophobe" }
+				country_remove_ethic = "ethic_xenophobe"
+			}
+			if = {
+				limit = { has_ethic = "ethic_authoritarian" }
+				country_remove_ethic = "ethic_authoritarian"
+			}
+			if = {
+				limit = { has_ethic = "ethic_egalitarian" }
+				country_remove_ethic = "ethic_egalitarian"
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_pacifist" }
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.300.authoritarian
+		trigger = {
+			owner = { has_ethic = ethic_fanatic_authoritarian }
+		}
+		owner = {			
+			if = {
+				limit = { has_ethic = "ethic_spiritualist" }
+				country_remove_ethic = "ethic_spiritualist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_materialist" }
+				country_remove_ethic = "ethic_materialist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophile" }
+				country_remove_ethic = "ethic_xenophile"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophobe" }
+				country_remove_ethic = "ethic_xenophobe"
+			}
+			if = {
+				limit = { has_ethic = "ethic_militarist" }
+				country_remove_ethic = "ethic_militarist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_pacifist" }
+				country_remove_ethic = "ethic_pacifist"
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_authoritarian" }
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.300.egalitarian
+		trigger = {
+			owner = { has_ethic = ethic_fanatic_egalitarian }
+		}
+		owner = {			
+			if = {
+				limit = { has_ethic = "ethic_spiritualist" }
+				country_remove_ethic = "ethic_spiritualist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_materialist" }
+				country_remove_ethic = "ethic_materialist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophile" }
+				country_remove_ethic = "ethic_xenophile"
+			}
+			if = {
+				limit = { has_ethic = "ethic_xenophobe" }
+				country_remove_ethic = "ethic_xenophobe"
+			}
+			if = {
+				limit = { has_ethic = "ethic_militarist" }
+				country_remove_ethic = "ethic_militarist"
+			}
+			if = {
+				limit = { has_ethic = "ethic_pacifist" }
+				country_remove_ethic = "ethic_pacifist"
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_egalitarian" }
+		}
+		ai_chance = {										# AI chance
+			factor = 1000
+		}
+	}
+}
+
+# Ascended Empire Subject Conversion
+country_event = {
+	id = fallen_technologies.4
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {		
+		zofe_sandbox = yes
+		is_country_type = default
+		is_at_war = no
+		NOT = { has_country_flag = subject_conversion }
+		OR = {
+			any_agreement = {
+				agreement_preset = preset_vassal
+			}
+			any_agreement = {
+				agreement_preset = preset_tributary
+			}
+			any_agreement = {
+				agreement_preset = preset_protectorate
+			}
+		}
+		any_country = {
+			AND = {
+				is_country_type = ascended_empire
+				is_overlord_to = root
+				NOT = { has_valid_civic = civic_inwards_perfection }
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_fanatic_materialist
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_fanatic_militarist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_fanatic_egalitarian
+					has_authority = auth_hive_mind
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}		
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+
+		save_event_target_as = NoobEmpire
+		
+		set_country_flag = subject_conversion
+	
+		random_country = {
+			limit = { 
+				is_country_type = ascended_empire
+				is_overlord_to = root
+			}
+			save_event_target_as = AscendedEmpireOverlord
+			event_target:AscendedEmpireOverlord = { country_event = { id = fallen_technologies.40 } }
+		}
+	}
+}
+
+# Ascended Empire Subject Conversion Notification
+country_event = {
+	id = fallen_technologies.40
+	title = fallen_technologies.40.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:NoobEmpire
+		planet_background = event_target:NoobEmpire
+		graphical_culture = event_target:NoobEmpire
+		city_level = event_target:NoobEmpire
+		room = event_target:NoobEmpire
+	}
+	
+	desc = {
+		text = fallen_technologies.40.desc
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_spiritualist }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.b
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_materialist }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.c
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_xenophile }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.d
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_xenophobe }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.e
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_militarist }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.f
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_pacifist }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.g
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_authoritarian }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.h
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_egalitarian }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.i
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_valid_civic = civic_barbaric_despoilers }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.j
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_authority = auth_hive_mind }
+		}
+	}
+	desc = {
+		text = fallen_technologies.40.desc.k
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_authority = auth_machine_intelligence }
+		}
+	}
+	
+	
+	option = {
+		name = fallen_technologies.40.a
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_dominion
+			}
+			remove_country_flag = subject_conversion
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.40.b
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_materialist }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_satellite
+			}
+			remove_country_flag = subject_conversion
+		}	
+	}
+	
+	option = {
+		name = fallen_technologies.40.c
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_xenophile }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_signatory
+			}
+			remove_country_flag = subject_conversion
+		}			
+	}
+		
+	option = {
+		name = fallen_technologies.40.d
+		trigger = {
+			NOT = {
+				event_target:AscendedEmpireOverlord = { has_valid_civic = civic_barbaric_despoilers }
+			}
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_thrall
+			}
+			remove_country_flag = subject_conversion
+		}		
+	}
+	
+	option = {
+		name = fallen_technologies.40.e
+		trigger = {
+			NOT = {
+				event_target:AscendedEmpireOverlord = { has_valid_civic = civic_barbaric_despoilers }
+			}
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_militarist }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_clan_member
+			}
+			remove_country_flag = subject_conversion
+		}			
+	}
+	
+	option = {
+		name = fallen_technologies.40.f
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_pacifist }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_demilitarized_state
+			}
+			remove_country_flag = subject_conversion
+		}	
+	}
+	
+	option = {
+		name = fallen_technologies.40.g
+		trigger = {
+			NOT = {
+				event_target:AscendedEmpireOverlord = { has_valid_civic = civic_barbaric_despoilers }
+			}
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_authoritarian }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_puppet_state
+			}
+			remove_country_flag = subject_conversion
+		}	
+	}
+	
+	option = {
+		name = fallen_technologies.40.h
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_egalitarian }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_union_state
+			}
+			remove_country_flag = subject_conversion
+		}		
+	}
+	
+	option = {
+		name = fallen_technologies.40.i
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_valid_civic = civic_barbaric_despoilers }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_satrapy
+			}
+			remove_country_flag = subject_conversion
+		}		
+	}
+	
+	option = {
+		name = fallen_technologies.40.j
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_authority = auth_hive_mind }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_symbiote
+			}
+			remove_country_flag = subject_conversion
+		}		
+	}
+	
+	option = {
+		name = fallen_technologies.40.k
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_authority = auth_machine_intelligence }
+		}
+		event_target:NoobEmpire = { 
+			set_subject_of = {
+				who = event_target:AscendedEmpireOverlord
+				preset = preset_fe_auxiliary
+			}
+			remove_country_flag = subject_conversion
+		}		
+	}
+}
+
+# Ascended Empire Subject Effects Trigger
+country_event = {
+	id = fallen_technologies.5
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {		
+		zofe_sandbox = yes
+		is_country_type = default
+		is_at_war = no
+		NOT = { has_country_flag = subject_modifier_applied }
+		OR = {
+			any_agreement = {
+				agreement_preset = preset_fe_satellite
+			}
+			any_agreement = {
+				agreement_preset = preset_fe_clan_member
+			}
+			any_agreement = {
+				agreement_preset = preset_fe_demilitarized_state
+			}
+			any_agreement = {
+				agreement_preset = preset_fe_puppet_state
+			}
+			any_agreement = {
+				agreement_preset = preset_fe_union_state
+			}
+			any_agreement = {
+				agreement_preset = preset_fe_satrapy
+			}
+			any_agreement = {
+				agreement_preset = preset_fe_auxiliary
+			}
+		}
+		any_country = {
+			is_country_type = ascended_empire
+			is_overlord_to = root
+			OR = { 
+				has_ethic = ethic_fanatic_materialist
+				has_valid_civic = civic_inspiring_warlords
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_fanatic_egalitarian
+				has_valid_civic = civic_barbaric_despoilers
+				has_authority = auth_machine_intelligence
+			}		
+		}
+	}		
+	
+	mean_time_to_happen = { days = 1 }
+
+	
+	immediate = {
+		save_event_target_as = NoobEmpire
+		set_country_flag = subject_modifier_applied
+		random_country = {
+			limit = { 
+				is_country_type = ascended_empire
+				is_overlord_to = root
+				OR = { 
+					has_ethic = ethic_fanatic_materialist
+					has_valid_civic = civic_inspiring_warlords
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_fanatic_egalitarian
+					has_valid_civic = civic_barbaric_despoilers
+					has_authority = auth_machine_intelligence
+				}
+			}
+			save_event_target_as = AscendedEmpireOverlord
+			event_target:AscendedEmpireOverlord = { 
+				country_event = { id = fallen_technologies.6 } 
+			}
+		}
+	}
+}
+
+
+# Ascended Empire Subject Effects
+country_event = {
+	id = fallen_technologies.6
+
+	title = fallen_technologies.6.name
+	picture = GFX_evt_fallen_empire
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = fallen_technologies.6.desc
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_materialist }
+		}
+	}
+	desc = {
+		text = fallen_technologies.6.desc.ed
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_valid_civic = civic_inspiring_warlords }
+		}
+	}
+	desc = {
+		text = fallen_technologies.6.desc.f
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_pacifist }
+		}
+	}
+	desc = {
+		text = fallen_technologies.6.desc.g
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_authoritarian }
+		}
+	}
+	desc = {
+		text = fallen_technologies.6.desc.h
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_egalitarian }
+		}
+	}
+	desc = {
+		text = fallen_technologies.6.desc.i
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_valid_civic = civic_barbaric_despoilers }
+		}
+	}
+	desc = {
+		text = fallen_technologies.6.desc.j
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_authority = auth_machine_intelligence }
+		}
+	}
+	
+	
+	
+	option = {
+		name = fallen_technologies.6.bd
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_materialist }
+		}
+		event_target:NoobEmpire = {
+#			set_country_flag = subject_modifier_applied
+			set_policy = {
+				policy = artificial_intelligence_policy
+				option = ai_full_rights
+				cooldown = yes
+			}
+		}
+	}
+	option = {
+		name = fallen_technologies.6.ed
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_valid_civic = civic_inspiring_warlords }
+		}
+		event_target:NoobEmpire = {
+#			set_country_flag = subject_modifier_applied
+			add_modifier = {
+				modifier = inspiring_warlord
+				days = -1
+			}	
+		}	
+	}
+	option = {
+		name = fallen_technologies.6.f
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_pacifist }
+		}
+		event_target:NoobEmpire = {
+#			set_country_flag = subject_modifier_applied
+			add_modifier = {
+				modifier = demilitarized_state
+				days = -1
+			}
+			set_policy = {
+				policy = war_philosophy
+				option = no_wars
+				cooldown = yes
+			}	
+			set_policy = {
+				policy = first_contact_protocol
+				option = first_contact_proactive
+				cooldown = yes
+			}	
+		}
+	}
+	option = {
+		name = fallen_technologies.6.g
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_authoritarian }
+		}
+		event_target:NoobEmpire = {
+#			set_country_flag = subject_modifier_applied
+			add_modifier = {
+				modifier = new_world_order
+				days = -1
+			}	
+		}
+	}
+	option = {
+		name = fallen_technologies.6.h
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_ethic = ethic_fanatic_egalitarian }
+		}
+		event_target:NoobEmpire = {
+#			set_country_flag = subject_modifier_applied
+			add_modifier = {
+				modifier = democratized_utopia
+				days = -1
+			}
+			shift_ethic = "ethic_egalitarian"
+			shift_ethic = "ethic_egalitarian"
+			change_government = {
+				authority = auth_democratic
+				civics = random
+			}
+			set_policy = {
+				policy = resettlement
+				option = resettlement_not_allowed
+				cooldown = yes
+			}
+			set_policy = {
+				policy = appropriation
+				option = appropriation_not_allowed
+				cooldown = yes
+			}
+			set_policy = {
+				policy = border_policy
+				option = border_policy_open
+				cooldown = yes
+			}
+			set_policy = {
+				policy = refugees
+				option = refugees_allowed
+				cooldown = yes
+			}
+			set_policy = {
+				policy = slavery
+				option = slavery_not_allowed
+				cooldown = yes
+			}
+			set_policy = {
+				policy = purge
+				option = purge_not_allowed
+				cooldown = yes
+			}
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.6.i
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_valid_civic = civic_barbaric_despoilers }
+		}
+		event_target:NoobEmpire = {
+#			set_country_flag = subject_modifier_applied
+			add_modifier = {
+				modifier = fe_satrapy
+				days = -1
+			}	
+		}
+	}
+	
+	option = {
+		name = fallen_technologies.6.j
+		trigger = {
+			event_target:AscendedEmpireOverlord = { has_authority = auth_machine_intelligence }
+		}
+#		event_target:NoobEmpire = {
+#			set_country_flag = subject_modifier_applied	
+#		}
+		event_target:AscendedEmpireOverlord = {
+			set_country_flag = overlord_modifier_applied
+			add_modifier = {
+				modifier = auxiliary_overlord
+				days = -1
+			}	
+		}
+	}
+}
+
+# Ascended Empire Subject Effects Removal
+country_event = {
+	id = fallen_technologies.7
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {	
+		OR = {
+			is_country_type = default
+			is_country_type = ascended_empire
+		}
+		has_country_flag = subject_modifier_applied
+		is_subject = no
+	}		
+
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		remove_country_flag = subject_modifier_applied
+		if = {
+			limit = { has_modifier = inspiring_warlord }
+			remove_modifier = "inspiring_warlord"
+		}
+		if = {
+			limit = { has_modifier = demilitarized_state }
+			remove_modifier = "demilitarized_state"
+		}
+		if = {
+			limit = { has_modifier = new_world_order }
+			remove_modifier = "new_world_order"
+		}
+		if = {
+			limit = { has_modifier = democratized_utopia }
+			remove_modifier = "democratized_utopia"
+		}
+		if = {
+			limit = { has_modifier = fe_satrapy }
+			remove_modifier = "fe_satrapy"
+		}
+	}
+}
+
+# Ascended Empire Overlord Effects Removal
+country_event = {
+	id = fallen_technologies.701
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {	
+		is_country_type = ascended_empire
+		has_country_flag = overlord_modifier_applied
+		is_overlord = no
+	}		
+
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		remove_country_flag = overlord_modifier_applied
+		if = {
+			limit = { has_modifier = auxiliary_overlord }
+			remove_modifier = "auxiliary_overlord"
+		}
+	}
+}
+
+
+
+
+
+

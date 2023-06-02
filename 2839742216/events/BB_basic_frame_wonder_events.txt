@@ -1,0 +1,3924 @@
+namespace = QQE_big_building
+#这组事件是制作飞地的核心事件，各位也是从这里延申出各自的内容的
+#为了参考这个制作出新的飞地，建议是复制该文件，更改*文件名*及*namespace*，然后在*on_action*内添加对应的事件。
+#请无比测试确保内容成功运行再投稿，因为......不想坑害新管理（）
+
+####################################################################################
+#飞地的生成：开局随机在整个银河生成
+####################################################################################
+event = {
+	id = QQE_big_building.1
+	hide_window = yes
+	is_triggered_only = yes	#在开局事件的*触发器*触发，即on_game_start
+	immediate = {
+		##################################################
+		#在创建国家前需要先创建种族
+		##################################################
+		create_species = {
+			name = "NAME_QQE_species"			#种族名字
+			plural = NAME_QQE_species_plural			#种族复数
+			class = random_non_machine			#种族小类：即爬行，鸟类，软体...
+			portrait = random			#肖像
+			traits = {
+				#特质
+				ideal_planet_class = pc_habitat
+			}
+		}
+		last_created_species = {
+			save_global_event_target_as = big_building_species
+		}
+		##################################################
+		#创建国家
+		##################################################
+		create_country = {
+			name = "NAME_QQE_country"			#国家名称，很重要
+			type = QQMGE_enclave			#指定country_type，不会的就不要动了
+			authority = "auth_oligarchic"			#政体
+			civics = {
+				#民政
+			}
+			origin = "origin_default"			#默认起源，这个不用管，玩家根本看不到飞地起源是啥
+			species = last_created_species			#设定种族，上面已经写好了，这一行不要动。
+			flag = {
+				#设定飞地旗帜，下边的自己搞吧
+				icon = {
+					category = "enclaves"
+					file = "enclaves_flag_trader.dds"
+				}
+				background = {
+					category = "backgrounds"
+					file = "double_hemispheres.dds"
+				}
+				colors = {
+					"green"
+					"dark_green"
+					"null"
+					"null"
+				}
+			}
+			ethos = {
+				#思潮
+				ethic = ethic_xenophile
+				ethic = ethic_materialist
+				ethic = ethic_egalitarian
+			}
+			ignore_initial_colony_error = yes
+			effect = {
+				############################################################################
+				#重要！！！！这个flag⭐国家标签⭐决定了你这个国家到底是谁，一定要改！
+				set_country_flag = big_building_country
+				save_global_event_target_as = wonder_builder
+				############################################################################
+				set_graphical_culture = npf_01					#默认的graphical_culture，不太需要动
+			}
+		}
+		##################################################
+		#生成所有的空间站
+		##################################################
+		while = {
+			count = 3	#总生成的个数
+			random_system = {
+				#随机某个星系
+				limit = {
+					#要求
+					NOR = {
+						exists = owner					#未被占据
+						has_star_flag = hostile_system					#避免原版的利维坦
+						has_star_flag = QQE_enclave_system			#避免多个空间站生成在同一个星系
+					}
+				}
+				set_star_flag = QQE_enclave_system
+				random_system_planet = {
+					#星系内随机星球
+					set_planet_flag = QQE_enclave_planet				#一个标记，暂时没有实际作用，但别删
+					##################################################
+					#生成空间站
+					##################################################
+					last_created_country = {
+						#以下为生成空间站
+						create_fleet = {
+							name = "NAME_QQE_enclave_Station"						#空间站舰队名称
+							settings = {
+								spawn_debris = no							#舰船是否生成残骸可供逆向
+							}
+							effect = {
+								set_owner = prev
+								create_ship = {
+									name = random
+									############################################################################
+									design = NAME_QQMGE_Enclave_Station								#空间站舰船设计，这里为默认，如果你想添加新的，自己参考着写。
+									############################################################################
+									graphical_culture = npf_01
+								}
+								set_location = {
+									#设定空间站位置，不要改
+									target = prevprev
+									distance = 90
+								}
+								save_event_target_as = CustomCapital
+								prev = {
+									set_custom_capital_location = event_target:CustomCapital
+								}
+								set_fleet_flag = QQE_big_building_enclave_station							#通用标记，不要改
+								############################################################################
+								set_fleet_flag = big_building_fleet							#标记出这是你的策展人空间站，你可以更改标记来方便调用
+								############################################################################
+							}
+						}
+					}
+				}
+			}
+		}
+		##################################################
+		#创建领袖，ruler
+		##################################################
+		last_created_country = {
+			create_leader = {
+				#生成领袖
+				class = ruler
+				species = this				#领袖种族
+				name = random				#领袖名字（当前为随机）
+				skill = 5
+			}
+			set_leader = last_created_leader			#使刚刚创建的领袖成为统治者
+			set_variable = {
+				which = level_of_big_building
+				value = 1
+			}
+		}
+	}
+}
+
+####################################################################################
+#飞地和我们建立通讯————在飞地进入我方探测器范围内时
+####################################################################################
+country_event = {
+	id = QQE_big_building.2
+	title = QQE_big_building.2.title	#事件标题
+	desc = QQE_big_building.2.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:wonder_builder
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes	#在舰队被探测到的*触发器*触发，即on_fleet_detected，from即探测到的舰队
+	trigger = {
+		from = {
+			owner = {
+				has_country_flag = big_building_country	#判断探测到的舰队所属国家，通过之前设立的country_flag
+				NOT = {
+					has_communications = root	#尚未和我方建立联系
+				}
+			}
+		}
+	}
+	immediate = {
+		establish_communications_no_message = from.owner	#与探测到的舰队所有者建交
+	}
+	option = {
+		name = QQE_big_building.2.a	#选项
+	}
+	option = {
+		name = QQE_big_building.2.b	#世界观解释
+		country_event = {
+			id = QQE_big_building.3
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.3
+	title = QQE_big_building.3.title	#事件标题
+	desc = QQE_big_building.3.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:wonder_builder
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes
+	option = {
+		name = QQE_big_building.3.a	#选项
+		country_event = {
+			id = QQE_big_building.4
+		}
+	}
+	option = {
+		name = QQE_big_building.3.b	#选项
+	}
+}
+
+country_event = {
+	id = QQE_big_building.4
+	title = QQE_big_building.4.title	#事件标题
+	desc = QQE_big_building.4.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:wonder_builder
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes
+	option = {
+		name = QQE_big_building.4.a	#选项
+		country_event = {
+			id = QQE_big_building.5
+		}
+	}
+	option = {
+		name = QQE_big_building.4.b	#选项
+	}
+}
+
+country_event = {
+	id = QQE_big_building.5
+	title = QQE_big_building.5.title	#事件标题
+	desc = QQE_big_building.5.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:wonder_builder
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes
+	option = {
+		name = QQE_big_building.5.a	#选项
+		country_event = {
+			id = QQE_big_building.6
+		}
+	}
+	option = {
+		name = QQE_big_building.5.b	#选项
+	}
+}
+
+country_event = {
+	id = QQE_big_building.6
+	title = QQE_big_building.6.title	#事件标题
+	desc = QQE_big_building.6.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:wonder_builder
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes
+	option = {
+		name = QQE_big_building.6.a	#选项
+		custom_tooltip = big_building_proceed
+	}
+	option = {
+		name = QQE_big_building.6.b	#选项
+	}
+}
+country_event = {
+	id = QQE_big_building.7 #测试用的，不会触发
+	title = QQE_big_building.7.title	#事件标题
+	desc = QQE_big_building.7.desc		#事件文本
+
+
+	is_triggered_only = yes
+	immediate = {
+		establish_communications_no_message = event_target:wonder_builder	#与探测到的舰队所有者建交
+	}
+	option = {
+		name = QQE_big_building.2.a	#选项
+		change_variable = {
+			which = donation_point_of_big_building
+			value = 99
+		}
+		event_target:wonder_builder = {
+			add_trust = {
+				who = root
+				amount = 100
+			}
+		}
+	}
+}
+####################################################################################
+#在通讯界面打开飞地菜单
+####################################################################################
+#引入事件：在点击国家图标时触发
+country_event = {
+	id = QQE_big_building.100
+	is_triggered_only = yes		#在点击国家图标的*触发器*触发，即on_custom_diplomacy，from即图标对应国家
+	hide_window = yes
+	
+
+	trigger = {
+		from = {
+			has_country_flag = big_building_country	#判断对应国家，通过之前设立的country_flag⭐国家标签⭐
+		}
+	}
+
+	immediate = {
+		from = {
+			save_event_target_as = QQE_contacting_building_country	#将from存为event_target
+		}
+		country_event = {
+			id = QQE_big_building.300	#触发正式的菜单事件
+		}
+	}
+}
+##################################################
+#飞地菜单
+#算是核心事件，通过该事件开始，实现你想要实现的各种乱七八糟的功能
+##################################################
+
+country_event = {
+	id = QQE_big_building.200 #给你总督
+	title = QQE_big_building.200.title	#事件标题
+	desc = QQE_big_building.200.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.200.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.200.b	#选项2
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 1000 }
+			NOT = {
+				root = {
+					any_owned_leader = {
+						has_trait = leader_trait_great_engineer_civ
+					}
+				}
+			}
+		}
+		event_target:wonder_builder = {
+			add_trust = {
+				who = root
+				amount = 15
+			}
+		}
+		country_event = {
+			id = QQE_big_building.201
+		}
+	}
+}
+
+
+country_event = {
+	id = QQE_big_building.201 #给你总督（触发端）
+	title = QQE_big_building.201.title	#事件标题
+	desc = QQE_big_building.201.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.201.a	#选项1
+		create_leader = {
+			class = governor
+			species = event_target:big_building_species
+			skill = 5
+			traits = {
+				trait = leader_trait_great_engineer_civ
+			}
+			event_leader = yes	# prevents this leader from leading factions and winning elections
+		}
+		last_created_leader = {
+			set_age = 30
+		}
+		add_resource = { energy = -1000 }
+	}
+}
+
+country_event = {
+	id = QQE_big_building.202 #关于其他建筑
+	title = QQE_big_building.202.title	#事件标题
+	desc = QQE_big_building.202.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.202.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.202.b	#选项2
+		allow = {
+			resource_stockpile_compare = { resource = minerals value >= 1000 }
+			resource_stockpile_compare = { resource = alloys value >= 500 }
+			resource_stockpile_compare = { resource = minor_artifacts value >= 5 }
+			check_variable = {
+				which = donation_point_of_big_building
+				value >= 1
+			}
+		}
+		subtract_variable = {
+			which = donation_point_of_big_building
+			value = 1
+		}
+		add_resource = {
+			minerals = -1000
+			alloys = -500
+			minor_artifacts = -5
+		}
+		custom_tooltip = big_building_not_wonder_tooltip
+		hidden_effect = {
+			random_list = {
+				1 = {
+					change_variable = {
+						which = affluence_center_build_count
+						value = 1
+					}
+					country_event = {
+						id = QQE_big_building.203
+					}
+				}
+				1 = {
+					change_variable = {
+						which = nourishment_center_build_count
+						value = 1
+					}
+					country_event = {
+						id = QQE_big_building.204
+					}
+				}
+				1 = {
+					change_variable = {
+						which = dimensional_fabricator_build_count
+						value = 1
+					}
+					country_event = {
+						id = QQE_big_building.205
+					}
+				}
+				1 = {
+					change_variable = {
+						which = class_4_singularity_build_count
+						value = 1
+					}
+					country_event = {
+						id = QQE_big_building.206
+					}
+				}
+				1 = {
+					change_variable = {
+						which = nano_forge_build_count
+						value = 1
+					}
+					country_event = {
+						id = QQE_big_building.207
+					}
+				}
+				1 = {
+					change_variable = {
+						which = skydome_build_count
+						value = 1
+					}
+					country_event = {
+						id = QQE_big_building.208
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.203 #财富中心
+	title = QQE_big_building.203.title	#事件标题
+	desc = QQE_big_building.203.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.203.a	#选项1
+	}
+}
+
+country_event = {
+	id = QQE_big_building.204 #营养中心
+	title = QQE_big_building.204.title	#事件标题
+	desc = QQE_big_building.203.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.203.a	#选项1
+	}
+}
+
+country_event = {
+	id = QQE_big_building.205 #次元制造机
+	title = QQE_big_building.205.title	#事件标题
+	desc = QQE_big_building.203.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.203.a	#选项1
+	}
+}
+
+country_event = {
+	id = QQE_big_building.206 #4级奇点
+	title = QQE_big_building.206.title	#事件标题
+	desc = QQE_big_building.203.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.203.a	#选项1
+	}
+}
+
+country_event = {
+	id = QQE_big_building.207 #纳米熔炉
+	title = QQE_big_building.207.title	#事件标题
+	desc = QQE_big_building.203.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.203.a	#选项1
+	}
+}
+
+country_event = {
+	id = QQE_big_building.208 #空中穹顶
+	title = QQE_big_building.208.title	#事件标题
+	desc = QQE_big_building.203.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.203.a	#选项1
+	}
+}
+
+country_event = {
+	id = QQE_big_building.209 #给点给点
+	title = QQE_big_building.209.title	#事件标题
+	desc = QQE_big_building.209.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.209.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.209.b	#选项1
+		allow = {
+			resource_stockpile_compare = { resource = minerals value >= 1000 }
+		}
+		add_resource = {
+			minerals = -1000
+		}
+		#关于提升好感
+		#对于country_type中定义custom_opinion = yes的国家，可以用add_trust来调整国家好感。
+		event_target:wonder_builder = {	#刚刚存的target
+			add_trust = {	#提高信任（在此处则代表好感）
+				amount = 15	#提高数值
+				who = root	#目标：root即查看菜单中的国家，即玩家。
+			}
+		}
+		change_variable = {
+			which = donation_point_of_big_building
+			value = 1
+		}
+		add_modifier = {
+			modifier = sponsor_wonder_builder
+			days = 3650
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.210
+	title = QQE_big_building.210.title	#事件标题
+	desc = QQE_big_building.210.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:wonder_builder
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes
+	option = {
+		name = QQE_big_building.210.a	#选项
+		country_event = {
+			id = QQE_big_building.211
+		}
+	}
+	option = {
+		name = QQE_big_building.3.b	#选项
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.211
+	title = QQE_big_building.211.title	#事件标题
+	desc = QQE_big_building.211.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:wonder_builder
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes
+	option = {
+		name = QQE_big_building.211.a	#选项
+		country_event = {
+			id = QQE_big_building.212
+		}
+	}
+	option = {
+		name = QQE_big_building.3.b	#选项
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.212
+	title = QQE_big_building.212.title	#事件标题
+	desc = QQE_big_building.212.desc		#事件文本
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:wonder_builder
+		room = enclave_curator_room
+	}
+
+
+	is_triggered_only = yes
+	option = {
+		name = QQE_big_building.3.b	#选项
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+}
+country_event = {
+	id = QQE_big_building.300
+	title = QQE_big_building.300.title	#事件标题
+	#多个desc可以是该事件文本随机挑一个显示，更生动（可选）
+	desc = QQE_big_building.300.desc	#事件文本
+	desc = QQE_big_building.300.desc2	#事件文本2
+	desc = QQE_big_building.300.desc3	#事件文本3
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = SCUM
+		trigger = { has_valid_civic = civic_fanatic_purifiers }
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = TASTY
+		trigger = { has_valid_civic = civic_hive_devouring_swarm }
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = EXTERMINATE
+		trigger = { has_valid_civic = civic_machine_terminator }
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = QQE_big_building.300.a	#选项1
+		trigger = { NOR = { has_valid_civic = civic_fanatic_purifiers has_valid_civic = civic_hive_devouring_swarm has_valid_civic = civic_machine_terminator } }
+	}
+	option = {
+		name = QQE_big_building.300.b	#升级数据库
+		trigger = { NOR = { has_valid_civic = civic_fanatic_purifiers has_valid_civic = civic_hive_devouring_swarm has_valid_civic = civic_machine_terminator } }
+		allow = {
+			event_target:wonder_builder = {
+				check_variable = {
+					which = level_of_big_building
+					value <= 6
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.301
+		}
+	}
+	option = {
+		name = QQE_big_building.300.c	#询问奇观的事
+		trigger = { NOR = { has_valid_civic = civic_fanatic_purifiers has_valid_civic = civic_hive_devouring_swarm has_valid_civic = civic_machine_terminator } }
+		allow = {
+			resource_stockpile_compare = {
+				resource = minor_artifacts
+				value >= 5
+			}
+		}
+		country_event = {
+			id = QQE_big_building.303
+		}
+	}
+	option = {
+		name = QQE_big_building.300.d	#无内鬼，来点总督
+		trigger = { NOR = { has_valid_civic = civic_fanatic_purifiers has_valid_civic = civic_hive_devouring_swarm has_valid_civic = civic_machine_terminator } }
+		allow = {
+			event_target:wonder_builder = {
+				trust = {
+					who = root
+					value >= 50
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.200
+		}
+	}
+	option = {
+		name = QQE_big_building.300.e	#关于其他建筑
+		trigger = { NOR = { has_valid_civic = civic_fanatic_purifiers has_valid_civic = civic_hive_devouring_swarm has_valid_civic = civic_machine_terminator } }
+		allow = {
+			event_target:wonder_builder = {
+				trust = {
+					who = root
+					value >= 70
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.202
+		}
+	}
+	option = {
+		name = QQE_big_building.300.f	#我想捐点东西
+		allow = {
+			NOT = {
+				has_modifier = sponsor_wonder_builder
+			}
+		}
+		trigger = { NOR = { has_valid_civic = civic_fanatic_purifiers has_valid_civic = civic_hive_devouring_swarm has_valid_civic = civic_machine_terminator } }
+		country_event = {
+			id = QQE_big_building.209
+		}
+	}
+	option = {
+		name = QQE_big_building.300.g	#聊聊你自己吧
+		trigger = { NOR = { has_valid_civic = civic_fanatic_purifiers has_valid_civic = civic_hive_devouring_swarm has_valid_civic = civic_machine_terminator } }
+		country_event = {
+			id = QQE_big_building.210
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.301 #升级数据库事件
+	title = QQE_big_building.301.title	#事件标题
+	desc = QQE_big_building.301.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.301.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.301.b	#选项2
+		allow = {
+			resource_stockpile_compare = {
+				resource = minor_artifacts
+				value >= 10
+			}
+		}
+		add_resource = {
+			minor_artifacts = -10
+		}
+		custom_tooltip = level_up_big_building_pre
+		country_event = {
+			id = QQE_big_building.302
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.302 #只是夸夸你
+	title = QQE_big_building.302.title	#事件标题
+	desc = QQE_big_building.302.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.302.a	#选项1
+		add_resource = {
+			minor_artifacts = -10
+		}
+		#关于提升好感
+		#对于country_type中定义custom_opinion = yes的国家，可以用add_trust来调整国家好感。
+		event_target:wonder_builder = {	#刚刚存的target
+			add_trust = {	#提高信任（在此处则代表好感）
+				amount = 15	#提高数值
+				who = root	#目标：root即查看菜单中的国家，即玩家。
+			}
+		}
+		custom_tooltip = level_up_big_building
+		hidden_effect = {
+			event_target:wonder_builder = {
+				change_variable = {
+					which = level_of_big_building
+					value = 1
+				}
+			}
+		}
+		change_variable = {
+			which = donation_point_of_big_building
+			value = 1
+		}
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.303 #在？看看数据库
+	title = QQE_big_building.303.title	#事件标题
+	desc = QQE_big_building.303.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.303.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.303.b	#选项2
+		country_event = {
+			id = QQE_big_building.304
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.304 #数据库目录
+	title = QQE_big_building.304.title	#事件标题
+	desc = QQE_big_building.304.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.304.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.304.b	#远古时代数据库
+		allow = {
+			event_target:wonder_builder = {
+				check_variable = {
+					which = level_of_big_building
+					value >= 1
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.305
+		}
+	}
+	option = {
+		name = QQE_big_building.304.c	#古典时代数据库
+		allow = {
+			event_target:wonder_builder = {
+				check_variable = {
+					which = level_of_big_building
+					value >= 2
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.312
+		}
+	}
+	option = {
+		name = QQE_big_building.304.d	#中世纪数据库
+		allow = {
+			event_target:wonder_builder = {
+				check_variable = {
+					which = level_of_big_building
+					value >= 3
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.324
+		}
+	}
+	option = {
+		name = QQE_big_building.304.e	#文艺复兴数据库
+		allow = {
+			event_target:wonder_builder = {
+				check_variable = {
+					which = level_of_big_building
+					value >= 4
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.325
+		}
+	}
+	option = {
+		name = QQE_big_building.304.f	#工业时代数据库
+		allow = {
+			event_target:wonder_builder = {
+				check_variable = {
+					which = level_of_big_building
+					value >= 5
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.326
+		}
+	}
+	option = {
+		name = QQE_big_building.304.g	#原子能时代数据库
+		allow = {
+			event_target:wonder_builder = {
+				check_variable = {
+					which = level_of_big_building
+					value >= 6
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.327
+		}
+	}
+	option = {
+		name = QQE_big_building.304.h	#信息时代数据库
+		allow = {
+			event_target:wonder_builder = {
+				check_variable = {
+					which = level_of_big_building
+					value >= 7
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.328
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.305 #远古时代数据库
+	title = QQE_big_building.305.title	#事件标题
+	desc = QQE_big_building.305.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.305.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.305.b	#巨石阵
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_1_1_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.306
+		}
+	}
+	option = {
+		name = QQE_big_building.305.c	#空中花园
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_1_2_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.307
+		}
+	}
+	option = {
+		name = QQE_big_building.305.d	#大金字塔
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_1_3_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.308
+		}
+	}
+	option = {
+		name = QQE_big_building.305.e	#神谕所
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_1_4_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.309
+		}
+	}
+	option = {
+		name = QQE_big_building.305.f	#阿尔忒弥斯神庙
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_1_5_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.310
+		}
+	}
+	option = {
+		name = QQE_big_building.305.g	#大浴场
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_1_5_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.311
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.306 #买点巨石阵？
+	title = QQE_big_building.306.title	#事件标题
+	desc = QQE_big_building.306.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.306.a	#选项1
+		country_event = {
+			id = QQE_big_building.305
+		}
+		custom_tooltip = questionable_purpose_wonder
+	}
+	option = {
+		name = QQE_big_building.306.b	#选项2
+		custom_tooltip = access_to_wonder_1_1
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_1_1_built
+			ROOT = {
+				set_country_flag = permission_wonder_1_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.307 #买点空花？
+	title = QQE_big_building.307.title	#事件标题
+	desc = QQE_big_building.307.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.307.a	#选项1
+		country_event = {
+			id = QQE_big_building.305
+		}
+		custom_tooltip = questionable_purpose_wonder_2
+	}
+	option = {
+		name = QQE_big_building.307.b	#选项2
+		custom_tooltip = access_to_wonder_1_2
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_1_2_built
+			ROOT = {
+				set_country_flag = permission_wonder_1_2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.308 #买点大金？
+	title = QQE_big_building.308.title	#事件标题
+	desc = QQE_big_building.308.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.308.a	#选项1
+		country_event = {
+			id = QQE_big_building.305
+		}
+		custom_tooltip = questionable_purpose_wonder_3
+	}
+	option = {
+		name = QQE_big_building.308.b	#选项2
+		custom_tooltip = access_to_wonder_1_3
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_1_3_built
+			ROOT = {
+				set_country_flag = permission_wonder_1_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.309 #买点神谕？
+	title = QQE_big_building.309.title	#事件标题
+	desc = QQE_big_building.309.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.309.a	#选项1
+		country_event = {
+			id = QQE_big_building.305
+		}
+		custom_tooltip = questionable_purpose_wonder_4
+	}
+	option = {
+		name = QQE_big_building.309.b	#选项2
+		custom_tooltip = access_to_wonder_1_4
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_1_4_built
+			ROOT = {
+				set_country_flag = permission_wonder_1_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.310 #买点小弓庙？
+	title = QQE_big_building.310.title	#事件标题
+	desc = QQE_big_building.310.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.310.a	#选项1
+		country_event = {
+			id = QQE_big_building.305
+		}
+		custom_tooltip = questionable_purpose_wonder_5
+	}
+	option = {
+		name = QQE_big_building.310.b	#选项2
+		custom_tooltip = access_to_wonder_1_5
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_1_5_built
+			ROOT = {
+				set_country_flag = permission_wonder_1_5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.311 #买点大浴场？
+	title = QQE_big_building.311.title	#事件标题
+	desc = QQE_big_building.311.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.311.a	#选项1
+		country_event = {
+			id = QQE_big_building.305
+		}
+		custom_tooltip = questionable_purpose_wonder_6
+	}
+	option = {
+		name = QQE_big_building.311.b	#选项2
+		custom_tooltip = access_to_wonder_1_6
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_1_6_built
+			ROOT = {
+				set_country_flag = permission_wonder_1_6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.312 #古典时代数据库
+	title = QQE_big_building.312.title	#事件标题
+	desc = QQE_big_building.312.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.312.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.312.b	#大灯塔
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_1_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.313
+		}
+	}
+	option = {
+		name = QQE_big_building.312.c	#巨像
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_2_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.314
+		}
+	}
+	option = {
+		name = QQE_big_building.312.d	#佩特拉
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_3_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.315
+		}
+	}
+	option = {
+		name = QQE_big_building.312.e	#罗马斗兽场
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_4_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.316
+		}
+	}
+	option = {
+		name = QQE_big_building.312.f	#大图书馆
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_5_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.317
+		}
+	}
+	option = {
+		name = QQE_big_building.312.g	#摩诃菩提寺
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_6_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.318
+		}
+	}
+	option = {
+		name = QQE_big_building.312.h	#兵马俑
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_7_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.319
+		}
+	}
+	option = {
+		name = QQE_big_building.312.i	#博尔戈尔山
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_8_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.320
+		}
+	}
+	option = {
+		name = QQE_big_building.312.j	#阿帕达纳宫
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_9_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.321
+		}
+	}
+	option = {
+		name = QQE_big_building.312.k	#摩索拉斯王陵
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_10_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.322
+		}
+	}
+	option = {
+		name = QQE_big_building.312.l	#马丘比丘
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_2_11_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.323
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.313 #买点大灯塔？
+	title = QQE_big_building.313.title	#事件标题
+	desc = QQE_big_building.313.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.313.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_7
+	}
+	option = {
+		name = QQE_big_building.313.b	#选项2
+		custom_tooltip = access_to_wonder_2_1
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_1_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.314 #买点巨像？
+	title = QQE_big_building.314.title	#事件标题
+	desc = QQE_big_building.314.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.314.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_8
+	}
+	option = {
+		name = QQE_big_building.314.b	#选项2
+		custom_tooltip = access_to_wonder_2_2
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_2_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.315 #买点佩特拉？
+	title = QQE_big_building.315.title	#事件标题
+	desc = QQE_big_building.315.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.315.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_9
+	}
+	option = {
+		name = QQE_big_building.315.b	#选项2
+		custom_tooltip = access_to_wonder_2_3
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_3_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.316 #买点大斗兽场？
+	title = QQE_big_building.316.title	#事件标题
+	desc = QQE_big_building.316.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.316.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_10
+	}
+	option = {
+		name = QQE_big_building.316.b	#选项2
+		custom_tooltip = access_to_wonder_2_4
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_4_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.317 #买点大图？
+	title = QQE_big_building.317.title	#事件标题
+	desc = QQE_big_building.317.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.317.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_11
+	}
+	option = {
+		name = QQE_big_building.317.b	#选项2
+		custom_tooltip = access_to_wonder_2_5
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_5_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.318 #买点摩珂菩提寺？
+	title = QQE_big_building.318.title	#事件标题
+	desc = QQE_big_building.318.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.318.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_12
+	}
+	option = {
+		name = QQE_big_building.318.b	#选项2
+		custom_tooltip = access_to_wonder_2_6
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_6_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.319 #买点兵马俑？
+	title = QQE_big_building.319.title	#事件标题
+	desc = QQE_big_building.319.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.319.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_13
+	}
+	option = {
+		name = QQE_big_building.319.b	#选项2
+		custom_tooltip = access_to_wonder_2_7
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_7_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_7
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.320 #买点博尔戈尔山？
+	title = QQE_big_building.320.title	#事件标题
+	desc = QQE_big_building.320.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.320.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_14
+	}
+	option = {
+		name = QQE_big_building.320.b	#选项2
+		custom_tooltip = access_to_wonder_2_8
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_8_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_8
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.321 #买点阿帕达纳宫？
+	title = QQE_big_building.321.title	#事件标题
+	desc = QQE_big_building.321.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.321.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_15
+	}
+	option = {
+		name = QQE_big_building.321.b	#选项2
+		custom_tooltip = access_to_wonder_2_9
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_9_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_9
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.322 #买点摩索拉斯王陵
+	title = QQE_big_building.322.title	#事件标题
+	desc = QQE_big_building.322.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.322.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_16
+	}
+	option = {
+		name = QQE_big_building.322.b	#选项2
+		custom_tooltip = access_to_wonder_2_10
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_10_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_10
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.323 #买点马丘比丘？
+	title = QQE_big_building.323.title	#事件标题
+	desc = QQE_big_building.323.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.323.a	#选项1
+		country_event = {
+			id = QQE_big_building.312
+		}
+		custom_tooltip = questionable_purpose_wonder_17
+	}
+	option = {
+		name = QQE_big_building.323.b	#选项2
+		custom_tooltip = access_to_wonder_2_11
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_2_11_built
+			ROOT = {
+				set_country_flag = permission_wonder_2_11
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.324 #中世纪数据库
+	title = QQE_big_building.324.title	#事件标题
+	desc = QQE_big_building.324.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.324.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.324.b	#圣索菲亚大教堂
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_1_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.329
+		}
+	}
+	option = {
+		name = QQE_big_building.324.c	#阿尔罕布拉宫
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_2_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.330
+		}
+	}
+	option = {
+		name = QQE_big_building.324.d	#奇琴伊察
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_3_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.331
+		}
+	}
+	option = {
+		name = QQE_big_building.324.e	#圣米歇尔山
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_4_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.332
+		}
+	}
+	option = {
+		name = QQE_big_building.324.f	#休伊神庙
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_5_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.333
+		}
+	}
+	option = {
+		name = QQE_big_building.324.g	#吴哥窟
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_6_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.334
+		}
+	}
+	option = {
+		name = QQE_big_building.324.h	#基尔瓦基斯瓦尼
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_7_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.335
+		}
+	}
+	option = {
+		name = QQE_big_building.324.i	#高德院
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_8_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.336
+		}
+	}
+	option = {
+		name = QQE_big_building.324.k	#桑科雷大学
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_3_10_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.337
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.325 #文艺复兴时代数据库
+	title = QQE_big_building.325.title	#事件标题
+	desc = QQE_big_building.325.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.325.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.325.b	#威尼斯军械库
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_4_1_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.338
+		}
+	}
+	option = {
+		name = QQE_big_building.325.c	#大津巴布韦
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_4_2_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.339
+		}
+	}
+	option = {
+		name = QQE_big_building.325.d	#紫禁城
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_4_3_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.340
+		}
+	}
+	option = {
+		name = QQE_big_building.325.e	#布达拉宫
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_4_4_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.341
+		}
+	}
+	option = {
+		name = QQE_big_building.325.f	#西印度交易所
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_4_5_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.342
+		}
+	}
+	option = {
+		name = QQE_big_building.325.g	#圣瓦西里主教座堂
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_4_6_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.343
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.326 #工业时代数据库
+	title = QQE_big_building.326.title	#事件标题
+	desc = QQE_big_building.326.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.326.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.326.b	#鲁尔山谷
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_5_1_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.344
+		}
+	}
+	option = {
+		name = QQE_big_building.326.c	#莫斯科大剧院
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_5_2_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.346
+		}
+	}
+	option = {
+		name = QQE_big_building.326.d	#牛津大学
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_5_3_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.347
+		}
+	}
+	option = {
+		name = QQE_big_building.326.e	#大本钟
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_5_4_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.348
+		}
+	}
+	option = {
+		name = QQE_big_building.326.f	#艾米塔什博物馆
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_5_5_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.349
+		}
+	}
+	option = {
+		name = QQE_big_building.326.g	#匈牙利议会大厦
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_5_6_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.350
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.327 #原子能时代数据库
+	title = QQE_big_building.327.title	#事件标题
+	desc = QQE_big_building.327.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.327.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.327.b	#埃菲尔铁塔
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_6_1_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.351
+		}
+	}
+	option = {
+		name = QQE_big_building.327.c	#百老汇
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_6_2_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.352
+		}
+	}
+	option = {
+		name = QQE_big_building.327.e	#自由女神像
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_6_4_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.354
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.328 #信息时代数据库
+	title = QQE_big_building.328.title	#事件标题
+	desc = QQE_big_building.328.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.328.a	#选项1
+		country_event = {
+			id = QQE_big_building.300
+		}
+	}
+	option = {
+		name = QQE_big_building.328.b	#马拉卡纳体育场
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_7_1_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.355
+		}
+	}
+	option = {
+		name = QQE_big_building.328.c	#悉尼歌剧院
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_7_2_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.356
+		}
+	}
+	option = {
+		name = QQE_big_building.328.d	#阿蒙森-斯科特南极站
+		allow = {
+			check_variable = {
+					which = donation_point_of_big_building
+					value >= 1
+				}
+			custom_tooltip = {
+				fail_text = already_global_flag_text
+				NOT = {
+					has_global_flag = wonder_7_3_built
+				}
+			}
+		}
+		country_event = {
+			id = QQE_big_building.357
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.329 #买点圣索菲亚大教堂？
+	title = QQE_big_building.329.title	#事件标题
+	desc = QQE_big_building.329.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.329.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_18
+	}
+	option = {
+		name = QQE_big_building.329.b	#选项2
+		custom_tooltip = access_to_wonder_3_1
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_1_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.330 #买点阿尔罕布拉宫？
+	title = QQE_big_building.330.title	#事件标题
+	desc = QQE_big_building.330.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.330.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_19
+	}
+	option = {
+		name = QQE_big_building.330.b	#选项2
+		custom_tooltip = access_to_wonder_3_2
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_2_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.331 #买点奇琴伊察？
+	title = QQE_big_building.331.title	#事件标题
+	desc = QQE_big_building.331.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.331.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_20
+	}
+	option = {
+		name = QQE_big_building.331.b	#选项2
+		custom_tooltip = access_to_wonder_3_3
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_3_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.332 #买点圣米歇尔山？
+	title = QQE_big_building.332.title	#事件标题
+	desc = QQE_big_building.332.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.332.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_21
+	}
+	option = {
+		name = QQE_big_building.332.b	#选项2
+		custom_tooltip = access_to_wonder_3_4
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_4_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.333 #买点休伊神庙？
+	title = QQE_big_building.333.title	#事件标题
+	desc = QQE_big_building.333.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.333.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_22
+	}
+	option = {
+		name = QQE_big_building.333.b	#选项2
+		custom_tooltip = access_to_wonder_3_5
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_5_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.334 #买点吴哥窟？
+	title = QQE_big_building.334.title	#事件标题
+	desc = QQE_big_building.334.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.334.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_23
+	}
+	option = {
+		name = QQE_big_building.334.b	#选项2
+		custom_tooltip = access_to_wonder_3_6
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_6_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.335 #买点基尔瓦基斯瓦尼？
+	title = QQE_big_building.335.title	#事件标题
+	desc = QQE_big_building.335.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.335.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_24
+	}
+	option = {
+		name = QQE_big_building.335.b	#选项2
+		custom_tooltip = access_to_wonder_3_7
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_7_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_7
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.336 #买点高德院？
+	title = QQE_big_building.336.title	#事件标题
+	desc = QQE_big_building.336.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.336.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_25
+	}
+	option = {
+		name = QQE_big_building.336.b	#选项2
+		custom_tooltip = access_to_wonder_3_8
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_8_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_8
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.337 #买点桑科雷？
+	title = QQE_big_building.337.title	#事件标题
+	desc = QQE_big_building.337.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.337.a	#选项1
+		country_event = {
+			id = QQE_big_building.324
+		}
+		custom_tooltip = questionable_purpose_wonder_26
+	}
+	option = {
+		name = QQE_big_building.337.b	#选项2
+		custom_tooltip = access_to_wonder_3_10
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_3_10_built
+			ROOT = {
+				set_country_flag = permission_wonder_3_10
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.338 #买点威尼斯军械库？
+	title = QQE_big_building.338.title	#事件标题
+	desc = QQE_big_building.338.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.338.a	#选项1
+		country_event = {
+			id = QQE_big_building.325
+		}
+		custom_tooltip = questionable_purpose_wonder_27
+	}
+	option = {
+		name = QQE_big_building.338.b	#选项2
+		custom_tooltip = access_to_wonder_4_1
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_4_1_built
+			ROOT = {
+				set_country_flag = permission_wonder_4_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.339 #买点大津巴布韦？
+	title = QQE_big_building.339.title	#事件标题
+	desc = QQE_big_building.339.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.339.a	#选项1
+		country_event = {
+			id = QQE_big_building.325
+		}
+		custom_tooltip = questionable_purpose_wonder_28
+	}
+	option = {
+		name = QQE_big_building.339.b	#选项2
+		custom_tooltip = access_to_wonder_4_2
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_4_2_built
+			ROOT = {
+				set_country_flag = permission_wonder_4_2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.340 #买点紫禁城？
+	title = QQE_big_building.340.title	#事件标题
+	desc = QQE_big_building.340.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.340.a	#选项1
+		country_event = {
+			id = QQE_big_building.325
+		}
+		custom_tooltip = questionable_purpose_wonder_29
+	}
+	option = {
+		name = QQE_big_building.340.b	#选项2
+		custom_tooltip = access_to_wonder_4_3
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_4_3_built
+			ROOT = {
+				set_country_flag = permission_wonder_4_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.341 #买点布达拉宫？
+	title = QQE_big_building.341.title	#事件标题
+	desc = QQE_big_building.341.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.341.a	#选项1
+		country_event = {
+			id = QQE_big_building.325
+		}
+		custom_tooltip = questionable_purpose_wonder_30
+	}
+	option = {
+		name = QQE_big_building.341.b	#选项2
+		custom_tooltip = access_to_wonder_4_4
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_4_4_built
+			ROOT = {
+				set_country_flag = permission_wonder_4_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.342 #买点西印度交易所？
+	title = QQE_big_building.342.title	#事件标题
+	desc = QQE_big_building.342.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.342.a	#选项1
+		country_event = {
+			id = QQE_big_building.325
+		}
+		custom_tooltip = questionable_purpose_wonder_31
+	}
+	option = {
+		name = QQE_big_building.342.b	#选项2
+		custom_tooltip = access_to_wonder_4_5
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_4_5_built
+			ROOT = {
+				set_country_flag = permission_wonder_4_5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.343 #买点圣瓦西里主教座堂？
+	title = QQE_big_building.343.title	#事件标题
+	desc = QQE_big_building.343.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.343.a	#选项1
+		country_event = {
+			id = QQE_big_building.325
+		}
+		custom_tooltip = questionable_purpose_wonder_32
+	}
+	option = {
+		name = QQE_big_building.343.b	#选项2
+		custom_tooltip = access_to_wonder_4_6
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_4_6_built
+			ROOT = {
+				set_country_flag = permission_wonder_4_6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.344 #买点鲁尔山谷？
+	title = QQE_big_building.344.title	#事件标题
+	desc = QQE_big_building.344.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.344.a	#选项1
+		country_event = {
+			id = QQE_big_building.326
+		}
+		custom_tooltip = questionable_purpose_wonder_33
+	}
+	option = {
+		name = QQE_big_building.344.b	#选项2
+		custom_tooltip = access_to_wonder_5_1
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_5_1_built
+			ROOT = {
+				set_country_flag = access_to_wonder_5_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.346 #买点莫斯科大剧院？
+	title = QQE_big_building.346.title	#事件标题
+	desc = QQE_big_building.346.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.346.a	#选项1
+		country_event = {
+			id = QQE_big_building.326
+		}
+		custom_tooltip = questionable_purpose_wonder_34
+	}
+	option = {
+		name = QQE_big_building.346.b	#选项2
+		custom_tooltip = access_to_wonder_5_2
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_5_2_built
+			ROOT = {
+				set_country_flag = access_to_wonder_5_2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.347 #买点牛津大学？
+	title = QQE_big_building.347.title	#事件标题
+	desc = QQE_big_building.347.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.347.a	#选项1
+		country_event = {
+			id = QQE_big_building.326
+		}
+		custom_tooltip = questionable_purpose_wonder_35
+	}
+	option = {
+		name = QQE_big_building.347.b	#选项2
+		custom_tooltip = access_to_wonder_5_3
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_5_3_built
+			ROOT = {
+				set_country_flag = access_to_wonder_5_3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.348 #买点大本钟？
+	title = QQE_big_building.348.title	#事件标题
+	desc = QQE_big_building.348.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.348.a	#选项1
+		country_event = {
+			id = QQE_big_building.326
+		}
+		custom_tooltip = questionable_purpose_wonder_36
+	}
+	option = {
+		name = QQE_big_building.348.b	#选项2
+		custom_tooltip = access_to_wonder_5_4
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_5_4_built
+			ROOT = {
+				set_country_flag = access_to_wonder_5_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.349 #买点艾米塔什博物馆？
+	title = QQE_big_building.349.title	#事件标题
+	desc = QQE_big_building.349.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.349.a	#选项1
+		country_event = {
+			id = QQE_big_building.326
+		}
+		custom_tooltip = questionable_purpose_wonder_37
+	}
+	option = {
+		name = QQE_big_building.349.b	#选项2
+		custom_tooltip = access_to_wonder_5_5
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_5_5_built
+			ROOT = {
+				set_country_flag = access_to_wonder_5_5
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.350 #买点匈牙利议会大厦？
+	title = QQE_big_building.350.title	#事件标题
+	desc = QQE_big_building.350.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.350.a	#选项1
+		country_event = {
+			id = QQE_big_building.326
+		}
+		custom_tooltip = questionable_purpose_wonder_38
+	}
+	option = {
+		name = QQE_big_building.350.b	#选项2
+		custom_tooltip = access_to_wonder_5_6
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_5_6_built
+			ROOT = {
+				set_country_flag = access_to_wonder_5_6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.351 #买点埃菲尔铁塔？
+	title = QQE_big_building.351.title	#事件标题
+	desc = QQE_big_building.351.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.351.a	#选项1
+		country_event = {
+			id = QQE_big_building.327
+		}
+		custom_tooltip = questionable_purpose_wonder_39
+	}
+	option = {
+		name = QQE_big_building.351.b	#选项2
+		custom_tooltip = access_to_wonder_6_1
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_6_1_built
+			ROOT = {
+				set_country_flag = access_to_wonder_6_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.352 #买点百老汇？
+	title = QQE_big_building.352.title	#事件标题
+	desc = QQE_big_building.352.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.352.a	#选项1
+		country_event = {
+			id = QQE_big_building.327
+		}
+		custom_tooltip = questionable_purpose_wonder_40
+	}
+	option = {
+		name = QQE_big_building.352.b	#选项2
+		custom_tooltip = access_to_wonder_6_2
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_6_2_built
+			ROOT = {
+				set_country_flag = access_to_wonder_6_2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.354 #买点自由女神像？
+	title = QQE_big_building.354.title	#事件标题
+	desc = QQE_big_building.354.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.354.a	#选项1
+		country_event = {
+			id = QQE_big_building.327
+		}
+		custom_tooltip = questionable_purpose_wonder_41
+	}
+	option = {
+		name = QQE_big_building.354.b	#选项2
+		custom_tooltip = access_to_wonder_6_4
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_6_4_built
+			ROOT = {
+				set_country_flag = access_to_wonder_6_4
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.355 #买点马拉卡纳体育场？
+	title = QQE_big_building.355.title	#事件标题
+	desc = QQE_big_building.355.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.355.a	#选项1
+		country_event = {
+			id = QQE_big_building.328
+		}
+		custom_tooltip = questionable_purpose_wonder_42
+	}
+	option = {
+		name = QQE_big_building.355.b	#选项2
+		custom_tooltip = access_to_wonder_7_1
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_7_1_built
+			ROOT = {
+				set_country_flag = access_to_wonder_7_1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.356 #买点悉尼歌剧院？
+	title = QQE_big_building.356.title	#事件标题
+	desc = QQE_big_building.356.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.356.a	#选项1
+		country_event = {
+			id = QQE_big_building.328
+		}
+		custom_tooltip = questionable_purpose_wonder_43
+	}
+	option = {
+		name = QQE_big_building.356.b	#选项2
+		custom_tooltip = access_to_wonder_7_2
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_7_2_built
+			ROOT = {
+				set_country_flag = access_to_wonder_7_2
+			}
+		}
+	}
+}
+
+country_event = {
+	id = QQE_big_building.357 #买点阿蒙森-斯科特南极站？
+	title = QQE_big_building.357.title	#事件标题
+	desc = QQE_big_building.357.desc	#事件文本
+	is_triggered_only = yes		#通过引入事件触发
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:QQE_contacting_building_country
+		room = enclave_curator_room
+	}
+	
+
+	immediate = {
+		
+	}
+
+	option = {
+		name = QQE_big_building.357.a	#选项1
+		country_event = {
+			id = QQE_big_building.328
+		}
+		custom_tooltip = questionable_purpose_wonder_44
+	}
+	option = {
+		name = QQE_big_building.357.b	#选项2
+		custom_tooltip = access_to_wonder_7_3
+		change_variable = {
+			which = donation_point_of_big_building
+			value = -1
+		}
+		hidden_effect = {
+			set_global_flag = wonder_7_3_built
+			ROOT = {
+				set_country_flag = access_to_wonder_7_3
+			}
+		}
+	}
+}
+####################################################################################
+#飞地空间站被消灭
+#这个事件并没有做什么敌对减少信任的事件，所以，嗯，你们自学罢
+#这个事件在飞地空间站被消灭时触发
+####################################################################################
+country_event = {
+	id = QQE_big_building.400
+	title = QQE_big_building.400.title	#事件标题
+	desc = QQE_big_building.400.desc		#事件文本
+	picture = GFX_evt_small_space_battle	#事件插图
+
+	is_triggered_only = yes		#通过舰队被摧毁的*触发器*触发，即on_fleet_destroyed_perp，from即被摧毁舰队的所有者，fromfromfrom即被摧毁舰队
+	trigger = {
+		from = {	#遇害舰队的所有者
+			has_country_flag = big_building_country	#拥有你的⭐国家标签⭐
+		}
+		fromfromfrom = {	#遇害舰队
+			has_fleet_flag = QQE_big_building_enclave_station	#拥有你的飞地空间站标签
+		}
+	}
+
+	option = {
+		name = QQE_big_building.400.a	#事件选项
+		event_target:wonder_builder = {
+			add_trust = {
+				amount = -50
+				who = this
+			}
+		}
+	}
+}
+##################################################################################################################
+#重点参数
+#这里陈列一些重点参数，你可以直接全文替换来达到新建飞地的目的
+#####文件的namespace（也改变了本地化条目）
+#QQE_big_building
+#####国家名称
+#NAME_QQE_country
+#####种族名称
+#NAME_QQE_species
+#NAME_QQE_species_plural（复数）
+#####空间站名称
+#NAME_QQE_enclave_Station
+#####⭐国家标签⭐country_flag
+#big_building_country
+#####⭐空间站标签⭐fleet_flag
+#QQE_default_enclave_station
+##################################################################################################################
+#其它小贴士
+#政府（government）可以随着⭐国家标签⭐改变，这一点请参考common的government文件夹
+#乱七八糟的政体，民政都对这个政府没啥影响，而特质完全就是做着好看，除非你需要刷出人口
+#建立联系也可以使用别的方式————比如使用进入星系的触发器，自己改罢
+#没了。

@@ -1,0 +1,1694 @@
+############################
+#
+# Original People Events
+#
+############################
+
+namespace = original_people
+
+#Fallen Empire warns Original People
+country_event = {
+	id = original_people.1
+	title = fallen_empires.8.name
+	desc = original_people.1.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+
+	immediate = {
+		from = { save_event_target_as = fallen_empire_humiliator }
+	}
+	
+	option = {
+		name = fallen_empires.8.a
+		ai_chance = {
+			factor = 90
+			modifier = {
+				factor = 0
+				fleet_power > 50000
+			}
+		}
+		fallen_empire_humiliate_effect = yes
+		from = { save_event_target_as = fallen_empire_humiliator }
+		tooltip = {
+			add_modifier = { modifier = humiliated days = 3600 }
+		}
+		custom_tooltip = "fallen_empires.8.a.tooltip"
+		hidden_effect = { remove_country_flag = fe_demand_made }
+	}
+	
+	option = {
+		name = fallen_empires.8.b
+		ai_chance = {
+			factor = 10
+		}		
+		custom_tooltip = fallen_empire_refuse_tooltip
+		hidden_effect = { 
+			from = { add_opinion_modifier = { who = root modifier = opinion_refused_fallen_empire_demand } }
+			remove_country_flag = fe_demand_made 
+		}
+	}
+}
+
+# Fallen Empire Notices Original Empire Returns
+country_event = {
+	id = original_people.2
+	title = OK
+	desc = OK
+	hide_window = yes
+
+	trigger = {
+		is_country_type = fallen_empire
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		any_country = {
+			is_ascended_empire = yes
+			has_origin = origin_original_people
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+
+	immediate = {
+		# Notify players
+		
+		every_country = {
+			limit = {
+				is_ai = no
+				has_origin = origin_original_people
+			}
+			country_event = { id = original_people.3 }
+		}
+	}
+}
+
+#Fallen Empire prepares for war
+country_event = {
+	id = original_people.3
+	title = fallen_empires.8.name
+	
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_spiritualist }
+		}
+		text = original_people.3.desc
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_materialist }
+		}
+		text = original_people.3.desc.b
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_xenophile }
+		}
+		text = original_people.3.desc.c
+	}
+	desc = {
+		trigger = {
+			from = { has_ethic = ethic_fanatic_xenophobe }
+		}
+		text = original_people.3.desc.d
+	}
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+	
+	option = {
+		name = original_people.3.a
+		hidden_effect = { 
+			from = { country_event = { id = original_people.4 } }	
+		}
+	}
+}
+
+# Fallen Empire Wakes up
+country_event = {
+	id = original_people.4
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		set_timed_country_flag = { flag = ai_no_wars days = 7200 }
+		# Notify players
+		country_event = { id = fallen_empires_awakening.3 }
+		every_country = {
+			limit = {
+				is_ai = no		
+			}
+			country_event = { id = fallen_empires_awakening.2 }
+		}
+		observer_event = { id = observer.73 }
+	}
+}
+
+
+# Awakened Empire prepares for war
+country_event = {
+	id = original_people.5
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		is_country_type = awakened_fallen_empire
+		NOT = { has_ethic = ethic_gestalt_consciousness }
+		NOT = { has_country_flag = wrath_of_the_ancients }
+		is_at_war = no
+		any_country = {
+			OR = {
+				is_ascended_empire = yes
+				has_country_flag = bad_oe
+			}
+			has_origin = origin_original_people
+			NOT = { has_country_flag = new_ascended_empire }
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 5
+		modifier = {
+			factor = 2.0
+			has_global_flag = fallen_empire_vanilla_difficulty
+		}
+		modifier = {
+			factor = 1.5
+			has_global_flag = fallen_empire_normal_difficulty
+		}
+		modifier = {
+			factor = 1.0
+			has_global_flag = fallen_empire_hard_difficulty
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = fallen_empire_veteran_difficulty
+		}
+		modifier = {
+			factor = 0.1
+			has_global_flag = fallen_empire_nightmare_difficulty
+		}
+	}
+
+	immediate = {
+		set_country_flag = wrath_of_the_ancients
+
+		every_country = {
+			limit = {
+				is_country_type = awakened_fallen_empire
+				NOT = { is_same_value = root }
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+			}
+			join_alliance = { who = root override_requirements = yes }
+		}
+		
+		federation = {
+			set_federation_type = military_federation
+			set_name = "NAME_Second_Coalition"
+			set_federation_law = succession_term_years_20
+			add_federation_experience = 20000
+		}
+		
+		set_federation_leader = root
+		
+		every_country = {
+			limit = { 
+				is_country_type = awakened_fallen_empire
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+			}
+			remove_country_flag = ai_no_wars
+
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+		}
+		
+		if = {
+			limit = { has_global_flag = fallen_empire_nightmare_difficulty }
+			
+			every_country = {
+				limit = { 
+					is_country_type = awakened_fallen_empire
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+			}
+		}
+		
+		if = {
+			limit = { has_global_flag = fallen_empire_veteran_difficulty }
+			
+			every_country = {
+				limit = { 
+					is_country_type = awakened_fallen_empire
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+			}
+		}
+		
+		if = {
+			limit = { has_global_flag = fallen_empire_hard_difficulty }
+			
+			every_country = {
+				limit = { 
+					is_country_type = awakened_fallen_empire
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+				country_event = { id = fallen_empires.13 }
+			}
+		}
+		
+		random_country = {
+			limit = { 
+				OR = {
+					is_ascended_empire = yes
+					has_country_flag = bad_oe
+				}
+				has_origin = origin_original_people
+				NOT = { has_country_flag = new_ascended_empire }
+			}
+			save_event_target_as = OriginalPeople
+			country_event = { id = original_people.50 }
+		}
+	}
+}
+
+#Awakened Fallen Empire declares Crusade
+country_event = {
+	id = original_people.50
+	title = fallen_empires.8.name
+	desc = original_people.50.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+	
+	option = {
+		name = original_people.50.a
+		hidden_effect = { 
+			from = {
+				declare_war = {
+					target = event_target:OriginalPeople
+					name = "NAME_The_Wrath_Of_The_Ancients"
+					attacker_war_goal = "wg_total_annihilation"
+				}
+			}
+			every_country = {
+				limit = {
+					is_country_type = awakened_fallen_empire
+					NOT = { is_same_value = root }
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				every_subject = {
+					join_war = overlord
+				}
+			}	
+		}
+	}
+	
+	option = {
+		name = original_people.50.b
+		hidden_effect = { 
+			from = {
+				declare_war = {
+					target = event_target:OriginalPeople
+					name = "NAME_The_Wrath_Of_The_Ancients"
+					attacker_war_goal = "wg_total_annihilation"
+				}
+			}
+			every_country = {
+				limit = {
+					is_country_type = awakened_fallen_empire
+					NOT = { is_same_value = root }
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				every_subject = {
+					join_war = overlord
+				}
+			}	
+		}
+	}
+	
+	option = {
+		name = original_people.50.c
+		hidden_effect = { 
+			from = {
+				declare_war = {
+					target = event_target:OriginalPeople
+					name = "NAME_The_Wrath_Of_The_Ancients"
+					attacker_war_goal = "wg_total_annihilation"
+				}
+			}
+			every_country = {
+				limit = {
+					is_country_type = awakened_fallen_empire
+					NOT = { is_same_value = root }
+					NOT = { has_ethic = ethic_gestalt_consciousness }
+				}
+				every_subject = {
+					join_war = overlord
+				}
+			}	
+		}
+	}
+}
+
+
+#Discovering Ships Graveyard
+
+planet_event = {
+	id = original_people.60
+	title = original_people.60.name
+	desc = original_people.60.desc
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_mystic_reveal
+
+	trigger = {
+		exists = owner
+		owner = { 
+			NOT = { has_country_flag = fe_ships_discovered }
+			has_origin = origin_original_people
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+		
+	immediate = {
+		owner = { set_country_flag = fe_ships_discovered }
+	}
+	
+	option = {
+		name = original_people.60.a
+		root = {
+			add_deposit = d_original_people_ship_graveyard
+		}
+	}
+}
+
+
+#Starting OE ships
+planet_event = {
+	id = original_people.6
+	title = original_people.6.name
+	desc = original_people.6.desc
+	picture = GFX_evt_archaeological_dig
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+		
+	immediate = {
+		owner = {
+			set_country_flag = original_people_start
+		}
+	}
+	
+	option = {
+		name = original_people.6.a
+		enable_special_project = {
+			name = "ORIGINAL_PEOPLE_ESCORT"
+			location = this
+			owner = root.owner
+		}
+
+		ai_chance = {
+			factor = 10
+		}
+	}
+	
+	option = {
+		name = original_people.6.b
+		root.owner = { 
+			add_resource = { alloys = 20000 }
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	
+	option = {
+		name = original_people.6.c
+		root.owner = { 
+			add_resource = { engineering_research = 10000 }
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	
+	option = {
+		name = original_people.6.d
+		root.owner = { 
+			add_resource = { influence = 1000 }
+		}
+		ai_chance = {
+			factor = 0
+		}		
+	}
+}
+
+#Starting OE ships
+planet_event = {
+	id = original_people.7
+	title = original_people.7.name
+	desc = original_people.7.desc
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = original_people.7.a
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			create_original_escort = yes
+			owner = {
+				original_technologies_more_attuned = yes
+				set_country_flag = original_escort_spawned
+			}
+		}
+	}
+}
+
+# Fallen Empires Wake up if Original People attack them
+event = {
+	id = original_people.8
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	fire_only_once = yes
+	
+	trigger = {
+		any_country = {
+			is_gestalt = no
+			is_country_type = fallen_empire
+			is_at_war = yes
+			any_war = {
+				any_defender = {
+					is_same_value = prevprev
+				}
+				any_attacker = {
+					is_country_type = default
+					is_ascended_empire = no
+					has_origin = origin_original_people
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		every_country = {
+			limit = {
+				is_gestalt = no
+				is_country_type = fallen_empire
+			}
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = fallen_empires.13 }
+			country_event = { id = original_people.4 }
+		}
+		every_country =  {
+			limit = { 
+				is_country_type = default
+				is_ascended_empire = no
+				has_origin = origin_original_people
+			}
+			set_country_flag = bad_oe
+		}	
+	}
+}
+
+
+#Original People Digsite 1
+
+#Original People Digsite 1
+country_event = {
+	id = original_people.100
+	title = original_people.100.name
+	desc = original_people.100.desc
+	picture = GFX_evt_ocean
+	location = from
+	show_sound = event_mystic_reveal
+
+	fire_only_once = yes
+
+	trigger = {
+		host_has_dlc = "Ancient Relics Story Pack"
+		has_origin = origin_original_people
+#		end_game_years_passed >= 0
+#		
+		
+#		is_ascended_empire = yes
+#		is_ai = no #For Testing
+#		has_technology = tech_fallen_technologies_4
+#		has_technology = tech_fallen_technologies_6
+
+		any_owned_planet = {
+#			has_planet_flag = fallen_spiritualist_capital
+			is_capital = yes
+		}
+	
+		NOT = {
+			has_country_flag = original_people_digsite_1_started
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		set_country_flag = original_people_digsite_1_started
+		
+		random_owned_planet = {
+			limit = {
+				is_capital = yes
+			}
+			save_event_target_as = original_people_digsite_1
+		}
+	}
+	
+	option = {
+		name = CURIOUS
+		event_target:original_people_digsite_1 = { 
+			create_archaeological_site = original_people_digsite_1
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+     			value = @tier1researchreward
+     			min = @tier1researchmin
+     			max = @tier1researchmax
+     		}
+		}
+	}
+}
+
+fleet_event = { 
+	id = original_people.101
+	title = "original_people.101.name"
+	desc = original_people.101.desc
+	picture = GFX_evt_underwater_ruins
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.101.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = original_people.102
+	title = "original_people.102.name"
+	desc = original_people.102.desc
+	picture = GFX_evt_big_landing_ship
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.102.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = original_people.103
+	title = "original_people.103.name"
+	desc = original_people.103.desc
+	picture = GFX_evt_ship_travel
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.103.a
+		medium_artifact_reward = yes
+		owner = {
+			set_country_flag = original_people_digsite_1_completed
+		}
+	}
+}
+
+#Original People Digsite 2
+
+#Original People Digsite 2
+country_event = {
+	id = original_people.200
+	title = original_people.200.name
+	desc = original_people.200.desc
+	picture = GFX_evt_relic_world
+	location = from
+	show_sound = event_mystic_reveal
+
+	fire_only_once = yes
+
+	trigger = {
+		host_has_dlc = "Ancient Relics Story Pack"
+		has_origin = origin_original_people
+#		end_game_years_passed >= 0
+#		
+		has_country_flag = original_people_digsite_1_completed
+#		is_ascended_empire = yes
+#		is_ai = no #For Testing
+#		has_technology = tech_fallen_technologies_4
+#		has_technology = tech_fallen_technologies_6
+
+		any_planet_within_border = {
+			has_planet_flag = original_people_digsite_2
+#			is_capital = yes
+		}
+	
+		NOT = {
+			has_country_flag = original_people_digsite_2_started
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 5
+	}
+	
+	immediate = {
+		set_country_flag = original_people_digsite_2_started
+		
+		random_planet_within_border = {
+			limit = {
+#				is_capital = yes
+				has_planet_flag = original_people_digsite_2
+			}
+			save_event_target_as = original_people_digsite_2
+		}
+	}
+	
+	option = {
+		name = original_people.200.a
+		event_target:original_people_digsite_2 = { 
+			create_archaeological_site = original_people_digsite_2
+#			root.owner = {
+#				set_country_flag = fallen_spiritualist_weapons_chain
+#			}
+		}
+	}
+}
+
+fleet_event = { 
+	id = original_people.201
+	title = "original_people.201.name"
+	desc = original_people.201.desc
+	picture = GFX_evt_death_from_above
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.201.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = original_people.202
+	title = "original_people.202.name"
+	desc = original_people.202.desc
+	picture = GFX_evt_night_raid
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.202.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = original_people.203
+	title = "original_people.203.name"
+	desc = original_people.203.desc
+	picture = GFX_evt_relic_world_building
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.203.a
+		medium_artifact_reward = yes
+		owner = {
+			set_country_flag = original_people_digsite_2_completed
+		}
+	}
+}
+
+# Shielded World (Original People)
+ship_event = {
+	id = original_people.3000
+	title = "original_people.3000.name"
+	desc = "original_people.3000.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	trackable = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = {
+			is_planet_class = pc_shielded
+			has_planet_flag = original_people_digsite_3
+		}
+	}
+
+	immediate = {
+		from = { save_event_target_as = original_people_shielded_planet }
+	}
+	
+	option = {
+		name = "original_people.3000.a"
+		from = {
+			enable_special_project = {
+				name = "ORIGINAL_PEOPLE_SHIELD_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+	}
+}
+
+# Mothballed Fleet
+ship_event = {
+	id = original_people.3001
+	title = "original_people.3001.name"
+	desc = "original_people.3001.desc"
+	picture = GFX_evt_federation_fleet
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			change_pc = pc_barren_cold
+			reset_planet = yes		
+		}
+	}
+	
+	option = {
+		name = "original_people.3001.a"
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {		
+			owner = {
+				original_technologies_more_attuned = yes
+				create_fleet = {
+					name = "NAME_ORIGINAL_MOTHBALLED_FLEET"
+					settings = {
+						spawn_debris = no
+						can_upgrade = no 
+						can_disband = yes
+					}
+					effect = {
+						while = {
+							count = 2
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_owner = root.owner
+						set_location = FROMFROM
+					}
+				}
+			}
+		}
+	}
+	
+	after = {
+		FROMFROM = {
+			add_modifier = {
+				modifier = "terraforming_candidate"
+				days = -1
+			}
+		}
+	}
+}
+
+# Mothballed Fleet
+ship_event = {
+	id = original_people.3002
+	title = "original_people.3002.name"
+	desc = "original_people.3002.desc"
+	picture = GFX_evt_federation_fleet
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			change_pc = pc_barren_cold
+			reset_planet = yes
+		}
+	}
+	
+	option = {
+		name = "original_people.3002.a"
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {		
+			owner = {
+				original_technologies_more_attuned = yes
+				create_fleet = {
+					name = "NAME_ORIGINAL_MOTHBALLED_FLEET"
+					settings = {
+						spawn_debris = no
+						can_upgrade = no 
+						can_disband = yes
+					}
+					effect = {
+						while = {
+							count = 1
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_owner = root.owner
+						set_location = FROMFROM
+					}
+				}
+			}
+		}
+	}
+	
+	after = {
+		FROMFROM = {
+			add_modifier = {
+				modifier = "terraforming_candidate"
+				days = -1
+			}
+		}
+	}
+}
+
+# Mothballed Fleet
+ship_event = {
+	id = original_people.3003
+	title = "original_people.3003.name"
+	desc = "original_people.3003.desc"
+	picture = GFX_evt_federation_fleet
+	location = FROMFROM
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			change_pc = pc_barren_cold
+			reset_planet = yes
+		}
+	}
+	
+	option = {
+		name = "original_people.3003.a"
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {		
+			owner = {
+				original_technologies_more_attuned = yes
+				create_fleet = {
+					name = "NAME_ORIGINAL_MOTHBALLED_FLEET"
+					settings = {
+						spawn_debris = no
+						can_upgrade = no 
+						can_disband = yes
+					}
+					effect = {
+						while = {
+							count = 2
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						while = {
+							count = 1
+							create_ship = {
+								name = random
+								design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+								graphical_culture = "original_empire_01"
+								upgradable = no
+							}
+						}
+						set_owner = root.owner
+						set_location = FROMFROM
+					}
+				}
+			}
+		}
+	}
+	
+	after = {
+		FROMFROM = {
+			add_modifier = {
+				modifier = "terraforming_candidate"
+				days = -1
+			}
+		}
+	}
+}
+
+#Original People Digsite 3
+
+#Original People Digsite 3
+country_event = {
+	id = original_people.300
+	title = original_people.300.name
+	desc = original_people.300.desc
+	picture = GFX_evt_shielded_planet
+	location = from
+	show_sound = event_mystic_reveal
+
+	fire_only_once = yes
+
+	trigger = {
+		host_has_dlc = "Ancient Relics Story Pack"
+		has_origin = origin_original_people
+#		end_game_years_passed >= 0
+	
+		has_country_flag = original_people_digsite_2_completed
+		has_country_flag = original_empire_shielded_world_opened
+#		is_ascended_empire = yes
+#		is_ai = no #For Testing
+#		has_technology = tech_fallen_technologies_4
+#		has_technology = tech_fallen_technologies_6
+
+		any_planet_within_border = {
+			has_planet_flag = original_people_digsite_3
+#			is_capital = yes
+		}
+	
+		NOT = {
+			has_country_flag = original_people_digsite_3_started
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 5
+	}
+	
+	immediate = {
+		set_country_flag = original_people_digsite_3_started
+		
+		random_planet_within_border = {
+			limit = {
+#				is_capital = yes
+				has_planet_flag = original_people_digsite_3
+			}
+			save_event_target_as = original_people_digsite_3
+		}
+	}
+	
+	option = {
+		name = original_people.300.a
+		event_target:original_people_digsite_3 = { 
+			create_archaeological_site = original_people_digsite_3
+#			root.owner = {
+#				set_country_flag = fallen_spiritualist_weapons_chain
+#			}
+		}
+	}
+}
+
+fleet_event = { 
+	id = original_people.301
+	title = "original_people.301.name"
+	desc = original_people.301.desc
+	picture = GFX_evt_cold_barren
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.301.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = original_people.302
+	title = "original_people.302.name"
+	desc = original_people.302.desc
+	picture = GFX_evt_planet_beam
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.302.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = original_people.303
+	title = "original_people.303.name"
+	desc = original_people.303.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.303.a
+		medium_artifact_reward = yes
+		owner = {
+			set_country_flag = original_people_digsite_3_completed
+			set_global_flag = arya_system_discovered
+		}
+		hidden_effect = {
+			owner = {
+				country_event = {
+					id = original_people.304
+					days = 3
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = original_people.304
+	is_triggered_only = yes
+	hide_window = yes
+	fire_only_once = yes
+
+	immediate = {
+		set_global_flag = arya_discovered
+		set_country_flag = last_original_empire_system
+		if = {
+			limit = {
+				any_system_within_border = { has_star_flag = original_people_init_04 }
+			}
+			random_system_within_border = {
+				limit = { has_star_flag = original_people_init_04 }
+				save_event_target_as = arya_spawn_system
+			}
+		}
+		else = {
+			random_system_within_border = {
+				save_event_target_as = arya_spawn_system
+			}
+		}
+		event_target:arya_spawn_system = {
+			spawn_system = {
+				min_distance = 10
+				max_distance = 30
+				max_jumps = 0
+				initializer = "original_people_init_05"
+			}
+			if = {
+				limit = { last_created_system = { NOT = { has_hyperlane_to = prev } } }
+				add_hyperlane = {
+					from = this
+					to = last_created_system
+				}
+			}
+			else = {
+				add_extra_hyperlane_to_spawned_system_effect = yes
+			}
+		}
+	}
+}
+
+# Goliath
+ship_event = {
+	id = original_people.4000
+	title = "original_people.4000.name"
+	desc = "original_people.4000.desc"
+	picture = GFX_evt_juggernaut
+	location = FROM
+	trackable = yes
+	show_sound = event_red_alert
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = owner
+		owner = {
+			has_origin = origin_original_people
+		}
+		FROM = {
+			has_star_flag = original_people_init_05
+			any_ship_in_system = { 
+				is_ship_size = fe_goliath
+				has_ship_flag = lone_goliath
+			}
+		}
+	}
+	
+	option = {
+		name = "original_people.4000.a"
+	}
+}
+
+# Goliath
+ship_event = {
+	id = original_people.4001
+	title = "original_people.4001.name"
+	desc = "original_people.4001.desc"
+	picture = GFX_evt_fallen_empire_awakes
+	location = FROM
+	trackable = yes
+	show_sound = event_radio_chatter
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		exists = owner
+		owner = {
+			has_origin = origin_original_people
+		}
+		FROM = {
+			is_planet_class = pc_shattered
+			has_planet_flag = original_people_digsite_4
+		}
+	}
+	
+	option = {
+		name = "original_people.4001.a"
+		custom_tooltip = original_technologies_more_attuned_tooltip
+		hidden_effect = {
+			owner = { original_technologies_more_attuned = yes }
+		}
+		solar_system = {
+			every_fleet_in_system = {
+				limit = {
+					is_ship_size = fe_goliath
+				}
+				set_owner = root.owner
+			}
+		}
+	}
+}
+
+#Original People Digsite 4
+
+#Original People Digsite 4
+country_event = {
+	id = original_people.400
+	title = original_people.400.name
+	desc = original_people.400.desc
+	picture = GFX_evt_shattered_planet
+	location = from
+	show_sound = event_mystic_reveal
+
+	fire_only_once = yes
+
+	trigger = {
+		host_has_dlc = "Ancient Relics Story Pack"
+		has_origin = origin_original_people
+#		end_game_years_passed >= 0
+	
+		has_country_flag = original_people_digsite_3_completed
+
+#		is_ascended_empire = yes
+#		is_ai = no #For Testing
+#		has_technology = tech_fallen_technologies_4
+#		has_technology = tech_fallen_technologies_6
+
+		any_planet_within_border = {
+			has_planet_flag = original_people_digsite_4
+#			is_capital = yes
+		}
+	
+		NOT = {
+			has_country_flag = original_people_digsite_4_started
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 5
+	}
+	
+	immediate = {
+		set_country_flag = original_people_digsite_4_started
+		
+		random_planet_within_border = {
+			limit = {
+#				is_capital = yes
+				has_planet_flag = original_people_digsite_4
+			}
+			save_event_target_as = original_people_digsite_4
+		}
+	}
+	
+	option = {
+		name = original_people.400.a
+		event_target:original_people_digsite_4 = { 
+			create_archaeological_site = original_people_digsite_4
+		}
+	}
+}
+
+fleet_event = { 
+	id = original_people.401
+	title = "original_people.401.name"
+	desc = original_people.401.desc
+	picture = GFX_evt_overgrown_city
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.401.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = original_people.402
+	title = "original_people.402.name"
+	desc = original_people.402.desc
+	picture = GFX_evt_galactic_empire
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.402.a
+		medium_artifact_reward = yes
+	}
+}
+
+fleet_event = { 
+	id = original_people.403
+	title = "original_people.403.name"
+	desc = original_people.403.desc
+	picture = GFX_evt_outpost
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = original_people.403.a
+		owner = {
+			set_country_flag = original_people_digsite_4_completed
+			enable_special_project = {
+				name = "ORIGINAL_PEOPLE_DISTRESS_SIGNAL"
+				location = owner.capital_scope
+				owner = from.owner
+			}
+		}
+	}
+	
+	option = {
+		name = original_people.403.b
+		great_artifact_reward = yes
+	}
+}
+
+# Distress Signal Replicated
+planet_event = {
+	id = original_people.5000
+	title = "original_people.5000.name"
+	desc = "original_people.5000.desc"
+	picture = GFX_evt_outpost
+	location = FROM
+	trackable = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "original_people.5000.a"
+		owner = {
+			set_country_flag = original_people_distress_signal_replicated
+		}
+	}
+}
+
+##Ship Spawn
+
+country_event = {
+	id = original_people.50000
+	title = OK
+	desc = OK
+	hide_window = yes
+	
+	trigger = {
+		has_origin = origin_original_people
+		end_game_years_passed < 50
+		has_country_flag = original_people_distress_signal_replicated
+		NOT = { has_country_flag = original_people_recent_reinforcements }
+	}
+	
+	mean_time_to_happen = {
+		years = 3
+	}
+	
+	immediate = {
+		set_timed_country_flag = { flag = original_people_recent_reinforcements  days = 1800 }
+		random_list = {
+			55 = { country_event = { id = original_people.5001 } }
+			35 = { country_event = { id = original_people.5002 } }
+			10 = { country_event = { id = original_people.5003 } }
+		}
+	}
+}
+
+
+
+
+# Escort Returns
+country_event = {
+	id = original_people.5001
+	title = OK
+	desc = OK
+	hide_window = yes
+	location = this
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		country_event = { id = original_people.5004 }
+		capital_scope = {
+			create_fleet = {
+				name = "NAME_ORIGINAL_RETURNED_ESCORT"
+				settings = {
+					spawn_debris = no
+					can_upgrade = no 
+					can_disband = yes
+				}
+				effect = {
+					while = {
+						count = 1
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+					}
+					set_owner = root
+					set_location = root.capital_scope
+				}
+			}
+		}
+	}
+}
+
+# Battlecruiser Returns
+country_event = {
+	id = original_people.5002
+	title = OK
+	desc = OK
+	hide_window = yes
+	location = this
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		country_event = { id = original_people.5004 }
+		capital_scope = {
+			create_fleet = {
+				name = "NAME_ORIGINAL_RETURNED_BATTLECRUISER"
+				settings = {
+					spawn_debris = no
+					can_upgrade = no 
+					can_disband = yes
+				}
+				effect = {
+					while = {
+						count = 1
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+					}
+					set_owner = root
+					set_location = root.capital_scope
+				}
+			}
+		}
+	}
+}
+
+# Titan Returns
+country_event = {
+	id = original_people.5003
+	title = OK
+	desc = OK
+	hide_window = yes
+	location = this
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		country_event = { id = original_people.5004 }
+		capital_scope = {
+			create_fleet = {
+				name = "NAME_ORIGINAL_RETURNED_TITAN"
+				settings = {
+					spawn_debris = no
+					can_upgrade = no 
+					can_disband = yes
+				}
+				effect = {
+					while = {
+						count = 1
+						create_ship = {
+							name = random
+							design = "NAME_ORIGINAL_EMPIRE_TITAN"
+							graphical_culture = "original_empire_01"
+							upgradable = no
+						}
+					}
+					set_owner = root
+					set_location = root.capital_scope
+				}
+			}
+		}
+	}
+}
+
+# Vessel Returns
+country_event = {
+	id = original_people.5004
+	title = "original_people.5004.name"
+	desc = "original_people.5004.desc"
+	picture = GFX_evt_ship_in_orbit
+	location = FROM
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "original_people.5004.a"
+	}
+}
+
+planet_event = { 
+	id = original_people.6000
+	title = "original_people.6000.name"
+	desc = original_people.6000.desc
+	picture = GFX_evt_overgrown_city
+	show_sound = event_mystic_reveal
+	location = root
+
+	trigger = {
+		is_capital = yes
+		exists = owner
+		owner = {
+			is_zofe_country = yes
+			has_technology = tech_original_empire_power_core
+			has_all_lost_tech_buildings = yes
+			NOT = { has_country_flag = original_people_buildings }
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 5
+	}	
+	
+	immediate = {
+		owner = {
+			set_country_flag = original_people_buildings
+		}
+	}
+	
+	option = {
+		name = original_people.6000.a	
+		root.owner = {
+			enable_special_project = {
+				name = "ORIGINAL_PEOPLE_BUILDINGS"
+				location = root
+				owner = root.owner
+			}
+		}
+	}
+	option = {
+		name = original_people.6000.b	
+		root.owner = {
+			add_resource = { influence = 100 }
+		}
+	}
+}
+
+# Buildings
+planet_event = {
+	id = original_people.6001
+	title = "original_people.6001.name"
+	desc = "original_people.6001.desc"
+	picture = GFX_evt_overgrown_city
+	location = FROM
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "original_people.6001.a"
+		owner = {
+			give_technology = { tech = tech_original_technologies_1	message = no }
+			if = {
+				limit = {
+					has_technology = tech_fe_dark_matter_power_plant
+				}
+				add_research_option = tech_original_empire_sun_generator
+			}
+			if = {
+				limit = {
+					has_technology = tech_fe_autonomous_fabricator
+				}
+				add_research_option = tech_original_empire_siphoner
+			}
+			if = {
+				limit = {
+					has_technology = tech_fe_agri_processing_complex
+				}
+				add_research_option = tech_original_empire_cornucopia
+			}
+			if = {
+				limit = {
+					has_technology = tech_fe_opulent_tower
+				}
+				add_research_option = tech_original_empire_pleasure_palace
+			}
+			if = {
+				limit = {
+					has_technology = tech_fe_pico_forge
+				}
+				add_research_option = tech_original_empire_star_forge
+			}
+			if = {
+				limit = {
+					has_technology = tech_fe_master_archive_3
+				}
+				add_research_option = tech_original_empire_eternal_archive
+			}
+			if = {
+				limit = {
+					has_technology = tech_fe_aegis_complex_3
+				}
+				add_research_option = tech_original_empire_star_forts
+			}
+		}
+	}
+}
+

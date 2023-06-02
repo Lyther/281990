@@ -1,0 +1,598 @@
+namespace = mt_country_event
+#亲外传统：国际调解，改善关系1%几率获得200影响力
+country_event = {
+	id = mt_country_event.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_exxenophile_3
+	}
+	immediate = {
+		every_envoy = {
+			limit = {
+				has_envoy_task = {
+					task = improve_relations
+				}
+			}
+			random_list = {
+				1 = {
+					root = {
+						add_resource = {
+							influence = 200
+						}
+						create_message = {
+							type = MESSAGE_ENVOY_IMPROVE_GAIN
+							localization = MESSAGE_mt_country_event_1_DESC
+							days = 30
+							target = prev.envoy_location_country.capital_scope
+							variable = {
+								type = name
+								localization = WHO
+								scope = prev.envoy_location_country
+							}
+						}
+					}
+				}
+				99 = {
+				}
+			}
+		}
+	}
+}
+
+#亲外传统：大国特使，改善关系1%几率获得1外交支持
+country_event = {
+	id = mt_country_event.2
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_exxenophile_4
+	}
+	immediate = {
+		every_envoy = {
+			limit = {
+				has_envoy_task = {
+					task = improve_relations
+				}
+				root = {
+					num_favors = {
+						target = prev.envoy_location_country
+						value < 10
+					}
+				}
+			}
+			random_list = {
+				1 = {
+					root = {
+						add_favors = {
+							target = prev.envoy_location_country
+							value = 1
+						}
+						create_message = {
+							type = MESSAGE_ENVOY_IMPROVE_GAIN
+							localization = MESSAGE_mt_country_event_2_DESC
+							days = 30
+							target = prev.envoy_location_country.capital_scope
+							variable = {
+								type = name
+								localization = WHO
+								scope = prev.envoy_location_country
+							}
+						}
+					}
+				}
+				99 = {
+				}
+			}
+		}
+	}
+}
+
+#亲外传统：大国行动，改善关系1%几率获得24个月的凝聚力
+country_event = {
+	id = mt_country_event.3
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_exxenophile_5
+	}
+	immediate = {
+		every_envoy = {
+			limit = {
+				has_envoy_task = {
+					task = improve_relations
+				}
+			}
+			random_list = {
+				1 = {
+					root = {
+						add_monthly_resource_mult = {
+							resource = unity
+							value = @tier4unityreward
+							min = @tier4unitymin
+							max = @tier4unitymax
+						}
+						create_message = {
+							type = MESSAGE_ENVOY_IMPROVE_GAIN
+							localization = MESSAGE_mt_country_event_3_DESC
+							days = 30
+							target = prev.envoy_location_country.capital_scope
+							variable = {
+								type = name
+								localization = WHO
+								scope = prev.envoy_location_country
+							}
+						}
+					}
+				}
+				99 = {
+				}
+			}
+		}
+	}
+}
+
+#追求真理传统：物理学狂热，研究科技获得12个月物理学点数
+country_event = {
+	id = mt_country_event.4
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_seektruth_2
+	}
+	immediate = {
+		root = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+#追求真理传统：社会学狂热，研究科技获得12个月社会学点数
+country_event = {
+	id = mt_country_event.5
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_seektruth_3
+	}
+	immediate = {
+		root = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+#追求真理传统：工程学狂热，研究科技获得12个月工程学点数
+country_event = {
+	id = mt_country_event.6
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_seektruth_4
+	}
+	immediate = {
+		root = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}
+
+#追求真理传统：科学浪潮，研究科技获得12个月凝聚力
+country_event = {
+	id = mt_country_event.7
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_seektruth_5
+	}
+	immediate = {
+		root = {
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier2unityreward
+				min = @tier2unitymin
+				max = @tier2unitymax
+			}
+		}
+	}
+}
+
+#追求真理传统：闭门，获得能量、矿物、食物
+country_event = {
+	id = mt_country_event.8
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_seektruth_finish
+	}
+	immediate = {
+		root = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier5materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier5materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = food
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier5materialmax
+			}
+		}
+	}
+}
+
+#星战传统：赢得太空战后获得6个月合金
+country_event = {
+	id = mt_country_event.9
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_starwar_4
+	}
+	immediate = {
+		root = {
+			add_monthly_resource_mult = {
+				resource = alloys
+				value = @tier1materialreward
+				min = @tier1materialmin
+				max = @tier5materialmax
+			}
+		}
+	}
+}
+
+#星战传统：赢得太空战后的6个月内获得50%射速加成
+country_event = {
+	id = mt_country_event.10
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_starwar_5
+	}
+	immediate = {
+		root = {
+			add_modifier = {
+				modifier = modifiers_mt_starwar_5_mf
+				days = 180
+			}
+		}
+	}
+}
+
+#经贸改革：每年获得修正
+country_event = {
+	id = mt_country_event.11
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_trade_5
+	}
+	immediate = {
+		#财富生产（默认）
+		if = {
+			limit = {
+				NOT = {
+					has_policy_flag = trade_conversion_consumer_goods
+					has_policy_flag = trade_conversion_unity
+					has_policy_flag = trade_conversion_holy_covenant
+					has_policy_flag = trade_conversion_trade_league
+				}
+			}
+			add_modifier = {
+				modifier = modifiers_mt_trade_default
+				years = 1
+			}
+		}
+		#消费者利益
+		if = {
+			limit = {
+				has_policy_flag = trade_conversion_consumer_goods
+			}
+			add_modifier = {
+				modifier = modifiers_mt_trade_consumer_goods
+				years = 1
+			}
+		}
+		#智囊市场/神圣契约
+		if = {
+			limit = {
+				OR = {
+					has_policy_flag = trade_conversion_unity
+					has_policy_flag = trade_conversion_holy_covenant
+				}
+			}
+			add_modifier = {
+				modifier = modifiers_mt_trade_unity
+				years = 1
+			}
+		}
+		#贸易联盟
+		if = {
+			limit = {
+				has_policy_flag = trade_conversion_trade_league
+			}
+			add_modifier = {
+				modifier = modifiers_mt_trade_league
+				years = 1
+			}
+		}
+	}
+}
+
+#经贸改革：经济盘活每年检测
+country_event = {
+	id = mt_country_event.12
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		has_active_tradition = tr_mt_trade_1
+	}
+	immediate = {
+		switch = {
+			trigger = has_modifier
+			#1级
+			modifiers_mt_trade_revitalization_1 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_1
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_2
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_1
+					}
+				}
+			}
+			#2级
+			modifiers_mt_trade_revitalization_2 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_2
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_3
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_2
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_1
+						days = 362
+					}
+					}
+				}
+			}
+			#3级
+			modifiers_mt_trade_revitalization_3 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_3
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_4
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_3
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_2
+						days = 362
+					}
+					}
+				}
+			}
+			#4级
+			modifiers_mt_trade_revitalization_4 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_4
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_5
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_4
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_3
+						days = 362
+					}
+					}
+				}
+			}
+			#5级
+			modifiers_mt_trade_revitalization_5 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_5
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_6
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_5
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_4
+						days = 362
+					}
+					}
+				}
+			}
+			#6级
+			modifiers_mt_trade_revitalization_6 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_6
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_7
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_6
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_5
+						days = 362
+					}
+					}
+				}
+			}
+			#7级
+			modifiers_mt_trade_revitalization_7 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_7
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_8
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_7
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_6
+						days = 362
+					}
+					}
+				}
+			}
+			#8级
+			modifiers_mt_trade_revitalization_8 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_8
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_9
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_8
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_7
+						days = 362
+					}
+					}
+				}
+			}
+			#9级
+			modifiers_mt_trade_revitalization_9 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_9
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_10
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_9
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_8
+						days = 362
+					}
+					}
+				}
+			}
+			#10级
+			modifiers_mt_trade_revitalization_10 = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					remove_modifier = modifiers_mt_trade_revitalization_10
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_10
+						days = 362
+					}
+					else = {
+						remove_modifier = modifiers_mt_trade_revitalization_10
+						add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_9
+						days = 362
+					}
+					}
+				}
+			}
+			default = {
+				if = {
+					limit = { 
+						resource_stockpile_compare = {
+							resource = energy
+							value >= 10000
+						}
+					}
+					add_modifier = {
+						modifier = modifiers_mt_trade_revitalization_1
+						days = 362
+					}
+				}
+			}
+		}
+	}
+}

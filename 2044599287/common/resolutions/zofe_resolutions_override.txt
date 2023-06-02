@@ -1,0 +1,387 @@
+@resolution_weight_hated = 3
+@resolution_weight_disliked = 4
+@resolution_weight_unpopular = 5
+@resolution_weight_normal = 6
+@resolution_weight_popular = 6.5
+@resolution_weight_loved = 7
+
+@resolution_cost_t1 = 100
+@resolution_cost_t2 = 150
+@resolution_cost_t3 = 200
+@resolution_cost_t4 = 250
+@resolution_cost_t5 = 300
+@resolution_cost_denounce = 25
+
+@resolution_flag_timer = 360
+
+
+
+
+# Galactic Market Resolutions
+resolution_galactic_market_form = {
+	icon = "GFX_resolution_form_galactic_market"
+
+	resources = {
+		category = resolutions
+		cost = {
+			influence = @resolution_cost_t1
+		}
+	}
+	target = no
+
+	effect = {
+		custom_tooltip = resolution_galactic_market_form_effect_success
+		hidden_effect = {
+			# Kickoff the Forming the Market event chain
+			country_event = { id = action.96 }
+
+			set_global_flag = galactic_community_resolution_passed
+
+			set_timed_country_flag = { flag = galactic_community_resolution_passed_general days = @resolution_flag_timer }
+
+			add_modifier = {
+				modifier = resolution_passed_diplomatic_weight
+				days = 2200
+			}
+		}
+	}
+
+	fail_effects = {
+		hidden_effect = {
+			set_timed_country_flag = { flag = galactic_community_resolution_failed_general days = @resolution_flag_timer }
+			add_modifier = {
+				modifier = resolution_failed_diplomatic_weight
+				days = 2200
+			}
+		}
+	}
+
+	modifier = {
+		country_resource_max_add = 10000
+	}
+
+	potential = {
+		NOR = {
+			has_global_flag = galactic_market_founded
+			has_global_flag = ongoing_market_nomination
+		}
+
+		is_gestalt = no
+		is_homicidal = no
+		count_relation = {
+			limit = {
+				is_zofe_compatible = yes
+				is_homicidal = no
+			}
+			count >= 3
+		}
+	}
+
+	ai_weight = {
+		base = @resolution_weight_popular
+
+		modifier = {
+			factor = 2
+			has_authority = auth_corporate
+			desc = auth_corporate
+		}
+
+		modifier = {
+			factor = 1.25
+			OR = {
+				has_ai_personality = peaceful_traders
+				has_ai_personality = ruthless_capitalists
+			}
+			desc = gal_com_trader_ai_personality
+		}
+
+		modifier = {
+			factor = 0.5
+			has_ai_personality = xenophobic_isolationists
+			desc = personality_xenophobic_isolationists
+		}
+
+		modifier = {
+			factor = 0.8
+			is_xenophobe = yes
+			desc = ethic_xenophobe
+		}
+
+		modifier = {
+			factor = 2
+			years_passed > 50
+			desc = gal_com_years_passed
+		}
+
+		modifier = {
+			factor = 2
+			years_passed > 100
+			desc = gal_com_years_passed
+		}
+
+		modifier = {
+			factor = 2
+			years_passed > 150
+			desc = gal_com_years_passed
+		}
+	}
+}
+
+resolution_mutualdefense_castigation_denouncement = {
+	icon = "GFX_resolution_mutual_defense"
+
+	resources = {
+		category = resolutions
+		cost = {
+			influence = @resolution_cost_denounce
+		}
+	}
+
+	target = yes
+	harmful = yes
+	valid_target = {
+		is_zofe_compatible = yes
+		NOT = { is_same_value = from } # don't denounce yourself.
+		OR = {
+			is_galactic_community_member = no
+			is_in_breach_of_any = yes
+		}
+		OR = {
+			opinion_level = { who = from level < neutral }
+			from = { is_rival = prev }
+			is_in_breach_of_any = yes
+		}
+	}
+
+	effect = {
+		add_modifier = { modifier = resolution_denounced days = 3600 }
+	}
+
+	potential = {
+		has_federations_dlc = yes
+		OR = {
+			is_active_resolution = "resolution_mutualdefense_castigation_proclamation"
+			is_active_resolution = "resolution_mutualdefense_renegade_containment"
+		}
+	}
+
+	ai_weight = {
+		base = @resolution_weight_normal
+	}
+}
+
+resolution_council_denouncement = {
+	icon = "GFX_resolution_purges"
+
+	potential = {
+		OR = {
+			has_federations_dlc = yes
+			has_nemesis = yes
+		}
+	}
+
+	resources = {
+		category = resolutions
+		cost = {
+			influence = @resolution_cost_t1
+		}
+	}
+
+	target = yes
+	harmful = yes
+	valid_target = {
+		is_zofe_compatible = yes
+		is_galactic_community_member = yes
+		NOT = { is_same_value = from } # don't denounce yourself.
+		OR = {
+			opinion_level = { who = from level < neutral }
+			from = { is_rival = prev }
+			is_in_breach_of_any = yes
+		}
+	}
+
+	effect = {
+		add_modifier = { modifier = resolution_denounced days = 3600 }
+	}
+
+	potential = {
+		is_galactic_council_established = yes
+		NOT = { has_global_flag = resolution_council_denouncement_abolished }
+	}
+
+	allow = {
+		is_part_of_galactic_council = yes
+	}
+
+	ai_weight = {
+		base = @resolution_weight_disliked
+
+		# weaklings are scared of BtC
+		modifier = {
+			factor = 5
+			has_nemesis = yes
+			any_playable_country = {
+				#has_crisis_level >= crisis_level_1
+				OR = {
+					has_crisis_level = crisis_level_1
+					has_crisis_level = crisis_level_2
+					has_crisis_level = crisis_level_3
+					has_crisis_level = crisis_level_4
+					has_crisis_level = crisis_level_5
+				}
+				NOT = { is_same_value = prev }
+				has_resource = {
+					type = menace
+					amount > 1000
+				}
+				relative_power = {
+					who = prev
+					category = all
+					value > equivalent
+				}
+			}
+			desc = gal_com_afraid_of_powerful_crisis
+		}
+
+		# everyone is scared of BtC
+		modifier = {
+			factor = 5
+			has_nemesis = yes
+			any_playable_country = {
+				#has_crisis_level >= crisis_level_1
+				OR = {
+					has_crisis_level = crisis_level_1
+					has_crisis_level = crisis_level_2
+					has_crisis_level = crisis_level_3
+					has_crisis_level = crisis_level_4
+					has_crisis_level = crisis_level_5
+				}
+				NOT = { is_same_value = prev }
+				has_resource = {
+					type = menace
+					amount > 2000
+				}
+			}
+			desc = gal_com_afraid_of_crisis
+		}
+
+		# imagine having a BtC empire next door
+		modifier = {
+			factor = 5
+			has_nemesis = yes
+			any_neighbor_country = {
+				#has_crisis_level >= crisis_level_1
+				OR = {
+					has_crisis_level = crisis_level_1
+					has_crisis_level = crisis_level_2
+					has_crisis_level = crisis_level_3
+					has_crisis_level = crisis_level_4
+					has_crisis_level = crisis_level_5
+				}
+			}
+			desc = gal_com_afraid_of_neighbor_crisis
+		}
+
+		# imagine your rival having a (not too scary) BtC empire next door - that's good
+		modifier = {
+			factor = 0.01
+			has_nemesis = yes
+			NOT = {
+				any_neighbor_country = {
+					#has_crisis_level >= crisis_level_1
+					OR = {
+						has_crisis_level = crisis_level_1
+						has_crisis_level = crisis_level_2
+						has_crisis_level = crisis_level_3
+						has_crisis_level = crisis_level_4
+						has_crisis_level = crisis_level_5
+					}
+				}
+			}
+			any_rival_country = {
+				any_neighbor_country = {
+					#has_crisis_level >= crisis_level_1
+					#has_crisis_level < crisis_level_5
+					OR = {
+						has_crisis_level = crisis_level_1
+						has_crisis_level = crisis_level_2
+						has_crisis_level = crisis_level_3
+						has_crisis_level = crisis_level_4
+						#has_crisis_level = crisis_level_5
+					}
+				}
+			}
+			desc = gal_com_pleased_to_have_rival_neighboring_crisis
+		}
+	}
+}
+
+resolution_galacticreforms_permanent_seat = {
+	icon = "GFX_resolution_council_member_permanent"
+
+	resources = {
+		category = resolutions
+		cost = {
+			influence = @resolution_cost_t5
+		}
+	}
+
+	target = yes
+	harmful = no
+	valid_target = {
+		is_zofe_compatible = yes
+		is_galactic_community_member = yes
+		is_part_of_galactic_council = yes
+		is_permanent_councillor = no
+		is_galactic_custodian = no
+	}
+
+	effect = {
+		add_permanent_councillor = yes
+	}
+
+	potential = {
+		has_federations_dlc = yes
+		is_galactic_council_established = yes
+		has_galactic_emperor = no
+	}
+
+	ai_weight = {
+		base = @resolution_weight_disliked
+	}
+}
+
+resolution_galacticreforms_revoke_permanent_seat = {
+	icon = "GFX_resolution_council_member_permanent"
+
+	resources = {
+		category = resolutions
+		cost = {
+			influence = @resolution_cost_t5
+		}
+	}
+
+	target = yes
+	harmful = yes
+	valid_target = {
+		is_zofe_compatible = yes
+		is_galactic_community_member = yes
+		is_part_of_galactic_council = yes
+		is_permanent_councillor = yes
+		is_galactic_custodian = no
+	}
+
+	effect = {
+		remove_permanent_councillor = yes
+	}
+
+	potential = {
+		has_federations_dlc = yes
+		is_galactic_council_established = yes
+		has_galactic_emperor = no
+	}
+
+	ai_weight = {
+		base = @resolution_weight_disliked
+	}
+}

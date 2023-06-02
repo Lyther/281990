@@ -1,0 +1,182 @@
+monster_hunter = {
+	category = specialist
+	condition_string = BATTLE_THRALL_JOB_TRIGGER
+	building_icon = building_order_keep
+	clothes_texture_index = 3
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible = {
+		battle_thrall_job_check_trigger = yes
+	}
+
+	resources = {
+		category = planet_entertainers
+		produces = {
+			food = 2
+			unity = 2
+			consumer_goods = 2
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = ether_trophy # 以太龙
+				}
+			}
+			food = 2
+			unity = 1
+			rare_crystals = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = shard_trophy # 裂爪龙
+				}
+			}
+			food = 2
+			unity = 1
+			volatile_motes = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = dread_trophy # 无畏舰
+				}
+			}
+			alloys = 1
+			engineering_research = 1
+			sr_living_metal = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					OR = {
+						has_modifier = burnt_tiyanki_trophy # 缇杨奇族母
+						has_modifier = tiyanki_trophy # 缇杨奇族母
+					}
+				}
+			}
+			food = 2
+			society_research = 1
+			exotic_gases = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = sky_dragon_trophy # 天龙
+				}
+			}
+			consumer_goods = 1
+			physics_research = 1
+			sr_living_metal = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = scavenger_trophy # 拾荒机器人
+				}
+			}
+			minerals = 2
+			engineering_research = 1
+			volatile_motes = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = wraith_trophy # 幽魂
+				}
+			}
+			energy = 2
+			society_research = 1
+			sr_zro = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = fortress_trophy # 神秘堡垒
+				}
+			}
+			minerals = 2
+			engineering_research = 1
+			sr_dark_matter = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = voidspawn_trophy # 虚空孳孽
+				}
+			}
+			unity = 1
+			society_research = 1
+			exotic_gases = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_modifier = stellar_devourer_trophy # 噬星者
+				}
+			}
+			energy = 2
+			physics_research = 1
+			rare_crystals = 0.5
+		}
+		produces = {
+			trigger = {
+				planet = {
+					has_horror_trophy_trigger = yes # 恐怖负相物质
+				}
+			}
+			physics_research = 1
+			sr_dark_matter = 0.5
+			sr_zro = 0.5
+		}
+		upkeep = {
+			alloys = 2
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			always = yes
+		}
+		planet_amenities_add = 10
+		mult = value:scripted_modifier_mult|MODIFIER|pop_job_amenities_mult|
+	}
+
+	country_modifier = {
+		country_naval_cap_add = 2
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+		mult = value:job_weights_modifier|JOB|monster_hunter|RESOURCE|unity|
+		mult = value:scripted_modifier_job_weight_mult|MODIFIER|pop_job_amenities_mult|
+		modifier = {
+			factor = 0.2
+			has_citizenship_rights = no
+			NOT = { has_trait = trait_mechanical }
+		}
+		modifier = {
+			factor = 10
+			is_enslaved = yes
+			has_slavery_type = { type = slavery_military }
+		}
+		modifier = {
+			factor = 1.5
+			has_job = monster_hunter
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { has_job = monster_hunter }
+			exists = planet
+			planet = {
+				free_amenities > 5
+			}
+		}
+	}
+}

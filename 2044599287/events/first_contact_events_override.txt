@@ -1,0 +1,39 @@
+################################
+#
+# First Contact Events
+#
+# Written by Pierre du Plessis
+#
+################################
+
+namespace = first_contact
+
+
+
+# General stuff
+
+# Executed right after country has established communications with another country
+# This = Country which established the communications
+# From = Country which communications were established with
+# Communication Established - hidden event replacing action.11
+country_event = {
+	id = first_contact.1050
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			is_zofe_compatible = yes
+		}
+		has_country_flag = first_contact_completed@from
+	}
+
+	immediate = {
+		from = {
+			country_event = { id = action.13 }
+			save_event_target_as = contact_empire
+		}
+		country_event = { id = distar.238 days = 1 }
+		country_event = { id = action.1 }
+	}
+}

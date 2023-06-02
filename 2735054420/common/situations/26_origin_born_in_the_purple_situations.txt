@@ -1,0 +1,174 @@
+situation_origin_born_in_the_purple = {
+	complete_icon_frame = GFX_situation_outcome_frame_red
+	complete_icon = GFX_situation_outcome_revolt
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_bankrupcy
+	picture = GFX_evt_grand_speech
+	
+	start_value = 100
+	
+	abort_trigger = {
+		OR = {
+			owner = {
+				NOT = { has_authority = auth_imperial }
+			}
+			target = {
+				is_heir = no
+			}
+		}
+	}
+	
+	on_abort = {
+		hidden_effect = {
+			destroy_situation = this
+		}
+	}
+	
+	stages = {
+		stage_born_in_the_purple_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_red
+			custom_tooltip = stage_unknown_effects
+			end = 40
+		}
+		stage_born_in_the_purple_2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 80
+		}
+		stage_born_in_the_purple_3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_green
+			custom_tooltip = stage_unknown_effects
+			end = 120
+		}
+		stage_born_in_the_purple_4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			custom_tooltip = stage_unknown_effects
+			end = 160
+		}
+		stage_born_in_the_purple_5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_red
+			custom_tooltip = stage_unknown_effects
+			end = 200
+		}
+	}
+	
+	on_progress_complete = {
+		custom_tooltip = situation_origin_born_in_the_purple_complete_effect
+		hidden_effect = {
+			situation_event = { id = origin_born_in_the_purple.4 }
+		}
+	}
+	
+	on_fail = {
+		custom_tooltip = situation_origin_born_in_the_purple_fail_effect
+		hidden_effect = {
+			situation_event = { id = origin_born_in_the_purple.5 }
+		}
+	}
+	
+	approach = {
+		name = approach_origin_born_in_the_purple_up
+		icon = GFX_situation_approach_influence
+		icon_background = GFX_situation_approach_bg_green
+		on_select = {
+			custom_tooltip = situation_origin_born_in_the_purple_up_effect
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				trigger = {
+					current_stage = stage_born_in_the_purple_1
+				}
+				influence = 2
+			}
+			upkeep = {
+				trigger = {
+					current_stage = stage_born_in_the_purple_2
+				}
+				influence = 1.5
+			}
+			upkeep = {
+				trigger = {
+					OR = {
+						current_stage = stage_born_in_the_purple_3
+						current_stage = stage_born_in_the_purple_4
+						current_stage = stage_born_in_the_purple_5
+					}
+				}
+				influence = 1
+			}
+		}
+	}
+	
+	approach = {
+		name = approach_origin_born_in_the_purple_normal
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_yellow
+		on_select = {
+			custom_tooltip = situation_origin_born_in_the_purple_normal_effect
+		}
+	}
+	
+	approach = {
+		name = approach_origin_born_in_the_purple_down
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = situation_origin_born_in_the_purple_down_effect
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				trigger = {
+					current_stage = stage_born_in_the_purple_5
+				}
+				influence = 2
+			}
+			upkeep = {
+				trigger = {
+					current_stage = stage_born_in_the_purple_4
+				}
+				influence = 1.5
+			}
+			upkeep = {
+				trigger = {
+					OR = {
+						current_stage = stage_born_in_the_purple_1
+						current_stage = stage_born_in_the_purple_2
+						current_stage = stage_born_in_the_purple_3
+					}
+				}
+				influence = 1
+			}
+		}
+	}
+	
+	monthly_progress = {
+		base = 0
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = approach_origin_born_in_the_purple_up
+			add = 0.5
+		}
+		modifier = {
+			desc = string_born_in_the_purple_up
+			current_stage = stage_born_in_the_purple_5
+			add = 0.25
+		}
+		modifier = {
+			desc = string_current_approach
+			current_situation_approach = approach_origin_born_in_the_purple_down
+			subtract = 0.5
+		}
+		modifier = {
+			desc = string_born_in_the_purple_down
+			current_stage = stage_born_in_the_purple_1
+			subtract = 0.25
+		}
+	}
+}

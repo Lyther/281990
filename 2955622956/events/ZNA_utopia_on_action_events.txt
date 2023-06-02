@@ -1,0 +1,263 @@
+###########################
+# Utopia On-Action Events #
+###########################
+
+@covenant_rank_1 = 20
+@covenant_rank_2 = 50
+@covenant_rank_3 = 90
+@covenant_rank_4 = 150
+
+namespace = utopia
+# New Leaders Get Erudite Trait
+country_event = {
+	id = utopia.2509
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			species = {
+				has_trait = trait_erudite
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			add_trait_no_notify = leader_trait_erudite
+		}
+	}
+}
+
+country_event = {
+	id = utopia.2508
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		every_owned_leader = {
+			add_leader_traits_after_modification = yes
+			#remove_leader_traits_after_modification = yes
+		}
+
+		every_pool_leader = {
+			add_leader_traits_after_modification = yes
+			#remove_leader_traits_after_modification = yes
+		}
+	}
+}
+
+country_event = {
+	id = utopia.2600
+	title = "utopia.2600.name"
+	desc = "utopia.2600.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_mind_over_matter
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_tradition = tr_psionics_adopt
+	}
+
+	immediate = {
+		every_owned_pop = {
+			limit = {
+				is_same_species = root
+				species = {
+					has_psionic_species_trait = no
+				}
+			}
+			#modify_species = {
+			#	species = this
+			#	add_trait = trait_latent_psionic
+			#}
+			create_psionic_species_mod = yes
+			species = { save_event_target_as = psionic_species }
+		}
+		# Ensure the event target exists, since in rare cases the main species is already psionic and no pops get modified
+		# (Example: Teachers of the Shroud empires)
+		if = {
+			limit = {
+				exists = event_target:psionic_species
+			}
+			change_dominant_species = {
+				species = event_target:psionic_species
+				change_all = yes
+			}
+		}
+		observer_event = { id = observer.5 }
+		every_country = {
+			limit = {
+				is_ai = no
+				has_communications = root
+				NOT = { is_same_value = root }
+			}
+			country_event = { id = utopia.2602 }
+		}
+		remove_country_flag = shroudwalker_enclave_diplomacy_engaged #Resets to fellow psionic greetings
+		if = {
+			limit = {
+				any_planet_within_border = {
+					has_planet_flag = fotd_seperatist_planet@root
+					owner = {
+						has_country_flag = fotd_seperatist_country@root
+					}
+				}
+			}
+			country_event = { id = origin.6105 days = 5 random = 2 }
+		}
+	}
+
+	option = {
+		name = "utopia.2600.a"
+		trigger = {
+			NOT = { has_origin = origin_shroudwalker_apprentice }
+		}
+		tooltip = {
+			modify_species = {
+				species = this
+				add_trait = trait_latent_psionic
+			}
+		}
+	}
+
+	option = {
+		name = "utopia.2600.a"
+		trigger = {
+			has_origin = origin_shroudwalker_apprentice
+		}
+	}
+}
+
+country_event = {
+	id = utopia.2650
+	title = "utopia.2650.name"
+	desc = "utopia.2650.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_tradition = tr_psionics_psionic_assimilation
+	}
+
+	immediate = {
+		every_owned_pop = {
+			limit = {
+				is_same_species = root
+				has_trait = trait_latent_psionic
+			}
+			#modify_species = {
+			#	species = this
+			#	remove_trait = trait_latent_psionic
+			#	add_trait = trait_psionic
+			#	effect = {
+			#		save_event_target_as = psionic_species
+			#	}
+			#}
+			create_psionic_species_mod_2 = yes
+			species = { save_event_target_as = psionic_species }
+		}
+		change_dominant_species = { species = event_target:psionic_species change_all = yes }
+	}
+	option = {
+		name = "utopia.2650.a"
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = default
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+				}
+				every_owned_leader = {
+					limit = {
+						species = {
+							has_trait = trait_psionic
+							#is_same_value = event_target:psionic_species
+						}
+						NOR = {
+							has_trait = leader_trait_psionic
+							has_leader_flag = renowned_leader
+							has_leader_flag = legendary_leader
+						}
+					}
+					add_trait_no_notify = leader_trait_psionic
+					owner = {
+						if = {
+							limit = {
+								NOT = {
+									has_country_flag = psionic_leader_toast
+								}
+							}
+							set_timed_country_flag = { 
+								flag = psionic_leader_toast
+								days = 30
+							}
+						}
+					}
+				}
+
+				every_pool_leader = {
+					limit = {
+						species = {
+							has_trait = trait_psionic
+							#is_same_value = event_target:psionic_species
+						}
+						NOT = { has_trait = leader_trait_psionic }
+					}
+					add_trait_no_notify = leader_trait_psionic
+					owner = {
+						if = {
+							limit = {
+								NOT = {
+									has_country_flag = psionic_leader_toast
+								}
+							}
+							set_timed_country_flag = { 
+								flag = psionic_leader_toast
+								days = 30
+							}
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						has_country_flag = psionic_leader_toast
+					}
+					create_message = {
+						type = MESSAGE_ALL_GAINED_TRAIT
+						localization = MESSAGE_ALL_GAINED_TRAIT_DESC
+						days = @toast_message_days
+						variable = {
+							type = key
+							value = leader_trait_psionic
+							localization = TRAIT
+						}
+						variable = {
+							key = TRAIT_KEY
+							value = leader_trait_psionic
+						}
+						variable = {
+							key = "border"
+							value = "GFX_invisible" #TODO Common/ no rarity frame
+						}
+					}
+				}
+			}
+			observer_event = { id = observer.6 }
+			every_country = {
+				limit = {
+					is_ai = no
+					has_communications = root
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = utopia.2652 }
+			}
+		}
+	}
+}

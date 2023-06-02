@@ -1,0 +1,647 @@
+#秩序思维信息库
+tc_order_mind_00 = {
+	entity = "construction_platform_entity"
+	construction_entity = "construction_platform_entity"
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 5000
+			unity = 2560
+		}
+	}
+
+	prerequisites = { tc_tech_order_mind }
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		custom_tooltip = {
+			fail_text = "requires_no_existing_megastructure"
+			has_no_non_gate_megastructure = yes
+		}
+		custom_tooltip = {
+			fail_text = "requires_surveyed_system"
+			NOT = {
+				any_system_planet = {
+					is_surveyed = {
+						who = prev.from
+						status = no
+					}
+				}
+			}
+		}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "requires_survey_not_habitable"
+				is_surveyed = {			# prevent leaking habitability information
+					who = prev.from
+					status = yes
+				}
+				colonizable_planet = no
+				NOT = { is_colonizable = yes }
+				NOT = { is_colony = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_star"
+				is_star = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_ring_world"
+				is_ringworld = no
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						has_star_flag = ring_world_built
+					}
+					is_artificial = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_ordermind"
+				from = { NOT = { has_country_flag = tc_built_ordermind } }
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { set_planet_flag = has_megastructure }
+		FROM = { set_country_flag = tc_built_ordermind }
+	}
+}
+
+tc_order_mind_01_temp = {
+	entity = "tc_order_mind_01_entity"
+	construction_entity = "tc_order_mind_01_entity"
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+	show_galactic_map_icon = no
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t2 }
+	upgrade_from = { tc_order_mind_00 }
+
+	build_time = 1080
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 10000
+			tc_element_shard = 512
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 40
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.1
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		spawn_megastructure = {
+			type = tc_order_mind_01
+			planet = FROMFROM.planet
+			owner = FROM
+		}
+		remove_megastructure = FROMFROM
+	}
+}
+
+tc_order_mind_01 = {
+	entity = "tc_order_mind_01_entity"
+	construction_entity = "tc_order_mind_01_entity"
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+
+	#prerequisites = { tc_tech_order_mind tc_tech_building_research_t2 }
+	#upgrade_from = { tc_order_mind_00 }
+	possible = {
+		always = no
+	}
+	potential = {
+		always = no
+	}
+
+	build_time = 1080
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 10000
+			tc_element_shard = 512
+			unity = 2560
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 40
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.1
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_order_mind_01_research = {
+	entity = "tc_order_mind_01_research_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_order_mind_01 tc_order_mind_01_knowledge }
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t2 }
+	construction_blocks_and_blocked_by = none
+
+	build_time = 30
+	resources = {
+		category = megastructures
+		cost = {
+			#tc_thaumium = 10000
+			#tc_element_shard = 512
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 40
+		}
+		upkeep = {
+			tc_knowledge_fragment = 16
+		}
+		produces = {
+			physics_research = 256
+			society_research = 256
+			engineering_research = 256			
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.1
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_order_mind_01_knowledge = {
+	entity = "tc_order_mind_01_knowledge_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_order_mind_01 tc_order_mind_01_research }
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t2 }
+	construction_blocks_and_blocked_by = none
+
+	build_time = 30
+	resources = {
+		category = megastructures
+		cost = {
+			#tc_thaumium = 10000
+			#tc_element_shard = 512
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 40
+		}
+		upkeep = {
+			physics_research = 256
+			society_research = 256
+			engineering_research = 256	
+		}
+		produces = {
+			tc_knowledge_fragment = 16
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.1
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_order_mind_02 = {
+	entity = "tc_order_mind_02_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t3 }
+	upgrade_from = { tc_order_mind_01_knowledge tc_order_mind_01_research tc_order_mind_01 }
+
+	build_time = 1080
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 10000
+			tc_element_shard = 512
+			unity = 2560
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 60
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.15
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_order_mind_02_research = {
+	entity = "tc_order_mind_02_research_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_order_mind_02 tc_order_mind_02_knowledge }
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t3 }
+	construction_blocks_and_blocked_by = none
+
+	build_time = 30
+	resources = {
+		category = megastructures
+		cost = {
+			#tc_thaumium = 10000
+			#tc_element_shard = 512
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 60
+		}
+		upkeep = {
+			tc_knowledge_fragment = 32
+		}
+		produces = {
+			physics_research = 512
+			society_research = 512
+			engineering_research = 512			
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.15
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_order_mind_02_knowledge = {
+	entity = "tc_order_mind_02_knowledge_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_order_mind_02 tc_order_mind_02_research }
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t3 }
+	construction_blocks_and_blocked_by = none
+
+	build_time = 30
+	resources = {
+		category = megastructures
+		cost = {
+			#tc_thaumium = 10000
+			#tc_element_shard = 512
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 60
+		}
+		upkeep = {
+			physics_research = 512
+			society_research = 512
+			engineering_research = 512
+		}
+		produces = {
+			tc_knowledge_fragment = 32
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.15
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_order_mind_03 = {
+	entity = "tc_order_mind_03_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t4 }
+	upgrade_from = { tc_order_mind_02_knowledge tc_order_mind_02_research tc_order_mind_02 }
+
+	build_time = 1080
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 10000
+			tc_element_shard = 512
+			unity = 2560
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 100
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.2
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_order_mind_03_research = {
+	entity = "tc_order_mind_03_research_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_order_mind_03 tc_order_mind_03_knowledge }
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t4 }
+	construction_blocks_and_blocked_by = none
+
+	build_time = 30
+	resources = {
+		category = megastructures
+		cost = {
+			#tc_thaumium = 10000
+			#tc_element_shard = 512
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 100
+		}
+		upkeep = {
+			tc_knowledge_fragment = 64
+		}
+		produces = {
+			physics_research = 1024
+			society_research = 1024
+			engineering_research = 1024			
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.2
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_order_mind_03_knowledge = {
+	entity = "tc_order_mind_03_knowledge_entity"
+	construction_entity = ""
+	portrait = "GFX_megastructure_tc_order_mind"
+	place_entity_on_planet_plane = no
+	upgrade_from = { tc_order_mind_03 tc_order_mind_03_research }
+
+	prerequisites = { tc_tech_order_mind tc_tech_building_research_t4 }
+	construction_blocks_and_blocked_by = none
+
+	build_time = 30
+	resources = {
+		category = megastructures
+		cost = {
+			#tc_thaumium = 10000
+			#tc_element_shard = 512
+		}
+		upkeep = {
+			trigger = {
+				solar_system = {
+					system_star = {
+						NOT = {
+							OR = {
+								is_planet_class = pc_tc_aura_node_normal
+								is_planet_class = pc_tc_aura_node_danger
+								is_planet_class = pc_tc_aura_node_hunger
+								is_planet_class = pc_tc_aura_node_purify
+								is_planet_class = pc_tc_aura_node_taint
+								is_planet_class = pc_tc_aura_node_unstable
+							}
+						}
+					}
+				}
+			}
+			tc_essences = 100
+		}
+		upkeep = {
+			physics_research = 1024
+			society_research = 1024
+			engineering_research = 1024
+		}
+		produces = {
+			tc_knowledge_fragment = 64
+		}
+	}
+
+	country_modifier = {
+		planet_researchers_produces_mult = 0.2
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}

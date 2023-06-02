@@ -1,0 +1,296 @@
+
+namespace = dark_forest
+
+country_event = {
+	id = dark_forest.0
+	title = dark_forest.0.name
+	desc = dark_forest.0.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		any_playable_country = {
+			has_origin = origin_dark_forest
+			is_ai = yes
+		}
+	}
+	
+	option = {
+		name = dark_forest.0.a
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					has_origin = origin_dark_forest
+					is_ai = yes
+				}
+				country_event = { id = dark_forest.1 }
+			}
+		}
+	}
+	
+	option = {
+		name = dark_forest.0.b
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					has_origin = origin_dark_forest
+					is_ai = yes
+				}
+				set_country_flag = allow_origin_dark_forest
+				set_origin_default_effect = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dark_forest.1
+	title = dark_forest.1.name
+	desc = dark_forest.1.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_dark_forest
+		OR = {
+			is_ai = no
+			has_country_flag = allow_origin_dark_forest
+		}
+	}
+	
+	immediate = {
+		set_global_flag = dark_forest
+		add_modifier = {
+			modifier = dark_forest_modifier
+			days = -1
+		}
+		every_country = {
+			limit = {
+				NOT = { has_origin = origin_dark_forest }
+			}
+			country_event = { id = dark_forest.2 }
+		}
+		country_event = { id = dark_forest.1000 days = 1080 random = 1440 }
+	}
+
+	option = {
+		name = dark_forest.1.a
+	}
+}
+
+country_event = {
+	id = dark_forest.2
+	title = dark_forest.2.name
+	desc = dark_forest.2.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = dark_forest
+		NOT = { has_modifier = dark_forest_modifier }
+	}
+	
+	immediate = {
+		add_modifier = {
+			modifier = dark_forest_modifier
+			days = -1
+		}
+		if = {
+			limit = {
+				has_modifier = newly_released_sector_loyalty
+			}
+			remove_modifier = newly_released_sector_loyalty
+		}
+		if = {
+			limit = {
+				has_modifier = divided_patronage
+			}
+			remove_modifier = divided_patronage
+		}
+		if = {
+			limit = {
+				is_subject = yes
+			}
+			set_subject_of = { who = none }
+		}
+		if = {
+			limit = {
+				has_federation = yes
+			}
+			leave_alliance = { override_requirements = yes }
+		}
+		country_event = { id = dark_forest.1000 days = 1080 random = 1440 }
+	}
+
+	option = {
+		name = dark_forest.2.a
+	}
+}
+
+country_event = {
+	id = dark_forest.3
+	title = dark_forest.3.name
+	desc = dark_forest.3.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = dark_forest
+		is_at_war = yes
+		any_playable_country = {
+			has_communications = root
+			NOT = { is_at_war_with = root }
+			is_ai = yes
+			NOT = { is_same_value = root }
+			can_declare_war = {
+				target = root
+				attacker_war_goal = wg_dark_forest
+			}
+		}
+	}
+	
+	immediate = {
+		random_playable_country = {
+			limit = {
+				has_communications = root
+				NOT = { is_at_war_with = root }
+				is_ai = yes
+				NOT = { is_same_value = root }
+				can_declare_war = {
+					target = root
+					attacker_war_goal = wg_dark_forest
+				}
+			}
+			save_event_target_as = dark_forest_war_declarer
+			declare_war = {
+				target = root
+				attacker_war_goal = wg_dark_forest
+			}
+		}
+	}
+
+	option = {
+		name = dark_forest.3.a
+		tooltip = {
+			event_target:dark_forest_war_declarer = {
+				declare_war = {
+					target = root
+					attacker_war_goal = wg_dark_forest
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dark_forest.4
+	title = dark_forest.4.name
+	desc = dark_forest.4.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = dark_forest
+		is_at_war = yes
+		any_playable_country = {
+			NOT = { has_communications = root }
+			NOT = { is_same_value = root }
+		}
+	}
+	
+	immediate = {
+		random_playable_country = {
+			limit = {
+				NOT = { has_communications = root }
+				NOT = { is_same_value = root }
+			}
+			save_event_target_as = dark_forest_communicator
+			establish_communications_no_message = root
+			country_event = { id = dark_forest.5 }
+		}
+	}
+
+	option = {
+		name = dark_forest.4.a
+		tooltip = {
+			event_target:dark_forest_communicator = {
+				establish_communications = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = dark_forest.5
+	title = dark_forest.5.name
+	desc = dark_forest.5.desc
+	picture = GFX_evt_in_the_dark
+	show_sound = event_mystic_reveal_light
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = dark_forest
+	}
+	
+	immediate = {
+	}
+
+	option = {
+		name = dark_forest.5.a
+		tooltip = {
+			establish_communications = from
+		}
+	}
+}
+
+# 事件循环
+country_event = {
+	id = dark_forest.1000
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+	}
+	
+	immediate = {
+		country_event = { id = dark_forest.1000 days = 1080 random = 1440 }
+		if = {
+			limit = {
+				is_at_war = yes
+				any_playable_country = {
+					has_communications = root
+					NOT = { is_at_war_with = root }
+					is_ai = yes
+					NOT = { is_same_value = root }
+					can_declare_war = {
+						target = root
+						attacker_war_goal = wg_dark_forest
+					}
+				}
+			}
+			country_event = { id = dark_forest.3 days = 1 random = 359 }
+		}
+		if = {
+			limit = {
+				is_at_war = yes
+				any_playable_country = {
+					NOT = { has_communications = root }
+					NOT = { is_same_value = root }
+				}
+			}
+			country_event = { id = dark_forest.4 days = 1 random = 179 }
+		}
+	}
+}

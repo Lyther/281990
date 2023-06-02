@@ -1,0 +1,96 @@
+create_original_empire_citadel = {
+	if = {
+		limit = { exists = starbase }
+		starbase = {
+			fleet = {
+				destroy_fleet = this
+			}
+		}
+	}
+	create_starbase = {
+		size = "starbase_citadel"
+		owner = event_target:original_empire
+			
+		module = "shipyard"
+		module = "original_empire_hangar_bay"
+		module = "original_empire_hangar_bay"
+		module = "original_empire_hangar_bay"
+		module = "original_empire_hangar_bay"
+		module = "original_empire_hangar_bay"
+			
+		building = "colossus_yards"
+		building = "target_uplink_computer"
+		building = "original_empire_shield_disabler"
+		building = "original_empire_communications_jammer"
+
+		
+		effect = {
+			while = {
+				count = 5
+				create_ship = {
+					name = random
+					design = "NAME_ORIGINAL_EMPIRE_TOWER"
+					graphical_culture = original_empire_01
+				}
+			}
+		}
+	}	
+}
+
+create_original_empire_reinforcement = {
+	create_leader = {
+		class = admiral
+		species = event_target:original_species
+		name = random
+		skill = 10
+		traits = {
+			trait = leader_trait_cautious
+			trait = leader_trait_aggressive
+			trait = leader_trait_engineer
+		}
+	}
+	capital_scope = {
+		create_fleet = {
+			settings = { 
+				can_change_composition = no
+				spawn_debris = yes
+			}
+			effect = {
+				set_owner = event_target:original_empire
+				create_ship = {
+					name = random
+					design = "NAME_ORIGINAL_EMPIRE_TITAN"
+					graphical_culture = "original_empire_01"
+					upgradable = no
+				}
+				assign_leader = last_created_leader
+				while = {
+					count = 4
+					create_ship = {
+						name = random
+						design = "NAME_ORIGINAL_EMPIRE_BATTLECRUISER"
+						graphical_culture = "original_empire_01"
+						upgradable = no
+					}
+				}
+				while = {
+					count = 8
+					create_ship = {
+						name = random
+						design = "NAME_ORIGINAL_EMPIRE_ESCORT"
+						graphical_culture = "original_empire_01"
+						upgradable = no
+					}
+				}
+				set_location = {
+					target = prev
+					distance = 10
+					angle = random
+				}
+				set_fleet_stance = passive
+				set_aggro_range_measure_from = self
+				set_aggro_range = 500	
+			}
+		}
+	}
+}

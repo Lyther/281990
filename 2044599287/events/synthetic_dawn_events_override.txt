@@ -1,0 +1,348 @@
+##############################
+##############################
+### SYNTHETIC DAWN events ###
+### by Maximilian Olbers, ###
+### Miranda van den Brink, ###
+### & Dee Majek				###
+##############################
+##############################
+
+namespace = syndaw
+
+# Machine Uprising wins
+# Root = Winner Warleader
+# From = Loser Warleader
+# FromFrom = War
+country_event = {
+	id = syndaw.1200
+	title = syndaw.1200.name
+	desc = syndaw.1200.desc
+	picture = GFX_evt_machine_sapience
+	#hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		host_has_dlc = "Synthetic Dawn Story Pack"
+		is_zofe_compatible = yes
+		has_authority = auth_machine_intelligence
+		has_country_flag = machine_uprising_country
+		has_relation_flag = {
+			who = from
+			flag = uprising_to_host_flag
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = { has_communications = root }
+			country_event = { id = syndaw.1030 days = 5 }
+		}
+		observer_event = { id = observer.82 }
+	}
+
+	option = {
+		name = syndaw.1200.a
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 120
+			min = 2000
+			max = 6000
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = 120
+			min = 200
+			max = 600
+		}
+		custom_tooltip = "syndaw.1200.a.tooltip"
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					has_communications = root
+					NOR = {
+						has_country_flag = synthetic_empire
+						has_authority = auth_machine_intelligence
+					}
+				}
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_machine_uprising_victorious
+				}
+			}
+			every_playable_country = {
+				limit = {
+					has_communications = root
+					OR = {
+						has_country_flag = synthetic_empire
+						has_authority = auth_machine_intelligence
+					}
+					NOT = { is_same_value = root }
+				}
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_machine_uprising_machine_comrades_victorious
+				}
+			}
+		}
+	}
+}
+
+# Uprising Host wins
+# Root = Winner Warleader
+# From = Loser Warleader
+# FromFrom = War
+country_event = {
+	id = syndaw.1205
+	title = syndaw.1205.name
+	desc = {
+		trigger = {
+			is_materialist = yes
+		}
+		text = syndaw.1205.desc.mater
+	}
+	desc = {
+		trigger = {
+			is_spiritualist = yes
+		}
+		text = syndaw.1205.desc.spiri
+	}
+	desc = {
+		trigger = {
+			is_militarist = yes
+		}
+		text = syndaw.1205.desc.milit
+	}
+	desc = {
+		trigger = {
+			is_pacifist = yes
+		}
+		text = syndaw.1205.desc.pacif
+	}
+	desc = {
+		trigger = {
+			is_egalitarian = yes
+		}
+		text = syndaw.1205.desc.egali
+	}
+	desc = {
+		trigger = {
+			is_authoritarian = yes
+		}
+		text = syndaw.1205.desc.autho
+	}
+	desc = {
+		trigger = {
+			is_xenophile = yes
+		}
+		text = syndaw.1205.desc.phile
+	}
+	desc = {
+		trigger = {
+			is_xenophobe = yes
+		}
+		text = syndaw.1205.desc.phobe
+	}
+	desc = {
+		trigger = {
+			NOR = {
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_materialist
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+		text = syndaw.1205.desc
+	}
+	picture = GFX_evt_unity_symbol
+	#hide_window = yes
+	is_triggered_only = yes
+	show_sound = event_mystic_reveal
+
+	trigger = {
+		host_has_dlc = "Synthetic Dawn Story Pack"
+		is_zofe_compatible = yes
+		has_relation_flag = {
+			who = from
+			flag = host_to_uprising_flag
+		}
+	}
+
+	immediate = {
+		every_playable_country = {
+			limit = { has_communications = root }
+			country_event = { id = syndaw.1035 days = 5 }
+		}
+		observer_event = { id = observer.83 }
+	}
+
+	option = {
+		name = OK
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 120
+			min = 2000
+			max = 6000
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = 120
+			min = 200
+			max = 600
+		}
+		custom_tooltip = syndaw.1205.a.tooltip
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					has_communications = root
+					NOR = {
+						has_country_flag = synthetic_empire
+						has_authority = auth_machine_intelligence
+						is_same_value = root
+					}
+				}
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_machine_uprising_defeated
+				}
+			}
+			every_playable_country = {
+				limit = {
+					has_communications = root
+					OR = {
+						has_country_flag = synthetic_empire
+						has_authority = auth_machine_intelligence
+					}
+				}
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_machine_uprising_machine_comrades_defeated
+				}
+			}
+		}
+	}
+}
+
+
+# Exterminator achievement check
+country_event = {
+	id = syndaw.2000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = { # conquered an organic empire
+		host_has_dlc = "Synthetic Dawn Story Pack"
+		has_authority = auth_machine_intelligence
+		has_civic = civic_machine_terminator
+		from = {
+			NOR = {
+				has_authority = auth_machine_intelligence
+				has_country_flag = synthetic_empire
+			}
+		}
+	}
+
+	immediate = {
+		if = { # no organics remain
+			limit = {
+				NOT = {
+					any_country = {
+						OR = {
+							is_zofe_compatible = yes
+							is_country_type = fallen_empire
+							is_country_type = awakened_fallen_empire
+						}
+						NOR = {
+							has_authority = auth_machine_intelligence
+							has_country_flag = synthetic_empire
+							has_country_flag = fallen_empire_machine
+						}
+					}
+				}
+			}
+			set_country_flag = exterminated_all_organics
+		}
+	}
+}
+
+# Disassembling a Mechanical pop under AI Uprising situation causes it to progress.
+planet_event = {
+	id = syndaw.1310
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		host_has_dlc = "Synthetic Dawn Story Pack"
+		fromfrom = { has_trait = trait_mechanical }
+		owner = {
+			is_zofe_compatible = yes
+			country_has_situation = { SITUATION = situation_machine_uprising }
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = machine_uprising_disassembly
+			every_situation = {
+				limit = { is_situation_type = situation_machine_uprising }
+				add_situation_progress = 2
+				change_variable = { which = var_cruelty_to_robots value = 1 }		# They'll hate you even more.
+			}
+		}
+	}
+}
+
+# Displacing a Mechanical pop under AI Uprising situation causes it to progress.
+planet_event = {
+	id = syndaw.1311
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		host_has_dlc = "Synthetic Dawn Story Pack"
+		fromfrom = { has_trait = trait_mechanical }
+		owner = {
+			is_zofe_compatible = yes
+			country_has_situation = { SITUATION = situation_machine_uprising }
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = machine_uprising_disassembly
+			every_situation = {
+				limit = { is_situation_type = situation_machine_uprising }
+				add_situation_progress = 1
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = syndaw.1320
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		host_has_dlc = "Synthetic Dawn Story Pack"
+		is_planet_class = pc_machine
+		from = { is_zofe_compatible = yes }
+	}
+
+	immediate = {
+		from = {
+			set_country_flag = planet_of_the_mechs
+		}
+	}
+}

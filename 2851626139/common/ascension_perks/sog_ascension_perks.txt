@@ -1,0 +1,60 @@
+
+#################
+# Убираю из общего доступа стремление стать кризисом.
+#################
+
+ap_become_the_crisis = {
+	potential = {
+		has_nemesis = yes
+		NOT = { has_ascension_perk = ap_become_the_crisis }
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "crisis_perk_disabled" # Добавить перевод для пояснения почему запрещено
+			always = no # Можно так же плавающий данный вариант сделать, дабы с панели настроек выбирать.
+		}
+	}
+
+	on_enabled = {
+		hidden_effect = {
+			set_ai_personality = became_the_crisis
+		}
+		activate_crisis_progression = yes
+	}
+
+	ai_weight = {
+		factor = 7.5
+		modifier = {
+			factor = 0
+			is_militarist = no
+			is_xenophobe = no
+			is_gestalt = no
+		}
+		modifier = {
+			factor = 10
+			is_homicidal = yes
+		}
+		modifier = {
+			factor = 2
+			has_tradition = tr_supremacy_finish
+		}
+		modifier = {
+			factor = 0
+			galaxy_percentage < 0.1
+		}
+		modifier = {
+			factor = 2
+			galaxy_percentage > 0.2
+		}
+		modifier = {
+			factor = 0
+			count_playable_country = {
+				count > 1
+				limit = {
+					has_ascension_perk = ap_become_the_crisis
+				}
+			}
+		}
+	}
+}

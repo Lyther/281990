@@ -1,0 +1,571 @@
+namespace = bd_origin_event
+###生成眺望者星系
+event = {
+	id = bd_origin_event.0
+	hide_window = yes
+	fire_only_once = yes
+	trigger = {
+		any_playable_country = {
+			OR = {
+				has_origin = bd_origin_watcher
+				# solar_system = {
+				# 	has_star_flag = bd_watcher_in
+				# }
+			}
+		}
+	}
+	immediate = {
+		set_spawn_system_batch = begin
+		no_scope = {
+			# makes system positions originate from galactic core
+			spawn_system = {
+				min_distance >= 550
+				max_distance <= 560
+				min_orientation_angle = 134
+				max_orientation_angle = 136
+				initializer = bd_watcher_system_out
+				hyperlane = no
+			}
+		}
+		set_spawn_system_batch = end
+	}
+}
+
+###起源星球添加地块、修正
+country_event = {
+	id = bd_origin_event.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		OR = {
+			has_origin = bd_origin_outside
+			has_origin = bd_origin_unlimited
+			has_origin = bd_origin_herald
+			has_origin = bd_origin_watcher
+			# solar_system = {
+			# 	has_star_flag = bd_outside_system
+			# }
+			# solar_system = {
+			# 	has_star_flag = bd_unlimited_system
+			# }
+			# solar_system = {
+			# 	has_star_flag = bd_herald_system
+			# }
+			# solar_system = {
+			# 	has_star_flag = bd_watcher_in
+			# }
+		}
+	}
+	immediate = {
+		#世外之地
+		if = {
+			limit = {
+				OR = {
+					has_origin = bd_origin_outside
+					# solar_system = {
+					# 	has_star_flag = bd_outside_system
+					# }
+				}
+			}
+			add_resource = {
+				influence = 1000
+			}
+			solar_system = {
+				every_ambient_object = {
+					destroy_ambient_object = this
+				}
+				create_ambient_object = {
+					type = "turbulent_nebula_2"
+					location = star
+				}
+				# last_created_ambient_object = {
+				# 	set_location = {
+				# 		target = star
+				# 		distance = 0
+				# 		angle = random
+				# 	}
+				# }
+				every_system_planet = {
+					if = {
+						limit = {
+							has_planet_flag = bd_outside_planet.1
+						}
+						add_modifier = {
+							modifier = paradise_planet
+						}
+						clear_deposits = yes
+						add_deposit = d_decrepit_dwellings
+						add_deposit = d_outside_planet
+						bd_add_start_deposit_twelve = yes
+					}
+					if = {
+						limit = {
+							has_planet_flag = bd_outside_planet.2
+						}
+						add_modifier = {
+							modifier = intentionally_tidally_locked
+						}
+						add_deposit = d_dayside_farm
+						bd_add_start_deposit_energy = yes
+					}
+					if = {
+						limit = {
+							has_planet_flag = bd_outside_planet.3
+						}
+						set_planet_flag = magnetic_mystery_solved
+						add_modifier = {
+							modifier = strong_magnetic_field
+						}
+						add_modifier = {
+							modifier = magnetic_research_boost
+						}
+						bd_add_start_deposit_energy = yes
+					}
+					if = {
+						limit = {
+							has_planet_flag = bd_outside_planet.4
+						}
+						add_modifier = {
+							modifier = soothing_crystals
+						}
+						add_modifier = {
+							modifier = paradise_made
+						}
+						bd_add_start_deposit_mining = yes
+					}
+					if = {
+						limit = {
+							has_planet_flag = bd_outside_planet.5
+						}
+						add_modifier = {
+							modifier = ultra_rich
+						}
+						bd_add_start_deposit_mining = yes
+					}
+				}
+			}
+		}
+		#无限星球
+		if = {
+			limit = {
+				OR = {
+					has_origin = bd_origin_unlimited
+					# solar_system = {
+					# 	has_star_flag = bd_unlimited_system
+					# }
+				}
+			}
+			home_planet = {
+				change_pc = pc_unlimited
+				clear_deposits = yes
+				add_deposit = d_decrepit_dwellings
+				add_deposit = d_unlimited_planet
+				#生成初始区划/普通国家
+				if = {
+					limit = {
+						owner = {
+							is_regular_empire = yes
+						}
+					}
+					owner = {
+						add_resource = {
+							energy = 400
+							minerals = 400
+							food = 400
+							consumer_goods = 400
+						}
+					}
+					add_building = building_factory_1
+					add_district = bd_unlimited_district_city
+					add_district = bd_unlimited_district_city
+					add_district = bd_unlimited_district_city
+					add_district = bd_unlimited_district_industrial
+					add_district = bd_unlimited_district_industrial
+					add_district = bd_unlimited_district_generator_uncapped
+					add_district = bd_unlimited_district_generator_uncapped
+					add_district = bd_unlimited_district_mining_uncapped
+					add_district = bd_unlimited_district_mining_uncapped
+					add_district = bd_unlimited_district_farming_uncapped
+					add_district = bd_unlimited_district_farming_uncapped
+				}
+				#智械
+				else_if = {
+					limit = {
+						owner = {
+							is_machine_empire = yes
+						}
+					}
+					owner = {
+						add_resource = {
+							energy = 400
+							minerals = 400
+							food = 400
+							consumer_goods = 400
+						}
+					}
+					add_district = bd_unlimited_district_nexus
+					add_district = bd_unlimited_district_nexus
+					add_district = bd_unlimited_district_industrial
+					add_district = bd_unlimited_district_generator_uncapped
+					add_district = bd_unlimited_district_generator_uncapped
+					add_district = bd_unlimited_district_generator_uncapped
+					add_district = bd_unlimited_district_mining_uncapped
+					#同化(石质亚种)
+					if = {
+						limit = {
+							owner = {
+								has_civic = civic_machine_assimilator
+							}
+							any_owned_pop = {
+								has_trait = trait_lithoid
+							}
+						}
+						add_district = bd_unlimited_district_mining_uncapped
+					}
+					#机仆(石质亚种)
+					else_if = {
+						limit = {
+							owner = {
+								has_civic = civic_machine_servitor
+							}
+							any_owned_pop = {
+								has_trait = trait_lithoid
+							}
+						}
+						add_district = bd_unlimited_district_nexus
+						add_district = bd_unlimited_district_generator_uncapped
+						add_district = bd_unlimited_district_mining_uncapped
+					}
+					#普通同化
+					else_if = {
+						limit = {
+							owner = {
+								has_civic = civic_machine_assimilator
+							}
+						}
+						add_district = bd_unlimited_district_farming_uncapped
+					}
+					#普通机仆
+					else_if = {
+						limit = {
+							owner = {
+								has_civic = civic_machine_servitor
+							}
+						}
+						add_district = bd_unlimited_district_farming_uncapped
+					}
+					#普通智械
+					else = {
+						add_district = bd_unlimited_district_generator_uncapped
+					}
+				}
+				#蜂巢
+				else_if = {
+					limit = {
+						owner = {
+							is_hive_empire = yes
+						}
+					}
+					owner = {
+						add_resource = {
+							energy = 400
+							minerals = 400
+							food = 400
+							consumer_goods = 400
+						}
+					}
+					add_district = bd_unlimited_district_hive
+					add_district = bd_unlimited_district_hive
+					add_district = bd_unlimited_district_hive
+					add_district = bd_unlimited_district_industrial
+					add_district = bd_unlimited_district_generator_uncapped
+					add_district = bd_unlimited_district_generator_uncapped
+					add_district = bd_unlimited_district_mining_uncapped
+					add_district = bd_unlimited_district_mining_uncapped
+					add_district = bd_unlimited_district_farming_uncapped
+					add_district = bd_unlimited_district_farming_uncapped
+				}
+			}
+		}
+		#伟大先驱
+		if = {
+			limit = {
+				OR = {
+					has_origin = bd_origin_herald
+					# solar_system = {
+					# 	has_star_flag = bd_herald_system
+					# }
+				}
+			}
+			home_planet = {
+				clear_deposits = yes
+				add_deposit = d_tomb_world_ruins
+				bd_add_start_deposit_twelve = yes
+			}
+		}
+		#遥望银河
+		if = {
+			limit = {
+				OR = {
+					has_origin = bd_origin_watcher
+					# solar_system = {
+					# 	has_star_flag = bd_watcher_in
+					# }
+				}
+			}
+			save_event_target_as = bd_origin_watcher_country
+			#摧毁所有舰队
+			solar_system = {
+				every_fleet_in_system = {
+					delete_fleet = {
+						target = this
+						destroy_template = yes
+						kill_leader = no
+					}
+				}
+				save_event_target_as = bd_watcher_system_name
+				every_system_planet = {
+					limit = {
+						has_planet_flag = watcher_out_home
+					}
+					save_event_target_as = bd_watcher_capital_name
+				}
+			}
+			#标记领袖
+			every_owned_leader = {
+				if = {
+					limit = {
+						leader_class = governor
+					}
+					save_event_target_as = bd_origin_watcher_leader_governor
+					unassign_leader = event_target:bd_origin_watcher_leader_governor
+				}
+				if = {
+					limit = {
+						leader_class = scientist
+						NOR = {
+							is_researching_area = physics
+							is_researching_area = society
+							is_researching_area = engineering
+						}
+					}
+					save_event_target_as = bd_origin_watcher_leader_scientist
+					unassign_leader = event_target:bd_origin_watcher_leader_scientist
+				}
+			}
+			#银河外星系
+			random_system = {
+				limit = {
+					has_star_flag = bd_watcher_out
+				}
+				set_name = event_target:bd_watcher_system_name
+				star = {
+					set_name = event_target:bd_watcher_system_name
+				}
+				#摧毁可能存在的舰队
+				every_fleet_in_system = {
+					destroy_fleet = this
+				}
+				#生成星基
+				create_starbase = {
+					size = "starbase_starport"
+					module = "shipyard"
+					module = "shipyard"
+					building = "crew_quarters"
+				}
+				#备选首都
+				every_system_planet = {
+					if = {
+						limit = {
+							is_planet_class = pc_gaia
+						}
+						save_event_target_as = bd_origin_watcher_start_planet_out
+						clear_deposits = yes
+						prevent_anomaly = yes
+						clear_planet_modifiers = yes
+						bd_add_start_deposit_twelve = yes
+						create_colony = {
+							owner = event_target:bd_origin_watcher_country
+							species = owner_main_species
+						}
+						owner = {
+							#转移人口
+							home_planet = {
+								every_owned_pop = {
+									resettle_pop = {
+										pop = THIS
+										planet = event_target:bd_origin_watcher_start_planet_out
+									}
+									unemploy_pop = yes
+								}
+							}
+							#生成舰队
+							create_fleet = {
+								set_take_point = yes
+								effect = {
+									set_owner = root
+									while = {
+										count = 3
+										create_ship = {
+											name = random
+											random_existing_design = corvette
+										}
+									}
+									set_location = owner.capital_scope.star
+								}
+							}
+							create_fleet = {
+								effect = {
+									set_owner = root
+									create_ship = {
+										name = random
+										random_existing_design = science
+									}
+									set_fleet_stance = evasive
+									set_location = owner.capital_scope.star
+									set_leader = event_target:bd_origin_watcher_leader_scientist
+								}
+							}
+							create_fleet = {
+								effect = {
+									set_owner = root
+									create_ship = {
+										name = random
+										random_existing_design = constructor
+									}
+									set_fleet_stance = evasive
+									set_location = owner.capital_scope.star
+								}
+							}
+						}
+						generate_start_buildings_and_districts = yes
+						set_name = event_target:bd_watcher_capital_name
+						set_owner = root
+						set_controller = root
+						#设为新首都
+						set_capital = yes
+						sector = {
+							set_name = event_target:bd_watcher_capital_name
+							assign_leader = event_target:bd_origin_watcher_leader_governor
+						}
+						every_owned_species = {
+							set_species_homeworld = prev
+						}
+						#原首都更名
+						every_system = {
+							limit = {
+								has_star_flag = bd_watcher_in
+							}
+							set_name = random
+							save_event_target_as = bd_random_name
+							star = {
+								set_name = event_target:bd_random_name
+							}
+							random_system_planet = {
+								limit = {
+									has_planet_flag = watcher_out_home
+								}
+								change_pc = pc_gas_giant
+								set_name = event_target:bd_random_name
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							has_deposit = d_energy_10
+							has_mining_station = no
+						}
+						create_mining_station = {
+							owner = root
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+###重置眺望者星门位置
+# Root = Country
+# From = Megastructure
+# FromFrom = System
+# FromFromFrom = Fleet
+country_event = {
+	id = bd_origin_event.2
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		from = {
+			is_megastructure_type = bd_lgate_base
+		}
+	}
+	immediate = {
+		remove_megastructure = from
+		fromfrom = {
+			spawn_megastructure = {
+				type = bd_lgate_base
+				orbit_angle = 270
+				orbit_distance = 40
+				init_effect = {
+					activate_gateway = this
+				}
+			}
+		}
+	}
+}
+
+###建立通信
+country_event = {
+	id = bd_origin_event.3
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			has_origin = bd_origin_watcher
+			# solar_system = {
+			# 	has_star_flag = bd_watcher_in
+			# }
+			# solar_system = {
+			# 	has_star_flag = bd_watcher_out
+			# }
+		}
+	}
+	immediate = {
+		set_country_flag = built_spyorb
+		set_country_flag = has_built_or_repaired_megastructure
+		capital_scope = {
+			hidden_effect = {
+				enable_special_project = {
+					name = AMOEBAS_PROJECT
+				}
+				enable_special_project = {
+					name = CRYSTALS_PROJECT
+				}
+				enable_special_project = {
+					name = DRONES_PROJECT
+				}
+				enable_special_project = {
+					name = CLOUDS_PROJECT
+				}
+			}
+		}
+		add_research_option = tech_space_whale_weapon_1
+		add_resource = {
+			influence = 1000
+		}
+		every_country = {
+			limit = {
+				NOR = {
+					has_communications = root
+					is_country_type = default
+					#is_country_type = caravaneer_home
+					#is_country_type = caravaneer_fleet
+					#is_country_type = enclave
+					is_country_type = shroud
+					is_country_type = primitive
+				}
+			}
+			establish_communications_no_message = root
+		}
+	}
+}

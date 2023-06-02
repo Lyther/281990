@@ -1,0 +1,10 @@
+version="1.1"
+tags={
+	"Overhaul"
+	"Fixes"
+	"Military"
+}
+name="xTsShipPowerFix"
+picture="thumbnail.png"
+supported_version="3.8.*"
+remote_file_id="2864561711"

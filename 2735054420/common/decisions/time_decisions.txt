@@ -1,0 +1,862 @@
+decision_call_time_titan_fleet = {
+	sound = event_alien_signal
+	icon = decision_time
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	
+	potential = {
+		if = {
+			limit = {
+				from = {
+					has_country_flag = gain_time_titan
+				}
+			}
+			if = {
+				limit = {
+					exists = event_target:time_titan_fleet
+				}
+				OR = {
+					is_planet_class = pc_black_hole
+					is_planet_class = pc_time
+					is_planet_class = pc_endless_time
+					is_planet_class = pc_core_of_truth
+				}
+			}
+			else = {
+				always = no
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+	
+	effect = {
+		custom_tooltip = decision_call_time_titan_fleet.tooltip
+		hidden_effect = {
+			event_target:time_titan_fleet = {
+				set_location = root
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_reroll_time_mod_deposits = {
+	owned_planets_only = yes
+	sound = event_alien_signal
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	
+	potential = {
+		OR = {
+			is_planet_class = pc_gas_colony
+			is_planet_class = pc_psionic
+			is_planet_class = pc_nanites
+		}
+		is_capital = yes
+		days_passed <= 30
+	}
+	
+	effect = {
+		custom_tooltip = decision_reroll_time_mod_deposits.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					is_planet_class = pc_gas_colony
+				}
+				reroll_pc_gas_colony_deposits = yes
+			}
+			else_if = {
+				limit = {
+					is_planet_class = pc_psionic
+				}
+				reroll_pc_psionic_deposits = yes
+			}
+			else_if = {
+				limit = {
+					is_planet_class = pc_nanites
+				}
+				reroll_pc_nanites_deposits = yes
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_search_pc_time_deposits = {
+	owned_planets_only = yes
+	sound = event_alien_signal
+	icon = decision_prospect
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			energy = 2000
+			minerals = 2000
+			food = 2000
+			consumer_goods = 1000
+			alloys = 1000
+			sr_dark_matter = 100
+			influence = 50
+		}
+	}
+	
+	potential = {
+		OR = {
+			is_planet_class = pc_time
+			is_planet_class = pc_endless_time
+		}
+		OR = {
+			has_deposit = d_time
+			has_deposit = d_endless_time
+		}
+		has_planet_flag = time_home_planet_of@owner
+	}
+	
+	effect = {
+		custom_tooltip = decision_search_pc_time_deposits.tooltip
+		hidden_effect = {
+			set_variable = {
+				which = search_pc_time_deposits_variable
+				value = 0
+			}
+			set_variable_to_random_value = {
+				which = search_pc_time_deposits_variable
+				min = 1
+				max = 3
+				rounded = yes
+			}
+			while = {
+				count = search_pc_time_deposits_variable
+				search_pc_time_deposits = yes
+			}
+			clear_variable = search_pc_time_deposits_variable
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_time = {
+	owned_planets_only = yes
+	sound = event_activating_unknown_technology
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 3600
+	resources = {
+		category = decisions
+		cost = {
+			energy = 10000
+			minerals = 10000
+			food = 10000
+			consumer_goods = 5000
+			alloys = 5000
+			sr_dark_matter = 500
+			influence = 250
+		}
+	}
+	
+	potential = {
+		NOT = { has_modifier = timesingularity }
+		is_planet_class = pc_time
+		has_planet_flag = time_home_planet_of@owner
+		exists = owner
+		owner = {
+			has_ascension_perk = ap_horror
+			has_origin = origin_time
+			# 完成交流事件链
+			OR = {
+				has_tech_option = tech_time_blocker_3
+				has_technology = tech_time_blocker_3
+			}
+		}
+	}
+	
+	allow = {
+		has_fully_upgraded_capital = yes
+		num_uncleared_blockers < 1
+		free_district_slots < 1
+	}
+	
+	effect = {
+		custom_tooltip = decision_time.tooltip
+		hidden_effect = {
+			planet_event = { id = time.100 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_time_synthetic_empire = {
+	owned_planets_only = yes
+	sound = event_alien_signal
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	
+	potential = {
+		exists = owner
+		owner = {
+			has_origin = origin_time
+			has_country_flag = synthetic_empire
+		}
+		OR = {
+			is_planet_class = pc_time
+			is_planet_class = pc_endless_time
+		}
+		any_owned_pop = {
+			has_trait = trait_mechanical
+			NOT = { has_trait = trait_time_robot }
+		}
+		NOT = { has_planet_flag = decision_time_synthetic_empire_finished }
+	}
+	
+	allow = {
+	}
+	
+	effect = {
+		custom_tooltip = decision_time_synthetic_empire.tooltip
+		hidden_effect = {
+			set_planet_flag = decision_time_synthetic_empire_finished
+			every_owned_pop = {
+				limit = {
+					has_trait = trait_mechanical
+					NOT = { has_trait = trait_time_robot }
+				}
+				modify_species = {
+					species = this
+					add_trait = trait_time_robot
+				}
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+decision_time_dimensional_horror = {
+	owned_planets_only = yes
+	sound = event_activating_unknown_technology
+	icon = decision_time
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	resources = {
+		category = decisions
+		cost = {
+			sr_dark_matter = 1000
+		}
+	}
+	
+	potential = {
+		if = {
+			limit = {
+				is_planet_class = pc_endless_time
+			}
+			is_same_value = event_target:time_dimensional_horror_planet
+			NOT = {
+				exists = event_target:time_dimensional_horror_fleet
+			}
+			owner = {
+				has_origin = origin_time
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+	
+	allow = {
+	}
+	
+	effect = {
+		custom_tooltip = decision_time_dimensional_horror.tooltip
+		hidden_effect = {
+			planet_event = { id = time.200 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_time_trophy_target = {
+	owned_planets_only = yes
+	sound = event_alien_signal
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	resources = {
+		category = decisions
+		cost = {
+			influence = 50
+		}
+	}
+	
+	potential = {
+		owner = {
+			has_technology = tech_time_dimension #拥有科技
+		}
+		NOT = { is_same_value = event_target:time_trophy_target } #不是目标
+	}
+	
+	effect = {
+		custom_tooltip = decision_time_trophy_target.tooltip
+		hidden_effect = {
+			save_global_event_target_as = time_trophy_target
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_time_trophy = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = {
+			sr_dark_matter = 100
+		}
+	}
+	
+	potential = {
+		owner = {
+			has_technology = tech_time_dimension #拥有科技
+		}
+		exists = event_target:time_trophy_target #存在目标
+		event_target:time_trophy_target = {
+			owner = { is_same_value = root.owner } #拥有目标
+		}
+		NOT = { is_same_value = event_target:time_trophy_target } #不是目标
+		OR = {
+			has_modifier = ether_trophy
+			has_modifier = shard_trophy
+			has_modifier = dread_trophy
+			has_modifier = burnt_tiyanki_trophy
+			has_modifier = tiyanki_trophy
+			has_modifier = sky_dragon_trophy
+			has_modifier = scavenger_trophy
+			has_modifier = wraith_trophy
+			has_modifier = fortress_trophy
+			has_modifier = voidspawn_trophy
+			has_modifier = stellar_devourer_trophy
+			AND = {
+				has_modifier = horror_stabilized
+				event_target:time_trophy_target = {
+					has_horror_trophy_trigger = no #禁止叠加
+				}
+			}
+		}
+	}
+	
+	effect = {
+		if = {
+			limit = {
+				has_modifier = ether_trophy
+			}
+			remove_modifier = ether_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = ether_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = shard_trophy
+			}
+			remove_modifier = shard_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = shard_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = dread_trophy
+			}
+			remove_modifier = dread_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = dread_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = burnt_tiyanki_trophy
+			}
+			remove_modifier = burnt_tiyanki_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = burnt_tiyanki_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = tiyanki_trophy
+			}
+			remove_modifier = tiyanki_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = tiyanki_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = sky_dragon_trophy
+			}
+			remove_modifier = sky_dragon_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = sky_dragon_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = scavenger_trophy
+			}
+			remove_modifier = scavenger_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = scavenger_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = wraith_trophy
+			}
+			remove_modifier = wraith_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = wraith_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = fortress_trophy
+			}
+			remove_modifier = fortress_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = fortress_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = voidspawn_trophy
+			}
+			remove_modifier = voidspawn_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = voidspawn_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = stellar_devourer_trophy
+			}
+			remove_modifier = stellar_devourer_trophy
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = stellar_devourer_trophy }
+			}
+		}
+		if = {
+			limit = {
+				has_modifier = horror_stabilized
+				event_target:time_trophy_target = {
+					has_horror_trophy_trigger = no
+				}
+			}
+			remove_modifier = horror_stabilized
+			event_target:time_trophy_target = {
+				add_modifier = { modifier = horror_stabilized }
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_psionic_1 = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal
+	icon = decision_consecrated_worlds
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			sr_zro = 500
+		}
+	}
+	
+	potential = {
+		is_planet_class = pc_psionic
+		exists = owner
+		owner = {
+			has_ascension_perk = ap_mind_over_matter
+			has_origin = origin_psionic
+		}
+		NOT = { has_modifier = psionic_origin }
+		NOT = { has_modifier = best_psionic }
+		NOT = { has_modifier = good_psionic }
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = psionic_requirements_1
+			OR = {
+				has_modifier = normal_psionic
+				has_modifier = bad_psionic
+			}
+		}
+	}
+	
+	effect = {
+		custom_tooltip = decision_psionic_1.tooltip
+		hidden_effect = {	
+			planet_event = { id = psionic.200 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+decision_psionic_2 = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal
+	icon = decision_consecrated_worlds
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	resources = {
+		category = decisions
+		cost = {
+			sr_zro = 1000
+		}
+	}
+	
+	potential = {
+		is_planet_class = pc_psionic
+		has_modifier = worst_psionic
+		NOT = { has_planet_flag = decision_psionic_2_finished }
+		exists = owner
+		owner = {
+			has_tradition = tr_psionics_psionic_assimilation
+			has_origin = origin_psionic
+		}
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = psionic_requirements_2
+			NOT = { has_planet_flag = psionic_disaster }
+		}
+	}
+	
+	effect = {
+		custom_tooltip = decision_psionic_2.tooltip
+		hidden_effect = {
+			planet_event = { id = psionic.300 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+decision_psionic_3 = {
+	owned_planets_only = yes
+	sound = event_mystic_reveal
+	icon = decision_consecrated_worlds
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 1800
+	resources = {
+		category = decisions
+		cost = {
+			sr_zro = 1000
+		}
+	}
+	
+	potential = {
+		is_planet_class = pc_psionic
+		has_modifier = psionic_origin
+		exists = owner
+		owner = {
+			has_tradition = tr_psionics_finish
+			has_origin = origin_psionic
+		}
+	}
+	
+	allow = {
+		owner = {
+			has_ascension_perk = ap_consecrated_worlds
+		}
+	}
+	
+	effect = {
+		custom_tooltip = decision_psionic_3.tooltip
+		hidden_effect = {
+			planet_event = { id = psionic.50 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+decision_nanites_fleet = {
+	owned_planets_only = yes
+	sound = event_construction
+	icon = decision_federation_fleet
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = {
+			alloys = 5000
+			nanites = 1000
+		}
+	}
+	
+	potential = {
+		is_planet_class = pc_nanites
+		exists = owner
+		owner = {
+			has_origin = origin_nanites
+			has_modifier = nanites_attacker
+		}
+	}
+	
+	allow = {
+	}
+	
+	effect = {
+		custom_tooltip = decision_nanites_fleet.tooltip
+		hidden_effect = {	
+			planet_event = { id = nanites.30 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+decision_tao_of_ninghe = {
+	owned_planets_only = yes
+	sound = event_alien_nature
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	
+	potential = {
+		exists = owner
+		owner = {
+			has_origin = origin_tao_of_ninghe
+		}
+	}
+	
+	allow = {
+	}
+	
+	effect = {
+		custom_tooltip = decision_tao_of_ninghe.tooltip
+		hidden_effect = {
+			refresh_tao_of_ninghe_value = yes
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}
+
+decision_reassembler_1 = {
+	owned_planets_only = yes
+	sound = event_construction
+	icon = decision_cybernetics
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 30
+	
+	potential = {
+		NOT = { has_modifier = reassembler_mode_modifier }
+		exists = owner
+		owner = {
+			has_origin = origin_reassembler
+		}
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = need_no_reassembler_machine
+			any_owned_pop = {
+				is_robot_pop = yes
+				NOT = { has_trait = trait_reassembler }
+			}
+		}
+		custom_tooltip = {
+			fail_text = recently_disable_reassembler_mode
+			NOT = { has_planet_flag = recently_disable_reassembler_mode }
+		}
+	}
+	
+	effect = {
+		add_modifier = {
+			modifier = reassembler_mode_modifier
+			days = -1
+			multiplier = value:num_time_modifier|MODIFIER|reassembler_modifier|
+		}
+		hidden_effect = {
+			set_timed_planet_flag = {
+				flag = recently_enable_reassembler_mode
+				days = 360
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+decision_reassembler_2 = {
+	owned_planets_only = yes
+	sound = event_construction
+	icon = decision_cybernetics
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	
+	potential = {
+		has_modifier = reassembler_mode_modifier
+		exists = owner
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = recently_enable_reassembler_mode
+			NOT = { has_planet_flag = recently_enable_reassembler_mode }
+		}
+	}
+	
+	effect = {
+		remove_modifier = "reassembler_mode_modifier"
+		hidden_effect = {
+			set_timed_planet_flag = {
+				flag = recently_disable_reassembler_mode
+				days = 360
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 10
+		modifier = {
+			factor = 0
+			owner = {
+				has_origin = origin_reassembler
+			}
+		}
+	}
+}
+
+decision_ai_wonder_country = {
+	owned_planets_only = yes
+	sound = event_alien_nature
+	icon = decision_tao_of_ninghe
+	
+	prerequisites = {
+	}
+	
+	enactment_time = 0
+	
+	potential = {
+		exists = owner
+		if = {
+			limit = {
+				has_modifier = time_wonder_modifier
+			}
+			if = {
+				limit = {
+					is_capital = no
+				}
+				is_original_owner = owner
+				owner = {
+					is_ai = yes
+				}
+			}
+			else = {
+				always = no
+			}
+		}
+		else = {
+			always = no
+		}
+	}
+	
+	allow = {
+	}
+	
+	effect = {
+		set_capital = yes
+	}
+	
+	ai_weight = {
+		weight = 10000
+	}
+}

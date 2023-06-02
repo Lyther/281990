@@ -1,0 +1,462 @@
+#军事空间站
+tc_military_station = {
+	entity = tc_station_frame_entity
+	#prerequisites = { }
+
+	max_hitpoints = 96000
+	max_speed = 0
+	rotation_speed = 0
+	collision_radius = 50
+
+	section_slots = {
+		"station" = { locator = "root" }
+	}
+
+	modifier = {
+		ship_armor_add = 38400
+		ship_shield_add = 38400
+	}
+	ship_modifier = {
+		weapon_type_tc_arcane_weapon_damage_mult = 0.5
+	}
+	
+	size_multiplier = 12
+	fleet_slot_size = 16
+	num_target_locators = 7
+
+	is_space_station = yes
+	can_be_inspected = yes
+	enable_default_design = no
+	flip_control_on_disable = yes
+	is_designable = no
+	
+	class = shipclass_military_station
+	default_behavior = platform
+
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	#required_component_set = "ship_aura_components"
+}
+
+#巨像
+tc_thaumic_colossus = {
+	entity = "tc_generic_empty_entity"
+	#prerequisites = { }
+	max_hitpoints = 128000
+	max_speed = 100
+	rotation_speed = 0.25
+	acceleration = 1
+	collision_radius = 64
+
+	section_slots = {
+		"core" = { locator = "root" }
+	}
+
+	modifier = { }
+	ship_modifier = { }
+
+	size_multiplier = 32
+	fleet_slot_size = 32
+	num_target_locators = 7
+
+	is_space_station = no
+	can_be_inspected = yes
+	enable_default_design = no
+	is_designable = no
+	is_space_object = yes
+
+	class = shipclass_military_special
+	default_behavior = colossus
+
+	required_component_set = "power_core"
+	required_component_set = "combat_computers"
+	#required_component_set = "thruster_components"
+	required_component_set = "ftl_components"
+}
+
+#防御塔
+tc_defense_tower = {
+	entity = "tc_generic_empty_entity"
+
+	max_hitpoints = 5120
+	max_speed = 4
+	rotation_speed = 0.1
+	acceleration = 10
+	collision_radius = 10
+
+	prerequisites = { tc_tech_defense_tower }
+
+	formation_priority = 4
+
+	section_slots = {
+		"tower" = { locator = "root" }
+	}
+
+	modifier = {
+		
+	}
+	ship_modifier = {
+		weapon_type_tc_arcane_weapon_damage_mult = 0.5
+	}
+
+	size_multiplier = 4
+	fleet_slot_size = 4
+	combat_size_multiplier = 8
+	num_target_locators = 1
+
+	is_space_station = yes
+	can_be_inspected = yes
+	enable_default_design = no
+	flip_control_on_disable = no
+	is_designable = yes
+	is_space_object = yes
+
+	class = shipclass_military_station
+	default_behavior = platform
+
+	construction_type = starbase_defenses
+	potential_construction = {
+		is_scope_type = starbase
+		always = no
+	}
+
+	possible_construction = {
+		always = no
+	}
+	base_buildtime = 360
+	components_add_to_cost = yes
+
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+tc_defense_move = {
+	entity = "tc_thaumic_defense_tower_close_entity"
+	#prerequisites = { }
+
+	max_hitpoints = 5120
+	max_speed = 100
+	rotation_speed = 1
+	acceleration = 10
+	collision_radius = 10
+
+	#section_slots = { }
+
+	modifier = { }
+	ship_modifier = {
+		weapon_type_tc_arcane_weapon_damage_mult = 0.5
+	}
+
+	size_multiplier = 4
+	fleet_slot_size = 4
+	combat_size_multiplier = 8
+	num_target_locators = 1
+
+	is_space_station = no
+	can_be_inspected = no
+	enable_default_design = no
+	flip_control_on_disable = no
+	is_designable = no
+	is_space_object = yes
+
+	class = shipclass_military
+	default_behavior = tc_aqua_behavior
+
+	construction_type = starbase_defenses
+	potential_construction = {
+		is_scope_type = starbase
+		always = no
+	}
+	possible_construction = {
+		always = no
+	}
+	base_buildtime = 360
+	components_add_to_cost = yes
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+}
+
+#巡航舰
+tc_cruise_ship = {
+	entity = "tc_generic_empty_entity"
+
+	max_hitpoints = 3840
+	max_speed = 150
+	rotation_speed = 0.5
+	acceleration = 1
+	collision_radius = 3
+
+	prerequisites = { tc_tech_cruise_ship }
+
+	icon = "tc_cruise_ship"
+	#icon_frame = "1"
+	ship_class_icon_frame = "16"
+
+	section_slots = {
+		"core" = { locator = "root" }
+	}
+
+	modifier = {
+		ship_armor_add = 1920
+		ship_shield_add = 1920
+	}
+	ship_modifier = {
+		weapon_type_tc_arcane_weapon_damage_mult = 0.5
+	}
+
+	resources = {
+		category = ships
+		cost = {
+			tc_thaumium = 640
+		}
+		upkeep = {
+			tc_essences = 2
+		}
+	}
+	base_buildtime = 360
+
+	construction_type = starbase_shipyard
+	potential_construction = {
+		OR = {
+			is_scope_type = starbase
+			is_scope_type = megastructure
+		}
+	}
+
+	possible_construction = {
+		OR = {
+			is_scope_type = starbase
+			is_scope_type = megastructure
+		}
+	}
+
+	size_multiplier = 6
+	fleet_slot_size = 6
+	num_target_locators = 1
+
+	is_space_station = no
+	can_be_inspected = yes
+	enable_default_design = no
+	is_designable = yes
+	is_space_object = yes
+
+	class = shipclass_military
+	default_behavior = tc_aqua_behavior
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+
+#战列舰
+tc_batter_ship = {
+	entity = "tc_generic_empty_entity"
+
+	max_hitpoints = 12800
+	max_speed = 120
+	rotation_speed = 0.25
+	acceleration = 1
+	collision_radius = 25
+
+	prerequisites = { tc_tech_batter_ship }
+
+	icon = "tc_batter_ship"
+	#icon_frame = "1"
+	ship_class_icon_frame = "16"
+
+	section_slots = {
+		"core" = { locator = "root" }
+	}
+
+	modifier = {
+		ship_armor_add = 5120
+		ship_shield_add = 5120
+	}
+	ship_modifier = {
+		weapon_type_tc_arcane_weapon_damage_mult = 0.5
+	}
+
+	resources = {
+		category = ships
+		cost = {
+			tc_thaumium = 1280
+		}
+		upkeep = {
+			tc_essences = 4
+		}
+	}
+	base_buildtime = 940
+
+	construction_type = starbase_shipyard
+	potential_construction = {
+		OR = {
+			is_scope_type = starbase
+			is_scope_type = megastructure
+		}
+	}
+
+	possible_construction = {
+		OR = {
+			is_scope_type = starbase
+			is_scope_type = megastructure
+		}
+	}
+
+	size_multiplier = 12
+	fleet_slot_size = 12
+	num_target_locators = 1
+
+	is_space_station = no
+	can_be_inspected = yes
+	enable_default_design = no
+	is_designable = yes
+	is_space_object = yes
+
+	class = shipclass_military
+	default_behavior = tc_ordo_behavior
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "ship_aura_components"
+}
+
+#恒星基地
+tc_starbase = {
+	entity = "tc_starbase_entity"
+
+	max_hitpoints = 512000
+	max_speed = 0
+	rotation_speed = 0
+	acceleration = 0
+	collision_radius = 32
+
+	modifier = {
+		ship_evasion_mult = -1
+		ship_armor_add = 65536
+		ship_shield_add = 65536
+		starbase_module_capacity_add = 6
+		starbase_building_capacity_add = 6
+		starbase_defense_platform_capacity_add = 15
+		#trade system
+		starbase_trade_collection_range_add = 1
+		starbase_trade_protection_range_add = 1
+		starbase_trade_protection_add = 64
+		ship_sensor_range_add = 1
+	}
+	ship_modifier = {
+		weapon_type_tc_arcane_weapon_damage_mult = 0.5
+	}
+	combat_size_multiplier = 50
+	size_multiplier = 8
+	fleet_slot_size = 16
+
+	section_slots = {
+		"core" = { locator = "root" }
+		"1" = { locator = "outer_section_part_1" }
+		"2" = { locator = "outer_section_part_2" }
+		"3" = { locator = "outer_section_part_3" }
+		"4" = { locator = "outer_section_part_4" }
+		"5" = { locator = "outer_section_part_5" }
+		"6" = { locator = "outer_section_part_6" }
+	}
+
+	is_designable = no
+	num_target_locators = 0
+	is_space_station = no
+	can_have_federation_design = no
+	is_civilian = no
+	components_add_to_cost = no
+	can_disable = no
+	flip_control_on_disable = no
+
+	enable_default_design = no
+	enable_3dview_in_ship_browser = yes
+	#prerequisites = { "tc_always_no" }
+	class = shipclass_starbase
+	#class = shipclass_military_station
+
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "ftl_inhibitor"
+
+	icon_frame = 5
+	icon = ship_size_military_station
+}
+
+#主宰
+tc_juggernaut_ship = {
+	entity = "tc_generic_empty_entity"
+
+	max_hitpoints = 128000
+	max_speed = 100
+	rotation_speed = 0.5
+	acceleration = 0.5
+	collision_radius = 15
+
+	section_slots = {
+		"core" = { locator = "root" }
+	}
+	prerequisites = { tc_tech_juggernaut_ship }
+
+	icon = "tc_juggernaut_ship"
+	#icon_frame = "1"
+	ship_class_icon_frame = "48"
+	
+
+	resources = {
+		category = ships
+		cost = {
+			tc_thaumium = 6400
+		}
+		upkeep = {
+			tc_essences = 16
+		}
+	}
+
+	modifier = {
+		ship_armor_add = 51200
+		ship_shield_add = 51200
+		ship_cloaking_detection_add = 4
+	}
+	ship_modifier = {
+		weapon_type_tc_arcane_weapon_damage_mult = 0.5
+	}
+
+	construction_type = starbase_shipyard
+	potential_construction = {
+		always = no
+	}
+
+	possible_construction = {
+		always = no
+	}
+
+	size_multiplier = 16
+	fleet_slot_size = 32
+	num_target_locators = 1
+
+	is_space_station = no
+	can_be_inspected = yes
+	enable_default_design = no
+	is_designable = yes
+	is_space_object = yes
+
+	class = shipclass_starbase
+	default_behavior = tc_aer_behavior
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "ship_aura_components"
+}

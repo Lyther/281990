@@ -1,0 +1,130 @@
+artifact_dark_matter_power_research = {
+	resources = {
+		category = artifact_actions
+		cost = {
+			minor_artifacts = 10
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+		modifier = {
+			factor = 0
+			has_resource = { type = minor_artifacts amount < 20 }
+		}
+	}
+
+	potential = {
+		NOT = { has_technology = tech_dark_matter_power_core }
+		NOT = { has_tech_option = tech_dark_matter_power_core }
+		has_technology = tech_mine_dark_matter
+		has_technology = tech_zero_point_power
+		has_technology = tech_arcane_deciphering
+		has_country_flag = dark_matter_power_arfifacts
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = "requires_arcane_deciphering_no_cooldown"
+			NOT = { has_modifier = arcane_deciphering_cooldown }
+		}
+	}
+
+	effect = {
+		custom_tooltip = artifact_dark_matter_power_research_effect
+		hidden_effect = {
+			add_modifier = {
+				modifier = "arcane_deciphering_cooldown" 
+				days = 720
+			}
+			random_list = {
+				20 = {
+					owner = {
+						country_event = { id = zofe.14 }
+					}
+				}
+				50 = {
+					owner = {
+						country_event = { id = zofe.15 }
+					}
+				}
+				20 = {
+					owner = {
+						country_event = { id = zofe.16 }
+					}
+				}
+				10 = {
+					owner = {
+						country_event = { id = zofe.17 }
+					}
+				}
+			}
+		}
+	}
+}
+
+artifact_lost_technologies_research = {
+	resources = {
+		category = artifact_actions
+		cost = {
+			minor_artifacts = 50
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+		modifier = {
+			factor = 0
+			has_resource = { type = minor_artifacts amount < 100 }
+		}
+	}
+
+	potential = {
+		has_country_flag = lost_technologies_decision_unlocked
+		has_technology = tech_arcane_deciphering
+		NOR = { 
+			AND = {
+				has_global_flag = zofe_automated_industries_activated
+				NOT = { 
+					has_global_flag = zofe_secrets_of_the_fallen_empires_activated
+				}
+				has_lost_buildings = yes
+			}
+			AND = {
+				has_global_flag = zofe_secrets_of_the_fallen_empires_activated
+				NOT = { 
+					has_global_flag = zofe_automated_industries_activated
+				}
+				has_lost_tech = yes
+			}
+			AND = {
+				has_global_flag = zofe_automated_industries_activated
+				has_global_flag = zofe_secrets_of_the_fallen_empires_activated
+				has_lost_buildings = yes
+				has_lost_tech = yes
+				has_country_flag = goliath_unlocked
+				has_country_flag = superior_designs_unlocked
+			}
+		}
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = "requires_arcane_deciphering_no_cooldown"
+			NOT = { has_modifier = arcane_deciphering_cooldown }
+		}
+	}
+
+	effect = {
+		custom_tooltip = lost_technologies_research_effect
+		hidden_effect = {
+			add_modifier = {
+				modifier = "arcane_deciphering_cooldown" 
+				days = 720
+			}
+			owner = {
+				country_event = { id = lost_technologies.1001 }
+			}
+		}
+	}
+}

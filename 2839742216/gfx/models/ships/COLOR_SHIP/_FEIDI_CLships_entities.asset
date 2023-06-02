@@ -1,0 +1,90 @@
+
+#############################################################
+entity = {#星环#
+	name = "FEIDI_ring_idle_entity"
+	pdxmesh = "TACFD_mammalian_01_colossus_rings_mesh"
+	default_state = idle
+	state = { name = "idle" animation = "idle" animation_speed = 1.5 }
+	game_data = { emissive_recolor_crunch = 0 }	
+	scale = 0.5
+}
+entity = {#世界环#
+	name = "TACFD_ringseam_entity"
+	pdxmesh = "TACFD_ringseam_mesh"
+}
+entity = {#舰船环#
+	name = "FEIDI_shipring_idle_entity"
+	pdxmesh = "TACFD_mammalian_01_colossus_rings_mesh"
+	default_state = idle
+	state = { name = "idle" animation = "idle" animation_speed = 1.5 }
+	game_data = { emissive_recolor_crunch = 0 }	
+#	scale = 0.5
+}
+
+entity = {#核心#
+	name = "FEIDI_core_entity"
+	pdxmesh = "AI_core_mesh"
+	game_data = { emissive_recolor_crunch = 0 }		
+}
+
+##########################################################################################
+entity = {#星环（静态）#
+	name = "FEIDI_shipring_part1_entity"
+	locator = { name = "center" position = { 0 0 0 } rotation = { 0 0 0}}
+	attach = { center = "FEIDI_shipring_idle_entity" }
+}
+entity = {#内环1#
+	name = "FEIDI_shipring_part2_entity"
+	pdxmesh ="AI_mega_ration_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 1.5 }
+	attach = { root = "FEIDI_shipring_idle_entity" }
+	scale = 0.85
+}
+entity = {#内环2#
+	name = "FEIDI_shipring_part3_entity"
+	pdxmesh ="AI_mega_ration_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 5 }
+	attach = { root = "FEIDI_shipring_idle_entity" }
+	scale = 0.75
+}
+entity = {#环#
+	name = "FEIDI_shiprings_entity"
+	locator = { name = "set1" position = { 0 0 0 } rotation = { 0 0 0}}
+	locator = { name = "set2" position = { 0 0 0 } rotation = { 160 120 90}}
+	locator = { name = "set3" position = { 0 0 0 } rotation = { 30 0 120}}
+	attach = {
+		set1 = "FEIDI_shipring_part1_entity"
+		set2 = "FEIDI_shipring_part2_entity"
+		set3 = "FEIDI_shipring_part3_entity"
+	}
+}
+################################################################################
+#世界环旋转#
+entity = {#部分1#
+	name = "FEIDI_SEAM_RING_PART_01"
+	pdxmesh = "AI_ring_world_ration_mesh"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 2 }
+	attach = { root = "TACFD_ringseam_entity" }
+}
+entity = {#部分2#
+	name = "FEIDI_SEAM_RING_PART_02"
+	pdxmesh = "AI_ring_world_ration_mesh2"
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_speed = 2 }
+	attach = { root = "TACFD_ringseam_entity" }
+}
+entity = {#集合##横#
+	name = "FEIDI_SEAM_RING_01_entity"
+	locator = { name = "set1" position = { 0 2.5 0 } rotation = { 0 0 0}}
+	locator = { name = "set2" position = { 0 -2.5 0 } rotation = { 0 0 0}}
+	attach = { set1 = "FEIDI_SEAM_RING_PART_01" }
+	attach = { set2 = "FEIDI_SEAM_RING_PART_02" }
+}
+entity = {#集合##竖#
+	name = "FEIDI_SEAM_RING_02_entity"
+	locator = { name = "set1" position = { 0 0 0 } rotation = { 0 0 90}}
+	attach = { set1 = "FEIDI_SEAM_RING_01_entity" }
+}

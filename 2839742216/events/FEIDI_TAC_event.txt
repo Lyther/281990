@@ -1,0 +1,671 @@
+namespace = TACFD
+
+####################################################################################################
+#买船#
+country_event = {#普通1#
+	id = TACFD.1
+	title = TACFD.1.title
+	desc = TACFD.1.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+		portrait = TAC_waiter_10
+		room = "TAC_FEIDI_station_room"
+	}
+	option = {#拦截舰舰队#
+		name = TACFD.1.a
+		custom_tooltip = buy_I_ship
+		allow = { 
+			custom_tooltip = { 
+				fail_text = need_3000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 3000
+				}
+			} 
+		}  
+		hidden_effect = {
+			add_player_I_fleet = yes
+			add_resource = { energy = -3000 }
+			country_event = { id = TACFD.1 }
+			subtract_variable = { which = SANHAOGAN value = -1 }
+		}
+	}
+
+	option = {#巡洋舰舰队#
+		name = TACFD.1.b
+		custom_tooltip = buy_C_ship
+		allow = { 
+			custom_tooltip = { 
+				fail_text = need_5000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 5000
+				}
+			} 
+		}  
+		hidden_effect = {
+			add_player_C_fleet = yes
+			add_resource = { energy = -5000 }
+			country_event = { id = TACFD.1 }
+			subtract_variable = { which = SANHAOGAN value = -2 }
+		}
+	}
+
+	option = {#游隼舰队#
+		name = TACFD.1.c
+		custom_tooltip = buy_B_ship
+		allow = { 
+			custom_tooltip = { 
+				fail_text = need_10000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 10000
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = QUEHUO 
+				NOT = { has_global_flag = Bship_is_making }
+			}
+		}  
+		hidden_effect = {
+			add_player_B_fleet = yes
+			add_resource = { energy = -10000 }
+			set_timed_global_flag = { flag = Bship_is_making days = 180 }
+			country_event = { id = TACFD.1 }
+			subtract_variable = { which = SANHAOGAN value = -5 }
+		}
+	}
+	option = {#母舰舰队#
+		name = TACFD.1.d
+		custom_tooltip = buy_M_ship
+		allow = { 
+			custom_tooltip = { 
+				fail_text = need_50000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 50000
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = QUEHUO 
+				NOT = { has_global_flag = Mship_is_making }
+			}
+		}  
+		hidden_effect = {
+			add_player_M_fleet = yes
+			add_resource = { energy = -50000 }
+			set_timed_global_flag = { flag = Mship_is_making days = 240 }
+			country_event = { id = TACFD.1 }
+			subtract_variable = { which = SANHAOGAN value = -10 }
+		}
+	}
+	option = {#舰船抽奖#
+		name = TACFD.1.g
+		custom_tooltip = FEIDI_give_ORfleets
+		allow = { 
+			custom_tooltip = { 
+				fail_text = need_300_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 300
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = FDsevice_clam_downing
+				NOT = { has_country_flag = FDsevice_clam_down }
+			} 
+		} 
+		hidden_effect = { 
+			set_timed_country_flag = { flag = FDsevice_clam_down days = 30 }
+			CG_give_random_ship = yes
+			country_event = { id = TACFD.1 }
+			add_resource = { energy = -300 }
+		} 
+	}
+	option = {#返回上一个界面#
+		name = TACFD.1.e
+		hidden_effect = { country_event = { id = QQE_basic_TAC.300 }} 
+	}
+	option = {#结束通讯#
+		name = TACFD.1.f
+	}
+}
+###############################
+#买舰船服务#
+country_event = {
+	id = TACFD.10
+	title = TACFD.10.title
+	desc = TACFD.10.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_01
+			room = "TAC_FEIDI_station_room"
+	}
+
+	option = {#小型舰队补给（360天）##########还不错#
+		name = TACFD.10.a
+		trigger = { check_variable = { which = SANHAOGAN value < 50 }}
+		allow = {
+			custom_tooltip = { 
+				fail_text = need_motherclass_ship 
+				any_owned_ship = {
+					OR = {
+						is_ship_size = FEIDI_mother_ship
+						is_ship_size = FEIDI_battle_ship
+					}
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = had_opened
+				NOT = { has_country_flag = smallfleet_give }
+			} 
+			custom_tooltip = { 
+				fail_text = need_5000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 5000
+				}
+			}
+		}
+		hidden_effect = { 
+			add_resource = { energy = -5000 }
+			remove_country_flag = largefleet_give
+			country_event = { id = TACFD.10 }
+			set_timed_country_flag = { flag = smallfleet_give days = 360 }
+			country_event = { id = FDeffect.1 }
+		}
+	}
+	option = {#大型舰队补给（360天）#
+		name = TACFD.10.b
+		trigger = { check_variable = { which = SANHAOGAN value < 50 }}
+		allow = {
+			custom_tooltip = { 
+				fail_text = need_motherclass_ship 
+				any_owned_ship = {
+					OR = {
+						is_ship_size = FEIDI_mother_ship
+						is_ship_size = FEIDI_battle_ship
+					}
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = had_opened
+				NOT = { has_country_flag = largefleet_give }
+			} 
+			custom_tooltip = { 
+				fail_text = need_10000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 10000
+				}
+			} 
+		}
+		hidden_effect = {
+			add_resource = { energy = -10000 } 
+			remove_country_flag = smallfleet_give
+			country_event = { id = TACFD.10 }
+			set_timed_country_flag = { flag = largefleet_give days = 360 }
+			country_event = { id = FDeffect.2 }
+		}
+	}
+
+	option = {#小型舰队补给（720天）############亲密#
+		name = TACFD.10.aa
+		trigger = { check_variable = { which = SANHAOGAN value >= 50 }}
+		allow = {
+			custom_tooltip = { 
+				fail_text = need_motherclass_ship 
+				any_owned_ship = {
+					OR = {
+						is_ship_size = FEIDI_mother_ship
+						is_ship_size = FEIDI_battle_ship
+					}
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = had_opened
+				NOT = { has_country_flag = smallfleet_give }
+			} 
+			custom_tooltip = { 
+				fail_text = need_5000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 5000
+				}
+			}
+		}
+		hidden_effect = { 
+			add_resource = { energy = -5000 }
+			remove_country_flag = largefleet_give
+			country_event = { id = TACFD.10 }
+			set_timed_country_flag = { flag = smallfleet_give days = 720 }
+			country_event = { id = FDeffect.1 }
+		}
+	}
+	option = {#大型舰队补给（720天）#
+		name = TACFD.10.bb
+		trigger = { check_variable = { which = SANHAOGAN value >= 50 }}
+		allow = {
+			custom_tooltip = { 
+				fail_text = need_motherclass_ship 
+				any_owned_ship = {
+					OR = {
+						is_ship_size = FEIDI_mother_ship
+						is_ship_size = FEIDI_battle_ship
+					}
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = had_opened
+				NOT = { has_country_flag = largefleet_give }
+			} 
+			custom_tooltip = { 
+				fail_text = need_10000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 10000
+				}
+			} 
+		}
+		hidden_effect = {
+			add_resource = { energy = -10000 } 
+			remove_country_flag = smallfleet_give
+			country_event = { id = TACFD.10 }
+			set_timed_country_flag = { flag = largefleet_give days = 720 }
+			country_event = { id = FDeffect.2 }
+		}
+	}
+
+	option = {#小型舰队补给（无时限）#
+		name = TACFD.10.c
+		allow = {
+			custom_tooltip = { 
+				fail_text = need_motherclass_ship 
+				any_owned_ship = {
+					OR = {
+						is_ship_size = FEIDI_mother_ship
+						is_ship_size = FEIDI_battle_ship
+					}
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = had_opened
+				NOT = { has_country_flag = smallfleet_give }
+			} 
+			custom_tooltip = { 
+				fail_text = need_10000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 10000
+				}
+			}
+			custom_tooltip = { 
+				fail_text = need_SANHAOGAN
+				check_variable = { which = SANHAOGAN	value >= 25 }
+			}
+		}
+		hidden_effect = { 
+			country_event = { id = TACFD.10 }
+			add_resource = { energy = -10000 }
+			set_country_flag = smallfleet_give
+			country_event = { id = FDeffect.1 }
+		}
+	}
+
+	option = {#舰队复活<360>#
+		name = TACFD.10.d
+		trigger = { check_variable = { which = SANHAOGAN value < 50 }}
+		allow = {
+			custom_tooltip = { 
+				fail_text = need_motherclass_ship 
+				any_owned_ship = {
+					OR = {
+						is_ship_size = FEIDI_mother_ship
+						is_ship_size = FEIDI_battle_ship
+					}
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = had_opened
+				NOT = { has_country_flag = FEIDI_REfleet }
+			} 
+			custom_tooltip = { 
+				fail_text = need_10000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 50000
+				}
+			}
+			custom_tooltip = { 
+				fail_text = need_SANHAOGAN
+				check_variable = { which = SANHAOGAN	value >= 50 }
+			}
+		}
+		hidden_effect = { 
+			country_event = { id = TACFD.10 }
+			add_resource = { energy = -50000 }
+			set_timed_country_flag = { flag = FEIDI_REfleet days = 360 }
+		}
+	}
+	option = {#舰队复活<720>#
+		name = TACFD.10.dd
+		trigger = { check_variable = { which = SANHAOGAN value >= 50 }}
+		allow = {
+			custom_tooltip = { 
+				fail_text = need_motherclass_ship 
+				any_owned_ship = {
+					OR = {
+						is_ship_size = FEIDI_mother_ship
+						is_ship_size = FEIDI_battle_ship
+					}
+				}
+			} 
+			custom_tooltip = { 
+				fail_text = had_opened
+				NOT = { has_country_flag = FEIDI_REfleet }
+			} 
+			custom_tooltip = { 
+				fail_text = need_10000_energy 
+				has_country_resource = {
+					type = energy
+					amount >= 50000
+				}
+			}
+			custom_tooltip = { 
+				fail_text = need_SANHAOGAN
+				check_variable = { which = SANHAOGAN value >= 50 }
+			}
+		}
+		hidden_effect = { 
+			country_event = { id = TACFD.10 }
+			add_resource = { energy = -50000 }
+			set_timed_country_flag = { flag = FEIDI_REfleet days = 720 }
+		}
+	}
+
+	option = {#退订舰队补给#
+		name = TACFD.10.f
+		allow = {
+			custom_tooltip = { 
+				fail_text = need_FEIDIsevive
+				OR = {
+					has_country_flag = smallfleet_give
+					has_country_flag = largefleet_give
+				} 
+			} 
+		}
+		hidden_effect = {
+			country_event = { id = TACFD.10 }
+			remove_country_flag = smallfleet_give
+		}
+	}
+	option = {#返回上一个界面#
+		name = TACFD.10.g
+		hidden_effect = { country_event = { id = QQE_basic_TAC.300 } }
+	}
+	option = {#结束通讯#
+		name = TACFD.10.h
+	}
+}
+###################################
+#查询资料#
+country_event = {
+	id = TACFD.100
+	title = TACFD.100.title
+	desc = TACFD.100.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_10
+			room = "TAC_FEIDI_station_room"
+	}
+	option = {#了解文明#
+		name = TACFD.100.a
+		hidden_effect = { country_event = { id = TACFD.101 } }
+	}
+	option = {#了解公司#
+		name = TACFD.100.b
+		hidden_effect = { country_event = { id = TACFD.102 } }
+	}
+	option = {#了解技术#
+		name = TACFD.100.c
+		hidden_effect = { country_event = { id = TACFD.103 } }
+	}
+	option = {#了解姗#
+		name = TACFD.100.d
+		hidden_effect = { country_event = { id = TACFD.104 } }
+	}
+	option = {#回到上一个界面#
+		name = TACFD.100.f
+		hidden_effect = { country_event = { id = QQE_basic_TAC.300 } }
+	}
+	option = {#结束通讯#
+		name = TACFD.100.g
+	}
+}
+#####################################################################################
+country_event = {#文明介绍#
+	id = TACFD.101
+	title = TACFD.101.title
+	desc = TACFD.101.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_01
+			room = "TAC_FEIDI_station_room"
+	}
+
+	option = { 
+		name = TACFD.101.a 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+	option = { 
+		name = TACFD.101.b 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+}
+country_event = {#公司介绍#
+	id = TACFD.102
+	title = TACFD.102.title
+	desc = TACFD.102.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_01
+			room = "TAC_FEIDI_station_room"
+	}
+
+	option = { 
+		name = TACFD.102.a 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+	option = { 
+		name = TACFD.102.b 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+}
+country_event = {#技术介绍#
+	id = TACFD.103
+	title = TACFD.103.title
+	desc = TACFD.103.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_01
+			room = "TAC_FEIDI_station_room"
+	}
+
+	option = { 
+		name = TACFD.103.a 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+	option = { 
+		name = TACFD.103.b 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+}
+###################################################################################
+#※特殊事件#
+country_event = {#姗介绍#
+	id = TACFD.104
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { check_variable = { which = SANHAOGAN value < 25 }}
+			country_event = { id = TACFD.200 }
+		}
+		if = {
+			limit = { 
+				AND = {
+					check_variable = { which = SANHAOGAN value >= 25 }
+					check_variable = { which = SANHAOGAN value < 50 }
+				}
+			}
+			country_event = { id = TACFD.300 }
+		}
+		if = {
+			limit = { check_variable = { which = SANHAOGAN value >= 50 }}
+			country_event = { id = TACFD.400 }
+		}
+	}
+}
+
+country_event = {#0-25好感#
+	id = TACFD.200
+	title = TACFD.200.title
+	desc = TACFD.200.desc1
+	desc = TACFD.200.desc2
+	desc = TACFD.200.desc3
+	desc = TACFD.200.desc4
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_01
+			room = "TAC_FEIDI_station_room"
+	}
+	option = { 
+		name = TACFD.200.a 
+		hidden_effect = { country_event = { id = TACFD.201 } }
+	}
+	option = { 
+		name = TACFD.200.b 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+}
+
+country_event = {#25-50好感#
+	id = TACFD.300
+	title = TACFD.300.title
+	desc = TACFD.300.desc1
+	desc = TACFD.300.desc2
+	desc = TACFD.300.desc3
+	desc = TACFD.300.desc4
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_11
+			room = "TAC_FEIDI_station_room"
+	}
+
+	option = { 
+		name = TACFD.300.a 
+		hidden_effect = { country_event = { id = TACFD.301 } }
+	}
+	option = { 
+		name = TACFD.300.b 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+}
+
+country_event = {#50以上好感#
+	id = TACFD.400
+	title = TACFD.400.title
+	desc = TACFD.400.desc1
+	desc = TACFD.400.desc2
+	desc = TACFD.400.desc3
+	desc = TACFD.400.desc4
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_11
+			room = "TAC_FEIDI_station_room"
+	}
+
+	option = { 
+		name = TACFD.400.a 
+		hidden_effect = { country_event = { id = TACFD.401 } }
+	}
+	option = { 
+		name = TACFD.400.b 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+}
+
+####################################################################
+country_event = {#0-25好感##普通#
+	id = TACFD.201
+	title = TACFD.201.title
+	desc = TACFD.201.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_01
+			room = "TAC_FEIDI_station_room"
+	}
+	option = { 
+		name = TACFD.201.a 
+		hidden_effect = { country_event = { id = TACFD.100 } }
+	}
+}
+#########################
+country_event = {#25-50好感##普通#
+	id = TACFD.301
+	title = TACFD.301.title
+	desc = TACFD.301.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_02
+			room = "TAC_FEIDI_station_room"
+	}
+	option = { 
+		name = TACFD.301.a 
+		hidden_effect = { country_event = { id = TACFD.100 }}
+	}
+}
+#########################
+country_event = {#50以上好感##普通#
+	id = TACFD.401
+	title = TACFD.401.title
+	desc = TACFD.401.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_02
+			room = "TAC_FEIDI_station_room"
+	}
+	option = { 
+		name = TACFD.401.a 
+		hidden_effect = { country_event = { id = TACFD.402 }}
+	}
+}
+
+country_event = {#50以上好感##普通#
+	id = TACFD.402
+	title = TACFD.402.title
+	desc = TACFD.402.desc
+	is_triggered_only = yes
+	diplomatic = yes
+	picture_event_data = {
+			portrait = TAC_waiter_03
+			room = "TAC_FEIDI_station_room"
+	}
+	option = { 
+		name = TACFD.402.a 
+		hidden_effect = { country_event = { id = TACFD.100 }}
+	}
+}

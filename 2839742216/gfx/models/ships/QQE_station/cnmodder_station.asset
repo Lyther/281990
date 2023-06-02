@@ -1,0 +1,79 @@
+#定位器模型 用于shipsize
+#可用8个打击位点
+entity = {
+	name = "QQMGE_enclave_station_entity"
+	pdxmesh = "cnmodder_station_frame_mesh"
+	scale = 1.0
+
+	locator = {
+		name = "root" position = { 0 0 0 } rotation = { 0 0 0 }
+	}
+
+	default_state = "idle"
+	state = { name = "idle" }
+	state = {
+		name = "death"
+		event={ time = 0 node = "target_locator_4" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 0 node = "target_locator_4" particle = "ship_burn_particle" }
+		event={ time = 0 node = "target_locator_7" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 0 node = "target_locator_7" particle = "ship_burn_particle" }
+
+		event={ time = 0.75 node = "target_locator_1" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 0.75 node = "target_locator_1" particle = "ship_burn_particle" }
+		event={ time = 0.75 node = "target_locator_3" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 0.75 node = "target_locator_3" particle = "ship_burn_particle" }
+
+		event={ time = 1.25 node = "target_locator_2" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 1.25 node = "target_locator_2" particle = "ship_burn_particle" }
+
+		event={ time = 1.5 node = "target_locator_6" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 1.5 node = "target_locator_6" particle = "ship_burn_particle" }
+		event={ time = 1.5 node = "target_locator_8" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 1.5 node = "target_locator_8" particle = "ship_burn_particle" }
+
+		event={ time = 1.75 node = "target_locator_5" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 1.75 node = "target_locator_5" particle = "ship_burn_particle" }
+
+		event={ time = 2 node = "root" particle = "avian_01_large_ship_explosion_particle" }
+		event={ time = 2 node = "root" particle = "ship_burn_particle" }
+	}
+}
+
+#区段模型 实际模型部分
+#可用点位:
+#武器槽:
+# X/T : main_weapon 位于模型中心顶部
+# L/M : l_weapon_01 - l_weapon_14 (01 02位于顶部 其余位于偏下部分)
+# H   : h_weapon_01 - H_weapon_06
+# G   : g_weapon_01 - g_weapon_04 (垂直发射系统 建议使用空炮塔实体)
+entity = {
+	name = "npf_01_QQMGE_enclave_station_hull_entity"
+	pdxmesh = "cnmodder_station_mesh"
+	scale = 1.0
+
+	default_state = "idle"
+	state = {
+		name = "idle"
+		start_event = {trigger_once = yes sound = { soundeffect = "amb_battleship_hum" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_battleship_bass" } }
+	}
+	locator = {
+		name = "root" position = { 0 0 0 } rotation = { 0 0 0 }
+	}
+
+	attach = {
+		"root" = "cnmodder_station_shield_entity"
+	}
+}
+
+entity = {
+	name = "cnmodder_station_shield_entity"
+	pdxmesh = "cnmodder_station_shield_mesh"
+	scale = 1.0
+
+	game_data = {
+		emissive_recolor_crunch = 0
+		uv_animation_direction = { 0.1 0.0 }
+		uv_animation_speed = 0.05
+	}
+}

@@ -1,0 +1,244 @@
+
+#
+tc_mega_crystalizer_00 = {
+	entity = "tc_mega_crystalizer_00_entity"
+	construction_entity = "tc_mega_crystalizer_00_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_crystalizer"
+	scales_with_planet = yes
+
+	prerequisites = { tech_mega_engineering tc_tech_essentia_crystallizer }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 2560
+			unity = 1024
+		}
+		upkeep = {
+			tc_essences = 10
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+		#custom_tooltip = {
+		#	fail_text = "requires_no_existing_megastructure"
+		#	has_no_non_gate_megastructure = yes
+		#}
+	}
+
+	placement_rules = {
+		planet_possible = {
+			custom_tooltip = {
+				fail_text = "tc_need_gas_giant"
+				is_planet_class = pc_gas_giant
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_anomaly"
+				NOT = { has_anomaly = yes }
+			}
+			custom_tooltip = {
+				fail_text = "requires_not_minor_planetary_body"
+				NOR = {
+					is_asteroid = yes
+					is_moon = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "requires_no_existing_megastructure"
+				NOR = {
+					has_planet_flag = megastructure
+					has_planet_flag = has_megastructure
+					solar_system = {
+						has_star_flag = ring_world_built
+					}
+					is_artificial = yes
+				}
+			}
+			custom_tooltip = {
+				fail_text = "tc_planet_too_small"
+				planet_size > 10
+			}
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM.planet = { 
+			set_planet_flag = has_megastructure 
+			if = {
+				limit = { has_modifier = terraforming_candidate }
+				remove_modifier = terraforming_candidate
+			}
+		}
+	}
+}
+
+tc_mega_crystalizer_01 = {
+	entity = "tc_mega_crystalizer_01_entity"
+	construction_entity = "tc_mega_crystalizer_01_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_crystalizer"
+	scales_with_planet = yes
+
+	upgrade_from = { tc_mega_crystalizer_00 }
+
+	prerequisites = { tech_mega_engineering tc_tech_essentia_crystallizer }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 3840
+			unity = 1024
+		}
+		produces = {
+			tc_element_shard = 24
+			exotic_gases = 12
+		}
+		produces = {
+			trigger = {
+				is_variable_set = tc_mega_crystalizer_live_product
+			}
+			sr_living_metal = 1
+			multiplier = tc_mega_crystalizer_live_product
+		}
+		upkeep = {
+			tc_essences = 32
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+		FROMFROM = {
+			random_list = {
+				120 = {}
+				10 = { set_variable = { which = tc_mega_crystalizer_live_product value = 1 } }
+				5 = { set_variable = { which = tc_mega_crystalizer_live_product value = 2 } }
+				1 = { set_variable = { which = tc_mega_crystalizer_live_product value = 3 } }
+			}
+		}
+	}
+}
+
+tc_mega_crystalizer_02 = {
+	entity = "tc_mega_crystalizer_02_entity"
+	construction_entity = "tc_mega_crystalizer_02_construction_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_crystalizer"
+	scales_with_planet = yes
+
+	upgrade_from = { tc_mega_crystalizer_01 }
+
+	prerequisites = { tech_mega_engineering tc_tech_essentia_crystallizer }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_thaumium = 3840
+			unity = 1024
+		}
+		produces = {
+			tc_element_shard = 48
+			exotic_gases = 24
+		}
+		produces = {
+			trigger = {
+				is_variable_set = tc_mega_crystalizer_live_product
+			}
+			sr_living_metal = 2
+			multiplier = tc_mega_crystalizer_live_product
+		}
+		upkeep = {
+			tc_essences = 64
+		}
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}
+
+tc_mega_crystalizer_03 = {
+	entity = "tc_mega_crystalizer_03_entity"
+	construction_entity = "tc_mega_crystalizer_03_construction_entity"
+	place_entity_on_planet_plane = yes
+	portrait = "GFX_megastructure_tc_mega_crystalizer"
+	scales_with_planet = yes
+	show_galactic_map_icon = no
+	show_in_outliner = no
+
+	upgrade_from = { tc_mega_crystalizer_02 }
+
+	prerequisites = { tech_mega_engineering tc_tech_essentia_crystallizer tc_tech_void_metal }
+
+	build_time = 720
+	resources = {
+		category = megastructures
+		cost = {
+			tc_void_metal = 2560
+			unity = 1024
+		}
+		produces = {
+			tc_element_shard = 72
+			exotic_gases = 36
+		}
+		produces = {
+			trigger = {
+				is_variable_set = tc_mega_crystalizer_live_product
+			}
+			sr_living_metal = 3
+			multiplier = tc_mega_crystalizer_live_product
+		}
+		upkeep = {
+			tc_essences = 96
+		}
+	}
+
+	country_modifier = {
+		country_resource_max_tc_essences_add = 240000
+	}
+
+	possible = {
+		exists = starbase
+		custom_tooltip = {
+			fail_text = "requires_inside_border"
+			is_inside_border = from
+		}
+	}
+
+	on_build_start = {}	
+	on_build_cancel = {}
+	on_build_complete = {
+		tc_megastructure_message = yes
+	}
+}

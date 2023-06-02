@@ -1,0 +1,177 @@
+###############################
+# Narrative Progression Events
+# by Maximilian Olbers
+###############################
+
+namespace = story
+
+### 1 - Microbial, simple plant life
+country_event = {
+	id = story.1
+	title = story.1.name
+	desc = {
+		trigger = {
+			switch = {
+				trigger = has_ethic
+				ethic_fanatic_spiritualist = { text = story.1.desc.spiri }
+				ethic_fanatic_xenophobe = { text = story.1.desc.phobe }
+				ethic_fanatic_xenophile = { text = story.1.desc.phile }
+				ethic_spiritualist = { text = story.1.desc.spiri }
+				ethic_xenophobe = { text = story.1.desc.phobe }
+				ethic_xenophile = { text = story.1.desc.phile }
+				ethic_gestalt_consciousness = {
+					if = {
+						limit = { has_civic = civic_machine_terminator }
+						text = story.1.desc.term
+					}
+					else = { text = story.1.desc.gesta }
+				}
+				default = { text = story.1.desc }
+			}
+		}
+	}
+
+	picture = GFX_evt_news_room
+	show_sound = event_scanner
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_zofe_compatible = yes
+		NOR = {
+			has_country_flag = Story1
+			has_country_flag = Story2
+			has_country_flag = Story3
+			has_country_flag = Story4
+			has_country_flag = Story5
+			has_country_flag = Story6
+			has_country_flag = Story7
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { has_country_flag = first_alien_life } }
+			set_country_flag = first_alien_life
+		}
+		set_country_flag = StoryFirst
+		set_country_flag = Story1
+	}
+
+	option = {
+		trigger = { NOR = { has_ethic = ethic_fanatic_xenophobe has_ethic = ethic_xenophobe } }
+		name = INTRIGUING
+	}
+	option = {
+		trigger = { OR = { has_ethic = ethic_fanatic_xenophobe has_ethic = ethic_xenophobe } }
+		name = DISCONCERTING
+	}
+
+	after = {
+		hidden_effect = {
+			country_event = { id = first_contact.1060 days = 10 random = 10 }
+		}
+	}
+}
+
+# Crystal boss
+fleet_event = {
+	id = story.220
+	title = story.220.name
+	desc = {
+		text = story.220.desc.gesta
+		trigger = {
+			owner = {
+				has_ethic = ethic_gestalt_consciousness
+			}
+		}
+	}
+	desc = {
+		text = story.220.desc.hostile
+		trigger = {
+			owner = {
+				has_modifier = crystal_hunting_buff
+				NOT = { has_ethic = ethic_gestalt_consciousness }
+			}
+		}
+	}
+	desc = {
+		text = story.220.desc.nonhostile
+		trigger = {
+			owner = {
+				NOR = {
+					has_modifier = crystal_hunting_buff
+					has_ethic = ethic_gestalt_consciousness
+				}
+			}
+		}
+	}
+	picture = GFX_evt_fleet_evil
+	show_sound = event_crystal_ship
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_star_flag = crystal_home_system
+			any_fleet_in_system = {
+				is_ship_size = crystal_station_large
+			}
+		}
+		owner = {
+			is_zofe_compatible = yes
+			OR = {
+				has_country_flag = crystal_hostile_approach
+				has_country_flag = crystal_nonhostile_approach
+			}
+			NOT = { has_country_flag = found_crystal_construct }
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = found_crystal_construct
+		}
+	}
+
+	option = {
+		name = OK
+		trigger = {
+			owner = { NOT = { has_modifier = crystal_hunting_buff } }
+		}
+	}
+
+	option = {
+		name = BATTLESTATIONS
+		trigger = {
+			owner = { has_modifier = crystal_hunting_buff }
+		}
+	}
+}
+
+country_event = {
+	id = story.222
+	title = story.222.name
+	desc = story.222.desc
+	picture = GFX_evt_fleet_evil
+	show_sound = event_crystal_ship
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_zofe_compatible = yes
+		from = {
+			is_country_type = crystal
+		}
+		fromfromfrom = {
+			is_ship_size = crystal_station_large
+		}
+	}
+
+	option = {
+		name = OK
+		add_research_option = tech_crystal_armor_2
+	}
+}

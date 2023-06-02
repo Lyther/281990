@@ -1,0 +1,2272 @@
+namespace = big_building_leader
+
+country_event = {
+	id = big_building_leader.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_leader = {
+			class = governor
+			species = owner_species
+			name = "大预言家"
+			skill = 5
+			traits = {
+				trait = leader_trait_great_priest_civ
+			}
+			event_leader = yes
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_constructor
+			}
+			save_event_target_as = your_constructor_target
+		}
+		capital_star = {
+			solar_system = {
+				create_fleet = {
+					effect = {
+						set_owner = THIS
+						create_ship = {
+							name = "假装这是个工人"
+							design = event_target:your_constructor_target
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_building = building_wonder_1_5
+	}
+
+	immediate = {
+		clear_variable = wonder_1_5_counting_variable
+		clear_variable = wonder_1_5_counting_variable_1
+		export_trigger_value_to_variable = {
+			trigger = num_districts
+			parameters = {
+				type = district_farming
+			}
+			variable = wonder_1_5_counting_variable
+		}
+		export_trigger_value_to_variable = {
+			trigger = num_districts
+			parameters = {
+				type = district_farming_uncapped
+			}
+			variable = wonder_1_5_counting_variable_1
+		}
+		change_variable = {
+			which = wonder_1_5_counting_variable
+			value = wonder_1_5_counting_variable_1
+		}
+		sector = {
+			every_owned_planet = {
+				remove_modifier = wonder_1_5_modifier
+				add_modifier = {
+					modifier = wonder_1_5_modifier
+					days = -1
+					multiplier = prevprev.wonder_1_5_counting_variable
+					clear_on_owner_change = yes
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_1_5
+		}
+	}
+
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				has_building = building_wonder_1_5
+			}
+			planet_event = {
+				id = big_building_leader.3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.5
+	hide_window = yes
+
+	trigger = {
+		any_owned_sector = {
+			NOT = {
+				any_owned_planet = {
+					has_building = building_wonder_1_5
+				}
+			}
+			any_owned_planet = {
+				has_modifier = wonder_1_5_modifier
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
+	}
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_modifier = wonder_1_5_modifier
+			}
+			remove_modifier = wonder_1_5_modifier
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		change_variable = {
+			which = wonder_1_6_counting_variable
+			value = 1
+		}
+		remove_modifier = wonder_1_6_modifier
+		add_modifier = {
+			modifier = wonder_1_6_modifier
+			days = -1
+			multiplier = wonder_1_6_counting_variable
+			clear_on_owner_change = yes
+		}
+		planet_event = {
+			id = big_building_leader.6
+			days = 3650
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.7
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = admiral
+			}
+			add_skill = 1
+		}
+		country_event = {
+			id = big_building_leader.7
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.8
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = admiral
+			}
+			add_skill = 1
+		}
+		country_event = {
+			id = big_building_leader.8
+			days = 1825
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.9
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_building = building_wonder_2_3
+	}
+
+	immediate = {
+		clear_variable = wonder_2_3_counting_variable
+		export_trigger_value_to_variable = {
+			trigger = num_districts
+			parameters = {
+				type = any
+			}
+			variable = wonder_2_3_counting_variable
+		}
+		remove_modifier = wonder_2_3_modifier
+		add_modifier = {
+			modifier = wonder_2_3_modifier
+			days = -1
+			multiplier = root.wonder_2_3_counting_variable
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_2_3
+		}
+	}
+
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				has_building = building_wonder_2_3
+			}
+			planet_event = {
+				id = big_building_leader.9
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.11
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		sector = {
+			every_owned_planet = {
+				limit = {
+					NOT = { has_modifier = wonder_2_4_modifier }
+				}
+				add_modifier = {
+					modifier = wonder_2_4_modifier
+					days = -1
+					clear_on_owner_change = yes
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.12
+	hide_window = yes
+
+	trigger = {
+		any_owned_sector = {
+			NOT = {
+				any_owned_planet = {
+					has_building = building_wonder_2_4
+				}
+			}
+			any_owned_planet = {
+				has_modifier = wonder_2_4_modifier
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
+	}
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_modifier = wonder_2_4_modifier
+			}
+			remove_modifier = wonder_2_4_modifier
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.13
+	hide_window = yes
+
+	trigger = {
+		any_owned_sector = {
+			any_owned_planet = {
+				has_building = building_wonder_2_4
+			}
+			any_owned_planet = {
+				NOT = { has_modifier = wonder_2_4_modifier }
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
+	}
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = wonder_2_4_modifier }
+			}
+			add_modifier = {
+				modifier = wonder_2_4_modifier
+				days = -1
+				clear_on_owner_change = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.14
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			add_skill = 1
+		}
+		country_event = {
+			id = big_building_leader.14
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.15
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+			}
+			add_skill = 1
+		}
+		country_event = {
+			id = big_building_leader.15
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.16
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_2_5
+		}
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				add_monthly_resource_mult = {
+					resource = society_research
+					value = @tier3researchreward
+					min = @tier3researchmin
+					max = @tier3researchmax
+				}
+			}
+			1 = {
+				add_monthly_resource_mult = {
+					resource = physics_research
+					value = @tier3researchreward
+					min = @tier3researchmin
+					max = @tier3researchmax
+				}
+			}
+			1 = {
+				add_monthly_resource_mult = {
+					resource = engineering_research
+					value = @tier3researchreward
+					min = @tier3researchmin
+					max = @tier3researchmax
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.17
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			leader_event = {
+				id = big_building_leader.18
+			}
+		}
+		random_owned_leader = {
+			limit = {
+				NOT = {
+					has_leader_flag = already_chosen
+				}
+			}
+			leader_event = {
+				id = big_building_leader.18
+			}
+		}
+		every_owned_leader = {
+			remove_leader_flag = already_chosen
+		}
+	}
+}
+
+leader_event = {
+	id = big_building_leader.18
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_trait = leader_trait_ruler_psionic }
+				NOT = { has_trait = leader_trait_ruler_chosen  }
+				leader_class = ruler
+			}
+			add_trait = leader_trait_ruler_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				NOT = { has_trait = leader_trait_governor_psionic }
+				NOT = { has_trait = leader_trait_governor_chosen }
+				leader_class = governor
+			}
+			add_trait = leader_trait_governor_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				NOT = { has_trait = leader_trait_scientist_psionic }
+				NOT = { has_trait = leader_trait_scientist_chosen }
+				leader_class = scientist
+			}
+			add_trait = leader_trait_scientist_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				NOT = { has_trait = leader_trait_admiral_psionic }
+				NOT = { has_trait = leader_trait_admiral_chosen }
+				leader_class = admiral
+			}
+			add_trait = leader_trait_admiral_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				NOT = { has_trait = leader_trait_general_psionic }
+				NOT = { has_trait = leader_trait_general_chosen }
+				leader_class = general
+			}
+			add_trait = leader_trait_general_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_ruler_psionic 
+				leader_class = ruler
+			}
+			add_trait = leader_trait_ruler_chosen
+			remove_trait = leader_trait_ruler_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_governor_psionic 
+				leader_class = governor
+			}
+			add_trait = leader_trait_governor_chosen
+			remove_trait = leader_trait_governor_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_scientist_psionic 
+				leader_class = scientist
+			}
+			add_trait = leader_trait_scientist_chosen
+			remove_trait = leader_trait_scientist_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_admiral_psionic 
+				leader_class = admiral
+			}
+			add_trait = leader_trait_admiral_chosen
+			remove_trait = leader_trait_admiral_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_general_psionic 
+				leader_class = general
+			}
+			add_trait = leader_trait_general_chosen
+			remove_trait = leader_trait_general_psionic
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_ruler_chosen 
+				leader_class = ruler
+			}
+			add_skill = 10
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_governor_chosen 
+				leader_class = governor
+			}
+			add_skill = 10
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_scientist_chosen 
+				leader_class = scientist
+			}
+			add_skill = 10
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_admiral_chosen 
+				leader_class = admiral
+			}
+			add_skill = 10
+			set_leader_flag = already_chosen
+		}
+		else_if = {
+			limit = {
+				has_trait = leader_trait_general_chosen 
+				leader_class = general
+			}
+			add_skill = 10
+			set_leader_flag = already_chosen
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.19
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = general
+			}
+			add_skill = 1
+		}
+		country_event = {
+			id = big_building_leader.19
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_owned_leader = {
+			add_skill = 1
+		}
+		every_owned_fleet = {
+			every_owned_ship = {
+				repair_percentage = 0.6
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.21
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		sector = {
+			every_owned_planet = {
+				limit = {
+					NOT = { has_modifier = wonder_2_4_modifier }
+				}
+				add_modifier = {
+					modifier = wonder_2_4_modifier
+					days = -1
+					clear_on_owner_change = yes
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.22
+	hide_window = yes
+
+	trigger = {
+		any_owned_sector = {
+			NOT = {
+				any_owned_planet = {
+					has_building = building_wonder_2_8
+				}
+			}
+			any_owned_planet = {
+				has_modifier = wonder_2_8_modifier
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
+	}
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_modifier = wonder_2_8_modifier
+			}
+			remove_modifier = wonder_2_8_modifier
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.23
+	hide_window = yes
+
+	trigger = {
+		any_owned_sector = {
+			any_owned_planet = {
+				has_building = building_wonder_2_8
+			}
+			any_owned_planet = {
+				NOT = { has_modifier = wonder_2_8_modifier }
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
+	}
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				NOT = { has_modifier = wonder_2_8_modifier }
+			}
+			add_modifier = {
+				modifier = wonder_2_8_modifier
+				days = -1
+				clear_on_owner_change = yes
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.24
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_building = building_wonder_2_9
+	}
+
+	immediate = {
+		clear_variable = wonder_2_9_counting_variable
+		export_trigger_value_to_variable = {
+			trigger = num_buildings
+			parameters = {
+				type = any
+			}
+			variable = wonder_2_9_counting_variable
+		}
+		remove_modifier = wonder_2_9_modifier
+		add_modifier = {
+			modifier = wonder_2_9_modifier
+			days = -1
+			multiplier = root.wonder_2_9_counting_variable
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.25
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_building = building_wonder_2_10
+	}
+
+	immediate = {
+		clear_variable = wonder_2_10_counting_variable
+		export_trigger_value_to_variable = {
+			trigger = num_districts
+			parameters = {
+				type = any
+			}
+			variable = wonder_2_10_counting_variable
+		}
+		remove_modifier = wonder_2_10_modifier
+		add_modifier = {
+			modifier = wonder_2_10_modifier
+			days = -1
+			multiplier = root.wonder_2_10_counting_variable
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.26
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+				NOR = {
+					has_trait = leader_trait_architectural_interest
+					has_trait = leader_trait_great_engineer_civ
+				}
+			}
+			add_trait = leader_trait_great_engineer_civ
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.27
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = wonder_2_11_flag
+		every_owned_planet = {
+			limit = {
+				OR = {
+					is_planet_class = pc_alpine
+					is_planet_class = pc_gaia
+				}
+			}
+			planet_event = {
+				id = big_building_leader.28
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.28
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			any_owned_planet = {
+				has_building = building_wonder_2_11
+			}
+		}
+	}
+
+	immediate = {
+		clear_variable = wonder_2_11_counting_variable
+		export_trigger_value_to_variable = {
+			trigger = num_uncleared_blockers
+			variable = wonder_2_11_counting_variable
+		}
+		remove_modifier = wonder_2_11_modifier
+		add_modifier = {
+			modifier = wonder_2_11_modifier
+			days = -1
+			multiplier = root.wonder_2_11_counting_variable
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.30
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = general
+			}
+			add_skill = 2
+		}
+		country_event = {
+			id = big_building_leader.30
+			days = 1825
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.31
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			any_owned_planet = {
+				has_building = building_wonder_3_3
+			}
+		}
+	}
+
+	immediate = {
+		clear_variable = wonder_3_3_counting_variable
+		export_trigger_value_to_variable = {
+			trigger = num_uncleared_blockers
+			variable = wonder_3_3_counting_variable
+		}
+		remove_modifier = wonder_3_3_modifier
+		add_modifier = {
+			modifier = wonder_3_3_modifier
+			days = -1
+			multiplier = root.wonder_3_3_counting_variable
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+
+country_event = {
+	id = big_building_leader.32
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_3_4
+		}
+	}
+
+	immediate = {
+		add_resource = {
+			minor_artifacts = 10
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.33
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			any_owned_planet = {
+				has_building = building_wonder_3_5
+			}
+		}
+		OR = {
+			is_planet_class = pc_tropical
+			is_planet_class = pc_continental
+			is_planet_class = pc_savannah
+			is_planet_class = pc_gaia
+		}
+	}
+
+	immediate = {
+		clear_variable = wonder_3_5_counting_variable
+		export_trigger_value_to_variable = {
+			trigger = num_uncleared_blockers
+			variable = wonder_3_5_counting_variable
+		}
+		remove_modifier = wonder_3_5_modifier
+		add_modifier = {
+			modifier = wonder_3_5_modifier
+			days = -1
+			multiplier = root.wonder_3_5_counting_variable
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.34
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_owned_planet = {
+			create_pop = {
+				species = owner_main_species
+			}
+		}
+		add_modifier = {
+			modifier = wonder_3_6_modifier
+			days = -1
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.35
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = wonder_buff_enclave_flag
+	}
+}
+
+country_event = {
+	id = big_building_leader.36
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag
+		OR = {
+			AND = {
+				has_modifier = curator_insight
+				NOT = {
+					has_modifier = enclave_modifier_1
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = curator_insight
+				}
+				has_modifier = enclave_modifier_1
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = curator_insight
+				NOT = {
+					has_modifier = enclave_modifier_1
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_1
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = curator_insight
+				}
+				has_modifier = enclave_modifier_1
+			}
+			remove_modifier = enclave_modifier_1
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.37
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag
+		OR = {
+			AND = {
+				has_modifier = enclave_artist_patron
+				NOT = {
+					has_modifier = enclave_modifier_2
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = enclave_artist_patron
+				}
+				has_modifier = enclave_modifier_2
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = enclave_artist_patron
+				NOT = {
+					has_modifier = enclave_modifier_2
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_2
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = enclave_artist_patron
+				}
+				has_modifier = enclave_modifier_2
+			}
+			remove_modifier = enclave_modifier_2
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.38
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag
+		OR = {
+			AND = {
+				has_modifier = salvager_insight
+				NOT = {
+					has_modifier = enclave_modifier_4
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = salvager_insight
+				}
+				has_modifier = enclave_modifier_4
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = salvager_insight
+				NOT = {
+					has_modifier = enclave_modifier_4
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_4
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = salvager_insight
+				}
+				has_modifier = enclave_modifier_4
+			}
+			remove_modifier = enclave_modifier_4
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.39
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag
+		OR = {
+			AND = {
+				has_modifier = mercenary_enclave_logistic_help
+				NOT = {
+					has_modifier = enclave_modifier_3
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = mercenary_enclave_logistic_help
+				}
+				has_modifier = enclave_modifier_3
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = mercenary_enclave_logistic_help
+				NOT = {
+					has_modifier = enclave_modifier_3
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_3
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = mercenary_enclave_logistic_help
+				}
+				has_modifier = enclave_modifier_3
+			}
+			remove_modifier = enclave_modifier_3
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.40
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag
+		OR = {
+			AND = {
+				has_modifier = sponsor_wonder_builder
+				NOT = {
+					has_modifier = enclave_modifier_5
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = sponsor_wonder_builder
+				}
+				has_modifier = enclave_modifier_5
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = sponsor_wonder_builder
+				NOT = {
+					has_modifier = enclave_modifier_5
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_5
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = sponsor_wonder_builder
+				}
+				has_modifier = enclave_modifier_5
+			}
+			remove_modifier = enclave_modifier_5
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.41
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_army = {
+			type = shroud_army
+			owner = owner
+		}
+		create_army = {
+			type = shroud_army
+			owner = owner
+		}
+		create_army = {
+			type = shroud_army
+			owner = owner
+		}
+		create_army = {
+			type = shroud_army
+			owner = owner
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.42
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_3_5
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				OR = {
+					is_planet_class = pc_tropical
+					is_planet_class = pc_continental
+					is_planet_class = pc_savannah
+					is_planet_class = pc_gaia
+				}
+			}
+			planet_event = {
+				id = big_building_leader.33
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.43
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_2_9
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_building = building_wonder_2_9
+			}
+			planet_event = {
+				id = big_building_leader.24
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.44
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_2_10
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_building = building_wonder_2_10
+			}
+			planet_event = {
+				id = big_building_leader.25
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.45
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_building = building_wonder_3_10
+	}
+
+	immediate = {
+		export_modifier_to_variable = {
+			modifier = trade_value_add
+			variable = wonder_3_10_counting_variable
+		}
+		sector = {
+			every_owned_planet = {
+				remove_modifier = wonder_3_10_modifier
+				add_modifier = {
+					modifier = wonder_3_10_modifier
+					days = -1
+					multiplier = wonder_3_10_counting_variable
+					clear_on_owner_change = yes
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.46
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_3_10
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_building = building_wonder_3_10
+			}
+			planet_event = {
+				id = big_building_leader.45
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.47
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			add_skill = 2
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = venisia_active_flag
+				}
+			}
+			set_country_flag = venisia_active_flag
+		}
+		country_event = {
+			id = big_building_leader.47
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.48
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+			}
+			add_skill = 2
+		}
+		country_event = {
+			id = big_building_leader.48
+			days = 1825
+		}
+	}
+}
+
+ship_event = {
+	id = big_building_leader.49
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		root = {
+			is_ship_size = corvette
+		}
+	}
+
+
+	immediate = {
+		save_event_target_as = venisia_corvette_target
+		owner = {
+			capital_scope = {
+				solar_system = {
+					create_fleet = {
+						effect = {
+							set_owner = owner
+							create_ship = {
+								design = event_target:venisia_corvette_target
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = big_building_leader.50
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		root = {
+			is_ship_size = destroyer
+		}
+	}
+
+
+	immediate = {
+		save_event_target_as = venisia_destroyer_target
+		owner = {
+			capital_scope = {
+				solar_system = {
+					create_fleet = {
+						effect = {
+							set_owner = owner
+							create_ship = {
+								design = event_target:venisia_destroyer_target
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = big_building_leader.51
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		root = {
+			is_ship_size = cruiser
+		}
+	}
+
+
+	immediate = {
+		save_event_target_as = venisia_cruiser_target
+		owner = {
+			capital_scope = {
+				solar_system = {
+					create_fleet = {
+						effect = {
+							set_owner = owner
+							create_ship = {
+								design = event_target:venisia_cruiser_target
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = big_building_leader.52
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		root = {
+			is_ship_size = battleship
+		}
+	}
+
+
+	immediate = {
+		save_event_target_as = venisia_battleship_target
+		owner = {
+			capital_scope = {
+				solar_system = {
+					create_fleet = {
+						effect = {
+							set_owner = owner
+							create_ship = {
+								design = event_target:venisia_battleship_target
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.53
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_building = building_wonder_4_2
+	}
+
+	immediate = {
+		export_modifier_to_variable = {
+			modifier = trade_value_add
+			variable = wonder_4_2_counting_variable
+		}
+		sector = {
+			every_owned_planet = {
+				remove_modifier = wonder_4_2_modifier
+				add_modifier = {
+					modifier = wonder_4_2_modifier
+					days = -1
+					multiplier = wonder_4_2_counting_variable
+					clear_on_owner_change = yes
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.54
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		sector = {
+			NOT = {
+				any_owned_planet = {
+					is_capital = yes
+				}
+			}
+			leader = {
+				exists = this
+			}
+		}
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = wonder_4_4_modifier
+			days = -1
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.55
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_sector = {
+			NOT = {
+				any_owned_planet = {
+					is_capital = yes
+				}
+			}
+			leader = {
+				exists = this
+			}
+		}
+		any_owned_planet = {
+			has_building = building_wonder_4_4
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				sector = {
+					NOT = {
+						any_owned_planet = {
+							is_capital = yes
+						}
+					}
+					leader = {
+						exists = this
+					}
+				}
+			}
+			planet_event = {
+				id = big_building_leader.54
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.56
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+			}
+			add_skill = 2
+		}
+		country_event = {
+			id = big_building_leader.56
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.57
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+			}
+			add_skill = 3
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.58
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			any_owned_planet = {
+				has_building = building_wonder_4_6
+			}
+		}
+		OR = {
+			is_planet_class = pc_tundra
+			is_planet_class = pc_arctic
+			is_planet_class = pc_gaia
+		}
+	}
+
+	immediate = {
+		clear_variable = wonder_4_6_counting_variable
+		export_trigger_value_to_variable = {
+			trigger = num_districts
+			parameters = {
+				type = any
+			}
+			variable = wonder_4_6_counting_variable
+		}
+		remove_modifier = wonder_4_6_modifier
+		add_modifier = {
+			modifier = wonder_4_6_modifier
+			days = -1
+			multiplier = root.wonder_4_6_counting_variable
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+
+country_event = {
+	id = big_building_leader.59
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		any_owned_planet = {
+			OR = {
+				is_planet_class = pc_tundra
+				is_planet_class = pc_arctic
+				is_planet_class = pc_gaia
+			}
+			has_building = building_wonder_4_6
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				OR = {
+					is_planet_class = pc_tundra
+					is_planet_class = pc_arctic
+					is_planet_class = pc_gaia
+				}
+				has_building = building_wonder_4_6
+			}
+			planet_event = {
+				id = big_building_leader.58
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.60
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+			}
+			add_skill = 4
+		}
+		country_event = {
+			id = big_building_leader.60
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.61
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		add_random_research_option = {
+			add_progress = 99
+			area = society
+		}
+		add_random_research_option = {
+			add_progress = 99
+			area = society
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.62
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		add_random_research_option = {
+			add_progress = 99
+			area = physics
+		}
+		add_random_research_option = {
+			add_progress = 99
+			area = engineering
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.63
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		export_resource_stockpile_to_variable = {
+			resource = energy
+			variable = wonder_5_4_counting_variable
+		}
+		divide_variable = {
+			which = wonder_5_4_counting_variable
+			value = 2
+		}
+		add_resource = {
+			energy = 1
+			mult = wonder_5_4_counting_variable
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.64
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+			}
+			add_skill = 3
+		}
+		country_event = {
+			id = big_building_leader.64
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.65
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			add_skill = 3
+		}
+		country_event = {
+			id = big_building_leader.65
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.66
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+			}
+			add_skill = 3
+		}
+		country_event = {
+			id = big_building_leader.66
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.67
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = wonder_buff_enclave_flag_2
+	}
+}
+
+country_event = {
+	id = big_building_leader.68
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag_2
+		OR = {
+			AND = {
+				has_modifier = curator_insight
+				NOT = {
+					has_modifier = enclave_modifier_1
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = curator_insight
+				}
+				has_modifier = enclave_modifier_1
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = curator_insight
+				NOT = {
+					has_modifier = enclave_modifier_12
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_12
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = curator_insight
+				}
+				has_modifier = enclave_modifier_12
+			}
+			remove_modifier = enclave_modifier_12
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.69
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag_2
+		OR = {
+			AND = {
+				has_modifier = enclave_artist_patron
+				NOT = {
+					has_modifier = enclave_modifier_22
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = enclave_artist_patron
+				}
+				has_modifier = enclave_modifier_22
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = enclave_artist_patron
+				NOT = {
+					has_modifier = enclave_modifier_22
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_22
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = enclave_artist_patron
+				}
+				has_modifier = enclave_modifier_22
+			}
+			remove_modifier = enclave_modifier_22
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.70
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag_2
+		OR = {
+			AND = {
+				has_modifier = salvager_insight
+				NOT = {
+					has_modifier = enclave_modifier_42
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = salvager_insight
+				}
+				has_modifier = enclave_modifier_42
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = salvager_insight
+				NOT = {
+					has_modifier = enclave_modifier_42
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_42
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = salvager_insight
+				}
+				has_modifier = enclave_modifier_42
+			}
+			remove_modifier = enclave_modifier_42
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.71
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag_2
+		OR = {
+			AND = {
+				has_modifier = mercenary_enclave_logistic_help
+				NOT = {
+					has_modifier = enclave_modifier_32
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = mercenary_enclave_logistic_help
+				}
+				has_modifier = enclave_modifier_32
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = mercenary_enclave_logistic_help
+				NOT = {
+					has_modifier = enclave_modifier_32
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_32
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = mercenary_enclave_logistic_help
+				}
+				has_modifier = enclave_modifier_32
+			}
+			remove_modifier = enclave_modifier_32
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.72
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = wonder_buff_enclave_flag_2
+		OR = {
+			AND = {
+				has_modifier = sponsor_wonder_builder
+				NOT = {
+					has_modifier = enclave_modifier_52
+				}
+			}
+			AND = {
+				NOT = {
+					has_modifier = sponsor_wonder_builder
+				}
+				has_modifier = enclave_modifier_52
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = sponsor_wonder_builder
+				NOT = {
+					has_modifier = enclave_modifier_52
+				}
+			}
+			add_modifier = {
+				modifier = enclave_modifier_52
+				days = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_modifier = sponsor_wonder_builder
+				}
+				has_modifier = enclave_modifier_52
+			}
+			remove_modifier = enclave_modifier_52
+		}
+	}
+}
+
+planet_event = {
+	id = big_building_leader.73
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_building = building_wonder_6_1
+	}
+
+	immediate = {
+		clear_variable = wonder_6_1_counting_variable
+		export_trigger_value_to_variable = {
+			trigger = num_districts
+			parameters = {
+				type = any
+			}
+			variable = wonder_6_1_counting_variable
+		}
+		remove_modifier = wonder_6_1_modifier
+		add_modifier = {
+			modifier = wonder_6_1_modifier
+			days = -1
+			multiplier = root.wonder_6_1_counting_variable
+			clear_on_owner_change = yes
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.74
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			has_building = building_wonder_6_1
+		}
+	}
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				has_building = building_wonder_6_1
+			}
+			planet_event = {
+				id = big_building_leader.73
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.75
+	hide_window = yes
+	is_triggered_only = yes
+
+
+	immediate = {
+		add_random_research_option = {
+			add_progress = 50
+			area = society
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.76
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_sector = {
+			any_owned_planet = {
+				has_building = building_wonder_6_4
+			}
+		}
+	}
+	immediate = {
+		every_owned_sector = {
+			limit = {
+				any_owned_planet = {
+					has_building = building_wonder_6_4
+				}
+			}
+			every_owned_planet = {
+				add_modifier = {
+					modifier = wonder_6_4_modifier
+					days = -1
+					clear_on_owner_change = yes
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.77
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = governor
+			}
+			add_skill = 5
+		}
+		country_event = {
+			id = big_building_leader.77
+			days = 1825
+		}
+	}
+}
+
+country_event = {
+	id = big_building_leader.78
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			add_skill = 5
+		}
+		country_event = {
+			id = big_building_leader.78
+			days = 1825
+		}
+	}
+}

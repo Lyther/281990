@@ -1,0 +1,173 @@
+portraits = {
+	magi_sipponeko_dan = {	entity = "portrait_magi_neko_entity" clothes_selector = "magi_neko_dan_clothes_01" attachment_selector = "no_texture"
+		greeting_sound = "magi_cat_nyaa_sound"
+		character_textures = {
+			"gfx/models/portraits/dds_sippo_dan2_sharp/buchi01.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/buchi02.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/buchi03.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/cha_01.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/cha_02.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/cha_03.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/kuro_01.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/kuro_02.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/kuro_03.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/siro_01.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/siro_02.dds"
+			"gfx/models/portraits/dds_sippo_dan2_sharp/siro_03.dds"
+		}
+	}
+	magi_sipponeko_jo = {	entity = "portrait_magi_neko_entity" clothes_selector = "magi_neko_jo_clothes_01" attachment_selector = "no_texture"
+		greeting_sound = "magi_cat_nyaa_sound"
+		character_textures = {
+			"gfx/models/portraits/dds_sippo_jo2_sharp/cha_jo_03.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/cha_jo_02.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/cha_jo_01.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/chatora_jo_01.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/kuro_jo_01.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/kuro_jo_02.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/kuro_jo_03.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/sippo_jo_022.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/sippo_jo_038.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/siro_jo_01.dds"
+			"gfx/models/portraits/dds_sippo_jo2_sharp/siro_jo_02.dds"
+		}
+	}
+}
+
+portrait_groups = {
+	magi_sipponeko = {
+		default = magi_sipponeko_jo
+		game_setup = { #will run with a limited country scope. species and government is set but the country does not actually exist
+			add = {
+				trigger = {
+					ruler = {
+						OR = {
+							gender = male
+							gender = indeterminable
+						}
+					}
+				}
+				portraits = {
+					# male add here
+					magi_sipponeko_dan
+				}
+			}
+			add = {
+				trigger = {
+					ruler = {
+						OR = {
+							gender = female
+							gender = indeterminable
+						}
+					}
+				}
+				portraits = {
+					#female add here
+					magi_sipponeko_jo
+				}
+			}
+
+		}
+
+		#species scope
+		species = { #generic portrait for a species
+			add = {
+				trigger = {
+					exists = species
+					NOT = { species = { species_gender = female } }
+				}
+				portraits = {
+					# male add here
+					magi_sipponeko_dan
+				}
+			}
+			add = {
+				trigger = {
+					exists = species
+					NOT = { species = { species_gender = male } }
+				}
+				portraits = {
+					#female add here
+					magi_sipponeko_jo
+				}
+			}
+		}
+
+		#pop scope
+		pop = { #for a specific pop
+			add = {
+				trigger = {
+					NOT = { species = { species_gender = female } }
+				}
+				portraits = {
+					# male add here
+					magi_sipponeko_dan
+				}
+			}
+			add = {
+				trigger = {
+					NOT = { species = { species_gender = male } }
+				}
+				portraits = {
+					# female add here
+					magi_sipponeko_jo
+				}
+			}
+		}
+
+		leader = {
+			add = {
+				trigger = {
+					OR = {
+						gender = male
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					# male add here
+					magi_sipponeko_dan
+				}
+			}
+			add = {
+				trigger = {
+					OR = {
+						gender = female
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					# female add here
+					magi_sipponeko_jo
+				}
+			}
+		}
+
+		ruler = {
+			add = {
+				trigger = {
+					OR = {
+						gender = male
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					# male add here
+					magi_sipponeko_dan
+				}
+			}
+			add = {
+				trigger = {
+					OR = {
+						gender = female
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					#female add here
+					magi_sipponeko_jo
+				}
+			}
+		}
+	}
+}
+

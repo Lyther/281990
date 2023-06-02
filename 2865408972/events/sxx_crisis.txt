@@ -1,0 +1,3045 @@
+namespace = sxx_crisis
+
+# 天灾难度设置
+country_event = {
+	id = sxx_crisis.1
+	title = sxx_crisis.1.name
+	desc = sxx_crisis.1.desc
+	is_triggered_only = yes
+	picture = GFX_evt_sxx_blessed_spot
+
+	trigger = {
+		is_ai = no
+	}
+
+	option = {
+		name = sxx_crisis.1.a
+		set_global_flag = sxx_outer_demon_level_1
+		remove_global_flag = sxx_outer_demon_level_2
+		remove_global_flag = sxx_outer_demon_level_3
+		remove_global_flag = sxx_outer_demon_level_4
+		remove_global_flag = sxx_outer_demon_level_5
+	}
+	option = {
+		name = sxx_crisis.1.b
+		set_global_flag = sxx_outer_demon_level_2
+		remove_global_flag = sxx_outer_demon_level_1
+		remove_global_flag = sxx_outer_demon_level_3
+		remove_global_flag = sxx_outer_demon_level_4
+		remove_global_flag = sxx_outer_demon_level_5
+		ai_chance = {
+			factor = 100
+		}
+	}
+	option = {
+		name = sxx_crisis.1.c
+		set_global_flag = sxx_outer_demon_level_3
+		remove_global_flag = sxx_outer_demon_level_1
+		remove_global_flag = sxx_outer_demon_level_2
+		remove_global_flag = sxx_outer_demon_level_4
+		remove_global_flag = sxx_outer_demon_level_5
+	}
+	option = {
+		name = sxx_crisis.1.d
+		set_global_flag = sxx_outer_demon_level_4
+		remove_global_flag = sxx_outer_demon_level_1
+		remove_global_flag = sxx_outer_demon_level_2
+		remove_global_flag = sxx_outer_demon_level_3
+		remove_global_flag = sxx_outer_demon_level_5
+	}
+	option = {
+		name = sxx_crisis.1.e
+		set_global_flag = sxx_outer_demon_level_5
+		remove_global_flag = sxx_outer_demon_level_1
+		remove_global_flag = sxx_outer_demon_level_2
+		remove_global_flag = sxx_outer_demon_level_3
+		remove_global_flag = sxx_outer_demon_level_4
+	}
+	option = {
+		name = sxx_crisis.1.f
+		custom_tooltip = sxx_crisis.1.f.tooltip
+		set_global_flag = no_sxx_crisis
+		set_global_flag = sxx_outer_demon_level_1
+		remove_global_flag = sxx_outer_demon_level_2
+		remove_global_flag = sxx_outer_demon_level_3
+		remove_global_flag = sxx_outer_demon_level_4
+		remove_global_flag = sxx_outer_demon_level_5
+	}
+}
+
+# 修仙堕落开局设置
+country_event = {
+	id = sxx_crisis.10
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_country_type = sxx_fallen_guardian
+	}
+
+	immediate = {
+		create_country = {
+			type = fallen_empire
+			effect = {
+				root = { copy_techs_from = { target = prev } }
+				set_country_type = global_event
+				destroy_country = yes
+			}
+		}
+		
+		capital_scope = {
+			spawn_system = {
+				min_distance = 20
+				max_distance = 30
+				max_jumps = 0
+				initializer = sxx_fallen_1_seal_system
+			}
+			create_sxx_fallen_1_ship_fleet = yes
+			create_sxx_fallen_1_ship_fleet = yes
+			create_sxx_fallen_1_construction_ship_fleet = yes
+			create_sxx_fallen_1_construction_ship_fleet = yes
+			create_sxx_fallen_1_construction_ship_fleet = yes
+		}
+		every_galaxy_planet = {
+			limit = {
+				has_planet_flag = sxx_fallen_1_fringe_colony
+			}
+			create_sxx_fe1_fringe_colony = yes
+		}
+		every_system = {
+			limit = {
+				has_star_flag = sxx_fallen_1_system
+			}
+			every_system_planet = {
+				limit = {
+					is_ideal_planet_class = {
+						who = event_target:sxx_fallen_1
+						status = yes
+					}
+					is_colony = no
+				}
+				create_sxx_fe1_fringe_colony = yes
+			}
+			if = {
+				limit = {
+					any_system_planet = {
+						is_capital = yes
+					}
+				}
+				sxx_create_fe1_home_citadel = yes
+			}
+			else_if = {
+				limit = {
+					any_system_planet = {
+						is_owned_by = root
+					}
+				}
+				sxx_create_fe1_citadel = yes
+			}
+			else = {
+				sxx_create_fe1_outpost = yes
+			}
+		}
+		add_modifier = {
+			modifier = fe_ship_cost_modifier
+			days = -1
+		}
+		# contact other fallen empires & marauders
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = dormant_marauders
+					is_country_type = fallen_empire
+					is_country_type = enclave
+				}
+				NOT = { has_communications = root }
+			}
+			establish_communications_no_message = root
+		}
+
+		# setup mining & research stations
+		every_planet_within_border = {
+			limit = {
+				has_deposit_for = shipclass_mining_station
+				has_mining_station = no
+			}
+			create_mining_station = {
+				owner = ROOT
+			}
+		}
+		every_planet_within_border = {
+			limit = {
+				has_deposit_for = shipclass_research_station
+				has_research_station = no
+			}
+			create_research_station = {
+				owner = ROOT
+			}
+		}
+
+		# 默认初始经验
+		every_owned_pop = {
+			limit = {
+				has_pop_flag = sxx_cultivator
+			}
+			if = {
+				limit = {
+					is_sxx_top_1_state = no
+				}
+				set_variable = { which = sxx_pop_xp value = value:sxx_pop_xp_max }
+				random_list = {
+					1 = {}
+					2 = { multiply_variable = { which = sxx_pop_xp value = 0.9 } }
+					3 = { multiply_variable = { which = sxx_pop_xp value = 0.8 } }
+					4 = { multiply_variable = { which = sxx_pop_xp value = 0.7 } }
+					5 = { multiply_variable = { which = sxx_pop_xp value = 0.6 } }
+					6 = { multiply_variable = { which = sxx_pop_xp value = 0.5 } }
+					7 = { multiply_variable = { which = sxx_pop_xp value = 0.4 } }
+					8 = { multiply_variable = { which = sxx_pop_xp value = 0.3 } }
+					9 = { multiply_variable = { which = sxx_pop_xp value = 0.2 } }
+					10 = { multiply_variable = { which = sxx_pop_xp value = 0.1 } }
+					11 = { multiply_variable = { which = sxx_pop_xp value = 0 } }
+				}
+			}
+		}
+	}
+}
+
+# Fallen Empire establishes communications
+country_event = {
+	id = sxx_crisis.20
+
+	hide_window = yes
+
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	trigger = {
+		is_sxx_fallen_1 = yes
+		is_at_war = no
+		any_country = {
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+			}
+			NOT = { has_communications = root }
+			OR = {
+				# if we're both fallen empires, we know of each other
+				is_country_type = fallen_empire
+				# also contact if we border them
+				any_system_within_border = {
+					any_neighbor_system = {
+						has_hyperlane_to = prev
+						is_owned_by = root
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+				}
+				NOT = { has_communications = root }
+				OR = {
+					# if we're both fallen empires, we know of each other
+					is_country_type = fallen_empire
+					# also contact if we border them
+					any_system_within_border = {
+						any_neighbor_system = {
+							has_hyperlane_to = prev
+							is_owned_by = root
+						}
+					}
+				}
+			}
+			establish_communications_no_message = root
+			root = { save_event_target_as = contact_empire }
+			country_event = { id = sxx_crisis.25 days = 2 }
+		}
+	}
+}
+
+# 好像没触发
+# Triggered when two empires discover each other
+# This = Empire 1
+# From = Empire 2
+# Fromfromfrom = System where contact occurred
+country_event = {
+	id = sxx_crisis.21
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		first_contact_handled = no
+		NOT = { has_communications = from }
+	}
+
+	immediate = {
+		country_event = { id = sxx_crisis.25 }
+		if = {
+			limit = {
+				from = {
+					is_sxx_fallen_1 = yes
+				}
+			}
+			establish_communications_no_message = from
+			from = { save_event_target_as = contact_empire }
+			country_event = { id = sxx_crisis.25 }
+		}
+		set_timed_relation_flag = {
+			flag = just_encountered
+			who = from
+			days = 5
+		}
+		#establish communications with a delay of a few days, in case there's any other relevant events pending
+		country_event = { id = first_contact_critters.1001 days = 5 }
+	}
+}
+
+### First Contact Diplomatic Message
+country_event = {
+	id = sxx_crisis.25
+	title = action.1.name
+	message_desc = action.1.message
+	location = event_target:contact_empire.capital_scope
+
+	picture_event_data = {
+		portrait = event_target:contact_empire
+		planet_background = event_target:contact_empire
+		graphical_culture = event_target:contact_empire
+		city_level = event_target:contact_empire
+		room = personality_fallen_empire_teal_room # 写event_target:contact_empire.ruler不行，不知道为啥
+	}
+
+	desc = {
+		text = sxx_crisis.25.desc_1
+		trigger = {
+			event_target:contact_empire = {
+				is_sxx_fallen_1 = yes
+				root = { is_sxx_sect = no }
+			}
+		}
+	}
+	desc = {
+		text = sxx_crisis.25.desc_2
+		trigger = {
+			event_target:contact_empire = {
+				is_sxx_fallen_1 = yes
+				root = { is_sxx_sect = yes }
+			}
+		}
+	}
+
+	diplomatic = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		event_target:contact_empire = {
+			is_primitive = no
+			NOR = {
+				is_tiyanki_country_type = yes
+				is_country_type = neutral_faction
+				is_country_type = faction
+				is_country_type = pirate
+				is_amoeba_country_type = yes
+				is_drone_country_type = yes
+				is_crystal_country_type = yes
+				is_country_type = cloud
+				has_relation_flag = { flag = AbandonedRefugees who = root }
+			}
+		}
+	}
+
+	immediate = {
+		country_event = { id = anomaly.4016 }
+		event_target:contact_empire = {
+			save_event_target_as = contact_speaker
+		}
+	}
+
+	
+	option = { #friendly
+		name = {
+			text = action.1.e
+			trigger = {
+				NOT = { is_same_species = event_target:contact_empire }
+				is_xenophile = yes
+			}
+		}
+		name = {
+			text = action.1.c
+			trigger = {
+				NOT = { is_same_species = event_target:contact_empire }
+				is_xenophile = yes
+			}
+		}
+		name = {
+			text = action.1.h
+			trigger = {
+				is_egalitarian = yes
+			}
+		}
+		name = {
+			text = action.1.n
+			trigger = {
+				is_spiritualist = yes
+				event_target:contact_empire = { NOT = { has_authority = auth_machine_intelligence } }
+			}
+		}
+		name = {
+			text = action.1.ag
+			trigger = {
+				is_materialist = yes
+			}
+		}
+		name = {
+			text = action.1.ah
+			trigger = {
+				is_xenophile = yes
+			}
+		}
+		name = {
+			text = action.1.ai
+			trigger = {
+				is_xenophile = yes
+				is_egalitarian = yes
+			}
+		}
+		name = {
+			text = action.1.aj
+			trigger = {
+				is_xenophile = yes
+				is_authoritarian = yes
+			}
+		}
+		name = {
+			text = action.1.ak
+			trigger = {
+				OR = {
+					is_xenophile = yes
+					is_militarist = yes
+				}
+			}
+		}
+		name = {
+			text = action.1.al
+			trigger = {
+				is_egalitarian = yes
+			}
+		}
+		name = {
+			text = action.1.am
+			trigger = {
+				is_spiritualist = yes
+			}
+		}
+		name = {
+			text = action.1.j
+			trigger = {
+				is_militarist = yes
+			}
+		}
+		name = {
+			text = action.1.l
+			trigger = {
+				is_pacifist = yes
+			}
+		}
+		name = {
+			text = action.1.p
+			trigger = {
+				is_materialist = yes
+			}
+		}
+		name = {
+			text = action.1.av
+			trigger = {
+				is_spiritualist = yes
+			}
+		}
+		name = {
+			text = action.1.aag
+			trigger = {
+				has_origin = origin_lost_colony
+				event_target:contact_empire = {
+					has_country_flag = special_intro_for@root
+					has_country_flag = lost_colony_parent_of@root
+				}
+			}
+		}
+		name = {
+			text = action.1.hm
+			trigger = {
+				has_authority = auth_hive_mind
+				NOT = { has_valid_civic = civic_hive_devouring_swarm }
+			}
+		}
+		name = {
+			text = action.1.me
+			trigger = {
+				has_authority = auth_machine_intelligence
+				NOT = { has_valid_civic = civic_machine_terminator }
+			}
+		}
+		name = {
+			text = action.1.mtm
+			trigger = {
+				has_valid_civic = civic_machine_terminator
+				event_target:contact_empire = { has_authority = auth_machine_intelligence }
+			}
+		}
+		name = {
+			text = action.1.o
+			trigger = {
+				is_spiritualist = yes
+				event_target:contact_empire = { NOT = { has_authority = auth_machine_intelligence } }
+			}
+		}
+		name = {
+			text = action.1.as
+			trigger = {
+				is_pacifist = yes
+			}
+		}
+		name = {
+			text = action.1.af
+			trigger = {
+				is_xenophobe = yes
+			}
+		}
+
+		icon = {
+			icon = GFX_option_icon_friendly
+			text = seek_friends_tt
+		}
+
+		allow = {
+			custom_tooltip_fail = {
+				text = friendship_already_precluded
+				event_target:contact_empire = {
+					NOR = {
+						has_opinion_modifier = {
+							who = root
+							modifier = opinion_caught_hacking
+						}
+						has_opinion_modifier = {
+							who = root
+							modifier = opinion_hostile_first_contact
+						}
+						has_opinion_modifier = {
+							who = root
+							modifier = opinion_hostile_first_contact_vivisection
+						}
+						has_opinion_modifier = {
+							who = root
+							modifier = opinion_hostile_first_contact_hungry
+						}
+					}
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				OR = {
+					NOT = { is_country_type = default }
+					event_target:contact_empire = { NOT = { is_country_type = default } }
+				}
+			}
+			custom_tooltip = action.1.fe_option
+		}
+		else = {
+			custom_tooltip = seek_friends_tt
+
+			event_target:contact_empire = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_friendly_first_comms_greeting
+				}
+			}
+		}
+
+		trigger = {
+			OR = {
+				is_homicidal = no
+				AND = {
+					has_valid_civic = civic_machine_terminator
+					event_target:contact_empire = { has_authority = auth_machine_intelligence }
+				}
+			}
+			NOT = { has_valid_civic = civic_inwards_perfection }
+			NAND = {
+				has_ethic = ethic_fanatic_spiritualist
+				event_target:contact_empire = { has_authority = auth_machine_intelligence }
+			}
+			OR = {
+				NOT = { has_ethic = ethic_fanatic_xenophobe }
+				event_target:contact_empire = { is_same_species = root }
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				is_xenophile = yes
+			}
+			modifier = {
+				factor = 0.5
+				OR = {
+					is_xenophobe = yes
+					is_gestalt = yes
+				}
+			}
+			modifier = {
+				factor = 4 #actually *2 as it is multiplied by *0.5 in the above modifier
+				OR = {
+					AND = {
+						is_machine_empire = yes
+						event_target:contact_empire = { is_machine_empire = yes }
+					}
+					AND = {
+						is_hive_empire = yes
+						event_target:contact_empire = { is_hive_empire = yes }
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				first_contact_custom_greeting = yes #basically, various hostility
+			}
+		}
+	}
+	option = { #hostile - isolationist
+		name = {
+			text = action.1.ac
+			trigger = {
+				is_xenophobe = yes
+			}
+		}
+		name = {
+			text = action.1.aab
+			trigger = {
+				OR = {
+					is_xenophobe = yes
+					is_materialist = yes
+				}
+				NOT = { is_same_species = event_target:contact_empire }
+			}
+		}
+		name = {
+			text = action.1.ad
+			trigger = {
+				is_authoritarian = yes
+			}
+		}
+		name = {
+			text = action.1.d
+			trigger = {
+				NOT = { is_same_species = event_target:contact_empire }
+				is_xenophobe = yes
+			}
+		}
+		name = {
+			text = action.1.i
+			trigger = {
+				is_egalitarian = yes
+			}
+		}
+		name = {
+			text = action.1.m
+			trigger = {
+				is_pacifist = yes
+			}
+		}
+		name = {
+			text = action.1.r
+			trigger = {
+				is_spiritualist = yes
+				event_target:contact_empire = { has_authority = auth_machine_intelligence }
+			}
+		}
+		name = {
+			text = action.1.aa
+			trigger = {
+				is_materialist = yes
+			}
+		}
+		name = {
+			text = action.1.ao
+			trigger = {
+				is_militarist = yes
+			}
+		}
+		name = {
+			text = action.1.aaa
+			trigger = {
+				is_authoritarian = yes
+			}
+		}
+		name = {
+			text = action.1.aae
+			trigger = {
+				is_authoritarian = yes
+			}
+		}
+		name = {
+			text = action.1.t1
+			trigger = {
+				is_xenophile = yes
+			}
+		}
+		name = {
+			text = action.1.t2
+			trigger = {
+				is_spiritualist = yes
+			}
+		}
+		name = {
+			text = action.1.t3
+			trigger = {
+				is_hive_empire = yes
+			}
+		}
+		name = {
+			text = action.1.t4
+			trigger = {
+				is_machine_empire = yes
+				NOR = {
+					has_valid_civic = civic_machine_assimilator
+					has_valid_civic = civic_machine_terminator
+				}
+			}
+		}
+		name = {
+			text = action.1.t5
+			trigger = {
+				has_valid_civic = civic_machine_assimilator
+			}
+		}
+		name = {
+			text = action.1.t6
+			trigger = {
+				has_valid_civic = civic_machine_terminator
+			}
+		}
+
+		icon = {
+			icon = GFX_option_icon_isolationist
+			text = seek_isolation_tt_short
+		}
+
+		if = {
+			limit = {
+				OR = {
+					NOT = { is_country_type = default }
+					event_target:contact_empire = { NOT = { is_country_type = default } }
+				}
+			}
+			custom_tooltip = action.1.fe_option
+		}
+		else = {
+			custom_tooltip = seek_isolation_tt
+
+			hidden_effect = {
+				event_target:contact_empire = {
+					random_spynetwork = {
+						limit = { target = { is_same_value = root } }
+						add_modifier = {
+							modifier = first_comms_defensive
+							years = 15
+						}
+					}
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				is_xenophobe = yes
+				is_militarist = no
+			}
+			modifier = {
+				factor = 2
+				has_valid_civic = civic_inwards_perfection
+			}
+		}
+	}
+	option = { #hostile - expansionist
+		name = {
+			text = action.1.ae
+			trigger = {
+				OR = {
+					is_xenophobe = yes
+					is_militarist = yes
+				}
+			}
+		}
+		name = {
+			text = action.1.ds
+			trigger = {
+				has_valid_civic = civic_hive_devouring_swarm
+			}
+		}
+		name = {
+			text = action.1.mt
+			trigger = {
+				is_machine_empire = yes
+			}
+		}
+		name = {
+			text = action.1.aac
+			trigger = {
+				is_militarist = yes
+				OR = {
+					is_spiritualist = yes
+					is_authoritarian = yes
+				}
+			}
+		}
+		name = {
+			text = action.1.aad
+			trigger = {
+				is_spiritualist = yes
+				NOT = { is_same_species = event_target:contact_empire }
+			}
+		}
+		name = {
+			text = action.1.b
+			trigger = {
+				NOT = { is_same_species = event_target:contact_empire }
+				is_xenophobe = yes
+			}
+		}
+		name = {
+			text = action.1.s
+			trigger = {
+				is_spiritualist = yes
+				event_target:contact_empire = { has_authority = auth_machine_intelligence }
+			}
+		}
+		name = {
+			text = action.1.ab
+			trigger = {
+				is_spiritualist = yes
+				NOT = { is_same_species = event_target:contact_empire }
+			}
+		}
+		name = {
+			text = action.1.an
+			trigger = {
+				is_militarist = yes
+			}
+		}
+		name = {
+			text = action.1.at
+			trigger = {
+				is_militarist = yes
+			}
+		}
+		name = {
+			text = action.1.au
+			trigger = {
+				is_spiritualist = yes
+				is_militarist = yes
+			}
+		}
+		name = {
+			text = action.1.k
+			trigger = {
+				OR = {
+					is_militarist = yes
+					is_authoritarian = yes
+				}
+			}
+		}
+		name = {
+			text = action.1.ax
+			trigger = {
+				OR = {
+					is_materialist = yes
+					is_egalitarian = yes
+					is_pacifist = yes
+				}
+			}
+		}
+		name = {
+			text = action.1.u1
+			trigger = {
+				is_xenophile = yes
+			}
+		}
+		name = {
+			text = action.1.u2
+			trigger = {
+				is_authoritarian = yes
+			}
+		}
+		name = {
+			text = action.1.u3
+			trigger = {
+				is_gestalt = yes
+				NOT = { has_valid_civic = civic_hive_devouring_swarm }
+			}
+		}
+
+		icon = {
+			icon = GFX_option_icon_hostile
+			text = seek_enemies_tt_short
+		}
+
+		if = {
+			limit = {
+				OR = {
+					NOT = { is_country_type = default }
+					event_target:contact_empire = { NOT = { is_country_type = default } }
+				}
+			}
+			custom_tooltip = action.1.fe_option
+		}
+		else = {
+			custom_tooltip = seek_enemies_tt
+
+			event_target:contact_empire = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_hostile_first_comms_greeting
+				}
+			}
+			hidden_effect = {
+				random_spynetwork = {
+					limit = {
+						owner = { is_same_value = root }
+						target = { is_same_value = event_target:contact_empire }
+					}
+					add_modifier = {
+						modifier = first_comms_hostility_preparations
+						years = 15
+					}
+				}
+			}
+		}
+
+		trigger = {
+			NOR = {
+				has_ethic = ethic_fanatic_pacifist
+				has_valid_civic = civic_inwards_perfection
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 100
+				is_homicidal = yes
+			}
+			modifier = {
+				factor = 2
+				is_militarist = yes
+			}
+			modifier = {
+				factor = 0.5
+				is_pacifist = yes
+			}
+			modifier = {
+				factor = 2
+				first_contact_custom_greeting = yes #basically, various hostility
+			}
+			modifier = {
+				factor = 0.1
+				is_in_federation_with = event_target:contact_empire #just in case
+			}
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				NOT = {
+					event_target:contact_empire = { has_relation_flag = { flag = no_coms who = root } }
+				}
+			}
+			hidden_effect = {
+				country_event = { id = progress.4 }
+				country_event = { id = progress.5 }
+				country_event = { id = progress.6 }
+				#country_event = { id = story.7 days = 30 } REMOVED DUE TO ON_ACTIONS ALSO TRIGGERING THIS, CAUSING SCOPING ISSUES
+				if = {
+					limit = {
+						event_target:contact_empire = {
+							OR = {
+								is_country_type = fallen_empire
+								is_country_type = awakened_fallen_empire
+							}
+						}
+					}
+					set_country_flag = Story7
+					set_country_flag = has_encountered_other_empire
+					if = {
+						limit = { NOT = { has_country_flag = StoryFirst } }
+						set_country_flag = StoryFirst
+					}
+				}
+			}
+		}
+	}
+}
+
+# 重建堕落空间站
+event = {
+	id = sxx_crisis.30
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:sxx_fallen_1
+		event_target:sxx_fallen_1 = {
+			any_owned_planet = {
+				is_controlled_by = PREV
+				solar_system = {
+					NOT = {
+						exists = starbase
+					}
+				}
+			}
+		}
+	}
+	immediate = {
+		every_system = {
+			limit = {
+				NOT = { exists = starbase }
+				any_system_colony = {
+					exists = owner
+					has_ground_combat = no
+					owner = {
+						is_sxx_fallen_1 = yes
+					}
+					solar_system = {
+						NOR = {
+							any_fleet_in_system = {
+								exists = owner
+								owner = {
+									NOT = { is_same_value = prevprevprev.owner }
+									OR = {
+										is_hostile = prevprevprev.owner
+										is_at_war_with = prevprevprev.owner
+									}
+								}
+							}
+							any_fleet_in_system = {
+								exists = controller
+								controller = {
+									NOT = { is_same_value = prevprevprev.owner }
+									OR = {
+										is_hostile = prevprevprev.owner
+										is_at_war_with = prevprevprev.owner
+									}
+								}
+							}
+							any_system_colony = {
+								exists = owner
+								NOT = { is_same_value = prevprev }
+								owner = {
+									NOT = { is_same_value = prevprevprev.owner }
+									OR = {
+										is_country_type = default
+										is_country_type = fallen_empire
+										is_country_type = awakened_fallen_empire
+										is_sxx_fallen_1 = yes
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			random_system_planet = {
+				limit = {
+					is_colony = yes
+					exists = owner
+					has_ground_combat = no
+					owner = {
+						is_sxx_fallen_1 = yes
+					}
+					solar_system = {
+						NOR = {
+							any_fleet_in_system = {
+								exists = owner
+								owner = {
+									NOT = { is_same_value = prevprevprev.owner }
+									OR = {
+										is_hostile = prevprevprev.owner
+										is_at_war_with = prevprevprev.owner
+									}
+								}
+							}
+							any_fleet_in_system = {
+								exists = controller
+								controller = {
+									NOT = { is_same_value = prevprevprev.owner }
+									OR = {
+										is_hostile = prevprevprev.owner
+										is_at_war_with = prevprevprev.owner
+									}
+								}
+							}
+							any_system_colony = {
+								exists = owner
+								owner = {
+									NOT = { is_same_value = prevprevprev.owner }
+									OR = {
+										is_country_type = default
+										is_country_type = fallen_empire
+										is_country_type = awakened_fallen_empire
+										is_sxx_fallen_1 = yes
+									}
+								}
+							}
+						}
+					}
+				}
+				planet_event = { id = action.91 }
+			}
+		}
+	}
+}
+
+# 建立堕落哨站
+ship_event = {
+	id = sxx_crisis.35
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = { is_sxx_fallen_1 = yes }
+	}
+	immediate = {
+		solar_system = {
+			system_event = { id = sxx_crisis.36 days = 1 }
+		}
+	}
+}
+
+# 建立堕落哨站
+system_event = {
+	id = sxx_crisis.36
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = starbase
+	}
+
+	immediate = {
+		starbase = {
+			set_starbase_size = starbase_outpost
+		}
+	}
+}
+
+country_event = {
+	id = sxx_crisis.50
+
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 8
+		modifier = {
+			factor = 0.5
+			mid_game_years_passed >= 0
+		}
+		modifier = {
+			factor = 0.5
+			end_game_years_passed >= 0
+		}
+		modifier = {
+			factor = 0.5
+			end_game_years_passed >= 25
+		}
+		modifier = {
+			factor = 0.5
+			end_game_years_passed >= 50
+		}
+		modifier = {
+			factor = 0.5
+			has_global_flag = galactic_crisis_happened
+		}
+		modifier = {
+			factor = 0.5
+			crisis_happened_and_defeated = yes
+		}
+	}
+
+	trigger = {
+		is_country_type = global_event
+		NOT = { has_global_flag = sxx_outer_demon_invasion_happened }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					NOT = { exists = event_target:sxx_seal_planet }
+					event_target:sxx_seal_planet = {
+						OR = {
+							count_owned_pop = { count = 0 }
+							NOT = { any_owned_pop = { has_job = sxx_sealer } }
+						}
+					}
+				}
+			}
+			event_target:sxx_seal_system = {
+				system_event = { id = sxx_crisis.1000 }
+			}
+		}
+		else = {
+			event_target:sxx_seal_planet = { planet_event = { id = sxx_crisis.55 } }
+		}
+	}
+}
+
+# 封印冲击
+planet_event = {
+	id = sxx_crisis.55
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		NOT = { has_global_flag = no_sxx_crisis }
+	}
+
+	immediate = {
+		random_list = {
+			20 = {
+				if = {
+					limit = {
+						any_owned_pop = {
+							sxx_pop_is_not_under_dujie = no
+						}
+					}
+					set_timed_planet_flag = {
+						flag = sxx_beside_sealer_killed
+						days = 5
+					}
+					every_owned_pop = {
+						limit = {
+							sxx_pop_is_not_under_dujie = no
+						}
+						kill_pop = yes
+					}
+				}
+			}
+			80 = {
+				modifier = {
+					factor = 5
+					count_owned_pop = {
+						limit = {
+							has_job = sxx_sealer
+						}
+						count = 1
+					}
+				}
+				modifier = {
+					factor = 2
+					count_owned_pop = {
+						limit = {
+							has_job = sxx_sealer
+						}
+						count = 2
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_owned_pop = {
+						limit = {
+							has_job = sxx_sealer
+						}
+						count >= 5
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_owned_pop = {
+						limit = {
+							has_job = sxx_sealer
+						}
+						count >= 10
+					}
+				}
+				modifier = {
+					factor = 0.5
+					count_owned_pop = {
+						limit = {
+							has_job = sxx_sealer
+						}
+						count >= 15
+					}
+				}
+				set_timed_planet_flag = {
+					flag = sxx_sealer_killed
+					days = 5
+				}
+				random_owned_pop = {
+					limit = {
+						has_job = sxx_sealer
+					}
+					kill_pop = yes
+				}
+				if = {
+					limit = {
+						any_owned_pop = {
+							sxx_pop_is_not_under_dujie = no
+						}
+					}
+					set_timed_planet_flag = {
+						flag = sxx_beside_sealer_killed
+						days = 5
+					}
+					every_owned_pop = {
+						limit = {
+							sxx_pop_is_not_under_dujie = no
+						}
+						kill_pop = yes
+					}
+				}
+			}
+		}
+		change_pc = pc_nuked
+		remove_all_districts = yes
+		remove_all_buildings = yes
+		add_planet_devastation = 100
+		planet_event = { id = sxx_crisis.60 }
+	}
+}
+
+# 封印冲击弹窗
+planet_event = {
+	id = sxx_crisis.60
+	title = sxx_crisis.60.name
+	desc = {
+		text = sxx_crisis.60.desc.1
+		trigger = {
+			NOR = {
+				has_planet_flag = sxx_sealer_killed
+				has_planet_flag = sxx_beside_sealer_killed
+			}
+		}
+	}
+	desc = {
+		text = sxx_crisis.60.desc.2
+		trigger = {
+			has_planet_flag = sxx_sealer_killed
+			NOT = { has_planet_flag = sxx_beside_sealer_killed }
+		}
+	}
+	desc = {
+		text = sxx_crisis.60.desc.3
+		trigger = {
+			NOT = { has_planet_flag = sxx_sealer_killed }
+			has_planet_flag = sxx_beside_sealer_killed
+		}
+	}
+	desc = {
+		text = sxx_crisis.60.desc.4
+		trigger = {
+			has_planet_flag = sxx_sealer_killed
+			has_planet_flag = sxx_beside_sealer_killed
+		}
+	}
+
+	picture = GFX_evt_sxx_demon_seal
+	show_sound = event_solar_fusion
+	location = root
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_crisis.60.a
+		trigger = {
+			NOR = {
+				has_planet_flag = sxx_sealer_killed
+				has_planet_flag = sxx_beside_sealer_killed
+			}
+		}
+	}
+	option = {
+		name = sxx_crisis.60.b
+		trigger = {
+			has_planet_flag = sxx_sealer_killed
+			NOT = { has_planet_flag = sxx_beside_sealer_killed }
+		}
+	}
+	option = {
+		name = sxx_crisis.60.c
+		trigger = {
+			NOT = { has_planet_flag = sxx_sealer_killed }
+			has_planet_flag = sxx_beside_sealer_killed
+		}
+	}
+	option = {
+		name = sxx_crisis.60.d
+		trigger = {
+			has_planet_flag = sxx_sealer_killed
+			has_planet_flag = sxx_beside_sealer_killed
+		}
+	}
+	option = {
+		name = sxx_crisis.60.e
+	}
+}
+
+# on_yearly_pulse
+event = {
+	id = sxx_crisis.65
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:sxx_seal_planet
+		event_target:sxx_seal_planet = {
+			exists = owner
+			owner = { is_sxx_fallen_1 = yes }
+		}
+	}
+
+	immediate = {
+		event_target:sxx_seal_planet = { planet_event = { id = sxx_crisis.70 days = 10 random = 30 } }
+	}
+}
+
+# 封印者移动人口
+planet_event = {
+	id = sxx_crisis.70
+	hide_window = yes
+	is_triggered_only = yes
+
+	pre_triggers = {
+		has_owner = yes
+		has_ground_combat = no
+		is_occupied_flag = no
+	}
+
+	trigger = {
+		#exists = owner
+		owner = {
+			is_sxx_fallen_1 = yes
+		}
+		has_deposit = d_sxx_seal
+		count_owned_pop = {
+			limit = {
+				has_job = sxx_sealer
+			}
+			count < 20
+		}
+	}
+
+	immediate = {
+		owner = {
+			if = {
+				limit = {
+					any_owned_ship = {
+						has_modifier = sxx_cultivator_ship_modifier_9
+					}
+				}
+				random_owned_ship = {
+					limit = {
+						has_modifier = sxx_cultivator_ship_modifier_9
+					}
+					sxx_ship_unassign_one_ship_fleet_leader = yes
+					delete_ship = this
+				}
+				root = {
+					create_pop = {
+						species = owner_main_species
+					}
+					last_created_pop = {
+						set_pop_flag = sxx_cultivator
+						set_pop_flag = sxx_dujie
+						modify_species = {
+							species = this
+							add_trait = trait_sxx_dujie
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_pop = {
+						has_pop_flag = sxx_dujie
+						planet = { NOT = { is_same_value = root } }
+					}
+				}
+				random_owned_pop = {
+					limit = {
+						has_pop_flag = sxx_dujie
+						planet = { NOT = { is_same_value = root } }
+					}
+					resettle_pop = {
+						pop = this
+						planet = root
+					}
+				}
+			}
+		}
+	}
+}
+
+# 觉醒
+country_event = {
+	id = sxx_crisis.75
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = sxx_fallen_guardian
+	}
+	
+	immediate = {
+	#	set_country_flag = guardians_of_the_galaxy
+		set_country_type = sxx_awakened_fallen_guardian
+
+		change_government = {
+			civics = {
+				civic = civic_sxx_afe
+				civic = civic_memorialist
+			}
+		}
+	
+		add_resource = { minerals = 50000 }
+		add_resource = { energy = 50000 }
+		add_resource = { food = 50000 }
+		add_resource = { influence = 1000 }
+		add_resource = { consumer_goods = 20000 }
+		add_resource = { alloys = 20000 }
+		add_resource = { exotic_gases = 10000 }
+		add_resource = { volatile_motes = 10000 }
+		add_resource = { rare_crystals = 10000 }
+		add_resource = { sr_dark_matter = 10000 }
+		add_resource = { sr_zro = 10000 }
+	#	add_resource = { sxx_stones = 50000 }
+	#	add_resource = { sxx_pills = 10000 }
+
+		every_owned_species = {
+			limit = {
+				is_sapient = yes
+			}
+			set_living_standard = { type = living_standard_sxx_xiuxian_0 country = root }
+		}
+	
+		every_country = {
+			limit = {
+				is_country_type = default
+			}
+			random_list = {
+				33 = { add_opinion_modifier = { who = root modifier = opinion_crisis_fighter } }
+				33 = { add_opinion_modifier = { who = root modifier = opinion_crisis_fighter_small } }
+				33 = { }
+			}
+		}
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = sxx_crisis.80 }
+		}
+	}
+}
+
+# 觉醒通讯
+country_event = {
+	id = sxx_crisis.80
+	title = TRANSMISSION
+	desc = sxx_crisis.80.desc
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:sxx_fallen_1
+		planet_background = event_target:sxx_fallen_1
+		graphical_culture = event_target:sxx_fallen_1
+		city_level = event_target:sxx_fallen_1
+		room = personality_fallen_empire_teal_room # 写event_target:sxx_fallen_1.ruler不行，不知道为啥
+	}
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.80.a
+	}
+	option = {
+		name = sxx_crisis.80.b
+	}
+	option = {
+		name = sxx_crisis.80.c
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_xenophobe
+				has_valid_civic = civic_machine_terminator
+			}
+		}
+	}
+}
+
+# 要人
+country_event = {
+	id = sxx_crisis.100
+	title = TRANSMISSION
+	desc = sxx_crisis.100.desc
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:sxx_fallen_1
+		planet_background = event_target:sxx_fallen_1
+		graphical_culture = event_target:sxx_fallen_1
+		city_level = event_target:sxx_fallen_1
+		room = personality_fallen_empire_teal_room # 写event_target:sxx_fallen_1.ruler不行，不知道为啥
+	}
+
+	mean_time_to_happen = {
+		years = 10
+	}
+
+	trigger = {
+		is_ai = no
+		is_sxx_dujie_country = yes
+		count_owned_pop = {
+			limit = {
+				has_pop_flag = sxx_dujie
+			}
+			count > 3
+		}
+		exists = event_target:sxx_fallen_1
+		exists = event_target:sxx_seal_planet
+		NOT = { is_same_value = event_target:sxx_fallen_1 }
+		has_communications = event_target:sxx_fallen_1
+		event_target:sxx_seal_planet = {
+			owner = {
+				is_same_value = event_target:sxx_fallen_1
+			}
+		}
+		NOR = {
+			has_country_flag = be_asked_dujie_pop_by_sxx_fallen_1
+			has_global_flag = sxx_outer_demon_invasion_happened
+		}
+	}
+
+	immediate = {
+		set_country_flag = be_asked_dujie_pop_by_sxx_fallen_1
+	}
+	
+	option = {
+		name = sxx_crisis.100.a
+		custom_tooltip = sxx_crisis.100.a.tooltip
+		custom_tooltip = sxx_fallen_empire_happy_tooltip
+		hidden_effect = {
+			random_owned_pop = {
+				limit = {
+					has_pop_flag = sxx_dujie
+				}
+				resettle_pop = {
+					pop = this
+					planet = event_target:sxx_seal_planet
+				}
+			}
+			event_target:sxx_fallen_1 = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_accepted_fallen_empire_request
+				}
+			}
+		}
+	}
+	option = {
+		name = sxx_crisis.100.b
+		custom_tooltip = sxx_fallen_empire_unhappy_tooltip
+		hidden_effect = {
+			event_target:sxx_fallen_1 = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_refused_fallen_empire_request
+				}
+			}
+		}
+	}
+}
+
+# 送功法
+country_event = {
+	id = sxx_crisis.105
+	title = TRANSMISSION
+	desc = sxx_crisis.105.desc
+
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:sxx_fallen_1
+		planet_background = event_target:sxx_fallen_1
+		graphical_culture = event_target:sxx_fallen_1
+		city_level = event_target:sxx_fallen_1
+		room = personality_fallen_empire_teal_room # 写event_target:sxx_fallen_1.ruler不行，不知道为啥
+	}
+
+	mean_time_to_happen = {
+		years = 10
+	}
+
+	trigger = {
+		is_ai = no
+		exists = event_target:sxx_fallen_1
+		NOT = { is_same_value = event_target:sxx_fallen_1 }
+		has_communications = event_target:sxx_fallen_1
+		NOT = { has_country_flag = be_sent_gongfa_by_sxx_fallen_1 }
+		event_target:sxx_fallen_1 = {
+			is_country_type = sxx_fallen_guardian
+			is_patronizing_to = root # 宠幸
+			has_opinion_modifier = { who = root modifier = opinion_accepted_fallen_empire_request }
+		}
+	}
+
+	immediate = {
+		set_country_flag = be_sent_gongfa_by_sxx_fallen_1
+	}
+	
+	option = {
+		name = sxx_crisis.105.a
+		add_resource = {
+			sxx_gongfa = 200000
+		}
+		hidden_effect = {
+			add_opinion_modifier = { who = event_target:sxx_fallen_1 modifier = opinion_fallen_empire_gift }
+		}
+	}
+	option = {
+		name = sxx_crisis.105.b
+	}
+}
+
+system_event = {
+	id = sxx_crisis.1000
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		every_system_ambient_object = {
+			limit = {
+				OR = {
+					is_ambient_object_type = small_debris_object
+					is_ambient_object_type = medium_debris_01_object
+					is_ambient_object_type = medium_debris_02_object
+					is_ambient_object_type = large_debris_object
+				}
+			}
+			destroy_ambient_object = this
+		}
+		set_global_flag = sxx_outer_demon_invasion_happened
+		set_star_flag = cannot_be_hit_by_aow_starfall_spear
+		sxx_create_outer_demon_country = yes
+		awaken_guardians_of_the_galaxy = yes
+		if = {
+			limit = {
+				exists = event_target:sxx_fallen_1
+			}
+			event_target:sxx_fallen_1 = {
+				country_event = { id = sxx_crisis.75 days = 2 }
+			}
+		}
+		if = {
+			limit = {
+				exists = event_target:sxx_seal_planet
+			}
+			event_target:sxx_seal_planet = {
+				every_owned_pop = { kill_pop = yes }
+				change_pc = pc_shattered
+				sxx_create_outer_demon_portal = yes
+			}
+		}
+		else = {
+			star = {
+				save_global_event_target_as = sxx_seal_planet
+				sxx_create_outer_demon_portal = yes
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = event_target:sxx_seal_planet }
+			}
+			random_galaxy_planet = {
+				limit = {
+					solar_system = {
+						NOT = {
+							has_star_flag = sxx_forbidden_area
+						}
+					}
+				}
+				save_global_event_target_as = sxx_seal_planet
+				sxx_create_outer_demon_portal = yes
+			}
+		}
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+					is_sxx_fallen_1 = yes
+				}
+			}
+			country_event = { id = sxx_crisis.1005 }
+		}
+		sxx_create_outer_demon_fleet_1 = yes
+		sxx_create_outer_demon_fleet_1 = yes
+		sxx_create_outer_demon_fleet_1 = yes
+		sxx_create_outer_demon_fleet_1 = yes
+		sxx_create_outer_demon_fleet_1 = yes
+
+		sxx_create_outer_demon_fleet_2 = yes
+		sxx_create_outer_demon_fleet_2 = yes
+		sxx_create_outer_demon_fleet_2 = yes
+
+		sxx_create_outer_demon_fleet_defend = yes
+
+		event_target:sxx_outer_demon_country = {
+			country_event = { id = sxx_crisis.1151 days = 10 }
+			country_event = { id = sxx_crisis.1151 days = 30 }
+			country_event = { id = sxx_crisis.1151 days = 60 }
+			country_event = { id = sxx_crisis.1151 days = 100 }
+			country_event = { id = sxx_crisis.1151 days = 150 }
+			country_event = { id = sxx_crisis.1151 days = 210 }
+			country_event = { id = sxx_crisis.1151 days = 280 }
+			country_event = { id = sxx_crisis.1151 days = 360 }
+			country_event = { id = sxx_crisis.1151 days = 450 }
+			country_event = { id = sxx_crisis.1151 days = 550 }
+		}
+	}
+}
+
+country_event = {
+	id = sxx_crisis.1005
+	title = sxx_crisis.1005.name
+	desc = {
+		text = sxx_crisis.1005.desc.space_owner
+		trigger = {
+			is_same_value = from.space_owner
+		}
+	}
+	desc = {
+		text = sxx_crisis.1005.desc.not_space_owner
+		trigger = {
+			NOT = { is_same_value = from.space_owner }
+		}
+	}
+
+	is_triggered_only = yes
+
+	picture = GFX_evt_sxx_demon_seal
+	show_sound = event_ex_started
+	location = from
+
+	after = {
+		begin_event_chain = {
+			event_chain = sxx_outer_demon_invasion_chain
+			target = ROOT
+		}
+	}
+
+	option = {
+		name = sxx_crisis.1005.space_owner
+		trigger = {
+			is_same_value = from.space_owner
+		}
+
+	}
+	option = {
+		name = sxx_crisis.1005.not_space_owner
+		trigger = {
+			NOT = { is_same_value = from.space_owner }
+		}
+	}
+}
+
+# 摧毁舰船并生成恒星基地
+country_event = {
+	id = sxx_crisis.1045
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = sxx_outer_demon
+		fromfrom.solar_system = {
+			NOT = { any_system_planet = { is_colony = yes } } # For populated systems, they need to invade first
+		}
+	}
+
+	immediate = {
+		fromfrom.solar_system = { save_event_target_as = starbase_system }
+		country_event = { id = sxx_crisis.1060 days = 5 }
+	}
+}
+
+# 摧毁恒星基地并生成恒星基地
+starbase_event = {
+	id = sxx_crisis.1050
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		from.owner = { is_country_type = sxx_outer_demon }
+		NOT = {
+			solar_system = {
+				any_system_planet = { is_colony = yes } # For populated systems, they need to invade first
+			}
+		}
+	}
+
+	immediate = {
+		solar_system = { save_event_target_as = starbase_system }
+		from.owner = {
+			country_event = { id = sxx_crisis.1060 days = 5 } # Delay so that destroyed starbase is properly cleared out
+		}
+	}
+}
+
+# 进入星系生成恒星基地
+fleet_event = {
+	id = sxx_crisis.1055
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = { is_country_type = sxx_outer_demon }
+		from = {
+			NOR = {
+				any_fleet_in_system = {
+					controller = {
+						is_hostile = root
+					}
+				}
+				any_system_planet = { is_colony = yes }
+			}
+		}
+	}
+
+	immediate = {
+		solar_system = { save_event_target_as = starbase_system }
+		owner = {
+			country_event = { id = sxx_crisis.1060 days = 5 } # Delay so that destroyed starbase is properly cleared out
+		}
+	}
+}
+
+# 生成恒星基地
+country_event = {
+	id = sxx_crisis.1060
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		event_target:starbase_system = {
+			NOR = {
+				any_fleet_in_system = {
+					controller = {
+						is_hostile = root
+					}
+				}
+				any_system_planet = { is_colony = yes }
+			}
+		}
+	}
+
+	immediate = {
+		event_target:starbase_system = {
+			solar_system = {
+				create_starbase = {
+					size = starbase_sxx_dimensional_horror
+					owner = root
+				}
+				every_system_planet = {
+					limit = { has_orbital_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+			}
+		}
+	}
+}
+
+# 恒星基地自我扩张
+event = {
+	id = sxx_crisis.1065
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = sxx_outer_demon_invasion_happened
+		exists = event_target:sxx_outer_demon_country
+	}
+
+	immediate = {
+		every_system = {
+			limit = {
+				NOR = {
+					exists = space_owner
+					any_fleet_in_system = {
+						controller = {
+							is_hostile = event_target:sxx_outer_demon_country
+						}
+					}
+					any_system_planet = { is_colony = yes }
+				}
+				any_neighbor_system = {
+					space_owner = { is_same_value = event_target:sxx_outer_demon_country }
+				}
+			}
+			create_starbase = {
+				size = starbase_sxx_dimensional_horror
+				owner = event_target:sxx_outer_demon_country
+			}
+		}
+	}
+}
+
+# 轰炸炸球
+fleet_event = {
+	id = sxx_crisis.1100
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = { is_country_type = sxx_outer_demon }
+		from = {
+			is_scope_type = planet
+			is_colony = yes
+			NOT = { is_planet_class = pc_sxx_heaven }
+		}
+	}
+
+	immediate = {
+		from = {
+			planet_event = { id = sxx_crisis.1101 days = 10 }
+			if = {
+				limit = {
+					is_capital = yes
+					owner = {
+						has_relic = r_sxx_zhumo_sword
+						check_variable = { which = sxx_zhumo_count value >= 5 }
+					}
+				}
+				owner = { save_event_target_as = sxx_zhumo_owner }
+				planet_event = { id = sxx_crisis.1105 }
+			}
+		}
+	}
+}
+
+# 轰炸炸球 & 生成恒星基地
+planet_event = {
+	id = sxx_crisis.1101
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = from
+		any_fleet_in_orbit = {
+			is_same_value = from
+		}
+		is_colony = yes
+		NOT = { is_planet_class = pc_sxx_heaven }
+	}
+
+	immediate = {
+		fire_on_action = {
+			on_action = on_destroy_planet_with_PLANET_KILLER_CRACKER
+			scopes = { from = from }
+		}
+		every_owned_pop = { kill_pop = yes }
+
+		every_country = {
+			limit = {
+				has_event_chain = "sxx_outer_demon_invasion_chain"
+			}
+			add_event_chain_counter = {
+				event_chain = "sxx_outer_demon_invasion_chain"
+				counter = sxx_crisis_destroyed_planets
+				amount = 1
+			}
+		}
+		solar_system = { save_event_target_as = starbase_system }
+		from.owner = {
+			country_event = { id = sxx_crisis.1060 days = 5 } # Delay so that destroyed starbase is properly cleared out
+		}
+	}
+}
+
+# 无名剑仙
+planet_event = {
+	id = sxx_crisis.1105
+	title = TRANSMISSION
+	desc = sxx_crisis.1105.desc
+	show_sound = event_psionic
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = shroud1
+		room = shroud_room
+	}
+
+	after = {
+		hidden_effect = {
+			event_target:sxx_zhumo_owner = {
+				country_event = { id = sxx_crisis.1110 }
+			}
+		}
+	}
+
+	option = {
+		name = sxx_crisis.1105.a
+	}
+}
+
+# 诛尽天魔
+country_event = {
+	id = sxx_crisis.1110
+	title = sxx_crisis.1110.name
+	desc = sxx_crisis.1110.desc
+	picture = GFX_evt_large_explosion
+	show_sound = event_super_explosion
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:sxx_outer_demon_country = {
+			every_owned_ship = {
+				limit = {
+					NOR = {
+						has_ship_flag = sxx_outer_demon_portal
+						has_ship_flag = sxx_crisis_god_ship
+					}
+				}
+				destroy_ship = this
+			}
+		}
+		remove_relic = r_sxx_zhumo_sword
+		add_relic = r_sxx_zhumo_sword_no_soul
+	}
+
+	option = {
+		name = sxx_crisis.1110.a
+	}
+	option = {
+		name = sxx_crisis.1110.b
+	}
+}
+
+# 每月刷兵
+event = {
+	id = sxx_crisis.1150
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		exists = event_target:sxx_outer_demon_country
+		exists = event_target:sxx_outer_demon_portal
+	}
+
+	immediate = {
+		event_target:sxx_outer_demon_country = {
+			random_list = {
+				75 = {
+					modifier = {
+						factor = 2
+						count_owned_ship = {
+							count >= 1000
+						}
+					}
+					modifier = {
+						factor = 2
+						count_owned_ship = {
+							count >= 1500
+						}
+					}
+					modifier = {
+						factor = 2
+						count_owned_ship = {
+							count >= 2000
+						}
+					}
+					modifier = {
+						factor = 2
+						count_owned_ship = {
+							count >= 2500
+						}
+					}
+					# nothing
+				}
+				15 = { sxx_create_outer_demon_fleet_1 = yes }
+				8 = { sxx_create_outer_demon_fleet_2 = yes }
+				2 = {
+					modifier = {
+						factor = 0
+						has_sxx_crisis_emperor = no
+					}
+					sxx_create_outer_demon_fleet_3 = yes
+				}
+			}
+		}
+	}
+}
+
+# 刷兵
+country_event = {
+	id = sxx_crisis.1151
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		exists = event_target:sxx_outer_demon_portal
+	}
+
+	immediate = {
+		random_list = {
+			60 = { sxx_create_outer_demon_fleet_1 = yes }
+			32 = { sxx_create_outer_demon_fleet_2 = yes }
+			8 = {
+				sxx_create_outer_demon_fleet_3 = yes
+				modifier = {
+					factor = 0
+					has_sxx_crisis_emperor = no
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = sxx_crisis.1200
+	title = sxx_crisis.1200.name
+	desc = sxx_crisis.1200.desc
+	picture = GFX_evt_fleet_evil
+	location = event_target:sxx_crisis_emperor_fleet
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.1200.a
+	}
+	option = {
+		name = sxx_crisis.1200.b
+		trigger = {
+			is_sxx_sect = yes
+		}
+	}
+}
+
+# 舰队瞬移
+fleet_event = {
+	id = sxx_crisis.1205
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				solar_system = {
+					any_fleet_in_system = {
+						controller = { is_hostile = root.owner }
+					}
+				}
+			}
+			fleet_event = { id = sxx_crisis.1205 days = 330 random = 60 }
+		}
+		else = {
+			random_system = {
+				limit = {
+					any_fleet_in_system = {
+						controller = { is_hostile = root.owner }
+					}
+					NOT = { has_star_flag = sxx_forbidden_area }
+				}
+				star = {
+					root = {
+						set_location = {
+							target = prev
+							distance = 5
+							angle = random
+						}
+					}
+				}
+			}
+			fleet_event = { id = sxx_crisis.1205 days = 330 random = 60 }
+		}
+	}
+}
+
+# 位面通道被摧毁
+country_event = {
+	id = sxx_crisis.1500
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		fromfrom = { has_ship_flag = sxx_outer_demon_portal }
+	}
+	
+	immediate = {
+		fromfrom.solar_system = {
+			save_event_target_as = sxx_outer_demon_portal_system
+			remove_star_flag = cannot_be_hit_by_aow_starfall_spear
+		}
+		from = {
+			save_event_target_as = sxx_outer_demon_portal_destroyer
+		}
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = { id = sxx_crisis.1501 }
+		}
+	}
+}
+
+# 位面通道被摧毁
+country_event = {
+	id = sxx_crisis.1501
+	title = sxx_crisis.1501.name
+	desc = sxx_crisis.1501.desc
+	picture = GFX_evt_wormhole
+	location = event_target:sxx_outer_demon_portal_system
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.1501.a
+	}
+	option = {
+		name = sxx_crisis.1501.b
+	}
+}
+
+# 没测试，未启用
+fleet_event = {
+	id = sxx_crisis.1800
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		always = no
+		OR = {
+			controller = { is_country_type = sxx_outer_demon }
+			from.controller = { is_country_type = sxx_outer_demon }
+		}
+	}
+
+	immediate = {
+		every_owned_ship = {
+			remove_modifier = sxx_normal_weapon_vs_outer_demon
+			export_modifier_to_variable = { modifier = ship_weapon_damage variable = sxx_ship_damage_mult }
+			set_variable = { which = sxx_ship_damage value = @\[ sxx_ship_damage_mult + 1 ] }
+			if = {
+				limit = {
+					check_variable = {
+						which = sxx_ship_damage
+						value > 0
+					}
+				}
+				add_modifier = {
+					modifier = sxx_normal_weapon_vs_outer_demon
+					mult = sxx_ship_damage
+				}
+			}
+		}
+		fleet_event = { id = sxx_crisis.1800 days = 10 }
+	}
+}
+
+# on_ship_destroyed_victim
+country_event = {
+	id = sxx_crisis.1900
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = sxx_outer_demon
+		exists = from
+	}
+
+	immediate = {
+		fromfrom = {
+			switch = {
+				trigger = is_ship_size
+				sxx_space_cloud = { sxx_kills_demon_count = { SIZE = demon } }
+				sxx_large_space_cloud = { sxx_kills_demon_count = { SIZE = large_demon } }
+				sxx_large_space_cloud_defend = { sxx_kills_demon_count = { SIZE = large_demon } }
+				sxx_space_cloud_king = { sxx_kills_demon_count = { SIZE = demon_king } }
+				sxx_space_cloud_king_defend = { sxx_kills_demon_count = { SIZE = demon_king } }
+				starbase_sxx_dimensional_horror = { sxx_kills_demon_count = { SIZE = horror } }
+				sxx_space_cloud_emperor = { sxx_kills_demon_count = { SIZE = demon_emperor } }
+				sxx_space_cloud_emperor_defend = { sxx_kills_demon_count = { SIZE = demon_emperor } }
+			}
+		}
+	}
+}
+
+# 天魔灭亡
+country_event = {
+	id = sxx_crisis.2000
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = sxx_outer_demon
+		NOT = { has_country_flag = sxx_crisis_god }
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+					is_sxx_fallen_1 = yes
+				}
+			}
+			country_event = { id = sxx_crisis.2001 }
+		}
+		if = {
+			limit = {
+				has_sxx_crisis_god = yes
+			}
+			random_country = {
+				limit = {
+					is_country_type = global_event
+				}
+				country_event = { id = sxx_crisis.2010 days = 50 random = 100 }
+				country_event = { id = sxx_crisis.2015 days = 200 random = 300 }
+			}
+		}
+		else = {
+			set_global_flag = sxx_outer_demon_invasion_ended
+		}
+	}
+}
+
+country_event = {
+	id = sxx_crisis.2001
+	title = sxx_crisis.2001.name
+	desc = sxx_crisis.2001.desc
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+
+	after = {
+		if = {
+			limit = {
+				has_sxx_crisis_god = no
+				has_event_chain = sxx_outer_demon_invasion_chain
+			}
+			end_event_chain = sxx_outer_demon_invasion_chain
+		}
+	}
+	
+	option = {
+		name = sxx_crisis.2001.a
+		add_modifier = { modifier = sxx_crisis_defeated days = 3600 }
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier5unityreward
+		}
+	}
+	option = {
+		name = sxx_crisis.2001.b
+		trigger = {
+			has_sxx_crisis_god = yes
+		}
+		add_modifier = { modifier = sxx_crisis_defeated days = 3600 }
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier5unityreward
+		}
+	}
+}
+
+country_event = {
+	id = sxx_crisis.2010
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+					is_sxx_fallen_1 = yes
+				}
+			}
+			country_event = { id = sxx_crisis.2011 }
+		}
+	}
+}
+
+country_event = {
+	id = sxx_crisis.2011
+	title = TRANSMISSION
+	desc = sxx_crisis.2011.desc
+
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.2011.a
+		hidden_effect = {
+			country_event = { id = sxx_crisis.2012 }
+		}
+	}
+}
+
+country_event = {
+	id = sxx_crisis.2012
+	title = TRANSMISSION
+	desc = sxx_crisis.2012.desc
+
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.2012.a
+	}
+}
+
+# 魔神降临
+country_event = {
+	id = sxx_crisis.2015
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = sxx_crisis_god_appeared
+		event_target:sxx_pool_country = {
+			set_variable = {
+				which = sxx_crisis_god_spawn_count
+				value = 0
+			}
+		}
+		sxx_create_outer_demon_god = yes
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+					is_sxx_fallen_1 = yes
+				}
+			}
+			country_event = { id = sxx_crisis.2016 }
+		}
+	}
+}
+
+# 魔神降临弹窗
+country_event = {
+	id = sxx_crisis.2016
+	title = sxx_crisis.2016.name
+	desc = sxx_crisis.2016.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = event_target:sxx_crisis_god_fleet
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.2016.a
+		remove_modifier = sxx_crisis_defeated
+	}
+	option = {
+		name = sxx_crisis.2016.b
+		remove_modifier = sxx_crisis_defeated
+	}
+}
+
+# 魔神重生
+country_event = {
+	id = sxx_crisis.2019
+
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		sxx_create_outer_demon_god = yes
+	}
+}
+
+# 魔神被摧毁时重生
+country_event = {
+	id = sxx_crisis.2020
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		fromfrom = { is_ship_size = sxx_space_cloud_god }
+		NOT = { has_global_flag = sxx_crisis_god_died }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				event_target:sxx_pool_country = {
+					check_variable = {
+						which = sxx_crisis_god_spawn_count
+						value >= 9
+					}
+				}
+			}
+			set_global_flag = sxx_crisis_god_died
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = default
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+						is_sxx_fallen_1 = yes
+					}
+				}
+				country_event = { id = sxx_crisis.2030 }
+			}
+		}
+		else = {
+			random_country = {
+				limit = {
+					is_country_type = global_event
+				}
+				country_event = { id = sxx_crisis.2019 days = 2 }
+				country_event = { id = sxx_crisis.2022 days = 2 }
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = sxx_outer_demon_level_5
+			}
+			fromfrom.solar_system = {
+				every_fleet_in_system = {
+					destroy_fleet = this
+				}
+				destroy_star_system = yes
+			}
+			random_country = {
+				limit = {
+					is_country_type = global_event
+				}
+				country_event = { id = sxx_crisis.2024 }
+			}
+		}
+	}
+}
+
+# 每月debug重生魔神
+event = {
+	id = sxx_crisis.2021
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = sxx_crisis_god_appeared
+		NOT = { has_global_flag = sxx_crisis_god_died }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				event_target:sxx_pool_country = {
+					check_variable = {
+						which = sxx_crisis_god_spawn_count
+						value >= 9
+					}
+				}
+				NOT = { exists = event_target:sxx_crisis_god_ship }
+			}
+			set_global_flag = sxx_crisis_god_died
+			set_global_flag = sxx_outer_demon_invasion_ended
+			every_country = {
+				limit = {
+					OR = {
+						is_country_type = default
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+						is_sxx_fallen_1 = yes
+					}
+				}
+				country_event = { id = sxx_crisis.2030 }
+			}
+		}
+		else = {
+			sxx_create_outer_demon_god = yes
+		}
+	}
+}
+
+# 国家触发魔神重生弹窗
+country_event = {
+	id = sxx_crisis.2022
+
+	hide_window = yes
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+					is_sxx_fallen_1 = yes
+				}
+			}
+			country_event = { id = sxx_crisis.2023 }
+		}
+	}
+}
+
+# 魔神重生弹窗
+country_event = {
+	id = sxx_crisis.2023
+	title = sxx_crisis.2023.name
+	desc = sxx_crisis.2023.desc
+	picture = GFX_evt_unspeakable_horror
+	show_sound = event_mystic_reveal
+	location = event_target:sxx_crisis_god_fleet
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.2023.a
+	}
+	option = {
+		name = sxx_crisis.2023.b
+	}
+}
+
+# 国家触发魔神死亡余波弹窗
+country_event = {
+	id = sxx_crisis.2024
+	hide_window = yes
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+	
+	immediate = {
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+					is_sxx_fallen_1 = yes
+				}
+			}
+			country_event = { id = sxx_crisis.2025 }
+		}
+	}
+}
+
+# 魔神死亡余波弹窗
+country_event = {
+	id = sxx_crisis.2025
+	title = sxx_crisis.2025.name
+	desc = sxx_crisis.2025.desc
+	picture = GFX_evt_supernova
+	show_sound = event_super_explosion
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.2025.a
+	}
+}
+
+# 魔神彻底死亡
+country_event = {
+	id = sxx_crisis.2030
+	title = sxx_crisis.2030.name
+	desc = sxx_crisis.2030.desc
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:sxx_crisis_god_planet.solar_system = {
+			remove_star_flag = cannot_be_hit_by_aow_starfall_spear
+		}
+	}
+
+	after = {
+		if = {
+			limit = {
+				has_event_chain = sxx_outer_demon_invasion_chain
+			}
+			end_event_chain = sxx_outer_demon_invasion_chain
+		}
+	}
+	
+	option = {
+		name = sxx_crisis.2030.a
+		add_modifier = { modifier = sxx_crisis_defeated days = 3600 }
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier5unityreward
+		}
+	}
+	option = {
+		name = sxx_crisis.2030.b
+		add_modifier = { modifier = sxx_crisis_defeated days = 3600 }
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier5unityreward
+		}
+	}
+}
+
+# 魔神分裂
+ship_event = {
+	id = sxx_crisis.2040
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		fleet = {
+			if = {
+				limit = {
+					if = {
+						limit = {
+							has_global_flag = sxx_outer_demon_level_5
+						}
+						count_owned_ship = { count >= 361 }
+					}
+					else = {
+						count_owned_ship = { count >= 109 }
+					}
+				}
+				random_list = {
+					2 = {
+						create_fleet = {
+							name = "NAME_SXX_Outer_Demon_Fleet_God_Other"
+							settings = {
+								can_change_composition = no
+								can_change_leader = no
+								uses_naval_capacity = no
+								spawn_debris = no
+							}
+							effect = {
+								set_owner = event_target:sxx_outer_demon_country
+								set_fleet_flag = sxx_crisis_god_other_fleet
+								while = {
+									count = 36
+									create_ship = {
+										name = "NAME_SXX_Cloud_Emperor_Entity_Ship"
+										design = "NAME_SXX_Cloud_Emperor_Entity"
+									}
+								}
+								set_location = {
+									target = root
+									distance = 5
+									angle = random
+								}
+								set_fleet_stance = aggressive
+								set_aggro_range = 500
+								set_aggro_range_measure_from = self
+								fleet_event = { id = sxx_crisis.1205 days = 330 random = 60 }
+							}
+						}
+						modifier = {
+							factor = 0
+							event_target:sxx_outer_demon_country = { count_owned_ship = { count >= 1000 } }
+						}
+					}
+					70 = {}
+				}
+			}
+			else = {
+				create_ship = {
+					name = "NAME_SXX_Cloud_Emperor_Entity_Ship"
+					design = "NAME_SXX_Cloud_Emperor_Defend_Entity"
+				}
+			}
+		}
+		switch = {
+			trigger = has_global_flag
+			sxx_outer_demon_level_3 = { ship_event = { id = sxx_crisis.2040 days = 2 } }
+			sxx_outer_demon_level_4 = { ship_event = { id = sxx_crisis.2040 days = 1 } }
+			sxx_outer_demon_level_5 = { ship_event = { id = sxx_crisis.2040 days = 1 } }
+		}
+	}
+}
+
+# 激活灵冥剑遗珍
+country_event = {
+	id = sxx_crisis.2050
+	
+	hide_window = yes
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_global_flag = sxx_crisis_god_appeared
+		NOT = { has_global_flag = sxx_crisis_god_died }
+		exists = event_target:sxx_crisis_god_ship
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+					is_sxx_fallen_1 = yes
+				}
+			}
+			country_event = { id = sxx_crisis.2051 }
+		}
+		create_country = {
+			name = "NAME_SXX_Qingyun_Country"
+			type = sxx_qingyun_country
+			flag = {
+				icon = {
+					category = "human"
+					file = "flag_human_5.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "00_solid.dds"
+				}
+				colors={
+					"white"
+					"white"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+				save_global_event_target_as = sxx_qingyun_country
+				create_fleet = {
+					name = "NAME_SXX_Qingyun_Fleet"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+						can_change_composition = no
+						can_change_leader = no
+						uses_naval_capacity = no
+					}
+					effect = {
+						set_owner = event_target:sxx_qingyun_country
+						create_ship = {
+							name = "NAME_SXX_Qingyun_Ship"
+							design = "NAME_SXX_Qingyun"
+						}
+						set_location = {
+							target = event_target:sxx_crisis_god_ship
+							distance = 100
+							angle = random
+						}
+						set_fleet_stance = aggressive
+						set_aggro_range = 500
+						set_aggro_range_measure_from = self
+						save_global_event_target_as = sxx_qingyun_fleet
+						fleet_event = { id = sxx_crisis.2055 days = 360 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# 青云真君传讯
+country_event = {
+	id = sxx_crisis.2051
+	title = TRANSMISSION
+	desc = sxx_crisis.2051.desc
+	#location = event_target:sxx_qingyun_fleet
+
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	is_triggered_only = yes
+	
+	option = {
+		name = sxx_crisis.2051.a
+	}
+	option = {
+		name = sxx_crisis.2051.b
+	}
+}
+
+# 青云化身消散
+fleet_event = {
+	id = sxx_crisis.2055
+
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		destroy_fleet = this
+	}
+}

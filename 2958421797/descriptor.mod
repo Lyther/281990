@@ -1,0 +1,15 @@
+version="4.0"
+tags={
+	"ZoFE"
+	"Events"
+	"Buildings"
+	"Gameplay"
+	"Technologies"
+	"Spaceships"
+	"Species"
+	"Economy"
+}
+picture="thumbnail.png"
+name="The Zenith of Fallen Empires 4.0"
+supported_version="3.8.*"
+remote_file_id="2958421797"

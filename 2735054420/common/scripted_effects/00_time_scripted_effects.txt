@@ -1,0 +1,1812 @@
+set_origin_default_effect = {
+	set_origin = origin_default
+	capital_scope = {
+		if = {
+			limit = {
+				prev = { is_regular_empire = yes }
+			}
+			if = {
+				limit = {
+					prev = {
+						OR = {
+							is_lithoid_empire = no
+							has_country_flag = non_lithoid_subspecies
+						}
+					}
+				}
+				add_district_and_planet_size_if_needed_effect = {
+					district = district_farming
+				}
+			}
+			else = {
+				add_district_and_planet_size_if_needed_effect = {
+					district = district_mining
+				}
+			}
+			add_district_and_planet_size_if_needed_effect = {
+				district = district_generator
+			}
+			add_modifier = { modifier = prosp_uni_mod days = -1 }
+		}
+		if = {
+			limit = {
+				prev = { is_hive_empire = yes }
+			}
+			if = {
+				limit = {
+					prev = {
+						is_lithoid_empire = no
+					}
+				}
+				add_district_and_planet_size_if_needed_effect = {
+					district = district_farming
+				}
+			}
+			else = {
+				add_district_and_planet_size_if_needed_effect = {
+					district = district_mining
+				}
+			}
+			add_district_and_planet_size_if_needed_effect = {
+				district = district_generator
+			}
+			add_modifier = { modifier = prosp_uni_mod_gestalt days = -1 }
+		}
+		if = {
+			limit = {
+				prev = { is_machine_empire = yes }
+			}
+			add_district_and_planet_size_if_needed_effect = {
+				district = district_mining
+			}
+			add_district_and_planet_size_if_needed_effect = {
+				district = district_generator
+			}
+			add_modifier = { modifier = prosp_uni_mod_gestalt days = -1 }
+		}
+	}
+}
+
+setup_coils_god_planet = {
+	set_owner = event_target:coils_country
+	set_capital = yes
+
+	remove_building = building_colony_shelter
+	event_target:coils_country = {
+		switch = {
+			trigger = has_pre_ftl_age
+			stone_age = {
+				prev = {
+					add_building = building_crude_huts
+					remove_building = building_colony_shelter
+					while = {
+						count = @stone_age_pops
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+			}
+			bronze_age = {
+				prev = {
+					add_building = building_primitive_dwellings
+					add_building = building_stone_palace
+					remove_building = building_colony_shelter
+					while = {
+						count = @bronze_age_pops
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+			}
+			iron_age = {
+				prev = {
+					add_building = building_primitive_dwellings
+					add_building = building_stone_palace
+					remove_building = building_colony_shelter
+					while = {
+						count = @iron_age_pops
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+			}
+			late_medieval_age = {
+				prev = {
+					add_building = building_primitive_dwellings
+					add_building = building_primitive_dwellings
+					add_building = building_stone_palace
+					remove_building = building_colony_shelter
+					while = {
+						count = @late_medieval_age_pops
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+			}
+			renaissance_age = {
+				prev = {
+					add_building = building_primitive_dwellings
+					add_building = building_primitive_dwellings
+					add_building = building_stone_palace
+					remove_building = building_colony_shelter
+					while = {
+						count = @renaissance_age_pops
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+			}
+			steam_age = {
+				prev = {
+					add_building = building_urban_dwellings
+					add_building = building_primitive_factory
+					add_building = building_primitive_mine
+					add_building = building_stone_palace
+					remove_building = building_colony_shelter
+					while = {
+						count = @steam_age_pops
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+			}
+			industrial_age = {
+				prev = {
+					add_building = building_primitive_farm
+					add_building = building_primitive_factory
+					add_building = building_primitive_mine
+					add_building = building_primitive_power_plant
+					add_building = building_primitive_capital
+					add_building = building_urban_dwellings
+					remove_building = building_colony_shelter
+					while = {
+						count = @industrial_age_pops
+						create_pop = {
+							species = owner_main_species
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_origin = origin_mechanists
+					}
+					create_built_robot_species = yes
+					last_created_species = { save_global_event_target_as = pre_ftl_mechanist_robot }
+					set_country_flag = created_robots
+					prev = {
+						while = {
+							count = 2
+							random_owned_pop = {
+								limit = {
+									is_robotic_species = no
+								}
+								kill_pop = yes
+							}
+							create_pop = {
+								species = event_target:pre_ftl_mechanist_robot
+							}
+						}
+					}
+				}
+			}
+			machine_age = {
+				prev = {
+					add_building = building_primitive_farm
+					add_building = building_primitive_factory
+					add_building = building_primitive_mine
+					add_building = building_primitive_power_plant
+					add_building = building_primitive_capital
+					add_building = building_urban_dwellings
+					remove_building = building_colony_shelter
+					while = {
+						count = @machine_age_pops
+						create_pop = {
+							species = last_created_species
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_origin = origin_mechanists
+					}
+					create_built_robot_species = yes
+					last_created_species = { save_global_event_target_as = pre_ftl_mechanist_robot }
+					set_country_flag = created_robots
+					prev = {
+						while = {
+							count = 4
+							random_owned_pop = {
+								limit = {
+									is_robotic_species = no
+								}
+								kill_pop = yes
+							}
+							create_pop = {
+								species = event_target:pre_ftl_mechanist_robot
+							}
+						}
+					}
+				}
+			}
+			atomic_age = {
+				prev = {
+					add_building = building_primitive_farm
+					add_building = building_primitive_factory
+					add_building = building_primitive_mine
+					add_building = building_primitive_power_plant
+					add_building = building_primitive_capital
+					add_building = building_urban_dwellings
+					remove_building = building_colony_shelter
+					while = {
+						count = @atomic_age_pops
+						create_pop = {
+							species = last_created_species
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_origin = origin_mechanists
+					}
+					create_built_robot_species = yes
+					last_created_species = { save_global_event_target_as = pre_ftl_mechanist_robot }
+					set_country_flag = created_robots
+					prev = {
+						while = {
+							count = 6
+							random_owned_pop = {
+								limit = {
+									is_robotic_species = no
+								}
+								kill_pop = yes
+							}
+							create_pop = {
+								species = event_target:pre_ftl_mechanist_robot
+							}
+						}
+					}
+				}
+			}
+			early_space_age = {
+				prev = {
+					add_building = building_primitive_farm
+					add_building = building_primitive_factory
+					add_building = building_primitive_mine
+					add_building = building_primitive_power_plant
+					add_building = building_primitive_capital
+					add_building = building_urban_dwellings
+					remove_building = building_colony_shelter
+					while = {
+						count = @early_space_age_pops
+						create_pop = {
+							species = last_created_species
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_origin = origin_mechanists
+					}
+					create_built_robot_species = yes
+					last_created_species = { save_global_event_target_as = pre_ftl_mechanist_robot }
+					set_country_flag = created_robots
+					prev = {
+						while = {
+							count = 8
+							random_owned_pop = {
+								limit = {
+									is_robotic_species = no
+								}
+								kill_pop = yes
+							}
+							create_pop = {
+								species = event_target:pre_ftl_mechanist_robot
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if = {
+		limit = {
+			event_target:coils_country = {
+				OR = {
+					has_pre_ftl_age = machine_age
+					has_pre_ftl_age = atomic_age
+					has_pre_ftl_age = early_space_age
+				}
+			}
+		}
+		create_pre_ftl_blockers = yes
+	}
+}
+
+time_hotel_random_events = {
+	random_list = {
+		1 = {
+			
+		}
+	}
+}
+
+syzygy_admiral_digsite_random_events = {
+	random_list = {
+		1 = {
+			
+		}
+	}
+}
+
+time_repair_ruined_buildings = {
+	if = {
+		limit = {
+			has_building = building_bureaucratic_1
+		}
+		remove_building = building_bureaucratic_1
+		add_building = building_bureaucratic_1
+	}
+	if = {
+		limit = {
+			has_building = building_sacrificial_temple_1
+		}
+		remove_building = building_sacrificial_temple_1
+		remove_building = building_sacrificial_temple_1
+		add_building = building_sacrificial_temple_1
+		add_building = building_sacrificial_temple_1
+	}
+	if = {
+		limit = {
+			has_building = building_temple
+		}
+		remove_building = building_temple
+		remove_building = building_temple
+		add_building = building_temple
+		add_building = building_temple
+	}
+	if = {
+		limit = {
+			has_building = building_research_lab_1
+		}
+		remove_building = building_research_lab_1
+		add_building = building_research_lab_1
+	}
+	if = {
+		limit = {
+			has_building = building_dread_encampment
+		}
+		remove_building = building_dread_encampment
+		add_building = building_dread_encampment
+	}
+	if = {
+		limit = {
+			has_building = building_posthumous_employment_center
+		}
+		remove_building = building_posthumous_employment_center
+		add_building = building_posthumous_employment_center
+	}
+	if = {
+		limit = {
+			has_building = building_ranger_lodge
+		}
+		remove_building = building_ranger_lodge
+		add_building = building_ranger_lodge
+	}
+	if = {
+		limit = {
+			has_building = building_holo_theatres
+		}
+		remove_building = building_holo_theatres
+		add_building = building_holo_theatres
+	}
+	if = {
+		limit = {
+			has_building = building_commercial_zone
+		}
+		remove_building = building_commercial_zone
+		add_building = building_commercial_zone
+	}
+	if = {
+		limit = {
+			has_building = building_gaiaseeders_1
+		}
+		remove_building = building_gaiaseeders_1
+		add_building = building_gaiaseeders_1
+	}
+	if = {
+		limit = {
+			has_building = building_hive_node
+		}
+		remove_building = building_hive_node
+		add_building = building_hive_node
+	}
+	if = {
+		limit = {
+			has_building = building_offspring_nest
+		}
+		remove_building = building_offspring_nest
+		add_building = building_offspring_nest
+	}
+	if = {
+		limit = {
+			has_building = building_spawning_pool
+		}
+		remove_building = building_spawning_pool
+		add_building = building_spawning_pool
+	}
+	if = {
+		limit = {
+			has_building = building_machine_assembly_plant
+		}
+		remove_building = building_machine_assembly_plant
+		add_building = building_machine_assembly_plant
+	}
+	if = {
+		limit = {
+			has_building = building_uplink_node
+		}
+		remove_building = building_uplink_node
+		add_building = building_uplink_node
+	}
+	if = {
+		limit = {
+			has_building = building_organic_sanctuary
+		}
+		remove_building = building_organic_sanctuary
+		add_building = building_organic_sanctuary
+	}
+}
+
+give_physics_tech_tier_1_effect_no_message = {
+	give_technology = { tech = tech_basic_science_lab_2 message = no }
+	give_technology = { tech = tech_space_science_1 message = no }
+	give_technology = { tech = tech_space_science_2 message = no }
+	give_technology = { tech = tech_physics_1 message = no }
+	give_technology = { tech = tech_administrative_ai message = no }
+	give_technology = { tech = tech_cryostasis_1 message = no }
+	give_technology = { tech = tech_automated_exploration message = no }
+	give_technology = { tech = tech_combat_computers_1 message = no }
+	give_technology = { tech = tech_auxiliary_fire_control message = no }
+	give_technology = { tech = tech_encryption_1 message = no }
+	give_technology = { tech = tech_decryption_1 message = no }
+	give_technology = { tech = tech_fusion_power message = no }
+	give_technology = { tech = tech_reactor_boosters_2 message = no }
+	give_technology = { tech = tech_reactor_boosters_3 message = no }
+	give_technology = { tech = tech_shields_2 message = no }
+	give_technology = { tech = tech_power_plant_2 message = no }
+	give_technology = { tech = tech_power_hub_1 message = no }
+}
+
+give_physics_tech_tier_2_effect_no_message = {
+	give_technology = { tech = tech_curator_lab message = no }
+	if = {
+		limit = {
+			has_ancrel = yes
+		}
+		give_technology = { tech = tech_archeology_lab_ancrel message = no }
+	}
+	else = {
+		give_technology = { tech = tech_archeology_lab message = no }
+	}
+	give_technology = { tech = tech_space_science_3 message = no }
+	give_technology = { tech = tech_space_science_4 message = no }
+	give_technology = { tech = tech_physics_2 message = no }
+	give_technology = { tech = tech_self_aware_logic message = no }
+	if = {
+		limit = {
+			OR = {
+				is_gestalt = no
+				has_valid_civic = civic_machine_servitor
+			}
+		}
+		give_technology = { tech = tech_consumer_good_refinement_1 message = no }
+	}
+	give_technology = { tech = tech_encryption_2 message = no }
+	give_technology = { tech = tech_decryption_2 message = no }
+	give_technology = { tech = tech_cold_fusion_power message = no }
+	give_technology = { tech = tech_shields_3 message = no }
+	give_technology = { tech = tech_shield_rechargers_1 message = no }
+	give_technology = { tech = tech_sensors_2 message = no }
+	give_technology = { tech = tech_power_plant_3 message = no }
+	give_technology = { tech = tech_power_hub_2 message = no }
+	give_technology = { tech = tech_hyper_drive_2 message = no }
+	give_technology = { tech = tech_ftl_inhibitor message = no }
+}
+
+give_engineering_tech_tier_1_effect_no_message = {
+	give_technology = { tech = tech_corvette_build_speed message = no }
+	give_technology = { tech = tech_corvette_hull_1 message = no }
+	give_technology = { tech = tech_strike_craft_1 message = no }
+	give_technology = { tech = tech_ship_armor_2 message = no }
+	give_technology = { tech = tech_powered_exoskeletons message = no }
+	give_technology = { tech = tech_space_mining_1 message = no }
+	give_technology = { tech = tech_space_mining_2 message = no }
+	give_technology = { tech = tech_mining_1 message = no }
+	give_technology = { tech = tech_mineral_purification_1 message = no }
+	give_technology = { tech = tech_alloys_1 message = no }
+	give_technology = { tech = tech_luxuries_1 message = no }
+	give_technology = { tech = tech_engineering_1 message = no }
+	give_technology = { tech = tech_robotic_workers message = no }
+	give_technology = { tech = tech_afterburners_1 message = no }
+	give_technology = { tech = tech_assembly_pattern message = no }
+}
+
+give_engineering_tech_tier_2_effect_no_message = {
+	give_technology = { tech = tech_destroyers message = no }
+	give_technology = { tech = tech_corvette_hull_2 message = no }
+	give_technology = { tech = tech_destroyer_build_speed message = no }
+	give_technology = { tech = tech_destroyer_hull_1 message = no }
+	give_technology = { tech = tech_starbase_3 message = no }
+	give_technology = { tech = tech_modular_engineering message = no }
+	give_technology = { tech = tech_strike_craft_2 message = no }
+	give_technology = { tech = tech_ship_armor_3 message = no }
+	give_technology = { tech = tech_crystal_armor_1 message = no }
+	give_technology = { tech = tech_thrusters_2 message = no }
+	give_technology = { tech = tech_defense_platform_hull_1 message = no }
+	give_technology = { tech = tech_space_mining_3 message = no }
+	give_technology = { tech = tech_space_mining_4 message = no }
+	give_technology = { tech = tech_mining_2 message = no }
+	give_technology = { tech = tech_mineral_purification_2 message = no }
+	give_technology = { tech = tech_advanced_metallurgy_1 message = no }
+	give_technology = { tech = tech_engineering_2 message = no }
+	give_technology = { tech = tech_droid_workers message = no }
+	give_technology = { tech = tech_housing_1 message = no }
+}
+
+give_society_tech_tier_1_effect_no_message = {
+	if = {
+		limit = {
+			is_regular_empire = yes
+		}
+		give_technology = { tech = tech_space_trading message = no }
+	}
+	give_technology = { tech = tech_eco_simulation message = no }
+	give_technology = { tech = tech_hydroponics message = no }
+	give_technology = { tech = tech_food_processing_1 message = no }
+	give_technology = { tech = tech_society_1 message = no }
+	if = {
+		limit = {
+			is_regular_empire = yes
+		}
+		give_technology = { tech = tech_alien_life_studies message = no }
+	}
+	if = {
+		limit = {
+			is_regular_empire = yes
+		}
+		give_technology = { tech = tech_frontier_health message = no }
+	}
+	give_technology = { tech = tech_dense_jungle message = no }
+	give_technology = { tech = tech_quicksand_basin message = no }
+	give_technology = { tech = tech_noxious_swamp message = no }
+	give_technology = { tech = tech_massive_glacier message = no }
+	give_technology = { tech = tech_toxic_kelp message = no }
+	give_technology = { tech = tech_deep_sinkhole message = no }
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_authority = auth_machine_intelligence }
+				has_civic = civic_machine_assimilator
+				has_civic = civic_machine_servitor
+			}
+		}
+		give_technology = { tech = tech_genome_mapping message = no }
+	}
+	give_technology = { tech = tech_ground_defense_planning message = no }
+	give_technology = { tech = tech_planetary_unification message = no }
+	give_technology = { tech = tech_adaptive_bureaucracy message = no }
+	if = {
+		limit = {
+			is_regular_empire = yes
+		}
+		give_technology = { tech = tech_neural_implants message = no }
+	}
+	if = {
+		limit = {
+			is_gestalt = no
+		}
+		give_technology = { tech = tech_hyper_entertainment_forum message = no }
+	}
+	if = {
+		limit = {
+			NOR = {
+				has_ethic = ethic_spiritualist
+				has_ethic = ethic_fanatic_spiritualist
+				has_valid_civic = civic_machine_servitor
+			}
+		}
+		give_technology = { tech = tech_heritage_site message = no }
+	}
+}
+
+give_society_tech_tier_2_effect_no_message = {
+	give_technology = { tech = tech_gene_crops message = no }
+	give_technology = { tech = tech_society_2 message = no }
+	give_technology = { tech = tech_arcane_deciphering message = no }
+	if = {
+		limit = {
+			OR = {
+				is_machine_empire = no
+				has_civic = civic_machine_assimilator
+				has_civic = civic_machine_servitor
+			}
+		}
+		give_technology = { tech = tech_colonization_2 message = no }
+	}
+	if = {
+		limit = {
+			OR = {
+				is_machine_empire = no
+				has_civic = civic_machine_assimilator
+				has_civic = civic_machine_servitor
+			}
+		}
+		give_technology = { tech = tech_colonization_3 message = no }
+	}
+	if = {
+		limit = {
+			is_gestalt = no
+		}
+		give_technology = { tech = tech_frontier_hospital message = no }
+	}
+	give_technology = { tech = tech_mountain_range message = no }
+	give_technology = { tech = tech_volcano message = no }
+	give_technology = { tech = tech_dangerous_wildlife message = no }
+	give_technology = { tech = tech_terrestrial_sculpting message = no }
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_authority = auth_machine_intelligence }
+				has_civic = civic_machine_assimilator
+			}
+		}
+		give_technology = { tech = tech_vitality_boosters message = no }
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_valid_civic = civic_fanatic_purifiers
+				#has_valid_civic = civic_machine_terminator # covered by not being machine
+				#has_valid_civic = civic_hive_devouring_swarm # can uplift to make delicious
+			}
+			OR = {
+				NOT = { has_authority = auth_machine_intelligence }
+				has_civic = civic_machine_assimilator
+				has_civic = civic_machine_servitor
+			}
+		}
+		give_technology = { tech = tech_epigenetic_triggers message = no }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_authority = auth_machine_intelligence }
+				has_civic = civic_machine_assimilator
+			}
+		}
+		give_technology = { tech = tech_cloning message = no }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_authority = auth_machine_intelligence }
+				has_civic = civic_machine_assimilator
+			}
+		}
+		give_technology = { tech = tech_gene_banks message = no }
+	}
+	give_technology = { tech = tech_doctrine_fleet_size_1 message = no }
+	give_technology = { tech = tech_doctrine_fleet_size_2 message = no }
+	give_technology = { tech = tech_interstellar_fleet_traditions message = no }
+	give_technology = { tech = tech_doctrine_navy_size_1 message = no }
+	give_technology = { tech = tech_centralized_command message = no }
+	give_technology = { tech = tech_global_defense_grid message = no }
+	give_technology = { tech = tech_galactic_ambitions message = no }
+	give_technology = { tech = tech_interstellar_campaigns message = no }
+	give_technology = { tech = tech_colonial_centralization message = no }
+	give_technology = { tech = tech_planetary_infrastructure_1 message = no }
+	if = {
+		limit = {
+			NOT = { has_ethic = ethic_gestalt_consciousness	}
+		}
+		give_technology = { tech = tech_subdermal_stimulation message = no }
+	}
+	give_technology = { tech = tech_effective_bureaucracy message = no }
+	give_technology = { tech = tech_colonial_bureaucracy message = no }
+	if = {
+		limit = {
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		give_technology = { tech = tech_living_state message = no }
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_gestalt_consciousness
+		}
+		give_technology = { tech = tech_autonomous_agents message = no }
+	}
+	if = {
+		limit = {
+			NOT = { has_ethic = ethic_gestalt_consciousness }
+		}
+		give_technology = { tech = tech_artificial_moral_codes message = no }
+	}
+	if = {
+		limit = {
+			is_gestalt = yes
+		}
+		give_technology = { tech = tech_unity_of_purpose message = no }
+	}
+	if = {
+		limit = {
+			has_ethic = ethic_gestalt_consciousness
+		}
+		give_technology = { tech = tech_holographic_rituals message = no }
+	}
+	if = {
+		limit = {
+			is_hive_empire = yes
+		}
+		give_technology = { tech = tech_hive_cluster message = no }
+	}
+	if = {
+		limit = {
+			is_gestalt = no
+		}
+		give_technology = { tech = tech_slave_colonies message = no }
+	}
+	if = {
+		limit = {
+			is_regular_empire = yes
+		}
+		give_technology = { tech = tech_xeno_diplomacy message = no }
+	}
+	give_technology = { tech = tech_capital_productivity_1 message = no }
+}
+
+# 国家
+akx_9101_option_effect = {
+	hidden_effect = {
+		set_country_flag = worm_events_available
+	}
+	if = {
+		limit = {
+			has_technology = tech_akx_worm_2
+		}
+		break = yes
+	}
+	if = {
+		limit = {
+			NOT = {
+				has_tech_option = tech_akx_worm_2
+			}
+		}
+		add_research_option = tech_akx_worm_2
+	}
+	add_tech_progress = {
+		tech = tech_akx_worm_2
+		progress = 0.20
+	}
+}
+
+# 星球
+refresh_civic_origin_time_variable = {
+	if = {
+		limit = {
+			NOT = {
+				is_variable_set = civic_origin_time_variable_1
+			}
+		}
+		set_variable = {
+			which = civic_origin_time_variable_1
+			value = value:num_civic_origin_time_value_1
+		}
+	}
+	else = {
+		change_variable = {
+			which = civic_origin_time_variable_1
+			value = value:num_civic_origin_time_value_1
+		}
+	}
+	if = {
+		limit = {
+			NOT = {
+				is_variable_set = civic_origin_time_variable_2
+			}
+		}
+		set_variable = {
+			which = civic_origin_time_variable_2
+			value = value:num_civic_origin_time_value_2
+		}
+	}
+	else = {
+		change_variable = {
+			which = civic_origin_time_variable_2
+			value = value:num_civic_origin_time_value_2
+		}
+	}
+}
+
+# 国家
+refresh_tao_of_ninghe_country_value = {
+	set_variable = {
+		which = num_yin_leader
+		value = 0
+	}
+	set_variable = {
+		which = num_yang_leader
+		value = 0
+	}
+	every_owned_leader = {
+		limit = {
+			OR = {
+				leader_class = governor
+				leader_class = general
+			}
+		}
+		owner = {
+			change_variable = {
+				which = num_yin_leader
+				value = prev.value:num_yin_leader
+			}
+		}
+	}
+	every_owned_leader = {
+		limit = {
+			OR = {
+				leader_class = scientist
+				leader_class = admiral
+			}
+		}
+		owner = {
+			change_variable = {
+				which = num_yang_leader
+				value = prev.value:num_yang_leader
+			}
+		}
+	}
+}
+
+# 星球
+refresh_tao_of_ninghe_value = {
+	set_variable = {
+		which = num_yin_value
+		value = value:num_yin_value
+	}
+	set_variable = {
+		which = num_yang_value
+		value = value:num_yang_value
+	}
+	set_variable = {
+		which = num_ninghe_planet_class_value
+		value = value:num_ninghe_planet_class_value
+	}
+}
+
+# 国家
+refresh_origin_hypocritical_face_value = {
+	set_variable = {
+		which = num_hypocritical_face_upkeep_value
+		value = value:num_hypocritical_face_upkeep_value
+	}
+	set_variable = {
+		which = num_hypocritical_face_decay_value
+		value = value:num_hypocritical_face_decay_value
+	}
+	set_variable = {
+		which = num_hypocritical_face_country_value
+		value = value:num_hypocritical_face_country_value
+	}
+	set_variable = {
+		which = num_hypocritical_face_building_value
+		value = value:num_hypocritical_face_building_value
+	}
+}
+
+# 局势
+refresh_born_in_the_purple_value = {
+	target = {
+		set_variable = {
+			which = born_in_the_purple_value
+			value = prev.trigger:situation_progress
+		}
+	}
+}
+
+# 国家
+refresh_corrupt_brain_value = {
+	set_variable = {
+		which = num_corrupt_brain_value
+		value = 0
+	}
+	ruler = {
+		owner = {
+			change_variable = {
+				which = num_corrupt_brain_value
+				value = prev.value:num_corrupt_brain_value
+			}
+			change_variable = {
+				which = num_corrupt_brain_value
+				value = prev.value:num_corrupt_brain_value
+			}
+		}
+	}
+	every_owned_leader = {
+		limit = {
+			is_gestalt_node = yes
+		}
+		owner = {
+			change_variable = {
+				which = num_corrupt_brain_value
+				value = prev.value:num_corrupt_brain_value
+			}
+		}
+	}
+}
+
+# 星球
+set_time_blocker_0_can_be_cleared = {
+	if = {
+		limit = {
+			any_deposit = {
+				is_deposit_type = d_time_blocker_0
+			}
+		}
+		custom_tooltip = clear_a_time_blocker_0
+		hidden_effect = {
+			random_deposit = {
+				limit = {
+					is_deposit_type = d_time_blocker_0
+				}
+				clear_blocker = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_deposit = {
+				is_deposit_type = d_time_blocker_1
+			}
+		}
+		random_deposit = {
+			limit = {
+				is_deposit_type = d_time_blocker_1
+			}
+			clear_blocker = yes
+		}
+	}
+	else = {
+		owner = {
+			add_monthly_resource_mult = {
+				resource = energy
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = food
+				value = @tier4materialreward
+				min = @tier4materialmin
+				max = @tier4materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = consumer_goods
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+			add_monthly_resource_mult = {
+				resource = alloys
+				value = @tier2materialreward
+				min = @tier2materialmin
+				max = @tier2materialmax
+			}
+		}
+	}
+}
+
+# 星球
+make_district_time_level_up = {
+	if = {
+		limit = {
+			check_variable = {
+				which = district_time_level_up
+				value < 3
+			}
+		}
+		custom_tooltip = district_time_level_up
+		hidden_effect = {
+			change_variable = {
+				which = district_time_level_up
+				value = 1
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				free_district_slots >= 2
+			}
+			custom_tooltip = add_2_district_time
+			hidden_effect = {
+				add_district = district_time
+				add_district = district_time
+			}
+		}
+		else_if = {
+			limit = {
+				free_district_slots >= 1
+			}
+			add_district = district_time
+			owner = {
+				add_monthly_resource_mult = {
+					resource = energy
+					value = @tier2materialreward
+					min = @tier2materialmin
+					max = @tier2materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = minerals
+					value = @tier2materialreward
+					min = @tier2materialmin
+					max = @tier2materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = food
+					value = @tier2materialreward
+					min = @tier2materialmin
+					max = @tier2materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = consumer_goods
+					value = @tier1materialreward
+					min = @tier1materialmin
+					max = @tier1materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = alloys
+					value = @tier1materialreward
+					min = @tier1materialmin
+					max = @tier1materialmax
+				}
+			}
+		}
+		else = {
+			owner = {
+				add_monthly_resource_mult = {
+					resource = energy
+					value = @tier4materialreward
+					min = @tier4materialmin
+					max = @tier4materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = minerals
+					value = @tier4materialreward
+					min = @tier4materialmin
+					max = @tier4materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = food
+					value = @tier4materialreward
+					min = @tier4materialmin
+					max = @tier4materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = consumer_goods
+					value = @tier2materialreward
+					min = @tier2materialmin
+					max = @tier2materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = alloys
+					value = @tier2materialreward
+					min = @tier2materialmin
+					max = @tier2materialmax
+				}
+			}
+		}
+	}
+}
+
+# 星球
+reroll_pc_time_deposits = {
+	clear_deposits = yes
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		add_deposit = d_time_resources # 未来宫殿
+		add_deposit = d_time_blocker_2 # 引力屏障
+	}
+	# 障碍
+	while = {
+		count = 6
+		add_deposit = d_time_blocker_0
+	}
+}
+
+# 星球
+search_pc_time_deposits = {
+	random_list = {
+		# 某个政策下，对应的地块总权重提升至50%
+		# 一产与科研：6/12
+		# 二产：7/14
+		# 凝聚：8/16
+		1 = {
+			modifier = {
+				add = 1
+				owner = {
+					has_policy_flag = policy_origin_time_resource
+				}
+			}
+			add_deposit = d_time_energy
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_1
+					days = 30
+					target = root
+				}
+			}
+		}
+		1 = {
+			modifier = {
+				add = 1
+				owner = {
+					has_policy_flag = policy_origin_time_resource
+				}
+			}
+			add_deposit = d_time_minerals
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_2
+					days = 30
+					target = root
+				}
+			}
+		}
+		1 = {
+			modifier = {
+				add = 1
+				owner = {
+					has_policy_flag = policy_origin_time_resource
+				}
+			}
+			add_deposit = d_time_food
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_3
+					days = 30
+					target = root
+				}
+			}
+		}
+		1 = {
+			modifier = {
+				add = 2.5
+				owner = {
+					has_policy_flag = policy_origin_time_manufacturing
+				}
+			}
+			add_deposit = d_time_alloys
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_4
+					days = 30
+					target = root
+				}
+			}
+		}
+		1 = {
+			modifier = {
+				add = 2.5
+				owner = {
+					has_policy_flag = policy_origin_time_manufacturing
+				}
+			}
+			add_deposit = d_time_consumer_goods
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_5
+					days = 30
+					target = root
+				}
+			}
+		}
+		1 = {
+			modifier = {
+				add = 1
+				owner = {
+					has_policy_flag = policy_origin_time_research
+				}
+			}
+			add_deposit = d_time_physics_research
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_6
+					days = 30
+					target = root
+				}
+			}
+		}
+		1 = {
+			modifier = {
+				add = 1
+				owner = {
+					has_policy_flag = policy_origin_time_research
+				}
+			}
+			add_deposit = d_time_society_research
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_7
+					days = 30
+					target = root
+				}
+			}
+		}
+		1 = {
+			modifier = {
+				add = 1
+				owner = {
+					has_policy_flag = policy_origin_time_research
+				}
+			}
+			add_deposit = d_time_engineering_research
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_8
+					days = 30
+					target = root
+				}
+			}
+		}
+		1 = {
+			modifier = {
+				add = 7
+				owner = {
+					has_policy_flag = policy_origin_time_unity
+				}
+			}
+			add_deposit = d_time_unity
+			owner = {
+				create_message = {
+					type = SEARCH_PC_TIME_DEPOSITS
+					localization = SEARCH_PC_TIME_DEPOSITS_9
+					days = 30
+					target = root
+				}
+			}
+		}
+	}
+}
+
+# 星球
+reroll_pc_gas_colony_deposits = {
+	clear_deposits = yes
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		add_deposit = d_gas_generator
+		add_deposit = d_gas_mining
+		add_deposit = d_gas_farming
+	}
+	# 电
+	random_list = {
+		2 = {
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+		}
+		2 = {
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+		}
+		3 = {
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+		}
+		3 = {
+			add_deposit = d_gas_generator
+			add_deposit = d_gas_generator
+		}
+	}
+	# 矿
+	random_list = {
+		2 = {
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+		}
+		2 = {
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+		}
+		3 = {
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+		}
+		3 = {
+			add_deposit = d_gas_mining
+			add_deposit = d_gas_mining
+		}
+	}
+	# 粮
+	random_list = {
+		2 = {
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+		}
+		2 = {
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+		}
+		3 = {
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+		}
+		3 = {
+			add_deposit = d_gas_farming
+			add_deposit = d_gas_farming
+		}
+	}
+	# 障碍
+	random_list = {
+		# 12
+		2 = {
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_2
+		}
+		# 15
+		3 = {
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_2
+		}
+		# 18
+		3 = {
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_1
+			add_blocker = {
+				type = d_gas_blocker_1
+			}
+			add_deposit = d_gas_blocker_2
+		}
+		# 21
+		2 = {
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_1
+			add_deposit = d_gas_blocker_2
+			add_deposit = d_gas_blocker_2
+		}
+	}
+}
+
+# 星球
+reroll_pc_psionic_deposits = {
+	clear_deposits = yes
+	# 电
+	random_list = {
+		2 = {
+			add_deposit = d_psionic_generator
+			add_deposit = d_psionic_generator
+			add_deposit = d_psionic_generator
+			add_deposit = d_psionic_generator
+		}
+		2 = {
+			add_deposit = d_psionic_generator
+			add_deposit = d_psionic_generator
+			add_deposit = d_psionic_generator
+		}
+		3 = {
+			add_deposit = d_psionic_generator
+			add_deposit = d_psionic_generator
+		}
+		3 = {
+			add_deposit = d_psionic_generator
+		}
+	}
+	# 矿
+	random_list = {
+		2 = {
+			add_deposit = d_psionic_mining
+			add_deposit = d_psionic_mining
+			add_deposit = d_psionic_mining
+			add_deposit = d_psionic_mining
+		}
+		2 = {
+			add_deposit = d_psionic_mining
+			add_deposit = d_psionic_mining
+			add_deposit = d_psionic_mining
+		}
+		3 = {
+			add_deposit = d_psionic_mining
+			add_deposit = d_psionic_mining
+		}
+		3 = {
+			add_deposit = d_psionic_mining
+		}
+	}
+	# 粮
+	random_list = {
+		2 = {
+			add_deposit = d_psionic_farming
+			add_deposit = d_psionic_farming
+			add_deposit = d_psionic_farming
+			add_deposit = d_psionic_farming
+		}
+		2 = {
+			add_deposit = d_psionic_farming
+			add_deposit = d_psionic_farming
+			add_deposit = d_psionic_farming
+		}
+		3 = {
+			add_deposit = d_psionic_farming
+			add_deposit = d_psionic_farming
+		}
+		3 = {
+			add_deposit = d_psionic_farming
+		}
+	}
+	# 障碍
+	random_list = {
+		# 5
+		2 = {
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_2
+		}
+		# 6
+		3 = {
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_2
+		}
+		# 7
+		3 = {
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_1
+			add_blocker = {
+				type = d_psionic_blocker_1
+			}
+			add_deposit = d_psionic_blocker_2
+		}
+		# 8
+		2 = {
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_1
+			add_deposit = d_psionic_blocker_2
+			add_deposit = d_psionic_blocker_2
+		}
+	}
+}
+
+# 星球
+reroll_pc_nanites_deposits = {
+	clear_deposits = yes
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		add_deposit = d_nanites_old_factory # 纳米工厂
+	}
+	# 电矿
+	random_list = {
+		2 = {
+			add_deposit = d_nanites_generator
+			add_deposit = d_nanites_generator
+			add_deposit = d_nanites_mining
+			add_deposit = d_nanites_mining
+		}
+		2 = {
+			add_deposit = d_nanites_generator
+			add_deposit = d_nanites_generator
+			add_deposit = d_nanites_mining
+		}
+		2 = {
+			add_deposit = d_nanites_generator
+			add_deposit = d_nanites_mining
+			add_deposit = d_nanites_mining
+		}
+		3 = {
+			add_deposit = d_nanites_generator
+			add_deposit = d_nanites_mining
+		}
+		3 = {
+			add_deposit = d_nanites_generator
+		}
+		3 = {
+			add_deposit = d_nanites_mining
+		}
+	}
+	# 障碍
+	random_list = {
+		# 7
+		1 = {
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_2
+			add_deposit = d_nanites_blocker_3
+		}
+		# 8
+		2 = {
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_2
+			add_deposit = d_nanites_blocker_3
+		}
+		# 6
+		3 = {
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_2
+		}
+		# 6
+		3 = {
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_3
+		}
+		# 5
+		3 = {
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+			add_deposit = d_nanites_blocker_1
+		}
+	}
+}
+
+# 国家
+give_origin_pirate_king_bonus = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { exists = event_target:pirate_king_situation }
+				event_target:pirate_king_situation = {
+					current_situation_approach = approach_origin_pirate_king_default
+				}
+			}
+		}
+		add_resource = {
+			energy = $energy|0$
+			minerals = $minerals|0$
+			food = $food|0$
+			alloys = $alloys|0$
+			consumer_goods = $consumer_goods|0$
+			physics_research = $physics_research|0$
+			society_research = $society_research|0$
+			engineering_research = $engineering_research|0$
+			unity = $unity|0$
+			sr_dark_matter = $sr_dark_matter|0$
+			nanites = $nanites|0$
+		}
+	}
+	if = {
+		limit = {
+			exists = event_target:pirate_king_situation
+		}
+		event_target:pirate_king_situation = {
+			if = {
+				limit = {
+					current_situation_approach = approach_origin_pirate_king_default
+				}
+				add_situation_progress = $progress|0$
+			}
+			else = {
+				add_situation_progress = $progress|0$
+				add_situation_progress = $progress|0$
+			}
+		}
+	}
+}
+
+# 人口（信使）
+make_akx_messenger = {
+	if = {
+		limit = {
+			pop_has_trait = trait_akx_waiting_world
+		}
+		modify_species = {
+			species = this
+			remove_trait = trait_akx_waiting_world
+		}
+	}
+	if = {
+		limit = {
+			NOT = { pop_has_trait = trait_akx_messenger }
+		}
+		modify_species = {
+			species = this
+			add_trait = trait_akx_messenger
+		}
+	}
+}
+
+# 人口（透明化）
+make_akx_waiting_world = {
+	if = {
+		limit = {
+			is_robot_pop = no
+			NOR = {
+				pop_has_trait = trait_akx_messenger
+				pop_has_trait = trait_akx_waiting_world
+			}
+		}
+		modify_species = {
+			species = this
+			add_trait = trait_akx_waiting_world
+		}
+	}
+	else_if = {
+		limit = {
+			is_robot_pop = yes
+			NOR = {
+				pop_has_trait = trait_akx_messenger
+				pop_has_trait = trait_akx_waiting_world_robot
+			}
+		}
+		modify_species = {
+			species = this
+			add_trait = trait_akx_waiting_world_robot
+		}
+	}
+}
+
+# 人口（来自异世）
+make_notofthisworld = {
+	if = {
+		limit = {
+			is_robot_pop = no
+			NOT = {
+				pop_has_trait = trait_notofthisworld
+			}
+		}
+		modify_species = {
+			species = this
+			add_trait = trait_notofthisworld
+		}
+	}
+	else_if = {
+		limit = {
+			is_robot_pop = yes
+			NOT = {
+				pop_has_trait = trait_robot_notofthisworld
+			}
+		}
+		modify_species = {
+			species = this
+			add_trait = trait_robot_notofthisworld
+		}
+	}
+}
+
+# 领袖（来自深渊）
+make_pass_black_hole = {
+	if = {
+		limit = {
+			has_pass_black_hole = no
+		}
+		add_trait = leader_trait_pass_black_hole
+		if = {
+			limit = {
+				is_dimension_traveler = yes
+				owner = {
+					NOT = { has_country_flag = dimension_traveler_trait_pass_black_hole }
+				}
+			}
+			owner = {
+				set_country_flag = dimension_traveler_trait_pass_black_hole
+			}
+		}
+	}
+}
+
+refresh_time_wanderer = {
+	if = {
+		limit = {
+			any_system = {
+				is_star_class = sc_black_hole
+				NOT = { is_same_value = event_target:time_wanderer_system }
+			}
+		}
+		random_system = {
+			limit = {
+				is_star_class = sc_black_hole
+				NOT = { is_same_value = event_target:time_wanderer_system }
+			}
+			choose_as_time_wanderer_system = yes
+		}
+	}
+	else = {
+		random_system = {
+			limit = {
+				NOT = { is_same_value = event_target:time_wanderer_system }
+			}
+			choose_as_time_wanderer_system = yes
+		}
+	}
+}
+
+# 星系
+choose_as_time_wanderer_system = {
+	if = {
+		limit = {
+			exists = event_target:time_wanderer_system
+		}
+		event_target:time_wanderer_system = {
+			remove_modifier = time_wanderer_system_modifier
+		}
+		clear_global_event_target = event_target:time_wanderer_system
+		# 需要时间移动
+		system_event = { id = time_wanderer.2 days = 180 random = 180 }
+	}
+	else = {
+		# 设置为新位置
+		system_event = { id = time_wanderer.2 }
+	}
+}
+
+# 星球
+choose_as_time_wanderer_planet = {
+	if = {
+		limit = {
+			exists = event_target:time_wanderer_planet
+		}
+		event_target:time_wanderer_planet = {
+			remove_modifier = time_wanderer_planet_modifier
+		}
+		clear_global_event_target = event_target:time_wanderer_planet
+		# 需要时间移动
+		planet_event = { id = time_wanderer.3 days = 90 random = 90 }
+	}
+	else = {
+		# 设置为新位置
+		planet_event = { id = time_wanderer.3 }
+	}
+}
