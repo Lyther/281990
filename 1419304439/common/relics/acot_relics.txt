@@ -1,0 +1,59 @@
+@activation_cost = 150
+@triumph_duration = 3600
+@triumph_duration_short = 1800
+@triumph_duration_veryshort = 900
+
+r_amerigo = {
+	activation_duration = @triumph_duration
+	portrait = "GFX_relic_acot_amerigo"
+	sound = "relic_activation_isolated_contingency_core"
+
+	resources = {
+		category = relics
+		# Activation cost
+		cost = {
+			influence = 250
+			acot_sr_dark_energy = 500
+			sr_dark_matter = 500
+		}
+		produces = {
+			alloys = 50
+		}
+	}
+
+	ai_weight = {
+		weight = 500
+	}
+
+	triggered_country_modifier = {
+		potential = {
+			always = yes
+		}
+		num_tech_alternatives_add = 3
+	}
+
+	score = 5000
+
+	active_effect = {
+		custom_tooltip = acot_amerigo_explain
+		custom_tooltip = relic_triumph_cooldown
+		hidden_effect = {
+			add_modifier = {
+				modifier = "acot_modifier_relic_amerigo_cooldown"
+				days = @triumph_duration
+			}
+			every_owned_ship = {
+				repair_ship = yes			
+			}
+			country_event = { id = acot_digsite_events.10 }
+		}
+	}
+
+	# Possible check for activation
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_relic_no_cooldown"
+			NOT = { has_modifier = acot_modifier_relic_amerigo_cooldown }
+		}
+	}
+}

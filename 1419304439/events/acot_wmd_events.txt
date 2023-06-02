@@ -1,0 +1,435 @@
+############DARK MATTER EVENTS
+
+
+namespace = acot_wmd
+
+# DIMENSIONAL - SUCKING
+planet_event = {
+	id = acot_wmd.1
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		planet_event = {
+			id = acot_wmd.100 days = 5
+		}
+		create_ambient_object = {
+			type = acot_herculean_w_weapon_initial
+			location = this
+
+			use_3d_location = yes
+			base_angle_towards = star
+			entity_face_object = star
+			entity_offset = { min = 0 max = 0 }
+
+			entity_offset_height = 10
+
+			duration = 20
+			scale = 4.0
+		}
+		create_ambient_object = {
+			type = acot_herculean_w_weapon_wormhole
+			location = this
+
+			use_3d_location = yes
+			base_angle_towards = star
+			entity_face_object = star
+			entity_offset = { min = 0 max = 0 }
+
+			entity_offset_height = 10
+
+			duration = 30
+			scale = 1.5
+
+		}
+		solar_system = {
+			save_event_target_as = imminent_bombing
+			every_ship_in_system = {
+				limit = {
+					fleet = {
+						solar_system = {
+							is_same_value = event_target:imminent_bombing
+						}
+						OR = {
+							is_ship_class = shipclass_military
+							is_ship_class = shipclass_military_special
+							is_ship_class = shipclass_colonizer
+							is_ship_class = shipclass_constructor		
+							is_ship_class = shipclass_science_ship	
+							is_ship_class = shipclass_transport
+						}
+					}
+				}
+				fleet = {
+					set_location = root
+				}
+			}				
+		}
+	}
+}
+
+# DEALING DAMAGE
+planet_event = {
+	id = acot_wmd.100
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		create_ambient_object = {
+			type = acot_herculean_w_weapon_explosion
+			location = this
+
+			use_3d_location = yes
+			base_angle_towards = star
+			entity_face_object = star
+			entity_offset = { min = 0 max = 0 }
+
+			entity_offset_height = 10
+
+			duration = 50
+			scale = 0.25
+		}
+		solar_system = {
+			save_event_target_as = imminent_bombing
+			every_ship_in_system = {
+				limit = {
+					fleet = {
+						owner = {
+							is_progenitor_empires = no
+						}
+						solar_system = {
+							is_same_value = event_target:imminent_bombing
+						}
+					}
+				}
+				add_modifier = { modifier = acot_rift_debuff days = 90 }
+				reduce_hp = 25000
+			}	
+			every_system_planet = {
+				limit = {
+					is_colony = yes
+					NOR = {
+						has_building = building_planetary_shield_generator
+						has_building = building_dark_energy_psg
+						has_building = building_ae_dark_energy_psg
+						is_planet_class = pc_acot_pmc_vault
+						is_planet_class = pc_acot_enigmopolis
+						is_planet_class = pc_dark_fractured
+						is_planet_class = pc_dark_fractured_ae
+					}
+				}
+				random_list = {
+					20 = {
+						add_planet_devastation = 20
+						while = {
+							count = 20
+							random_owned_pop = {
+								kill_pop = yes
+							}
+						}
+					}
+					20 = {
+						add_planet_devastation = 21
+						while = {
+							count = 21
+							random_owned_pop = {
+								kill_pop = yes
+							}
+						}
+					}
+					20 = {
+						add_planet_devastation = 22
+						while = {
+							count = 22
+							random_owned_pop = {
+								kill_pop = yes
+							}
+						}
+					}
+					20 = {
+						add_planet_devastation = 23
+						while = {
+							count = 23
+							random_owned_pop = {
+								kill_pop = yes
+							}
+						}
+					}
+					20 = {
+						add_planet_devastation = 24
+						while = {
+							count = 24
+							random_owned_pop = {
+								kill_pop = yes
+							}
+						}
+					}
+					20 = {
+						add_planet_devastation = 25
+						while = {
+							count = 25
+							random_owned_pop = {
+								kill_pop = yes
+							}
+						}
+					}
+				}
+			}			
+		}
+	}
+}
+
+ship_event = {
+	id = acot_wmd.101
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			create_message = {
+				type = ACOT_RIFT_GENERATOR_READY
+				localization = message_acot_rift_generator_ready
+				days = 20
+				target = root
+			}
+		}
+	}	
+}
+
+##############################################
+
+# EMP - Effect
+planet_event = {
+	id = acot_wmd.2
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		create_ambient_object = {
+			type = acot_wmd_emp_explosion
+			location = this
+
+			use_3d_location = yes
+			base_angle_towards = star
+			entity_face_object = star
+			entity_offset = { min = 0 max = 0 }
+
+			entity_offset_height = 15
+
+			duration = 20
+			scale = 50.0
+		}
+		solar_system = {
+			every_ship_in_system = {
+				limit = {
+					fleet = {
+						owner = {
+							is_progenitor_empires = no
+						}
+					}
+				}
+				create_ambient_object = {
+					type = acot_wmd_emp_hit_effect
+					location = this
+		
+					use_3d_location = yes
+					base_angle_towards = star
+					entity_face_object = star
+					entity_offset = { min = 0 max = 0 }
+		
+					entity_offset_height = 0
+		
+					duration = 20
+					scale = 4.0
+				}
+				IF = {
+					limit = {
+						fleet = {
+							owner = {
+								OR = {
+									has_authority = auth_machine_intelligence
+									is_country_type = ai_empire
+									is_country_type = cybrex_empire
+									is_country_type = drone
+								}
+							}
+						}
+					}
+					reduce_hp = 5000
+				}
+				IF = {
+					limit = {
+						NOR = {
+							has_component = AE_NAVY_ENGINEER_OFFICER
+							is_ship_size = lost_swarm_adult
+							is_ship_size = queen_swarm
+							is_ship_size = starbase_swarm
+							is_ship_size = large_ship_swarm
+							is_ship_size = small_ship_swarm
+							is_ship_size = colony_ship_swarm
+							is_ship_size = transport_ship_swarm
+							is_ship_size = construction_ship_swarm
+							is_ship_size = large_ship_carrier_swarm
+
+							is_ship_size = space_amoeba
+							is_ship_size = space_amoeba_centenarian
+							is_ship_size = space_amoeba_mother
+
+							is_ship_size = leviathan_01_elder_tiyanki
+							is_ship_size = space_whale_1
+							is_ship_size = space_whale_2
+							is_ship_size = space_whale_3
+							is_ship_size = space_whale_4
+							is_ship_size = space_whale_5
+
+							is_ship_size = leviathan_01_voidspawn
+							is_ship_size = space_dragon_baby
+							is_ship_size = space_dragon_blue
+							is_ship_size = nanite_space_dragon_baby
+							is_ship_size = space_dragon_origin
+							is_ship_size = space_dragon_origin_baby
+
+							is_ship_size = reanimated_leviathan_01_elder_tiyanki
+							is_ship_size = reanimated_leviathan_01_voidspawn
+							
+							is_ship_size = reanimated_space_amoeba
+							is_ship_size = reanimated_space_amoeba_centenarian
+							is_ship_size = reanimated_space_amoeba_mother
+
+							is_ship_size = reanimated_space_dragon_blue
+							is_ship_size = reanimated_space_dragon_origin
+							is_ship_size = reanimated_space_dragon_red
+							is_ship_size = reanimated_space_whale_1
+							is_ship_size = reanimated_space_whale_2
+							is_ship_size = reanimated_space_whale_3
+							is_ship_size = reanimated_space_whale_4
+						}
+					}
+					add_modifier = { modifier = acot_emp_blast_debuff days = 90 }		
+				}
+			}
+			every_system_planet = {
+				limit = {
+					is_colony = yes
+					owner = {
+						is_progenitor_empires = no
+					}
+				}
+				IF = {
+					limit = {
+						NOR = {
+							has_building = building_planetary_shield_generator
+							has_building = building_dark_energy_psg
+							has_building = building_ae_dark_energy_psg
+							is_planet_class = pc_acot_enigmopolis
+							is_planet_class = pc_acot_pmc_vault
+							is_planet_class = pc_dark_fractured
+							is_planet_class = pc_dark_fractured_ae
+						}
+					}
+					add_modifier = {
+						modifier = acot_emp_blast_planet_debuff
+						days = 180
+					}
+					while = {
+						count = 25
+						random_owned_pop = {
+							limit = {
+								OR = {
+									has_trait = trait_mechanical
+									has_trait = trait_machine_unit
+								}
+							}
+							kill_pop = yes
+						}
+					}
+					every_planet_army = {
+						limit = {
+							species = {
+								OR = {
+									has_trait = trait_mechanical
+									has_trait = trait_machine_unit
+								}		
+							}
+						}
+						remove_army = yes
+					}
+				}
+				ELSE = {
+					IF = {
+						limit = {
+							has_building = building_planetary_shield_generator
+						}
+						remove_building = building_planetary_shield_generator
+						add_planet_devastation = 30
+					}
+					IF = {
+						limit = {
+							has_building = building_dark_energy_psg
+						}
+						random_list = {
+							25 = {
+
+							}
+							75 = {
+								remove_building = building_dark_energy_psg	
+								add_planet_devastation = 10
+							}
+						}
+					}
+					IF = {
+						limit = {
+							has_building = building_ae_dark_energy_psg
+						}
+						random_list = {
+							50 = {
+
+							}
+							50 = {
+								remove_building = building_ae_dark_energy_psg	
+								add_planet_devastation = 10
+							}
+						}
+					}
+				}
+			}	
+		}
+	}
+}
+
+ship_event = {
+	id = acot_wmd.200
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+		owner = {
+			create_message = {
+				type = ACOT_EMP_READY
+				localization = message_acot_emp_ready
+				days = 20
+				target = root
+			}
+		}
+	}	
+}

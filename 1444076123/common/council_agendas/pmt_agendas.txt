@@ -1,0 +1,93 @@
+agenda_mind_as_water = {
+	agenda_cost = 7000
+	allow = {
+		has_tradition = tr_tranquillity_adopt
+	}
+	potential = {
+		is_machine_empire = no
+		pmt_crystal_pony_species_trigger = yes
+	}
+	modifiers = {
+		{
+			pop_amenities_usage_mult = -0.1
+		}
+	}
+	finish_modifier = agenda_mind_as_water_finish
+	effect = {
+		custom_tooltip = council_agenda_agenda_mind_as_water_effect
+	}
+}
+
+agenda_harmony_paragon = {
+	agenda_cost = 7000
+	allow = {
+		has_ascension_perk = ap_harmony_times
+		custom_tooltip = {
+			fail_text = "agenda_harmony_paragon_need_six_leaders"
+			count_owned_leader = {
+				limit = {
+					NOR = {
+						has_leader_flag = renowned_leader
+						has_leader_flag = legendary_leader
+					}
+				}
+				count >= 6
+			}
+		}
+	}
+	potential = {
+		is_machine_empire = no
+		pmt_pony_species_trigger = yes
+	}
+	modifiers = {
+		{
+			pop_amenities_usage_mult = -0.05
+			council_agenda_progress_speed = 0.1
+		}
+	}
+	effect = {
+		custom_tooltip = council_agenda_agenda_harmony_paragon_effect
+		if = {
+			limit = {
+				count_owned_leader = {
+					limit = {
+						NOR = {
+							has_leader_flag = renowned_leader
+							has_leader_flag = legendary_leader
+						}
+					}
+					count >= 6
+				}
+				count_owned_leader = {
+					limit = {
+						OR = {
+							has_trait = leader_trait_harmony_paragon_honest
+							has_trait = leader_trait_harmony_paragon_kindness
+							has_trait = leader_trait_harmony_paragon_laughter
+							has_trait = leader_trait_harmony_paragon_generously
+							has_trait = leader_trait_harmony_paragon_loyalty
+							has_trait = leader_trait_harmony_paragon_magic
+						}
+					}
+					count < 6
+				}
+			}
+			hidden_effect = {
+				designate_harmony_paragon_leader = { HARMONY = honest }
+				designate_harmony_paragon_leader = { HARMONY = kindness }
+				designate_harmony_paragon_leader = { HARMONY = laughter }
+				designate_harmony_paragon_leader = { HARMONY = generously }
+				designate_harmony_paragon_leader = { HARMONY = loyalty }
+				designate_harmony_paragon_leader = { HARMONY = magic }
+			}
+		}
+		else = {
+			hidden_effect = {
+				add_monthly_resource_mult = {
+					resource = unity
+					value = 36
+				}
+			}
+		}
+	}
+}

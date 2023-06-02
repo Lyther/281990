@@ -1,0 +1,742 @@
+
+#########################################
+#
+# on_action_events
+#
+#########################################
+
+namespace = acot_planets
+
+
+# Empire Defeats the stupid stronghold of the lifeforms
+country_event = {
+	id = acot_planets.1
+	title = acot_planets.1.name
+	desc = { trigger = { FROMFROM = { has_planet_flag = ongoing_void_mutant_purge } } text = acot_planets.1.desc.mutant }
+	desc = { trigger = { FROMFROM = { has_planet_flag = ongoing_void_machine_purge } } text = acot_planets.1.desc.machine }
+	desc = { trigger = { FROMFROM = { has_planet_flag = ongoing_void_crystal_purge } } text = acot_planets.1.desc.crystals }
+	desc = { trigger = { FROMFROM = { has_planet_flag = ongoing_void_fiend_purge } } text = acot_planets.1.desc.lifeform }
+	desc = { trigger = { FROMFROM = { has_planet_flag = ongoing_void_plant_purge } } text = acot_planets.1.desc.plants }
+	picture = GFX_evt_victorious_army
+	show_sound = event_ground_battle
+	location = FROMFROM
+
+	is_triggered_only = yes
+	
+	trigger = {
+		FROMFROM = {
+			OR = {
+				has_planet_flag = ongoing_void_mutant_purge
+				has_planet_flag = ongoing_void_machine_purge
+				has_planet_flag = ongoing_void_crystal_purge
+				has_planet_flag = ongoing_void_fiend_purge
+				has_planet_flag = ongoing_void_plant_purge
+			}
+		}
+	}
+	
+	immediate = {
+		IF = {
+			limit = {
+				FROMFROM = {
+					has_planet_flag = ongoing_void_mutant_purge
+				}			
+			}
+			FROMFROM = {
+				remove_planet_flag = ongoing_void_mutant_purge
+				remove_modifier = acot_modifier_fractured_mutants
+			}
+		}
+		IF = {
+			limit = {
+				FROMFROM = {
+					has_planet_flag = ongoing_void_machine_purge
+				}			
+			}
+			FROMFROM = {
+				remove_planet_flag = ongoing_void_machine_purge
+				remove_modifier = acot_modifier_fractured_machines
+			}
+		}
+		IF = {
+			limit = {
+				FROMFROM = {
+					has_planet_flag = ongoing_void_fiend_purge
+				}			
+			}
+			FROMFROM = {
+				remove_planet_flag = ongoing_void_fiend_purge
+				remove_modifier = acot_modifier_fractured_lifeforms
+			}
+		}
+		IF = {
+			limit = {
+				FROMFROM = {
+					has_planet_flag = ongoing_void_plant_purge
+				}			
+			}
+			FROMFROM = {
+				remove_planet_flag = ongoing_void_plant_purge
+				remove_modifier = acot_modifier_fractured_plants
+			}
+		}
+		IF = {
+			limit = {
+				FROMFROM = {
+					has_planet_flag = ongoing_void_crystal_purge
+				}			
+			}
+			FROMFROM = {
+				remove_planet_flag = ongoing_void_crystal_purge
+				remove_modifier = acot_modifier_fractured_sentient_crystal
+			}
+		}
+	}
+
+	option = {
+		trigger = { FROMFROM = { has_planet_flag = ongoing_void_plant_purge }	}
+		name = acot_planets.1.a.plants
+	}
+
+	option = {
+		trigger = { FROMFROM = { has_planet_flag = ongoing_void_machine_purge }	}
+		name = acot_planets.1.a.machine
+	}
+
+	option = {
+		trigger = { FROMFROM = { has_planet_flag = ongoing_void_fiend_purge }	}
+		name = acot_planets.1.a.lifeform
+	}
+
+	option = {
+		trigger = { FROMFROM = { has_planet_flag = ongoing_void_mutant_purge }	}
+		name = acot_planets.1.a.mutant
+	}
+
+	option = {
+		trigger = { FROMFROM = { has_planet_flag = ongoing_void_crystal_purge }	}
+		name = acot_planets.1.a.crystals
+	}
+
+}
+
+# Empire Loses to the stupid stronghold of the lifeforms
+country_event = {
+	id = acot_planets.2
+	title = acot_planets.2.name
+	desc = acot_planets.2.desc
+	picture = GFX_evt_exploding_planet
+	show_sound = event_super_explosion
+
+	is_triggered_only = yes
+	
+	trigger = {
+		FROMFROM = {
+			OR = {
+				has_planet_flag = ongoing_void_mutant_purge
+				has_planet_flag = ongoing_void_machine_purge
+				has_planet_flag = ongoing_void_crystal_purge
+				has_planet_flag = ongoing_void_fiend_purge
+				has_planet_flag = ongoing_void_plant_purge
+			}
+		}
+	}
+	
+	immediate = {
+		FROMFROM = {
+			every_owned_pop = {
+				kill_pop = yes					
+			}
+			destroy_colony = yes
+			change_pc = pc_shattered
+			remove_planet_flag = ongoing_void_mutant_purge
+			remove_planet_flag = ongoing_void_machine_purge
+			remove_planet_flag = ongoing_void_fiend_purge
+			remove_planet_flag = ongoing_void_plant_purge
+			remove_planet_flag = ongoing_void_crystal_purge
+			remove_modifier = acot_modifier_fractured_mutants
+			remove_modifier = acot_modifier_fractured_machines
+			remove_modifier = acot_modifier_fractured_lifeforms
+			remove_modifier = acot_modifier_fractured_plants
+			remove_modifier = acot_modifier_fractured_sentient_crystal
+		}
+	}
+}
+
+# Assaults happen due to low amount of defenses - Prompt
+planet_event = {
+	id = acot_planets.3000
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	pre_triggers = {
+		has_ground_combat = no
+	}
+
+	trigger = {
+		exists = owner
+		is_colony = yes
+		is_under_colonization = no
+		owner = {
+			is_playable_country = yes
+		}
+		OR = {
+			has_modifier = acot_modifier_fractured_machines
+			has_modifier = acot_modifier_fractured_lifeforms
+			has_modifier = acot_modifier_fractured_mutants
+			has_modifier = acot_modifier_fractured_plants
+			has_modifier = acot_modifier_fractured_sentient_crystal
+		}
+		NOR = {
+			has_planet_flag = ongoing_void_fiend_purge
+			has_planet_flag = ongoing_void_machine_purge
+			has_planet_flag = ongoing_void_mutant_purge
+			has_planet_flag = ongoing_void_plant_purge
+			has_planet_flag = ongoing_void_crystal_purge
+			has_building = building_giga_fortress
+			has_building = building_giga_fortress_array
+			has_building = building_giga_fortress_fe
+			has_building = building_giga_fortress_lab
+			has_building = building_giga_fortress_obelisk
+		}
+	}
+	
+	immediate = {
+		IF = {
+			limit = {
+				has_modifier = acot_modifier_fractured_machines		
+			}
+			random_list = {
+				75 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_planet_flag = no_lifeform_attack
+						}
+					}
+					planet_event = {
+						id = acot_planets.300 days = 10 random = 10
+					}
+				}
+				25 = {
+				}
+			}
+		}
+		IF = {
+			limit = {
+				has_modifier = acot_modifier_fractured_mutants		
+			}
+			random_list = {
+				75 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_planet_flag = no_mutant_attack
+						}
+					}
+					planet_event = {
+						id = acot_planets.301 days = 10 random = 10
+					}
+				}
+				25 = {
+				}
+			}
+		}
+		IF = {
+			limit = {
+				has_modifier = acot_modifier_fractured_plants		
+			}
+			random_list = {
+				75 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_planet_flag = no_plants_attack
+						}
+					}
+					planet_event = {
+						id = acot_planets.302 days = 45 random = 46
+					}
+				}
+				25 = {
+				}
+			}
+		}
+		IF = {
+			limit = {
+				has_modifier = acot_modifier_fractured_lifeforms		
+			}
+			random_list = {
+				75 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_planet_flag = no_machine_attack
+						}
+					}
+					planet_event = {
+						id = acot_planets.303 days = 30 random = 30
+					}
+				}
+				25 = {
+				}
+			}
+		}
+		IF = {
+			limit = {
+				has_modifier = acot_modifier_fractured_sentient_crystal		
+			}
+			random_list = {
+				75 = {
+					modifier = {
+						factor = 0
+						OR = {
+							has_planet_flag = no_crystal_attack
+						}
+					}
+					planet_event = {
+						id = acot_planets.304 days = 45 random = 45
+					}
+				}
+				25 = {
+				}
+			}
+		}
+	}
+}
+
+# Assaults happen due to low amount of defenses - Machine
+planet_event = {
+	id = acot_planets.300
+	title = acot_planets.300.name
+	desc = acot_planets.300.desc
+	picture = GFX_evt_guardians
+	show_sound = event_ground_battle
+
+	is_triggered_only = yes
+	
+	pre_triggers = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = no_machine_attack
+			days = 360
+		}
+		random_list = {
+			33 = {
+				while = {
+					count = 20
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_machine_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 25
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_machine_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 30
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_machine_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = acot_planets.300.a
+	}
+
+}
+
+# Assaults happen due to low amount of defenses - Mutant
+planet_event = {
+	id = acot_planets.301
+	title = acot_planets.301.name
+	desc = acot_planets.301.desc
+	picture = GFX_evt_ground_combat
+	show_sound = event_red_alert
+
+	is_triggered_only = yes
+	
+	pre_triggers = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = no_mutant_attack
+			days = 360
+		}
+		random_list = {
+			33 = {
+				while = {
+					count = 15
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_mutants_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 20
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_mutants_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 25
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_mutants_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = acot_planets.301.a
+	}
+
+}
+
+# Assaults happen due to low amount of defenses - Plants
+planet_event = {
+	id = acot_planets.302
+	title = acot_planets.302.name
+	desc = acot_planets.302.desc
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_red_alert
+
+	is_triggered_only = yes
+	
+	pre_triggers = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = no_plants_attack
+			days = 360
+		}
+		random_list = {
+			33 = {
+				while = {
+					count = 5
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_plant_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 10
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_plant_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 15
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_plant_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = acot_planets.302.a
+	}
+
+}
+
+# Assaults happen due to low amount of defenses - Fiends
+planet_event = {
+	id = acot_planets.303
+	title = acot_planets.303.name
+	desc = acot_planets.303.desc
+	picture = GFX_evt_unidentified_monster
+	show_sound = event_red_alert
+
+	is_triggered_only = yes
+	
+	pre_triggers = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = no_lifeform_attack
+			days = 360
+		}
+		random_list = {
+			33 = {
+				while = {
+					count = 10
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_fiends_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 15
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_fiends_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 20
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_fiends_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = acot_planets.303.a
+	}
+
+}
+
+# Assaults happen due to low amount of defenses - Crystals
+planet_event = {
+	id = acot_planets.304
+	title = acot_planets.304.name
+	desc = acot_planets.304.desc
+	picture = GFX_evt_ground_combat
+	show_sound = event_red_alert
+
+	is_triggered_only = yes
+	
+	pre_triggers = {
+	}
+	
+	immediate = {
+		set_timed_planet_flag = {
+			flag = no_crystal_attack
+			days = 360
+		}
+		random_list = {
+			33 = {
+				while = {
+					count = 3
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_crystal_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 6
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_crystal_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+			33 = {
+				while = {
+					count = 9
+					create_army = {
+						owner = event_target:lifeform_country
+						type = acot_void_crystal_army
+						species = root
+						land_army = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = acot_planets.304.a
+	}
+
+}
+
+# Colony Overran Mission Failed
+planet_event = {
+	id = acot_planets.305
+	title = acot_planets.305.name
+	desc = acot_planets.305.desc
+	picture = GFX_evt_ground_combat
+	show_sound = event_ghost_town
+
+	mean_time_to_happen = {
+		days = 1440
+	}
+	
+	pre_triggers = {
+		has_ground_combat = no
+	}
+
+	trigger = {
+		exists = owner
+		is_colony = yes
+		is_controlled_by = event_target:lifeform_country
+	}
+	
+	immediate = {
+		every_owned_pop = {
+			kill_pop = yes
+		}
+		destroy_colony = yes
+		every_planet_army = {
+			remove_army = yes
+		}
+	}
+
+	option = {
+		name = acot_planets.305.a
+	}
+
+}
+
+############################################################################
+
+#### VOIDERU SPHERDARU
+
+############################################################################
+
+# VOIDSPHERE CONSTRUCTION
+planet_event = {
+	id = acot_planets.4
+	title = acot_planets.4.name
+	desc = acot_planets.4.desc
+	picture = GFX_acot_precursor_uprising
+	show_sound = event_mystery
+
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+
+	option = {
+		name = acot_planets.4.a
+	}
+
+}
+
+# VOIDSPHERE COMPLETION
+ship_event = {
+	id = acot_planets.5
+	title = acot_planets.5.name
+	desc = acot_planets.5.desc
+	picture = GFX_acot_precursor_uprising
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			change_pc = pc_acot_enigmatic
+		}
+	}
+
+	option = {
+		name = acot_planets.5.a
+	}
+
+}
+
+# VOIDSPHERE CONSTRUCTION
+planet_event = {
+	id = acot_planets.6
+	title = acot_planets.6.name
+	desc = acot_planets.6.desc
+	picture = GFX_acot_precursor_uprising
+	show_sound = event_mystery
+
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+
+	option = {
+		name = acot_planets.6.a
+	}
+
+}
+
+# VOIDSPHERE COMPLETION
+ship_event = {
+	id = acot_planets.7
+	title = acot_planets.7.name
+	desc = acot_planets.7.desc
+	picture = GFX_acot_precursor_uprising
+	show_sound = event_mega_structure_other_empire_build_complete
+
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			trigger_megastructure_icon = yes
+			change_pc = pc_acot_enigmopolis
+			set_planet_flag = is_void_sphere
+		}
+	}
+
+	option = {
+		name = acot_planets.7.a
+	}
+
+}

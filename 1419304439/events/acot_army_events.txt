@@ -1,0 +1,344 @@
+namespace = acot_army_events
+
+# Hero Loss
+country_event = {
+	id = acot_army_events.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { 
+			OR = {
+				army_type = acot_hero_ae
+				army_type = acot_army_phile_hero
+				army_type = acot_army_auth_hero
+				army_type = acot_army_paci_hero
+				army_type = acot_army_mili_hero
+				army_type = acot_army_machine_hero
+				army_type = acot_army_mat_hero
+				army_type = acot_army_ega_hero
+				army_type = acot_army_phobe_hero
+				army_type = acot_army_spirit_hero
+				army_type = acot_army_hive_hero
+				army_type = acot_army_cyborg_hero
+				army_type = acot_army_synth_hero
+				army_type = acot_army_psi_hero
+				army_type = acot_army_gene_hero
+			}
+		 }
+	}
+
+	immediate = {
+		IF = {
+			limit = {
+				from = { 
+					OR = {
+						army_type = acot_hero_ae
+						army_type = acot_army_phile_hero
+						army_type = acot_army_auth_hero
+						army_type = acot_army_paci_hero
+						army_type = acot_army_mili_hero
+						army_type = acot_army_mat_hero
+						army_type = acot_army_ega_hero
+						army_type = acot_army_phobe_hero
+						army_type = acot_army_spirit_hero
+					}
+				 }	
+			}
+			create_message = {
+				type = ACOT_HERO_DEATH
+				localization = message_acot_hero_death_default
+				days = 20
+				target = root
+			}
+		}
+		IF = {
+			limit = {
+				from = { 
+					army_type = acot_army_gene_hero
+				 }	
+			}
+			change_variable = {
+				which = doomguy_count
+				value = -1
+			}
+			create_message = {
+				type = ACOT_HERO_DEATH
+				localization = message_acot_hero_death_gene
+				days = 20
+				target = root
+			}
+		}
+		IF = {
+			limit = {
+				from = { 
+					army_type = acot_army_cyborg_hero
+				 }	
+			}
+			change_variable = {
+				which = cyborgmando_count
+				value = -1
+			}
+			create_message = {
+				type = ACOT_HERO_DEATH
+				localization = message_acot_hero_death_cyborg
+				days = 20
+				target = root
+			}
+		}
+		IF = {
+			limit = {
+				from = { 
+					army_type = acot_army_synth_hero
+				 }	
+			}
+			change_variable = {
+				which = synthmando_count
+				value = -1
+			}
+			create_message = {
+				type = ACOT_HERO_DEATH
+				localization = message_acot_hero_death_synth
+				days = 20
+				target = root
+			}
+		}
+		IF = {
+			limit = {
+				from = { 
+					army_type = acot_army_psi_hero
+				 }	
+			}
+			change_variable = {
+				which = psion_count
+				value = -1
+			}
+			create_message = {
+				type = ACOT_HERO_DEATH
+				localization = message_acot_hero_death_psi
+				days = 20
+				target = root
+			}
+		}
+		IF = {
+			limit = {
+				from = { 
+					army_type = acot_army_hive_hero
+				 }	
+			}
+			change_variable = {
+				which = terror_count
+				value = -1
+			}
+			create_message = {
+				type = ACOT_HERO_DEATH
+				localization = message_acot_hero_death_hive
+				days = 20
+				target = root
+			}
+		}
+		IF = {
+			limit = {
+				from = { 
+					army_type = acot_army_machine_hero
+				 }	
+			}
+			change_variable = {
+				which = godmech_count
+				value = -1
+			}
+			create_message = {
+				type = ACOT_HERO_DEATH
+				localization = message_acot_hero_death_machine
+				days = 20
+				target = root
+			}
+		}
+	}
+}
+
+# Phanon Operative Defeated
+country_event = {
+	id = acot_army_events.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { 
+			army_type = acot_phanon_defense_operative
+		 }
+	}
+
+	immediate = {
+		random_list = {
+			60 = {
+				create_message = {
+					type = ACOT_PHANON_INJURED
+					localization = message_acot_phanon_operative_injured
+					days = 20
+					target = root
+				}
+				create_fleet = {
+					effect = {
+						set_owner = from.owner
+						create_ship = {
+							name = random
+							design = NAME_ACOT_STARFIGHTER_HERO
+							graphical_culture = acot_pmc
+						}	
+						set_location = {
+							target = FromFromFrom
+							distance = 0
+							angle = 0 
+						}
+						set_timed_fleet_flag = {
+							flag = acot_injured_operative
+							days = 1800
+						}
+					}
+				}
+			}
+			20 = {
+				create_message = {
+					type = ACOT_PHANON_DEATH
+					localization = message_acot_phanon_operative_dead
+					days = 20
+					target = root
+				}
+				create_fleet = {
+					effect = {
+						set_owner = from.owner
+						create_ship = {
+							name = random
+							design = NAME_ACOT_STARFIGHTER_HERO
+							graphical_culture = acot_pmc
+						}	
+						set_location = {
+							target = FromFromFrom
+							distance = 0
+							angle = 0 
+						}
+						add_modifier = {
+							modifier = acot_phanon_invader_dead_operative_debuff
+						}
+						set_fleet_flag = acot_dead_operative
+					}
+				}
+			}
+			20 = {
+				create_message = {
+					type = ACOT_PHANON_DESTROYED
+					localization = message_acot_phanon_operative_destroyed
+					days = 20
+					target = root
+				}	
+			}
+		}
+	}
+}
+
+# Fortification Damaged
+
+country_event = {
+	id = acot_army_events.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { 
+			OR = {
+				army_type = acot_defensive_wall
+				army_type = acot_defensive_cannon
+			}
+		 }
+	}
+
+	immediate = {
+		IF = {
+			limit = {
+				from = { 
+					army_type = acot_defensive_wall
+				}
+			}
+			FromFromFrom = {
+				remove_modifier = acot_modifier_fortification_1
+				add_modifier = {
+					modifier = acot_modifier_damaged_fortification_1
+				}
+			}
+		}
+		IF = {
+			limit = {
+				from = { 
+					army_type = acot_defensive_cannon
+				}
+			}
+			FromFromFrom = {
+				remove_modifier = acot_modifier_fortification_2
+				add_modifier = {
+					modifier = acot_modifier_damaged_fortification_2
+				}
+			}
+		}
+	}
+}
+
+# Fortification Destroyed
+
+country_event = {
+	id = acot_army_events.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FromFrom = { 
+			NOT = {
+				any_planet_army = {
+					OR = {
+						army_type = acot_defensive_wall
+						army_type = acot_defensive_cannon
+					}
+				}
+			}
+			OR = {
+				has_modifier = acot_modifier_fortification_1
+				has_modifier = acot_modifier_fortification_2
+				has_modifier = acot_modifier_damaged_fortification_1
+				has_modifier = acot_modifier_damaged_fortification_2
+			}
+		 }
+	}
+
+	immediate = {
+		fromfrom = {
+			remove_modifier = acot_modifier_fortification_1
+			remove_modifier = acot_modifier_fortification_2
+			remove_modifier = acot_modifier_damaged_fortification_1
+			remove_modifier = acot_modifier_damaged_fortification_2	
+		}
+	}
+}
+
+# Reset Garrision Upgrades
+
+country_event = {
+	id = acot_army_events.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FromFrom = { 
+			OR = {
+				has_modifier = acot_modifier_defense_upgrade_1
+				has_modifier = acot_modifier_defense_upgrade_2
+			}
+		 }
+	}
+
+	immediate = {
+		fromfrom = {
+			remove_modifier = acot_modifier_defense_upgrade_1
+			remove_modifier = acot_modifier_defense_upgrade_2
+		}
+	}
+}

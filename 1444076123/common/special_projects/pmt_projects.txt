@@ -1,0 +1,243 @@
+special_project = {
+    key = "ADAPT_TO_DARKNESS"
+    cost = 20000
+    tech_department = society_technology
+    timelimit = -1
+    picture = GFX_evt_psionics
+    icon = "gfx/interface/icons/situation_log/situation_log_tick.dds"
+    location = no
+
+    event_scope = planet_event
+
+    on_success = {
+        owner = { country_event = { id = "ponycountry.40" } }
+    }
+}
+
+special_project = {
+    key = "INVESTIGATING_LEGENDS"
+    cost = 500
+    tech_department = society_technology
+    timelimit = 90
+    picture = GFX_evt_old_books
+    icon = "gfx/interface/icons/situation_log/situation_log_modification.dds"
+    location = no
+
+    event_scope = planet_event
+
+    on_success = {
+        owner = {
+            if = {
+                limit = {
+                    NOT = { has_country_flag = start_fight_with_nightmare }
+                }
+                country_event = { id = harmony.1002 }
+            }
+        }
+    }
+
+    on_fail = {
+        if = {
+            limit = { has_country_flag = investigating_legends }
+            remove_country_flag = investigating_legends
+        }
+    }
+}
+
+special_project = {
+    key = "MYSTERIOUS_CALL"
+    cost = 0
+    days_to_research = 30
+    tech_department = society_technology
+    timelimit = 1800
+    picture = GFX_evt_seal
+    icon = "gfx/interface/icons/situation_log/situation_log_quest.dds"
+
+    event_scope = ship_event
+    
+    requirements = {
+        shipclass_science_ship = 1
+        leader = scientist
+    }
+
+    on_success = {
+        owner = {
+            country_event = { id = harmony.1040 }
+        }
+    }
+
+    on_fail = {
+        owner = {
+            country_event = { id = harmony.1041 }
+        }
+    }
+}
+
+special_project = {
+    key = "UNSTABLE_SPACE"
+    cost = 0
+    days_to_research = 60
+    tech_department = society_technology
+    timelimit = -1
+    picture = GFX_evt_physics_research
+    icon = "gfx/interface/icons/situation_log/situation_log_alert.dds"
+
+    event_scope = ship_event
+
+    requirements = {
+        shipclass_science_ship = 1
+        leader = scientist
+    }
+
+    on_success = { 
+        owner = {
+            country_event = { id = harmony.2101 }
+        }
+    }
+
+    on_fail = {
+    }
+}
+
+special_project = {
+    key = "DISAPPEAR_CHAIN_0"
+    event_chain = "disappear_chain"
+    cost = 0
+    days_to_research = 120
+    tech_department = society_technology
+    timelimit = -1
+    picture = GFX_evt_physics_research
+    icon = "gfx/interface/icons/situation_log/situation_log_scanning_beam.dds"
+
+    event_scope = ship_event
+
+    requirements = {
+        shipclass_science_ship = 1
+        leader = scientist
+    }
+    
+    on_success = {
+        ship_event = { id = harmony.2230 }
+    }
+
+    on_fail = {
+    }
+}
+
+special_project = {
+    key = "DEBRIS_OF_DISCORD"
+    cost = 0
+    days_to_research = 180
+    tech_department = society_technology
+    timelimit = -1
+    picture = GFX_evt_physics_research
+    icon = "gfx/interface/icons/situation_log/situation_log_debris.dds"
+
+    event_scope = ship_event
+
+    requirements = {
+        shipclass_science_ship = 1
+        leader = scientist
+    }
+
+    on_success = {
+        ship_event = { id = harmony.2611 }
+    }
+
+    on_fail = {
+    }
+}
+
+special_project = {
+    key = "STABILIZE_REALITY"
+    cost = 2000
+    tech_department = physics_technology
+    timelimit = -1
+    picture = GFX_evt_physics_research
+    icon = "gfx/interface/icons/situation_log/situation_log_scanning_beam.dds"
+
+    event_scope = ship_event
+
+    requirements = {
+        shipclass_science_ship = 1
+        leader = scientist
+    }
+
+    on_success = {
+       ship_event = { id = harmony.2621 }
+    }
+
+    on_fail = {
+    }
+}
+
+special_project = {
+    key = "INVESTIGATE_MAGIC_DISTURBANCE"
+    cost = 0
+    days_to_research = 180
+    tech_department = society_technology
+    timelimit = -1
+    picture = GFX_evt_physics_research
+    icon = "gfx/interface/icons/situation_log/situation_log_scanning_beam.dds"
+
+    event_scope = ship_event
+
+    requirements = {
+        shipclass_science_ship = 1
+        leader = scientist
+    }
+
+    on_success = {
+        ship_event = { id = harmony.2636 }
+    }
+
+    on_fail = {
+    }
+}
+
+special_project = {
+    key = "FIND_SUSPECT_CHAIN_PLANET"
+    event_chain = "find_suspect_chain"
+    cost = 0
+    days_to_research = 90
+    tech_department = society_technology
+    timelimit = -1
+    picture = GFX_evt_scholarium_anomaly
+    icon = "gfx/interface/icons/situation_log/situation_log_scanning_beam.dds"
+
+    event_scope = ship_event
+
+    requirements = {
+        shipclass_science_ship = 1
+        leader = scientist
+    }
+    
+    on_success = {
+        owner = {
+            change_variable = {
+                which = num_suspect_planet
+                value = -1
+            }
+            if = {
+                limit = {
+                    check_variable = {
+                        which = num_suspect_planet
+                        value <= 0
+                    }
+                }
+                end_event_chain = "find_suspect_chain"
+                random_list = {
+                    50 = {
+                        country_event = { id = eqgcountry.221 }
+                    }
+                    50 = {
+                        country_event = { id = eqgcountry.222 }
+                    }
+                }
+            }
+        }
+    }
+
+    on_fail = {
+    }
+}

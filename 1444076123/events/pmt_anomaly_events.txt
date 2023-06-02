@@ -1,0 +1,541 @@
+namespace = pmtanomaly
+
+# Who's the best pony
+ship_event = {
+	id = pmtanomaly.100
+	title = "pmtanomaly.100.title"
+	desc = "pmtanomaly.100.desc"
+	picture = GFX_evt_binary_stars
+	show_sound = event_scanner
+	is_triggered_only = yes
+	location = FROM
+
+	immediate = {
+		owner = { set_country_flag = PMT_STAR_BASE_FLAG }
+	}
+
+	option = {
+		name = "pmtanomaly.100.a" # wrong
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.101 days = 30 }
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.100.b" # wrong
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.101 days = 30 }
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.100.c" # right
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.102 days = 30 }
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.100.d" # wrong
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.101 days = 30 }
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.101
+	title = "pmtanomaly.100.title"
+	desc = "pmtanomaly.101.desc"
+	picture = GFX_evt_binary_stars
+	show_sound = event_default
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.101.a"
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.102
+	title = "pmtanomaly.100.title"
+	desc = "pmtanomaly.102.desc"
+	picture = GFX_evt_binary_stars
+	show_sound = event_default
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.102.a"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = food
+				value = 1
+				min = 50
+				max = 200
+			}
+		}
+	}
+}
+
+# Balefire Bomb Event
+ship_event = {
+	id = pmtanomaly.110
+	title = "pmtanomaly.110.title"
+	desc = "pmtanomaly.110.desc"
+	picture = GFX_evt_tomb_world
+	show_sound = event_scanner
+	is_triggered_only = yes
+	location = FROM
+
+	immediate = {
+		owner = { set_country_flag = PMT_BALEFIRE_BOMB_FLAG }
+	}
+
+	option = {
+		name = "pmtanomaly.110.a"
+		hidden_effect = {
+			random_list = {
+				90 = { }
+				10 = {
+					ship_event = { id = pmtanomaly.111 days = 5 }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.110.b"
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.120 days = 10 }
+			owner = { set_country_flag = balefire_bomb_a }
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.110.c"
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.120 days = 10 }
+			owner = { set_country_flag = balefire_bomb_b }
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.111
+	title = "pmtanomaly.110.title"
+	desc = "pmtanomaly.111.desc"
+	picture = GFX_evt_balefire_bomb_explosion
+	show_sound = event_super_explosion
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.111.a"
+		FROMFROM = {
+			add_deposit = d_balefire_ruins
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.120
+	title = "pmtanomaly.110.title"
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = balefire_bomb_a
+			}
+		}
+		text = "pmtanomaly.120.desc.1"
+	}
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = balefire_bomb_b
+			}
+		}
+		text = "pmtanomaly.120.desc.2"
+	}
+	picture = GFX_evt_intelligence_report
+	show_sound = event_default
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.120.a"
+		hidden_effect = {
+			if = {
+				limit = {
+					owner = { has_country_flag = balefire_bomb_a }
+				}
+				ship_event = { id = pmtanomaly.121 days = 5 } # a success
+			}
+			else_if = {
+				limit = {
+					owner = { has_country_flag = balefire_bomb_b }
+				}
+				ship_event = { id = pmtanomaly.123 days = 5 } # b fail
+			}
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.120.b"
+		hidden_effect = {
+			if = {
+				limit = {
+					owner = { has_country_flag = balefire_bomb_a }
+				}
+				ship_event = { id = pmtanomaly.122 days = 5 } # a fail
+			}
+			else_if = {
+				limit = {
+					owner = { has_country_flag = balefire_bomb_b }
+				}
+				ship_event = { id = pmtanomaly.123 days = 5 } # b fail
+			}
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.120.c"
+		hidden_effect = {
+			if = {
+				limit = {
+					owner = { has_country_flag = balefire_bomb_a }
+				}
+				ship_event = { id = pmtanomaly.122 days = 5 } # a fail
+			}
+			else_if = {
+				limit = {
+					owner = { has_country_flag = balefire_bomb_b }
+				}
+				ship_event = { id = pmtanomaly.124 days = 5 } # b success
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.121
+	title = "pmtanomaly.110.title"
+	desc = "pmtanomaly.121.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_default
+	is_triggered_only = yes
+	location = FROMFROMFROM
+
+	immediate = {
+		owner = {
+			remove_country_flag = balefire_bomb_a
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.121.a"
+		owner = {
+			add_research_option = tech_balefire_bomb_launchers
+			locked_random_list = {
+				50 = { }
+				50 = {
+					add_tech_progress = {
+						tech = tech_balefire_bomb_launchers
+						progress = 0.1
+					}
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.122
+	title = "pmtanomaly.110.title"
+	desc = "pmtanomaly.122.desc"
+	picture = GFX_evt_debris
+	show_sound = event_super_explosion
+	is_triggered_only = yes
+	location = FROMFROMFROM
+
+	immediate = {
+		owner = {
+			remove_country_flag = balefire_bomb_a
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.122.a"
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.123
+	title = "pmtanomaly.110.title"
+	desc = "pmtanomaly.123.desc"
+	picture = GFX_evt_debris
+	show_sound = event_super_explosion
+	is_triggered_only = yes
+	location = FROMFROMFROM
+
+	immediate = {
+		owner = {
+			remove_country_flag = balefire_bomb_b
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.122.a"
+		fleet = {
+			leader = {
+				if = {
+					limit = {
+						NOT = { has_trait = leader_trait_maimed }
+					}
+					add_trait_no_notify = leader_trait_maimed
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.124
+	title = "pmtanomaly.110.title"
+	desc = "pmtanomaly.121.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_default
+	is_triggered_only = yes
+	location = FROMFROMFROM
+
+	immediate = {
+		owner = {
+			remove_country_flag = balefire_bomb_b
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.121.a"
+		owner = {
+			add_research_option = tech_balefire_bomb_launchers
+			locked_random_list = {
+				75 = {
+					add_tech_progress = {
+						tech = tech_balefire_bomb_launchers
+						progress = 0.5
+					}
+				}
+				25 = {
+					add_tech_progress = {
+						tech = tech_balefire_bomb_launchers
+						progress = 0.25
+					}
+				}
+			}
+		}
+	}
+}
+
+# Pink Cloud Bomb Event
+ship_event = {
+	id = pmtanomaly.130
+	title = "pmtanomaly.130.title"
+	desc = "pmtanomaly.130.desc"
+	picture = GFX_evt_derelict_interior
+	show_sound = event_scanner
+	is_triggered_only = yes
+	location = FROM
+
+	immediate = {
+		owner = { set_country_flag = PMT_PINK_CLOUD_BOMB_FLAG }
+	}
+
+	option = {
+		name = "pmtanomaly.130.a"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.130.b"
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.131 days = 5 }
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.130.c"
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.132 days = 5 }
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.130.d"
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.133 days = 5 }
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.131
+	title = "pmtanomaly.130.title"
+	desc = "pmtanomaly.131.desc"
+	picture = GFX_evt_pink_cloud_explosion
+	show_sound = event_super_explosion
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.131.a"
+		fleet = {
+			kill_leader = { type = scientist show_notification = no }
+		}
+		FROMFROM = {
+			change_pc = pc_toxic
+			add_modifier = {
+				modifier = pink_cloud_pollution
+				days = -1
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.132
+	title = "pmtanomaly.130.title"
+	desc = "pmtanomaly.132.desc"
+	picture = GFX_evt_pink_cloud_leakage
+	show_sound = event_default
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.132.a"
+		fleet = {
+			kill_leader = { type = scientist show_notification = no }
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.133
+	title = "pmtanomaly.130.title"
+	desc = "pmtanomaly.133.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_default
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.133.a"
+		owner = {
+			add_research_option = tech_pink_cloud_bomb_launchers
+		}
+	}
+}
+
+# Enervation event
+ship_event = {
+	id = pmtanomaly.140
+	title = "pmtanomaly.140.title"
+	desc = {
+		trigger = {
+			leader = {
+				is_organic_species = yes
+			}
+		}
+		text = "pmtanomaly.140.desc.1"
+	}
+	desc = {
+		trigger = {
+			leader = {
+				NOT = {
+					is_organic_species = yes
+				}
+			}
+		}
+		text = "pmtanomaly.140.desc.2"
+	}
+	picture = GFX_evt_tomb_world
+	show_sound = event_scanner
+	is_triggered_only = yes
+	location = FROM
+
+	immediate = {
+		owner = { set_country_flag = PMT_ENERVATION_FLAG }
+	}
+
+	option = {
+		name = "pmtanomaly.140.a"
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.141 days = 180 }
+		}
+	}
+
+	option = {
+		name = "pmtanomaly.140.b"
+		hidden_effect = {
+			ship_event = { id = pmtanomaly.142 days = 180 }
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.141
+	title = "pmtanomaly.140.title"
+	desc = "pmtanomaly.141.desc"
+	picture = GFX_evt_tomb_world
+	show_sound = event_scanner
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.141.a"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = 120
+				min = 8000
+				max = 16000
+			}
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = 10
+				min = 250
+				max = 1000
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = pmtanomaly.142
+	title = "pmtanomaly.140.title"
+	desc = "pmtanomaly.142.desc"
+	picture = GFX_evt_tomb_world
+	show_sound = event_scanner
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "pmtanomaly.142.a"
+		owner = {
+			add_research_option = tech_enervation_study
+		}
+		FROMFROM = {
+			add_modifier = {
+				modifier = pm_enervation_anomoly
+				days = -1
+			}
+		}
+	}
+}

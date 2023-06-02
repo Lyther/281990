@@ -1,0 +1,1359 @@
+namespace = eqgcountry
+
+country_event = {
+	id = eqgcountry.1
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_eqg_species_trigger = yes
+		is_country_type = default
+		NOR = {
+			has_origin = origin_shattered_ring
+			has_origin = origin_void_dwellers
+			has_origin = origin_doomsday
+		}
+	}
+
+	immediate = {
+		capital_scope = {
+			set_planet_flag = eqg_capital@root
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.10
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_eqg_species_trigger = yes
+		is_country_type = default
+		NOT = {
+			has_country_flag = trigger_eqg_event
+		}
+		#years_passed >= 20
+		years_passed <= 100
+		any_owned_planet = {
+			has_planet_flag = eqg_capital@root
+			has_ground_combat = no
+			is_occupied_flag = no
+			num_pops > 0
+		}
+		count_owned_planet = {
+			limit = {
+				is_colony = yes
+				is_artificial = no
+				owner = { is_primitive = no }
+			}
+			count >= 2
+		}
+	}
+
+	immediate = {
+		random_list = {
+			#98 = { }
+			2 = {
+				set_country_flag = trigger_eqg_event
+				random_planet_within_border = {
+					limit = {
+						has_planet_flag = eqg_capital@root
+					}
+					save_event_target_as = eqg_capital
+				}
+				country_event = { id = eqgcountry.101 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.101
+	title = "eqgcountry.101.title"
+	desc = "eqgcountry.101.desc"
+	picture = GFX_evt_aggressive_flora
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.101.a"
+		hidden_effect = {
+			country_event = { id = eqgcountry.102 days = 90 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.102
+	title = "eqgcountry.102.title"
+	desc = "eqgcountry.102.desc"
+	picture = GFX_evt_bribery
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.102.a"
+		hidden_effect = {
+			country_event = { id = eqgcountry.110 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.110
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.110.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.110.a"
+		is_dialog_only = yes
+		response_text = eqgcountry.110.a.response
+	}
+
+	option = {
+		name = "eqgcountry.110.b"
+		is_dialog_only = yes
+		response_text = eqgcountry.110.b.response
+	}
+
+	option = {
+		name = "eqgcountry.110.c"
+		is_dialog_only = yes
+		response_text = eqgcountry.110.c.response
+	}
+
+	option = {
+		name = "eqgcountry.110.d"
+		hidden_effect = {
+			country_event = { id = eqgcountry.111 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.111
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.111.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.111.a"
+		hidden_effect = {
+			country_event = { id = eqgcountry.200 }
+		}
+	}
+
+	option = {
+		name = "eqgcountry.111.b"
+		hidden_effect = {
+			country_event = { id = eqgcountry.300 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.200
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.200.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.200.a"
+		hidden_effect = {
+			country_event = { id = eqgcountry.210 days = 90 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.210
+	title = "eqgcountry.210.title"
+	desc = "eqgcountry.210.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.210.a"
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 2000 }
+		}
+		add_resource = {
+			energy = -2000
+		}
+		hidden_effect = {
+			country_event = { id = eqgcountry.211 days = 90 }
+		}
+	}
+
+	option = {
+		name = "eqgcountry.210.b"
+		hidden_effect = {
+			random_list = {
+				20 = {
+					random_planet_within_border = {
+						limit = {
+							is_colony = yes
+							is_artificial = no
+							owner = { is_primitive = no }
+							NOT = { has_planet_flag = eqg_capital@root }
+						}
+						planet_event = { id = eqgcountry.212 days = 180 }
+					}
+				}
+				80 = {
+					country_event = { id = eqgcountry.215 days = 180 }
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.211
+	title = "eqgcountry.210.title"
+	desc = "eqgcountry.211.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.211.a"
+		begin_event_chain = {
+			event_chain = "find_suspect_chain"
+			target = ROOT
+		}
+		hidden_effect = {
+			set_variable = {
+				which = num_suspect_planet
+				value = 0
+			}
+			every_planet_within_border = {
+				limit = {
+					is_colony = yes
+					owner = { is_primitive = no }
+				}
+				enable_special_project = {
+					name = "FIND_SUSPECT_CHAIN_PLANET"
+					location = THIS
+					owner = ROOT
+				}
+				owner = {
+					change_variable = {
+						which = num_suspect_planet
+						value = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = eqgcountry.212
+	title = "eqgcountry.212.title"
+	desc = "eqgcountry.212.desc"
+	picture = GFX_evt_molten
+	show_sound = event_planetary_riot
+	location = root
+	is_triggered_only = yes
+
+	immediate = {
+		destroy_colony = yes
+		change_pc = pc_molten
+	}
+
+	option = {
+		name = "eqgcountry.212.a"
+		tooltip = {
+			destroy_colony = yes
+			change_pc = pc_molten
+		}
+		hidden_effect = {
+			from = {
+				country_event = { id = eqgcountry.213 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.213
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.213.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.213.a"
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier5materialreward
+			min = @tier5materialmin
+			max = @tier5materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier5materialreward
+			min = @tier5materialmin
+			max = @tier5materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = food
+			value = @tier5materialreward
+			min = @tier5materialmin
+			max = @tier5materialmax
+		}
+		hidden_effect = {
+			country_event = { id = eqgcountry.214 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.214
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.214.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.214.a"
+		custom_tooltip = situation_the_portal_is_open_tooltip
+		hidden_effect = {
+			country_event = { id = eqgcountry.500 }
+			start_situation = {
+				type = situation_the_portal_is_open
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.215
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.215.desc"
+	picture = GFX_evt_spymaster
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.215.a"
+		hidden_effect = {
+			country_event = { id = eqgcountry.230 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.221
+	title = "eqgcountry.210.title"
+	desc = "eqgcountry.221.desc"
+	picture = GFX_evt_spymaster
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.221.a"
+		hidden_effect = {
+			country_event = { id = eqgcountry.230 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.222
+	title = "eqgcountry.210.title"
+	desc = "eqgcountry.222.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.222.a"
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 3000 }
+		}
+		add_resource = {
+			energy = -3000
+		}
+		hidden_effect = {
+			country_event = { id = eqgcountry.223 days = 180 }
+		}
+	}
+
+	option = {
+		name = "eqgcountry.222.b"
+		hidden_effect = {
+			random_list = {
+				20 = {
+					random_planet_within_border = {
+						limit = {
+							is_colony = yes
+							owner = { is_primitive = no }
+							NOT = { has_planet_flag = eqg_capital@root }
+						}
+						planet_event = { id = eqgcountry.212 days = 360 }
+					}
+				}
+				80 = {
+					country_event = { id = eqgcountry.215 days = 360 }
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.223
+	title = "eqgcountry.210.title"
+	desc = "eqgcountry.223.desc"
+	picture = GFX_evt_spymaster
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.223.a"
+		hidden_effect = {
+			country_event = { id = eqgcountry.230 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.230
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.230.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.230.a"
+		custom_tooltip = situation_the_portal_is_open_tooltip
+		hidden_effect = {
+			country_event = { id = eqgcountry.500 }
+			start_situation = {
+				type = situation_the_portal_is_open
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.300
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.300.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.300.a"
+		hidden_effect = {
+			random_list = {
+				20 = {
+					random_planet_within_border = {
+						limit = {
+							is_colony = yes
+							is_artificial = no
+							owner = { is_primitive = no }
+						}
+						planet_event = { id = eqgcountry.310 days = 360 }
+					}
+				}
+				80 = {
+					random_planet_within_border = {
+						limit = {
+							is_colony = yes
+							is_artificial = no
+							owner = { is_primitive = no }
+							NOT = { has_planet_flag = eqg_capital@root }
+						}
+						planet_event = { id = eqgcountry.320 days = 360 }
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = eqgcountry.310
+	title = "eqgcountry.212.title"
+	desc = "eqgcountry.310.desc"
+	picture = GFX_evt_scanning_remains
+	show_sound = event_default
+	location = ROOT
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.310.a"
+		hidden_effect = {
+			owner = {
+				country_event = { id = eqgcountry.311 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.311
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.311.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.311.a"
+		hidden_effect = {
+			country_event = { id = eqgcountry.312 days = 90 }
+		}
+	}
+
+	option = {
+		name = "eqgcountry.311.b"
+		hidden_effect = {
+			country_event = { id = eqgcountry.313 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.312
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.312.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.312.a"
+		custom_tooltip = situation_the_portal_is_open_tooltip
+		hidden_effect = {
+			country_event = { id = eqgcountry.500 }
+			start_situation = {
+				type = situation_the_portal_is_open
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.313
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.313.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.313.a"
+		add_modifier = {
+			modifier = creation_of_the_other_world
+			days = -1
+		}
+	}
+}
+
+planet_event = {
+	id = eqgcountry.320
+	title = "eqgcountry.212.title"
+	desc = "eqgcountry.320.desc"
+	picture = GFX_evt_molten
+	show_sound = event_planetary_riot
+	location = ROOT
+	is_triggered_only = yes
+
+	immediate = {
+		destroy_colony = yes
+		change_pc = pc_molten
+	}
+
+	option = {
+		name = "eqgcountry.320.a"
+		tooltip = {
+			destroy_colony = yes
+			change_pc = pc_molten
+		}
+		hidden_effect = {
+			from = {
+				country_event = { id = eqgcountry.321 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.321
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.321.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.321.a"
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier5materialreward
+			min = @tier5materialmin
+			max = @tier5materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier5materialreward
+			min = @tier5materialmin
+			max = @tier5materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = food
+			value = @tier5materialreward
+			min = @tier5materialmin
+			max = @tier5materialmax
+		}
+		hidden_effect = {
+			country_event = { id = eqgcountry.322 days = 180 }
+		}
+	}
+
+	option = {
+		name = "eqgcountry.321.b"
+		hidden_effect = {
+			country_event = { id = eqgcountry.323 }
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.322
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.322.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.322.a"
+		custom_tooltip = situation_the_portal_is_open_tooltip
+		hidden_effect = {
+			country_event = { id = eqgcountry.500 }
+			start_situation = {
+				type = situation_the_portal_is_open
+			}
+		}
+	}
+}
+
+country_event = {
+	id = eqgcountry.323
+	title = "eqgcountry.110.title"
+	desc = "eqgcountry.323.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = celestia
+		planet_background = root
+		graphical_culture = root
+		city_level = root
+		room = root
+	}
+
+	option = {
+		name = "eqgcountry.323.a"
+	}
+}
+
+# Situation Events
+country_event = {
+	id = eqgcountry.500
+	title = "eqgcountry.500.title"
+	desc = "eqgcountry.500.desc"
+	picture = GFX_evt_coronation
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.500.a"
+	}
+}
+
+country_event = {
+	id = eqgcountry.501
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		start_situation = {
+			type = situation_the_portal_is_open
+		}
+	}
+}
+
+situation_event = {
+	id = eqgcountry.502
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { current_situation_approach = approach_technical_mutual_benefit }
+			owner = {
+				if = {
+					limit = {
+						NOT = { is_variable_set = num_technical_mutual_benefit_earn_tech }
+					}
+					set_variable = {
+						which = num_technical_mutual_benefit_earn_tech
+						value = 6 #full 24
+					}
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = {
+					random_list = {
+						90 = { situation_event = { id = eqgcountry.511 } }
+						10 = {
+							modifier = {
+								factor = 0
+								owner = {
+									check_variable = {
+										which = num_technical_mutual_benefit_earn_tech
+										value <= 0
+									}
+								}
+							}
+							situation_event = { id = eqgcountry.512 }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				current_situation_approach = approach_trade_cooperation
+				owner = {
+					NOT = { has_country_flag = situation_portal_has_traded }
+				}
+			}
+			random_list = {
+				75 = { }
+				25 = {
+					random_list = {
+						10 = { situation_event = { id = eqgcountry.521 } }
+						10 = { situation_event = { id = eqgcountry.522 } }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { current_situation_approach = approach_cultural_exchange }
+			random_list = {
+				11 = { }
+				1 = { situation_event = { id = eqgcountry.531 } }
+			}
+		}
+		if = {
+			limit = { current_situation_approach = approach_population_flow }
+			random_list = {
+				95 = { }
+				5 = { situation_event = { id = eqgcountry.541 } }
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = eqgcountry.511
+	title = "eqgcountry.511.title"
+	desc = "eqgcountry.511.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.511.a"
+		owner = {
+			locked_random_list = {
+				10 = {
+					add_monthly_resource_mult = {
+						resource = physics_research
+						value = @tier5researchreward
+						min = @tier5researchmin
+						max = @tier5researchmax
+					}
+				}
+				10 = {
+					add_monthly_resource_mult = {
+						resource = society_research
+						value = @tier5researchreward
+						min = @tier5researchmin
+						max = @tier5researchmax
+					}
+				}
+				10 = {
+					add_monthly_resource_mult = {
+						resource = engineering_research
+						value = @tier5researchreward
+						min = @tier5researchmin
+						max = @tier5researchmax
+					}
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = eqgcountry.512
+	title = "eqgcountry.511.title"
+	desc = "eqgcountry.512.desc"
+	picture = GFX_evt_engineering_research
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	immediate = {
+		owner = {
+			change_variable = {
+				which = num_technical_mutual_benefit_earn_tech
+				value = -1
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.511.a"
+		owner = {
+			locked_random_list = {
+				3 = {
+					modifier = { factor = 0 has_technology = tech_magic_3 }
+					give_technology = { tech = tech_magic_3 }
+				}
+				4 = {
+					modifier = { factor = 0 has_technology = tech_portal_migration_scheme }
+					give_technology = { tech = tech_portal_migration_scheme }
+				}
+				3 = {
+					modifier = { factor = 0 has_technology = tech_mind_reading }
+					give_technology = { tech = tech_mind_reading }
+				}
+				3 = {
+					modifier = { factor = 0 has_technology = tech_divination }
+					give_technology = { tech = tech_divination }
+				}
+				4 = {
+					modifier = { factor = 0 has_technology = tech_modular_crystal_planting }
+					give_technology = { tech = tech_modular_crystal_planting }
+				}
+				4 = {
+					modifier = { factor = 0 has_technology = tech_crystal_grinding }
+					give_technology = { tech = tech_crystal_grinding }
+				}
+				4 = {
+					modifier = { factor = 0 has_technology = tech_crystal_gasification }
+					give_technology = { tech = tech_crystal_gasification }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_magic_missile_2 }
+					give_technology = { tech = tech_magic_missile_2 }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_magic_armor_3 }
+					give_technology = { tech = tech_magic_armor_3 }
+				}
+				4 = {
+					modifier = { factor = 0 has_technology = tech_magic_lifting_equipment }
+					give_technology = { tech = tech_magic_lifting_equipment }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_crystal_cannon_3 }
+					give_technology = { tech = tech_crystal_cannon_3 }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_magic_regenerative_rune }
+					give_technology = { tech = tech_magic_regenerative_rune }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_invisible_rune }
+					give_technology = { tech = tech_invisible_rune }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_phantom_strike_craft }
+					give_technology = { tech = tech_phantom_strike_craft }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_speed_crystal_cannon_1 }
+					give_technology = { tech = tech_speed_crystal_cannon_1 }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_crystal_blocker }
+					give_technology = { tech = tech_crystal_blocker }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_megaspell_power }
+					give_technology = { tech = tech_megaspell_power }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_magic_lasers_3 }
+					give_technology = { tech = tech_magic_lasers_3 }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_magic_shields_3 }
+					give_technology = { tech = tech_magic_shields_3 }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_etheron_magic_weapon_1 }
+					give_technology = { tech = tech_etheron_magic_weapon_1 }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_reality_spell_3 }
+					give_technology = { tech = tech_reality_spell_3 }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_magic_lasers_3 }
+					give_technology = { tech = tech_magic_lasers_3 }
+				}
+				2 = {
+					modifier = { factor = 0 has_technology = tech_portal_trade }
+					give_technology = { tech = tech_portal_trade }
+				}
+				1 = {
+					modifier = { factor = 0 has_technology = tech_black_opal }
+					give_technology = { tech = tech_black_opal }
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = eqgcountry.521
+	title = "eqgcountry.521.title"
+	desc = "eqgcountry.521.desc"
+	picture = GFX_evt_gunrunning
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.521.a"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = energy value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+				minerals = 2000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.521.b"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = energy value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+				food = 2000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.521.c"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = energy value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+				consumer_goods = 1000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.521.d"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = energy value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+				alloys = 500
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.521.e"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = energy value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+				volatile_motes = 200
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.521.f"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = energy value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+				exotic_gases = 200
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.521.g"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = energy value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -1000
+				rare_crystals = 200
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.521.h"
+	}
+}
+
+situation_event = {
+	id = eqgcountry.522
+	title = "eqgcountry.521.title"
+	desc = "eqgcountry.521.desc"
+	picture = GFX_evt_gunrunning
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.522.a"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = minerals value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				minerals = -1000
+				energy = 2000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.522.b"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = food value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				food = -1000
+				energy = 2000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.522.c"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = consumer_goods value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				consumer_goods = -1000
+				energy = 4000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.522.d"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = alloys value >= 1000 }
+			}
+		}
+		owner = {
+			add_resource = {
+				alloys = -1000
+				energy = 8000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.522.e"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = volatile_motes value >= 100 }
+			}
+		}
+		owner = {
+			add_resource = {
+				volatile_motes = -100
+				energy = 2000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.522.f"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = exotic_gases value >= 100 }
+			}
+		}
+		owner = {
+			add_resource = {
+				exotic_gases = -100
+				energy = 2000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.522.g"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = rare_crystals value >= 100 }
+			}
+		}
+		owner = {
+			add_resource = {
+				rare_crystals = -100
+				energy = 2000
+			}
+			hidden_effect = {
+				set_timed_country_flag = { flag = situation_portal_has_traded days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = "eqgcountry.522.h"
+	}
+}
+
+situation_event = {
+	id = eqgcountry.531
+	title = "eqgcountry.531.title"
+	desc = "eqgcountry.531.desc"
+	picture = GFX_evt_tradestation_interior
+	show_sound = event_cityscape
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.531.a"
+		owner = {
+			locked_random_list = {
+				10 = {
+					add_monthly_resource_mult = {
+						resource = unity
+						value = @tier5unityreward
+						min = @tier5unitymin
+						max = @tier5unitymax
+					}
+				}
+				10 = {
+					add_modifier = { modifier = mod_cultural_exchange_1 days = 360 }
+				}
+				10 = {
+					add_modifier = { modifier = mod_cultural_exchange_2 days = 360 }
+				}
+			}
+		}
+	}
+}
+
+situation_event = {
+	id = eqgcountry.541
+	title = "eqgcountry.541.title"
+	desc = "eqgcountry.541.desc"
+	picture = GFX_evt_colony_settlement
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	option = {
+		name = "eqgcountry.541.a"
+		owner = {
+			random_planet_within_border = {
+				limit = {
+					is_colony = yes
+					owner = { is_primitive = no }
+				}
+				create_pop = {
+					species = PREV
+				}
+			}
+		}
+	}
+}

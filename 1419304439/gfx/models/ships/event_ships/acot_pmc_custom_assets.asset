@@ -1,0 +1,2382 @@
+###########################################
+
+#######	Star Fighter Entities  #################
+
+###########################################
+
+entity = {
+	name = "acot_starfighter_turret_entity"
+	pdxmesh = "acot_pmc_starfighter_mesh"
+	scale = 0.15
+	
+	locator = { name = "turret_muzzle_01" 	position = { 0 0 0 } rotation = { 0 0 0 } }
+
+	default_state = "idle"
+	state = { name = "idle"	 animation = "idle" animation_blend_time = 4 
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_event_ship_06_idle" } }
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_035_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving"	animation = "idle" animation_blend_time = 2 
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "death" animation = "death3" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 4.63 node = "ship_main" particle = "ship_explosion_particle" }
+		event = { time = 0.0 node = "explosion_locator1" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 1.6 node = "explosion_locator2" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 2.83 node = "explosion_locator3" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 3.26 node = "explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 3.9 node = "explosion_locator4" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 4.1 node = "explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+	}
+	
+	locator = {
+		name = "root"
+	}
+}
+
+#FRAME
+entity = {
+	name = "acot_star_fighters_entity"
+	pdxmesh = "molluscoid_01_corvette_frame_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" animation_blend_time = 4
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_corvette_hum" } }
+	}
+	state = { name = "moving" animation = "idle" animation_blend_time = 2
+		event = { trigger_once = yes sound = { soundeffect = "moving_out_corvette" } }
+	}
+	state = { name = "death" animation = "death" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 3.4 node = "part1_locator" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 3.4 node = "part1_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 3.4 node = "part1_locator" particle = "ship_burn_particle" }
+
+		event = { time = 8.0 node = "part2_back_locator" particle = "ship_explosion_air_vent_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 3.4 node = "part2_front_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 8.0 node = "part2_back_locator" particle = "ship_burn_particle" }
+		event = { time = 3.4 node = "part2_front_locator" particle = "ship_burn_particle" }
+
+		event = { time = 8.0 node = "part3_locator" particle = "ship_burn_particle" }
+		event = { time = 8.0 node = "part3_locator" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 8.0 node = "part3_locator" particle = "ship_explosion_air_vent_particle" }
+
+		event = { time = 10.3 node = "explosion_locator6" particle = "small_player_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+
+		event = { time = 19.73 node = "part2" particle = "small_player_ship_explosion_particle" sound = { soundeffect = ship_explosion_large } }
+		event = { time = 19.73 node = "explosion_locator3" particle = "small_player_ship_explosion_particle" }
+	}
+	state = { name = "death" animation = "death2" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 5.16 node = "part1_locator" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 5.16 node = "part1_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 5.16 node = "part1_locator" particle = "ship_burn_particle" }
+
+		event = { time = 5.16 node = "part2_front_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 5.16 node = "part2_front_locator" particle = "ship_burn_particle" }
+
+		event = { time = 11.9 node = "part2_back_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 11.9 node = "part2_back_locator" particle = "ship_burn_particle" }
+		event = { time = 11.9 node = "part2_back_locator" particle = "ship_explosion_particle" }
+
+		event = { time = 11.9 node = "part3_explosion_locator" particle = "small_player_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+
+		event = { time = 18.0 node = "part2" particle = "small_player_ship_explosion_particle" sound = { soundeffect = ship_explosion_large } }
+		event = { time = 18.0 node = "part1" particle = "small_player_ship_explosion_particle" }
+	}
+
+	state = { name = "death" animation = "death3" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 1.7 node = "explosion_locator1" particle = "ship_burn_particle" }
+		event = { time = 1.7 node = "explosion_locator1" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 2.16 node = "explosion_locator2" particle = "ship_burn_particle" }
+		event = { time = 2.16 node = "explosion_locator2" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 3.9 node = "explosion_locator3" particle = "ship_burn_particle" }
+		event = { time = 3.9 node = "explosion_locator3" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 7.5 node = "explosion_locator4" particle = "ship_burn_particle" }
+		event = { time = 7.5 node = "explosion_locator4" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 4.9 node = "explosion_locator5" particle = "ship_burn_particle" }
+		event = { time = 4.9 node = "explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 17.5 node = "part2" particle = "small_player_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+	}
+
+	scale = 0.75
+
+	game_data = {
+		size = 10
+		emissive_recolor_crunch = 3.0
+	}
+}
+
+# BOW
+entity = {
+	name = "acot_star_fighters_team_one_entity"
+	pdxmesh = "locator_mesh"
+
+	locator = { name = "unit_one" 	position = { 0 0 2 } rotation = { 0 0 0 } }
+	locator = { name = "unit_two" 	position = { 5 -3.5 -5.5 } rotation = { 0 0 0 } }
+	locator = { name = "unit_three" 	position = { -5 -3.5 -5.5 } rotation = { 0 0 0 } }
+	locator = { name = "unit_four" 	position = { 7 -2.5 0 } rotation = { 0 0 0 } }
+	locator = { name = "unit_five" 	position = { -7 -2.5 0 } rotation = { 0 0 0 } }
+	locator = { name = "unit_six" 	position = { -9 1.5 6 } rotation = { 0 0 0 } }
+	locator = { name = "unit_seven" 	position = { 9 1.5 6 } rotation = { 0 0 0 } }
+
+	attach = { unit_one = "acot_starfighter_turret_entity" }
+	attach = { unit_two = "acot_starfighter_turret_entity" }
+	attach = { unit_three = "acot_starfighter_turret_entity" }
+	attach = { unit_four = "acot_starfighter_turret_entity" }
+	attach = { unit_five = "acot_starfighter_turret_entity" }
+	attach = { unit_six = "acot_starfighter_turret_entity" }
+	attach = { unit_seven = "acot_starfighter_turret_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "unit_one" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 1 node = "unit_two" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 2 node = "unit_three" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "unit_four" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 1 node = "unit_five" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 2 node = "unit_six" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 3 node = "unit_seven" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving" state_time = 5
+		event = { time = 0 node = "unit_one" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 1 node = "unit_two" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 2 node = "unit_three" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "unit_four" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 1 node = "unit_five" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 2 node = "unit_six" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 3 node = "unit_seven" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "death" state_time = 5 }
+}
+
+###########################################
+
+#######	Star Bender Entities  #################
+
+###########################################
+
+entity = {
+	name = "acot_star_bender_entity"
+	pdxmesh = "molluscoid_01_destroyer_frame_mesh"
+
+	locator = { name = "part1" 	position = { 0 0 -5 } rotation = { 0 0 0 } }
+	locator = { name = "part2" 	position = { 0 0 5 } rotation = { 0 0 0 } }
+	locator = { name = "wing" 	position = { 0 0 0 } rotation = { 90 0 0 } }
+
+	attach = { wing = "acot_star_bender_wing_entity" }
+
+
+	default_state = "idle"
+	state = { name = "idle"		animation = "idle" animation_blend_time = 0.25
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_destroyer_hum" } }
+	}
+	state = { name = "moving"	animation = "idle" animation_blend_time = 0.25
+		event = { trigger_once = yes sound = { soundeffect = "moving_out_destroyer" } }
+	}
+	state = { name = "death" animation = "death" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 8.15 node = "part1_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 8.15 node = "part1_locator" particle = "ship_burn_particle" }
+
+		event = { time = 8.15 node = "part2_locator" particle = "ship_burn_particle" }
+		event = { time = 8.15 node = "part2_locator" particle = "ship_explosion_air_vent_particle" }
+
+		event = { time = 8.3 node = "ship_main" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+
+		event = { time = 18.56 node = "part1" particle = "large_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 18.56 node = "part2" particle = "large_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+	}
+	state = { name = "death" animation = "death2" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 3.05 node = "part1_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 3.05 node = "part2_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 3.05 node = "ship_main" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+
+		event = { time = 4.6 node = "ship_main" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 4.6 node = "part1_locator" particle = "ship_burn_particle" }
+		event = { time = 4.6 node = "part2_locator" particle = "ship_burn_particle" }
+
+		event = { time = 18.56 node = "part1" particle = "large_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 18.56 node = "part2" particle = "large_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+	}
+	state = { name = "death" animation = "death3" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 1.05 node = "part2_local_explosion_locator" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 1.6 node = "part2_local_explosion_locator1" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 3.4 node = "part2_local_explosion_locator2" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 6.6 node = "part2_local_explosion_locator3" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 6.83 node = "part2_local_explosion_locator4" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 7.1 node = "part2_local_explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 7.5 node = "part2_local_explosion_locator6" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+
+		event = { time = 7.93 node = "part2_explosion_locator" particle = "large_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 7.93 node = "part1_locator" particle = "ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		event = { time = 7.93 node = "part1_locator" particle = "ship_burn_particle" }
+		event = { time = 7.93 node = "part1_locator" particle = "ship_explosion_air_vent_particle" }
+
+		event = { time = 12.83 node = "part1" particle = "large_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+	}
+
+    scale = 1.0
+
+	game_data = {
+		size = 9
+		emissive_recolor_crunch = 5.0
+	}
+}
+
+entity = {
+	name = "acot_star_bender_wing_entity"
+	pdxmesh = "acot_pmc_military_station_medium_mesh"
+
+	attach = { part1 = "acot_star_bender_section_entity" }
+	attach = { part2 = "acot_star_bender_section_entity" }
+	attach = { part3 = "acot_star_bender_section_entity" }
+	attach = { part4 = "acot_star_bender_section_entity" }
+
+	scale = 0.8
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { trigger_once = yes sound = { soundeffect = "defense_station_idle_hum" } }
+
+		event = { time = 0.0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+
+	}
+
+	state = { name = "death" state_time = 5 looping = no
+		event = { time = 0.0 node = "light_locator_01" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 0.5 node = "light_locator_02" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 1.5 node = "light_locator_03" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 2.0 node = "light_locator_04" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 3.0 node = "light_locator_05" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 4.0 node = "light_locator_04" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+
+		event = { time = 4.9 particle = "medium_station_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_large" } }
+	}
+
+
+	game_data = {
+		emissive_recolor_crunch = 5.0
+	}
+}
+
+entity = {
+	name = "acot_star_bender_section_entity"
+	pdxmesh = "acot_pmc_military_station_section_heavy_mesh"
+	scale = 1.0
+}
+
+entity = {
+	name = "acot_star_bender_bow_entity"
+	pdxmesh = "acot_pmc_destroyer_bow_S3_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "death" state_time = 5 }
+}
+
+entity = {
+	name = "acot_star_bender_stern_entity"
+	pdxmesh = "acot_pmc_destroyer_stern_M1_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_large_02" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_large_03" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving" state_time = 5
+		event = { time = 0 node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_large_02" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_large_03" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+
+	state = { name = "death" state_time = 5 }
+
+	game_data = {
+	}
+}
+
+###########################################
+
+#######	Star Invader Entities  #################
+
+###########################################
+
+entity = {
+	name = "acot_starfighter_hero_entity"
+	   pdxmesh = "molluscoid_01_corvette_frame_mesh"
+   
+	   default_state = "idle"
+	   state = { name = "idle"	 animation = "idle" animation_blend_time = 4
+	   }
+	   state = { name = "moving"	animation = "idle" animation_blend_time = 2
+	   }
+	   state = { name = "death" animation = "death3" animation_blend_time = 0.0 chance = 1 looping = no
+		   event = { time = 4.63 node = "ship_main" particle = "large_ship_explosion_particle" }
+	   }
+   
+	   scale = 1.00
+	   game_data = {
+		   emissive_recolor_crunch = 5.0
+	   }
+}
+
+entity = {
+	name = "acot_starfighter_hero_ship_entity"
+	pdxmesh = "acot_pmc_starfighter_hero_mesh"
+	scale = 0.40
+	
+	locator = { name = "xl_1" 	position = { 0 0 0 } rotation = { 0 0 0 } }
+	locator = { name = "gun_1" 	position = { 0 0 0 } rotation = { 0 0 0 } }
+	locator = { name = "gun_2" 	position = { 0 0 0 } rotation = { 0 0 0 } }
+	locator = { name = "root" 	position = { 0 0 0 } rotation = { 0 0 0 } }
+
+
+	attach = { root = "acot_starfighter_hero_ship_shield_entity" }
+
+	default_state = "idle"
+	state = { name = "idle"	 animation = "idle" animation_blend_time = 4 
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_event_ship_06_idle" } }
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_035_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving"	animation = "idle" animation_blend_time = 2 
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "death" animation = "death3" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 4.63 node = "ship_main" particle = "ship_explosion_particle" }
+		event = { time = 0.0 node = "explosion_locator1" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 1.6 node = "explosion_locator2" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 2.83 node = "explosion_locator3" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 3.26 node = "explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 3.9 node = "explosion_locator4" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 4.1 node = "explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+	}
+	
+	locator = {
+		name = "root"
+	}
+}
+
+entity = {
+	name = "acot_starfighter_hero_ship_shield_entity"
+	pdxmesh = "acot_pmc_starfighter_hero_shield_mesh"
+	scale = 1.00
+	
+	game_data = {
+  		raytrace_projectiles = no
+  		dissolve_on_death = 3.0
+		ship_color = hsv { 0.05 1.0 0.75 1.0 }
+	}
+	 
+	default_state = "idle"
+	state = { name = "idle"	 animation = "idle" animation_blend_time = 4 
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_event_ship_06_idle" } }
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_035_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving"	animation = "idle" animation_blend_time = 2 
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "death" animation = "death3" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 4.63 node = "ship_main" particle = "ship_explosion_particle" }
+		event = { time = 0.0 node = "explosion_locator1" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 1.6 node = "explosion_locator2" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 2.83 node = "explosion_locator3" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 3.26 node = "explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 3.9 node = "explosion_locator4" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+		event = { time = 4.1 node = "explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = origin_small_explosion } }
+	}
+	
+	locator = {
+		name = "root"
+	}
+}
+
+###########################################
+
+#######	Star Destroyer Entities  #################
+
+###########################################
+
+# FRAME
+entity = {
+	name = "acot_star_destroyer_entity"
+	pdxmesh = "mammalian_01_battleship_frame_mesh"
+
+	locator = { name = "part1"	position = { 0 2 -11.5 } rotation = { 0 0 0 } }
+	locator = { name = "part1down"	position = { 0 -3 -11.5 } rotation = { 0 0 180 } }
+	locator = { name = "part2"	position = { 0 2 -5.5 } rotation = { 0 0 0 } }
+	locator = { name = "part2down"	position = { 0 -2 -5.5 } rotation = { 0 0 180 } }
+	locator = { name = "part3"	position = { 0 2 5.5 } rotation = { 0 0 0 } }
+	locator = { name = "part3down"	position = { 0 -2 0.5 } rotation = { 0 0 180 } }
+	locator = { name = "part4"	position = { 0 2 10.6 } rotation = { 0 0 0 } }
+	locator = { name = "part4down"	position = { 0 -2 10.6 } rotation = { 0 0 180 } }
+	locator = { name = "left_wing"	position = { 5.5 1 8.5 } rotation = { -90 0 0 } }
+	locator = { name = "right_wing"	position = { -5.5 1 8.5 } rotation = { 90 0 0 } }
+
+	locator = { name = "wing_1"	position = { 17 1.5 8.7 } rotation = { 0 0 180 } }
+	locator = { name = "wing_2"	position = { -17 1.5 8.7 } rotation = { 0 0 180 } }
+
+
+	attach = { wing_1 = "acot_star_destroyer_connector_wing_entity" }
+	attach = { wing_2 = "acot_star_destroyer_connector_wing_entity" }
+
+	default_state = "idle"
+	state = { name = "idle"	animation = "idle" animation_blend_time = 4.0
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_battleship_hum" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_battleship_bass" } }
+	}
+	state = { name = "moving"	animation = "idle" animation_blend_time = 4.0
+		event = { trigger_once = yes sound = { soundeffect = "moving_out_battleship" } }
+	}
+	state = { name = "death" animation = "death" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 9.26 node = "part1_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 9.26 node = "part1_locator" particle = "ship_burn_particle" }
+		event = { time = 9.26 node = "part1_locator" particle = "large_ship_explosion_particle" }
+		event = { time = 7.63 node = "part1_locator" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 10.26 node = "part2_back_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 10.26 node = "part2_back_locator" particle = "ship_burn_particle" }
+
+		event = { time = 10.26 node = "part3_locator" particle = "ship_burn_particle" }
+		event = { time = 10.26 node = "part3_locator" particle = "large_ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 14.5 node = "part2" particle = "large_player_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+	}
+	state = { name = "death" animation = "death2" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 9.56 node = "part1_locator" particle = "ship_explosion_air_vent_particle" }
+		event = { time = 9.56 node = "part1_locator" particle = "ship_burn_particle" }
+		event = { time = 9.56 node = "part1_locator" particle = "large_ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 9.0 node = "part1_locator" particle = "ship_explosion_particle" }
+
+		event = { time = 9.56 node = "part2_front_locator" particle = "ship_explosion_air_vent_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 9.56 node = "part2_front_locator" particle = "ship_burn_particle" }
+		event = { time = 14.7 node = "part2_back_locator" particle = "ship_explosion_air_vent_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 14.7 node = "part2_back_locator" particle = "ship_burn_particle" }
+
+		event = { time = 14.7 node = "part3_locator" particle = "ship_explosion_air_vent_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 14.7 node = "part3_locator" particle = "ship_burn_particle" }
+		event = { time = 14.7 node = "part3_locator" particle = "large_ship_explosion_particle" }
+
+		event = { time = 22.5 node = "part1" particle = "small_player_ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+		event = { time = 22.5 node = "part2" particle = "small_player_ship_explosion_particle" sound = { soundeffect = ship_explosion_large } }
+		event = { time = 22.5 node = "part3" particle = "small_player_ship_explosion_particle" }
+	}
+	state = { name = "death" animation = "death3" animation_blend_time = 0.0 chance = 1 looping = no
+		event = { time = 1.0 node = "explosion_locator1" particle = "ship_burn_particle" }
+		event = { time = 1.0 node = "explosion_locator1" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 1.7 node = "explosion_locator2" particle = "ship_burn_particle" }
+		event = { time = 1.7 node = "explosion_locator2" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 3.7 node = "explosion_locator3" particle = "ship_burn_particle" }
+		event = { time = 3.7 node = "explosion_locator3" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 6 node = "explosion_locator4" particle = "ship_burn_particle" }
+		event = { time = 6 node = "explosion_locator4" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 7.3 node = "explosion_locator5" particle = "ship_burn_particle" }
+		event = { time = 7.3 node = "explosion_locator5" particle = "ship_explosion_particle" sound = { soundeffect = "ship_explosion"} }
+
+		event = { time = 15.9 node = "part2" particle = "large_player_ship_explosion_particle" sound = { soundeffect = ship_destroyed } }
+	}
+
+	scale = 1.0
+
+	game_data = {
+		size = 35
+		emissive_recolor_crunch = 5.0
+	}
+}
+
+entity = {
+	name = "acot_star_destroyer_spinal_entity"
+	pdxmesh = "acot_pmc_battleship_long_xl_mesh"
+
+	default_state = "idle"
+	state = { name = idle	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	state = { name = moving	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	state = { name = "death" state_time = 5 }
+
+}
+
+entity = {
+	name = "acot_star_destroyer_bow_entity"
+	pdxmesh = "acot_pmc_battleship_bow_L1M1S2_mesh"
+
+	default_state = "idle"
+	state = { name = idle	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	state = { name = moving	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	state = { name = "death" state_time = 5 }
+}
+
+entity = {
+	name = "acot_star_destroyer_mid_entity"
+	pdxmesh = "acot_pmc_battleship_mid_L3_mesh"
+
+	default_state = "idle"
+	state = { name = idle	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	state = { name = moving	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	state = { name = "death" state_time = 5 }
+}
+
+entity = {
+	name = "acot_star_destroyer_core_entity"
+	pdxmesh = "acot_pmc_battleship_mid_L1M4_mesh"
+
+	default_state = "idle"
+	state = { name = idle	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	state = { name = moving	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+
+	state = { name = "death" state_time = 5 }
+}
+
+entity = {
+	name = "acot_star_destroyer_stern_entity"
+	pdxmesh = "acot_pmc_battleship_stern_L1_mesh"
+
+	default_state = idle
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_04" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving" state_time = 5
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_04" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "death" state_time = 5 }
+}
+
+entity = {
+	name = "acot_star_destroyer_stern_down_entity"
+	pdxmesh = "acot_pmc_battleship_stern_S4_mesh"
+
+	default_state = idle
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_04" particle = "acot_pmc_075_exhaust_circle_idle" trigger_once = yes keep_particle = yes }
+
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving" state_time = 5
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "engine_medium_04" particle = "acot_pmc_075_exhaust_circle_moving" trigger_once = yes keep_particle = yes }
+
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "death" state_time = 5 }
+}
+
+entity = {
+	name = "acot_star_destroyer_connector_entity"
+	pdxmesh = "acot_pmc_destroyer_bow_M1S2_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "moving" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "death" state_time = 5 }
+}
+
+entity = {
+	name = "acot_star_destroyer_connector_wing_entity"
+	pdxmesh = "acot_pmc_military_station_small_mesh"
+
+	attach = { part1 = "acot_star_destroyer_platform_entity" }
+	attach = { part2 = "acot_star_destroyer_platform_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { trigger_once = yes sound = { soundeffect = "defense_station_idle_hum" } }
+
+		event = { time = 0.0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+
+	}
+
+	state = { name = "death" state_time = 2 looping = no
+		event = { time = 0.0 node = "light_locator_01" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 0.5 node = "light_locator_02" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+
+		event = { time = 1.9 particle = "medium_station_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_large" } }
+	}
+
+	scale = 1.2
+
+	game_data = {
+		emissive_recolor_crunch = 5.0
+	}
+}
+
+entity = {
+	name = "acot_star_destroyer_platform_entity"
+	pdxmesh = "acot_pmc_military_station_section_heavy_mesh"
+	scale = 1.0
+}
+
+###########################################
+
+#######	STAR DEVASTATOR  #################
+
+###########################################
+
+entity = {
+	name = "acot_star_devastator_entity"
+	pdxmesh = "acot_pmc_titan_frame_mesh"
+	
+	locator = { name = "part1"	position = { 0 -1 -13.0 } rotation = { 0 0 -180 } }
+	locator = { name = "part1down"	position = { 0 5 -13.0 } rotation = { 0 0 0 } }
+	locator = { name = "part2"	position = { 0 -1 -7 } rotation = { 0 0 -180 } }
+	locator = { name = "part2down"	position = { 0 5 -7 } rotation = { 0 0 0 } }
+	locator = { name = "part3"	position = { 0 -1 4 } rotation = { 0 0 -180 } }
+	locator = { name = "part3down"	position = { 0 5 4 } rotation = { 0 0 0 } }	
+
+	locator = { name = "hub"	position = { 0 2 17.6 } rotation = { 0 0 0 } } #CITADEL
+
+	locator = { name = "cover_up"	position = { 0 -1 9 } rotation = { 0 0 -180 } }	
+
+	attach = { cover_up = "acot_star_devastator_stern_entity" }
+
+	scale = 1.0
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" 
+	
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_titan_ship_hum_01" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_titan_ship_hum_02" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_titan_ship_hum_03" } }
+	
+	}
+	state = { name = "moving" animation = "idle"
+		event =  { trigger_once = yes sound = { soundeffect = "moving_out_battleship" } }
+	}
+	state = { name = "death" animation = "death" looping = no 
+		event = { time = 2.5 node = "explosion_locator_01" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 3.5 node = "explosion_locator_02" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 5.5 node = "explosion_locator_03" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 7.5 node = "explosion_locator_04" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 9.5 node = "explosion_locator_05" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 12.5 node = "ship_main" particle = "dreadnought_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "amb_titan_ship_death" } }
+	}
+
+	game_data = {
+		size = 35
+		emissive_recolor_crunch = 5.0
+	}
+}
+
+entity = {
+	name = "acot_pmc_devastator_turret_xl_entity"
+	pdxmesh = "acot_pmc_turret_xl_mesh"
+	
+	state = { name = "idle"	}
+	state = { name = "attack" looping = no next_state = "idle"
+	}
+	scale = 0.35
+	
+	game_data = {
+		emissive_recolor_crunch = 2.0
+	}
+}
+
+entity = {
+	name = "acot_star_devastator_spinal_entity"
+	pdxmesh = "acot_pmc_titan_bow_mesh"
+	locator = { name = "root"				position = { 0	0  0 } }
+
+	scale = 0.6
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	attach = { "root" = "acot_pmc_titan_glow_effect_mesh_entity" }
+	state = { name = "death" state_time = 5 looping = no }
+}
+
+entity = {
+	name = "acot_star_devastator_mid_entity"
+	pdxmesh = "acot_pmc_titan_mid_mesh"
+
+	scale = 0.6
+}
+
+entity = {
+	name = "acot_star_devastator_stern_entity"
+	pdxmesh = "acot_pmc_titan_stern_mesh"
+	
+	scale = 0.6
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	
+		#start_event = { node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		#start_event = { node = "engine_large_02" particle = "acot_pmc_075_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		#start_event = { node = "engine_large_03" particle = "acot_pmc_075_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "moving" state_time = 5
+		start_event = { node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	
+		#start_event = { node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		#start_event = { node = "engine_large_02" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		#start_event = { node = "engine_large_03" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" state_time = 5 looping = no }
+}
+
+### SHIP
+entity = {
+	name = "acot_star_devastator_main_entity"
+	pdxmesh = "acot_meganought_mesh"
+	
+
+	scale = 1.75
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		start_event = { trigger_once = yes sound = { soundeffect = "dreadnaught_idle" } }
+		
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_04" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_05" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_06" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "engine_medium_07" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_small_01" particle = "acot_pmc_025_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_small_02" particle = "acot_pmc_025_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "moving" animation = "idle"
+		event = { sound = { soundeffect = juggernaut_mammalian_move } }
+	
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "engine_large_01" particle = "acot_pmc_1_5_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_04" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_05" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_06" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "engine_medium_07" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_small_01" particle = "acot_pmc_05_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_small_02" particle = "acot_pmc_05_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" animation = "death" looping = no
+		event = { time = 0.0 node = "explosion1" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1.4 node = "explosion2" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 2.0 node = "explosion3" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 2.8 node = "explosion4" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 3.4 node = "explosion5" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 3.8 node = "explosion6" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 4.4 node = "explosion7" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 5.0 node = "explosion8" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 5.6 node = "explosion9" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 6 node = "explosion10" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+	}
+
+}
+
+entity = {
+	name = "acot_star_devastator_citadel_entity"
+	pdxmesh = "acot_pmc_citadel_mesh"
+
+	scale = 1.00
+
+	#locator = { name = "slot1"				position = { 0	0  0 } }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_07" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_08" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_09" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_01" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_02" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_03" } }
+	}
+}
+
+###########################################
+
+#######	STAR DECIMATOR #################
+
+###########################################
+
+entity = {
+	name = "acot_star_decimator_entity"
+	pdxmesh = "avian_01_colossus_frame_mesh"
+	
+	locator = { name = "core"	position = { 0 0 0 } rotation = { 0 0 0 } }
+	locator = { name = "part1"	position = { -46 -24 0 } rotation = { 90 0 180 } }
+	locator = { name = "part2"	position = { 46 -24 0 } rotation = { -90 0 180 } }
+	locator = { name = "part3"	position = { -46 24 0 } rotation = { 90 0 0 } }
+	locator = { name = "part4"	position = { 46 24 0 } rotation = { -90 0 0 } }
+
+	locator = { name = "part1x"	position = { -23 -12 0 } rotation = { 90 0 180 } }
+	locator = { name = "part2x"	position = { 23 -12 0 } rotation = { -90 0 180 } }
+	locator = { name = "part3x"	position = { -23 12 0 } rotation = { 90 0 0 } }
+	locator = { name = "part4x"	position = { 23 12 0 } rotation = { -90 0 0 } }
+
+	attach = { core = "acot_star_decimator_jugger_entity" }
+	
+	#attach = { part1x = "acot_star_decimator_jugger_entity" }
+	#attach = { part2x = "acot_star_decimator_jugger_entity" }
+	#attach = { part3x = "acot_star_decimator_jugger_entity" }
+	#attach = { part4x = "acot_star_decimator_jugger_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+	state = { name = "moving" animation = "idle" }
+	state = { name = "working" animation = "idle" }
+	state = { name = "death" animation = "closed_death" looping = no 
+		event = { time = 13.2 node = "frame_ship" particle = "dreadnought_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		chance = {
+			if_current_state = {
+				"idle" = 100
+				"moving" = 100
+				"death" = 0
+				"working" = 0
+			}
+		}
+	}
+	state = { name = "death" animation = "opened_death" looping = no 
+		event = { time = 9.13 node = "frame_ship" particle = "dreadnought_explosion_particle" sound = { soundeffect = ship_destroyed } }
+		chance = {
+			if_current_state = {
+				"idle" = 0
+				"moving" = 0
+				"death" = 0
+				"working" = 100
+			}
+		}
+	}
+	
+	game_data = {
+		size = 70
+	}
+	
+}
+
+entity = {
+	name = "acot_star_decimator_colossus_ship_entity"
+	pdxmesh = "acot_pmc_colossus_mesh"
+	
+	scale = 1.25
+
+	default_state = "idle"
+	# Actual idle state when being in idle/moving.
+	state = { name = "idle" animation = "idle" looping = no next_state = "idle" animation_blend_time = 5
+		start_event = { trigger_once = yes sound = { soundeffect = "mammalian_colossus_idle" } }
+		
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	#	event = { time = 0 node = "root" particle = "avian_01_colossus_inner_core_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "large_engine_01" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "large_engine_02" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "large_engine_03" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+	}
+	
+	locator = { name = "explosion_locator_01" position = { 3.3 7 5.6 } }
+	locator = { name = "explosion_locator_02" position = { -38 -2 2.5 } }
+	locator = { name = "explosion_locator_03" position = { 4 3 -28 } }
+	locator = { name = "explosion_locator_04" position = { 28 22 -2.5 } }
+	locator = { name = "explosion_locator_05" position = { -6 3.4 -8 } }
+	#locator = { name = "planet_killer_gun_01" position = { 0 0 0 } } # Actual locator in mesh.
+	
+	#attach = { arms = "acot_star_decimator_colossus_rings_entity" }
+	#attach = { ship_local = "acot_star_decimator_colossus_sphere_entity" }
+	#attach = { ship_local = "acot_star_decimator_colossus_sphere_contents_entity" }
+}
+
+entity = {
+	name = "acot_star_decimator_jugger_entity"
+	pdxmesh = "acot_pmc_juggernaut_mesh"
+	
+	scale = 1
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	}
+	state = { name = "moving" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" animation = "death" looping = no 
+		event = { time = 1.1 node = "explosion_locator_01" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 1.8 node = "explosion_locator_02" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 3.1 node = "explosion_locator_03" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.4 node = "explosion_locator_04" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.7 node = "explosion_locator_05" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 5.2 node = "explosion_locator_06" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.5 node = "explosion_locator_07" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.9 node = "explosion_locator_08" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+	
+		event = { time = 6.96 node = "big_explosion_locator" particle = "small_2_player_ship_explosion_particle" keep_particle = yes trigger_once = no }
+		event = { time = 6.96 node = "big_explosion_locator" particle = "juggernaut_burn_effect" keep_particle = yes trigger_once = no }
+	}
+}
+
+entity = {
+	name = "acot_star_decimator_colossus_rings_entity"
+	pdxmesh = "acot_pmc_colossus_rings_mesh"
+	
+	get_state_from_parent = no
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+}
+
+entity = {
+	name = "acot_star_decimator_colossus_rings_smaller_entity"
+	pdxmesh = "acot_pmc_colossus_rings_mesh"
+
+	scale = 0.70
+
+	get_state_from_parent = no
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+}
+
+entity = {
+	name = "acot_star_decimator_colossus_sphere_entity"
+	pdxmesh = "acot_pmc_colossus_sphere_mesh"
+	
+	game_data = {
+		uv_animation_speed   = 0.07
+		uv_animation_direction  = { -1.0 0.5 }
+	}
+}
+
+entity = {
+	name = "acot_star_decimator_colossus_sphere_contents_entity"
+	pdxmesh = "acot_pmc_colossus_sphere_contents_mesh"
+	
+	get_state_from_parent = no
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+}
+
+###########################################
+
+#######	STAR DOMINATOR I  #################
+
+###########################################
+
+### FRAME
+entity = {
+	name = "acot_star_dominator_entity"
+	pdxmesh = "locator_mesh"
+	locator = { name = "part1" 	position = { 0 0 -68.5 } rotation = { 0 0 0 } }
+
+	locator = { name = "hammer" 	position = { 0 4 -53 } rotation = { 0 0 0 } }
+	locator = { name = "hammerdown" 	position = { 0 -7 -53 } rotation = { 0 0 180 } }	
+
+	locator = { name = "spinal" 	position = { 0 3 -35 } rotation = { 0 0 0 } }
+	locator = { name = "spinaldown" 	position = { 0 -3 -35 } rotation = { 0 0 180 } }
+
+	locator = { name = "part2" 	position = { 0 3 -26.5 } rotation = { 0 0 0 } }
+	locator = { name = "part2down" 	position = { 0 -3 -26.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part3" 	position = { 0 3 -11.5 } rotation = { 0 0 0 } }
+	locator = { name = "part3down" 	position = { 0 -3 -11.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part4" 	position = { 0 3 4.5 } rotation = { 0 0 0 } }
+	locator = { name = "part4down" 	position = { 0 -3 4.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part5" 	position = { 0 4.5 26.5 } rotation = { 0 0 0 } }
+	locator = { name = "part5down" 	position = { 0 -4.5 26.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part6" 	position = { 0 3 46 } rotation = { 0 0 0 } }
+	locator = { name = "part6down" 	position = { 0 -3 46 } rotation = { 0 0 180 } }
+
+	locator = { name = "part7" 	position = { 0 3 63.0 } rotation = { 0 0 0 } }
+	locator = { name = "part7down" 	position = { 0 -3 63.0 } rotation = { 0 0 180 } }
+
+	locator = { name = "engine" 	position = { 0 -4.5 66 } rotation = { 0 0 0 } }
+	locator = { name = "enginedown" 	position = { 0 4.5 66 } rotation = { 0 0 180 } }
+
+
+	attach = { part6down = "acot_megadreadnought_mid_entity" }
+	attach = { part7down = "acot_megadreadnought_mid_entity" }
+	attach = { engine = "acot_megadreadnought_stern_entity" }
+	attach = { enginedown = "acot_megadreadnought_stern_entity" }
+
+
+	### SIDE GUN
+	locator = { name = "bottom" position = { 0 -20 42 } rotation = { 0 0 180 } }
+	locator = { name = "left" 	position = { 30 0 34 } rotation = { 0 0 -90 } }
+	locator = { name = "right" 	position = { -30 0 34 } rotation = { 0 0 90 } }
+	locator = { name = "explosion" 	position = { 0 -15 -50 } }
+	cull_radius = 10.0
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 }
+	state = { name = "moving" state_time = 5 }
+	state = { name = "death" state_time = 8.9 looping = no
+		event = { time = 8.8 node = "explosion" particle = "dreadnought_explosion_particle" keep_particle = yes }
+	}
+
+	scale = 1.00
+}
+
+###########################################
+
+#######	STAR DOMINATOR II  #################
+
+###########################################
+
+### FRAME
+entity = {
+	name = "acot_megadreadnought_entity"
+	pdxmesh = "locator_mesh"
+	locator = { name = "part1" 	position = { 0 0 -68.5 } rotation = { 0 0 0 } }
+
+	locator = { name = "hammer" 	position = { 0 4 -63 } rotation = { 0 0 0 } }
+	locator = { name = "hammerdown" 	position = { 0 -7 -63 } rotation = { 0 0 180 } }	
+
+	locator = { name = "spinal" 	position = { 0 3 -35 } rotation = { 0 0 0 } }
+	locator = { name = "spinaldown" 	position = { 0 -3 -35 } rotation = { 0 0 180 } }
+
+	locator = { name = "part2" 	position = { 0 3 -26.5 } rotation = { 0 0 0 } }
+	locator = { name = "part2down" 	position = { 0 -3 -26.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part3" 	position = { 0 3 -11.5 } rotation = { 0 0 0 } }
+	locator = { name = "part3down" 	position = { 0 -3 -11.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part4" 	position = { 0 3 4.5 } rotation = { 0 0 0 } }
+	locator = { name = "part4down" 	position = { 0 -3 4.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part5" 	position = { 0 4.5 26.5 } rotation = { 0 0 0 } }
+	locator = { name = "part5down" 	position = { 0 -4.5 26.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part6" 	position = { 0 3 46 } rotation = { 0 0 0 } }
+	locator = { name = "part6down" 	position = { 0 -3 46 } rotation = { 0 0 180 } }
+
+	locator = { name = "part7" 	position = { 0 3 63.0 } rotation = { 0 0 0 } }
+	locator = { name = "part7down" 	position = { 0 -3 63.0 } rotation = { 0 0 180 } }
+
+	locator = { name = "engine" 	position = { 0 -4.5 66 } rotation = { 0 0 0 } }
+	locator = { name = "enginedown" 	position = { 0 4.5 66 } rotation = { 0 0 180 } }
+
+	attach = { spinal = "acot_megadreadnought_spinal_entity" }
+	attach = { spinaldown = "acot_megadreadnought_spinal_entity" }
+	attach = { part6down = "acot_megadreadnought_mid_entity" }
+	attach = { part7down = "acot_megadreadnought_mid_entity" }
+	attach = { engine = "acot_megadreadnought_stern_entity" }
+	attach = { enginedown = "acot_megadreadnought_stern_entity" }
+
+
+	### SIDE GUN
+	locator = { name = "bottom" position = { 0 -20 42 } rotation = { 0 0 180 } }
+	locator = { name = "left" 	position = { 30 0 34 } rotation = { 0 0 -90 } }
+	locator = { name = "right" 	position = { -30 0 34 } rotation = { 0 0 90 } }
+	locator = { name = "explosion" 	position = { 0 -15 -50 } }
+	cull_radius = 10.0
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 }
+	state = { name = "moving" state_time = 5 }
+	state = { name = "death" state_time = 8.9 looping = no
+		event = { time = 8.8 node = "explosion" particle = "dreadnought_explosion_particle" keep_particle = yes }
+	}
+
+	scale = 1.25
+}
+
+
+
+### SHIP
+entity = {
+	name = "acot_megadreadnought_hull_entity"
+	pdxmesh = "acot_meganought_mesh"
+	
+
+	scale = 1.75
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		#start_event = { trigger_once = yes sound = { soundeffect = "dreadnaught_idle" } }
+		
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_04" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_05" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_06" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "engine_medium_07" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_small_01" particle = "acot_pmc_025_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_small_02" particle = "acot_pmc_025_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "moving" animation = "idle"
+		event = { sound = { soundeffect = juggernaut_mammalian_move } }
+	
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "engine_large_01" particle = "acot_pmc_1_5_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_01" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_02" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_03" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_04" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_05" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_medium_06" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "engine_medium_07" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_small_01" particle = "acot_pmc_05_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "engine_small_02" particle = "acot_pmc_05_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" animation = "death" looping = no
+		event = { time = 0.0 node = "explosion1" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 1.4 node = "explosion2" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 2.0 node = "explosion3" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 2.8 node = "explosion4" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 3.4 node = "explosion5" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 3.8 node = "explosion6" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 4.4 node = "explosion7" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 5.0 node = "explosion8" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 5.6 node = "explosion9" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+		event = { time = 6 node = "explosion10" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes }
+	}
+
+}
+
+entity = {
+	name = "acot_megadreadnought_mid_entity"
+	pdxmesh = "acot_pmc_titan_mid_mesh"
+
+	scale = 1.0
+}
+
+entity = {
+	name = "acot_megadreadnought_spinal_entity"
+	pdxmesh = "acot_pmc_titan_bow_mesh"
+	locator = { name = "root"				position = { 0	0  0 } }
+
+	scale = 1.0
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	attach = { "root" = "acot_pmc_titan_glow_effect_mesh_entity" }
+	state = { name = "death" state_time = 5 looping = no }
+}
+
+entity = {
+	name = "acot_megadreadnought_stern_entity"
+	pdxmesh = "acot_pmc_titan_stern_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	
+		start_event = { node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		start_event = { node = "engine_large_02" particle = "acot_pmc_075_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		start_event = { node = "engine_large_03" particle = "acot_pmc_075_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "moving" state_time = 5
+		start_event = { node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	
+		start_event = { node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		start_event = { node = "engine_large_02" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		start_event = { node = "engine_large_03" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" state_time = 5 looping = no }
+}
+
+
+entity = {
+	name = "acot_megadreadnought_hammer_entity"
+	pdxmesh = "acot_pmc_juggernaut_mesh"
+	
+	scale = 0.70
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	}
+	state = { name = "moving" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" animation = "death" looping = no 
+		event = { time = 1.1 node = "explosion_locator_01" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 1.8 node = "explosion_locator_02" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 3.1 node = "explosion_locator_03" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.4 node = "explosion_locator_04" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.7 node = "explosion_locator_05" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 5.2 node = "explosion_locator_06" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.5 node = "explosion_locator_07" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.9 node = "explosion_locator_08" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+	
+		event = { time = 6.96 node = "big_explosion_locator" particle = "small_2_player_ship_explosion_particle" keep_particle = yes trigger_once = no }
+		event = { time = 6.96 node = "big_explosion_locator" particle = "juggernaut_burn_effect" keep_particle = yes trigger_once = no }
+	}
+}
+
+entity = {
+	name = "acot_megadreadnought_edge_entity"
+	pdxmesh = "acot_pmc_battleship_mid_L2M2_mesh"
+	
+	default_state = "idle"
+	state = { name = idle	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	
+	state = { name = moving	state_time = 5
+		event = { time = 0 node = "light_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	
+	scale = 2.25
+
+	state = { name = "death" state_time = 5 }
+}
+
+entity = {
+	name = "acot_megadreadnought_ion_cannon_entity"
+	pdxmesh = "acot_pmc_ion_cannon_mesh"
+	scale = 1.00
+	locator = { name = "root" position = { 0 0 0 } }
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 
+		start_event = { node = "root" particle = "pmc_ion_cannon_core_effect" keep_particle = yes trigger_once = yes }
+	}
+	
+	attach = { "root" = "acot_megadreadnought_ion_cannon_core_entity" }
+}
+
+entity = {
+	name = "acot_megadreadnought_ion_cannon_core_entity"
+	pdxmesh = "acot_pmc_ion_cannon_core_mesh"
+	scale = 1.0
+	
+	game_data = {
+		uv_animation_speed   = -0.05
+		uv_animation_direction  = { 0.5 1.0 }
+	}
+}
+
+entity = {
+	name = "acot_megadreadnought_hammersection_entity"
+	pdxmesh = "acot_pmc_military_station_medium_mesh"	
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		
+		event = { time = 0.0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	}
+	
+	state = { name = "death" state_time = 5 looping = no
+		event = { time = 0.0 node = "light_locator_01" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 0.5 node = "light_locator_02" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 1.5 node = "light_locator_03" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 2.0 node = "light_locator_04" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 3.0 node = "light_locator_05" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 4.0 node = "light_locator_04" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		
+		event = { time = 4.9 particle = "medium_station_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_large" } }
+	}
+	
+	scale = 1.75
+	
+	game_data = {
+		emissive_recolor_crunch = 5.0
+	}
+}
+
+###########################################
+
+#######	STAR ANNIHILATOR  #################
+
+###########################################
+
+entity = {
+	name = "acot_star_annihilator_entity"
+	pdxmesh = "acot_pmc_titan_frame_mesh"
+	
+	#locator = { name = "part1"	position = { 0 6 -34.0 } rotation = { 0 0 0 } }
+	#locator = { name = "part1down"	position = { 0 6 -34.0 } rotation = { 0 0 180 } }
+
+	locator = { name = "hammer" 	position = { 0 7 -88 } rotation = { 0 0 0 } }
+	locator = { name = "hammerdown" 	position = { 0 -7 -88 } rotation = { 0 0 180 } }	
+
+#	attach = { hammer = "acot_star_annihilator_hammer_entity" }
+#	attach = { hammerdown = "acot_star_annihilator_hammer_entity" }
+
+	locator = { name = "part1"	position = { 0 6 -64.0 } rotation = { 0 0 0 } }
+	locator = { name = "part1down"	position = { 0 6 -64.0 } rotation = { 0 0 180 } }
+
+	locator = { name = "fpart1"	position = { 0 6 -55.5 } rotation = { 0 0 0 } }
+	locator = { name = "fpart1down"	position = { 0 6 -55.5 } rotation = { 0 0 180 } }
+	locator = { name = "fpart2"	position = { 0 6 -40.5 } rotation = { 0 0 0 } }
+	locator = { name = "fpart2down"	position = { 0 6 -40.5 } rotation = { 0 0 180 } }
+
+#	attach = { fpart1 = "acot_star_annihilator_titan_mid_entity" }
+#	attach = { fpart1down = "acot_star_annihilator_titan_mid_entity" }
+#	attach = { fpart2 = "acot_star_annihilator_titan_mid_entity" }
+#	attach = { fpart2down = "acot_star_annihilator_titan_mid_entity" }
+
+	locator = { name = "part2"	position = { 0 6 -25.5 } rotation = { 0 0 0 } }
+	locator = { name = "part2down"	position = { 0 6 -25.5 } rotation = { 0 0 180 } }
+	locator = { name = "part3"	position = { 0 6 -10.5 } rotation = { 0 0 0 } }
+	locator = { name = "part3down"	position = { 0 6 -10.5 } rotation = { 0 0 180 } }
+	locator = { name = "part4"	position = { 0 6 4.5 } rotation = { 0 0 0 } }
+	locator = { name = "part4down"	position = { 0 6 4.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "hub"	position = { 0 5 39.5 } rotation = { 0 0 180 } } ## STARBASE
+
+	locator = { name = "part5"	position = { 0 5.0 58.5 } rotation = { 180 0 0 } }
+	locator = { name = "part6"	position = { 17.5 0 43.6 } rotation = { 0 0 0 } }
+	locator = { name = "part6rerverse"	position = { -17.5 0 43.6 } rotation = { 0 0 0 } }
+
+	locator = { name = "fside1"	position = { -35.0 3.5 39.5 } rotation = { 90 0 0 } }
+	locator = { name = "fside2"	position = { 35.0 3.5 39.5 } rotation = { -90 0 0 } }
+
+#	attach = { fside1 = "acot_star_annihilator_side_wing_entity" }
+#	attach = { fside2 = "acot_star_annihilator_side_wing_entity" }
+
+	locator = { name = "side1"	position = { -20.0 3.5 39.5 } rotation = { 90 0 0 } }
+	locator = { name = "side2"	position = { 20.0 3.5 39.5 } rotation = { -90 0 0 } }
+
+
+	locator = { name = "colos"	position = { 0 0 68.5 } rotation = { 0 0 0 } }		
+	locator = { name = "armor1"	position = { 0 6 19.5 } rotation = { 0 0 0 } }
+	locator = { name = "armor2"	position = { 0 6 19.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "left" 	position = { -45 0 39 } rotation = { 90 0 0 } }
+	locator = { name = "right" 	position = { 45 0 39 } rotation = { -90 0 0 } }
+
+	locator = { name = "ring1"	position = { 0 0 19.5 } rotation = { -90 0 180 } }		
+	attach = { colos = "acot_star_annihilator_colossus_ship_entity" }
+	#attach = { ring1 = "acot_star_annihilator_colossus_rings_smaller_entity" }
+
+#	attach = { side4 = "acot_star_annihilator_titan_mid_entity" }
+
+	scale = 1.55
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" 
+		
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_titan_ship_hum_01" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_titan_ship_hum_02" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_titan_ship_hum_03" } }
+	
+	}
+	state = { name = "moving" animation = "idle"
+		event =  { trigger_once = yes sound = { soundeffect = "moving_out_titan" } }
+	}
+	state = { name = "death" animation = "death" looping = no 
+		event = { time = 2.5 node = "explosion_locator_01" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 3.5 node = "explosion_locator_02" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 5.5 node = "explosion_locator_03" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 7.5 node = "explosion_locator_04" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 9.5 node = "explosion_locator_05" particle = "ship_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "ship_explosion" } }
+		event = { time = 12.5 node = "ship_main" particle = "dreadnought_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "amb_titan_ship_death" } }
+	}
+	
+		
+	game_data = {
+		size = 75
+	}
+	
+}
+
+entity = {
+	name = "acot_star_annihilator_hammer_entity"
+	pdxmesh = "acot_pmc_juggernaut_mesh"
+	
+	scale = 0.90
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	}
+	state = { name = "moving" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" animation = "death" looping = no 
+		event = { time = 1.1 node = "explosion_locator_01" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 1.8 node = "explosion_locator_02" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 3.1 node = "explosion_locator_03" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.4 node = "explosion_locator_04" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.7 node = "explosion_locator_05" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 5.2 node = "explosion_locator_06" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.5 node = "explosion_locator_07" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.9 node = "explosion_locator_08" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+	
+		event = { time = 6.96 node = "big_explosion_locator" particle = "small_2_player_ship_explosion_particle" keep_particle = yes trigger_once = no }
+		event = { time = 6.96 node = "big_explosion_locator" particle = "juggernaut_burn_effect" keep_particle = yes trigger_once = no }
+	}
+}
+
+entity = {
+	name = "acot_star_annihilator_side_wing_entity"
+	pdxmesh = "acot_pmc_juggernaut_mesh"
+	
+	scale = 0.65
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	}
+	state = { name = "moving" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" animation = "death" looping = no 
+		event = { time = 1.1 node = "explosion_locator_01" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 1.8 node = "explosion_locator_02" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 3.1 node = "explosion_locator_03" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.4 node = "explosion_locator_04" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.7 node = "explosion_locator_05" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 5.2 node = "explosion_locator_06" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.5 node = "explosion_locator_07" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.9 node = "explosion_locator_08" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+	
+		event = { time = 6.96 node = "big_explosion_locator" particle = "small_2_player_ship_explosion_particle" keep_particle = yes trigger_once = no }
+		event = { time = 6.96 node = "big_explosion_locator" particle = "juggernaut_burn_effect" keep_particle = yes trigger_once = no }
+	}
+}
+
+entity = {
+	name = "acot_star_annihilator_titan_bow_entity"
+	pdxmesh = "acot_pmc_titan_bow_mesh"
+	locator = { name = "root"				position = { 0	0  0 } }
+
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	attach = { "root" = "mammalian_01_titan_glow_effect_mesh_entity" }
+	state = { name = "death" state_time = 5 looping = no }
+}
+
+entity = {
+	name = "acot_star_annihilator_titan_mid_entity"
+	pdxmesh = "acot_pmc_titan_mid_mesh"
+}
+
+entity = {
+	name = "acot_star_annihilator_titan_stern_entity"
+	pdxmesh = "acot_pmc_titan_stern_mesh"
+	
+	scale = 1.2
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	
+		start_event = { node = "engine_large_01" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		start_event = { node = "engine_large_02" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+		start_event = { node = "engine_large_03" particle = "acot_pmc_035_exhaust_circle_idle" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "moving" state_time = 5
+		start_event = { node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	
+		start_event = { node = "engine_large_01" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		start_event = { node = "engine_large_02" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		start_event = { node = "engine_large_03" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" state_time = 5 looping = no }
+}
+
+entity = {
+	name = "acot_star_annihilator_colossus_ship_entity"
+	pdxmesh = "acot_pmc_colossus_mesh"
+	
+	scale = 1.15
+
+	default_state = "idle"
+	# Actual idle state when being in idle/moving.
+	state = { name = "idle" animation = "idle" looping = no next_state = "idle" animation_blend_time = 5
+		start_event = { trigger_once = yes sound = { soundeffect = "mammalian_colossus_idle" } }
+		
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	#	event = { time = 0 node = "root" particle = "avian_01_colossus_inner_core_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { time = 0 node = "large_engine_01" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "large_engine_02" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "large_engine_03" particle = "acot_pmc_075_exhaust_circle_moving" keep_particle = yes trigger_once = yes }
+	}
+	
+	locator = { name = "explosion_locator_01" position = { 3.3 7 5.6 } }
+	locator = { name = "explosion_locator_02" position = { -38 -2 2.5 } }
+	locator = { name = "explosion_locator_03" position = { 4 3 -28 } }
+	locator = { name = "explosion_locator_04" position = { 28 22 -2.5 } }
+	locator = { name = "explosion_locator_05" position = { -6 3.4 -8 } }
+	#locator = { name = "planet_killer_gun_01" position = { 0 0 0 } } # Actual locator in mesh.
+	
+	attach = { arms = "acot_star_annihilator_colossus_rings_entity" }
+	attach = { ship_local = "acot_star_annihilator_colossus_sphere_entity" }
+	attach = { ship_local = "acot_star_annihilator_colossus_sphere_contents_entity" }
+}
+
+entity = {
+	name = "acot_star_annihilator_colossus_rings_entity"
+	pdxmesh = "acot_pmc_colossus_rings_mesh"
+	
+	get_state_from_parent = no
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+}
+
+entity = {
+	name = "acot_star_annihilator_colossus_rings_smaller_entity"
+	pdxmesh = "acot_pmc_colossus_rings_mesh"
+
+	scale = 0.70
+
+	get_state_from_parent = no
+	
+	playback_rate = -1.0
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+}
+
+entity = {
+	name = "acot_star_annihilator_colossus_sphere_entity"
+	pdxmesh = "acot_pmc_colossus_sphere_mesh"
+	
+	game_data = {
+		uv_animation_speed   = 0.07
+		uv_animation_direction  = { -1.0 0.5 }
+	}
+}
+
+entity = {
+	name = "acot_star_annihilator_colossus_sphere_contents_entity"
+	pdxmesh = "acot_pmc_colossus_sphere_contents_mesh"
+	
+	get_state_from_parent = no
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+}
+
+entity = {
+	name = "acot_star_annihilator_starbase_citadel_section_entity"
+	pdxmesh = "acot_pmc_citadel_mesh"
+
+	scale = 1.35
+
+	#locator = { name = "slot1"				position = { 0	0  0 } }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_07" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_08" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_09" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_01" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_02" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_03" } }
+	}
+}
+
+###########################################
+
+#######	Star Overwatcher  #################
+
+###########################################
+
+entity = {
+	name = "acot_star_overwatcher_entity"
+	pdxmesh = "mammalian_01_citadel_frame_mesh"
+
+	locator = { name = "hub"	position = { 0 0 0 } rotation = { 0 0 0 } }
+
+	locator = { name = "front1"	position = { 0 1.5 -15.5 } rotation = { 0 0 0 } }
+	locator = { name = "front1down"	position = { 0 1.5 -15.5 } rotation = { 0 0 180 } }
+	locator = { name = "front2"	position = { 0 1.5 -25.5 } rotation = { 0 0 0 } }
+	locator = { name = "front2down"	position = { 0 1.5 -25.5 } rotation = { 0 0 180 } }
+	locator = { name = "front3"	position = { 0 1.5 -35.5 } rotation = { 0 0 0 } }
+	locator = { name = "front3down"	position = { 0 1.5 -35.5 } rotation = { 0 0 180 } }
+	locator = { name = "front_jug"	position = { 0 -1 -55.5 } rotation = { 0 0 0 } }
+
+	locator = { name = "back1"	position = { 0 1.5 15.5 } rotation = { 180 0 0 } }
+	locator = { name = "back1down"	position = { 0 1.5 15.5 } rotation = { 180 0 180 } }
+	locator = { name = "back2"	position = { 0 1.5 25.5 } rotation = { 180 0 0 } }
+	locator = { name = "back2down"	position = { 0 1.5 25.5 } rotation = { 180 0 180 } }
+	locator = { name = "back3"	position = { 0 1.5 35.5 } rotation = { 180 0 0 } }
+	locator = { name = "back3down"	position = { 0 1.5 35.5 } rotation = { 180 0 180 } }
+	locator = { name = "back_jug"	position = { 0 -1 55.5 } rotation = { 180 0 0 } }
+
+	locator = { name = "right1"	position = { -15.5 1.5 0 } rotation = { 90 0 0 } }
+	locator = { name = "right1down"	position = { -15.5 1.5 0 } rotation = { 90 0 180 } }
+	locator = { name = "right2"	position = { -25.5 1.5 0 } rotation = { 90 0 0 } }
+	locator = { name = "right2down"	position = { -25.5 1.5 0 } rotation = { 90 0 180 } }
+	locator = { name = "right3"	position = { -35.5 1.5 0 } rotation = { 90 0 0 } }
+	locator = { name = "right3down"	position = { -35.5 1.5 -0.5 } rotation = { 90 0 180 } }
+	locator = { name = "right_jug"	position = { -55.5 -1 0 } rotation = { 90 0 0 } }
+
+	locator = { name = "left1"	position = { 15.5 1.5 0 } rotation = { -90 0 0 } }
+	locator = { name = "left1down"	position = { 15.5 1.5 0 } rotation = { -90 0 180 } }
+	locator = { name = "left2"	position = { 25.5 1.5 0 } rotation = { -90 0 0 } }
+	locator = { name = "left2down"	position = { 25.5 1.5 0 } rotation = { -90 0 180 } }
+	locator = { name = "left3"	position = { 35.5 1.5 0 } rotation = { -90 0 0 } }
+	locator = { name = "left3down"	position = { 35.5 1.5 0 } rotation = { -90 0 180 } }
+	locator = { name = "left_jug"	position = { 55.5 -1 0 } rotation = { -90 0 0 } }
+
+	locator = { name = "ring"	position = { 0 -5 0 } rotation = { 0 0 90 } }
+
+	attach = { ring = "acot_star_annihilator_colossus_rings_smaller_entity" }
+
+
+	scale = 1.25
+		
+	game_data = {
+		size = 75
+	}
+	
+}
+
+entity = {
+	name = "acot_star_overwatch_hub_entity"
+	pdxmesh = "acot_pmc_citadel_mesh"
+
+	scale = 1.15
+
+	#locator = { name = "slot1"				position = { 0	0  0 } }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_07" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_08" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_09" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_01" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_02" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_03" } }
+	}
+}
+
+entity = {
+	name = "acot_star_overwatch_titan_mid_entity"
+	pdxmesh = "acot_pmc_titan_mid_mesh"
+
+	scale = 0.80
+}
+
+entity = {
+	name = "acot_star_overwatch_hammer_entity"
+	pdxmesh = "acot_pmc_juggernaut_mesh"
+	
+	scale = 1.00
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	}
+	state = { name = "moving" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" animation = "death" looping = no 
+		event = { time = 1.1 node = "explosion_locator_01" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 1.8 node = "explosion_locator_02" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 3.1 node = "explosion_locator_03" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.4 node = "explosion_locator_04" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.7 node = "explosion_locator_05" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 5.2 node = "explosion_locator_06" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.5 node = "explosion_locator_07" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.9 node = "explosion_locator_08" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+	
+		event = { time = 6.96 node = "big_explosion_locator" particle = "small_2_player_ship_explosion_particle" keep_particle = yes trigger_once = no }
+		event = { time = 6.96 node = "big_explosion_locator" particle = "juggernaut_burn_effect" keep_particle = yes trigger_once = no }
+	}
+}
+
+############## VAUILT PLANET
+
+entity = {
+	name = "pc_acot_pmc_vault_01_entity"
+	pdxmesh = "acot_pmc_vault_station_mesh"
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_terraforming_station_idle_hum" } }
+		event = { time = 0.0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0.0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+
+	}
+
+	state = { name = "death" state_time = 5 looping = no
+		event = { time = 0.0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 0.5 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 1.5 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 2.0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 3.0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+		event = { time = 4.0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_small" } }
+
+		event = { time = 4.9 particle = "medium_station_explosion_particle" keep_particle = yes trigger_once = yes sound = { soundeffect = "station_explosion_large" } }
+	}
+
+	scale = 0.55
+
+	game_data = {
+		size = 10
+		emissive_recolor_crunch = 5.0
+	}
+
+	attach = { root = "terraforming_effect_entity" }
+}
+
+###########################################
+
+#######	Star Overseer  #################
+
+###########################################
+
+entity = {
+	name = "acot_star_overseer_entity"
+	pdxmesh = "mammalian_01_starfort_frame_mesh"
+
+	locator = { name = "hub"	position = { 0 0 0 } rotation = { 0 0 0 } }
+
+	locator = { name = "front1"	position = { 0 -6 -15 } rotation = { 0 0 0 } }
+	locator = { name = "front1down"	position = { 0 -6 -15 } rotation = { 0 0 180 } }
+	locator = { name = "front2"	position = { 0 -6 -30 } rotation = { 0 0 0 } }
+	locator = { name = "front2down"	position = { 0 -6 -30 } rotation = { 0 0 180 } }
+	locator = { name = "front3"	position = { 0 -6 -45 } rotation = { 0 0 0 } }
+	locator = { name = "front3down"	position = { 0 -6 -45 } rotation = { 0 0 180 } }
+	locator = { name = "front_jug"	position = { 0 -6 -55.5 } rotation = { 0 0 0 } }
+
+	locator = { name = "back1"	position = { 0 -6 15 } rotation = { 180 0 0 } }
+	locator = { name = "back1down"	position = { 0 -6 15 } rotation = { 180 0 180 } }
+	locator = { name = "back2"	position = { 0 -6 30 } rotation = { 180 0 0 } }
+	locator = { name = "back2down"	position = { 0 -6 30 } rotation = { 180 0 180 } }
+	locator = { name = "back3"	position = { 0 -6 45 } rotation = { 180 0 0 } }
+	locator = { name = "back3down"	position = { 0 -6 45 } rotation = { 180 0 180 } }
+	locator = { name = "back_jug"	position = { 0 -6 55.5 } rotation = { 180 0 0 } }
+
+
+	locator = { name = "right1"	position = { -15 -6 0 } rotation = { 90 0 0 } }
+	locator = { name = "right1down"	position = { -15 -6 0 } rotation = { 90 0 180 } }
+	locator = { name = "right2"	position = { -30 -6 0 } rotation = { 90 0 0 } }
+	locator = { name = "right2down"	position = { -30 -6 0 } rotation = { 90 0 180 } }
+	locator = { name = "right3"	position = { -45 -6 0 } rotation = { 90 0 0 } }
+	locator = { name = "right3down"	position = { -45 -6 -0.5 } rotation = { 90 0 180 } }
+	locator = { name = "right_jug"	position = { -55.5 -6 0 } rotation = { 90 0 0 } }
+
+	locator = { name = "left1"	position = { 15 -6 0 } rotation = { -90 0 0 } }
+	locator = { name = "left1down"	position = { 15 -6 0 } rotation = { -90 0 180 } }
+	locator = { name = "left2"	position = { 30 -6 0 } rotation = { -90 0 0 } }
+	locator = { name = "left2down"	position = { 30 -6 0 } rotation = { -90 0 180 } }
+	locator = { name = "left3"	position = { 45 -6 0 } rotation = { -90 0 0 } }
+	locator = { name = "left3down"	position = { 45 -6 0 } rotation = { -90 0 180 } }
+	locator = { name = "left_jug"	position = { 55.5 -6 0 } rotation = { -90 0 0 } }
+
+	locator = { name = "ring"	position = { 0 -5 0 } rotation = { 0 0 90 } }
+
+	#attach = { ring = "acot_star_annihilator_colossus_rings_smaller_entity" }
+
+}
+
+entity = {
+	name = "acot_star_overseer_hull_entity"
+	pdxmesh = "acot_pmc_starfort_mesh"
+
+	#locator = { name = "slot1"				position = { 0	0  0 } }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_07" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_08" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_01" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_02" } }
+	}
+}
+
+entity = {
+	name = "acot_pmc_star_overseer_wing_entity"
+	pdxmesh = "acot_pmc_starbase_turret_section_mesh"
+		scale = 1.0
+		
+	default_state = "idle"
+		state = { name = "idle" state_time = 5
+			event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+			event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+}
+
+###########################################
+
+#######	Star Commander  #################
+
+###########################################
+
+entity = {
+	name = "acot_star_commander_entity"
+	pdxmesh = "mammalian_01_citadel_frame_mesh"
+
+	locator = { name = "hub"	position = { 0 0 0 } rotation = { 0 0 0 } }
+
+}
+
+entity = {
+	name = "acot_star_commander_hull_entity"
+	pdxmesh = "acot_pmc_citadel_mesh"
+
+
+	locator = { name = "left_jug"	position = { 10 0 0 } rotation = { 0 0 90 } }
+	locator = { name = "right_jug"	position = { -10 0 0 } rotation = { 0 0 -90 } }
+
+	attach = { left_jug = "acot_star_commander_hammer_entity" }
+	attach = { right_jug = "acot_star_commander_hammer_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_07" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_08" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_09" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_01" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_02" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "starbase_hum_stage_03" } }
+	}
+}
+
+entity = {
+	name = "acot_star_commander_hammer_entity"
+	pdxmesh = "acot_pmc_juggernaut_mesh"
+	
+	scale = 1.25
+
+	default_state = "idle"
+	state = { name = "idle" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		
+	}
+	state = { name = "moving" animation = "idle"
+		event = { time = 0 node = "light_locator_01" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_02" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_03" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_04" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_05" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+		event = { time = 0 node = "light_locator_06" particle = "ship_light_red_effect" keep_particle = yes trigger_once = yes }
+	}
+	state = { name = "death" animation = "death" looping = no 
+		event = { time = 1.1 node = "explosion_locator_01" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 1.8 node = "explosion_locator_02" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 3.1 node = "explosion_locator_03" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.4 node = "explosion_locator_04" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 4.7 node = "explosion_locator_05" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 5.2 node = "explosion_locator_06" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.5 node = "explosion_locator_07" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+		event = { time = 6.9 node = "explosion_locator_08" particle = "juggernaut_hull_explosion_effect" keep_particle = yes trigger_once = no }
+	
+		event = { time = 6.96 node = "big_explosion_locator" particle = "small_2_player_ship_explosion_particle" keep_particle = yes trigger_once = no }
+		event = { time = 6.96 node = "big_explosion_locator" particle = "juggernaut_burn_effect" keep_particle = yes trigger_once = no }
+	}
+}
+
+################# Phanon Planet Databank #################
+
+entity = {
+	name = "pc_acot_pmc_storage_planet_01_entity"
+	pdxmesh = "planet_no_pole_no_clouds_mesh"
+
+	#attach = { planet = "acot_pmc_planet_shield_effect_entity" }
+
+	meshsettings = {
+	name = "planet_geosphereShape"
+	shader = "PdxMeshPlanetEmissive"
+		texture_diffuse = "acot_pmc_city_planet_diffuse.dds"
+		texture_normal = "city_planet_mammalian_01_normal.dds"
+		texture_specular = "city_planet_mammalian_01_specular.dds"
+	}
+
+	
+
+	default_state = "idle"
+	playback_rate = 1.0 # Rotation is reversed
+	state = { name = "idle" animation = "idle" time_offset = { 0 100 }
+	}
+}
+
+entity = {
+	name = "pc_acot_pmc_data_planet_rings_entity"
+	pdxmesh = "acot_pmc_colossus_planet_rings_mesh"
+
+	scale = 0.20
+
+	get_state_from_parent = no
+	
+	playback_rate = -0.50
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" }
+}
+
+#shielded planet
+entity = {
+	name = "pc_acot_pmc_data_planet_01_entity"
+	pdxmesh = "shielded_planet_mesh"
+	
+	attach = { planet = "pc_acot_pmc_data_planet_rings_entity" }
+
+	meshsettings = {
+	name = "planet_geosphereShape"
+	texture_diffuse = "acot_pmc_planet_shield_diffuse.dds"
+	texture_normal = "nonormal.dds"
+	texture_specular = "nospec.dds"
+	}
+	
+	##pole texture override
+	meshsettings = {
+	name = "polesShape"
+	texture_diffuse = "acot_pmc_planet_shield_diffuse.dds"
+	texture_normal = "nonormal.dds"
+	texture_specular = "nospec.dds"
+	}
+	
+	##cloud texture override
+	meshsettings = {
+	name = "clouds_geosphereShape"
+	texture_diffuse = "acot_pmc_planet_shield_clouds.dds"
+	texture_normal = "nonormal.dds"
+	texture_specular = "nospec.dds"
+	
+
+	}
+	
+	##cloud shadow texture override
+	meshsettings = {
+	name = "clouds_shadow_geosphereShape"
+	texture_diffuse = "acot_pmc_planet_shield_clouds.dds"
+	texture_normal = "nonormal.dds"
+	texture_specular = "nospec.dds"
+	
+	
+	}
+	
+	
+	
+	default_state = "idle"
+	state = { name = "idle" animation = "idle" time_offset = { 0 100 }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_planet_class" } }
+		start_event = { trigger_once = yes sound = { soundeffect = "amb_planet_class_02" } }
+	}
+	
+	#scale = 10
+}
+
+entity = {
+	name = "acot_pmc_planet_shield_effect_entity"
+	pdxmesh = "acot_pmc_planet_shield_effect_mesh"
+	
+	#get_state_from_parent = no
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+	#	start_event = { trigger_once = yes sound = { soundeffect = "amb_planet_class" } }
+	#	start_event = { trigger_once = yes sound = { soundeffect = "amb_planet_class_02" } }
+		start_event = { node = root particle = "acot_pmc_planet_shield_effect" keep_particle = yes trigger_once = yes }
+	}
+	
+	game_data = { 
+		bloom_factor = 1.2 
+		uv_animation_speed 		= 2
+		uv_animation_direction 	= { 0.0 -0.02 }
+	}
+	
+	locator = { name = "root" position = { 0 0 0 } }
+	
+	scale = 0.55
+	
+}
+
+entity = {
+	name = "acot_pmc_planet_large_shield_effect_entity"
+	pdxmesh = "acot_pmc_planet_shield_effect_mesh"
+	
+	#get_state_from_parent = no
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 5
+	#	start_event = { trigger_once = yes sound = { soundeffect = "amb_planet_class" } }
+	#	start_event = { trigger_once = yes sound = { soundeffect = "amb_planet_class_02" } }
+		start_event = { node = root particle = "acot_pmc_planet_shield_effect" keep_particle = yes trigger_once = yes }
+	}
+	
+	game_data = { 
+		bloom_factor = 1.2 
+		uv_animation_speed 		= 2
+		uv_animation_direction 	= { 0.0 -0.02 }
+	}
+	
+	locator = { name = "root" position = { 0 0 0 } }
+	
+	scale = 0.6
+	
+}
+
+
+################# AMBIENT OJBECT #################
+
+### FRAME
+entity = {
+	name = "acot_megadreadnought_damaged_ambient_entity"
+	pdxmesh = "locator_mesh"
+	locator = { name = "part1" 	position = { 24 -48 19 } rotation = { 31 61 76 } }
+	locator = { name = "part2" 	position = { 19 -65 0 } rotation = { 21 47 39 } }
+	cull_radius = 10.0
+	
+	attach = { part1 = "acot_megadreadnought_damaged_ambient_ship_front_entity" }
+	attach = { part2 = "acot_megadreadnought_damaged_ambient_ship_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 }
+	state = { name = "moving" state_time = 5 }
+	state = { name = "death" state_time = 8.9 looping = no
+	}
+
+	scale = 1.25
+}
+
+### FRAME
+entity = {
+	name = "acot_megadreadnought_damaged_ambient_ship_front_entity"
+	pdxmesh = "locator_mesh"
+	locator = { name = "part1" 	position = { 11 7 -85.5 } rotation = { 42 0 41 } }
+
+	locator = { name = "hammer" 	position = { 0 4 -63 } rotation = { 0 0 0 } }
+	locator = { name = "hammerdown" 	position = { 0 -7 -63 } rotation = { 0 0 180 } }	
+
+	locator = { name = "spinal" 	position = { 0 3 -35 } rotation = { 0 0 0 } }
+	locator = { name = "spinaldown" 	position = { 0 -3 -35 } rotation = { 0 0 180 } }
+
+	locator = { name = "part2" 	position = { 0 3 -26.5 } rotation = { 0 0 0 } }
+	locator = { name = "part2down" 	position = { 0 -3 -26.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part3" 	position = { 0 3 -11.5 } rotation = { 35 0 20 } }
+	locator = { name = "part3down" 	position = { 0 -3 -11.5 } rotation = { 35 0 200 } }
+
+	locator = { name = "part4" 	position = { 0 3 4.5 } rotation = { 0 0 0 } }
+	locator = { name = "part4down" 	position = { 0 -3 4.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part5" 	position = { 0 4.5 26.5 } rotation = { 0 0 0 } }
+	locator = { name = "part5down" 	position = { 0 -4.5 26.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part6" 	position = { 0 3 46 } rotation = { 0 0 0 } }
+	locator = { name = "part6down" 	position = { 0 -3 46 } rotation = { 0 0 180 } }
+
+	locator = { name = "part7" 	position = { 0 3 63.0 } rotation = { 0 0 0 } }
+	locator = { name = "part7down" 	position = { 0 -3 63.0 } rotation = { 0 0 180 } }
+
+	locator = { name = "engine" 	position = { 0 -4.5 66 } rotation = { 0 0 0 } }
+	locator = { name = "enginedown" 	position = { 0 4.5 66 } rotation = { 0 0 180 } }
+
+
+	### SIDE GUN
+	locator = { name = "bottom" position = { 0 -20 42 } rotation = { 0 0 180 } }
+	locator = { name = "left" 	position = { 30 0 34 } rotation = { 0 0 -90 } }
+	locator = { name = "right" 	position = { -30 0 34 } rotation = { 0 0 90 } }
+	locator = { name = "explosion" 	position = { 0 -15 -50 } }
+	cull_radius = 10.0
+	
+	attach = { part1 = "acot_megadreadnought_ion_cannon_entity" }
+	attach = { part1 = "debris_medium_01_entity" }
+
+	attach = { hammer = "acot_megadreadnought_hammer_entity" }
+	attach = { hammerdown = "acot_megadreadnought_hammer_entity" }
+	attach = { part2 = "acot_megadreadnought_mid_entity" }
+	attach = { part2down = "acot_megadreadnought_mid_entity" }
+	attach = { part3 = "acot_megadreadnought_mid_entity" }
+	attach = { part3down = "acot_megadreadnought_mid_entity" }
+	attach = { part3down = "debris_medium_02_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 }
+	state = { name = "moving" state_time = 5 }
+	state = { name = "death" state_time = 8.9 looping = no
+		event = { time = 8.8 node = "explosion" particle = "dreadnought_explosion_particle" keep_particle = yes }
+	}
+
+	scale = 1.00
+}
+
+### FRAME
+entity = {
+	name = "acot_megadreadnought_damaged_ambient_ship_entity"
+	pdxmesh = "locator_mesh"
+	locator = { name = "part1" 	position = { 0 0 -68.5 } rotation = { 0 0 0 } }
+
+	locator = { name = "hammer" 	position = { 0 4 -63 } rotation = { 0 0 0 } }
+	locator = { name = "hammerdown" 	position = { 0 -7 -63 } rotation = { 0 0 180 } }	
+
+	locator = { name = "spinal" 	position = { 0 3 -35 } rotation = { 0 0 0 } }
+	locator = { name = "spinaldown" 	position = { 0 -3 -35 } rotation = { 0 0 180 } }
+
+	locator = { name = "part2" 	position = { 0 3 -26.5 } rotation = { 0 0 0 } }
+	locator = { name = "part2down" 	position = { 0 -3 -26.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part3" 	position = { 0 3 -11.5 } rotation = { 0 0 0 } }
+	locator = { name = "part3down" 	position = { 0 -3 -11.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part4" 	position = { 0 3 4.5 } rotation = { 0 0 0 } }
+	locator = { name = "part4down" 	position = { 0 -3 4.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part5" 	position = { 0 4.5 26.5 } rotation = { 0 0 0 } }
+	locator = { name = "part5down" 	position = { 0 -4.5 26.5 } rotation = { 0 0 180 } }
+
+	locator = { name = "part6" 	position = { 0 3 46 } rotation = { 0 0 0 } }
+	locator = { name = "part6down" 	position = { 0 -3 46 } rotation = { 0 0 180 } }
+
+	locator = { name = "part7" 	position = { 0 3 63.0 } rotation = { 0 0 0 } }
+	locator = { name = "part7down" 	position = { 0 -3 63.0 } rotation = { 0 0 180 } }
+
+	locator = { name = "engine" 	position = { 0 -4.5 66 } rotation = { 0 0 0 } }
+	locator = { name = "enginedown" 	position = { 0 4.5 66 } rotation = { 0 0 180 } }
+
+
+	### SIDE GUN
+	locator = { name = "bottom" position = { 0 -20 42 } rotation = { 0 0 180 } }
+	locator = { name = "left" 	position = { 30 0 34 } rotation = { 0 0 -90 } }
+	locator = { name = "right" 	position = { -30 0 34 } rotation = { 0 0 90 } }
+	locator = { name = "explosion" 	position = { 0 -15 -50 } }
+	cull_radius = 10.0
+	
+#	attach = { part1 = "acot_megadreadnought_ion_cannon_entity" }
+#	attach = { hammer = "acot_megadreadnought_hammer_entity" }
+#	attach = { hammerdown = "acot_megadreadnought_hammer_entity" }
+#	attach = { part2 = "acot_megadreadnought_mid_entity" }
+#	attach = { part2down = "acot_megadreadnought_mid_entity" }
+#	attach = { part3 = "acot_megadreadnought_mid_entity" }
+#	attach = { part3down = "acot_megadreadnought_mid_entity" }
+	attach = { part4 = "acot_megadreadnought_mid_entity" }
+	attach = { part4down = "acot_megadreadnought_mid_entity" }
+	attach = { part4down = "ancient_battlefield_entity" }
+
+	attach = { part5 = "acot_megadreadnought_edge_entity" }
+	attach = { part5down = "acot_megadreadnought_edge_entity" }
+	attach = { bottom = "npf_01_broken_npc_warship_01_hull_entity" }
+	attach = { left = "npf_01_broken_npc_warship_01_hull_entity" }
+	attach = { right = "acot_megadreadnought_hull_entity" }
+	attach = { part6 = "acot_megadreadnought_mid_entity" }
+	attach = { part7 = "acot_megadreadnought_mid_entity" }
+	attach = { part7 = "debris_medium_02_entity" }
+
+	attach = { spinal = "acot_megadreadnought_spinal_entity" }
+	attach = { spinaldown = "acot_megadreadnought_spinal_entity" }
+	attach = { part6down = "acot_megadreadnought_mid_entity" }
+	attach = { part7down = "acot_megadreadnought_mid_entity" }
+	attach = { engine = "acot_megadreadnought_stern_entity" }
+	attach = { enginedown = "acot_megadreadnought_stern_entity" }
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 5 }
+	state = { name = "moving" state_time = 5 }
+	state = { name = "death" state_time = 8.9 looping = no
+		event = { time = 8.8 node = "explosion" particle = "dreadnought_explosion_particle" keep_particle = yes }
+	}
+
+	scale = 1.00
+}

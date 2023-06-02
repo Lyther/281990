@@ -1,0 +1,72 @@
+### ################################################# ###
+###                    Mod Option Menu                ###
+### ################################################# ###
+
+acot_mod_menu_edict = {
+	length = -1
+	resources = { category = edicts cost = { } }
+	potential = {
+		is_ai = no
+	}
+	icon = GFX_edict_type_policy
+
+	effect = { 
+		country_event = { id = acot_mod_options.1 } 
+	}
+}
+
+acot_enable_shroud_barrier_activation = {
+	length = -1
+	resources = { category = edicts cost = { } }
+	potential = {
+		is_ai = no
+	}
+	icon = GFX_edict_type_policy
+
+	prerequisites = {
+		tech_shroud_barrier
+	}
+
+	effect = { 
+	}
+}
+
+acot_forced_shroud_barrier_activation = {
+	length = 1
+	resources = { category = edicts cost = { } }
+	potential = {
+		is_ai = no
+	}
+	icon = GFX_edict_type_policy
+
+	prerequisites = {
+		tech_shroud_barrier
+	}
+
+	allow = {
+		any_owned_ship = {
+			has_component = ACOT_PSIONIC_REPEL
+			NOT = {
+				has_ship_flag = acot_psionic_repel_cooldown
+			}
+		}		
+	}
+
+	effect = { 
+		hidden_effect = {
+			every_owned_ship = {
+				limit = {
+					has_component = ACOT_PSIONIC_REPEL
+					NOT = {
+						has_ship_flag = acot_psionic_repel_cooldown
+					}
+				}
+				add_modifier = { modifier = acot_psionic_repel_buff days = 30 }			
+				set_timed_ship_flag = {
+					flag = acot_psionic_repel_cooldown
+					days = 90
+				}
+			}		
+		}
+	}
+}

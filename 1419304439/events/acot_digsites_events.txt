@@ -1,0 +1,2510 @@
+#This event is meant to help AIs get better at not being stupid and to cirucmvant their many terrible decisions, or not doing things you expect them to do in
+#the mod. So here it goes, Mr Maximus Black.
+
+namespace = acot_digsite_events
+
+
+# DIG Site - ANCIENT BATTLEFIELD
+
+### INCOMPLETED BUT IS INACTIVE ANYWAY
+
+planet_event = {
+	id = acot_digsite_events.0
+	hide_window = yes
+	
+	mean_time_to_happen = {
+		years = 2
+	}
+
+
+	trigger = {
+		NOT = {
+			has_global_flag = acot_digsite_1_happened
+		}
+		NOT = {
+			has_global_flag = acot_amerigo_forbidden
+		}
+		has_planet_flag = can_have_precursor_event
+		exists = owner
+		owner = {
+			is_same_value = root.owner
+			OR = {
+				AND = {
+					is_ai = no
+				}
+				AND = {
+					is_ai = yes
+					has_technology = tech_dark_matter_power_core
+				}
+			}
+		}
+	}
+
+	immediate = {
+		create_archaeological_site = sites_acot_old_warfield
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = acot_digsite_1_happened
+				}				
+			}
+			set_global_flag = acot_digsite_1_happened
+		}
+		save_global_event_target_as = acot_digsite_1_planet
+		owner = {
+			country_event = {
+				id = acot_digsite_events.1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_digsite_events.1
+	title = acot_digsite_events.1.name
+	desc = acot_digsite_events.1.desc
+	picture = GFX_acot_fractured_world
+	show_sound = event_mystery
+	location = event_target:acot_digsite_1_planet
+	
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+	}
+}
+
+
+# Stage 2 - Vault of the Fallen
+fleet_event = {
+	id = acot_digsite_events.2
+	title = acot_digsite_events.2.name
+	desc = {
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_enigmatic_power_core
+					has_technology = tech_dark_matter_power_core
+				}
+			}						
+		}
+		text = acot_digsite_events.2.desc.stupid
+	}
+	desc = {
+		trigger = {
+			owner = {
+				OR = {
+					has_technology = tech_enigmatic_power_core
+					has_technology = tech_dark_matter_power_core
+				}
+			}						
+		}
+		text = acot_digsite_events.2.desc.smart
+	}
+	picture = GFX_evt_resource_cache
+	show_sound = event_mystic_reveal_light
+	
+	archaeology = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = { 
+		from = { set_site_progress_locked = no } 
+	}
+	
+	#### FOR PLAYERS
+
+	option = {
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_enigmatic_power_core
+					has_technology = tech_dark_matter_power_core
+				}
+			}			
+		}
+		name = acot_digsite_events.2.a
+		custom_tooltip = acot_digsite_events.2.a.explain
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = robbed_all
+		}
+		owner = {
+			add_resource = {
+				minor_artifacts = 100
+				acot_sr_dark_energy = 1000
+				sr_dark_matter = 1000
+			}		
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_enigmatic_power_core
+					has_technology = tech_dark_matter_power_core
+				}
+			}			
+		}
+		name = acot_digsite_events.2.b
+		custom_tooltip = acot_digsite_events.2.b.explain
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = robbed_sr
+		}
+		owner = {
+			add_resource = {
+				acot_sr_dark_energy = 500
+				sr_dark_matter = 500
+			}		
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOR = {
+					has_technology = tech_enigmatic_power_core
+					has_technology = tech_dark_matter_power_core
+				}
+			}			
+		}
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = no_robbed
+		}
+		name = acot_digsite_events.2.c
+		custom_tooltip = acot_digsite_events.2.c.explain
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				OR = {
+					has_technology = tech_enigmatic_power_core
+					has_technology = tech_dark_matter_power_core
+				}
+			}			
+		}
+		name = acot_digsite_events.2.d
+		custom_tooltip = acot_digsite_events.2.d.explain
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = smart_decision
+		}
+		owner = {
+			add_resource = {
+				minor_artifacts = 55
+				acot_sr_dark_energy = 639
+				sr_dark_matter = 456
+			}		
+		}
+		ai_chance = {
+			factor = 6
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				OR = {
+					has_technology = tech_enigmatic_power_core
+					has_technology = tech_dark_matter_power_core
+				}
+			}			
+		}
+		name = acot_digsite_events.2.e
+		custom_tooltip = acot_digsite_events.2.e.explain
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = robbed_all
+		}
+		owner = {
+			add_resource = {
+				minor_artifacts = 100
+				acot_sr_dark_energy = 1000
+				sr_dark_matter = 1000
+			}		
+		}
+		ai_chance = {
+			factor = 4
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = acot_ai_simple_event_forbidden
+				}
+			}
+		}
+	}
+
+}
+
+# Stage 3 - Records of the Lost
+fleet_event = {
+	id = acot_digsite_events.3
+	title = acot_digsite_events.3.name
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		text = acot_digsite_events.3.a.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_sr }	}
+		text = acot_digsite_events.3.b.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = no_robbed }	}
+		text = acot_digsite_events.3.c.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = smart_decision }	}	
+		text = acot_digsite_events.3.d.desc
+	}
+	picture = GFX_acot_fractured_world
+	show_sound = event_mystic_reveal_light
+
+	archaeology = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+		IF = {
+			limit = {
+				event_target:acot_digsite_1_planet = {
+					has_planet_flag = robbed_all
+				}
+			}
+			fleet_event = { id = acot_digsite_events.300 }
+			leader = {
+				kill_leader = { }
+			}
+			event_target:acot_digsite_1_planet = {
+				change_pc = pc_shattered
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				event_target:acot_digsite_1_planet = {
+					has_planet_flag = robbed_sr
+				}
+			}
+			fleet_event = { id = acot_digsite_events.301 }
+			leader = {
+				kill_leader = { }
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				event_target:acot_digsite_1_planet = {
+					has_planet_flag = no_robbed
+				}
+			}
+			fleet_event = { id = acot_digsite_events.302 }
+		}
+	}
+
+	after = { 
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		name = acot_digsite_events.3.a.1
+	}
+
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_sr }	}
+		name = acot_digsite_events.3.b.1
+	}
+
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = no_robbed }	}
+		name = acot_digsite_events.3.c.1
+	}
+
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = smart_decision }	}
+		name = acot_digsite_events.3.d.1
+		owner = {
+			add_resource = {
+				minor_artifacts = 5
+				engineering_research = 10000
+			}		
+		}
+	}
+
+}
+
+# Stage 3 - OUTCOMESIR - ALL IS LOST
+fleet_event = {
+	id = acot_digsite_events.300
+	title = acot_digsite_events.300.name
+	desc = acot_digsite_events.300.desc
+	picture = GFX_evt_exploding_planet
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.300.a
+	}
+}
+
+# Stage 3 - OUTCOMESIR - SHIP LOST BUT VICTORIOUS
+fleet_event = {
+	id = acot_digsite_events.301
+	title = acot_digsite_events.301.name
+	desc = acot_digsite_events.301.desc
+	picture = GFX_evt_archaeologists_escaping
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.301.a
+	}
+}
+
+# Stage 3 - OUTCOMESIR - DONE BUT RETARD ALERT!
+fleet_event = {
+	id = acot_digsite_events.302
+	title = acot_digsite_events.302.name
+	desc = acot_digsite_events.302.desc
+	picture = GFX_evt_fleet_from_surface
+	show_sound = event_ai_started
+	
+	is_triggered_only = yes
+	
+	immediate = {	
+		hidden_effect = {
+			### FACTION  1 ###
+			create_country = {
+				name = "NAME_DIGSITE_ANGRY_GUY"
+				type = faction
+				flag = {
+					icon = {
+						category = "pointy"
+						file = "flag_pointy_21.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"black"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				set_graphical_culture = fallen_empire_04
+				create_fleet = {
+					name = "NAME_DIGSITE_ANGRY_GUY"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = prev
+						create_ship = {
+							name = "NAME_Supremacy"
+							design = "NAME_Supremacy"
+							graphical_culture = fallen_empire_04
+						}
+						set_location = {
+							target = fromfrom
+							distance = 4
+							angle = random
+						}
+					}
+				}
+			}
+			### FACTION 2 ###
+			create_country = {
+				name = "NAME_DIGSITE_ANGRY_GUY"
+				type = faction
+				flag = {
+					icon = {
+						category = "pointy"
+						file = "flag_pointy_14.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"black"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				set_graphical_culture = fallen_empire_02
+				create_fleet = {
+					name = "NAME_DIGSITE_ANGRY_GUY"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = prev
+						while = {
+							count = 3
+							create_ship = {
+								name = "NAME_Sage"
+								design = "NAME_Sage"
+								graphical_culture = fallen_empire_02
+							}
+						}
+						set_location = {
+							target = fromfrom
+							distance = 9
+							angle = random
+						}
+					}
+				}
+			}
+			### FACTION 3 ###
+			create_country = {
+				name = "NAME_DIGSITE_ANGRY_GUY"
+				type = faction
+				flag = {
+					icon = {
+						category = "pointy"
+						file = "flag_pointy_17.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"black"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				set_graphical_culture = mammalian_01
+				create_fleet = {
+					name = "NAME_DIGSITE_ANGRY_GUY"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = prev
+						while = {
+							count = 2
+							create_ship = {
+								name = "NAME_PCA_BATTLESHIP"
+								design = "NAME_PCA_BATTLESHIP"
+								graphical_culture = mammalian_01
+							}
+						}
+						set_location = {
+							target = fromfrom
+							distance = 13
+							angle = random
+						}
+					}
+				}
+			}
+			### FACTION 4 ###
+			create_country = {
+				name = "NAME_DIGSITE_ANGRY_GUY"
+				type = faction
+				flag = {
+					icon = {
+						category = "pointy"
+						file = "flag_pointy_04.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"black"
+						"black"
+						"null"
+						"null"
+					}
+				}
+			}
+			last_created_country = {
+				set_graphical_culture = pirate_01
+				create_fleet = {
+					name = "NAME_DIGSITE_ANGRY_GUY"
+					settings = {
+						spawn_debris = no
+					}
+					effect = {
+						set_owner = prev
+						while = {
+							count = 7
+							create_ship = {
+								name = "NAME_PIRATE_CRUISER_WIH"
+								design = "NAME_PIRATE_CRUISER_WIH"
+								graphical_culture = pirate_01
+							}
+						}
+						set_location = {
+							target = fromfrom
+							distance = 16
+							angle = random
+						}
+					}
+				}
+			}
+		}	
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.302.a
+	}
+}
+
+
+# Stage 4 - Records of the Lost
+fleet_event = {
+	id = acot_digsite_events.4
+	title = acot_digsite_events.4.name
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		text = acot_digsite_events.4.a.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { NOT = { has_planet_flag = robbed_all } }	}
+		text = acot_digsite_events.4.b.desc
+	}
+	picture = GFX_acot_fractured_world
+	show_sound = event_mystic_reveal_light
+
+	archaeology = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = { 
+		from = { set_site_progress_locked = no } 
+	}
+	
+	option = {
+		name = acot_digsite_events.4.a.1
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all } }
+		owner = {
+			add_resource = {
+				alloys = 3
+				minerals = 7
+				engineering_research = 1
+				food = 6
+			}			
+		}
+	}
+
+	### DUMB
+	option = {
+		name = acot_digsite_events.4.b.1
+		trigger = { event_target:acot_digsite_1_planet = { NOT = { has_planet_flag = robbed_all } }	}
+		custom_tooltip = acot_digsite_events.4.b.1.explain
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = fusion_selected
+		}
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = acot_ai_simple_event_forbidden
+				}
+			}
+		}
+	}
+
+	### ZERO POINT ALLOCATION
+	option = {
+		trigger = {
+			event_target:acot_digsite_1_planet = { NOT = { has_planet_flag = robbed_all } }	
+			owner = {
+				has_technology = tech_zero_point_power
+				NOT = {
+					has_technology = tech_enigmatic_power_core
+				}
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 10000
+				}
+			}
+		}
+		name = acot_digsite_events.4.b.2
+		custom_tooltip = acot_digsite_events.4.b.2.explain
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = zp_selected
+		}
+		owner = {
+			add_resource = {
+				energy = -10000
+			}			
+		}
+		ai_chance = {
+			factor = 3
+			modifier = {
+				factor = 0
+				NOT = {
+					has_global_flag = acot_ai_simple_event_forbidden
+				}
+			}
+		}
+	}
+
+	### ENIGMATIC ALLOCATION
+	option = {
+		trigger = {
+			event_target:acot_digsite_1_planet = { NOT = { has_planet_flag = robbed_all } }	
+			owner = {
+				has_technology = tech_enigmatic_power_core
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = energy
+					value >= 5000
+				}
+			}
+		}
+		name = acot_digsite_events.4.b.3
+		custom_tooltip = acot_digsite_events.4.b.3.explain
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = enig_selected
+		}
+		owner = {
+			add_resource = {
+				energy = -5000
+			}			
+		}
+	}
+	
+	### DM ALLOCATION
+	option = {
+		trigger = {
+			event_target:acot_digsite_1_planet = { NOT = { has_planet_flag = robbed_all } }	
+			owner = {
+				has_technology = tech_dark_matter_power_core
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = sr_dark_matter
+					value >= 1000
+				}
+			}
+		}
+		name = acot_digsite_events.4.b.4
+		custom_tooltip = acot_digsite_events.4.b.4.explain
+		owner = {
+			add_resource = {
+				sr_dark_matter = -1000
+			}			
+		}
+		event_target:acot_digsite_1_planet = {
+			set_planet_flag = dm_selected
+		}
+		ai_chance = {
+			factor = 5
+		}
+	}
+}
+
+# Stage 5 - The Archive
+fleet_event = {
+	id = acot_digsite_events.5
+	title = acot_digsite_events.5.name
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		text = acot_digsite_events.5.a.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = fusion_selected }	}
+		text = acot_digsite_events.5.b.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = zp_selected }	}
+		text = acot_digsite_events.5.c.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = enig_selected }	}
+		text = acot_digsite_events.5.d.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = dm_selected }	}
+		text = acot_digsite_events.5.e.desc
+	}
+	picture = GFX_acot_fractured_world
+	show_sound = event_mystic_reveal_light
+
+	archaeology = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = { 
+		from = { set_site_progress_locked = no } 
+	}
+
+	### BLEW UP PLANET
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		name = acot_digsite_events.5.a.1
+		owner = {
+			add_resource = {
+				food = 1
+			}			
+		}
+	}
+
+	### PLEB SELECTED
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = fusion_selected }	}
+		name = acot_digsite_events.5.b.1
+	}
+
+	### ZERO POINT
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = zp_selected }	}
+		name = acot_digsite_events.5.c.1
+		custom_tooltip = acot_digsite_events.5.c.1.explain
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = escort_picked
+			}	
+		}
+	}
+
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = zp_selected }	}
+		name = acot_digsite_events.5.c.2
+		custom_tooltip = acot_digsite_events.5.c.2.explain
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = bc_picked
+			}	
+		}
+	}
+
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = zp_selected }	}
+		name = acot_digsite_events.5.c.3
+		custom_tooltip = acot_digsite_events.5.c.3.explain
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = guard_picked
+			}	
+		}
+	}
+
+	### ENIG 
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = enig_selected } }
+		name = acot_digsite_events.5.d.1
+		custom_tooltip = acot_digsite_events.5.d.1.explain
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = escbc_picked
+			}	
+		}
+	}
+
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = enig_selected } }
+		name = acot_digsite_events.5.d.2
+		custom_tooltip = acot_digsite_events.5.d.2.explain
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = bcguard_picked
+			}	
+		}
+	}
+
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = enig_selected } }
+		name = acot_digsite_events.5.d.3
+		custom_tooltip = acot_digsite_events.5.d.3.explain
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = escguard_picked
+			}	
+		}
+	}
+
+	#### DM SELECTED
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = dm_selected } }
+		name = acot_digsite_events.5.e.1
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = all_picked
+			}	
+		}
+	}
+
+}
+
+
+# Stage 6 - The Test Lab
+fleet_event = {
+	id = acot_digsite_events.6
+	title = acot_digsite_events.6.name
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		text = acot_digsite_events.6.a.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = fusion_selected }	}
+		text = acot_digsite_events.6.b.desc
+	}
+	desc = {
+		trigger = { 
+			event_target:acot_digsite_1_planet = {
+				OR = {	
+					has_planet_flag = escort_picked
+					has_planet_flag = guard_picked
+					has_planet_flag = bc_picked
+					has_planet_flag = escbc_picked
+					has_planet_flag = escguard_picked
+					has_planet_flag = bcguard_picked		
+				}
+			}
+			owner = {
+				NOT = {
+					has_technology = tech_precursor_design
+				}					
+			}
+		}
+		text = acot_digsite_events.6.c.desc
+	}
+	desc = {
+		trigger = { 
+			event_target:acot_digsite_1_planet = {
+				OR = {	
+					has_planet_flag = escort_picked
+					has_planet_flag = guard_picked
+					has_planet_flag = bc_picked
+					has_planet_flag = escbc_picked
+					has_planet_flag = escguard_picked
+					has_planet_flag = bcguard_picked		
+				}
+			}
+			owner = {
+				has_technology = tech_precursor_design					
+			}
+		}
+		text = acot_digsite_events.6.c.desc.translated
+	}
+	desc = {
+		trigger = { 
+			event_target:acot_digsite_1_planet = { has_planet_flag = all_picked	}
+			owner = {
+				NOT = {
+					has_technology = tech_precursor_design
+				}					
+			}
+		}
+		text = acot_digsite_events.6.d.desc
+	}
+	desc = {
+		trigger = { 
+			event_target:acot_digsite_1_planet = { has_planet_flag = all_picked	}
+			owner = {
+				has_technology = tech_precursor_design					
+			}
+		}
+		text = acot_digsite_events.6.d.desc.translated
+	}
+
+	archaeology = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = { 
+		from = { set_site_progress_locked = no } 
+	}
+
+	# Still failed	
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		name = acot_digsite_events.6.a.1
+		owner = {
+			add_resource = {
+				food = 7
+			}			
+		}
+	}
+
+	# Still Salvaged	
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = fusion_selected }	}
+		name = acot_digsite_events.6.b.1
+		owner = {
+			add_resource = {
+				alloys = 100000
+			}			
+		}
+	}
+
+	### PICK FE FLEET - IDIOT LOL
+	option = {
+		name = acot_digsite_events.6.c.1
+		custom_tooltip = acot_digsite_events.6.c.1.explain
+		trigger = {
+			event_target:acot_digsite_1_planet = {
+				OR = {	
+					has_planet_flag = escort_picked
+					has_planet_flag = guard_picked
+					has_planet_flag = bc_picked
+					has_planet_flag = escbc_picked
+					has_planet_flag = escguard_picked
+					has_planet_flag = bcguard_picked		
+					has_planet_flag = all_picked	
+				}
+			}
+			owner = {
+				NOT = {
+					has_technology = tech_precursor_design
+				}					
+			}				
+		}
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = fe_fleet_selected
+			}		
+		}
+	}
+
+	### PICK PRECURSOR DESIGN
+	option = {
+		name = acot_digsite_events.6.c.2
+		custom_tooltip = acot_digsite_events.6.c.2.explain
+		trigger = {
+			event_target:acot_digsite_1_planet = {
+				OR = {	
+					has_planet_flag = escort_picked
+					has_planet_flag = guard_picked
+					has_planet_flag = bc_picked
+					has_planet_flag = escbc_picked
+					has_planet_flag = escguard_picked
+					has_planet_flag = bcguard_picked		
+					has_planet_flag = all_picked	
+				}
+			}
+			owner = {
+				NOT = {
+					has_technology = tech_precursor_design
+				}					
+			}				
+		}
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = precursor_design_selected
+			}		
+		}
+	}
+
+	### SELECT TO PICK BOTH FLEET AND DESIGN
+	option = {
+		name = acot_digsite_events.6.d.1
+		custom_tooltip = acot_digsite_events.6.d.1.explain
+		trigger = {
+			event_target:acot_digsite_1_planet = {
+				OR = {	
+					has_planet_flag = escort_picked
+					has_planet_flag = guard_picked
+					has_planet_flag = bc_picked
+					has_planet_flag = escbc_picked
+					has_planet_flag = escguard_picked
+					has_planet_flag = bcguard_picked		
+					has_planet_flag = all_picked	
+				}
+			}
+			owner = {
+				has_technology = tech_precursor_design				
+			}				
+		}
+		hidden_effect = {
+			event_target:acot_digsite_1_planet = {
+				set_planet_flag = precursor_all_selected
+			}		
+		}
+	}
+
+}
+
+#ALPHA EXISTENCE THROUGH EVENTGO
+country_event = {
+	id = acot_digsite_events.700
+	title = acot_alpha_matter_events.1.name
+	desc =  acot_alpha_matter_events.1.a.desc
+	picture = GFX_evt_ancient_records
+	show_sound = event_mystery
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = hear_precursor_rumor
+	}
+	
+	option = {
+		name = acot_alpha_matter_events.1.a
+		trigger = {
+			is_ai = no
+		}
+		set_country_flag = allow_databank_steal
+		begin_event_chain = {
+			event_chain = acot_alpha_tech_chain
+		}
+		capital_scope = {
+			create_point_of_interest = {
+				id = acot_alpha_research.1
+				name = "acot_databank_attack_fe"
+				desc = "acot_databank_attack_fe_desc"
+				event_chain = acot_alpha_tech_chain
+				location = this
+			}	
+			create_point_of_interest = {
+				id = acot_alpha_research.2
+				name = "acot_databank_trick_fe"
+				desc = "acot_databank_trick_fe_desc"
+				event_chain = acot_alpha_tech_chain
+				location = this
+			}		
+		}
+	}
+
+	### AI IS TOO STUPID TO RELIABLY UNDERSTAND COMPLEX SYSTEMS WITHOUT BUNCH OF  CODES
+	option = {
+		name = EXCELLENT
+		trigger = {
+			is_ai = yes
+		}		
+		give_technology = {
+			tech = tech_precursor_design
+		}
+		country_event = { id = acot_precursor_databank.3 days = 1800 }
+		set_country_flag = learned_dm_alpha_existence
+	}
+}
+
+# Stage 7 - The End
+fleet_event = {
+	id = acot_digsite_events.7
+	title = acot_digsite_events.7.name
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		text = acot_digsite_events.7.a.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = fusion_selected }	}
+		text = acot_digsite_events.7.b.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = fe_fleet_selected }	}
+		text = acot_digsite_events.7.c.desc
+	}
+	desc = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = precursor_design_selected }	}
+		text = acot_digsite_events.7.d.desc
+	}
+	desc = {
+		trigger = { 
+			OR = {
+				event_target:acot_digsite_1_planet = { 
+					has_planet_flag = precursor_all_selected 
+					NOT = {
+						has_planet_flag = all_picked
+						has_planet_flag = smart_decision
+					}
+				}
+				event_target:acot_digsite_1_planet = { 
+					has_planet_flag = precursor_all_selected 
+					has_planet_flag = all_picked
+					NOT = {
+						has_planet_flag = smart_decision
+					}
+				}						
+			}	
+		}
+		text = acot_digsite_events.7.e.desc
+	}
+	desc = {
+		trigger = { 	
+			event_target:acot_digsite_1_planet = { 
+				has_planet_flag = precursor_all_selected 
+				has_planet_flag = all_picked
+				has_planet_flag = smart_decision
+			}	
+		}
+		text = acot_digsite_events.7.f.desc
+	}
+
+	archaeology = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		#from = { set_site_progress_locked = yes }
+		IF = {
+			limit = {
+				event_target:acot_digsite_1_planet = {
+					has_planet_flag = robbed_all
+				}
+			}
+			create_fleet = {
+				name = NAME_Meme_Corvette_FLEET
+				settings = {
+					can_change_composition = no
+					can_upgrade = no
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = root.owner
+					create_ship = {
+						design = NAME_Meme_Corvette
+						name = NAME_Meme_Corvette_DESIGN
+						graphical_culture = pirate_01
+						effect = { add_modifier = { modifier = acot_meme_vette_buff } }
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+		}
+	}
+
+	after = { 
+		from = { 
+			set_site_progress_locked = no 
+			expire_site_event = acot_digsite_events.7
+		} 
+		hidden_effect = {
+			### CHECK IF NOT HAVE SOPHIA
+			owner = {
+				IF = { 
+					limit = {  
+						NOR = { 
+							has_country_flag = hear_precursor_rumor 
+							has_tech_option = tech_precursor_design
+							has_technology = tech_precursor_design
+							has_technology = tech_dark_matter_power_core_ae
+							has_event_chain = acot_alpha_tech_chain
+						} 
+					} 
+					country_event = {
+						id = acot_digsite_events.700 days = 5
+					}
+				}
+			}
+		}
+	}
+
+	### SPAWN A MEME PIRATE
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = robbed_all }	}
+		name = acot_digsite_events.7.a.1
+	}
+
+	### SALVAGE
+	option = {
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = fusion_selected }	}
+		name = acot_digsite_events.7.b.1
+		owner = {
+			add_resource = {
+				alloys = 10000
+			}			
+		}
+	}
+
+	### SPAWNDADOLO FLEETA
+	option = {
+		name = acot_digsite_events.7.c.1
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = fe_fleet_selected }	}
+		hidden_effect = {
+			### ESCORT ONLY
+			IF = {
+				limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escort_picked }	}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 30
+							create_ship = {
+								design = NAME_Sage
+								name = random
+								graphical_culture = fallen_empire_02
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			### BC ONLY
+			IF = {
+				limit = { event_target:acot_digsite_1_planet = { has_planet_flag = bc_picked }	}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 15
+							create_ship = {
+								design = NAME_Supremacy
+								name = random
+								graphical_culture = fallen_empire_04
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}	
+			### PLATFORM ONLY
+			IF = {
+				limit = { event_target:acot_digsite_1_planet = { has_planet_flag = guard_picked }	}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 3
+							create_ship = {
+								design = NAME_Faith
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 3
+							create_ship = {
+								design = NAME_Keeper
+								name = random
+								graphical_culture = fallen_empire_03
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			### ESCORT/BC
+			IF = {
+				limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escbc_picked }	}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 30
+							create_ship = {
+								design = NAME_Sage
+								name = random
+								graphical_culture = fallen_empire_02
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 15
+							create_ship = {
+								design = NAME_Supremacy
+								name = random
+								graphical_culture = fallen_empire_04
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			### BC/OUTPOST
+			IF = {
+				limit = { event_target:acot_digsite_1_planet = { has_planet_flag = bcguard_picked }	}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 15
+							create_ship = {
+								design = NAME_Supremacy
+								name = random
+								graphical_culture = fallen_empire_04
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 3
+							create_ship = {
+								design = NAME_Faith
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 3
+							create_ship = {
+								design = NAME_Keeper
+								name = random
+								graphical_culture = fallen_empire_03
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}	
+			### ESCORT OUTPOST
+			IF = {
+				limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escguard_picked }	}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 30
+							create_ship = {
+								design = NAME_Sage
+								name = random
+								graphical_culture = fallen_empire_02
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 3
+							create_ship = {
+								design = NAME_Faith
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 3
+							create_ship = {
+								design = NAME_Keeper
+								name = random
+								graphical_culture = fallen_empire_03
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			### ALL PICKED
+			IF = {
+				limit = { event_target:acot_digsite_1_planet = { has_planet_flag = all_picked }	}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 30
+							create_ship = {
+								design = NAME_Sage
+								name = random
+								graphical_culture = fallen_empire_02
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 15
+							create_ship = {
+								design = NAME_Supremacy
+								name = random
+								graphical_culture = fallen_empire_04
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 3
+							create_ship = {
+								design = NAME_Faith
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 3
+							create_ship = {
+								design = NAME_Keeper
+								name = random
+								graphical_culture = fallen_empire_03
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}			
+		}
+	}
+
+	### DESIGN GIFF
+	option = {
+		name = acot_digsite_events.7.d.1
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = precursor_design_selected }	}
+		### ESCORT ONLY
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escort_picked }	}
+			owner = {
+				add_research_option = tech_precursor_escort
+				}
+			}
+		### BC ONLY
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = bc_picked }	}
+			owner = {
+				add_research_option = tech_precursor_bc
+			}
+		}		
+		### GUARD ONLY
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = guard_picked }	}
+			owner = {
+				add_research_option = tech_precursor_titan
+			}
+		}	
+		### ESCORT/BC
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escbc_picked }	}
+			owner = {
+				add_research_option = tech_precursor_escort
+				add_research_option = tech_precursor_bc
+			}
+		}	
+		### BC/OUTPOST
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = bcguard_picked }	}
+			owner = {
+				add_research_option = tech_precursor_titan
+				add_research_option = tech_precursor_bc
+			}
+		}	
+		### ESCORT OUTPOST	
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escguard_picked }	}
+			owner = {
+				add_research_option = tech_precursor_escort
+				add_research_option = tech_precursor_titan
+			}
+		}	
+		### ALL PICKED	
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = all_picked }	}
+			owner = {
+				add_research_option = tech_precursor_escort
+				add_research_option = tech_precursor_bc
+				add_research_option = tech_precursor_titan
+			}
+		}			
+	}	
+
+	### I SEE EVERYTHING
+	option = {
+		name = acot_digsite_events.7.e.1
+		trigger = { event_target:acot_digsite_1_planet = { has_planet_flag = precursor_all_selected } }
+		### ESCORT ONLY
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escort_picked }	}
+			owner = {
+				add_research_option = tech_precursor_escort
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 30
+						create_ship = {
+							design = NAME_Sage
+							name = random
+							graphical_culture = fallen_empire_02
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+		}
+		### BC ONLY
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = bc_picked }	}
+			owner = {
+				add_research_option = tech_precursor_bc
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 15
+						create_ship = {
+							design = NAME_Supremacy
+							name = random
+							graphical_culture = fallen_empire_04
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+		}		
+		### GUARD ONLY
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = guard_picked }	}
+			owner = {
+				add_research_option = tech_precursor_titan
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 3
+						create_ship = {
+							design = NAME_Faith
+							name = random
+							graphical_culture = fallen_empire_01
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 3
+						create_ship = {
+							design = NAME_Keeper
+							name = random
+							graphical_culture = fallen_empire_03
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+		}	
+		### ESCORT/BC
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escbc_picked }	}
+			owner = {
+				add_research_option = tech_precursor_escort
+				add_research_option = tech_precursor_bc
+				add_research_option = tech_precursor_escort_cost
+				add_research_option = tech_precursor_bc_cost
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 30
+						create_ship = {
+							design = NAME_Sage
+							name = random
+							graphical_culture = fallen_empire_02
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 15
+						create_ship = {
+							design = NAME_Supremacy
+							name = random
+							graphical_culture = fallen_empire_04
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}			
+		}	
+		### BC/OUTPOST
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = bcguard_picked }	}
+			owner = {
+				add_research_option = tech_precursor_titan
+				add_research_option = tech_precursor_bc
+				add_research_option = tech_precursor_bc_cost
+				add_research_option = tech_precursor_titan_cost
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 15
+						create_ship = {
+							design = NAME_Supremacy
+							name = random
+							graphical_culture = fallen_empire_04
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 3
+						create_ship = {
+							design = NAME_Faith
+							name = random
+							graphical_culture = fallen_empire_01
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 3
+						create_ship = {
+							design = NAME_Keeper
+							name = random
+							graphical_culture = fallen_empire_03
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+		}	
+		### ESCORT OUTPOST	
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = escguard_picked }	}
+			owner = {
+				add_research_option = tech_precursor_escort
+				add_research_option = tech_precursor_escort_cost
+				add_research_option = tech_precursor_titan
+				add_research_option = tech_precursor_titan_cost
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 30
+						create_ship = {
+							design = NAME_Sage
+							name = random
+							graphical_culture = fallen_empire_02
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 3
+						create_ship = {
+							design = NAME_Faith
+							name = random
+							graphical_culture = fallen_empire_01
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 3
+						create_ship = {
+							design = NAME_Keeper
+							name = random
+							graphical_culture = fallen_empire_03
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+		}	
+		### 100% COMPLETION - YOU ARE NOT BORDERLANDS 3 CONGRATS
+		IF = {
+			limit = { event_target:acot_digsite_1_planet = { has_planet_flag = all_picked }	}
+			owner = {
+				add_research_option = tech_precursor_escort
+				add_research_option = tech_precursor_escort_cost
+				add_research_option = tech_precursor_bc
+				add_research_option = tech_precursor_bc_cost
+				add_research_option = tech_precursor_titan
+				add_research_option = tech_precursor_titan_cost
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 30
+						create_ship = {
+							design = NAME_Sage
+							name = random
+							graphical_culture = fallen_empire_02
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 15
+						create_ship = {
+							design = NAME_Supremacy
+							name = random
+							graphical_culture = fallen_empire_04
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 3
+						create_ship = {
+							design = NAME_Faith
+							name = random
+							graphical_culture = fallen_empire_01
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner
+					while = {
+						count = 3
+						create_ship = {
+							design = NAME_Keeper
+							name = random
+							graphical_culture = fallen_empire_03
+							effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+						}
+					}
+					set_location = event_target:acot_digsite_1_planet
+				}
+			}
+		}
+		########
+		IF = {
+			limit = {
+				event_target:acot_digsite_1_planet = { 
+					has_planet_flag = precursor_all_selected 
+					has_planet_flag = all_picked
+					has_planet_flag = smart_decision
+				}
+			}
+			fleet_event = { id = acot_digsite_events.8  days = 2 } ### FINAL RESTORATION OF THE CITADELO
+		}
+	}	
+
+}
+
+# PERFECT SCORE - ALLOW YOU TO RESTORE THE AMERIGOOO
+fleet_event = {
+	id = acot_digsite_events.8
+	title = acot_digsite_events.8.name
+	desc = acot_digsite_events.8.desc
+	picture = GFX_acot_fractured_world
+	show_sound = event_mystic_reveal_light
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.8.a
+		owner = {
+			enable_special_project = {
+				name = RESTORE_AMERIGO_MEGA
+				location = event_target:acot_digsite_1_planet
+			}
+		}
+	}
+
+	option = {
+		name = acot_digsite_events.8.b
+		owner = {
+			add_resource = {
+				alloys =  200000
+			}
+		}
+	}
+}
+
+# RESTORATION COMPLETED
+country_event = {
+	id = acot_digsite_events.9
+	title = acot_digsite_events.9.name
+	desc = acot_digsite_events.9.desc
+	picture = GFX_acot_precursor_amerigo
+	show_sound = event_energy_field
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		event_target:acot_digsite_1_planet = { 
+			solar_system = {
+				spawn_megastructure = {
+					type = acot_amerigo
+					coords_from = event_target:acot_digsite_1_planet
+					orbit_distance = 0
+					orbit_angle = 0
+					owner = root
+				}			
+			}
+		}
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.9.a
+		add_relic = r_amerigo
+	}
+
+}
+
+# RESTORATION BEAM FIRED
+country_event = {
+	id = acot_digsite_events.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			45 = { country_event = { id = acot_digsite_events.1000 } } ### GETS FE FLEETS
+			45 = { country_event = { id = acot_digsite_events.1003 } } ### GETS A BUNCH OF RESOURCE
+			#20 = { country_event = { id = acot_digsite_events.1004 } } ### GETS A RANDOM STANDARD FLEETS
+			10 = { 
+				modifier = {
+					factor = 0 ### NO REPLICA
+					has_global_flag = star_dominator_acquired
+				}
+				modifier = {
+					factor = 0 ### NO PHANON
+					has_global_flag = acot_phanon_forbidden
+				}
+				country_event = { id = acot_digsite_events.1004 } #### STAR DOMINATOR ALERT!
+			}
+		}
+	}
+
+	after = { 
+	}
+
+}
+
+# FE SHIPS
+country_event = {
+	id = acot_digsite_events.1000
+	title = acot_digsite_events.1000.name
+	desc = acot_digsite_events.1000.desc
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_door_opening
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		### FE TITAN
+		random_list = {
+			40 = {  }
+			30 = { 
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 1
+							create_ship = {
+								design = NAME_Keeper
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			30 = { 
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 2
+							create_ship = {
+								design = NAME_Keeper
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+		}
+		#### FE BC
+		random_list = {
+			40 = { 
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 2
+							create_ship = {
+								design = NAME_Supremacy
+								name = random
+								graphical_culture = fallen_empire_04
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			40 = { 
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 4
+							create_ship = {
+								design = NAME_Supremacy
+								name = random
+								graphical_culture = fallen_empire_04
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			20 = { 
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 8
+							create_ship = {
+								design = NAME_Supremacy
+								name = random
+								graphical_culture = fallen_empire_04
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+		}
+
+		#### FE ESCORT
+		random_list = {
+			40 = { 
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 4
+							create_ship = {
+								design = NAME_Sage
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			40 = { 
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 8
+							create_ship = {
+								design = NAME_Sage
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+			20 = { 
+				create_fleet = {
+					effect = {
+						set_owner = root.owner
+						while = {
+							count = 16
+							create_ship = {
+								design = NAME_Sage
+								name = random
+								graphical_culture = fallen_empire_01
+								effect = { add_modifier = { modifier = acot_ancient_armada_buff } }
+							}
+						}
+						set_location = event_target:acot_digsite_1_planet
+					}
+				}
+			}
+		}
+
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.1000.a
+	}
+
+}
+
+# ATARI
+country_event = {
+	id = acot_digsite_events.1003
+	title = acot_digsite_events.1003.name
+	desc = acot_digsite_events.1003.desc
+	picture = GFX_evt_ship_offloading_cargo
+	show_sound = event_door_opening
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.1003.a
+		random_list = {
+			10 = { 
+				add_resource = { 
+					alloys = 1250 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					alloys = 2500 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					alloys = 5000 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					alloys = 10000 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					alloys = 20000 
+				} 
+			}
+		}
+
+		random_list = {
+			10 = { 
+			}
+			10 = { 
+				add_resource = { 
+					sr_dark_matter = 50 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					sr_dark_matter = 100 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					sr_dark_matter = 200 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					sr_dark_matter = 400 
+				} 
+			}
+		}
+
+		random_list = {
+			10 = { 
+			}
+			10 = { 
+				add_resource = { 
+					acot_sr_dark_energy = 50 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					acot_sr_dark_energy = 100 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					acot_sr_dark_energy = 200 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					acot_sr_dark_energy = 400 
+				} 
+			}
+		}
+
+		random_list = {
+			90 = { 
+			}
+			10 = { 
+				add_resource = { 
+					food = 1 
+				} 
+			}
+		}
+
+		random_list = {
+			10 = { 
+			}
+			10 = { 
+				add_resource = { 
+					engineering_research = 2500 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					engineering_research = 5000 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					engineering_research = 10000 
+				} 
+			}
+			10 = { 
+				add_resource = { 
+					engineering_research = 20000 
+				} 
+			}
+		}
+
+	}
+
+}
+
+# ATARI
+country_event = {
+	id = acot_digsite_events.1004
+	title = acot_digsite_events.1004.name
+	desc = acot_digsite_events.1004.desc
+	picture = GFX_acot_precursor_amerigo
+	show_sound = event_mystic_reveal_light
+	
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.1004.a
+		allow = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 25000
+			}
+		}
+		add_resource = {
+			energy = -25000
+		}
+		hidden_effect = {
+			country_event = {
+				id = acot_digsite_events.10041
+			}
+		}
+	}
+
+	option = {
+		name = acot_digsite_events.1004.b
+		hidden_effect = {
+		}
+	}
+
+}
+
+# ATARI
+country_event = {
+	id = acot_digsite_events.10041
+	title = acot_digsite_events.10041.name
+	desc = acot_digsite_events.10041.desc
+	picture = GFX_acot_precursor_amerigo
+	show_sound = event_red_alert
+	
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.10041.a
+		allow = {
+			resource_stockpile_compare = {
+				resource = acot_sr_dark_energy
+				value >= 2500
+			}
+			resource_stockpile_compare = {
+				resource = sr_dark_matter
+				value >= 2500
+			}
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 25000
+			}
+		}
+		add_resource = {
+			sr_dark_matter = -2500
+			energy = -2500
+			acot_sr_dark_energy = -2500
+		}
+		hidden_effect = {
+			country_event = {
+				id = acot_digsite_events.10042
+			}			
+		}
+	}
+
+	option = {
+		name = acot_digsite_events.10041.b
+		hidden_effect = {
+		}
+	}
+
+}
+
+# ATARI
+country_event = {
+	id = acot_digsite_events.10042
+	title = acot_digsite_events.10042.name
+	desc = acot_digsite_events.10042.desc
+	picture = GFX_acot_precursor_amerigo
+	show_sound = event_red_alert
+	
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.10042.a
+		allow = {
+			resource_stockpile_compare = {
+				resource = acot_sr_dark_energy
+				value >= 5000
+			}
+			resource_stockpile_compare = {
+				resource = sr_dark_matter
+				value >= 5000
+			}
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 50000
+			}
+		}
+		add_resource = {
+			sr_dark_matter = -5000
+			energy = -5000 
+			acot_sr_dark_energy = -5000
+		}
+		hidden_effect = {
+			country_event = {
+				id = acot_digsite_events.10043
+			}			
+		}
+	}
+
+	option = {
+		name = acot_digsite_events.10042.b
+		hidden_effect = {
+		}
+	}
+
+}
+
+# ATARI
+country_event = {
+	id = acot_digsite_events.10043
+	title = acot_digsite_events.10043.name
+	desc = acot_digsite_events.10043.desc
+	picture = GFX_acot_star_dominator
+	show_sound = event_herculean_start
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = star_dominator_acquired
+		create_fleet = {
+			settings = {
+				spawn_debris = no 
+				can_upgrade = no 
+				uses_naval_capacity = no
+				is_boss = yes
+				can_change_composition = no
+				can_disband = no
+		   }
+			effect = {
+				set_owner = root.owner
+				while = {
+					count = 1
+					create_ship = {
+						design = NAME_ACOT_MEGANOUGHT
+						name = NAME_ACOT_MEGANOUGHT
+						graphical_culture = acot_pmc
+					}
+				}
+				set_location = event_target:acot_digsite_1_planet
+			}
+		}
+	}
+
+	after = { 
+	}
+	
+	option = {
+		name = acot_digsite_events.10043.a
+	}
+
+}
+
+##Random Events
+

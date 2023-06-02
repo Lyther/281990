@@ -1,0 +1,164 @@
+lava_extraction_station ={
+	icon = "GFX_spaceport_lava_extraction_station"
+	construction_days = 360
+
+	potential = {
+		exists = owner
+		owner = { has_technology = tech_molten_world_mining }
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_starport"
+			has_starbase_size >= starbase_starport
+		}
+		custom_tooltip = {
+			fail_text = "requires_molten_world"
+			solar_system = {
+				any_system_planet = {
+					is_planet_class = pc_molten
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = starbase_buildings
+		cost = {
+			alloys = 100
+		}
+
+		produces = {
+			minerals = 5
+			energy = 5
+		}
+
+		produces = {
+			trigger = {
+				exists = owner
+				owner = { has_technology = tech_mine_rare_crystals }
+			}
+			rare_crystals = 1
+		}
+	}
+
+	show_in_tech = "tech_molten_world_mining"
+
+	ai_build_at_chokepoint = yes
+	ai_build_outside_chokepoint = yes
+	ai_weight = {
+		weight = 100 #use same weight here - ai weighting is done in starbase_types.txt
+	}
+}
+
+magma_drilling_station ={
+	icon = "GFX_spaceport_magma_drilling_station"
+	construction_days = 360
+
+	potential = {
+		exists = owner
+		owner = { has_technology = tech_underground_lava_mining }
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_starport"
+			has_starbase_size >= starbase_starport
+		}
+		custom_tooltip = {
+			fail_text = "requires_rocky_planet_except_habitable"
+			solar_system = {
+				any_system_planet = {
+					OR = {
+						is_planet_class = pc_molten
+						is_planet_class = pc_barren
+						is_planet_class = pc_barren_cold
+						is_planet_class = pc_toxic
+						is_planet_class = pc_frozen
+					}
+				}
+			}
+		}
+	}
+
+	resources = {
+		category = starbase_buildings
+		cost = {
+			alloys = 100
+		}
+
+		produces = {
+			minerals = 2
+			energy = 2
+		}
+
+		produces = {
+			trigger = {
+				exists = owner
+				owner = { has_technology = tech_mine_rare_crystals }
+			}
+			rare_crystals = 0.5
+		}
+	}
+
+	show_in_tech = "tech_underground_lava_mining"
+
+	ai_build_at_chokepoint = yes
+	ai_build_outside_chokepoint = yes
+	ai_weight = {
+		weight = 100 #use same weight here - ai weighting is done in starbase_types.txt
+	}
+}
+
+the_queens_will = {
+	icon = "GFX_the_queens_will"
+	construction_days = 360
+
+	potential = {
+		exists = owner
+		owner = { has_technology = tech_chrysalis_stone }
+	}
+
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_starport"
+			has_starbase_size >= starbase_starport
+		}
+		solar_system = {
+			count_starbase_buildings = {
+				type = the_queens_will
+				count < 1
+				include_being_constructed = yes
+			}
+		}
+	}
+
+	abort_construction_trigger = {
+		solar_system = {
+			count_starbase_buildings = {
+				type = communications_jammer
+				count > 1
+				include_being_constructed = yes
+			}
+		}
+	}
+
+	equipped_component = "STARBASE_THE_QUEENS_WILL"
+
+	resources = {
+		category = starbase_buildings
+		cost = {
+			alloys = 100
+			rare_crystals = 25
+		}
+	}
+
+
+	show_in_tech = "tech_chrysalis_stone"
+
+	ai_build_at_chokepoint = yes
+	ai_build_outside_chokepoint = yes
+	ai_weight = {
+		weight = 100 #use same weight here - ai weighting is done in starbase_types.txt
+	}
+}

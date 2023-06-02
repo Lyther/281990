@@ -1,0 +1,1924 @@
+###################################
+# Pony's Magic Technology 
+###################################
+
+namespace = ponycountry
+
+### Magic
+
+##### Dark Magic Tech Events #####
+country_event = {
+	id = ponycountry.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		pmt_pony_species_trigger = yes
+		is_country_type = default
+		NOT = { has_country_flag = ponycountry_100 }
+	}
+
+	immediate = {
+		capital_scope = {
+			set_planet_flag = "Equestria"
+		}
+		set_country_flag = ponycountry_100
+	}
+}
+
+country_event = {
+    id = ponycountry.2
+	title = "ponycountry.2.title"
+	desc = "ponycountry.2.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_default
+	is_triggered_only = yes
+	
+	trigger = {
+		has_technology = tech_dark_magic	# I don't know if this can stop dark magic bug, but this is effective to playable and non-pony country.
+		is_country_type = default	# Last code doesn't work for country that isn't playable, this may fix it.
+		NOT = {
+		    has_country_flag = dark_magic_event
+		}
+	}
+	
+	immediate = {
+	    #set_country_flag = pop_happiness_dark_magic
+		set_country_flag = dark_magic_event
+	}
+	
+	option = {
+	    name = "ponycountry.2.a"
+		hidden_effect = {
+			country_event = { id = "ponycountry.3"  days = 540 random = 180 }
+		}
+	}
+	
+	option = {
+		name = "ponycountry.2.b"
+		hidden_effect = {
+			country_event = { id = "ponycountry.3" days = 540 random = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.3
+	title = "ponycountry.3.title"
+	desc = "ponycountry.3.desc"
+	picture = GFX_evt_dark_alley
+	show_sound = event_criminal_activity
+	is_triggered_only = yes
+
+	option = {
+		name = "ponycountry.3.a"
+		add_modifier = {
+			modifier = "uneasiness"
+			days = -1
+		}
+		hidden_effect = {
+			country_event = { id = "ponycountry.4" days = 540 random = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.4
+	title = "ponycountry.4.title"
+	desc = "ponycountry.4.desc"
+	picture = GFX_evt_ground_combat
+	show_sound = event_ground_battle
+	is_triggered_only = yes
+
+	option = {
+		name = "ponycountry.4.a"
+		remove_modifier = "uneasiness"
+		every_planet_within_border = {
+			limit = {
+				is_colony = yes
+				owner = { is_primitive = no }
+				num_pops > 3
+			}
+			random_owned_pop = { kill_pop = yes }
+		}
+		add_modifier = {
+			modifier = "pop_happiness_dark_magic"
+			days = -1
+		}
+		capital_scope = {
+			enable_special_project = {
+				name = "ADAPT_TO_DARKNESS"
+				location = this
+				owner = root
+			}
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_monthly_income = {
+					resource = society_research
+					value < 100
+				}
+			}
+			modifier = {
+				factor = 5
+				has_monthly_income = {
+					resource = society_research
+					value >= 200
+				}
+				has_monthly_income = {
+					resource = society_research
+					value < 250
+				}
+			}
+			modifier = {
+				factor = 20
+				has_monthly_income = {
+					resource = society_research
+					value >= 250
+				}
+				has_monthly_income = {
+					resource = society_research
+					value < 400
+				}
+			}
+			modifier = {
+				factor = 100
+				has_monthly_income = {
+					resource = society_research
+					value >= 400
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "ponycountry.4.b"
+		every_planet_within_border = {
+			limit = {
+				is_colony = yes
+				num_pops > 3
+			}
+			random_owned_pop = { kill_pop = yes }
+		}
+		add_resource = {
+			influence = -50
+			energy = -1000
+		}
+		remove_modifier = "uneasiness"
+		add_modifier = {
+			modifier = "pop_happiness_dark_magic"
+			days = -1
+		}
+		hidden_effect = {
+			random_list = {
+				10 = { country_event = { id = "ponycountry.43" days = 60 random = 30 } } #success
+				20 = { country_event = { id = "ponycountry.44" days = 60 random = 30 } } #fail
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.40
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			90 = { country_event = { id = "ponycountry.41" } } #success
+			10 = { country_event = { id = "ponycountry.42" } } #fail
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.41
+	title = "ponycountry.41.title"
+	desc = "ponycountry.41.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+	is_triggered_only = yes
+
+	trigger = {
+		has_technology = tech_dark_magic
+		is_country_type = default
+	}
+
+	immediate = {
+		set_country_flag = end_dark_magic_evt
+		every_owned_pop = {
+			limit = {
+				is_same_species = root
+				NOT = { species = { has_trait = trait_dark_magic_manipulator } }
+			}
+			modify_species = {
+				species = this
+				add_trait = trait_dark_magic_manipulator
+				effect = {
+					save_event_target_as = dark_magic_species
+				}
+			}
+		}
+		change_dominant_species = { species = event_target:dark_magic_species change_all = yes }
+	}
+
+	option = {
+		name = "ponycountry.41.a"
+		remove_modifier = "pop_happiness_dark_magic"
+		custom_tooltip = dark_magic_manipulator
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_same_value = root
+				}
+				every_owned_leader = {
+					limit = {
+						is_same_species = root
+						NOT = { has_trait = leader_trait_dark_magic_manipulator }
+					}
+					add_trait_no_notify = leader_trait_dark_magic_manipulator
+				}
+				every_pool_leader = {
+					limit = {
+						is_same_species = root
+						NOT = { has_trait = leader_trait_dark_magic_manipulator }
+					}
+					add_trait_no_notify = leader_trait_dark_magic_manipulator
+				}
+				create_message = {
+					type = MESSAGE_ALL_GAINED_TRAIT
+					localization = MESSAGE_ALL_GAINED_TRAIT_DESC
+					days = @toast_message_days
+					variable = {
+						type = key
+						value = leader_trait_dark_magic_manipulator
+						localization = TRAIT
+					}
+					variable = {
+						key = TRAIT_KEY
+						value = leader_trait_dark_magic_manipulator
+					}
+					variable = {
+						key = "border"
+						value = "GFX_invisible" #TODO Common/ no rarity frame
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_ai = no
+					has_communications = root
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = ponycountry.53 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.42
+	title = "ponycountry.42.title"
+	desc = "ponycountry.42.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = {
+		name = "ponycountry.42.a"
+		add_modifier = {
+			modifier = "pmt_production_stagnation_1"
+			days = -1
+		}
+		hidden_effect = {
+			country_event = { id = "ponycountry.5" days = 270 random = 90 }
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.43
+	title = "ponycountry.43.title"
+	desc = "ponycountry.43.desc"
+	picture = GFX_evt_derelict_interior
+	show_sound = event_criminal_activity
+	is_triggered_only = yes
+
+	option = {
+		name = "ponycountry.43.a"
+		add_modifier = {
+			modifier = "pmt_production_stagnation_1"
+			days = -1
+		}
+		hidden_effect = {
+			country_event = { id = "ponycountry.5" days = 1080 random = 360 }
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.44
+	title = "ponycountry.44.title"
+	desc = "ponycountry.44.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_criminal_activity
+	is_triggered_only = yes
+
+	option = {
+		name = "ponycountry.44.a"
+		add_modifier = {
+			modifier = "pmt_production_stagnation_2"
+			days = -1
+		}
+		
+		hidden_effect = {
+			country_event = { id = "ponycountry.5" days = 1080 random = 360 }
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.5
+	title = "ponycountry.5.title"
+	desc = "ponycountry.5.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+	is_triggered_only = yes
+
+	trigger = {
+		has_technology = tech_dark_magic
+		is_country_type = default
+	}
+
+	immediate = {
+		set_country_flag = end_dark_magic_evt
+		every_owned_pop = {
+			limit = {
+				is_same_species = root
+				NOT = { species = { has_trait = trait_dark_magic_manipulator } }
+			}
+			modify_species = {
+				species = this
+				add_trait = trait_dark_magic_manipulator
+				effect = {
+					save_event_target_as = dark_magic_species
+				}
+			}
+		}
+		change_dominant_species = { species = event_target:dark_magic_species change_all = yes }
+	}
+
+	option = {
+		name = "ponycountry.5.a"
+		name = "ponycountry.5.a"
+		remove_modifier = "pop_happiness_dark_magic"
+		custom_tooltip = "remove_production_stagnation"
+		custom_tooltip = dark_magic_manipulator
+		hidden_effect = {
+			remove_modifier = "pmt_production_stagnation_1"
+			remove_modifier = "pmt_production_stagnation_2"
+			every_country = {
+				limit = {
+					is_same_value = root
+				}
+				every_owned_leader = {
+					limit = {
+						is_same_species = root
+						NOT = { has_trait = leader_trait_dark_magic_manipulator }
+					}
+					add_trait_no_notify = leader_trait_dark_magic_manipulator
+				}
+				every_pool_leader = {
+					limit = {
+						is_same_species = root
+						NOT = { has_trait = leader_trait_dark_magic_manipulator }
+					}
+					add_trait_no_notify = leader_trait_dark_magic_manipulator
+				}
+				create_message = {
+					type = MESSAGE_ALL_GAINED_TRAIT
+					localization = MESSAGE_ALL_GAINED_TRAIT_DESC
+					days = @toast_message_days
+					variable = {
+						type = key
+						value = leader_trait_dark_magic_manipulator
+						localization = TRAIT
+					}
+					variable = {
+						key = TRAIT_KEY
+						value = leader_trait_dark_magic_manipulator
+					}
+					variable = {
+						key = "border"
+						value = "GFX_invisible" #TODO Common/ no rarity frame
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_ai = no
+					has_communications = root
+					NOT = { is_same_value = root }
+				}
+				country_event = { id = ponycountry.53 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.51
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = {
+			species = { has_trait = trait_dark_magic_manipulator }
+		}
+		has_technology = tech_dark_magic
+		is_country_type = default
+	}
+
+	immediate = {
+		from = {
+			add_trait_no_notify = leader_trait_dark_magic_manipulator
+		}
+	}
+}
+
+#country_event = {
+#	id = ponycountry.52
+#	is_triggered_only = yes
+#	hide_window = yes
+#
+#	trigger = {
+#		from = {
+#			OR = {
+#				species = { has_trait = trait_dark_magic_manipulator }
+#				has_ruler_trait = leader_trait_ruler_dark_magic_manipulator
+#			}
+#			NOR = {
+#				has_trait = leader_trait_admiral_dark_magic_manipulator
+#				has_trait = leader_trait_general_dark_magic_manipulator
+#				has_trait = leader_trait_governor_dark_magic_manipulator
+#				has_trait = leader_trait_scientist_dark_magic_manipulator
+#			}
+#		}
+#	}
+#
+#	immediate = {
+#		from = {
+#			if = {
+#				limit = { leader_class = admiral }
+#				add_trait = leader_trait_admiral_dark_magic_manipulator
+#				break = yes
+#			}
+#			if = {
+#				limit = { leader_class = general }
+#				add_trait = leader_trait_general_dark_magic_manipulator
+#				break = yes
+#			}
+#			if = {
+#				limit = { leader_class = governor }
+#				add_trait = leader_trait_governor_dark_magic_manipulator
+#				break = yes
+#			}
+#			if = {
+#				limit = { leader_class = scientist }
+#				remove_trait = leader_trait_expertise_magic
+#				add_trait = leader_trait_scientist_dark_magic_manipulator
+#				break = yes
+#			}
+#		}
+#	}
+#}
+
+country_event = {
+	id = ponycountry.53
+	title = "ponycountry.53.title"
+	desc = "ponycountry.53.desc"
+	picture = GFX_evt_psionics
+	show_sound = event_the_great_awakening
+	is_triggered_only = yes
+
+	option = {
+		name = "ponycountry.53.a"
+		trigger = {
+			NOT = { is_at_war_with = from }
+		}
+	}
+
+	option = {
+		name = "ponycountry.53.b"
+		trigger = {
+			is_at_war_with = from
+		}
+	}
+}
+
+### Dark Magic Successive Event
+
+event = {
+	id = ponycountry.6
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		any_country = {
+			has_country_flag = end_dark_magic_evt
+			#NOT = { has_country_flag = dark_magic_after_evt_1 }
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				has_country_flag = end_dark_magic_evt
+				#NOT = { has_country_flag = dark_magic_after_evt_1 }
+			}
+			random_list = {
+				90 = {
+					modifier = {
+						factor = 5.0
+						has_ascension_perk = ap_dark_times
+					}
+				}
+				10 = {
+					random_list = {
+						50 = {
+							modifier = {
+								factor = 0
+								has_ethic = ethic_gestalt_consciousness
+							}
+							country_event = {
+								id = ponycountry.61	#change pop ethic
+							}
+						}
+						50 = {
+							country_event = {
+								id = ponycountry.62	#add crime
+							}
+						}
+						10 = {
+							country_event = {
+								id = ponycountry.63	#add leader negative trait
+							}
+						}
+						5 = {
+							country_event = {
+								id = ponycountry.64	#add species negative trait
+							}
+						}
+						5 = {
+							country_event = {
+								id = ponycountry.65	#kill pop
+							}
+						}
+						25 = {
+							country_event = {
+								id = ponycountry.66	#change opinion
+							}
+						}
+						25 = {
+							country_event = {
+								id = ponycountry.67	#reduce diplo weight
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# event = {
+# 	id = ponycountry.60
+# 	is_triggered_only = yes
+# 	hide_window = yes
+
+# 	trigger = {
+# 		any_country = {
+# 			has_country_flag = end_dark_magic_evt
+# 			has_country_flag = dark_magic_after_evt_1
+# 			NOT = { has_country_flag = dark_magic_after_evt_2 }
+# 			NOT = { has_ascension_perk = ap_dark_times }
+# 		}
+# 	}
+
+# 	immediate = {
+# 		random_country = {
+# 			limit = {
+# 				has_country_flag = end_dark_magic_evt
+# 				has_country_flag = dark_magic_after_evt_1
+# 				NOT = { has_country_flag = dark_magic_after_evt_2 }	
+# 			}
+# 			random_list = {
+# 				280 = {
+# 					modifier = {
+# 						factor = 5.0
+# 						has_ascension_perk = ap_dark_times
+# 					}
+# 				}
+# 				10 = {
+# 					modifier = {
+# 						factor = 0
+# 						has_ethic = ethic_gestalt_consciousness
+# 					}
+# 					country_event = {
+# 						id = ponycountry.61
+# 					}
+# 					set_country_flag = dark_magic_after_evt_2
+# 				}
+# 				10 = {
+# 					country_event = {
+# 						id = ponycountry.62
+# 					}
+# 					set_country_flag = dark_magic_after_evt_2
+# 				}
+# 				10 = {
+# 					country_event = {
+# 						id = ponycountry.63
+# 					}
+# 					set_country_flag = dark_magic_after_evt_2
+# 				}
+# 				10 = {
+# 					country_event = {
+# 						id = ponycountry.64
+# 					}
+# 					set_country_flag = dark_magic_after_evt_2
+# 				}
+# 				10 = {
+# 					country_event = {
+# 						id = ponycountry.65
+# 					}
+# 					set_country_flag = dark_magic_after_evt_2
+# 				}
+# 				10 = {
+# 					country_event = {
+# 						id = ponycountry.66
+# 					}
+# 					set_country_flag = dark_magic_after_evt_2
+# 				}
+# 				10 = {
+# 					country_event = {
+# 						id = ponycountry.67
+# 					}
+# 					set_country_flag = dark_magic_after_evt_2
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+
+country_event = {
+	id = ponycountry.61
+	title = "ponycountry.6.title"
+	desc = "ponycountry.61.desc"
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_factions
+	is_triggered_only = yes
+	location = event_target:chosen_planet
+
+	trigger = {
+		any_planet_within_border = {
+			is_colony = yes
+			owner = { is_primitive = no }
+			num_pops > 12 
+		}
+	}
+	
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_colony = yes
+				owner = { is_primitive = no }
+				num_pops > 12 
+			}
+			set_planet_flag = dark_magic_change_ethic
+			save_event_target_as = chosen_planet
+		}
+		random_list = {
+			10 = { set_country_flag = dark_magic_change_ethic_1 }
+			10 = { set_country_flag = dark_magic_change_ethic_2 }
+		}
+	}
+
+	option = {
+		name = "ponycountry.6.a"
+		custom_tooltip = "ponycountry.61.a.tooltip"
+		trigger = { has_country_flag = dark_magic_change_ethic_1 }
+		hidden_effect = {
+			remove_country_flag = dark_magic_change_ethic_1
+			random_planet_within_border = {
+				limit = {
+					has_planet_flag = dark_magic_change_ethic
+				}
+				while = {
+					count = 3
+					random_owned_pop = {
+						limit = {
+							NOT = { has_pop_flag = pmt_ethic_changed }
+						}
+						set_pop_flag = pmt_ethic_changed
+						if = {
+							limit = { pop_has_ethic = ethic_authoritarian }
+							if = {
+								limit = { pop_has_ethic = ethic_authoritarian }
+								pop_remove_ethic = ethic_authoritarian
+							}
+							pop_change_ethic = "ethic_egalitarian"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_egalitarian }
+							if = {
+								limit = { pop_has_ethic = ethic_egalitarian }
+								pop_remove_ethic = ethic_egalitarian
+							}
+							pop_change_ethic = "ethic_authoritarian"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophobe }
+							if = {
+								limit = { pop_has_ethic = ethic_xenophobe }
+								pop_remove_ethic = ethic_xenophobe
+							}
+							pop_change_ethic = "ethic_xenophile"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophile }
+							if = {
+								limit = { pop_has_ethic = ethic_xenophile }
+								pop_remove_ethic = ethic_xenophile
+							}
+							pop_change_ethic = "ethic_xenophobe"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_militarist }
+							if = {
+								limit = { pop_has_ethic = ethic_militarist }
+								pop_remove_ethic = ethic_militarist
+							}
+							pop_change_ethic = "ethic_pacifist"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_pacifist }
+							if = {
+								limit = { pop_has_ethic = ethic_pacifist }
+								pop_remove_ethic = ethic_pacifist
+							}
+							pop_change_ethic = "ethic_militarist"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_spiritualist }
+							if = {
+								limit = { pop_has_ethic = ethic_spiritualist }
+								pop_remove_ethic = ethic_spiritualist
+							}
+							pop_change_ethic = "ethic_materialist"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_materialist }
+							if = {
+								limit = { pop_has_ethic = ethic_materialist }
+								pop_remove_ethic = ethic_materialist
+							}
+							pop_change_ethic = "ethic_spiritualist"
+						}
+					}
+				}
+				remove_planet_flag = dark_magic_change_ethic
+			}
+		}
+	}
+
+	option = {
+		name = "ponycountry.6.a"
+		custom_tooltip = "ponycountry.61.b.tooltip"
+		trigger = { has_country_flag = dark_magic_change_ethic_2 }
+		hidden_effect = {
+			remove_country_flag = dark_magic_change_ethic_2
+			random_planet_within_border = {
+				limit = {
+					has_planet_flag = dark_magic_change_ethic
+				}
+				while = {
+					count = 6
+					random_owned_pop = {
+						limit = {
+							NOT = { has_pop_flag = pmt_ethic_changed }
+						}
+						set_pop_flag = pmt_ethic_changed
+						if = {
+							limit = { pop_has_ethic = ethic_authoritarian }
+							if = {
+								limit = { pop_has_ethic = ethic_authoritarian }
+								pop_remove_ethic = ethic_authoritarian
+							}
+							pop_change_ethic = "ethic_egalitarian"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_egalitarian }
+							if = {
+								limit = { pop_has_ethic = ethic_egalitarian }
+								pop_remove_ethic = ethic_egalitarian
+							}
+							pop_change_ethic = "ethic_authoritarian"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophobe }
+							if = {
+								limit = { pop_has_ethic = ethic_xenophobe }
+								pop_remove_ethic = ethic_xenophobe
+							}
+							pop_change_ethic = "ethic_xenophile"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_xenophile }
+							if = {
+								limit = { pop_has_ethic = ethic_xenophile }
+								pop_remove_ethic = ethic_xenophile
+							}
+							pop_change_ethic = "ethic_xenophobe"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_militarist }
+							if = {
+								limit = { pop_has_ethic = ethic_militarist }
+								pop_remove_ethic = ethic_militarist
+							}
+							pop_change_ethic = "ethic_pacifist"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_pacifist }
+							if = {
+								limit = { pop_has_ethic = ethic_pacifist }
+								pop_remove_ethic = ethic_pacifist
+							}
+							pop_change_ethic = "ethic_militarist"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_spiritualist }
+							if = {
+								limit = { pop_has_ethic = ethic_spiritualist }
+								pop_remove_ethic = ethic_spiritualist
+							}
+							pop_change_ethic = "ethic_materialist"
+						}
+						if = {
+							limit = { pop_has_ethic = ethic_materialist }
+							if = {
+								limit = { pop_has_ethic = ethic_materialist }
+								pop_remove_ethic = ethic_materialist
+							}
+							pop_change_ethic = "ethic_spiritualist"
+						}
+					}
+				}
+				remove_planet_flag = dark_magic_change_ethic
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.62
+	title = "ponycountry.6.title"
+	desc = "ponycountry.62.desc"
+	picture = GFX_evt_dark_alley
+	show_sound = event_criminal_activity
+	is_triggered_only = yes
+	location = event_target:chosen_planet
+
+	trigger = {
+		any_planet_within_border = {
+			is_colony = yes
+			NOT = { has_modifier = pm_dark_magic_crime }
+			owner = { is_primitive = no }
+		}
+	}
+	
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_colony = yes
+				NOT = { has_modifier = pm_dark_magic_crime }
+				owner = { is_primitive = no }
+			}
+			set_planet_flag = dark_magic_planet_crime
+			save_event_target_as = chosen_planet
+		}
+	}
+
+	option = {
+		name = "ponycountry.6.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = dark_magic_planet_crime
+			}
+			add_modifier = {
+				modifier = pm_dark_magic_crime days = 3600
+			}
+			hidden_effect = {
+				remove_planet_flag = dark_magic_planet_crime
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.63
+	title = "ponycountry.6.title"
+	desc = "ponycountry.63.desc"
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_factions
+	is_triggered_only = yes
+	location = event_target:chosen_leader
+
+	immediate = {
+		random_owned_leader = {
+			limit = {
+				NOT = {
+					has_trait = leader_trait_curator
+				}
+				is_same_species = root
+			}
+			set_leader_flag = dark_magic_leader
+			save_event_target_as = chosen_leader
+		}
+	}
+
+	option = {
+		name = "ponycountry.6.a"
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = dark_magic_leader
+				is_ruler = no
+			}
+			if = {
+				limit = {
+					OR = {
+						leader_class = admiral
+						leader_class = scientist
+						leader_class = general
+						leader_class = governor
+					}
+				}
+				if = {
+					limit = {
+						NOR = {
+							has_trait = leader_trait_adaptable
+							has_trait = leader_trait_adaptable_2
+							has_trait = leader_trait_stubborn
+							has_trait = leader_trait_stubborn_2
+						}
+					}
+					add_trait_no_notify = leader_trait_stubborn
+				}
+			}
+			else_if = {
+				limit = { leader_class = admiral }
+				if = {
+					limit = {
+						NOR = {
+							has_trait = leader_trait_unyielding
+							has_trait = leader_trait_unyielding_2
+							has_trait = leader_trait_nervous
+							has_trait = leader_trait_nervous_2
+						}
+					}
+					add_trait_no_notify = leader_trait_nervous
+				}
+				if = {
+					limit = {
+						NOR = {
+							has_trait = leader_trait_gale_speed
+							has_trait = leader_trait_gale_speed_2
+							has_trait = leader_trait_gale_speed_3
+							has_trait = leader_trait_lethargic
+							has_trait = leader_trait_lethargic_2
+						}
+					}
+					add_trait_no_notify = leader_trait_lethargic
+				}
+			}
+			else_if = {
+				limit = { leader_class = scientist }
+				if = {
+					limit = {
+						NOR = {
+							has_trait = leader_trait_paranoid
+							has_trait = leader_trait_paranoid_2
+						}
+					}
+					add_trait_no_notify = leader_trait_paranoid
+				}
+			}
+			else_if = {
+				limit = { leader_class = general }
+				if = {
+					limit = {
+						NOR = {
+							has_trait = leader_trait_butcher
+							has_trait = leader_trait_butcher_2
+							has_trait = leader_trait_glory_seeker
+							has_trait = leader_trait_glory_seeker_2
+							has_trait = leader_trait_armchair_commander
+							has_trait = leader_trait_armchair_commander_2
+						}
+					}
+					add_trait_no_notify = leader_trait_armchair_commander
+				}
+			}
+			else = {
+				add_trait_no_notify = leader_trait_great_personality_changes
+			}
+			remove_leader_flag = dark_magic_leader
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.64
+	title = "ponycountry.6.title"
+	desc = "ponycountry.64.desc"
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_factions
+	is_triggered_only = yes
+
+	option = {
+		name = "ponycountry.6.a"
+		random_owned_species = {
+			limit = {
+				is_same_species = root
+			}
+			if = {
+				limit = { is_archetype = BIOLOGICAL }
+				if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robust
+							has_trait = trait_adaptive
+							has_trait = trait_extremely_adaptive
+							has_trait = trait_nonadaptive
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_nonadaptive
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_charismatic
+							has_trait = trait_repugnant
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_repugnant
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_nerve_stapled
+							has_trait = trait_communal
+							has_trait = trait_solitary
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_solitary
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_conformists
+							has_trait = trait_deviants
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_deviants
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_conservational
+							has_trait = trait_wasteful
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_wasteful
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_docile
+							has_trait = trait_unruly
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_unruly
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_enduring
+							has_trait = trait_venerable
+							has_trait = trait_fleeting
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_fleeting
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_nomadic
+							has_trait = trait_sedentary
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_sedentary
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_uplifted
+							has_trait = trait_quick_learners
+							has_trait = trait_slow_learners
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_slow_learners
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_fertile
+							has_trait = trait_rapid_breeders
+							has_trait = trait_slow_breeders
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_slow_breeders
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_strong
+							has_trait = trait_very_strong
+							has_trait = trait_weak
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_weak
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_traditional
+							has_trait = trait_quarrelsome
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_quarrelsome
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							has_trait = trait_decadent
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_decadent
+					}
+				}
+			}
+
+			else_if = {
+				limit = { is_archetype = LITHOID }
+				if = {
+					limit = {
+						NOR = {
+							has_trait = trait_charismatic
+							has_trait = trait_repugnant
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_repugnant
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_nerve_stapled
+							has_trait = trait_communal
+							has_trait = trait_solitary
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_solitary
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_conformists
+							has_trait = trait_deviants
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_deviants
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_conservational
+							has_trait = trait_wasteful
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_wasteful
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_docile
+							has_trait = trait_unruly
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_unruly
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_enduring
+							has_trait = trait_venerable
+							has_trait = trait_fleeting
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_fleeting
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_nomadic
+							has_trait = trait_sedentary
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_sedentary
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_uplifted
+							has_trait = trait_quick_learners
+							has_trait = trait_slow_learners
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_slow_learners
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_strong
+							has_trait = trait_very_strong
+							has_trait = trait_weak
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_weak
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_traditional
+							has_trait = trait_quarrelsome
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_quarrelsome
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							has_trait = trait_decadent
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_decadent
+					}
+				}
+			}
+
+			else_if = {
+				limit = { is_archetype = MACHINE }
+				if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_double_jointed
+							has_trait = trait_robot_bulky
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_bulky
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_durable
+							has_trait = trait_robot_high_maintenance
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_high_maintenance
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_emotion_emulators
+							has_trait = trait_robot_uncanny
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_uncanny
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_learning_algorithms
+							has_trait = trait_robot_repurposed_hardware
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_repurposed_hardware
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_mass_produced
+							has_trait = trait_robot_custom_made
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_custom_made
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_recycled
+							has_trait = trait_robot_luxurious
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_luxurious
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_streamlined_protocols
+							has_trait = trait_robot_high_bandwidth
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_high_bandwidth
+					}
+				}
+			}
+
+			else_if = {
+				limit = { is_archetype = ROBOT }
+				if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_double_jointed
+							has_trait = trait_robot_bulky
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_bulky
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_durable
+							has_trait = trait_robot_high_maintenance
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_high_maintenance
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_learning_algorithms
+							has_trait = trait_robot_repurposed_hardware
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_repurposed_hardware
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_mass_produced
+							has_trait = trait_robot_custom_made
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_custom_made
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_recycled
+							has_trait = trait_robot_luxurious
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_luxurious
+					}
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							has_trait = trait_robot_streamlined_protocols
+							has_trait = trait_robot_high_bandwidth
+						}
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_robot_high_bandwidth
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.65
+	title = "ponycountry.6.title"
+	desc = "ponycountry.65.desc"
+	picture = GFX_evt_burning_settlement
+	show_sound = event_ground_battle
+	is_triggered_only = yes
+	location = event_target:chosen_planet
+
+	trigger = {
+		any_planet_within_border = {
+			num_pops > 3
+			is_colony = yes
+			NOT = { has_modifier = pm_dark_magic_destroy }
+			owner = { is_primitive = no }
+		}
+	}
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				num_pops > 3
+				is_colony = yes
+				NOT = { has_modifier = pm_dark_magic_destroy }
+				owner = { is_primitive = no }
+			}
+			set_planet_flag = dark_magic_destroy
+			save_event_target_as = chosen_planet
+		}
+	}
+
+	option = {
+		name = "ponycountry.6.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = dark_magic_destroy
+			}
+			while = {
+				count = 2
+				random_owned_pop = {
+					kill_pop = yes
+				}
+			}
+			add_modifier = {
+				modifier = pm_dark_magic_destroy
+				days = 720
+			}
+			remove_planet_flag = dark_magic_destroy
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.66
+	title = "ponycountry.6.title"
+	desc = "ponycountry.66.desc"
+	picture = GFX_evt_assembly_fight
+	show_sound = event_assembly_fight
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		any_relation = {
+			is_improving_relations_with = root
+			NOT = { has_country_flag = dark_magic_envoy_event }
+			NOT = { is_same_species = root }
+			NOT = { is_same_species = root.ruler }
+			any_envoy = {
+				has_envoy_task = {
+					task = improve_relations
+					target = root
+				}
+				NOT = { is_same_species = root }
+				NOT = { is_same_species = root.ruler }
+			}
+		}
+		NOT = { has_country_flag = dark_magic_envoy_event }
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = dark_magic_envoy_event
+			days = 720
+		}
+		random_relation = {
+			limit = {
+				is_improving_relations_with = root
+				NOT = { has_country_flag = dark_magic_envoy_event }
+				NOT = { is_same_species = root }
+				NOT = { is_same_species = root.ruler }
+				any_envoy = {
+					has_envoy_task = {
+						task = improve_relations
+						target = root
+					}
+					NOT = { is_same_species = root }
+					NOT = { is_same_species = root.ruler }
+				}
+			}
+			set_timed_country_flag = {
+				flag = dark_magic_envoy_event
+				days = 720
+			}
+			random_envoy = {
+				limit = {
+					has_envoy_task = {
+						task = improve_relations
+						target = root
+					}
+					NOT = { is_same_species = root }
+					NOT = { is_same_species = root.ruler }
+				}
+				save_event_target_as = event_envoy
+			}
+		}
+	}
+
+	option = {
+		name = "ponycountry.6.a"
+		from = {
+			tooltip = {
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_dark_magic_envoy
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.67
+	title = "ponycountry.6.title"
+	desc = "ponycountry.67.desc"
+	picture = GFX_evt_arguing_senate
+	show_sound = event_galactic_community
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		NOT = { has_country_flag = dark_magic_envoy_event }
+		is_galactic_community_member = yes
+		any_envoy = {
+			has_envoy_cooldown = yes 
+			has_envoy_task = {
+				task = galactic_community
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = dark_magic_envoy_event
+			days = 720
+		}
+		random_envoy = {
+			limit = {
+				has_envoy_task = {
+					task = galactic_community
+				}
+			}
+			save_event_target_as = event_envoy
+		}
+	}
+
+	option = {
+		name = "ponycountry.6.a"
+		add_modifier = {
+			modifier = galactic_community_dark_magic_envoy
+			days = 3600
+		}
+	}
+}
+
+# When has tech -- IMP Application
+country_event = {
+	id = ponycountry.201
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_pony_species_trigger = yes
+		has_technology = tech_IMP_application
+	}
+
+	immediate = {
+		from = {
+			if = {
+				limit = {
+					leader_class = general
+					NOT = { has_trait = leader_trait_modified_alicorn }
+					is_same_species = root
+				}
+				random_list = {
+					20 = { }
+					10 = {
+						add_trait_no_notify = leader_trait_modified_alicorn
+					}
+				}
+			}
+		}
+	}
+}
+
+# The effect of Enervation Bombing when zero pop.
+planet_event = {
+	id = ponycountry.210
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_orbital_bombardment_stance = enervation_bombing
+		}
+		from = {
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+		}
+		habitable_planet = yes
+	}
+
+	immediate = {
+		owner = {
+			add_static_war_exhaustion = {
+				attacker = from
+				location = root
+				value_for_planet_destruction = 0.5
+			}
+			country_event = { id = ponycountry.211 } #former owner
+		}
+		from = { country_event = { id = ponycountry.212 } } #bombarder
+		set_planet_flag = nuked_planet_anomalies_disabled
+		set_planet_flag = armageddon_nuked
+		remove_modifier = "natural_beauty"
+		remove_modifier = "atmospheric_aphrodisiac"
+		remove_modifier = "atmospheric_hallucinogen"
+		remove_modifier = "lush_planet"
+		remove_modifier = "dangerous_wildlife"
+		reroll_deposits = yes
+		change_pc = pc_nuked
+		add_modifier = {
+			modifier = "pm_enervation_bombardment"
+			days = -1
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.211
+	title = "ponycountry.211.title"
+	desc = "ponycountry.211.desc"
+	picture = GFX_evt_tomb_world
+	show_sound = event_super_explosion
+	is_triggered_only = yes
+	location = from
+
+	option = {
+		name = "ponycountry.211.a"
+	}
+}
+
+country_event = {
+	id = ponycountry.212
+	title = "ponycountry.211.title"
+	desc = "ponycountry.212.desc"
+	picture = GFX_evt_tomb_world
+	show_sound = event_super_explosion
+	is_triggered_only = yes
+	location = from
+
+	immediate = {
+		if = {
+			limit = {
+				has_ascension_perk = ap_become_the_crisis
+			}
+			complete_crisis_objective = crisobj_destroy_worlds
+		}
+	}
+
+	option = {
+		name = "ponycountry.212.a"
+	}
+}
+
+##################
+##### Others #####
+##################
+
+country_event = {
+	id = ponycountry.2001
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		#pmt_pony_species_trigger = yes
+		last_increased_tech = tech_divination
+	}
+
+	immediate = {
+		add_modifier = {
+			modifier = tech_divination_modifier
+			days = -1
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.2002
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_pony_species_trigger = yes
+		last_increased_tech = tech_memory_learning
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { is_variable_set = num_tech_memory_learning }
+			}
+			set_variable = {
+				which = num_tech_memory_learning
+				value = 0
+			}
+		}
+		change_variable = {
+			which = num_tech_memory_learning
+			value = 1
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.2003
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_pony_species_trigger = yes
+		has_edict = black_opal
+	}
+
+	immediate = {
+		every_owned_leader = {
+			if = {
+				limit = {
+					OR = {
+						is_ruler = yes
+						leader_class = governor
+						leader_class = scientist
+					}
+				}
+				add_experience = 3
+			}
+			if = {
+				limit = {
+					is_ruler = no
+					OR = {
+						leader_class = admiral
+						leader_class = general
+					}
+				}
+				add_experience = 6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ponycountry.2004
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_pony_foe_species_trigger = yes
+		has_origin = origin_post_apocalyptic
+	}
+
+	immediate = {
+		random_list = {
+			#99 = { }
+			1 = {
+				set_country_flag = FOE_ORIGIN_FLAG
+				capital_scope = {
+					add_deposit = d_unexploded_balefire_bomb
+				}
+			}
+		}
+	}
+}

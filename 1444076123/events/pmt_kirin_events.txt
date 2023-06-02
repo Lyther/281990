@@ -1,0 +1,1416 @@
+namespace = kirincountry
+
+# Start Event
+country_event = {
+	id = kirincountry.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		is_country_type = default
+		is_ai = no
+		NOT = { has_country_flag = start_kirin_event }
+		OR = {
+			is_multiplayer = no
+			has_country_flag = trigger_event_country_kirin
+		}
+	}
+
+	immediate = {
+		country_event = { id = kirincountry.100 }
+	}
+}
+
+# Initial events
+country_event = {
+	id = kirincountry.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		has_country_flag = start_kirin_event
+		NOT = { has_country_flag = stop_kirin_initial_event }
+		NOT = { has_country_flag = finish_kirin_event }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = kirin_initial_event_1 }
+				any_owned_planet = {
+					is_colony = yes
+					planet_stability <= 50
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+			}
+			random_planet_within_border = {
+				limit = {
+					is_colony = yes
+					planet_stability <= 50
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+				random_list = {
+					75 = { }
+					25 = { planet_event = { id = kirincountry.101 days = 1 } }	#lag, just in case
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = kirin_initial_event_1
+				NOT = { has_country_flag = kirin_initial_event_2 }
+				NOT = { has_country_flag = stop_kirin_initial_event }
+				any_owned_planet = {
+					is_colony = yes
+					planet_stability <= 60
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+			}
+			random_planet_within_border = {
+				limit = {
+					is_colony = yes
+					planet_stability <= 60
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+				random_list = {
+					50 = { }
+					50 = { planet_event = { id = kirincountry.102 } }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = kirin_initial_event_2
+				NOT = { has_country_flag = kirin_initial_event_3 }
+				NOT = { has_country_flag = stop_kirin_initial_event }
+				any_owned_planet = {
+					is_colony = yes
+					planet_stability <= 75
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+			}
+			random_planet_within_border = {
+				limit = {
+					is_colony = yes
+					planet_stability <= 75
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+				random_list = {
+					25 = { }
+					75 = { planet_event = { id = kirincountry.103 } }
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = kirin_initial_event_3
+				NOT = { has_country_flag = kirin_initial_event_4 }
+				NOT = { has_country_flag = stop_kirin_initial_event }
+				any_owned_planet = {
+					is_colony = yes
+					planet_stability <= 95
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+			}
+			random_planet_within_border = {
+				limit = {
+					is_colony = yes
+					planet_stability <= 95
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+				planet_event = { id = kirincountry.104 }
+			}
+		}
+	}
+}
+
+# 30 year event
+country_event = {
+	id = kirincountry.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		NOT = { has_country_flag = kirin_initial_event_1 }
+		NOT = { has_country_flag = finish_kirin_event }
+		years_passed > 30
+	}
+
+	immediate = {
+		country_event = { id = kirincountry.120 }
+	}
+}
+
+# Options trigger
+country_event = {
+	id = kirincountry.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		is_country_type = default
+		is_ai = no
+		NOT = { has_country_flag = finish_kirin_event }
+		OR = {
+			is_multiplayer = no
+			has_country_flag = trigger_event_country_kirin
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_country_flag = kirincountry_201_flag }
+			random_list = {
+				90 = { }
+				10 = { country_event = { id = kirincountry.202 } }
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = kirincountry_301_flag
+				NOT = {
+					any_owned_planet = {
+						planet_stability <= 75
+					}
+				}
+			}
+			random_list = {
+				75 = { }
+				25 = { country_event = { id = kirincountry.311 days = 1 } }	#lag, just in case
+			}
+		}
+	}
+}
+
+# Foal's-breath flowers
+country_event = {
+	id = kirincountry.5
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		OR = {
+			has_country_flag = foal_s_breath_flowers
+			has_country_flag = kirincountry_401_flag
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { has_country_flag = foal_s_breath_flowers }
+			random_list = {
+				95 = { }
+				5 = { country_event = { id = kirincountry.321 } }	#O2
+			}
+		}
+		if = {
+			limit = { has_country_flag = kirincountry_401_flag }
+			random_list = {
+				95 = { }
+				5 = { country_event = { id = kirincountry.402 } }	#O3
+			}
+		}
+	}
+}
+
+# Tradition mission
+country_event = {
+	id = kirincountry.6
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		has_country_flag = finish_kirin_event
+		OR = {
+			has_event_chain = kirin_tradition_mission_1
+			has_event_chain = kirin_tradition_mission_2
+			has_event_chain = kirin_tradition_mission_3
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_event_chain = kirin_tradition_mission_1
+				has_tradition = tr_tranquillity_adopt
+			}
+			end_event_chain = kirin_tradition_mission_1
+			begin_event_chain = {
+				event_chain = kirin_tradition_mission_2
+				target = ROOT
+			}
+			add_resource = {
+				influence = 50
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 12
+				min = 1000
+			}
+			random_list = {
+				1 = { add_resource = { energy = 1000 } }
+				1 = { add_resource = { minerals = 1000 } }
+				1 = { add_resource = { food = 1000 } }
+				1 = { add_resource = { alloys = 1000 } }
+				1 = { add_resource = { consumer_goods = 1000 } }
+			}
+			random_list = {
+				1 = { add_resource = { volatile_motes = 100 } }
+				1 = { add_resource = { rare_crystals = 100 } }
+				1 = { add_resource = { exotic_gases = 100 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_event_chain = kirin_tradition_mission_2
+				has_tradition = tr_tranquillity_emotional_understanding
+				has_tradition = tr_tranquillity_talk_and_listen
+			}
+			end_event_chain = kirin_tradition_mission_2
+			begin_event_chain = {
+				event_chain = kirin_tradition_mission_3
+				target = ROOT
+			}
+			add_resource = {
+				influence = 50
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 12
+				min = 1000
+			}
+			random_list = {
+				1 = { add_resource = { energy = 1000 } }
+				1 = { add_resource = { minerals = 1000 } }
+				1 = { add_resource = { food = 1000 } }
+				1 = { add_resource = { alloys = 1000 } }
+				1 = { add_resource = { consumer_goods = 1000 } }
+			}
+			random_list = {
+				1 = { add_resource = { volatile_motes = 100 } }
+				1 = { add_resource = { rare_crystals = 100 } }
+				1 = { add_resource = { exotic_gases = 100 } }
+			}
+		}
+		else_if = {
+			limit = {
+				has_event_chain = kirin_tradition_mission_3
+				has_tradition = tr_tranquillity_finish
+			}
+			end_event_chain = kirin_tradition_mission_3
+			add_resource = {
+				influence = 50
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = 12
+				min = 1000
+			}
+			random_list = {
+				1 = { add_resource = { energy = 1000 } }
+				1 = { add_resource = { minerals = 1000 } }
+				1 = { add_resource = { food = 1000 } }
+				1 = { add_resource = { alloys = 1000 } }
+				1 = { add_resource = { consumer_goods = 1000 } }
+			}
+			random_list = {
+				1 = { add_resource = { volatile_motes = 100 } }
+				1 = { add_resource = { rare_crystals = 100 } }
+				1 = { add_resource = { exotic_gases = 100 } }
+			}
+		}
+	}
+}
+
+# Normal Nirik Events
+country_event = {
+	id = kirincountry.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		is_country_type = default
+		is_ai = no
+		NOT = { has_country_flag = stop_normal_nirik_event }
+		OR = {
+			is_multiplayer = no
+			has_country_flag = trigger_event_country_kirin
+		}
+	}
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_colony = yes
+				any_owned_pop = {
+					pmt_kirin_species_trigger = yes
+				}
+			}
+			random_list = {
+				60 = { }
+				40 = {
+					modifier = {
+						factor = 0.375	#20%
+						has_modifier = pm_quarrelling_kirin
+					}
+					modifier = {
+						factor = 2.25 #60%
+						owner = { has_country_flag = high_chance_of_normal_nirik_event }
+					}
+					random_list = {
+						10 = { planet_event = { id = kirincountry.11 } }
+						10 = { planet_event = { id = kirincountry.12 } }
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = kirincountry.11
+	title = "kirincountry.11.title"
+	desc = "kirincountry.11.desc"
+	picture = GFX_evt_quarrelling_kirin
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	location = ROOT
+
+	option = {
+		name = "kirincountry.11.a"
+		add_planet_devastation = 15
+		add_modifier = {
+			modifier = pm_quarrelling_kirin
+			days = 1800
+		}
+	}
+}
+
+planet_event = {
+	id = kirincountry.12
+	title = "kirincountry.12.title"
+	desc = "kirincountry.12.desc"
+	picture = GFX_evt_quarrelling_kirin
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	location = ROOT
+
+	option = {
+		name = "kirincountry.12.a"
+		add_planet_devastation = 15
+		add_modifier = {
+			modifier = pm_quarrelling_kirin
+			days = 1800
+		}
+	}
+}
+
+# Nirik event
+country_event = {
+	id = kirincountry.20
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		has_country_flag = start_nirik_event
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_owned_planet = {
+					is_colony = yes
+					planet_stability <= 60
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+			}
+			random_planet_within_border = {
+				limit = {
+					is_colony = yes
+					planet_stability <= 60
+					any_owned_pop = {
+						pmt_kirin_species_trigger = yes
+					}
+				}
+				random_list = {
+					50 = {
+						modifier = {
+							factor = 9	#10%
+							owner = { has_country_flag = finish_kirin_event_411 }
+						}
+					}
+					50 = { planet_event = { id = kirincountry.21 } }
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = kirincountry.21
+	title = "kirincountry.101.title"
+	desc = "kirincountry.21.desc"
+	picture = GFX_evt_nirik
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	location = ROOT
+
+	option = {
+		name = "kirincountry.21.a"
+		add_planet_devastation = 15
+		add_modifier = {
+			modifier = pm_nirik_destroy
+			days = 1080
+		}
+		locked_random_list = {
+			95 = { }
+			5 = { remove_last_built_building = yes }
+		}
+	}
+}
+
+# Events Start
+country_event = {
+	id = kirincountry.100
+	title = "kirincountry.100.title"
+	desc = "kirincountry.100.desc"
+	picture = GFX_evt_turn_into_nirik
+	show_sound = event_default
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			is_colony = yes
+			planet_stability <= 50
+			any_owned_pop = {
+				pmt_kirin_species_trigger = yes
+			}
+		}
+	}
+
+	immediate = {
+		set_country_flag = start_kirin_event
+	}
+
+	option = {
+		name = "kirincountry.100.a"
+		custom_tooltip = kirincountry.100.tooltip
+	}
+}
+
+planet_event = {
+	id = kirincountry.101
+	title = "kirincountry.101.title"
+	desc = "kirincountry.101.desc"
+	picture = GFX_evt_destroyed_kirin_village
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	location = ROOT
+
+	trigger = {
+		NOT = {
+			owner = { has_country_flag = finish_kirin_event }
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = kirin_initial_event_1
+		}
+	}
+
+	option = {
+		name = "kirincountry.101.a"
+		add_planet_devastation = 20
+		add_modifier = {
+			modifier = pm_nirik_destroy
+			days = 1080
+		}
+		locked_random_list = {
+			95 = { }
+			5 = { remove_last_built_building = yes }
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = stop_kirin_initial_event
+				country_event = { id = kirincountry.110 days = 90 }
+			}
+		}
+	}
+
+	option = {
+		name = "kirincountry.101.b"
+		add_planet_devastation = 20
+		add_modifier = {
+			modifier = pm_nirik_destroy
+			days = 1080
+		}
+		locked_random_list = {
+			95 = { }
+			5 = { remove_last_built_building = yes }
+		}
+	}
+}
+
+planet_event = {
+	id = kirincountry.102
+	title = "kirincountry.101.title"
+	desc = "kirincountry.102.desc"
+	picture = GFX_evt_destroyed_kirin_village
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	location = ROOT
+
+	immediate = {
+		owner = {
+			set_country_flag = kirin_initial_event_2
+		}
+	}
+
+	option = {
+		name = "kirincountry.102.a"
+		add_planet_devastation = 20
+		add_modifier = {
+			modifier = pm_nirik_destroy
+			days = 1080
+		}
+		locked_random_list = {
+			95 = { }
+			5 = { remove_last_built_building = yes }
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = stop_kirin_initial_event
+				country_event = { id = kirincountry.110 days = 90 }
+			}
+		}
+	}
+
+	option = {
+		name = "kirincountry.102.b"
+		add_planet_devastation = 20
+		add_modifier = {
+			modifier = pm_nirik_destroy
+			days = 1080
+		}
+		locked_random_list = {
+			95 = { }
+			5 = { remove_last_built_building = yes }
+		}
+	}
+}
+
+planet_event = {
+	id = kirincountry.103
+	title = "kirincountry.101.title"
+	desc = "kirincountry.103.desc"
+	picture = GFX_evt_destroyed_kirin_village
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	location = ROOT
+
+	immediate = {
+		owner = {
+			set_country_flag = kirin_initial_event_3
+		}
+	}
+
+	option = {
+		name = "kirincountry.103.a"
+		add_planet_devastation = 20
+		add_modifier = {
+			modifier = pm_nirik_destroy
+			days = 1080
+		}
+		locked_random_list = {
+			95 = { }
+			5 = { remove_last_built_building = yes }
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = stop_kirin_initial_event
+				country_event = { id = kirincountry.110 days = 90 }
+			}
+		}
+	}
+
+	option = {
+		name = "kirincountry.103.b"
+		add_planet_devastation = 20
+		add_modifier = {
+			modifier = pm_nirik_destroy
+			days = 1080
+		}
+		locked_random_list = {
+			95 = { }
+			5 = { remove_last_built_building = yes }
+		}
+	}
+}
+
+planet_event = {
+	id = kirincountry.104
+	title = "kirincountry.101.title"
+	desc = "kirincountry.104.desc"
+	picture = GFX_evt_destroyed_kirin_village
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	location = ROOT
+
+	immediate = {
+		owner = {
+			set_country_flag = kirin_initial_event_4
+		}
+	}
+
+	option = {
+		name = "kirincountry.104.a"
+		add_planet_devastation = 20
+		add_modifier = {
+			modifier = pm_nirik_destroy
+			days = 1080
+		}
+		locked_random_list = {
+			95 = { }
+			5 = { remove_last_built_building = yes }
+		}
+		hidden_effect = {
+			owner = {
+				set_country_flag = stop_kirin_initial_event
+				country_event = { id = kirincountry.110 days = 90 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.110
+	title = "kirincountry.110.title"
+	desc = "kirincountry.110.desc"
+	picture = GFX_evt_stream_of_silence
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	immediate = {
+		remove_country_flag = kirin_initial_event_1
+		remove_country_flag = kirin_initial_event_2
+		remove_country_flag = kirin_initial_event_3
+		remove_country_flag = kirin_initial_event_4
+	}
+
+	option = {
+		name = "kirincountry.110.a"
+		hidden_effect = {
+			set_country_flag = high_chance_of_normal_nirik_event
+			country_event = { id = kirincountry.201 days = 90 }
+		}
+	}
+
+	option = {
+		name = "kirincountry.110.b"
+		hidden_effect = {
+			set_country_flag = stop_normal_nirik_event
+			country_event = { id = kirincountry.301 days = 90 }
+		}
+	}
+
+	option = {
+		name = "kirincountry.110.c"
+		hidden_effect = {
+			set_country_flag = stop_normal_nirik_event
+			country_event = { id = kirincountry.401 days = 90 }
+		}
+	}
+}
+
+# If didn't trigger start event in 30 years
+country_event = {
+	id = kirincountry.120
+	title = "kirincountry.100.title"
+	desc = "kirincountry.120.desc"
+	picture = GFX_evt_kirin_village
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = finish_kirin_event
+	}
+
+	option = {
+		name = "kirincountry.120.a"
+		custom_tooltip = unlock_tradition_tranquillity
+		add_modifier = {
+			modifier = amiabl_kirin
+			days = -1
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = 60
+			min = 5000
+			max = 50000
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = 60
+			min = 5000
+			max = 50000
+		}
+		add_resource = {
+			influence = 250
+		}
+		add_resource = {
+			unity = 1
+			mult = value:kirin_unity_reward_effect
+		}
+	}
+}
+###
+
+# Option 1
+country_event = {
+	id = kirincountry.201
+	title = "kirincountry.201.title"
+	desc = "kirincountry.201.desc"
+	picture = GFX_evt_turn_into_nirik
+	show_sound = event_factions
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = start_nirik_event
+		set_country_flag = kirincountry_201_flag
+	}
+
+	option = {
+		name = "kirincountry.201.a"
+		custom_tooltip = "kirincountry.100.tooltip"
+		custom_tooltip = "start_nirik_event_tooltip"
+	}
+}
+
+country_event = {
+	id = kirincountry.202
+	title = "kirincountry.202.title"
+	desc = "kirincountry.202.desc"
+	picture = GFX_evt_turn_into_nirik
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		remove_country_flag = kirincountry_201_flag
+	}
+
+	option = {
+		name = "kirincountry.202.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.203 days = 1440 random = 360 }
+		}
+	}
+
+	option = {
+		name = "kirincountry.202.b"
+		add_resource = {
+			influence = -50
+		}
+		hidden_effect = {
+			country_event = { id = kirincountry.203 days = 360 random = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.203
+	title = "kirincountry.202.title"
+	desc = "kirincountry.203.desc"
+	picture = GFX_evt_happy_kirins
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = finish_kirin_event
+		set_country_flag = stop_normal_nirik_event
+		remove_country_flag = start_nirik_event
+		remove_country_flag = high_chance_of_normal_nirik_event
+	}
+
+	option = {
+		name = "kirincountry.203.a"
+		custom_tooltip = unlock_tradition_tranquillity
+		begin_event_chain = {
+			event_chain = kirin_tradition_mission_1
+			target = ROOT
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = 60
+			min = 3000
+		}
+		add_monthly_resource_mult = {
+			resource = energy
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+		add_monthly_resource_mult = {
+			resource = minerals
+			value = @tier1materialreward
+			min = @tier1materialmin
+			max = @tier1materialmax
+		}
+		custom_tooltip = "stop_nirik_event_tooltip"
+	}
+}
+
+# Option 2
+country_event = {
+	id = kirincountry.301
+	title = "kirincountry.301.title"
+	desc = "kirincountry.301.desc"
+	picture = GFX_evt_silent_kirin
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = foal_s_breath_flowers
+		set_country_flag = kirincountry_301_flag
+	}
+
+	option = {
+		name = "kirincountry.301.a"
+		add_modifier = {
+			modifier = selective_silence
+			days = -1
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.311
+	title = "kirincountry.301.title"
+	desc = "kirincountry.311.desc"
+	picture = GFX_evt_silent_kirin
+	show_sound = event_default
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = kirincountry_301_flag
+	}
+
+	immediate = {
+		remove_country_flag = kirincountry_301_flag
+		remove_country_flag = foal_s_breath_flowers
+	}
+
+	option = {
+		name = "kirincountry.311.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.312 days = 1080 random = 360 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.312
+	title = "kirincountry.202.title"
+	desc = "kirincountry.312.desc"
+	picture = GFX_evt_pleasant_talking_kirin
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.312.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.313 days = 1080 random = 360 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.313
+	title = "kirincountry.202.title"
+	desc = "kirincountry.313.desc"
+	picture = GFX_evt_happy_kirins
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = finish_kirin_event
+	}
+
+	option = {
+		name = "kirincountry.313.a"
+		custom_tooltip = unlock_tradition_tranquillity
+		add_modifier = {
+			modifier = talk_and_share
+			days = -1
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = triggered_foal_s_breath_flowers }
+				country_event = { id = kirincountry.314 days = 180 }
+			}
+			else = {
+				country_event = { id = kirincountry.315 days = 180 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.314
+	title = "kirincountry.314.title"
+	desc = "kirincountry.314.desc"
+	picture = GFX_evt_foal_s_breath_flowers
+	show_sound = event_default
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_country_flag = triggered_foal_s_breath_flowers
+	}
+
+	option = {
+		name = "kirincountry.314.a"
+		remove_modifier = selective_silence
+	}
+}
+
+country_event = {
+	id = kirincountry.315
+	title = "kirincountry.314.title"
+	desc = "kirincountry.315.desc"
+	picture = GFX_evt_foal_s_breath_flowers
+	show_sound = event_default
+	is_triggered_only = yes
+	
+	option = {
+		name = "kirincountry.315.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.316 days = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.316
+	title = "kirincountry.314.title"
+	desc = "kirincountry.316.desc"
+	picture = GFX_evt_foal_s_breath_flowers
+	show_sound = event_default
+	is_triggered_only = yes
+	
+	option = {
+		name = "kirincountry.316.a"
+		remove_modifier = selective_silence
+	}
+}
+
+# Foal's-breath flowers
+country_event = {
+	id = kirincountry.321
+	title = "kirincountry.321.title"
+	desc = "kirincountry.321.desc"
+	picture = GFX_evt_foal_s_breath_flowers
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	immediate = {
+		remove_country_flag = foal_s_breath_flowers
+		remove_country_flag = kirincountry_301_flag
+	}
+	
+	option = {
+		name = "kirincountry.321.a"
+		hidden_effect = {
+			set_country_flag = kirincountry_301_flag
+			set_country_flag = triggered_foal_s_breath_flowers
+		}
+	}
+
+	option = {
+		name = "kirincountry.321.b"
+		remove_modifier = selective_silence
+		hidden_effect = {
+			country_event = { id = kirincountry.322 days = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.322
+	title = "kirincountry.321.title"
+	desc = "kirincountry.322.desc"
+	picture = GFX_evt_foal_s_breath_flowers
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = start_nirik_event
+		set_country_flag = kirincountry_201_flag
+	}
+
+	option = {
+		name = "kirincountry.322.a"
+		custom_tooltip = "start_nirik_event_tooltip"
+	}
+}
+
+# Option 3
+country_event = {
+	id = kirincountry.401
+	title = "kirincountry.401.title"
+	desc = "kirincountry.401.desc"
+	picture = GFX_evt_silent_kirin
+	show_sound = event_factions
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = kirincountry_401_flag
+	}
+
+	option = {
+		name = "kirincountry.401.a"
+		add_modifier = {
+			modifier = collective_silence
+			days = -1
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.402
+	title = "kirincountry.321.title"
+	desc = "kirincountry.402.desc"
+	picture = GFX_evt_foal_s_breath_flowers
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	immediate = {
+		remove_country_flag = kirincountry_401_flag
+	}
+
+	option = {
+		name = "kirincountry.402.a"
+		hidden_effect = {
+			set_country_flag = kirincountry_402_a
+			country_event = { id = kirincountry.403 days = 1440 random = 360 }
+		}
+	}
+
+	option = {
+		name = "kirincountry.402.b"
+		remove_modifier = collective_silence
+		add_modifier = {
+			modifier = selective_silence
+			days = -1
+		}
+		hidden_effect = {
+			set_country_flag = kirincountry_402_b
+			country_event = { id = kirincountry.403 days = 1440 random = 360 }
+		}
+	}
+
+	option = {
+		name = "kirincountry.402.c"
+		remove_modifier = collective_silence
+		hidden_effect = {
+			set_country_flag = start_nirik_event
+			set_country_flag = kirincountry_402_c
+			remove_country_flag = stop_normal_nirik_event
+			set_country_flag = high_chance_of_normal_nirik_event
+			country_event = { id = kirincountry.403 days = 1440 random = 360 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.403
+	title = "kirincountry.403.title"
+	desc = "kirincountry.403.desc"
+	picture = GFX_evt_turn_into_nirik
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.403.a"
+		hidden_effect = {
+			switch = {
+				trigger = has_country_flag
+				kirincountry_402_a = { country_event = { id = kirincountry.411 days = 1800 random = 360 } }
+				kirincountry_402_b = { country_event = { id = kirincountry.421 days = 1800 random = 360 } }
+				kirincountry_402_c = { country_event = { id = kirincountry.431 days = 1800 random = 360 } }
+			}
+		}
+	}
+
+	after = {
+		remove_country_flag = kirincountry_402_a
+		remove_country_flag = kirincountry_402_b
+		remove_country_flag = kirincountry_402_c
+	}
+}
+
+country_event = {
+	id = kirincountry.411
+	title = "kirincountry.411.title"
+	desc = "kirincountry.411.desc"
+	picture = GFX_evt_kirin_village
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = finish_kirin_event
+		set_country_flag = finish_kirin_event_411
+		set_country_flag = start_nirik_event
+	}
+
+	option = {
+		name = "kirincountry.411.a"
+		remove_modifier = collective_silence
+		custom_tooltip = unlock_tradition_tranquillity
+		custom_tooltip = "kirincountry.411.tooltip"
+		custom_tooltip = "start_nirik_event_tooltip"
+	}
+}
+
+country_event = {
+	id = kirincountry.421
+	title = "kirincountry.202.title"
+	desc = "kirincountry.421.desc"
+	picture = GFX_evt_pleasant_talking_kirin
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.421.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.422 days = 360 random = 180 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.422
+	title = "kirincountry.202.title"
+	desc = "kirincountry.422.desc"
+	picture = GFX_evt_happy_kirins
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = finish_kirin_event
+	}
+
+	option = {
+		name = "kirincountry.422.a"
+		remove_modifier = selective_silence
+		custom_tooltip = unlock_tradition_tranquillity
+	}
+}
+
+country_event = {
+	id = kirincountry.431
+	title = "kirincountry.202.title"
+	desc = "kirincountry.431.desc"
+	picture = GFX_evt_pleasant_talking_kirin
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		remove_country_flag = start_nirik_event
+		remove_country_flag = high_chance_of_normal_nirik_event
+		set_country_flag = finish_kirin_event
+		set_country_flag = stop_normal_nirik_event
+	}
+
+	option = {
+		name = "kirincountry.431.a"
+		custom_tooltip = unlock_tradition_tranquillity
+		begin_event_chain = {
+			event_chain = kirin_tradition_mission_1
+			target = ROOT
+		}
+		custom_tooltip = "stop_nirik_event_tooltip"
+	}
+}
+
+
+###
+country_event = {
+	id = kirincountry.1000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_kirin_species_trigger = yes
+		is_country_type = default
+		is_ai = no
+	}
+
+	immediate = {
+		random_list = {
+			90 = { }
+			10 = { country_event = { id = kirincountry.1001 days = 1 } }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1001
+	title = "kirincountry.1001.title"
+	desc = "kirincountry.1001.desc"
+	picture = GFX_evt_taohuayuan_1
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1001.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.1002 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1002
+	title = "kirincountry.1001.title"
+	desc = "kirincountry.1002.desc"
+	picture = GFX_evt_taohuayuan_2
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1001.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.1003 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1003
+	title = "kirincountry.1001.title"
+	desc = "kirincountry.1003.desc"
+	picture = GFX_evt_taohuayuan_3
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1001.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.1004 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1004
+	title = "kirincountry.1001.title"
+	desc = "kirincountry.1004.desc"
+	picture = GFX_evt_kirin_village
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1004.a"
+	}
+
+	option = {
+		name = "kirincountry.1004.b"
+		hidden_effect = {
+			country_event = { id = kirincountry.1011 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1011
+	title = "kirincountry.1011.title"
+	desc = "kirincountry.1011.desc"
+	picture = GFX_evt_kirin_village
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1001.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.1012 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1012
+	title = "kirincountry.1011.title"
+	desc = "kirincountry.1012.desc"
+	picture = GFX_evt_kirin_village
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1001.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.1013 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1013
+	title = "kirincountry.1011.title"
+	desc = "kirincountry.1013.desc"
+	picture = GFX_evt_kirin_village
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1001.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.1014 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1014
+	title = "kirincountry.1011.title"
+	desc = "kirincountry.1014.desc"
+	picture = GFX_evt_kirin_village
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1001.a"
+		hidden_effect = {
+			country_event = { id = kirincountry.1015 }
+		}
+	}
+}
+
+country_event = {
+	id = kirincountry.1015
+	title = "kirincountry.1011.title"
+	desc = "kirincountry.1015.desc"
+	picture = GFX_evt_kirin_village
+	is_triggered_only = yes
+
+	option = {
+		name = "kirincountry.1015.a"
+	}
+}

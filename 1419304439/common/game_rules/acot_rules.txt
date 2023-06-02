@@ -1,0 +1,316 @@
+#Tooltips will be generated from these rules when they fail. Use of custom_tooltip is recommended
+#There are still multiple hard-coded rules that apply in addition to these.
+#If rules here evaluate to true, there might still be other rules that make the action unavailable.
+#If a rule here evaluates to false the action will become unavailable
+
+#This rule is a condition for bombarding planets
+#Root = fleet, potential attacker
+#From = planet, potential target
+
+# this = starbase
+can_orbitable_repair_ships = {
+	OR = {
+		AND = {
+			is_scope_type = starbase
+			OR = {
+				has_starbase_size >= starbase_starport
+				has_starbase_size = juggernaut
+				has_starbase_size >= ls_starbase_starport		
+				has_starbase_size = origin_super_citadel_playable
+				has_starbase_size = origin_super_citadel
+				is_precursor_starbase = yes		
+				has_starbase_size >= precursor_colossus		
+			}
+			fleet = {
+				is_disabled = no
+			}
+		}
+		AND = {
+			is_scope_type = megastructure
+			OR = {
+				is_megastructure_type = mega_shipyard_1
+				is_megastructure_type = mega_shipyard_2
+				is_megastructure_type = mega_shipyard_3
+				is_megastructure_type = acot_precursor_colossus_base
+				is_megastructure_type = acot_precursor_colossus_stage_two
+				is_megastructure_type = acot_amerigo
+				is_megastructure_type = acot_amerigo_ae
+				is_megastructure_type = acot_amerigo_se
+				is_megastructure_type = acot_amerigo_oe
+				is_megastructure_type = acot_phanon_master_reactor_sphere
+			}
+		}
+	}
+}
+
+#Root = country, attacker
+#This = country, target
+#This rule is a condition for taking hostile actions towards neutral targets. Such as landing troops or attacking their fleets
+can_take_hostile_actions = {
+	if = {
+		limit = {
+			ROOT = {
+				NOT = { has_policy_flag = first_contact_attack_allowed }
+			}
+			NOT = {
+				is_hostile = ROOT
+				has_communications = ROOT
+			}
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_FIRST_CONTACT_PROTOCOL"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			AND = {
+				NOT = { has_country_flag = hostile_to_nomads }
+				ROOT = {
+					is_country_type = nomad
+				}
+			}
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_FIRST_CONTACT_PROTOCOL"
+			always = no
+		}
+	}
+	else_if = {
+		#attacking primitives with non-interference
+		limit = {
+			ROOT = {
+				is_country_type = default
+				OR = {
+					has_policy_flag = interference_passive
+					has_policy_flag = interference_active
+				}
+			}
+			is_primitive = yes
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_NATIVE_INTERFERENCE"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			is_primitive = yes
+			ROOT = { is_country_type = default }
+			capital_scope = {
+				root = {
+					NOT = {
+						any_planet_within_border = {
+							is_same_value = prevprev
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = ""
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			ROOT = { any_agreement = { agreement_preset = preset_satrapy } }
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_SATRAPY"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			exists = overlord
+			overlord = { is_same_value = root }
+			ROOT = { any_agreement = { agreement_preset = preset_satrapy } }
+		}
+		custom_tooltip = {
+			text = "CAN_TAKE_HOSTILE_ACTION_OVERLORD"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			THIS = {
+				is_country_type = sbtg_stellarborne_empire_passive
+			}
+		}
+		custom_tooltip = {
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			THIS = {
+				is_country_type = void_lifeforms_1
+			}
+		}
+		custom_tooltip = {
+			always = yes
+		}
+	}
+	else_if = {
+		limit = {
+			ROOT = {
+				is_country_type = void_lifeforms_1
+			}
+		}
+		custom_tooltip = {
+			always = yes
+		}
+	}
+	else_if = {
+		limit = {
+			THIS = {
+				is_country_type = void_lifeforms_2
+			}
+		}
+		custom_tooltip = {
+			always = yes
+		}
+	}
+	else_if = {
+		limit = {
+			ROOT = {
+				is_country_type = void_lifeforms_2
+			}
+		}
+		custom_tooltip = {
+			always = yes
+		}
+	}
+	else = {
+		always = yes
+	}
+}
+
+#Root = country, us
+#This = country, them
+#This rule is a condition for determining if a country is hostile towards another. not to be confused with can_take_hostile_action
+can_be_hostile_towards = {
+	if = {
+		limit = { is_primitive = yes }
+		ROOT = {
+			NOT = { has_policy_flag = interference_passive }
+		}
+	}
+	else_if = {
+		limit = { ROOT = { is_primitive = yes } }
+		NOT = { has_policy_flag = interference_passive }
+	}
+	else_if = {
+		limit = { is_country_type = ratlings }
+		always = yes
+	}
+	else_if = {
+		limit = { is_country_type = void_lifeforms_1 }
+		always = yes
+	}
+	else_if = {
+		limit = { ROOT = { is_country_type = void_lifeforms_1 } }
+		always = yes
+	}
+	else_if = {
+		limit = { is_country_type = void_lifeforms_2 }
+		always = yes
+	}
+	else_if = {
+		limit = { ROOT = { is_country_type = void_lifeforms_2 } }
+		always = yes
+	}
+}
+
+#This rule is a condition for bombarding planets
+#Root = fleet, potential attacker
+#From = planet, potential target
+can_orbital_bombard = {
+	exists = FROM.OWNER
+	NOT = {
+		any_controlled_ship = {
+			is_ship_size = colossus
+		}
+	}
+	NAND = {
+		OWNER = { is_progenitor_empires = no }
+		FROM = {
+			OR = {
+				is_planet_class = pc_acot_pmc_vault
+				is_planet_class = pc_acot_enigmopolis
+			}
+		}
+	}
+	OR = {
+		AND = {
+			ROOT.CONTROLLER = {
+				NOT = { has_communications = FROM.OWNER }
+			}
+			FROM.OWNER = {
+				NOT = { is_country_type = primitive }
+			}
+		}
+		AND = {
+			ROOT.CONTROLLER = {
+				NOR = {
+					has_policy_flag = interference_passive
+					has_policy_flag = interference_active
+				}
+			}
+			FROM.OWNER = { is_country_type = primitive }
+		}
+		ROOT.CONTROLLER = { is_at_war_with = FROM.CONTROLLER }
+		FROM = { is_planet_class = pc_infested }
+		FROM.CONTROLLER = {
+			OR = {
+				is_country_type = swarm 
+				is_country_type = ai_empire
+				is_country_type = cybrex_empire
+				is_country_type = sbtg_stellarborne_empire
+				is_country_type = compound_empire
+				is_country_type = void_lifeforms_1
+				is_country_type = void_lifeforms_2
+				is_country_type = katzenartig_imperium
+				AND = {
+					is_country_type = awakened_marauders
+					ROOT.CONTROLLER = { is_hostile = prev }
+				}
+			}
+		}
+		ROOT.CONTROLLER = {
+			OR = {
+				is_country_type = extradimensional
+				is_country_type = extradimensional_2
+				is_country_type = extradimensional_3
+				is_country_type = swarm
+				is_country_type = ai_empire
+				is_country_type = cybrex_empire
+				is_country_type = dormant_marauders
+				is_country_type = marauder_raiders
+				is_country_type = ruined_marauders
+				is_country_type = gray_goo
+				is_country_type = vol
+				is_progenitor_empires = yes
+				is_country_type = compound_empire
+				is_country_type = katzenartig_imperium
+				is_country_type = void_lifeforms_1
+				is_country_type = void_lifeforms_2
+				is_country_type = acot_crazed_stellarite
+				AND = {
+					is_country_type = awakened_marauders
+					FROM.CONTROLLER = { is_hostile = prev }
+				}
+			}
+		}
+		AND = {
+			from.controller = {
+				is_country_type = faction
+				NOT = { is_same_value = ROOT.CONTROLLER }
+			}
+			from.owner = {
+				is_same_value = ROOT.CONTROLLER
+			}
+		}
+	}
+}

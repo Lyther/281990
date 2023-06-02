@@ -1,0 +1,235 @@
+namespace = griffincountry
+
+### Archaeological: The Idol of Boreas
+# Start
+country_event = {
+	id = griffincountry.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		years_passed > 30
+		NOT = { has_country_flag = griffin_arc }
+		pmt_griffin_species_trigger = yes
+		is_gestalt = no
+		is_country_type = default
+		is_ai = no
+		any_planet_within_border = {
+			OR = {
+				is_planet_class = pc_barren
+				is_planet_class = pc_barren_cold
+				is_planet_class = pc_frozen
+			}
+		}
+		OR = {
+			is_multiplayer = no
+			has_country_flag = trigger_event_country_griffin
+		}
+	}
+
+	immediate = {
+		random_list = {
+			90 = { }
+			10 = {
+				set_country_flag = griffin_arc
+				country_event = { id = griffincountry.101 days = 1 random = 350 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = griffincountry.101
+	title = "griffincountry.101.title"
+	desc = "griffincountry.101.desc"
+	picture = GFX_evt_frozen
+	show_sound = event_scanner
+	location = event_target:griffin_arc
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				OR = {
+					is_planet_class = pc_barren
+					is_planet_class = pc_barren_cold
+					is_planet_class = pc_frozen
+				}
+				NOT = { exists = archaeological_site }
+			}
+			save_event_target_as = griffin_arc
+		}
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+			}
+			save_event_target_as = griffin_arc_scientist
+		}
+	}
+
+	option = {
+		name = "griffincountry.101.a"
+		event_target:griffin_arc = {
+			create_archaeological_site = site_the_idol_of_boreas
+		}
+	}
+}
+
+# Stage 1 - Grotto
+fleet_event = {
+	id = griffincountry.110
+	title = "griffincountry.110.title"
+	desc = "griffincountry.110.desc"
+	picture = GFX_evt_frozen
+	show_sound = event_scanner
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "griffincountry.110.a"
+		fromfrom = {
+			add_deposit = d_minerals_4
+		}
+	}
+}
+
+# Stage 2 - Cave
+fleet_event = {
+	id = griffincountry.120
+	title = "griffincountry.120.title"
+	desc = "griffincountry.120.desc"
+	picture = GFX_evt_cold_barren
+	show_sound = event_scanner
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "griffincountry.120.a"
+		small_artifact_reward = yes
+	}
+}
+
+# Stage 3 - Underground
+fleet_event = {
+	id = griffincountry.130
+	title = "griffincountry.130.title"
+	desc = "griffincountry.130.desc"
+	picture = GFX_evt_zro_5
+	show_sound = event_scanner
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "griffincountry.130.a"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+}
+
+# Stage 4 - Underworld
+fleet_event = {
+	id = griffincountry.140
+	title = "griffincountry.140.title"
+	desc = "griffincountry.140.desc"
+	picture = GFX_evt_ancient_records
+	show_sound = event_scanner
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "griffincountry.140.a"
+		medium_artifact_reward = yes
+	}
+}
+
+# Stage 5 - The Idol of Boreas
+fleet_event = {
+	id = griffincountry.150
+	title = "griffincountry.150.title"
+	desc = "griffincountry.150.desc"
+	picture = GFX_evt_the_idol_of_boreas
+	show_sound = event_scanner
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+	}
+
+	option = {
+		name = "griffincountry.150.a"
+		owner = { add_relic = r_the_idol_of_boreas }
+		large_artifact_reward = yes
+	}
+
+	option = {
+		name = "griffincountry.150.b"
+		owner = {
+			add_relic = r_the_idol_of_boreas
+			add_monthly_resource_mult = {
+				resource = minerals
+				value = 10
+				min = 200
+				max = 1000
+			}
+		}
+		small_artifact_reward = yes
+	}
+}

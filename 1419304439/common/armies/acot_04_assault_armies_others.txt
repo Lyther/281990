@@ -1,0 +1,496 @@
+#Defensive armies can't transport of the planet
+#maintenance is directly scripted here. 0.25 translates to 0.25 monthly cost (excluding other upkeep modifiers)
+#morale_damage = 1		# average morale damage of the army, default: auto (calculated from morale * MORALE_DAMAGE_MULT)
+
+###############
+
+# SE Michael Bay Lord
+acot_army_stellarite_bomber = {
+	damage = 30.00
+	health = 0.50
+	has_morale = no
+	morale_damage = 1.0
+	collateral_damage = 200.00
+	war_exhaustion = 1.0
+	time = 300
+	icon = GFX_army_type_xenomorph
+	prerequisites = { "tech_acot_army_stellarite_bomber" }
+	has_species = no
+	resources = {
+		category = armies
+		cost = {
+			minerals = 1000
+			acot_sr_stellarite =  200
+		}
+		upkeep = {
+			acot_sr_stellarite = 10
+		}
+	}
+	potential = {
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+
+	ai_weight = {
+		base = 50
+	}
+}
+
+############################## PHANON ##############################
+
+# Phanon Army
+acot_phanon_army = {
+	damage = 4.0
+	health = 4.5
+	morale = 2.00
+	morale_damage = 0.5
+	collateral_damage = 0.75
+	war_exhaustion = 0.50
+	time = 90
+	icon = GFX_army_type_infantry
+	prerequisites = { "tech_phanon_army" }
+	has_species = no
+	resources = {
+		category = armies
+		cost = {
+			minerals = 250
+			energy = 100
+			unity = 50
+		}
+		upkeep = {
+			energy = 5
+		}
+	}
+	potential = {
+		owner = {
+			check_variable = {
+				which = acot_phanon_dutyman_count
+				value >= 1
+			}
+		}
+		OR = {
+			is_planet_class = pc_acot_pmc_vault
+			owner = {
+				is_country_type = acot_phanon_base
+			}
+		}
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+
+	on_queued = {
+		owner = {
+			subtract_variable = {
+				which = "acot_phanon_dutyman_count" 
+				value = 1
+			}
+		}
+	}
+	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = "acot_phanon_dutyman_count" 
+				value = 1
+			}
+		}
+	}	
+}
+
+acot_phanon_army_sniper = {
+	damage = 6.0
+	health = 2.5
+	morale = 1.50
+	morale_damage = 2.0
+	collateral_damage = 0.1
+	war_exhaustion = 0.50
+	time = 90
+	icon = GFX_army_type_infantry
+	prerequisites = { "tech_phanon_army" }
+	has_species = no
+	resources = {
+		category = armies
+		cost = {
+			minerals = 250
+			energy = 100
+			unity = 50
+		}
+		upkeep = {
+			energy = 5
+		}
+	}
+	potential = {
+		owner = {
+			check_variable = {
+				which = acot_phanon_dutyman_count
+				value >= 1
+			}
+		}
+		OR = {
+			is_planet_class = pc_acot_pmc_vault
+			owner = {
+				is_country_type = acot_phanon_base
+			}
+		}
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+
+	on_queued = {
+		owner = {
+			subtract_variable = {
+				which = "acot_phanon_dutyman_count" 
+				value = 1
+			}
+		}
+	}
+	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = "acot_phanon_dutyman_count" 
+				value = 1
+			}
+		}
+	}	
+}
+
+acot_phanon_elite = {
+	damage = 6.5
+	health = 7.0
+	morale = 2.00
+	morale_damage = 1.0
+	collateral_damage = 1.00
+	war_exhaustion = 2.00
+	time = 150
+	icon = GFX_army_type_special
+	prerequisites = { "tech_phanon_army_elite" }
+	has_species = no
+	resources = {
+		category = armies
+		cost = {
+			minerals = 400
+			energy = 200
+			unity = 100
+		}
+		upkeep = {
+			energy = 30
+		}
+	}
+	potential = {
+		owner = {
+			check_variable = {
+				which = acot_phanon_dutyman_count
+				value >= 2
+			}
+		}
+		OR = {
+			is_planet_class = pc_acot_pmc_vault
+			owner = {
+				is_country_type = acot_phanon_base
+			}
+		}
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+
+	on_queued = {
+		owner = {
+			subtract_variable = {
+				which = "acot_phanon_dutyman_count" 
+				value = 2
+			}
+		}
+	}
+	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = "acot_phanon_dutyman_count" 
+				value = 2
+			}
+		}
+	}	
+}
+
+acot_phanon_tank = {
+	damage = 8.5
+	health = 6.5
+	morale = 2.50
+	morale_damage = 1.50
+	collateral_damage = 3.00
+	war_exhaustion = 2.50
+	time = 360
+	icon = GFX_army_type_heavy
+	prerequisites = { "tech_phanon_army_elite" }
+	has_species = no
+	resources = {
+		category = armies
+		cost = {
+			minerals = 600
+			alloys = 300
+			unity = 100
+		}
+		upkeep = {
+			energy = 60
+		}
+	}
+	potential = {
+		owner = {
+			check_variable = {
+				which = acot_phanon_dutyman_count
+				value >= 3
+			}
+		}
+		OR = {
+			is_planet_class = pc_acot_pmc_vault
+			owner = {
+				is_country_type = acot_phanon_base
+			}
+		}
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+
+	on_queued = {
+		owner = {
+			subtract_variable = {
+				which = "acot_phanon_dutyman_count" 
+				value = 3
+			}
+		}
+	}
+	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = "acot_phanon_dutyman_count" 
+				value = 3
+			}
+		}
+	}	
+}
+
+# Phanon Army
+acot_phanon_attack_dog = {
+	damage = 7.0
+	health = 1.5
+	has_morale = no
+	morale_damage = 2.0
+	collateral_damage = 2.00
+	war_exhaustion = 0.50
+	has_species = no
+	time = 150
+	icon = GFX_army_type_xenomorph
+	prerequisites = { "tech_phanon_attack_dog" }
+	resources = {
+		category = armies
+		cost = {
+			minerals = 350
+			energy = 50
+			unity = 50
+		}
+		upkeep = {
+			energy = 25
+		}
+	}
+	potential = {
+		owner = {
+			check_variable = {
+				which = acot_phanon_machina_count
+				value >= 1
+			}
+		}
+		OR = {
+			is_planet_class = pc_acot_pmc_vault
+			owner = {
+				is_country_type = acot_phanon_base
+			}
+		}
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+
+	on_queued = {
+		owner = {
+			subtract_variable = {
+				which = "acot_phanon_machina_count" 
+				value = 1
+			}
+		}
+	}
+	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = "acot_phanon_machina_count" 
+				value = 1
+			}
+		}
+	}	
+}
+
+acot_phanon_attack_mammoth = {
+	damage = 12.50
+	health = 4.5
+	has_morale = no
+	morale_damage = 3.0
+	collateral_damage = 5.00
+	war_exhaustion = 1
+	has_species = no
+	time = 450
+	icon = GFX_army_type_xenomorph
+	prerequisites = { "tech_phanon_attack_dog" }
+	resources = {
+		category = armies
+		cost = {
+			minerals = 700
+			energy = 100
+			unity = 100
+		}
+		upkeep = {
+			energy = 50
+		}
+	}
+	potential = {
+		owner = {
+			check_variable = {
+				which = acot_phanon_machina_count
+				value >= 3
+			}
+		}
+		OR = {
+			is_planet_class = pc_acot_pmc_vault
+			owner = {
+				is_country_type = acot_phanon_base
+			}
+		}
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+
+	on_queued = {
+		owner = {
+			subtract_variable = {
+				which = "acot_phanon_machina_count" 
+				value = 3
+			}
+		}
+	}
+	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = "acot_phanon_machina_count" 
+				value = 3
+			}
+		}
+	}	
+}
+
+# Phanon Army
+acot_phanon_operative = {
+	damage = 45.00
+	health = 100.00
+	morale = 30.0
+	morale_damage = 4.00
+	collateral_damage = 0.05
+	war_exhaustion = 0.00
+	time = 800
+	icon = GFX_army_type_hero
+	has_species = no
+	prerequisites = { tech_phanon_operative }
+	resources = {
+		category = armies
+		cost = {
+			minerals = 3500
+			energy = 500
+			unity = 500
+			influence = 500
+		}
+		upkeep = {
+			energy = 250
+			unity = 250
+		}
+	}
+	potential = {
+		owner = {
+			check_variable = {
+				which = acot_phanon_agent_count
+				value >= 1
+			}
+		}
+		OR = {
+			is_planet_class = pc_acot_pmc_vault
+			is_same_value = event_target:acot_phanon_vault
+			owner = {
+				is_country_type = acot_phanon_base
+			}
+		}
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+	
+	on_queued = {
+		owner = {
+			subtract_variable = {
+				which = "acot_phanon_agent_count" 
+				value = 1
+			}
+		}
+	}
+	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = "acot_phanon_agent_count" 
+				value = 1
+			}
+		}
+	}	
+}
+
+# Phanon Army
+acot_phanon_operative_type_b = {
+	damage = 55.00
+	health = 80.00
+	morale = 30.0
+	morale_damage = 1.00
+	collateral_damage = 5.00
+	war_exhaustion = 0.00
+	time = 800
+	icon = GFX_army_type_hero
+	has_species = no
+	prerequisites = { tech_phanon_operative }
+	resources = {
+		category = armies
+		cost = {
+			minerals = 3500
+			energy = 500
+			unity = 500
+			influence = 500
+		}
+		upkeep = {
+			energy = 250
+			unity = 250
+		}
+	}
+	potential = {
+		owner = {
+			check_variable = {
+				which = acot_phanon_agent_count
+				value >= 1
+			}
+		}
+		OR = {
+			is_planet_class = pc_acot_pmc_vault
+			is_same_value = event_target:acot_phanon_vault
+			owner = {
+				is_country_type = acot_phanon_base
+			}
+		}
+		NOT = { has_global_flag = acot_army_forbidden }
+	}
+	
+	on_queued = {
+		owner = {
+			subtract_variable = {
+				which = "acot_phanon_agent_count" 
+				value = 1
+			}
+		}
+	}
+	on_unqueued = {
+		owner = {
+			change_variable = {
+				which = "acot_phanon_agent_count" 
+				value = 1
+			}
+		}
+	}		
+}

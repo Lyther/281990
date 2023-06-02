@@ -1,0 +1,74 @@
+@ambitionDuration = -1
+@ambitionCost = 75
+@ambitionUpkeep = 75
+
+@EdictDuration = -1
+
+architectural_renaissance = {
+	length = @ambitionDuration
+	icon = "GFX_edict_type_time"
+
+	resources = {
+		category = edicts
+
+		cost = {
+			unity = @ambitionCost
+			multiplier = value:edict_size_effect
+		}
+
+		upkeep = {
+			unity = @ambitionUpkeep
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	modifier = {
+		megastructure_build_speed_mult = 1.00
+		country_megastructure_build_cap_add = 1
+		planet_building_build_speed_mult = 1.50
+	}
+
+	potential = {
+		has_technology = tech_ascension_theory
+	}
+
+	allow = {
+		has_technology = tech_mega_engineering
+	}
+
+	ai_weight = {
+		weight = 1
+	}
+}
+
+living_metal_construction = {
+	length = @EdictDuration
+	icon = "GFX_edict_type_time"
+	resources = {
+		category = rare_edicts
+		upkeep = {
+			sr_living_metal = 0.5
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	modifier = {
+		megastructure_build_speed_mult = 1.00
+		megastructures_cost_mult = -0.10
+	}
+
+	prerequisites = {
+		"tech_mine_living_metal"
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = @EdictHighPrio
+			count_owned_megastructure = {
+				count >= 1
+				limit = { is_upgrading = yes }
+			}
+		}
+	}
+}

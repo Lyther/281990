@@ -1,0 +1,518 @@
+### ### ### ### ### MISSILES ### ### ### ### ### 
+
+### SE Missiles
+weapon_component_template = {
+	key = "ACOT_MISSILE_SHROUD"
+	size = medium
+	icon = "GFX_ship_part_shroud_missile"
+	icon_frame = 1
+	entity = "turret_missile_medium_entity"	
+	type = missile
+
+	damage = { min = 455 max = 722 }
+	windup = { min = 10 max = 40 }
+	total_fire_time = 60
+	range = 150
+	accuracy = 1.0
+	missile_speed = 30 # 375 -- apparently, the game doesn't auto-convert speed for non-vanilla components
+	missile_evasion = 0.60
+	missile_health = 20
+	missile_shield = 40
+	missile_retarget_range = 150
+	power = @m_ae_power_cost
+
+	resources = {
+		category = ship_components
+		cost = {
+			unity = @m_ae_cost
+			sr_zro = @m_ae_sr_cost
+		}		
+		upkeep = {
+			unity = @m_ae_upkeep_energy
+		}
+	}
+	hull_damage = 2.00
+	armor_damage = 1.50
+	armor_penetration = 1.0
+	shield_damage = 0.25
+	shield_penetration = 0.0
+	tracking = 1.00
+
+	prerequisites = { "tech_shroud_missile" }
+	component_set = "ACOT_MISSILE_SHROUD"
+	projectile_gfx = "acot_missile_psionic"
+	tags = { weapon_type_explosive weapon_type_energy }
+	ai_tags = { weapon_role_artillery artillery energy_torpedoes }
+
+	ai_weight = {
+		weight = 2
+		modifier = {
+			factor = 0.0
+			has_resource = {
+				type = sr_zro
+				amount <= 5	
+			}
+			has_monthly_income = {
+				resource = sr_zro
+				value <= 1
+			}		
+		}
+	}
+}
+
+weapon_component_template = {
+	key = "ACOT_MISSILE_SHROUD_XL"
+	size = extra_large
+	icon = "GFX_ship_part_shroud_missile"
+	icon_frame = 1
+	type = missile
+
+	damage = { min = 1950 max = 3300 }
+	windup = { min = 1 max = 19 }
+	total_fire_time = 60
+	range = 250
+	accuracy = 1.0
+	missile_speed = 30 # 375 -- apparently, the game doesn't auto-convert speed for non-vanilla components
+	missile_evasion = 0.20
+	missile_health = 50
+	missile_shield = 200
+	missile_retarget_range = 250
+	power = @xl_ae_power_cost
+
+	target_weights = {
+		battleship = 2
+		precursor_battlecruiser = 2
+		fallen_empire_large_warship = 2
+
+		titan = 3
+		juggernaut = 3
+		precursor_assault_carrier = 3
+		precursor_titan = 3
+		fallen_empire_massive_warship = 3
+	}
+
+	resources = {
+		category = ship_components
+		cost = {
+			unity = @xl_ae_cost
+			sr_zro = @xl_ae_sr_cost
+		}		
+		upkeep = {
+			unity = @xl_ae_upkeep_energy
+		}
+	}
+	hull_damage = 2.00
+	armor_damage = 1.00
+	armor_penetration = 1.0
+	shield_damage = 0.25
+	shield_penetration = 0.0
+	tracking = 1.00
+
+	prerequisites = { "tech_shroud_missile" }
+	component_set = "ACOT_MISSILE_SHROUD"
+	projectile_gfx = "acot_missile_psionic_xl"
+	tags = { weapon_type_explosive weapon_type_energy }
+	ai_tags = { weapon_role_artillery artillery energy_torpedoes }
+
+	ai_weight = {
+		weight = 2
+		modifier = {
+			factor = 0.0
+			has_resource = {
+				type = sr_zro
+				amount <= 5	
+			}
+			has_monthly_income = {
+				resource = sr_zro
+				value <= 1
+			}		
+		}
+	}
+}
+
+### SE Fighter
+strike_craft_component_template = {
+	key = "ACOT_CLOUDBALL_SHROUD"
+	size = LARGE
+	entity = "acot_cloud_ball_entity"
+	icon = "GFX_ship_part_shroud_hanger"
+	icon_frame = 1
+
+	weapon_type = instant
+	projectile_gfx = "acot_cloud_ball_weapon"
+	power = @l_ae_power_cost
+	resources = {
+		category = ship_components
+		cost = {
+			unity = @al_ae_cost
+			sr_zro  = @al_ae_sr_cost
+		}		
+		upkeep = {
+			unity = @al_ae_upkeep_energy
+		}
+	}
+	
+	count = 1
+	regeneration_per_day = 0.10
+	launch_time = 0.25
+	
+	damage = { min = 450 max = 900 }
+	cooldown = 1.5
+	range = 65
+	accuracy = 1.0
+	health = 120
+	armor = 0
+	shield = 480
+	tracking = 0.80	
+	speed = 950
+	rotation_speed = 0.8
+	acceleration = 0.8
+	evasion = 0.90
+
+	hull_damage = 1.50
+	armor_penetration = 1.0
+	armor_damage = 1.0
+	shield_penetration = 0.0
+	shield_damage = 0.25
+
+	ship_behavior = "origin_fighters_behavior"
+	component_set = "ACOT_CLOUDBALL_SHROUD"
+	prerequisites = { "tech_shroud_hanger" }
+	tags = { weapon_type_strike_craft }
+	ai_tags = { weapon_role_anti_armor carrier explosive }
+
+	ai_weight = {
+		weight = 2
+		modifier = {
+			factor = 0.0
+			has_resource = {
+				type = sr_zro
+				amount <= 5	
+			}
+			has_monthly_income = {
+				resource = sr_zro
+				value <= 1
+			}		
+		}
+	}
+}
+
+### SE Titan
+weapon_component_template = {
+	key = "ACOT_PSI_STORM"
+	size = titanic
+	type = instant
+	prio_projectile = yes
+	
+	icon = "GFX_ship_part_shroud_storm"
+	icon_frame = 1
+	
+	firing_arc = 10.0
+	min_range = 30.0
+	use_ship_kill_target = no
+	
+	damage = { min = 10000 max = 20000 }
+	windup = { min = 50 max = 70 }
+	total_fire_time = 180
+	range = 275.0
+	accuracy = 1.0
+	hull_damage = 5.00
+	armor_penetration = 0.0
+	armor_damage = 10.0
+	shield_penetration = 0.0
+	shield_damage = 0.10
+	tracking = 0.25
+	power = @titanic_ae_power_cost
+	resources = {
+		category = ship_components
+		cost = {
+			unity = @titanic_ae_cost
+			sr_zro  = @titanic_ae_sr_cost
+		}		
+		upkeep = {
+			unity = @titanic_ae_upkeep_energy
+		}
+	}
+	
+	prerequisites = { "tech_shroud_storm" }
+	component_set = "ACOT_PSI_STORM"
+	projectile_gfx = "acot_psi_storm"
+	
+	tags = { weapon_type_explosive }
+	ai_tags = { weapon_role_artillery artillery}
+	
+
+	ai_weight = {
+		weight = 2
+		modifier = {
+			factor = 0.0
+			has_resource = {
+				type = sr_zro
+				amount <= 5	
+			}
+			has_monthly_income = {
+				resource = sr_zro
+				value <= 1
+			}		
+		}
+	}
+}
+
+### Shroud Jump drives
+utility_component_template = {
+	key = "SHROUD_DRIVE"
+	size = small
+	icon = "GFX_ship_part_shroud_drive"
+	icon_frame = 1
+	power = 100
+	ftl = yes
+	jumpdrive = yes
+	ship_modifier = {
+		ship_windup_mult = -1.00
+		ship_ftl_jumpdrive_range_mult = 3.00
+		ship_jumpdrive_cooldown_mult = -1.0
+		ship_disengage_opportunities_add = -5
+	}
+	
+	resources = {
+		category = ship_components
+		cost = {
+			unity = 100
+			sr_zro  = 5
+		}
+	}
+
+	ai_weight = {
+		weight = 2
+		modifier = {
+			factor = 0.0
+			has_resource = {
+				type = sr_zro
+				amount <= 5	
+			}
+			has_monthly_income = {
+				resource = sr_zro
+				value <= 1
+			}		
+		}
+	}
+	
+
+	class_restriction = { shipclass_military shipclass_constructor shipclass_colonizer shipclass_science_ship shipclass_transport shipclass_military_special shipclass_starbase }
+	prerequisites = { "tech_shroud_jump_drive" }
+	component_set = "ftl_components"
+}
+
+#####################
+
+utility_component_template = {
+	key = "SMALL_ACOT_SHROUD_BARRIER"
+	size = small
+	icon = "GFX_ship_part_shroud_barrier"
+	icon_frame = 1
+	power = 0
+
+	resources = {
+		category = ship_components
+		cost = {
+			sr_dark_matter = @shield_s_ae_sr_cost
+			acot_sr_dark_energy = @shield_s_ae_sr2_cost
+			sr_zro = @shield_s_ae_sr2_cost
+		}		
+		upkeep = {
+			energy = @shield_s_ae_upkeep_energy
+			sr_zro = @shield_s_ae_upkeep_alloys
+		}
+	}
+
+	triggered_ship_modifier = {
+		potential = {
+			has_component = SHROUD_DRIVE
+		}
+		modifier = {
+			ship_shield_mult = 0.01	
+			ship_hull_mult = 0.01	
+		}
+	}
+
+    modifier = {
+		ship_shield_add = 750
+		ship_shield_mult = 0.01	
+		ship_shield_regen_add_static = 75
+		ship_hull_add = -185
+		ship_hull_mult = -0.01	
+	}	
+
+	prerequisites = { "tech_shroud_barrier" }
+	component_set = "ACOT_SHROUD_BARRIER"
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+utility_component_template = {
+	key = "MEDIUM_ACOT_SHROUD_BARRIER"
+	size = medium
+	icon = "GFX_ship_part_shroud_barrier"
+	icon_frame = 1
+	power = 0
+
+	triggered_ship_modifier = {
+		potential = {
+			has_component = SHROUD_DRIVE
+		}
+		modifier = {
+			ship_shield_mult = 0.01	
+			ship_hull_mult = 0.01	
+		}
+	}
+
+    modifier = {
+		ship_shield_add = 1860
+		ship_shield_mult = 0.01	
+		ship_shield_regen_add_static = 186
+		ship_hull_add = -465
+		ship_hull_mult = -0.01	
+	}	
+
+	resources = {
+		category = ship_components
+		cost = {
+			sr_dark_matter = @shield_m_ae_sr_cost
+			acot_sr_dark_energy = @shield_m_ae_sr2_cost
+			sr_zro = @shield_m_ae_sr2_cost
+		}		
+		upkeep = {
+			energy = @shield_m_ae_upkeep_energy
+			sr_zro = @shield_m_ae_upkeep_alloys
+		}
+	}
+
+	prerequisites = { "tech_shroud_barrier" }
+	component_set = "ACOT_SHROUD_BARRIER"
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+utility_component_template = {
+	key = "LARGE_ACOT_SHROUD_BARRIER"
+	size = large
+	icon = "GFX_ship_part_shroud_barrier"
+	icon_frame = 1
+	power = 0
+
+	triggered_ship_modifier = {
+		potential = {
+			has_component = SHROUD_DRIVE
+		}
+		modifier = {
+			ship_shield_mult = 0.01	
+			ship_hull_mult = 0.01	
+		}
+	}
+
+    modifier = {
+		ship_shield_add = 4470
+		ship_shield_mult = 0.01	
+		ship_shield_regen_add_static = 447
+		ship_hull_add = -1120
+		ship_hull_mult = -0.01		
+	}	
+
+	resources = {
+		category = ship_components
+		cost = {
+			sr_dark_matter = @shield_l_ae_sr_cost
+			acot_sr_dark_energy = @shield_l_ae_sr2_cost
+			sr_zro = @shield_l_ae_sr2_cost
+		}		
+		upkeep = {
+			energy = @shield_l_ae_upkeep_energy
+			sr_zro = @shield_l_ae_upkeep_alloys
+		}
+	}
+
+	prerequisites = { "tech_shroud_barrier" }
+	component_set = "ACOT_SHROUD_BARRIER"
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
+
+utility_component_template = {
+	key = "ACOT_PSIONIC_REPEL"
+	size = aux
+	icon = "GFX_ship_part_shroud_protector"
+	icon_frame = 1
+	power = 0
+	resources = {
+		category = ship_components
+		cost = {
+			sr_zro = 300
+			sr_dark_matter = 150
+			acot_sr_dark_energy = 150
+		}
+		upkeep = {
+			energy = 15
+			sr_zro = 3
+		}
+	}
+	class_restriction = { shipclass_military shipclass_military_special }
+	component_set = "ACOT_PSIONIC_REPEL"
+
+	ship_limit = 1
+
+	triggered_ship_modifier = {
+	}
+
+	ship_modifier = {
+		ship_shield_mult = 0.05	
+		ship_shield_regen_add_perc = 0.25
+		ship_shield_reduction = -1.0
+		ship_hull_mult = -0.1	
+	}
+
+	prerequisites = { tech_shroud_barrier }	
+
+	ai_weight = {
+		weight = 30
+		modifier = {
+			factor = 0.0
+			has_monthly_income = {
+				resource = sr_dark_matter
+				value <= 2
+			}
+			has_resource = {
+				type = sr_dark_matter
+				amount <= 5
+			}		
+		}
+		modifier = {
+			factor = 0.0
+			has_resource = {
+				type = acot_sr_dark_energy
+				amount <= 5
+			}
+			has_monthly_income = {
+				resource = acot_sr_dark_energy
+				value <= 2
+			}		
+		}
+		modifier = {
+			factor = 0.0
+			has_resource = {
+				type = sr_zro
+				amount <= 5
+			}
+			has_monthly_income = {
+				resource = sr_zro
+				value <= 2
+			}		
+		}	
+	}
+}

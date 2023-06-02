@@ -1,0 +1,1351 @@
+namespace = crystalcountry
+
+country_event = {
+	id = crystalcountry.1
+	title = "crystalcountry.1.title"
+	desc = "crystalcountry.1.desc"
+	picture = GFX_evt_crystal_empire
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_crystal_empire
+		pmt_crystal_pony_species_trigger = yes
+		is_country_type = default
+		OR = {
+			is_multiplayer = no
+			has_country_flag = trigger_event_country_crystal_pony
+		}
+	}
+
+	immediate = {
+		set_country_flag = crystal_pony_lock_tech
+		capital_scope = {
+			set_planet_flag = crystal_empire_capital
+		}
+	}
+
+	option = {
+		name = "crystalcountry.1.a"
+		custom_tooltip = "crystalcountry.1.tooltip"
+		add_modifier = {
+			modifier = "under_the_shadow"
+			days = -1
+		}
+		add_modifier = {
+			modifier = "stage_a_comeback"
+			days = 18000
+		}
+		begin_event_chain = {
+			event_chain = alter_the_situation_1
+			target = root
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.2
+	title = "crystalcountry.2.title"
+	desc = "crystalcountry.2.desc"
+	picture = GFX_evt_crystal_empire
+	show_sound = event_conversation
+	is_triggered_only = yes
+
+	immediate = {
+		add_event_chain_counter = {
+			event_chain = alter_the_situation_1
+			counter = crystal_mission_1
+			amount = 1
+		}
+	}
+
+	option = {
+		name = "crystalcountry.2.a"
+		custom_tooltip = "crystalcountry.2.a.tooltip"
+		hidden_effect = {
+			end_event_chain = alter_the_situation_1
+			begin_event_chain = {
+				event_chain = alter_the_situation_2
+				target = root
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			set_variable = {
+				which = crystal_building_num
+				value = 0
+			}
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.100
+	title = "crystalcountry.100.title"
+	desc = "crystalcountry.100.desc"
+	picture = GFX_evt_old_crystal_castle
+	is_triggered_only = yes
+
+	option = {
+		name = "crystalcountry.100.a"
+		begin_event_chain = {
+			event_chain = find_crystal_heart_chain
+			target = root
+		}
+		hidden_effect = {
+			set_country_flag = crystalcountry_100
+		}
+	}
+}
+
+planet_event = {
+	id = crystalcountry.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_origin = origin_crystal_empire
+			pmt_crystal_pony_species_trigger = yes
+			is_country_type = default
+			NOT = { has_country_flag = defeat_king_sombra }
+		}
+		has_planet_flag = crystal_empire_capital
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_building = building_crystal_fair
+				owner = {
+					NOT = { has_country_flag = crystal_building_1 }
+				}
+			}
+			owner = {
+				set_country_flag = crystal_building_1
+				change_variable = {
+					which = crystal_building_num
+					value = 1
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_building = building_crystal_zoo
+				owner = {
+					NOT = { has_country_flag = crystal_building_2 }
+				}
+			}
+			owner = {
+				set_country_flag = crystal_building_2
+				change_variable = {
+					which = crystal_building_num
+					value = 1
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_building = building_crystal_sports_arena
+				owner = {
+					NOT = { has_country_flag = crystal_building_3 }
+				}
+			}
+			owner = {
+				set_country_flag = crystal_building_3
+				change_variable = {
+					which = crystal_building_num
+					value = 1
+				}
+			}
+		}
+	}
+}
+
+# After finishing building once
+country_event = {
+	id = crystalcountry.110
+	title = "crystalcountry.110.title"
+	desc = "crystalcountry.110.desc"
+	picture = GFX_evt_crystal_throne
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = crystal_building_num
+			value > 0
+		}
+		has_country_flag = crystalcountry_100
+		NOT = {	has_country_flag = crystal_build_mission_1 }
+		NOT = { has_country_flag = defeat_king_sombra }
+	}
+
+	immediate = {
+		country_event = { id = crystalcountry.210 days = 180 }
+		set_country_flag = crystal_build_mission_1
+	}
+
+	option = {
+		name = "crystalcountry.110.a"
+		add_event_chain_counter = {
+			event_chain = alter_the_situation_2
+			counter = crystal_mission_2
+			amount = 1
+		}
+		hidden_effect = {
+			country_event = { id = crystalcountry.120 days = 5 }
+		}
+	}
+
+	after = {
+		remove_country_flag = crystalcountry_100
+	}
+}
+
+country_event = {
+	id = crystalcountry.120
+	title = "crystalcountry.110.title"
+	desc = {
+		trigger = {
+			has_country_flag = crystalcountry_choise_a
+		}
+		text = "crystalcountry.120.desc.a"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = crystalcountry_choise_b
+		}
+		text = "crystalcountry.120.desc.b"
+	}
+	picture = GFX_evt_crystal_throne
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			10 = { set_country_flag = crystalcountry_choise_a }
+			10 = { set_country_flag = crystalcountry_choise_b }
+		}
+	}
+
+	option = {
+		name = "crystalcountry.120.a"
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = crystalcountry_choise_b
+					NOT = { has_country_flag = crystal_wrong_chiose }
+				}
+				set_country_flag = crystal_wrong_chiose
+			}
+			set_country_flag = crystalcountry_120_a
+		}
+	}
+
+	option = {
+		name = "crystalcountry.120.b"
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = crystalcountry_choise_a
+					NOT = { has_country_flag = crystal_wrong_chiose }
+				}
+				set_country_flag = crystal_wrong_chiose
+			}
+			set_country_flag = crystalcountry_120_b
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			set_country_flag = crystal_build_mission_1_0
+			remove_country_flag = crystalcountry_choise_a
+			remove_country_flag = crystalcountry_choise_b
+			subtract_variable = {
+				which = crystal_building_num
+				value = 1
+			}
+		}
+	}
+}
+
+# After finishing building once
+country_event = {
+	id = crystalcountry.130
+	title = "crystalcountry.130.title"
+	desc = {
+		trigger = {
+			has_country_flag = crystalcountry_120_a
+		}
+		text = "crystalcountry.130.desc.a"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = crystalcountry_120_b
+		}
+		text = "crystalcountry.130.desc.b"
+	}
+	picture = GFX_evt_crystal_spiral_stairs
+	show_sound = event_crystal_ship
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = crystal_building_num
+			value > 0
+		}
+		has_country_flag = crystal_build_mission_1_0
+		NOT = {	has_country_flag = crystal_build_mission_2 }
+		NOT = { has_country_flag = defeat_king_sombra }
+	}
+
+	immediate = {
+		set_country_flag = crystal_build_mission_2
+	}
+
+	option = {
+		name = "crystalcountry.130.a"
+		add_event_chain_counter = {
+			event_chain = alter_the_situation_2
+			counter = crystal_mission_2
+			amount = 1
+		}
+		if = {
+			limit = {
+				has_country_flag = crystal_wrong_chiose
+				NOT = { has_modifier = king_sombra_curse }
+			}
+			custom_tooltip = "crystal_wrong_chiose_tooltip"
+			hidden_effect = {
+				add_modifier = {
+					modifier = king_sombra_curse
+					days = -1
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = crystalcountry.140 days = 5 }
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = crystalcountry_120_a
+			remove_country_flag = crystalcountry_120_b
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.140
+	title = "crystalcountry.130.title"
+	desc = {
+		trigger = {
+			has_country_flag = crystalcountry_choise_a
+		}
+		text = "crystalcountry.140.desc.a"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = crystalcountry_choise_b
+		}
+		text = "crystalcountry.140.desc.b"
+	}
+	picture = GFX_evt_the_door
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			10 = { set_country_flag = crystalcountry_choise_a }
+			10 = { set_country_flag = crystalcountry_choise_b }
+		}
+	}
+
+	option = {
+		name = "crystalcountry.120.a"
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = crystalcountry_choise_b
+					NOT = { has_country_flag = crystal_wrong_chiose }
+				}
+				set_country_flag = crystal_wrong_chiose
+			}
+			set_country_flag = crystalcountry_140_a
+		}
+	}
+
+	option = {
+		name = "crystalcountry.120.b"
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = crystalcountry_choise_a
+					NOT = { has_country_flag = crystal_wrong_chiose }
+				}
+				set_country_flag = crystal_wrong_chiose
+			}
+			set_country_flag = crystalcountry_140_b
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			set_country_flag = crystal_build_mission_2_0
+			remove_country_flag = crystalcountry_choise_a
+			remove_country_flag = crystalcountry_choise_b
+			subtract_variable = {
+				which = crystal_building_num
+				value = 1
+			}
+		}
+	}
+}
+
+# After finishing building once
+country_event = {
+	id = crystalcountry.150
+	title = "crystalcountry.150.title"
+	desc = {
+		trigger = {
+			has_country_flag = crystalcountry_140_a
+		}
+		text = "crystalcountry.150.desc.a"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = crystalcountry_140_b
+		}
+		text = "crystalcountry.150.desc.b"
+	}
+	picture = GFX_evt_find_crystal_heart
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+
+	trigger = {
+		check_variable = {
+			which = crystal_building_num
+			value > 0
+		}
+		has_country_flag = crystal_build_mission_2_0
+		NOT = { has_country_flag = crystal_build_mission_3 }
+		NOT = { has_country_flag = defeat_king_sombra }
+	}
+
+	immediate = {
+		set_country_flag = crystal_build_mission_3
+	}
+
+	option = {
+		name = "crystalcountry.150.a"
+		add_event_chain_counter = {
+			event_chain = alter_the_situation_2
+			counter = crystal_mission_2
+			amount = 1
+		}
+		if = {
+			limit = {
+				has_country_flag = crystal_wrong_chiose
+				NOT = { has_modifier = king_sombra_curse }
+			}
+			custom_tooltip = "crystal_wrong_chiose_tooltip"
+			hidden_effect = {
+				add_modifier = {
+					modifier = king_sombra_curse
+					days = -1
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = crystalcountry.160 days = 5 }
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = crystalcountry_140_a
+			remove_country_flag = crystalcountry_140_b
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.160
+	title = "crystalcountry.150.title"
+	desc = "crystalcountry.160.desc"
+	picture = GFX_evt_find_crystal_heart
+	is_triggered_only = yes
+
+	option = {
+		name = "crystalcountry.160.a"
+		add_relic = r_crystal_heart
+		hidden_effect = {
+			country_event = { id = crystalcountry.170 days = 31 }
+			country_event = { id = pmtspecial.1001 }		#Alert message
+			if = {
+				limit = {
+					NOT = { has_country_flag = crystal_wrong_chiose }
+				}
+				country_event = { id = crystalcountry.161 days = 30 }
+			}
+			else_if = {
+				limit = { has_country_flag = crystal_wrong_chiose }
+				country_event = { id = crystalcountry.162 days = 30 }
+			}
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			subtract_variable = {
+				which = crystal_building_num
+				value = 1
+			}
+			clear_variable = crystal_building_num
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.161
+	title = "crystalcountry.161.title"
+	desc = "crystalcountry.161.desc"
+	picture = GFX_evt_king_sombra_come
+	show_sound = event_activating_unknown_technology
+	is_triggered_only = yes
+
+	trigger = {
+		years_passed < 50 
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = stage_a_comeback
+			}
+			remove_modifier = stage_a_comeback
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = fight_with_king_sombra }
+			}
+			set_country_flag = fight_with_king_sombra
+		}
+		save_event_target_as = crystal_empire
+		random_planet_within_border = {
+			solar_system = {
+				create_country = {
+					name = "NAME_King_Sombra"
+					type = king_sombra
+					flag = {
+						icon = {
+							category = "domination"
+							file = "domination_5.dds"
+						}
+						background = {
+							category = "backgrounds"
+							file = "triangle_split.dds"
+						}
+						colors = {
+							"red"
+							"dark_grey"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						set_faction_hostility = {
+							target = event_target:crystal_empire
+							set_hostile = yes
+							set_neutral = no
+							set_friendly = no
+						}
+						declare_war = {
+							target = event_target:crystal_empire
+							name = "NAME_crystal_empire_war"
+							attacker_war_goal = wg_crystal_empire_war
+						}
+						save_global_event_target_as = king_sombra_country
+						if = {
+							limit = {
+								has_global_flag = using_pony_mod
+							}
+							create_species = {
+								name = "NAME_Umbrum"
+								class = mod_pony
+								portrait = "sombra"
+							}
+						}
+						else = {
+							create_species = {
+								name = "NAME_Umbrum"
+								class = PONY_CRYSTAL
+								portrait = "pony_ruler_04"
+							}
+						}
+						create_leader = {
+							class = admiral
+							species = last_created_species
+							name = "King_Sombra"
+							gender = male
+							event_leader = yes
+							hide_age = yes
+							skill = 5
+							traits = {
+								trait = leader_trait_umbrum
+							}
+						}
+						create_fleet = {
+							name = "NAME_King_Sombra_Fleet"
+							settings = {
+								spawn_debris = no
+								is_boss = yes
+							}
+							effect = {
+								set_owner = event_target:king_sombra_country
+								create_ship = {
+									name = "NAME_King_Sombra"
+									design = "NAME_King_Sombra"
+									graphical_culture = "necroid_01"
+								}
+								assign_leader = last_created_leader
+								while = {
+									count = 5
+									create_ship = {
+										name = "NAME_Umbrum"
+										design = "NAME_Umbrum"
+										graphical_culture = "necroid_01"
+									}
+								}
+								set_location = {
+									target = PREVPREVPREV
+									distance = 10
+									angle = 90
+									direction = in_system
+								}
+								set_fleet_stance = aggressive
+								set_aggro_range_measure_from = self
+								set_aggro_range = 350
+							}
+						}
+					}
+				}
+			}
+		}
+		every_country = { establish_communications_no_message = event_target:king_sombra_country }
+		every_planet_within_border = {
+			limit = {
+				has_modifier = pm_weird_shadow
+			}
+			remove_modifier = pm_weird_shadow
+			create_fleet = {
+				name = "NAME_Umbrum"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:king_sombra_country
+					while = {
+						count = 6
+						create_ship = {
+							name = "NAME_Umbrum"
+							design = "NAME_Umbrum"
+							graphical_culture = "necroid_01"
+						}
+						set_location = {
+							target = PREV
+							distance = 10
+							angle = 90
+							direction = in_system
+						}
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 350
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "crystalcountry.161.a"
+	}
+}
+
+country_event = {
+	id = crystalcountry.162
+	title = "crystalcountry.161.title"
+	desc = "crystalcountry.162.desc"
+	picture = GFX_evt_king_sombra_come
+	show_sound = event_activating_unknown_technology
+	is_triggered_only = yes
+
+	trigger = {
+		years_passed < 50 
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				has_modifier = stage_a_comeback
+			}
+			remove_modifier = stage_a_comeback
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = fight_with_king_sombra }
+			}
+			set_country_flag = fight_with_king_sombra
+		}
+		save_event_target_as = crystal_empire
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = crystal_empire_capital
+			}
+			solar_system = {
+				create_country = {
+					name = "NAME_King_Sombra"
+					type = king_sombra
+					flag = {
+						icon = {
+							category = "domination"
+							file = "domination_5.dds"
+						}
+						background = {
+							category = "backgrounds"
+							file = "triangle_split.dds"
+						}
+						colors = {
+							"red"
+							"dark_grey"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						set_faction_hostility = {
+							target = event_target:crystal_empire
+							set_hostile = yes
+							set_neutral = no
+							set_friendly = no
+						}
+						declare_war = {
+							target = event_target:crystal_empire
+							name = "NAME_crystal_empire_war"
+							attacker_war_goal = wg_crystal_empire_war
+						}
+						save_global_event_target_as = king_sombra_country
+						if = {
+							limit = {
+								has_global_flag = using_pony_mod
+							}
+							create_species = {
+								name = "NAME_Umbrum"
+								class = mod_pony
+								portrait = "sombra"
+							}
+						}
+						else = {
+							create_species = {
+								name = "NAME_Umbrum"
+								class = PONY_CRYSTAL
+								portrait = "pony_ruler_04"
+							}
+						}
+						create_leader = {
+							class = admiral
+							species = last_created_species
+							name = "King_Sombra"
+							gender = male
+							event_leader = yes
+							hide_age = yes
+							skill = 5
+							traits = {
+								trait = leader_trait_umbrum
+							}
+						}
+						create_fleet = {
+							name = "NAME_King_Sombra_Fleet"
+							settings = {
+								spawn_debris = no
+								is_boss = yes
+							}
+							effect = {
+								set_owner = event_target:king_sombra_country
+								create_ship = {
+									name = "NAME_King_Sombra"
+									design = "NAME_King_Sombra"
+									graphical_culture = "necroid_01"
+								}
+								assign_leader = last_created_leader
+								while = {
+									count = 10
+									create_ship = {
+										name = "NAME_Umbrum"
+										design = "NAME_Umbrum"
+										graphical_culture = "necroid_01"
+									}
+								}
+								set_location = {
+									target = PREVPREVPREV
+									distance = 10
+									angle = 90
+									direction = in_system
+								}
+								set_fleet_stance = aggressive
+								set_aggro_range_measure_from = self
+								set_aggro_range = 350
+							}
+						}
+					}
+				}
+			}
+		}
+		every_country = { establish_communications_no_message = event_target:king_sombra_country }
+		every_planet_within_border = {
+			limit = {
+				has_modifier = pm_weird_shadow
+			}
+			remove_modifier = pm_weird_shadow
+			create_fleet = {
+				name = "NAME_Umbrum"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:king_sombra_country
+					while = {
+						count = 6
+						create_ship = {
+							name = "NAME_Umbrum"
+							design = "NAME_Umbrum"
+							graphical_culture = "necroid_01"
+						}
+						set_location = {
+							target = PREV
+							distance = 10
+							angle = 90
+							direction = in_system
+						}
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 350
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "crystalcountry.162.a"
+	}
+}
+
+country_event = {
+	id = crystalcountry.170
+	title = "crystalcountry.150.title"
+	desc = "crystalcountry.170.desc"
+	picture = GFX_evt_find_crystal_heart
+	is_triggered_only = yes
+
+	option = {
+		name = "crystalcountry.170.a"
+		hidden_effect = {
+			country_event = { id = crystalcountry.180 days = 1 }
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.180
+	title = "crystalcountry.180.title"
+	desc = "crystalcountry.180.desc"
+	picture = GFX_evt_crystal_empire_castle
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	option = {
+		name = "crystalcountry.180.a"
+		end_event_chain = alter_the_situation_2
+		end_event_chain = find_crystal_heart_chain
+		begin_event_chain = {
+			event_chain = power_the_crystal_heart
+			target = root
+		}
+		add_resource = {
+			unity = 2000
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.190
+	title = "crystalcountry.190.title"
+	desc = "crystalcountry.190.desc"
+	picture = GFX_evt_power_crystal_heart
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = fight_with_king_sombra
+		has_event_chain = power_the_crystal_heart
+		has_modifier = crystal_heart
+		NOT = { has_country_flag = defeat_king_sombra }
+	}
+
+	immediate = {
+		set_country_flag = defeat_king_sombra
+		country_event = { id = crystalcountry.191 days = 1 }
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = crystal_empire_capital
+			}
+			add_modifier = {
+				modifier = pm_crystal_fair
+				days = -1
+			}
+		}
+	}
+
+	option = {
+		name = "crystalcountry.190.a"
+		end_event_chain = power_the_crystal_heart
+		remove_modifier = king_sombra_curse
+		remove_modifier = under_the_shadow
+	}
+}
+
+country_event = {
+	id = crystalcountry.191
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:king_sombra_country = {
+			every_owned_fleet = {
+				destroy_fleet = this
+			}
+		}
+		remove_country_flag = crystal_pony_lock_tech
+	}
+
+	after = {
+		event_target:king_sombra_country = {
+			destroy_country = yes
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.200
+	title = "crystalcountry.200.title"
+	desc = "crystalcountry.200.desc"
+	picture = GFX_evt_frozen
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = find_shadow
+		random_planet_within_border = {
+			limit = {
+				NOT = { has_modifier = pm_weird_shadow }
+				is_colony = no
+				is_star = no
+			}
+			save_event_target_as = shadow_target
+			add_modifier = {
+				modifier = pm_weird_shadow
+				days = -1
+			}
+		}
+	}
+
+	option = {
+		name = "crystalcountry.200.a"
+	}
+}
+
+country_event = {
+	id = crystalcountry.201
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = find_shadow
+		NOT = { has_country_flag = fight_with_king_sombra }
+		NOT = { has_country_flag = defeat_king_sombra }
+	}
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				NOT = { has_modifier = pm_weird_shadow }
+				is_colony = no
+				is_star = no
+			}
+			save_event_target_as = shadow_target
+			add_modifier = {
+				modifier = pm_weird_shadow
+				days = -1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = crystalcountry.210
+	title = "crystalcountry.200.title"
+	desc = "crystalcountry.210.desc"
+	picture = GFX_evt_frozen
+	is_triggered_only = yes
+
+	option = {
+		name = "crystalcountry.210.a"
+	}
+}
+
+country_event = {
+	id = crystalcountry.220
+	title = "crystalcountry.161.title"
+	desc = "crystalcountry.161.desc"
+	picture = GFX_evt_king_sombra_come
+	is_triggered_only = yes
+
+	trigger = {
+		has_origin = origin_crystal_empire
+		pmt_crystal_pony_species_trigger = yes
+		is_country_type = default
+		NOT = { has_country_flag = fight_with_king_sombra }
+		years_passed >= 50
+		NOT = { has_country_flag = defeat_king_sombra }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = fight_with_king_sombra }
+			}
+			set_country_flag = fight_with_king_sombra
+		}
+		save_event_target_as = crystal_empire
+		random_planet_within_border = {
+			solar_system = {
+				create_country = {
+					name = "NAME_King_Sombra"
+					type = king_sombra
+					flag = {
+						icon = {
+							category = "domination"
+							file = "domination_5.dds"
+						}
+						background = {
+							category = "backgrounds"
+							file = "triangle_split.dds"
+						}
+						colors = {
+							"red"
+							"dark_grey"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						add_modifier = {
+							modifier = king_sombra_fleet
+							days = -1
+						}
+						set_faction_hostility = {
+							target = event_target:crystal_empire
+							set_hostile = yes
+							set_neutral = no
+							set_friendly = no
+						}
+						declare_war = {
+							target = event_target:crystal_empire
+							name = "NAME_crystal_empire_war"
+							attacker_war_goal = wg_crystal_empire_war
+						}
+						save_global_event_target_as = king_sombra_country
+						if = {
+							limit = {
+								has_global_flag = using_pony_mod
+							}
+							create_species = {
+								name = "NAME_Umbrum"
+								class = mod_pony
+								portrait = "sombra"
+							}
+						}
+						else = {
+							create_species = {
+								name = "NAME_Umbrum"
+								class = PONY_CRYSTAL
+								portrait = "pony_ruler_04"
+							}
+						}
+						create_leader = {
+							class = admiral
+							species = last_created_species
+							name = "King_Sombra"
+							gender = male
+							event_leader = yes
+							hide_age = yes
+							skill = 5
+							traits = {
+								trait = leader_trait_umbrum
+							}
+						}
+					}
+				}
+				create_fleet = {
+					name = "NAME_King_Sombra_Fleet"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+					}
+					effect = {
+						set_owner = event_target:king_sombra_country
+						create_ship = {
+							name = "NAME_King_Sombra"
+							design = "NAME_King_Sombra"
+							graphical_culture = "necroid_01"
+						}
+						assign_leader = last_created_leader
+						while = {
+							count = 5
+							create_ship = {
+								name = "NAME_Umbrum"
+								design = "NAME_Umbrum"
+								graphical_culture = "necroid_01"
+							}
+						}
+						set_location = {
+							target = PREVPREV
+							distance = 10
+							angle = 90
+							direction = in_system
+						}
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 350
+					}
+				}
+			}
+		}
+		every_country = { establish_communications_no_message = event_target:king_sombra_country }
+		every_planet_within_border = {
+			limit = {
+				has_modifier = pm_weird_shadow
+			}
+			remove_modifier = pm_weird_shadow
+			create_fleet = {
+				name = "NAME_Umbrum"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:king_sombra_country
+					while = {
+						count = 6
+						create_ship = {
+							name = "NAME_Umbrum"
+							design = "NAME_Umbrum"
+							graphical_culture = "necroid_01"
+						}
+						set_location = {
+							target = PREV
+							distance = 10
+							angle = 90
+							direction = in_system
+						}
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 350
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "crystalcountry.162.a"
+	}
+}
+
+country_event = {
+	id = crystalcountry.221
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:king_sombra_country
+		event_target:king_sombra_country = {
+			num_fleets < 10
+		}
+		has_country_flag = fight_with_king_sombra
+		NOT = { has_country_flag = defeat_king_sombra }	
+	}
+
+	immediate = {
+		random_planet_within_border = {
+			create_fleet = {
+				name = "NAME_Umbrum"
+				settings = {
+					spawn_debris = no
+				}
+				effect = {
+					set_owner = event_target:king_sombra_country
+					while = {
+						count = 6
+						create_ship = {
+							name = "NAME_Umbrum"
+							design = "NAME_Umbrum"
+							graphical_culture = "necroid_01"
+						}
+						set_location = {
+							target = PREV
+							distance = 10
+							angle = 90
+							direction = in_system
+						}
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 350
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = crystalcountry.222
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		planet_devastation >= 100
+		FROM = { is_country_type = king_sombra }
+	}
+
+	immediate = {
+		every_owned_pop = {
+			kill_pop = yes
+		}
+		destroy_colony = yes
+		reset_planet = yes
+	}
+}
+
+fleet_event = {
+	id = crystalcountry.223
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:king_sombra_country
+		This = {
+			exists = owner
+			owner = { is_same_value = event_target:king_sombra_country }
+		}
+	}
+
+	immediate = {
+		From = {
+			if = {
+				limit = {
+					owner = {
+						is_primitive = yes
+					}
+					NOT = { has_planet_flag = orbital_bombardment_king_sombra }
+				}
+				set_timed_planet_flag = {
+					flag = orbital_bombardment_king_sombra
+					days = 360
+				}
+				planet_event = { id = crystalcountry.224 days = 360 }
+			}
+			if = {
+				limit = {
+					owner = {
+						is_primitive = no
+						NOT = { has_origin = origin_crystal_empire }
+					}
+					NOT = { has_modifier = pm_umbrum_raid }
+				}
+				add_modifier = {
+					modifier = pm_umbrum_raid
+					days = 1800
+				}
+				planet_event = { id = crystalcountry.224 days = 1800 }
+				planet_event = { id = crystalcountry.225 }
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = crystalcountry.224
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		solar_system = {
+			random_fleet_in_system = {
+				limit = {
+					exists = owner
+					owner = { is_same_value = event_target:king_sombra_country }
+					orbit = { is_same_value = root }
+				}
+				orbit = {
+					planet_event = { id = crystalcountry.226 }
+					every_owned_pop = {
+						kill_pop = yes
+					}
+					destroy_colony = yes
+					reset_planet = yes
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = crystalcountry.225
+	title = "crystalcountry.225.title"
+	desc = "crystalcountry.225.desc"
+	picture = GFX_evt_king_sombra_come
+	show_sound = event_burning_city
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = king_sombra_alert
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = king_sombra_alert
+		}
+	}
+
+	option = {
+		name = "crystalcountry.225.a"
+	}
+}
+
+planet_event = {
+	id = crystalcountry.226
+	title = "crystalcountry.225.title"
+	desc = "crystalcountry.226.desc"
+	picture = GFX_evt_king_sombra_come
+	show_sound = event_burning_city
+	is_triggered_only = yes
+	
+	option = {
+		name = "crystalcountry.226.a"
+	}
+}

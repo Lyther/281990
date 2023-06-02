@@ -1,0 +1,1085 @@
+#This event is meant to help AIs get better at not being stupid and to cirucmvant their many terrible decisions, or not doing things you expect them to do in
+#the mod. So here it goes, Mr Maximus Black.
+
+namespace = acot_ai_helper
+
+##########THE MASTER CHECKLIST#############YEARLY
+country_event = {
+	id = acot_ai_helper.1
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 2
+	}
+	
+	trigger = {
+		is_ai = yes
+		NOT = {
+			has_global_flag = acot_sr_helper_forbidden
+		}
+		OR = {
+			AND = {
+				resource_stockpile_compare = {
+					resource = acot_sr_dark_energy
+					value <= 100
+				}
+				has_technology = tech_mine_dark_energy
+			}
+			AND = {
+				resource_stockpile_compare = {
+					resource = sr_dark_matter
+					value <= 100
+				}
+				has_technology = tech_mine_dark_matter
+			}
+			AND = {
+				resource_stockpile_compare = {
+					resource = acot_sr_stellarite
+					value <= 100
+				}
+				has_technology = tech_dark_matter_power_core_se
+			}
+		}
+	}
+
+	immediate = {
+		IF = {
+			limit = {
+				has_technology = tech_mine_dark_energy
+			}
+			add_resource = {
+				acot_sr_dark_energy = 1000
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_mine_dark_energy
+			}
+			add_resource = {
+				sr_dark_matter = 1000
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_dark_matter_power_core_se
+			}
+			add_resource = {
+				acot_sr_stellarite = 1000
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_ai_helper.2
+	hide_window = yes
+
+	mean_time_to_happen = {
+		years = 2
+	}
+	
+	trigger = {
+		is_ai = yes
+		is_country_type = default
+		is_at_war = no
+		NOT = {
+			has_global_flag = acot_sr_helper_forbidden
+		}
+		OR = {
+			AND = {
+				mid_game_years_passed <= 0
+				num_armies <= 20
+			}
+			AND = {
+				mid_game_years_passed >= 0
+				end_game_years_passed <= 0
+				num_armies <= 40
+			}
+			AND = {
+				end_game_years_passed >= 0
+				num_armies <= 60
+			}
+		}
+		OR = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 500
+			}
+			has_monthly_income = {
+				resource = energy
+				value >= 20
+			}
+		}
+	}
+
+	immediate = {
+		IF = {
+			limit = {
+				end_game_years_passed >= 0	
+			}
+			IF = {
+				limit = {
+					is_regular_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 20
+							create_army = {
+								owner = root
+								type = assault_army
+								species = root.species
+							}
+						}
+						while = {
+							count = 10
+							create_army = {
+								owner = root
+								type = acot_light_armor
+								species = root.species
+							}
+						}
+						while = {
+							count = 5
+							create_army = {
+								owner = root
+								type = acot_heavy_armor
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_dm
+						NOT = {
+							has_technology = tech_acot_army_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 20
+							create_army = {
+								owner = root
+								type = acot_infantry_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 10
+							create_army = {
+								owner = root
+								type = acot_light_armor_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 5
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_ae
+					}
+					capital_scope = {
+						while = {
+							count = 20
+							create_army = {
+								owner = root
+								type = acot_infantry_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 10
+							create_army = {
+								owner = root
+								type = acot_light_armor_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 5
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					is_hive_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_hive_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 25
+							create_army = {
+								owner = root
+								type = acot_hive_infantry_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = acot_hive_light_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 3
+							create_army = {
+								owner = root
+								type = acot_hive_heavy_1
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_hive_dm
+						NOT = {
+							has_technology = tech_acot_army_hive_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 25
+							create_army = {
+								owner = root
+								type = acot_hive_infantry_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = acot_hive_light_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 3
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_hive_ae
+					}
+					capital_scope = {
+						while = {
+							count = 20
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 5
+							create_army = {
+								owner = root
+								type = acot_hive_heavy_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					is_machine_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_machine_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = machine_assault_2
+								species = root.species
+							}
+						}
+						while = {
+							count = 5
+							create_army = {
+								owner = root
+								type = machine_assault_3
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_machine_dm
+						NOT = {
+							has_technology = tech_acot_army_machine_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = acot_army_machine_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = acot_army_machine_light_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 5
+							create_army = {
+								owner = root
+								type = acot_army_machine_heavy_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_machine_ae
+					}
+					capital_scope = {
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = acot_army_machine_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 15
+							create_army = {
+								owner = root
+								type = acot_army_machine_light_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 5
+							create_army = {
+								owner = root
+								type = acot_army_machine_heavy_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+		}
+		IF = {
+			limit = {
+				mid_game_years_passed >= 0
+				end_game_years_passed <= 0	
+			}
+			IF = {
+				limit = {
+					is_regular_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 10
+							create_army = {
+								owner = root
+								type = assault_army
+								species = root.species
+							}
+						}
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_light_armor
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_heavy_armor
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_dm
+						NOT = {
+							has_technology = tech_acot_army_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 10
+							create_army = {
+								owner = root
+								type = acot_infantry_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_light_armor_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_ae
+					}
+					capital_scope = {
+						while = {
+							count = 10
+							create_army = {
+								owner = root
+								type = acot_infantry_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_light_armor_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					is_hive_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_hive_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 12
+							create_army = {
+								owner = root
+								type = acot_hive_infantry_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 8
+							create_army = {
+								owner = root
+								type = acot_hive_light_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_hive_heavy_1
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_hive_dm
+						NOT = {
+							has_technology = tech_acot_army_hive_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 12
+							create_army = {
+								owner = root
+								type = acot_hive_infantry_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 8
+							create_army = {
+								owner = root
+								type = acot_hive_light_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_hive_ae
+					}
+					capital_scope = {
+						while = {
+							count = 12
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 8
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_hive_heavy_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					is_machine_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_machine_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 8
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = machine_assault_2
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = machine_assault_3
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_machine_dm
+						NOT = {
+							has_technology = tech_acot_army_machine_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 8
+							create_army = {
+								owner = root
+								type = acot_army_machine_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_army_machine_light_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_army_machine_heavy_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_machine_ae
+					}
+					capital_scope = {
+						while = {
+							count = 8
+							create_army = {
+								owner = root
+								type = acot_army_machine_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_army_machine_light_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_army_machine_heavy_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+		}
+		IF = {
+			limit = {
+				mid_game_years_passed <= 0			
+			}
+			IF = {
+				limit = {
+					is_regular_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = assault_army
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_light_armor
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_heavy_armor
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_dm
+						NOT = {
+							has_technology = tech_acot_army_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_infantry_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_light_armor_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_ae
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_infantry_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_light_armor_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					is_hive_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_hive_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_hive_infantry_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_hive_light_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_hive_heavy_1
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_hive_dm
+						NOT = {
+							has_technology = tech_acot_army_hive_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_hive_infantry_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_hive_light_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_heavy_armor_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_hive_ae
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_hive_heavy_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					is_machine_empire = yes
+				}
+				IF = {
+					limit = {
+						NOT = {
+							has_technology = tech_acot_army_machine_dm
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = machine_assault_1
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = machine_assault_2
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = machine_assault_3
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_machine_dm
+						NOT = {
+							has_technology = tech_acot_army_machine_ae
+						}
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_army_machine_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_army_machine_light_dm
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_army_machine_heavy_dm
+								species = root.species
+							}
+						}
+					}
+				}
+				IF = {
+					limit = {
+						has_technology = tech_acot_army_machine_ae
+					}
+					capital_scope = {
+						while = {
+							count = 6
+							create_army = {
+								owner = root
+								type = acot_army_machine_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 2
+							create_army = {
+								owner = root
+								type = acot_army_machine_light_ae
+								species = root.species
+							}
+						}
+						while = {
+							count = 1
+							create_army = {
+								owner = root
+								type = acot_army_machine_heavy_ae
+								species = root.species
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = acot_ai_helper.3
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	pre_triggers = {
+		has_owner = yes
+	}
+
+	trigger = {
+		exists = owner
+		owner = {
+			is_ai = yes
+			is_playable_country = yes
+		}
+		has_enigmatic_capital = yes
+		free_building_slots <= 4
+	}
+
+	immediate = {
+		acot_upgrade_to_delta_building = yes
+	}
+}

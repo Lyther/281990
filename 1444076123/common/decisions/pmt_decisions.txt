@@ -1,0 +1,230 @@
+########################
+### Dragon Decisions ###
+########################
+
+decision_surface_melting = {
+	owned_planets_only = yes
+	prerequisites = { "tech_surface_melting_state" }
+	icon = decision_molten_planet
+
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = {
+			influence = 50
+			energy = 2000
+		}
+	}
+
+	potential = {
+		habitable_structure = no
+		NOT = {
+			has_planet_flag = decision_surface_melting
+		}
+	}
+
+	effect = {
+		custom_tooltip = "decision_surface_melting_tooltip"
+		hidden_effect = {
+			set_planet_flag = decision_surface_melting
+			random_list = {
+				5 = {
+					while = {
+						count = 1
+						random_list = {
+							5 = { add_deposit = d_melting_surface_1 }
+							5 = { add_deposit = d_melting_surface_2 }
+							5 = { add_deposit = d_melting_surface_3 }
+							5 = { add_deposit = d_melting_surface_4 }
+						}
+					}
+				}
+				5 = {
+					while = {
+						count = 2
+						random_list = {
+							5 = { add_deposit = d_melting_surface_1 }
+							5 = { add_deposit = d_melting_surface_2 }
+							5 = { add_deposit = d_melting_surface_3 }
+							5 = { add_deposit = d_melting_surface_4 }
+						}
+					}
+				}
+				5 = {
+					while = {
+						count = 3
+						random_list = {
+							5 = { add_deposit = d_melting_surface_1 }
+							5 = { add_deposit = d_melting_surface_2 }
+							5 = { add_deposit = d_melting_surface_3 }
+							5 = { add_deposit = d_melting_surface_4 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 5
+	}
+}
+
+decision_crystal_fair = {
+	owned_planets_only = yes
+	icon = decision_alien_propaganda
+
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = {
+			influence = 50
+			energy = 500
+		}
+	}
+
+	potential = {
+		owner = {
+			has_origin = origin_crystal_empire
+			NOT = {
+				has_country_flag = hold_crystal_fair
+			}
+		}
+		has_planet_flag = crystal_empire_capital
+	}
+
+	effect = {
+		custom_tooltip = "decision_crystal_fair_tooltip"
+		hidden_effect = {
+			owner = {
+				set_country_flag = hold_crystal_fair
+				country_event = { id = crystalcountry.2 days = 1 }
+				country_event = { id = crystalcountry.100 days = 360 }
+				country_event = { id = crystalcountry.200 days = 480 }
+			}
+		}
+	}
+
+	ai_weight = {
+		weight = 1000
+	}
+}
+
+decision_rich_crystal_development = {
+	owned_planets_only = yes
+	prerequisites = { "tech_crystal_rich_land" }
+	icon = decision_rich_crystal_development
+
+	enactment_time = 360
+	resources = {
+		category = decisions
+		cost = {
+			energy = 500
+		}
+	}
+
+	potential = {
+		habitable_structure = no
+		NOT = {
+			has_planet_flag = decision_rich_crystal_development
+		}
+	}
+
+	effect = {
+		random_list = {
+			20 = { add_deposit = d_crystalline_caverns }
+			10 = { add_deposit = d_crystal_forest }
+			10 = { add_deposit = d_crystal_reef }
+		}
+		hidden_effect = {
+			set_planet_flag = decision_rich_crystal_development
+		}
+	}
+
+	ai_weight = {
+		weight = 5
+	}
+}
+
+decision_remove_enervation = {
+	owned_planets_only = yes
+	icon = decision_remove_enervation
+
+	enactment_time = 1080
+	resources = {
+		category = decisions
+		cost = {
+			influence = 50
+			energy = 1000
+		}
+	}
+
+	potential = {
+		has_modifier = pm_enervation_bombardment
+	}
+
+	effect = {
+		remove_modifier = pm_enervation_bombardment
+	}
+
+	ai_weight = {
+		weight = 50
+	}
+}
+
+decision_launch_vow_of_silence = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_vow_of_silence
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = { has_country_flag = finish_kirin_event_411 }
+		NOT = { has_modifier = pm_vow_of_silence }
+	}
+
+	effect = {
+		add_modifier = {
+			modifier = pm_vow_of_silence
+			days = -1
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 10
+			planet_stability <= 30
+		}
+	}
+}
+
+decision_end_vow_of_silence = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_vow_of_silence
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = { has_country_flag = finish_kirin_event_411 }
+		has_modifier = pm_vow_of_silence
+	}
+
+	effect = {
+		remove_modifier = pm_vow_of_silence
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 10
+			planet_stability >= 60
+		}
+	}
+}

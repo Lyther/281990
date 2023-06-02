@@ -1,0 +1,46 @@
+@minor_artifact_decision_cost = 2
+@minor_artifact_decision_duration = 3600
+
+artifact_acot_databank_assemble = {
+	resources = {
+		category = artifact_actions
+		cost = {
+			alloys = 15000
+			sr_dark_matter = 5000
+			acot_sr_dark_energy = 5000
+			minor_artifacts = 50
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+
+	potential = {
+		has_event_chain = acot_alpha_tech_chain
+		has_country_flag = allow_databank_steal
+		NOT = {
+			has_country_flag = has_databank
+		}
+	}
+	
+	allow = {
+		custom_tooltip = {
+			fail_text = "acot_databank_assemble_attempt_cooldown_desc"
+			NOT = { has_modifier = acot_databank_assemble_attempt }
+		}
+	}
+
+	effect = {
+		custom_tooltip = artifact_acot_databank_assemble_effect
+		hidden_effect = {
+			add_modifier = {
+				modifier = "acot_databank_assemble_attempt" 
+				days = 360
+			}
+			owner = {
+				country_event = { id = acot_alpha_matter_events.9000 days = 5 }
+			}
+		}
+	}
+}

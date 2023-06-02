@@ -1,0 +1,232 @@
+# Check if a planet can be targetd by a planet killer weapon
+# Scope:
+#   this = planet being targeted
+#   from = fleet
+#can_destroy_planet_with_PLANET_DESTRUCTION_COMPONENT = {
+#	...
+#}
+
+is_a_habitable_planet_megastructure = {
+	OR = {
+		is_planet_class = pc_nuked
+		is_planet_class = pc_infested
+		is_planet_class = pc_dark_fractured
+		is_planet_class = pc_dark_fractured_ae
+		is_planet_class = pc_acot_enigmopolis
+		habitable_planet = yes
+		habitable_structure = yes
+	}
+}
+
+can_destroy_planet_with_ACOT_PLANET_KILLER_CRACKER = { can_destroy_planet_with_PLANET_KILLER_CRACKER = yes }
+
+can_destroy_planet_with_ACOT_PLANET_KILLER_SHIELDER = { can_destroy_planet_with_PLANET_KILLER_SHIELDER = yes }
+
+can_destroy_planet_with_ACOT_PLANET_KILLER_NEUTRON = { can_destroy_planet_with_PLANET_KILLER_NEUTRON = yes }
+
+can_destroy_planet_with_ACOT_PLANET_KILLER_GODRAY = { can_destroy_planet_with_PLANET_KILLER_GODRAY = yes }
+
+can_destroy_planet_with_ACOT_PLANET_KILLER_NANOBOTS = { can_destroy_planet_with_PLANET_KILLER_NANOBOTS = yes }
+
+####
+
+can_destroy_planet_with_ACOT_SE_PLANET_KILLER_CRACKER = { can_destroy_planet_with_PLANET_KILLER_CRACKER = yes }
+
+can_destroy_planet_with_ACOT_SE_PLANET_KILLER_SHIELDER = { can_destroy_planet_with_PLANET_KILLER_SHIELDER = yes }
+
+can_destroy_planet_with_ACOT_SE_PLANET_KILLER_NEUTRON = { can_destroy_planet_with_PLANET_KILLER_NEUTRON = yes }
+
+can_destroy_planet_with_ACOT_SE_PLANET_KILLER_GODRAY = { can_destroy_planet_with_PLANET_KILLER_GODRAY = yes }
+
+can_destroy_planet_with_ACOT_SE_PLANET_KILLER_NANOBOTS = { can_destroy_planet_with_PLANET_KILLER_NANOBOTS = yes }
+
+####
+
+can_destroy_planet_with_ACOT_HE_PLANET_KILLER_CRACKER = { can_destroy_planet_with_PLANET_KILLER_CRACKER = yes }
+
+can_destroy_planet_with_ACOT_HE_PLANET_KILLER_SHIELDER = { can_destroy_planet_with_PLANET_KILLER_SHIELDER = yes }
+
+can_destroy_planet_with_ACOT_HE_PLANET_KILLER_NEUTRON = { can_destroy_planet_with_PLANET_KILLER_NEUTRON = yes }
+
+can_destroy_planet_with_ACOT_HE_PLANET_KILLER_GODRAY = { can_destroy_planet_with_PLANET_KILLER_GODRAY = yes }
+
+can_destroy_planet_with_ACOT_HE_PLANET_KILLER_NANOBOTS = { can_destroy_planet_with_PLANET_KILLER_NANOBOTS = yes }
+
+
+###########################
+
+can_destroy_planet_with_ACOT_EMISSARY_BEAM = {
+	custom_tooltip = {
+		text = acot_emissary_on_cooldown
+		FROM = {
+			NOT = {
+				has_fleet_flag = acot_emissary_beam_delay
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = is_shielded
+		NOR = {
+			is_planet_class = pc_shielded
+			is_planet_class = pc_ringworld_shielded
+			is_planet_class = pc_habitat_shielded
+		}
+	}
+	OR = {
+		custom_tooltip = {
+			text = acot_is_valid_for_emissary_beam
+			OR = {
+				NOT = { exists = space_owner }
+				AND = {
+					exists = space_owner
+					space_owner = { is_same_value = from.owner }
+				}
+			}
+			is_a_planet = yes
+			is_asteroid = no
+			is_star = no
+			is_artificial = no
+			NOR = {
+				is_planet_class = pc_gas_giant
+				is_planet_class = pc_asteroid	
+				is_planet_class = pc_habitat
+				is_planet_class = pc_ringworld_habitable
+			}
+		}		
+	}
+}
+
+can_destroy_planet_with_ACOT_EMISSARY_BEAM_LANDING = {
+	custom_tooltip = {
+		text = acot_emissary_on_cooldown
+		FROM = {
+			NOT = {
+				has_fleet_flag = acot_emissary_beam_delay
+			}
+		}
+	}
+	OR = {
+		custom_tooltip = {
+			text = is_not_hostile_cracker
+			exists = owner
+			is_colony = yes
+			owner = {
+				OR = {
+					is_at_war_with = from.owner
+					is_hostile_to = from.owner
+					is_country_type = swarm
+					is_country_type = extradimensional
+					is_country_type = extradimensional_2
+					is_country_type = extradimensional_3
+					is_country_type = ai_empire
+				}
+			}
+		}
+		custom_tooltip = {
+			text = acot_is_valid_for_emissary_beam
+			exists = space_owner
+			space_owner = { is_same_value = from.owner }
+			is_colonizable = yes
+		}		
+	}
+}
+
+can_destroy_planet_with_ACOT_EMISSARY_BEAM_REMOVE = {
+	custom_tooltip = {
+		text = acot_emissary_on_cooldown
+		FROM = {
+			NOT = {
+				has_fleet_flag = acot_emissary_beam_delay
+			}
+		}
+	}
+	OR = {
+		custom_tooltip = {
+			text = acot_is_valid_for_emissary_beam
+			exists = space_owner
+			space_owner = { is_same_value = from.owner }
+			is_star = no
+			OR = {
+				is_artificial = no
+				is_planet_class = pc_habitat
+			}
+			NOR = {
+				is_planet_class = pc_ringworld_habitable
+			}
+		}		
+	}
+}
+
+##################
+
+can_destroy_planet_with_ACOT_HERCULEAN_PLANET_RESONANT_BEAM_8E = {
+	OR = {
+		custom_tooltip = {
+			text = is_not_hostile_cracker
+			OR = {
+				AND = {
+					exists = space_owner
+					space_owner = {
+						OR = {
+							is_at_war_with = from.owner
+							is_crisis_faction = yes
+							is_country_type = swarm
+							is_country_type = extradimensional
+							is_country_type = extradimensional_2
+							is_country_type = extradimensional_3
+							is_country_type = ai_empire
+						}
+					}
+				}
+				AND = { # colony
+					exists = owner
+					owner = {
+						OR = {
+							is_at_war_with = from.owner
+							is_crisis_faction = yes
+							is_country_type = swarm
+							is_country_type = extradimensional
+							is_country_type = extradimensional_2
+							is_country_type = extradimensional_3
+							is_country_type = ai_empire
+						}
+					}
+				}
+				AND = { # primitive
+					exists = space_owner
+					exists = owner
+					owner = {
+						is_primitive = yes
+					}
+					space_owner = {
+						OR = {
+							is_at_war_with = from.owner
+							is_crisis_faction = yes
+							is_country_type = swarm
+							is_country_type = extradimensional
+							is_country_type = extradimensional_2
+							is_country_type = extradimensional_3
+							is_country_type = ai_empire
+						}
+					}
+				}
+			}
+		}
+		AND = {
+			exists = space_owner
+			space_owner = {
+				OR = {
+					is_same_value = from.owner 
+				}
+			}
+		}
+	}	
+}
+
+can_destroy_planet_with_ACOT_HERCULEAN_PLANET_RESONANT_BEAM_7E = {
+	can_destroy_planet_with_ACOT_HERCULEAN_PLANET_RESONANT_BEAM_7E = yes
+}
+
+can_destroy_planet_with_ACOT_HERCULEAN_PLANET_RESONANT_BEAM_7S = {
+	can_destroy_planet_with_ACOT_HERCULEAN_PLANET_RESONANT_BEAM_8E = yes
+}

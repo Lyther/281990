@@ -1,0 +1,1109 @@
+####################
+# NOTE FOR MODDERS #
+####################
+# modifier = { } only takes the following modifiers
+# hull, shield & armor add/mult and regen add perc/static
+# evasion add/mult
+# speed/base speed mult
+# weapon damage mult
+# upkeep mult
+# for other modifiers, use ship_modifier = { }
+# use_shipnames_from = other_size # allows a ship size to use names from another size
+# icon = ship_size_military_1
+		#ship_size_military_1 is default. The following sprite keys are generated from it:
+			#GFX_text_<key>
+			#GFX_<key>
+			#GFX_<key>_top
+			#GFX_<key>_top_damaged
+# icon_frame: now only used for starbases. Value of 2 or more means it shows up on the galaxy map, 1-5 denote which icon it uses on starbase sprite sheets (e.g. gfx/interface/icons/starbase_ship_sizes.dds)
+# ai_ship_data = {					#For determining how many ships the AI wants. Ships it can't recruit (i.e. missing tech prereqs or fails potential_country or possible_country) are pre-filtered out.
+# 	fraction = { }					#As standard, base, modifier = { factor }, etc. The AI will want this divided by the total fraction it is able to recruit. Note: it is the fraction of the naval cap, so the final value is divided by size_multiplier
+#									#Note: if the fraction is > 0, the following lines will not be applied
+#	min = 1							#Sets a minimum absolute number the country will aim to have
+#	system_mult/planet_mult = 0.1	#Adds this amount for each system/planet the country owns. I.e. min + ( num planets * planet_mult ) + ( num systems * system_mult )
+#	max = 5							#Sets a maximum absolute number the country will aim to have. Note that it will still want only the minimum unless you define a system_mult or planet_mult
+#}
+# ship_roles = { name1 name2 } # Show up as selectable roles in the ship designer
+# triggered_ship_roles = { { name = test1 trigger = {} } { name = test1 trigger = {} } } # List of triggered ship roles, show up in the ship designer when the trigger is true, executes on country scope
+
+
+@corvette_collision_radius = 2.0
+@corvette_formation_priority = 4
+
+@destroyer_collision_radius = 2.5
+@destroyer_formation_priority = 2
+
+@cruiser_collision_radius = 3.5
+@cruiser_formation_priority = 3
+
+@battleship_collision_radius = 6
+@battleship_formation_priority = 5
+
+@titan_collision_radius = 12
+@titan_formation_priority = 1
+
+@build_block_radius_none = 0
+@build_block_radius_civilian = 20
+@build_block_radius_military = 200
+
+@speed_very_slow = 80
+@speed_slow = 100
+@speed_default = 120
+@speed_fast = 140
+@speed_very_fast = 160
+
+#################
+# STUFFS HERE EMPIRE #
+#################
+
+#### Since the only possible known country types that players can play as far as I know are ZOFE's AE, Twinks' PFE and SOFE's OE-A, none of which really have any needs
+###  for these ships, the are thus made not usable by anything save foe default countries. If you are an AE< you already have your own ships, EE and OE-A have superior ships. So none of them really needs these anymore.
+
+# TO PREVENT FURTHER ISSUES AND BS HAVING TO DEAL WITH COMPS AND DESIGN CLASH, THE SHIPS HERE WILL ONLY BE AVAILIABLE TO DEFAULT COUNTRY
+# MODDERS WHO WISH TO ALTER THIS, DO KEEP THIS ATTENTION IN MIND. I DONT WANT TO HAVE TO DEAL WITH THE OE BEING SNATCHED AGAIN BECAUSE PEOPLE CANT LEARN TO BE NICE
+# THAT SAID, BE MINDFUL THAT YOU WILL HAVE TO ALSO MODIFY THE TECHS AS WELL TO MAKE THEM ACCEPT NON-DEFAULT COUNTRY.
+
+precursor_escort = {
+	use_shipnames_from = destroyer
+	formation_priority = 3
+	max_speed = @speed_fast
+	acceleration = 0.3
+	rotation_speed = 0.3
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_evasion_add = 35
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+		ship_piracy_suppression_add = 15
+		ship_cloaking_strength_add = 2
+	}
+	max_hitpoints = 2000
+	size_multiplier = 4
+	fleet_slot_size = 3
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part1" } "stern" = { locator = "part1" } }
+	num_target_locators = 0
+	icon = acot_ship_escort_icon
+	is_space_station = no
+	
+	default_behavior = origin_balance
+	
+	combat_disengage_chance = 1.5
+	
+	resources = {
+		category = ships	
+		upkeep = {
+			sr_dark_matter = 0.25
+			acot_sr_dark_energy = 0.25
+		}
+	}
+	
+	min_upgrade_cost = {
+		alloys = 4
+	}
+	
+	base_buildtime = 280
+	
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	enable_default_design = yes
+	can_have_federation_design = yes
+	is_space_object = yes
+
+	potential_construction = {
+		OR =  {
+			can_build_precursor_ship = yes
+		}
+	}
+
+	possible_construction = {
+		OR =  {
+			can_build_precursor_ship = yes
+		}
+	}
+
+	prerequisites = { "tech_precursor_escort" }
+	
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+	ai_ship_data = {
+		fraction = {
+			base = 0
+			modifier = {
+				add = 40
+				uses_standard_ship_sizes = yes
+			}
+		}
+	}
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+
+precursor_battlecruiser = {
+	use_shipnames_from = battleship
+	formation_priority = 6
+	max_speed = @speed_default
+	acceleration = 0.2
+	rotation_speed = 0.2
+	collision_radius = @battleship_collision_radius
+	modifier = {
+		ship_evasion_add = 10
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+		ship_piracy_suppression_add = 25
+		ship_cloaking_strength_add = 1
+	}
+	max_hitpoints = 6000
+	size_multiplier = 10
+	fleet_slot_size = 5
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part1" } "stern" = { locator = "part1" }}
+	num_target_locators = 0
+	is_space_station = no
+	is_space_object = yes
+	icon = acot_ship_bc_icon
+
+	default_behavior = origin_balance_bc
+	
+	combat_disengage_chance = 1.00
+	
+	resources = {
+		category = ships	
+		upkeep = {
+			sr_dark_matter = 0.50
+			acot_sr_dark_energy = 0.50
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 8
+	}
+
+	base_buildtime = 560
+	
+	prerequisites = { "tech_precursor_bc" }
+	
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	enable_default_design = yes
+	can_have_federation_design = yes
+	
+	potential_construction = {
+		OR =  {
+			can_build_precursor_ship = yes
+		}
+	}
+
+	possible_construction = {
+		OR =  {
+			can_build_precursor_ship = yes
+		}
+	}
+
+	ai_ship_data = {
+		fraction = {
+			base = 0
+			modifier = {
+				add = 30
+				uses_standard_ship_sizes = yes
+			}
+		}
+	}
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+
+precursor_titan = {
+	use_shipnames_from = titan
+	formation_priority = 9
+	max_speed = @speed_default
+	acceleration = 0.15
+	rotation_speed = 0.15
+	collision_radius = @titan_collision_radius
+	modifier = {
+		ship_evasion_add = 10
+		ship_hull_regen_add_perc = 0.25
+		ship_armor_regen_add_perc = 0.25
+		ship_piracy_suppression_add = 50
+	}
+	max_hitpoints = 40000
+	size_multiplier = 30
+	fleet_slot_size = 30
+	section_slots = { "spinal" = { locator = "part1" } "mid" = { locator = "part1" } "core" = { locator = "part1" } "stern" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon = acot_ship_titan_icon
+	
+	is_space_object = yes
+
+	combat_disengage_chance = 0.5
+
+	default_behavior = origin_balance_titan
+
+	resources = {
+		category = ships
+		upkeep = {
+			sr_dark_matter = 2.0
+			acot_sr_dark_energy = 2.0
+		}
+	}
+
+	base_buildtime = 1100
+	
+	min_upgrade_cost = {
+		alloys = 10
+	}
+
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	enable_default_design = yes
+	can_have_federation_design = yes
+	
+	potential_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	possible_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	prerequisites = { "tech_precursor_titan" }
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "ship_aura_components"
+	required_component_set = "ship_aura_components"
+
+	ai_ship_data = {
+		fraction = {
+			base = 0
+			modifier = {
+				add = 10
+				uses_standard_ship_sizes = yes
+			}
+		}
+	}
+
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+}
+
+precursor_assault_carrier = {
+	use_shipnames_from = cruiser
+	formation_priority = 12
+	max_speed = @speed_default
+	acceleration = 0.15
+	rotation_speed = 0.15
+	collision_radius = @titan_collision_radius
+	modifier = {
+		ship_evasion_add = 5
+		ship_hull_regen_add_perc = 0.25
+		ship_armor_regen_add_perc = 0.25
+		ship_piracy_suppression_add = 50
+	}
+	max_hitpoints = 25000
+	size_multiplier = 20
+	fleet_slot_size = 20
+	section_slots = { "spinal" = { locator = "part1" } "hanger1" = { locator = "part1" } "hanger2" = { locator = "part1" } "hanger3" = { locator = "part1" } }
+	num_target_locators = 6
+	is_space_station = no
+	icon = acot_ship_carrier_icon
+	
+	default_behavior = origin_defense_titan
+
+	is_space_object = yes
+	
+	combat_disengage_chance = 0.50
+	
+	resources = {
+		category = ships
+		upkeep = {
+			sr_dark_matter = 1.5
+			acot_sr_dark_energy = 1.5
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 10
+	}
+
+	base_buildtime = 900
+	
+	class = shipclass_military
+	construction_type = starbase_shipyard
+	is_designable = yes
+	enable_default_design = yes
+	can_have_federation_design = yes
+	
+	potential_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	possible_construction = {
+		can_build_precursor_ship = yes
+	}
+	
+	ai_ship_data = {
+		fraction = {
+			base = 0
+			modifier = {
+				add = 10
+				uses_standard_ship_sizes = yes
+			}
+		}
+	}
+
+	prerequisites = { "tech_precursor_assault_carrier" }
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+}
+
+###############STARBASE DEFENSES ###########################
+
+precursor_guardian = {
+	use_shipnames_from = military_station_small
+	max_speed = 8
+	rotation_speed = 10
+	acceleration = 10
+	modifier = {
+		ship_evasion_mult = -1
+		ship_hull_regen_add_perc = 0.25
+		ship_armor_regen_add_perc = 0.25
+		ships_upkeep_mult = -0.25
+	}
+	ship_modifier = {
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = 150000
+
+	combat_size_multiplier = 8
+	size_multiplier = 4
+	fleet_slot_size = 4
+	section_slots = { 
+		"top" = { locator = "part1" }
+		"left" = { locator = "part1" }
+		"right" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_military
+	uses_name_prefix = no
+	takes_name_from_ship_design = yes
+	is_space_object = yes
+
+	auto_upgrade = no
+
+	resources = {
+		category = ships
+		cost = {
+		}
+		upkeep = {
+			sr_dark_matter = 0.50
+			acot_sr_dark_energy = 0.5
+		}
+	}
+
+	base_buildtime = 360
+	
+	prerequisites = { "tech_precursor_guardian" }
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	class = shipclass_military_station
+	
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+	ship_class_icon_frame = 26
+	construction_type = starbase_defenses
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	
+	potential_construction = {
+		OR =  {
+			can_build_precursor_ship = yes
+		}
+	}
+
+	possible_construction = {
+		OR =  {
+			can_build_precursor_ship = yes
+		}
+	}
+
+}
+
+precursor_sentinel = {
+	use_shipnames_from = ion_cannon
+	max_speed = 8
+	rotation_speed = 10
+	acceleration = 10
+	modifier = {
+		ship_evasion_mult = -1
+		ship_hull_regen_add_perc = 0.25
+		ship_armor_regen_add_perc = 0.25
+		ships_upkeep_mult = -0.25
+	}
+	ship_modifier = {
+		ship_weapon_range_mult = 0.20
+	}
+	max_hitpoints = 300000
+
+	combat_size_multiplier = 8
+	size_multiplier = 12
+	fleet_slot_size = 12
+	section_slots = { 
+		"mid" = { locator = "part1" } "core" = { locator = "part1" } "data" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_military
+	uses_name_prefix = no
+	takes_name_from_ship_design = yes
+	is_space_object = yes
+
+	auto_upgrade = no
+
+	resources = {
+		category = ships
+		cost = {
+		}
+		upkeep = {
+			sr_dark_matter = 3.00
+			acot_sr_dark_energy = 3.0
+		}
+	}
+
+	base_buildtime = 1200
+	
+	prerequisites = { "tech_precursor_sentinel" }
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	class = shipclass_military_station
+	
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+	ship_class_icon_frame = 26
+	construction_type = starbase_defenses
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	
+	potential_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	possible_construction = {
+		can_build_precursor_ship = yes
+	}
+	
+}
+
+####COLOSUS
+
+precursor_colossus = {
+	use_shipnames_from = colossus
+	formation_priority = 100
+	max_speed = 50
+	acceleration = 0.2
+	rotation_speed = 0.15
+	collision_radius = 10
+	max_hitpoints = 25000000
+	modifier = {
+		ship_evasion_add = 5
+		ship_hull_regen_add_static = 25000
+		ship_armor_regen_add_static = 12500
+		ship_shield_regen_add_static = 12500
+		ship_armor_add = 12500000
+		ship_shield_add = 12500000
+		starbase_shipyard_capacity_add = 100
+		ship_starting_experience_add = 2500
+		ship_cloaking_strength_add = 4
+	}
+	size_multiplier = 500
+	fleet_slot_size = 500
+	section_slots = { "ship" = { locator = "frame_ship" } "weapon1" = { locator = "frame_ship" } "weapon2" = { locator = "frame_ship" } "weapon3" = { locator = "frame_ship" } "weapon4" = { locator = "frame_ship" } "weapon5" = { locator = "frame_ship" } }
+	num_target_locators = 4
+	icon = ship_size_military_32
+	#ship_class_icon_frame = 35
+	base_buildtime = 3600
+	can_have_federation_design = no
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	is_space_object = yes
+	prerequisites = { "tech_precursor_colossus" }
+	
+	class = shipclass_starbase
+	#construction_type = starbase_shipyard
+	required_component_set = "ACOT_HERCULEAN_REACTOR"
+	required_component_set = "ACOT_HERCULEAN_COMPUTER"
+	required_component_set = "ACOT_HERCULEAN_FTL"
+	required_component_set = "acot_tactical_computers"
+	required_component_set = "ship_aura_components"
+	required_component_set = "ship_aura_components"
+	required_component_set = "ship_aura_components"
+	required_component_set = "ship_aura_components"
+	
+	resources = {
+		category = stations
+		cost = {
+			alloys = 1000000
+			sr_dark_matter = 100000
+			acot_sr_dark_energy = 100000
+		}
+		produces = {
+			influence = 1
+			unity = 500
+		}
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_precursor_colossus_ae
+				}
+			}
+			influence = 1
+			unity = 500
+		}
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_precursor_colossus_se
+				}
+			}
+			influence = 1
+			unity = 500
+		}
+		produces = {
+			energy = 1000
+			alloys = 1000
+			sr_dark_matter = 100
+			acot_sr_dark_energy = 100
+		}
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_acot_precursor_herculean_supply_line_e7
+				}
+			}
+			minerals = 5000
+			energy = 5000
+			food = 5000
+			alloys = 2500
+			sr_dark_matter = 250
+			acot_sr_dark_energy = 250
+		}
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_acot_precursor_herculean_supply_line_e8
+				}
+			}
+			minerals = 5000
+			energy = 5000
+			food = 5000
+			alloys = 2500
+			sr_dark_matter = 250
+			acot_sr_dark_energy = 250
+		}
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_acot_precursor_herculean_supply_line_s7
+				}
+			}
+			minerals = 10000
+			energy = 10000
+			food = 10000
+			alloys = 5000
+			acot_sr_stellarite = 500
+		}
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_omega_colossus
+				}
+			}
+			minerals = 10000
+			energy = 10000
+			food = 10000
+			alloys = 10000
+			unity = 500
+			sr_dark_matter = 5000
+			acot_sr_dark_energy = 5000
+			influence = 5
+		}
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_acot_precursor_herculean_science_e7
+				}
+			}
+			physics_research = 2500
+			society_research = 2500
+			engineering_research = 2500
+		}		
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_acot_precursor_herculean_science_e8
+				}
+			}
+			physics_research = 2500
+			society_research = 2500
+			engineering_research = 2500
+		}	
+		produces = {
+			trigger = {
+				from = {
+					has_technology = tech_acot_precursor_herculean_science_curator
+				}
+			}
+			physics_research = 5000
+			society_research = 5000
+			engineering_research = 5000
+			unity = 500
+			minor_artifacts = 5
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 250
+	}
+}
+
+precursor_platform_l = {
+	use_shipnames_from = military_station_large
+	max_speed = 20
+	rotation_speed = 10
+	acceleration = 10
+	modifier = {
+		ship_evasion_mult = -1
+		ship_hull_regen_add_perc = 0.25
+		ship_armor_regen_add_perc = 0.25
+	}
+	max_hitpoints = 30000
+	size_multiplier = 8
+	fleet_slot_size = 8
+	section_slots = {
+		"top" = { locator = "part1" }  "bottom" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	uses_name_prefix = no
+	takes_name_from_ship_design = yes
+	is_space_object = yes
+	build_block_radius = @build_block_radius_civilian
+	#auto_upgrade = yes
+
+	prerequisites = {
+		tech_precursor_construcor
+	}
+
+	resources = {
+		category = ships
+		cost = {
+		}
+		upkeep = {
+			sr_dark_matter = 10.00
+			acot_sr_dark_energy = 10.0
+		}
+	}
+
+	class = shipclass_military_station
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	is_designable = yes
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	ship_class_icon_frame = 26
+}
+
+precursor_platform_m = {
+	use_shipnames_from = military_station_medium
+	max_speed = 20
+	rotation_speed = 10
+	acceleration = 10
+	modifier = {
+		ship_evasion_mult = -1
+		ship_hull_regen_add_perc = 0.25
+		ship_armor_regen_add_perc = 0.25
+	}
+	max_hitpoints = 15000
+	size_multiplier = 8
+	fleet_slot_size = 8
+	section_slots = { 
+		"top" = { locator = "part1" }  "bottom" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	uses_name_prefix = no
+	takes_name_from_ship_design = yes
+	is_space_object = yes
+	auto_upgrade = no
+	build_block_radius = @build_block_radius_civilian
+	#auto_upgrade = yes
+
+	prerequisites = {
+		tech_precursor_construcor
+	}
+	
+	resources = {
+		category = ships
+		cost = {
+		}
+		upkeep = {
+			sr_dark_matter = 2.00
+			acot_sr_dark_energy = 2.0
+		}
+	}
+
+	class = shipclass_military_station
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	is_designable = yes
+	required_component_set = "power_core"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+
+######################### CIVILIANO SHIPPA ################################
+
+precursor_science = {
+	use_shipnames_from = science
+	max_speed = 240
+	acceleration = 0.8
+	rotation_speed = 0.3
+	max_hitpoints = 3500
+	modifier = {
+		ship_evasion_add = 60
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+		ship_cloaking_strength_add = 4
+	}
+	ship_modifier = {
+		ship_hyperlane_range_add = 10
+		science_ship_survey_speed = 3.0
+	}
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "mid" = { locator = "part1" } "stern" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon = ship_size_science
+	base_buildtime = 250
+
+	combat_disengage_chance = 4.0
+
+	enable_default_design = no	#if yes, countries will have an auto-generated design at start
+	is_designable = yes
+	prerequisites = { "tech_precursor_science" }
+	is_civilian = yes
+	class = shipclass_science_ship
+	construction_type = starbase_shipyard
+	valid_target_aggressive_stance = yes
+	#auto_upgrade = yes
+	can_have_federation_design = no
+	is_space_object = yes
+
+	potential_country = {
+		has_technology = tech_precursor_science
+	}
+
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+	potential_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	possible_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 100
+		}
+		upkeep = {
+			energy = @science_upkeep_energy
+			alloys = @science_upkeep_alloys
+		}
+	}
+
+	ai_ship_data = {
+		min = value:desired_science_ships
+		system_mult = value:desired_science_ships_system_mult
+		max = 5
+	}
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+
+precursor_constructor = {
+	use_shipnames_from = constructor
+	max_speed = 100
+	acceleration = 0.3
+	rotation_speed = 0.2
+	max_hitpoints = 10000
+	modifier = {
+		ship_evasion_add = 30
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+		ship_cloaking_strength_add = 3
+	}
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part1" }  "stern" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon = ship_size_constructor
+	base_buildtime = 250
+
+	combat_disengage_chance = 1.5
+
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_precursor_construcor" }
+	is_civilian = yes
+	is_designable = yes
+	class = shipclass_constructor
+	construction_type = starbase_shipyard
+	valid_target_aggressive_stance = yes
+	auto_upgrade = no
+	can_have_federation_design = no
+
+
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+	potential_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	possible_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 100
+		}
+		upkeep = {
+			energy = @science_upkeep_energy
+			alloys = @science_upkeep_alloys
+		}
+	}
+
+	ai_ship_data = {
+		min = value:desired_constructors_min
+		system_mult = 0.15
+		max = value:desired_constructors_max
+	}
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+
+precursor_colonizer = {
+	use_shipnames_from = colonizer
+	max_speed = 80
+	acceleration = 0.3
+	rotation_speed = 0.2
+	max_hitpoints = 8000
+	modifier = {
+		ship_evasion_add = 5
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+		ship_cloaking_strength_add = 3
+	}
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "bow" = { locator = "part1" } "mid" = { locator = "part1" }  "stern" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon = ship_size_colonizer
+	base_buildtime = 1080
+
+	combat_disengage_chance = 1.5
+
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	prerequisites = { "tech_precursor_colonizer" }
+	is_civilian = yes
+	is_designable = yes
+	class = shipclass_military_special
+	construction_type = starbase_shipyard
+	valid_target_aggressive_stance = yes
+	auto_upgrade = no
+	can_have_federation_design = no
+
+
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+	potential_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	possible_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	resources = {
+		category = colonies
+		cost = {
+			alloys = 100
+			influence = 100
+		}
+		upkeep = {
+			energy = @science_upkeep_energy
+			alloys = @science_upkeep_alloys
+		}
+	}
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "thruster_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+}
+
+precursor_world_shaper = {
+	use_shipnames_from = colonizer
+	max_speed = 80
+	acceleration = 0.4
+	rotation_speed = 0.1
+	max_hitpoints = 2500
+	modifier = {
+		ship_evasion_add = 20
+		ship_hull_regen_add_perc = 0.1
+		ship_armor_regen_add_perc = 0.1
+		ship_cloaking_strength_add = 1
+	}
+	ship_modifier = {
+	}
+	size_multiplier = 1
+	fleet_slot_size = 1
+	section_slots = { "mid" = { locator = "part1" }  }
+	num_target_locators = 0
+	is_space_station = no
+	icon = ship_size_colonizer
+	base_buildtime = 720
+
+	combat_disengage_chance = 2.0
+
+	enable_default_design = no	#if yes, countries will have an auto-generated design at start
+	is_designable = yes
+	prerequisites = { "tech_precursor_world_shaper" }
+	is_civilian = yes
+	class = shipclass_military_special
+	construction_type = starbase_shipyard
+	valid_target_aggressive_stance = yes
+	#auto_upgrade = yes
+	can_have_federation_design = no
+	is_space_object = yes
+
+	potential_country = {
+		has_technology = tech_precursor_world_shaper
+	}
+
+	possible_country = {
+		NOR = {
+			is_country_type = fallen_empire		
+			is_country_type = awakened_fallen_empire
+		}
+	}
+
+	potential_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	possible_construction = {
+		can_build_precursor_ship = yes
+	}
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 1000
+			influence = 250
+		}
+		upkeep = {
+			energy = @science_upkeep_energy
+			alloys = @science_upkeep_alloys
+		}
+	}
+
+	ai_ship_data = {
+	}
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "sensor_components"
+	#required_component_set = "combat_computers"
+}

@@ -1,0 +1,2286 @@
+############DARK MATTER EVENTS
+
+
+namespace = acot_ships
+
+# SHIP PRECURSOROS Built
+ship_event = {
+	id = acot_ships.0
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			is_ship_size = precursor_colossus
+			is_ship_size = precursor_science
+			is_ship_size = precursor_constructor
+		}
+	}
+
+	immediate = {
+		IF = {
+			limit = {
+				is_ship_size = precursor_colossus			
+			}
+			set_disable_at_health = 0.02	
+		}
+		IF = {
+			limit = {
+				is_ship_size = precursor_science			
+			}
+			set_disable_at_health = 0.02	
+		}
+		IF = {
+			limit = {
+				is_ship_size = precursor_constructor	
+			}
+			if = {
+				limit = {
+					has_component = INITIALIZER_DELTA_COMPUTER
+				 }
+				 solar_system = {
+					every_system_planet = {
+						limit = {
+							is_owned_by = root.owner
+							NOT = {
+								has_modifier = acot_modifier_builder_delta
+							}
+						}
+						add_modifier = { modifier = acot_modifier_builder_delta }
+					}					 
+				 }
+			}
+			if = {
+				limit = {
+					has_component = INITIALIZER_ALPHA_COMPUTER
+				 }
+				solar_system = {
+					every_system_planet = {
+						limit = {
+							is_owned_by = root.owner
+							NOT = {
+								has_modifier = acot_modifier_builder_alpha
+							}
+						}
+						add_modifier = { modifier = acot_modifier_builder_alpha }
+					}					 
+				 }				
+			}
+			if = {
+				limit = {
+					has_component = INITIALIZER_SIGMA_COMPUTER
+				 }
+				solar_system = {
+					every_system_planet = {
+						limit = {
+							is_owned_by = root.owner
+							NOT = {
+								has_modifier = acot_modifier_builder_sigma
+							}
+						}
+						add_modifier = { modifier = acot_modifier_builder_sigma }
+					}					 
+				 }				
+			}
+			if = {
+				limit = {
+					has_component = INITIALIZER_OMEGA_COMPUTER
+				 }
+				solar_system = {
+					every_system_planet = {
+						limit = {
+							is_owned_by = root.owner
+							NOT = {
+								has_modifier = acot_modifier_builder_omega
+							}
+						}
+						add_modifier = { modifier = acot_modifier_builder_omega }
+					}					 
+				 }			
+			}
+		}
+	}
+}
+
+# Herculean First Life
+ship_event = {
+	id = acot_ships.1
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_ship_size = precursor_colossus
+	}
+
+	immediate = {
+		IF ={
+			limit = {
+				NOT = {
+					has_ship_flag = herculean_first_life
+				}			
+			}
+			set_ship_flag = herculean_first_life
+			repair_ship = yes
+			set_disabled = no	
+		}
+		IF ={
+			limit = {
+				has_ship_flag = herculean_first_life		
+			}
+			owner = {
+				country_event = {
+					id = acot_ships.100 days = 3600
+				}
+			}
+			fleet = {
+				delete_fleet = this
+			}
+			if = {
+				limit = {
+					exists = root
+				}
+				destroy_ship = this	
+			}
+
+		}		
+	}
+}
+
+# Herculean Disappears
+country_event = {
+	id = acot_ships.100
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			80 = {
+				country_event = {
+					id = acot_ships.100 days = 360
+				}			
+			}
+			20 = {
+				capital_scope = {
+					create_fleet = {
+						settings = {
+							 spawn_debris = no 
+							 is_boss = yes
+						}
+						effect = {
+							set_owner = root
+							while = {
+								count = 1
+								create_ship = {
+									random_existing_design = precursor_colossus
+									graphical_culture = root
+									effect = {
+										set_disable_at_health = 0.02
+									}
+								}
+							}
+							set_location = {
+								target = prev
+								distance = 45
+								angle = random
+							}
+						}
+					}	
+				}
+			}
+		}		
+	}
+}
+
+# Destruction
+ship_event = {
+	id = acot_ships.2
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+
+	immediate = {
+		IF ={
+			limit = {
+				has_component = ORACLE_ALPHA_COMPUTER
+			}
+			random_list = {
+				25 = {  #50
+					fleet = {
+						if = {
+							limit = {
+								exists = leader
+							 }
+							 leader = {
+								 unassign_leader = this
+								 save_event_target_as = leader_eject
+							 }
+						}
+					}
+					ship_event = {
+						id = acot_ships.200
+					}
+					destroy_ship = this		
+				}
+				75 = {
+					ship_event = {
+						id = acot_ships.201
+					}
+					destroy_ship = this		
+				}
+			}
+		}
+		IF ={
+			limit = {
+				has_component = ORACLE_SIGMA_COMPUTER
+			}
+			random_list = {
+				50 = {
+					fleet = {
+						if = {
+							limit = {
+								exists = leader
+							 }
+							 leader = {
+								 unassign_leader = this
+								 save_event_target_as = leader_eject
+							 }
+						}
+					}
+					ship_event = {
+						id = acot_ships.200
+					}
+					destroy_ship = this		
+				}
+				50 = {
+					ship_event = {
+						id = acot_ships.201
+					}
+					destroy_ship = this		
+				}
+			}	
+		}
+		IF ={
+			limit = {
+				has_component = ORACLE_OMEGA_COMPUTER
+			}
+			fleet = {
+				if = {
+					limit = {
+						exists = leader
+					 }
+					 leader = {
+						 unassign_leader = this
+						 save_event_target_as = leader_eject
+					 }
+				}
+			}
+			ship_event = {
+				id = acot_ships.200
+			}
+			destroy_ship = this		
+			
+		}
+		IF ={
+			limit = {
+				NOR = {
+					has_component = ORACLE_ALPHA_COMPUTER
+					has_component = ORACLE_SIGMA_COMPUTER
+					has_component = ORACLE_OMEGA_COMPUTER
+				}
+			}
+			destroy_ship = this		
+		}
+	}
+}
+
+
+# Science  Ship Eject
+ship_event = {
+	id = acot_ships.200
+	title = acot_ships.200.name
+	desc = acot_ships.200.desc
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion
+	
+	is_triggered_only = yes
+
+
+
+	immediate = {		
+	}
+
+	option = {
+		name = acot_ships.200.a
+		default_hide_option = yes
+		ai_chance = {
+			factor = 100
+		}
+	}
+
+	option = {
+		name = acot_ships.200.b
+		custom_tooltip = acot_ships.200.b.explain
+		event_target:leader_eject = {
+			kill_leader = {}
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+ship_event = {
+	id = acot_ships.201
+	title = acot_ships.201.name
+	desc = acot_ships.201.desc
+	picture = GFX_evt_exploding_ship
+	show_sound = event_ship_explosion	
+
+	is_triggered_only = yes
+
+
+
+	immediate = {		
+	}
+
+	option = {
+		name = acot_ships.201.a
+		custom_tooltip = acot_ships.201.a.explain
+		default_hide_option = yes
+		ai_chance = {
+			factor = 100
+		}
+	}
+
+}
+
+
+
+# Science  Ship Eject
+ship_event = {
+	id = acot_ships.3
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		is_ship_size = precursor_science
+	}
+
+	immediate = {
+		IF ={
+			limit = {
+				NOT = {
+					has_ship_flag = precursor_science_eject
+				}			
+			}
+			owner = {
+				capital_scope = {
+					save_event_target_as = home_base
+				}
+			}
+			repair_ship = yes
+			set_disabled = no	
+			fleet ={
+				set_location = event_target:home_base
+				clear_orders = yes
+			}
+			ship_event = {
+				id = acot_ships.4 days = 1
+			}
+		}
+		IF ={
+			limit = {
+				has_ship_flag = precursor_science_eject		
+			}
+			ship_event = {
+				id = acot_ships.2 days = 1
+			}
+		}		
+	}
+}
+
+# Flag Assign
+ship_event = {
+	id = acot_ships.4
+	title = acot_ships.4.name
+	picture = GFX_acot_precursor_oracle
+	show_sound = event_laboratory_sound
+	desc = {
+		trigger = {
+			OR = {
+				has_component = ORACLE_DELTA_COMPUTER
+				has_component = ORACLE_ALPHA_COMPUTER
+				has_component = ORACLE_SIGMA_COMPUTER
+				has_component = ORACLE_OMEGA_COMPUTER
+			}			
+		}
+		text = acot_ships.4.desc.a
+	}
+	desc = {
+		trigger = {
+			NOR = {
+				has_component = ORACLE_DELTA_COMPUTER
+				has_component = ORACLE_ALPHA_COMPUTER
+				has_component = ORACLE_SIGMA_COMPUTER
+				has_component = ORACLE_OMEGA_COMPUTER
+			}			
+		}
+		text = acot_ships.4.desc.b
+	}
+
+	is_triggered_only = yes
+
+
+	immediate = {
+		IF ={
+			limit = {
+				has_component = ORACLE_DELTA_COMPUTER
+			}
+			set_timed_ship_flag = {
+				flag = precursor_science_eject
+				days = 1800
+			}	
+		}
+		IF ={
+			limit = {
+				has_component = ORACLE_ALPHA_COMPUTER
+			}
+			set_timed_ship_flag = {
+				flag = precursor_science_eject
+				days = 1080
+			}	
+		}
+		IF ={
+			limit = {
+				has_component = ORACLE_SIGMA_COMPUTER
+			}
+			set_timed_ship_flag = {
+				flag = precursor_science_eject
+				days = 360
+			}	
+		}
+		IF ={
+			limit = {
+				has_component = ORACLE_OMEGA_COMPUTER
+			}
+			set_timed_ship_flag = {
+				flag = precursor_science_eject
+				days = 60
+			}	
+		}
+		IF ={
+			limit = {
+				NOR = {
+					has_component = ORACLE_DELTA_COMPUTER
+					has_component = ORACLE_ALPHA_COMPUTER
+					has_component = ORACLE_SIGMA_COMPUTER
+					has_component = ORACLE_OMEGA_COMPUTER
+				}
+			}
+			ship_event = {
+				id = acot_ships.2 days = 1
+			}
+		}
+	}
+
+	option = {
+		name = acot_ships.4.a
+		trigger = {
+			OR =  {
+				has_component = ORACLE_DELTA_COMPUTER
+				has_component = ORACLE_ALPHA_COMPUTER
+				has_component = ORACLE_SIGMA_COMPUTER
+				has_component = ORACLE_OMEGA_COMPUTER				
+			}
+		}
+	}
+
+	option = {
+		name = acot_ships.4.b
+		trigger = {
+			NOR =  {
+				has_component = ORACLE_DELTA_COMPUTER
+				has_component = ORACLE_ALPHA_COMPUTER
+				has_component = ORACLE_SIGMA_COMPUTER
+				has_component = ORACLE_OMEGA_COMPUTER				
+			}
+		}
+	}
+}
+
+# Herculean Flag
+ship_event = {
+	id = acot_ships.5
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+
+	immediate = {
+		IF ={
+			limit = {
+				is_ship_size = precursor_colossus
+			}
+			set_timed_ship_flag = {
+				flag = herculean_first_life
+				days = 1800
+			}
+		}
+	}
+}
+
+
+# Initializer Begins Orbitting
+fleet_event = {
+	id = acot_ships.6
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_ship = {
+			OR = {
+				has_component = INITIALIZER_DELTA_COMPUTER
+				has_component = INITIALIZER_ALPHA_COMPUTER
+				has_component = INITIALIZER_SIGMA_COMPUTER
+				has_component = INITIALIZER_OMEGA_COMPUTER
+			}
+		}
+		OR = {
+			FROM = {
+				exists = owner
+				owner = {
+					is_same_value = root.owner
+				}
+			}
+			FromFrom = {
+				exists = owner
+				owner = {
+					is_same_value = root.owner
+				}
+			}
+		}
+	}
+
+	immediate = {
+		From = {
+			every_system_planet = {
+				remove_modifier = acot_modifier_builder_delta
+				remove_modifier = acot_modifier_builder_alpha
+				remove_modifier = acot_modifier_builder_sigma
+				remove_modifier = acot_modifier_builder_omega
+			}
+		}
+		if = {
+			limit = {
+				any_owned_ship = {
+					has_component = INITIALIZER_DELTA_COMPUTER
+				}
+			 }
+			 FromFrom = {
+				every_system_planet = {
+					limit = {
+						is_owned_by = root.owner
+						NOT = {
+							has_modifier = acot_modifier_builder_delta
+						}
+					}
+					add_modifier = {
+						modifier = acot_modifier_builder_delta
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_owned_ship = {
+					has_component = INITIALIZER_ALPHA_COMPUTER
+				}
+			 }
+			 FromFrom = {
+				every_system_planet = {
+					limit = {
+						is_owned_by = root.owner
+						NOT = {
+							has_modifier = acot_modifier_builder_alpha
+						}
+					}
+					add_modifier = {
+						modifier = acot_modifier_builder_alpha
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_owned_ship = {
+					has_component = INITIALIZER_SIGMA_COMPUTER
+				}
+			 }
+			 FromFrom = {
+				every_system_planet = {
+					limit = {
+						is_owned_by = root.owner
+						NOT = {
+							has_modifier = acot_modifier_builder_sigma
+						}
+					}
+					add_modifier = {
+						modifier = acot_modifier_builder_sigma
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				any_owned_ship = {
+					has_component = INITIALIZER_OMEGA_COMPUTER
+				}
+			 }
+			 FromFrom = {
+				every_system_planet = {
+					limit = {
+						is_owned_by = root.owner
+						NOT = {
+							has_modifier = acot_modifier_builder_omega
+						}
+					}
+					add_modifier = {
+						modifier = acot_modifier_builder_omega
+					}
+				}
+			}
+		}
+	}
+}
+
+# EMISSARY PLANET TRASNFORM CHOICE
+planet_event = {
+	id = acot_ships.8
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+
+	immediate = {
+		save_event_target_as = terraforming_planet
+		from = {
+			save_event_target_as = terraforming_emissary
+		}
+		from.owner = {
+			country_event = { id = acot_ships.80 }
+		}
+	}
+}
+
+# Initializer PLANET TRASNFORM CHOICE
+country_event = {
+	id = acot_ships.80
+	title = acot_ships.80.name
+	desc = acot_ships.80.desc
+	picture = GFX_acot_emissary_invasion
+	show_sound = event_laboratory_sound
+	
+	is_triggered_only = yes
+
+
+	immediate = {	
+	}
+
+	### INTO GAIA
+	option = {
+		name = acot_ships.80.a
+		custom_tooltip = acot_ships.9.tooltip.a
+		IF = {
+			limit = {
+				event_target:terraforming_planet = {
+					is_planet = yes
+				}				
+			}
+			add_resource = {
+				minerals = 50000
+			}
+		}
+		IF = {
+			limit = {
+				event_target:terraforming_planet = {
+					is_asteroid = yes
+				}				
+			}
+			add_resource = {
+				minerals = 10000
+			}
+		}
+		IF = {
+			limit = {
+				event_target:terraforming_planet = {
+					habitable_planet = yes
+				}				
+			}
+			add_resource = {
+				food = 10000
+			}
+		}
+		hidden_effect = {
+			event_target:terraforming_planet = {
+				remove_planet = yes
+			}	
+		}
+	}
+
+	### INTO GAIA
+	option = {
+		name = acot_ships.80.b
+		hidden_effect = {
+		}
+	}	
+}
+
+# Initializer PLANET TRASNFORM CHOICE
+planet_event = {
+	id = acot_ships.9
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+
+	immediate = {
+		save_event_target_as = terraforming_planet
+		from = {
+			save_event_target_as = terraforming_emissary
+		}
+		from.owner = {
+			country_event = { id = acot_ships.90 }
+		}
+	}
+}
+
+# Initializer PLANET TRASNFORM CHOICE
+country_event = {
+	id = acot_ships.90
+	title = acot_ships.90.name
+	desc = acot_ships.90.desc
+	picture = GFX_acot_emissary_invasion
+	show_sound = event_laboratory_sound
+	
+	is_triggered_only = yes
+
+
+	immediate = {
+	}
+
+	option = {
+		name = "acot_ships.90.a"
+		custom_tooltip = "acot_ships.90.a.tooltip"
+		allow = {
+			event_target:terraforming_planet = {
+				solar_system = {
+					custom_tooltip = {
+						fail_text = "requires_no_black_hole_neutron_star_pulsar"
+						NOR = {
+							is_star_class = sc_black_hole
+							is_star_class = sc_neutron_star
+							is_star_class = sc_pulsar
+						}
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = acot_ships.91
+			}
+		}
+	}
+
+	option = {
+		name = "acot_ships.90.b"
+		custom_tooltip = "acot_ships.90.b.tooltip"
+		allow = {
+			OR = {
+				has_ascension_perk = ap_world_shaper
+				has_ascension_perk = ap_machine_worlds
+				has_ascension_perk = ap_arcology_project
+				has_ascension_perk = ap_hive_worlds
+				has_technology = tech_tomb_world_adaption
+				has_technology = tech_acot_colonize_fractured
+				has_technology = tech_acot_create_enigmatic_world
+			}
+		}
+		trigger = {
+			event_target:terraforming_emissary = {
+				any_owned_ship = {
+					OR = {
+						has_component = EMISSARY_ALPHA_COMPUTER
+						has_component = EMISSARY_SIGMA_COMPUTER
+						has_component = EMISSARY_OMEGA_COMPUTER
+					}
+				}
+			}		
+		}
+		hidden_effect = {
+			country_event = {
+				id = acot_ships.92
+			}
+		}
+	}
+
+	option = {
+		name = "acot_ships.90.c"
+		custom_tooltip = "acot_ships.90.c.tooltip"
+		hidden_effect = {
+			country_event = {
+				id = acot_ships.93
+			}
+		}
+	}
+
+	option = {
+		name = "acot_ships.90.d"
+		trigger = {
+			event_target:terraforming_emissary = {
+				any_owned_ship = {
+					NOR = {
+						has_component = EMISSARY_SIGMA_COMPUTER
+						has_component = EMISSARY_OMEGA_COMPUTER
+					}
+				}
+			}		
+		}
+		hidden_effect = {
+		}
+		default_hide_option = yes
+	}
+
+	option = {
+		name = "acot_ships.90.d"
+		custom_tooltip = "acot_ships.90.d.tooltip"
+		trigger = {
+			event_target:terraforming_emissary = {
+				any_owned_ship = {
+					OR = {
+						has_component = EMISSARY_SIGMA_COMPUTER
+						has_component = EMISSARY_OMEGA_COMPUTER
+					}
+				}
+			}		
+		}
+		hidden_effect = {
+			country_event = {
+				id = acot_ships.94
+			}
+		}
+		default_hide_option = yes
+	}
+}
+
+country_event = {
+	id = acot_ships.91
+	title = "acot_ships.91.name"
+	desc = "acot_ships.91.desc"
+	picture = GFX_evt_planet_beam
+	location = event_target:terraforming_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "acot_ships.91.a"
+		event_target:terraforming_planet = {
+			change_pc = pc_continental
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.91.b"
+		event_target:terraforming_planet = {
+			change_pc = pc_tropical
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.91.c"
+		event_target:terraforming_planet = {
+			change_pc = pc_ocean
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.91.d"
+		event_target:terraforming_planet = {
+			change_pc = pc_desert
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.91.e"
+		event_target:terraforming_planet = {
+			change_pc = pc_arid
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.91.f"
+		event_target:terraforming_planet = {
+			change_pc = pc_savannah
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.91.g"
+		event_target:terraforming_planet = {
+			change_pc = pc_arctic
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.91.h"
+		event_target:terraforming_planet = {
+			change_pc = pc_alpine
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.91.i"
+		event_target:terraforming_planet = {
+			change_pc = pc_tundra
+			reroll_deposits = yes
+		}
+	}
+
+	after = {
+		IF = {
+			limit = {
+				event_target:terraforming_emissary = {
+					any_owned_ship = {
+						OR = {
+							has_component = EMISSARY_SIGMA_COMPUTER
+							has_component = EMISSARY_OMEGA_COMPUTER
+						}
+					}
+				}	
+			}
+			hidden_effect = {
+				country_event = {
+					id = acot_ships.94
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_ships.92
+	title = "acot_ships.92.name"
+	desc = "acot_ships.92.desc"
+	picture = GFX_evt_planet_beam
+	location = event_target:terraforming_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "acot_ships.92.a"
+		allow = {
+			has_ascension_perk = ap_world_shaper
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_gaia
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.92.b"
+		allow = {
+			has_ascension_perk = ap_hive_worlds
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_hive
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.92.c"
+		allow = {
+			has_ascension_perk = ap_machine_worlds
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_machine
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.92.d"
+		allow = {
+			has_ascension_perk = ap_arcology_project
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_city
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.92.e"
+		allow = {
+			has_technology = tech_tomb_world_adaption
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_nuked
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.92.f"
+		allow = {
+			has_technology = tech_acot_colonize_fractured
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_dark_fractured
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.92.g"
+		allow = {
+			has_technology = tech_acot_create_enigmatic_world
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_acot_enigmatic
+			reroll_deposits = yes
+		}
+	}
+
+	after = {
+		IF = {
+			limit = {
+				event_target:terraforming_emissary = {
+					any_owned_ship = {
+						OR = {
+							has_component = EMISSARY_SIGMA_COMPUTER
+							has_component = EMISSARY_OMEGA_COMPUTER
+						}
+					}
+				}	
+			}
+			hidden_effect = {
+				country_event = {
+					id = acot_ships.94
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_ships.93
+	title = "acot_ships.93.name"
+	desc = "acot_ships.93.desc"
+	picture = GFX_evt_planet_beam
+	location = event_target:terraforming_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "acot_ships.93.a"
+		event_target:terraforming_planet = {
+			change_pc = pc_toxic
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.93.h"
+		event_target:terraforming_planet = {
+			change_pc = pc_barren
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.93.b"
+		event_target:terraforming_planet = {
+			change_pc = pc_barren_cold
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.93.c"
+		event_target:terraforming_planet = {
+			change_pc = pc_molten
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.93.d"
+		event_target:terraforming_planet = {
+			change_pc = pc_frozen
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.93.e"
+		allow = {
+			host_has_dlc = Apocalypse
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_shattered
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.93.f"
+		event_target:terraforming_planet = {
+			change_pc = pc_broken
+			reroll_deposits = yes
+		}
+	}
+	option = {
+		name = "acot_ships.93.g"
+		allow = {
+			has_ascension_perk = ap_mind_over_matter
+		}
+		event_target:terraforming_planet = {
+			change_pc = pc_shrouded
+			reroll_deposits = yes
+		}
+	}
+
+	after = {
+		IF = {
+			limit = {
+				event_target:terraforming_emissary = {
+					any_owned_ship = {
+						OR = {
+							has_component = EMISSARY_SIGMA_COMPUTER
+							has_component = EMISSARY_OMEGA_COMPUTER
+						}
+					}
+				}	
+			}
+			hidden_effect = {
+				country_event = {
+					id = acot_ships.94
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_ships.94
+	title = "acot_ships.94.name"
+	desc = "acot_ships.94.desc"
+	picture = GFX_evt_planet_beam
+	location = event_target:terraforming_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = "acot_ships.94.a"
+		custom_tooltip = "acot_ships.94.a.tooltip"
+	}
+
+	option = {
+		name = "acot_ships.94.b"
+		custom_tooltip = "acot_ships.94.b.tooltip"
+		hidden_effect = {
+			random_list = {
+				20 = { event_target:terraforming_planet = { change_planet_size = 1	} }
+				20 = { event_target:terraforming_planet = { change_planet_size = 2	} }
+				20 = { event_target:terraforming_planet = { change_planet_size = 3	} }
+				20 = { event_target:terraforming_planet = { change_planet_size = 4	} }
+				20 = { event_target:terraforming_planet = { change_planet_size = 5	} }
+			}
+		}
+	}
+
+	option = {
+		name = "acot_ships.94.c"
+		custom_tooltip = "acot_ships.94.c.tooltip"
+		hidden_effect = {
+			random_list = {
+				20 = { event_target:terraforming_planet = { change_planet_size = 6	} }
+				20 = { event_target:terraforming_planet = { change_planet_size = 7	} }
+				20 = { event_target:terraforming_planet = { change_planet_size = 8	} }
+				20 = { event_target:terraforming_planet = { change_planet_size = 9	} }
+				20 = { event_target:terraforming_planet = { change_planet_size = 10	} }
+			}
+		}
+	}
+
+	option = {
+		name = "acot_ships.94.d"
+		custom_tooltip = "acot_ships.94.d.tooltip"
+		allow = {
+			event_target:new_created_planet = {
+				planet_size >= 2	
+			}			
+		}
+		hidden_effect = {
+			random_list = {
+				20 = {
+					event_target:new_created_planet = {
+						change_planet_size = -1	
+					}
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						event_target:new_created_planet = {
+							planet_size <= 3
+						}
+					}
+					event_target:new_created_planet = {
+						change_planet_size = -2	
+					}
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						event_target:new_created_planet = {
+							planet_size <= 4
+						}
+					}
+					event_target:new_created_planet = {
+						change_planet_size = -3	
+					}
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						event_target:new_created_planet = {
+							planet_size <= 5
+						}
+					}
+					event_target:new_created_planet = {
+						change_planet_size = -4	
+					}
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						event_target:new_created_planet = {
+							planet_size <= 6
+						}
+					}
+					event_target:new_created_planet = {
+						change_planet_size = -5	
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "acot_ships.94.e"
+		custom_tooltip = "acot_ships.94.e.tooltip"
+		allow = {
+			event_target:new_created_planet = {
+				planet_size >= 7	
+			}			
+		}
+		hidden_effect = {
+			random_list = {
+				20 = {
+					event_target:new_created_planet = {
+						change_planet_size = -6	
+					}
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						event_target:new_created_planet = {
+							planet_size <= 8
+						}
+					}
+					event_target:new_created_planet = {
+						change_planet_size = -7	
+					}
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						event_target:new_created_planet = {
+							planet_size <= 9
+						}
+					}
+					event_target:new_created_planet = {
+						change_planet_size = -8	
+					}
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						event_target:new_created_planet = {
+							planet_size <= 10
+						}
+					}
+					event_target:new_created_planet = {
+						change_planet_size = -9	
+					}
+				}
+				20 = {
+					modifier = {
+						factor = 0
+						event_target:new_created_planet = {
+							planet_size <= 10
+						}
+					}
+					event_target:new_created_planet = {
+						change_planet_size = -10	
+					}
+				}
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+		}
+	}
+}
+
+# Initializer PLANET TRASNFORM CHOICE
+planet_event = {
+	id = acot_ships.10
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+
+	immediate = {
+		save_event_target_as = terraforming_planet
+		from = {
+			save_event_target_as = terraforming_emissary
+		}
+		IF = {
+			limit = {
+				has_owner = no
+			}
+			create_colony = {
+				owner = event_target:terraforming_emissary.owner
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary.owner = {
+						is_regular_empire = yes
+					}
+				 }
+				 remove_building = building_colony_shelter
+				 add_building = building_ae_ancient_palace			
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary.owner = {
+						is_hive_empire = yes
+					}
+				 }
+				 remove_building = building_colony_shelter
+				 add_building = building_ae_ancient_hive_cluster			
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary.owner = {
+						is_machine_empire = yes
+					}
+				 }
+				 remove_building = building_deployment_post
+				 add_building = building_ae_ancient_control_center			
+			}
+		#### DELTA	
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						has_fleet_flag = precursor_colonizer_delta				
+					}
+				}
+				while ={
+					count = 5
+					create_pop = {
+						species = event_target:terraforming_emissary.owner.species
+					}
+				}
+			}
+		### ALPHA	
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_alpha		
+						any_owned_ship = {
+							has_component = EMISSARY_ALPHA_COMPUTER
+						}	
+					}
+				}
+				while ={
+					count = 10
+					create_pop = {
+						species = event_target:terraforming_emissary.owner.species
+					}
+				}
+			}
+		#### SUGNA	
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_sigma		
+						any_owned_ship = {
+							has_component = EMISSARY_SIGMA_COMPUTER
+						}
+					}
+				}
+				while ={
+					count = 15
+					create_pop = {
+						species = event_target:terraforming_emissary.owner.species
+					}
+				}
+			}
+		#### INEGA
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_omega		
+						any_owned_ship = {
+							has_component = EMISSARY_OMEGA_COMPUTER
+						}
+					}
+				}
+				while ={
+					count = 20
+					create_pop = {
+						species = event_target:terraforming_emissary.owner.species
+					}
+				}
+			}
+			### EXTRA STUFFS
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_extra_pop
+						any_owned_ship = {
+							has_component = ACOT_EMISSART_EXTRA_POP
+						}	
+					}
+				 }
+				 while ={
+					count = 10
+					create_pop = {
+					   species = event_target:terraforming_emissary.owner.species
+				   }
+				}
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_extra_giga		
+						any_owned_ship = {
+							has_component = ACOT_EMISSART_EXTRA_GIGA
+						}					
+					}
+				 }
+				 add_building = building_giga_fortress
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_extra_lab
+						any_owned_ship = {
+							has_component = ACOT_EMISSART_EXTRA_LAB
+						}			
+					}
+				 }
+				 add_building = building_ae_enigmatic_lab
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_extra_skyshield	
+						any_owned_ship = {
+							has_component = ACOT_EMISSART_EXTRA_SKYSHIELD
+						}						
+					}
+				 }
+				 add_building = building_ae_dark_energy_psg
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_extra_nexus		
+						any_owned_ship = {
+							has_component = ACOT_EMISSART_EXTRA_NEXUS
+						}					
+					}
+				 }
+				 add_building = building_ae_dark_matter_synthersizer
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_extra_assembly	
+						any_owned_ship = {
+							has_component = ACOT_EMISSART_EXTRA_ASSEMBLY
+						}						
+					}
+				 }
+				 if = {
+					limit = {
+						event_target:terraforming_emissary.owner = {
+							is_machine_empire = no
+						}
+					}
+					add_building = building_ae_super_assembly
+				}
+				 if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							is_machine_empire = yes
+						}
+					 }
+					 add_building = building_ae_super_assembly_machine
+				 }
+			}			
+		}
+	############## ATTACK #############################
+			IF = {
+				limit = {
+					planet_is_hostile = yes
+				}
+			### DELTA ###
+				if = {
+					limit = {
+						event_target:terraforming_emissary = {
+							#has_fleet_flag = precursor_colonizer_delta
+							any_owned_ship = {
+								has_component = EMISSARY_DELTA_COMPUTER
+							}	
+						}
+				 	}
+				if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							 is_machine_empire = no
+						 }
+					  }	
+					  while ={
+						 count = 10
+						 create_army = {
+							 owner = event_target:terraforming_emissary.owner
+							 type = acot_garrison_army
+							 species = event_target:terraforming_emissary.owner.species
+							 land_army = yes
+						 }
+					 }
+				 }
+				 if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							 is_machine_empire = yes
+						 }
+					  }
+					  while ={
+						 count = 10
+						 create_army = {
+							 owner = event_target:terraforming_emissary.owner
+							 type = acot_garrison_army_droid
+							 species = event_target:terraforming_emissary.owner.species
+							 land_army = yes
+						 }
+					 }	
+				 }
+			}
+			### ALPHA ###
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_alpha
+						any_owned_ship = {
+							has_component = EMISSARY_ALPHA_COMPUTER
+						}	
+					}
+				 }
+				 if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							 is_machine_empire = no
+						 }
+					  }	
+					  while ={
+						 count = 15
+						 create_army = {
+							 owner = event_target:terraforming_emissary.owner
+							 type = acot_garrison_army
+							 species = event_target:terraforming_emissary.owner.species
+							 land_army = yes
+							 effect = {
+								set_army_flag = acot_emissary_army
+							}
+						 }
+					 }
+				 }
+				 if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							 is_machine_empire = yes
+						 }
+					  }
+					  while ={
+						 count = 15
+						 create_army = {
+							 owner = event_target:terraforming_emissary.owner
+							 type = acot_garrison_army_droid
+							 species = event_target:terraforming_emissary.owner.species
+							 land_army = yes
+							 effect = {
+								set_army_flag = acot_emissary_army
+							}
+						 }
+					 }	
+				 }
+			}
+			### SIGMA ###
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_sigma
+						any_owned_ship = {
+							has_component = EMISSARY_SIGMA_COMPUTER
+						}	
+					}
+				 }
+				 if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							 is_machine_empire = no
+						 }
+					  }	
+					  while ={
+						 count = 20
+						 create_army = {
+							 owner = event_target:terraforming_emissary.owner
+							 type = acot_garrison_army
+							 species = event_target:terraforming_emissary.owner.species
+							 land_army = yes
+							 effect = {
+								set_army_flag = acot_emissary_army
+							}
+						 }
+					 }
+				 }
+				 if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							 is_machine_empire = yes
+						 }
+					  }
+					  while ={
+						 count = 20
+						 create_army = {
+							 owner = event_target:terraforming_emissary.owner
+							 type = acot_garrison_army_droid
+							 species = event_target:terraforming_emissary.owner.species
+							 land_army = yes
+							 effect = {
+								set_army_flag = acot_emissary_army
+							}
+						 }
+					 }	
+				 }
+			}
+			### OMEGA ###
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_omega
+						any_owned_ship = {
+							has_component = EMISSARY_OMEGA_COMPUTER
+						}	
+					}
+				 }
+				 if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							 is_machine_empire = no
+						 }
+					  }	
+					  while ={
+						 count = 25
+						 create_army = {
+							 owner = event_target:terraforming_emissary.owner
+							 type = acot_garrison_army
+							 species = event_target:terraforming_emissary.owner.species
+							 land_army = yes
+							 effect = {
+								set_army_flag = acot_emissary_army
+							}
+						 }
+					 }
+				 }
+				 if = {
+					 limit = {
+						event_target:terraforming_emissary.owner = {
+							 is_machine_empire = yes
+						 }
+					  }
+					  while ={
+						 count = 25
+						 create_army = {
+							 owner = event_target:terraforming_emissary.owner
+							 type = acot_garrison_army_droid
+							 species = event_target:terraforming_emissary.owner.species
+							 land_army = yes
+							 effect = {
+								set_army_flag = acot_emissary_army
+							}
+						 }
+					 }	
+				 }
+			}
+			### EXTRA STUFFS
+			if = {
+				limit = {
+						event_target:terraforming_emissary = {
+							#has_fleet_flag = precursor_colonizer_extra_troop	
+							any_owned_ship = {
+								has_component = ACOT_EMISSART_EXTRA_TROOPS
+							}						
+						}
+					 }
+					 while ={
+						count = 10
+						create_army = {
+							owner = from.owner
+							type = acot_garrison_army
+							species = from.owner.species
+							land_army = yes
+							effect = {
+								set_army_flag = acot_emissary_army
+							}
+						}
+					}
+			}
+			if = {
+				limit = {
+						event_target:terraforming_emissary = {
+							#has_fleet_flag = precursor_colonizer_extra_droid	
+							any_owned_ship = {
+								has_component = ACOT_EMISSART_EXTRA_DROIDS
+							}						
+						}
+					 }
+					while ={
+						count = 10
+						create_army = {
+							owner = from.owner
+							type = acot_garrison_army_droid
+							species = from.owner.species
+							land_army = yes
+							effect = {
+								set_army_flag = acot_emissary_army
+							}
+					}
+				}
+			}
+			if = {
+				limit = {
+					event_target:terraforming_emissary = {
+						#has_fleet_flag = precursor_colonizer_extra_giga		
+						any_owned_ship = {
+							has_component = ACOT_EMISSART_EXTRA_GIGA
+						}					
+					}
+				}
+				while ={
+					count = 3
+					create_army = {
+						owner = from.owner
+						type = acot_garrison_army_giga
+						species = from.owner.species
+						land_army = yes
+						effect = {
+							set_army_flag = acot_emissary_army
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#  ATTACKER VICTORIOUS
+country_event = {
+	id = acot_ships.11
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FromFrom = {
+			OR = {
+				has_planet_flag = will_have_delta_emis
+				has_planet_flag = will_have_alpha_emis
+				has_planet_flag = will_have_sigma_emis
+				has_planet_flag = will_have_omega_emis
+			}			
+		}
+	}
+	
+	immediate = {
+		FROMFROM = {
+			every_planet_army = {
+				limit = {
+					has_army_flag = acot_emissary_army
+				}
+				remove_army = yes
+			}
+		}
+	}
+}
+
+#  DEFENDER VICTORIOUS
+country_event = {
+	id = acot_ships.12
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FromFrom = {
+			OR = {
+				has_planet_flag = will_have_delta_emis
+				has_planet_flag = will_have_alpha_emis
+				has_planet_flag = will_have_sigma_emis
+				has_planet_flag = will_have_omega_emis
+			}			
+		}
+	}
+	
+	immediate = {
+	}
+}
+
+#  HERCULEAN SPAWN FLEETS
+country_event = {
+	id = acot_ships.13
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FromFrom = {
+			any_owned_ship = {
+				OR = {
+					has_component = ACOT_HERCULEAN_AUX_GARRISON_ESCORT
+					has_component = ACOT_HERCULEAN_AUX_GARRISON_BC
+					has_component = ACOT_HERCULEAN_AUX_GARRISON_TITAN
+				}	
+			}		
+		}
+	}
+	
+	immediate = {
+		FROMFROM = {
+			save_event_target_as = acot_herculean_spot
+			create_country = {
+				type = acot_herculean_garrison
+				name = "Herculean Garrison"
+				flag = {
+					icon = {
+						category = "spherical"
+						file = "flag_spherical_23.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "v.dds"
+					}
+					colors={
+						"black"
+						"blue"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					copy_techs_from = {
+						target = root
+					}
+					save_event_target_as = herculean_garrison_reinforcement
+					every_playable_country = {
+						establish_communications_no_message = event_target:herculean_garrison_reinforcement					
+					}	
+					set_faction_hostility = {
+						set_friendly = yes
+						target = root
+					}	
+					every_country = {
+						limit = {
+							OR = {
+								is_at_war_with = root
+								is_hostile_to = root
+							}
+						}
+						set_faction_hostility = {
+							set_friendly = yes
+							target = event_target:herculean_garrison_reinforcement		
+						}	
+					}	
+				}
+			}
+			IF = {
+				limit = {
+					any_owned_ship = {
+						has_component = ACOT_HERCULEAN_AUX_GARRISON_ESCORT		
+					}
+					NOT = {
+						has_fleet_flag = acot_herculean_garrison_escort_cooldown
+					}
+				}
+				set_timed_fleet_flag = {
+					flag = acot_herculean_garrison_escort_cooldown
+					days = 360
+				}
+				create_fleet = {
+					settings = {
+						 spawn_debris = no 
+						 can_upgrade = no 
+						 uses_naval_capacity = no
+						 can_change_composition = no
+						 can_disband = no
+					}
+					effect = {
+						set_fleet_flag = herculean_escort_garrison
+						set_owner = root
+						while = {
+							count = 12
+							create_ship = {
+								random_existing_design = precursor_escort
+								upgradable = no
+							}
+						}
+						set_owner = event_target:herculean_garrison_reinforcement				
+						set_location = {
+							target = event_target:acot_herculean_spot
+							distance = 30
+							angle = random
+						}
+					}
+				}
+			}
+			IF = {
+				limit = {
+					any_owned_ship = {
+						has_component = ACOT_HERCULEAN_AUX_GARRISON_BC		
+					}
+					NOT = {
+						has_fleet_flag = acot_herculean_garrison_bc_cooldown
+					}
+				}
+				set_timed_fleet_flag = {
+					flag = acot_herculean_garrison_bc_cooldown
+					days = 720
+				}
+				create_fleet = {
+					settings = {
+						 spawn_debris = no 
+						 can_upgrade = no 
+						 uses_naval_capacity = no
+						 can_change_composition = no
+						 can_disband = no
+					}
+					effect = {
+						set_fleet_flag = herculean_bc_garrison
+						set_owner = root
+						while = {
+							count = 6
+							create_ship = {
+								random_existing_design = precursor_battlecruiser
+								upgradable = no
+							}
+						}
+						set_owner = event_target:herculean_garrison_reinforcement	
+						set_location = {
+							target = event_target:acot_herculean_spot
+							distance = 20
+							angle = random
+						}
+					}
+				}
+			}
+			IF = {
+				limit = {
+					any_owned_ship = {
+						has_component = ACOT_HERCULEAN_AUX_GARRISON_TITAN		
+					}
+					NOT = {
+						has_fleet_flag = acot_herculean_garrison_titan_cooldown
+					}
+				}
+				set_timed_fleet_flag = {
+					flag = acot_herculean_garrison_titan_cooldown
+					days = 1800
+				}
+				create_fleet = {
+					settings = {
+						 spawn_debris = no 
+						 can_upgrade = no 
+						 uses_naval_capacity = no
+						 can_change_composition = no
+						 can_disband = no
+					}
+					effect = {
+						set_fleet_flag = herculean_hyperion_garrison
+						set_owner = root
+						while = {
+							count = 2
+							create_ship = {
+								random_existing_design = precursor_titan
+								upgradable = no
+							}
+						}
+						set_owner = event_target:herculean_garrison_reinforcement	
+						set_location = {
+							target = event_target:acot_herculean_spot
+							distance = 10
+							angle = random
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Initializer Begins Orbitting
+fleet_event = {
+	id = acot_ships.130
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			is_ship_size = precursor_colossus
+		}
+		FROM = {
+			any_fleet_in_system = {
+				OR = {
+					has_fleet_flag = herculean_hyperion_garrison
+					has_fleet_flag = herculean_bc_garrison
+					has_fleet_flag = herculean_escort_garrison
+				}
+			}
+		}
+	}
+
+	immediate = {
+		From = {
+			IF = {
+				limit = {
+					any_fleet_in_system = {
+						has_fleet_flag = herculean_escort_garrison
+					}
+				}	
+				root = {
+					remove_fleet_flag = acot_herculean_garrison_escort_cooldown
+				}
+				every_fleet_in_system = {
+					limit = {
+						has_fleet_flag = herculean_escort_garrison
+					}
+					delete_fleet = this
+				}
+			}
+			IF = {
+				limit = {
+					any_fleet_in_system = {
+						has_fleet_flag = herculean_bc_garrison
+					}
+				}	
+				root = {
+					remove_fleet_flag = acot_herculean_garrison_bc_cooldown
+				}
+				every_fleet_in_system = {
+					limit = {
+						has_fleet_flag = herculean_bc_garrison
+					}
+					delete_fleet = this
+				}
+			}
+			IF = {
+				limit = {
+					any_fleet_in_system = {
+						has_fleet_flag = herculean_hyperion_garrison
+					}
+				}	
+				root = {
+					remove_fleet_flag = acot_herculean_garrison_titan_cooldown
+				}
+				every_fleet_in_system = {
+					limit = {
+						has_fleet_flag = herculean_hyperion_garrison
+					}
+					delete_fleet = this
+				}
+			}
+		}
+	}
+}
+
+# REPEL
+country_event = {
+	id = acot_ships.21
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			is_fallen_empire_spiritualist = yes
+			has_edict = acot_enable_shroud_barrier_activation
+		}
+		OR = {
+			FROMFROM = {
+				any_owned_ship = {
+					has_component = ACOT_PSIONIC_REPEL
+					NOT = {
+						has_ship_flag = acot_psionic_repel_cooldown
+					}
+				}
+			}
+			FromFromFrom = {
+				any_owned_ship = {
+					has_component = ACOT_PSIONIC_REPEL
+					NOT = {
+						has_ship_flag = acot_psionic_repel_cooldown
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		FROMFROM = {
+			every_owned_ship = {
+				limit = {
+					has_component = ACOT_PSIONIC_REPEL
+					NOT = {
+						has_ship_flag = acot_psionic_repel_cooldown
+					}
+				}
+				add_modifier = { modifier = acot_psionic_repel_buff days = 30 }			
+				set_timed_ship_flag = {
+					flag = acot_psionic_repel_cooldown
+					days = 90
+				}
+			}
+		}
+		FromFromFrom = {
+			every_owned_ship = {
+				limit = {
+					has_component = ACOT_PSIONIC_REPEL
+					NOT = {
+						has_ship_flag = acot_psionic_repel_cooldown
+					}
+				}
+				add_modifier = { modifier = acot_psionic_repel_buff days = 30 }			
+				set_timed_ship_flag = {
+					flag = acot_psionic_repel_cooldown
+					days = 90
+				}
+			}
+		}
+	}
+}
+
+# DIMENSIONAL SHIFT
+fleet_event = {
+	id = acot_ships.22
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_ship = {
+			has_acot_dimensional_cloaking = yes
+		}
+	}
+
+	immediate = {
+		every_owned_ship = {
+			limit = {
+				has_acot_dimensional_cloaking = yes	
+			}
+			add_modifier = { modifier = acot_dimensional_phasing_aftercloak_debuff days = 90 }			
+		}
+	}
+}
+
+# LIGHT STEALTH
+fleet_event = {
+	id = acot_ships.23
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_ship = {
+			has_acot_light_cloaking = yes
+		}
+	}
+
+	immediate = {
+		every_owned_ship = {
+			limit = {
+				has_acot_light_cloaking = yes
+			}
+			add_modifier = { modifier = acot_light_cloak_buff days = 90 }			
+		}
+	}
+}
+
+# LIGHT STEALTH
+fleet_event = {
+	id = acot_ships.24
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_ship = {
+			has_acot_heavy_cloaking = yes
+		}
+	}
+
+	immediate = {
+		every_owned_ship = {
+			limit = {
+				has_acot_heavy_cloaking = yes
+			}
+			add_modifier = { modifier = acot_heavy_cloak_buff days = 90 }			
+		}
+	}
+}

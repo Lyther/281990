@@ -1,0 +1,229 @@
+situation_the_portal_is_open = {
+	picture = GFX_evt_metropolis
+	category = positive
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 100
+		}
+	}
+
+	monthly_progress = {
+		base = 8	# 1 year
+	}
+
+	on_progress_complete = {
+		custom_tooltip = situation_the_portal_is_close_tooltip
+		hidden_effect = {
+			owner = {
+				country_event = { id = eqgcountry.501 days = 1800 }
+			}
+			destroy_situation = this
+		}
+	}
+
+	approach = {
+		name = approach_technical_mutual_benefit
+		icon = GFX_situation_approach_research
+		icon_background = GFX_situation_approach_bg_green
+		default = yes
+		modifier = {
+			all_technology_research_speed = 0.05
+		}
+	}
+
+	approach = {
+		name = approach_trade_cooperation
+		icon = GFX_situation_approach_handshake
+		icon_background = GFX_situation_approach_bg_green
+		modifier = {
+			trade_value_mult = 0.1
+		}
+	}
+
+	approach = {
+		name = approach_cultural_exchange
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_green
+		modifier = {
+			country_unity_produces_mult = 0.1
+		}
+	}
+
+	approach = {
+		name = approach_population_flow
+		icon = GFX_situation_approach_pop
+		icon_background = GFX_situation_approach_bg_green
+		modifier = {
+			pop_demotion_time_mult = -0.3
+		}
+	}
+
+	on_monthly = {
+		events = {
+			eqgcountry.502
+		}
+	}
+}
+
+situation_designate_harmony_paragon = {
+	picture = GFX_evt_find_harmony
+	start_value = 50
+	complete_icon_frame = GFX_situation_outcome_frame_green
+	complete_icon = GFX_situation_outcome_positive
+	fail_icon_frame = GFX_situation_outcome_frame_red
+	fail_icon = GFX_situation_outcome_negative
+
+	stages = {
+		stage_1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_green
+			end = 100
+		}
+	}
+
+	on_progress_complete = {
+		custom_tooltip = approach_start_designation
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = {
+						NOT = {
+							any_owned_leader = {
+								has_trait = leader_trait_harmony_paragon_honest
+							}
+						}
+					}
+					designate_harmony_paragon_leader = { HARMONY = honest }
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							any_owned_leader = {
+								has_trait = leader_trait_harmony_paragon_kindness
+							}
+						}
+					}
+					designate_harmony_paragon_leader = { HARMONY = kindness }
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							any_owned_leader = {
+								has_trait = leader_trait_harmony_paragon_laughter
+							}
+						}
+					}
+					designate_harmony_paragon_leader = { HARMONY = laughter }
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							any_owned_leader = {
+								has_trait = leader_trait_harmony_paragon_generously
+							}
+						}
+					}
+					designate_harmony_paragon_leader = { HARMONY = generously }
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							any_owned_leader = {
+								has_trait = leader_trait_harmony_paragon_loyalty
+							}
+						}
+					}
+					designate_harmony_paragon_leader = { HARMONY = loyalty }
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							any_owned_leader = {
+								has_trait = leader_trait_harmony_paragon_magic
+							}
+						}
+					}
+					designate_harmony_paragon_leader = { HARMONY = magic }
+				}
+			}
+			destroy_situation = this
+		}
+	}
+
+	on_fail = {
+		custom_tooltip = approach_cancel_designation
+		hidden_effect = { destroy_situation = this }
+	}
+
+	approach = {
+		name = approach_start_designation
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_green
+		ai_weight = {
+			base = 0
+			modifier = {
+				add = 100
+				owner = {
+					has_monthly_income = {
+						resource = unity
+						value > 100
+					}
+				}
+			}
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				unity = 100
+			}
+		}
+	}
+
+	approach = {
+		name = approach_pause_designation
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = approach_pause_designation
+		}
+		ai_weight = {
+			base = 0
+		}
+	}
+
+	approach = {
+		name = approach_cancel_designation
+		icon = GFX_situation_approach_unity
+		icon_background = GFX_situation_approach_bg_red
+		on_select = {
+			custom_tooltip = approach_cancel_designation
+		}
+		ai_weight = {
+			base = 10
+		}
+	}
+
+	monthly_progress = {
+		base = 0
+		modifier = {
+			desc = approach_start_designation
+			current_situation_approach = approach_start_designation
+			add = 2
+		}
+		modifier = {
+			desc = approach_cancel_designation
+			current_situation_approach = approach_cancel_designation
+			add = -100
+		}
+	}
+
+	abort_trigger = {
+		owner = { has_agenda_selected = agenda_harmony_paragon }
+	}
+}

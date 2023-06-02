@@ -1,0 +1,1846 @@
+##############################
+#### 	   	Tech Event Sir
+####			By Greetings from Beyond
+##############################
+
+
+namespace = origin_tech
+
+
+
+# ARKSHIP GIFF
+country_event = {
+	id = origin_tech.6500
+	title = "origin_diplo_header_2"
+	desc = origin_tech.6500.desc
+	
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+
+	option = {
+		name = origin_tech.6500.ask.a
+		trigger = {
+			NOT = {
+				has_country_flag = ask_about_shadow
+			}	
+		}
+		set_country_flag = ask_about_shadow
+		response_text = origin_tech.6500.ask.a.explain
+		is_dialog_only = yes
+	}
+	option = {
+		name = origin_tech.6500.ask.b
+		trigger = {
+			NOT = {
+				has_country_flag = ask_about_doing_yourself
+			}	
+		}
+		set_country_flag = ask_about_doing_yourself
+		response_text = origin_tech.6500.ask.b.explain
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = origin_tech.6500.a
+		response_text = origin_tech.6500.a.response
+		capital_scope = {
+			enable_special_project = {
+				name = "ORIGINAL_ARKSHIP_REBUILD"
+				location = this
+				owner = root.owner
+			}			
+		}
+		save_event_target_as = owner_country
+		ai_chance = {                                        # AI chance
+			factor = 1000
+		}
+	}
+}
+
+# BECOME CHAMPION
+country_event = {
+	id = origin_tech.6501
+	title = "origin_diplo_header_2"
+	desc = {
+		text =  origin_tech.651.desc
+		trigger = {
+			is_machine_empire = no
+		}
+	}
+	desc = {
+		text =  origin_tech.651.desc.machine
+		trigger = {
+			is_machine_empire = yes
+		}
+	}
+
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+
+	option = {
+		name = origin_tech.6500.ask.a
+		response_text = origin_tech.6500.ask.a.explain
+		trigger = {
+			NOT = {
+				has_country_flag = ask_about_shadow
+			}
+		}
+		is_dialog_only = yes
+		set_country_flag = ask_about_shadow
+	}
+	option = {
+		name = origin_tech.6500.ask.c
+		trigger = {
+			event_target:sofe_crisis_country = {
+				is_country_type = sbtg_stellarborne_empire_active
+			}
+			NOT = {
+				has_country_flag = ask_about_consequence
+			}			
+		}
+		response_text = origin_tech.6500.ask.c.explain
+		is_dialog_only = yes
+		set_country_flag = ask_about_consequence
+	}
+
+	option = {
+		name = origin_tech.651.a
+		response_text = origin_tech.651.a.response
+		custom_tooltip = origin_tech.651.a.desc
+		trigger = {
+			is_machine_empire = no
+		}
+		ai_chance = {                                        # AI chance
+			factor = 1000
+		}
+		hidden_effect = {
+			country_event = { id = origin_tech.6 }
+		}
+	}
+
+	option = {
+		name = origin_tech.651.a.machine
+		response_text = origin_tech.651.a.response
+		custom_tooltip = origin_tech.651.a.desc
+		trigger = {
+			is_machine_empire = yes
+		}
+		ai_chance = {                                        # AI chance
+			factor = 1000
+		}
+	}
+
+}
+
+
+
+#Arkship spawn
+planet_event = {
+	id = origin_tech.100
+	title = origin_tech.100.name
+	desc = origin_tech.100.desc
+	picture = GFX_evt_origin_flagship
+	#show_sound = event_arkship_roar
+	
+	is_triggered_only = yes
+
+	immediate = {
+		create_flagship = yes
+		create_origin_small_fleet = yes
+		owner = {
+			establish_communications = event_target:sofe_light_country
+		}
+	}
+	
+	option = {
+		name = origin_tech.100.a
+	}
+	option = {
+		name = origin_tech.100.b
+	}
+	option = {
+		name = origin_tech.100.c
+	}
+	option = {
+		name = origin_tech.100.d
+	}
+	option = {
+		name = origin_tech.100.e
+	}
+}
+
+country_event = {
+	id = origin_tech.6
+	title = origin_tech.final.name
+	desc = {
+		text = origin_tech.final.desc
+		trigger = {
+			is_regular_empire = yes
+		}
+	}
+	desc = {
+		text = origin_tech.final.desc.hive
+		trigger = {
+			is_hive_empire = yes
+		}
+	}
+	desc = {
+		text = origin_tech.final.desc.machine
+		trigger = {
+			is_machine_empire = yes
+		}
+	}
+	picture = GFX_evt_origin_ascension
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		country_event = { id = origin_tech.6500 days = 5 }
+		set_country_type = sbtg_stellarborne_empire_active
+		change_government = {
+			civics = {
+				civic = civic_know_everything_ascended
+				civic = civic_solar_empire_ascended
+				civic = civic_eternal_fleet_ascended
+			}
+		}
+		country_event = { id = origin_test_event.0 }
+		country_event = { id = origin_test_event.1 }
+		country_event = { id = origin_test_event.2 }
+		clear_ethos = yes
+		add_resource = {
+			minerals = 1000000
+			energy = 1000000
+			alloys = 1000000
+			food = 1000000
+			consumer_goods = 1000000
+			sr_dark_matter = 1000000
+			sr_zro = 100000
+			sr_living_metal = 100000
+			volatile_motes = 100000
+			rare_crystals = 100000
+			exotic_gases = 100000
+			nanites = 100000
+			acot_sr_dark_energy = 1000000
+			acot_sr_stellarite = 1000000
+			acot_sr_light_matter = 1000000				
+			influence = 1000
+			unity = 100000
+		}
+		give_technology = { tech = tech_ultimate_weapon }
+		create_ship_design = { design = "NAME_PROGENITOR_ESCORT" }
+		add_ship_design = last_created_design
+		create_ship_design = { design = "NAME_PROGENITOR_BATTLECRUISER" }
+		add_ship_design = last_created_design
+		create_ship_design = { design = "NAME_PROGENITOR_TITAN" }
+		add_ship_design = last_created_design
+		create_ship_design = { design = "NAME_PROGENITOR_AVATAR" }
+		add_ship_design = last_created_design
+		create_ship_design = { design = "NAME_ORIGIN_TOWER" }
+		add_ship_design = last_created_design
+		create_ship_design = { design = "NAME_OE_Super_Starbase_Playable" }
+		add_ship_design = last_created_design
+		every_owned_pop = {
+			if = {
+				limit = { has_trait = trait_pc_desert_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_desert_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_arid_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_arid_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_savannah_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_savannah_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_tropical_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_tropical_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_continental_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_continental_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_arctic_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_arctic_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_tundra_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_tundra_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_alpine_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_alpine_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_nuked_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_nuked_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_gaia_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_gaia_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_ringworld_habitable_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_ringworld_habitable_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_habitat_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_habitat_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_machine_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_machine_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_hive_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_hive_preference
+				}			
+			}
+			if = {
+				limit = { has_trait = trait_pc_relic_preference }
+				modify_species = {
+					species = this
+					remove_trait = trait_pc_relic_preference
+				}			
+			}
+		}	
+		every_owned_pop = {
+			modify_species = {
+				species = this
+					add_trait = trait_master_mind
+			}
+			modify_species = {
+				species = this
+					add_trait = trait_ancient_knowledge
+			}
+			modify_species = {
+				species = this
+					add_trait = trait_bionic_implants
+			}
+			modify_species = {
+				species = this
+					add_trait = trait_ancient_race
+			}
+			modify_species = {
+				species = this
+					add_trait = trait_pc_all_preference
+			}
+		}
+		every_country = {
+			limit = {
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire			
+				}
+			}
+			establish_communications_no_message = root
+		}
+	### Ancient Knowledge
+
+	every_owned_leader = {
+		limit = {
+			NOR = {
+				has_trait =	leader_trait_admiral_ancient_knowledge
+				has_trait =	leader_trait_general_ancient_knowledge
+				has_trait =	leader_trait_governor_ancient_knowledge
+				has_trait =	leader_trait_scientist_ancient_knowledge
+				has_trait =	leader_trait_ruler_ancient_knowledge
+			}
+		}
+		if = {
+			limit = { leader_class = admiral }
+			add_trait = leader_trait_admiral_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+		if = {
+			limit = { leader_class = general }
+			add_trait = leader_trait_general_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+		if = {
+			limit = { leader_class = governor }
+			add_trait = leader_trait_governor_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+		if = {
+			limit = { leader_class = scientist }
+			add_trait = leader_trait_scientist_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+		if = {
+			limit = { leader_class = ruler }
+			add_trait = leader_trait_ruler_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+	}		
+
+	every_pool_leader = {
+		limit = {
+			NOR = {
+				has_trait = leader_trait_admiral_ancient_knowledge
+				has_trait = leader_trait_general_ancient_knowledge
+				has_trait = leader_trait_governor_ancient_knowledge
+				has_trait = leader_trait_scientist_ancient_knowledge
+				has_trait = leader_trait_ruler_ancient_knowledge
+			}
+		}
+		if = {
+			limit = { leader_class = admiral }
+			add_trait = leader_trait_admiral_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+		if = {
+			limit = { leader_class = general }
+			add_trait = leader_trait_general_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+		if = {
+			limit = { leader_class = governor }
+			add_trait = leader_trait_governor_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+		if = {
+			limit = { leader_class = scientist }
+			add_trait = leader_trait_scientist_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+		if = {
+			limit = { leader_class = ruler }
+			add_trait = leader_trait_ruler_ancient_knowledge
+			add_ruler_trait = leader_trait_ruler_ancient_knowledge
+		}
+	}
+
+#### Bio Implants
+
+	every_owned_leader = {
+		limit = {
+			NOR = {
+				has_trait =    leader_trait_admiral_bionic_implant
+				has_trait =    leader_trait_general_bionic_implant
+				has_trait =    leader_trait_governor_bionic_implant
+				has_trait =    leader_trait_scientist_bionic_implant
+				has_trait =    leader_trait_ruler_bionic_implant
+			}
+		}
+		if = {
+			limit = { leader_class = admiral }
+			add_trait = leader_trait_admiral_bionic_implant
+			add_ruler_trait = leader_trait_ruler_bionic_implant
+		}
+		if = {
+			limit = { leader_class = general }
+			add_trait = leader_trait_general_bionic_implant
+			add_ruler_trait = leader_trait_ruler_bionic_implant
+		}
+		if = {
+			limit = { leader_class = governor }
+			add_trait = leader_trait_governor_bionic_implant
+			add_ruler_trait = leader_trait_ruler_bionic_implant
+		}
+		if = {
+			limit = { leader_class = scientist }
+			add_trait = leader_trait_scientist_bionic_implant
+			add_ruler_trait = leader_trait_ruler_bionic_implant
+		}
+		if = {
+			limit = { leader_class = ruler }
+			add_trait = leader_trait_ruler_bionic_implant
+		}
+	}
+	every_owned_leader = {
+		limit = {
+			is_same_species = root.owner
+			NOR = {
+				has_trait =    leader_trait_admiral_bionic_implant
+				has_trait =    leader_trait_general_bionic_implant
+				has_trait =    leader_trait_governor_bionic_implant
+				has_trait =    leader_trait_scientist_bionic_implant
+				has_trait =    leader_trait_ruler_bionic_implant
+			}
+		}
+		if = {
+			limit = { leader_class = admiral }
+			add_trait = leader_trait_admiral_bionic_implant
+			add_ruler_trait = leader_trait_ruler_bionic_implant
+		}
+		if = {
+			limit = { leader_class = general }
+			add_trait = leader_trait_general_bionic_implant
+			add_ruler_trait = leader_trait_ruler_bionic_implant
+		}
+		if = {
+			limit = { leader_class = governor }
+			add_trait = leader_trait_governor_bionic_implant
+			add_ruler_trait = leader_trait_ruler_bionic_implant
+		}
+		if = {
+			limit = { leader_class = scientist }
+			add_trait = leader_trait_scientist_bionic_implant
+			add_ruler_trait = leader_trait_ruler_bionic_implant
+		}
+		if = {
+			limit = { leader_class = ruler }
+			add_trait = leader_trait_ruler_bionic_implant
+		}
+	}
+
+
+#### Dracakis
+
+	every_owned_leader = {
+		limit = {
+			NOR = {
+				has_trait =    leader_trait_admiral_master_mind
+				has_trait =    leader_trait_general_master_mind
+				has_trait =    leader_trait_governor_master_mind
+				has_trait =    leader_trait_scientist_master_mind
+				has_trait =    leader_trait_ruler_master_mind
+			}
+		}
+		if = {
+			limit = { leader_class = admiral }
+			add_trait = leader_trait_admiral_master_mind
+			add_ruler_trait = leader_trait_ruler_master_mind
+		}
+		if = {
+			limit = { leader_class = general }
+			add_trait = leader_trait_general_master_mind
+			add_ruler_trait = leader_trait_ruler_master_mind
+		}
+		if = {
+			limit = { leader_class = governor }
+			add_trait = leader_trait_governor_master_mind
+			add_ruler_trait = leader_trait_ruler_master_mind
+		}
+		if = {
+			limit = { leader_class = scientist }
+			add_trait = leader_trait_scientist_master_mind
+			add_ruler_trait = leader_trait_ruler_master_mind
+		}
+		if = {
+			limit = { leader_class = ruler }
+			add_trait = leader_trait_ruler_master_mind
+		}
+	}
+	every_owned_leader = {
+		limit = {
+			NOR = {
+				has_trait =    leader_trait_admiral_bionic_implant
+				has_trait =    leader_trait_general_bionic_implant
+				has_trait =    leader_trait_governor_bionic_implant
+				has_trait =    leader_trait_scientist_bionic_implant
+				has_trait =    leader_trait_ruler_master_mind
+			}
+		}
+		if = {
+			limit = { leader_class = admiral }
+			add_trait = leader_trait_admiral_master_mind
+			add_ruler_trait = leader_trait_ruler_master_mind
+		}
+		if = {
+			limit = { leader_class = general }
+			add_trait = leader_trait_general_master_mind
+			add_ruler_trait = leader_trait_ruler_master_mind
+		}
+		if = {
+			limit = { leader_class = governor }
+			add_trait = leader_trait_governor_master_mind
+			add_ruler_trait = leader_trait_ruler_master_mind
+		}
+		if = {
+			limit = { leader_class = scientist }
+			add_trait = leader_trait_scientist_master_mind
+			add_ruler_trait = leader_trait_ruler_master_mind
+		}
+		if = {
+			limit = { leader_class = ruler }
+			add_trait = leader_trait_ruler_master_mind
+			}
+		}
+	}
+
+	option = {
+		name = origin_tech.final.a
+		custom_tooltip = origin_tech.final.a.desc
+		root.owner = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_playable_country = yes
+				}
+				add_opinion_modifier = {
+					who = root.owner
+					modifier = opinion_new_orginal_empire
+				}				
+			}
+			#####################MISC################
+			}
+		}	
+	}
+}
+
+# Light Matter Tech
+planet_event = {
+	id = origin_tech.3
+	title = "origin_tech.3"
+	desc = "origin_tech.3.desc"
+	show_sound = event_mystic_reveal
+	diplomatic = yes
+	
+	pre_triggers = {
+		is_capital = yes
+	}
+
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+	
+
+	trigger = {
+		has_global_flag = active_sofe_crisis
+		owner = {
+			is_progenitor_empires = no		
+			check_variable = {
+				which = "origin_fleet_kills" 
+				value > 20
+			}
+			NOR = { 
+				has_valid_civic = "civic_fanatic_purifiers"
+				has_valid_civic = "civic_hive_devouring_swarm"
+				has_valid_civic = "civic_machine_terminator"
+			} 
+			NOT = { has_country_flag = learned_light_matter }
+			NOT = { has_technology = tech_dark_matter_power_core_oe }
+		}
+	}
+	
+	
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	immediate = {
+		owner = {
+			set_country_flag = learned_light_matter
+		}
+	}
+
+	option = {
+		name = origin_tech.3.a
+		custom_tooltip = origin_tech.3.a.desc
+		default_hide_option = yes
+		root.owner = {
+			add_resource = {
+				influence = 100			
+			}
+		}
+		enable_special_project = {
+				name = "PROJECT_LIGHT_MATTER"
+				location = this
+				owner = root.owner
+		}
+		ai_chance = {                                        # AI chance
+			factor = 1000
+		}
+	}
+
+}
+
+# Light Matter Tech Acquired
+planet_event = {
+	id = origin_tech.4
+	title = origin_tech.4.name
+	desc = {
+		text = origin_tech.4.desc
+		trigger = {
+			owner = {
+				NOT = {
+					has_technology = tech_precursor_design				
+				}				
+			}
+		}
+	}
+	desc = {
+		text = origin_tech.4.desc.precursor
+		trigger = {
+			owner = {
+				has_technology = tech_precursor_design				
+			}
+		}
+	}
+	show_sound = event_mystic_reveal
+	picture = GFX_evt_origin_empire
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = origin_tech.4.a
+		hidden_effect = {
+		}
+		root.owner = {
+		set_country_flag = acquired_light_matter
+			if = {
+				limit = { NOT = { has_technology = tech_dark_matter_power_core_oe } }
+				add_research_option = tech_dark_matter_power_core_oe				
+			}
+			add_resource = {
+				acot_sr_light_matter = 1000
+			}	
+
+			if = {
+				limit = { has_technology = tech_precursor_escort }
+				add_research_option = tech_omega_escort				
+			}
+			if = {
+				limit = { has_technology = tech_precursor_bc }
+				add_research_option = tech_omega_battlecruiser				
+			}
+			if = {
+				limit = { has_technology = tech_precursor_sentinel }
+				add_research_option = tech_omege_sentinel				
+			}
+			if = {
+				limit = { has_technology = tech_precursor_assault_carrier }
+				add_research_option = tech_omega_carrier				
+			}
+			if = {
+				limit = { has_technology = tech_precursor_titan }
+				add_research_option = tech_omega_titan			
+			}			
+			if = {
+				limit = { has_technology = tech_precursor_guardian }
+				add_research_option = tech_omega_guardian				
+			}	
+			if = {
+				limit = { has_technology = tech_precursor_colossus }
+				add_research_option = tech_omega_colossus				
+			}		
+		}
+	}
+}
+
+# Light Matter Tech Options
+planet_event = {
+	id = origin_tech.5
+	title = origin_tech.5.name
+	desc = origin_tech.4.desc.origin
+	show_sound = event_mystic_reveal
+
+	pre_triggers = {
+		is_capital = yes		
+	}
+
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+	
+	trigger = {
+		owner = {
+			is_progenitor_empires = no
+			has_country_flag = acquired_light_matter
+			check_variable = {
+				which = "origin_fleet_kills" 
+				value > 40
+			}
+			NOR = { 
+				has_valid_civic = "civic_fanatic_purifiers"
+				has_valid_civic = "civic_hive_devouring_swarm"
+				has_valid_civic = "civic_machine_terminator"
+			} 
+			NOT = { has_country_flag = light_matter_option_selected }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 30
+	}
+
+	immediate = {
+		root.owner = {
+		set_country_flag = light_matter_option_selected
+		}
+	}
+
+	option = {
+		name = origin_tech.4.desc.origin.ask1
+		response_text = origin_tech.4.desc.origin.explain1
+		is_dialog_only = yes
+	}
+	option = {
+		name = origin_tech.4.desc.origin.ask2
+		response_text = origin_tech.4.desc.origin.explain2
+		is_dialog_only = yes
+	}
+	
+	option = {
+		name = origin_tech.5.a
+		custom_tooltip = origin_tech.5.a.desc
+			enable_special_project = {
+				name = "PROJECT_OFFENSE_ORIGIN_TECH"
+				location = this
+				owner = root.owner
+		}
+	}
+
+	option = {
+		name = origin_tech.5.b
+		custom_tooltip = origin_tech.5.b.desc
+			enable_special_project = {
+				name = "PROJECT_DEFENSE_ORIGIN_TECH"
+				location = this
+				owner = root.owner
+		}
+	}
+
+	option = {
+		name = origin_tech.5.c
+		custom_tooltip = origin_tech.5.c.desc
+			enable_special_project = {
+				name = "PROJECT_UTILITY_ORIGIN_TECH"
+				location = this
+				owner = root.owner
+		}
+	}
+}
+
+# Light Matter Tech Options Second Time
+planet_event = {
+	id = origin_tech.501
+	title = origin_tech.501.name
+	desc = origin_tech.501.desc
+	show_sound = event_mystic_reveal
+	
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+
+	pre_triggers = {
+		is_capital = yes		
+	}
+
+	trigger = {
+		owner = {
+			is_progenitor_empires = no
+			check_variable = {
+				which = "origin_fleet_kills" 
+				value > 80 
+			}
+			OR = {
+				has_country_flag = acquired_light_matter_offense		
+				has_country_flag = acquired_light_matter_defense	
+				has_country_flag = acquired_light_matter_utility			
+			}
+			NOR = { 
+				has_valid_civic = "civic_fanatic_purifiers"
+				has_valid_civic = "civic_hive_devouring_swarm"
+				has_valid_civic = "civic_machine_terminator"
+			} 
+			NOT = { has_country_flag = light_matter_option_selected_second }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 30
+	}
+
+	immediate = {
+		root.owner = {
+		set_country_flag = light_matter_option_selected_second
+		}
+	}
+	
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = acquired_light_matter_offense
+				}
+			}
+		}
+		name = origin_tech.5.a
+		custom_tooltip = origin_tech.5.a.desc
+			enable_special_project = {
+				name = "PROJECT_OFFENSE_ORIGIN_TECH"
+				location = this
+				owner = root.owner
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = acquired_light_matter_defense
+				}
+			}
+		}
+		name = origin_tech.5.b
+		custom_tooltip = origin_tech.5.b.desc
+			enable_special_project = {
+				name = "PROJECT_DEFENSE_ORIGIN_TECH"
+				location = this
+				owner = root.owner
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOT = {
+					has_country_flag = acquired_light_matter_utility
+				}
+			}
+		}
+		name = origin_tech.5.c
+		custom_tooltip = origin_tech.5.c.desc
+			enable_special_project = {
+				name = "PROJECT_UTILITY_ORIGIN_TECH"
+				location = this
+				owner = root.owner
+		}
+	}
+}
+
+# Light Matter Tech Acquired - Weapons
+planet_event = {
+	id = origin_tech.11
+	title = origin_tech.11.name
+	desc = origin_tech.11.desc
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+
+	pre_triggers = {
+		is_capital = yes		
+	}
+
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = origin_tech.11.a
+		root.owner = {
+			set_country_flag = acquired_light_matter_offense
+			#####################OFFENSE################
+
+			if = {
+				limit = { NOT = { has_technology = tech_barrage_missile_oe } }
+				give_technology = { tech = tech_barrage_missile_oe message = no } 					
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_xl_missile_oe } }
+				give_technology = { tech = tech_xl_missile_oe message = no } 					
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_missile_nuke_oe } }
+				give_technology = { tech = tech_missile_nuke_oe message = no } 					
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_kinetic_artillery_oe } }
+				add_research_option = tech_kinetic_artillery_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_mass_accelerator_oe } }
+				add_research_option = tech_mass_accelerator_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_energy_cannon_oe } }
+				add_research_option = tech_energy_cannon_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_energy_torpedo_oe } }
+				add_research_option = tech_energy_torpedo_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_energy_lance_oe } }
+				add_research_option = tech_energy_lance_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_arc_emitter_oe } }
+				add_research_option = tech_arc_emitter_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_perdition_beam_oe } }
+				add_research_option = tech_perdition_beam_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_missile_oe } }
+				add_research_option = tech_missile_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_strike_craft_gunship_oe } }
+				add_research_option = tech_strike_craft_gunship_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_strike_craft_bomber_oe } }
+				add_research_option = tech_strike_craft_bomber_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_energy_core_oe } }
+				add_research_option = tech_energy_core_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_titan_accelerator_oe } }
+				add_research_option = tech_titan_accelerator_oe 				
+			}				
+			if = {
+				limit = { NOT = { has_technology = tech_titan_emitter_oe } }
+				add_research_option = tech_titan_emitter_oe 				
+			}				
+
+		}
+	}
+}
+
+# Light Matter Tech Acquired - Defenses
+planet_event = {
+	id = origin_tech.12
+	title = origin_tech.12.name
+	desc = origin_tech.12.desc
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+
+	pre_triggers = {
+		is_capital = yes		
+	}
+
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = origin_tech.12.a
+		root.owner = {
+		set_country_flag = acquired_light_matter_defense
+			#####################DEFENCE################
+
+			if = {
+				limit = { NOT = { has_technology = tech_flak_batteries_oe } }
+				add_research_option = tech_flak_batteries_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_point_defense_oe } }
+				add_research_option = tech_point_defense_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_autocannons_oe } }
+				add_research_option = tech_autocannons_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_mass_driver_oe } }
+				add_research_option = tech_mass_driver_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_laser_oe } }
+				add_research_option = tech_laser_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_plasma_oe } }
+				add_research_option = tech_plasma_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_strike_craft_fighter_oe } }
+				add_research_option = tech_strike_craft_fighter_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_armor_oe } }
+				add_research_option = tech_armor_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_dark_matter_deflector_oe } }
+				add_research_option = tech_dark_matter_deflector_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_darkmatter_reactive_drone_oe } }
+				add_research_option = tech_darkmatter_reactive_drone_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_darkmatter_shield_supercharger_oe } }
+				add_research_option = tech_darkmatter_shield_supercharger_oe				
+			}
+			if = {
+				limit = { NOT = { has_technology = tech_darkmatter_armor_supercharger_oe } }
+				add_research_option = tech_darkmatter_armor_supercharger_oe				
+			}
+		}
+	}
+}
+
+
+# Light Matter Tech Acquired - Utility
+planet_event = {
+	id = origin_tech.13
+	title = origin_tech.13.name
+	desc = origin_tech.13.desc
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+
+	pre_triggers = {
+		is_capital = yes		
+	}
+
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = origin_tech.13.a
+		root.owner = {
+		set_country_flag = acquired_light_matter_utility
+		if = {
+			limit = { NOT = { has_technology = tech_thrusters_oe } }
+			add_research_option = tech_thrusters_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_dark_matter_power_core_oe } }
+			add_research_option = tech_dark_matter_power_core_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_sensor_oe } }
+			add_research_option = tech_sensor_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_computer_lightmatter } }
+			add_research_option = tech_computer_lightmatter				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_enigmatic_drive_oe } }
+			add_research_option = tech_enigmatic_drive_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_darkmatter_afterburners_oe } }
+			add_research_option = tech_darkmatter_afterburners_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_darkmatter_hyper_jump_drive_oe } }
+			add_research_option = tech_darkmatter_hyper_jump_drive_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_analyzer_oe } }
+			add_research_option = tech_analyzer_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_inspire_aura_oe } }
+			add_research_option = tech_inspire_aura_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_darkmatter_aura_energy_drainer_oe } }
+			add_research_option = tech_darkmatter_aura_energy_drainer_oe				
+		}
+		if = {
+			limit = { NOT = { has_technology = tech_omega_warmech } }
+			add_research_option = tech_omega_warmech				
+			}
+		}
+	}
+}
+
+######################################################################################
+
+# Light Matter Tech Options Final Time
+planet_event = {
+	id = origin_tech.8
+	title = origin_tech.8.name
+	desc = origin_tech.8.desc
+	show_sound = event_mystic_reveal
+	
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:sofe_crisis_country
+		room = "personality_original_empire_room"
+	}
+
+	pre_triggers = {
+		is_capital = yes		
+	}
+
+	trigger = {
+		owner = {
+			is_progenitor_empires = no
+			check_variable = {
+				which = "origin_fleet_kills" 
+				value > 160 
+			}
+			NOR = { 
+				has_valid_civic = "civic_fanatic_purifiers"
+				has_valid_civic = "civic_hive_devouring_swarm"
+				has_valid_civic = "civic_machine_terminator"
+			} 
+			NOT = { has_country_flag = light_matter_option_final_goodman_acquired }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	immediate = {	
+		root.owner = {
+			set_country_flag = light_matter_option_final_goodman_acquired
+			capital_scope = { save_event_target_as = pc_home }
+		}
+	}
+	
+	option = {
+		name = origin_tech.8.a
+		custom_tooltip = origin_tech.8.a.desc
+		create_fleet = {
+			settings = {
+				uses_naval_capacity = no
+			}
+			effect = {
+				#assign_leader = last_created_leader
+				while = {
+					count = 45
+					create_ship = {
+						random_existing_design = cruiser
+					}
+				}
+				while = {
+					count = 25
+					create_ship = {
+						random_existing_design = battleship
+					}
+				}
+				while = {
+					count = 4
+					create_ship = {
+						random_existing_design = titan
+					}
+				}
+				set_owner = root.owner
+				set_formation_scale = 2
+				set_fleet_stance = aggressive
+				set_location = {
+					target = event_target:pc_home
+					distance = 10
+					angle = random
+				}
+			}
+		}
+		create_fleet = {
+			settings = {
+				uses_naval_capacity = no
+			}
+			effect = {
+				while = {
+					count = 12
+					create_ship = {
+						random_existing_design = cruiser
+					}
+				}
+				while = {
+					count = 8
+					create_ship = {
+						random_existing_design = battleship
+					}
+				}
+				while = {
+					count = 6
+					create_ship = {
+						random_existing_design = precursor_escort
+					}
+				}
+				while = {
+					count = 4
+					create_ship = {
+						random_existing_design = precursor_battlecruiser
+					}
+				}
+				while = {
+					count = 1
+					create_ship = {
+						random_existing_design = sofe_gatekeeper_warden
+					}
+				}
+				set_owner = root.owner
+				set_formation_scale = 2
+				set_fleet_stance = aggressive
+				set_location = {
+					target = event_target:pc_home
+					distance = 20
+					angle = random
+				}
+			}
+		}
+		create_fleet = {
+			settings = {
+				uses_naval_capacity = no
+			}
+			effect = {
+				while = {
+					count = 15
+					create_ship = {
+						random_existing_design = precursor_escort
+					}
+				}
+				while = {
+					count = 8
+					create_ship = {
+						random_existing_design = precursor_battlecruiser
+					}
+				}
+				while = {
+					count = 2
+					create_ship = {
+						random_existing_design = precursor_titan
+					}
+				}
+				while = {
+					count = 2
+					create_ship = {
+						random_existing_design = precursor_assault_carrier
+					}
+				}
+				set_owner = root.owner
+				set_formation_scale = 2
+				set_fleet_stance = aggressive
+				set_location = {
+					target = event_target:pc_home
+					distance = 40
+					angle = random
+				}
+			}
+		}
+	}
+
+
+	option = {
+		name = origin_tech.8.b
+		response_text = origin_tech.8.b.response
+	}
+}
+
+
+
+######################################################################################
+
+# Assign Leader Traits Here
+
+country_event = {
+    id = origin_tech.101
+    hide_window = yes
+ 	is_triggered_only = yes
+    
+    immediate = {
+        every_country = {
+            limit = {
+                species = { has_trait = trait_ancient_knowledge }
+			}
+			every_owned_leader = {
+                limit = {
+                    is_same_species = root
+                    NOR = {
+                        has_trait =    leader_trait_admiral_ancient_knowledge
+                        has_trait =    leader_trait_general_ancient_knowledge
+                        has_trait =    leader_trait_governor_ancient_knowledge
+                        has_trait =    leader_trait_scientist_ancient_knowledge
+                        has_trait =    leader_trait_ruler_ancient_knowledge
+                    }
+                }
+                if = {
+                    limit = { leader_class = admiral }
+                    add_trait = leader_trait_admiral_ancient_knowledge
+                    add_ruler_trait = leader_trait_ruler_ancient_knowledge
+                }
+                if = {
+                    limit = { leader_class = general }
+                    add_trait = leader_trait_general_ancient_knowledge
+                    add_ruler_trait = leader_trait_ruler_ancient_knowledge
+                }
+                if = {
+                    limit = { leader_class = governor }
+                    add_trait = leader_trait_governor_ancient_knowledge
+                    add_ruler_trait = leader_trait_ruler_ancient_knowledge
+                }
+                if = {
+                    limit = { leader_class = scientist }
+					add_trait = leader_trait_scientist_ancient_knowledge
+                    add_trait = leader_trait_curator
+                    add_ruler_trait = leader_trait_ruler_ancient_knowledge
+                }
+                if = {
+                    limit = { leader_class = ruler }
+                    add_trait = leader_trait_ruler_ancient_knowledge
+				}
+				set_skill = 10
+            }
+			every_pool_leader = {
+                limit = {
+                    is_same_species = root
+                    NOR = {
+                        has_trait =    leader_trait_admiral_ancient_knowledge
+                        has_trait =    leader_trait_general_ancient_knowledge
+                        has_trait =    leader_trait_governor_ancient_knowledge
+                        has_trait =    leader_trait_scientist_ancient_knowledge
+                        has_trait =    leader_trait_ruler_ancient_knowledge
+                    }
+                }
+                if = {
+                    limit = { leader_class = admiral }
+                    add_trait = leader_trait_admiral_ancient_knowledge
+                    add_ruler_trait = leader_trait_ruler_ancient_knowledge
+                }
+                if = {
+                    limit = { leader_class = general }
+                    add_trait = leader_trait_general_ancient_knowledge
+                    add_ruler_trait = leader_trait_ruler_ancient_knowledge
+                }
+                if = {
+                    limit = { leader_class = governor }
+                    add_trait = leader_trait_governor_ancient_knowledge
+                    add_ruler_trait = leader_trait_ruler_ancient_knowledge
+                }
+                if = {
+                    limit = { leader_class = scientist }
+                    add_trait = leader_trait_scientist_ancient_knowledge
+                    add_ruler_trait = leader_trait_ruler_ancient_knowledge
+                }
+                if = {
+                    limit = { leader_class = ruler }
+                    add_trait = leader_trait_ruler_ancient_knowledge
+				}
+				set_skill = 10
+            }
+    	}
+	}
+}
+
+country_event = {
+    id = origin_tech.102
+    hide_window = yes
+ 	is_triggered_only = yes
+    
+    immediate = {
+        every_country = {
+            limit = {
+                species = { has_trait = trait_bionic_implants }
+			}
+			every_owned_leader = {
+                limit = {
+                    is_same_species = root
+                    NOR = {
+                        has_trait =    leader_trait_admiral_bionic_implant
+                        has_trait =    leader_trait_general_bionic_implant
+                        has_trait =    leader_trait_governor_bionic_implant
+                        has_trait =    leader_trait_scientist_bionic_implant
+                        has_trait =    leader_trait_ruler_bionic_implant
+                    }
+                }
+                if = {
+                    limit = { leader_class = admiral }
+                    add_trait = leader_trait_admiral_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_bionic_implant
+                }
+                if = {
+                    limit = { leader_class = general }
+                    add_trait = leader_trait_general_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_bionic_implant
+                }
+                if = {
+                    limit = { leader_class = governor }
+                    add_trait = leader_trait_governor_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_bionic_implant
+                }
+                if = {
+                    limit = { leader_class = scientist }
+                    add_trait = leader_trait_scientist_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_bionic_implant
+                }
+                if = {
+                    limit = { leader_class = ruler }
+                    add_trait = leader_trait_ruler_bionic_implant
+				}
+				set_skill = 10
+            }
+			every_owned_leader = {
+                limit = {
+                    is_same_species = root
+                    NOR = {
+                        has_trait =    leader_trait_admiral_bionic_implant
+                        has_trait =    leader_trait_general_bionic_implant
+                        has_trait =    leader_trait_governor_bionic_implant
+                        has_trait =    leader_trait_scientist_bionic_implant
+                        has_trait =    leader_trait_ruler_bionic_implant
+                    }
+                }
+                if = {
+                    limit = { leader_class = admiral }
+                    add_trait = leader_trait_admiral_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_bionic_implant
+                }
+                if = {
+                    limit = { leader_class = general }
+                    add_trait = leader_trait_general_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_bionic_implant
+                }
+                if = {
+                    limit = { leader_class = governor }
+                    add_trait = leader_trait_governor_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_bionic_implant
+                }
+                if = {
+                    limit = { leader_class = scientist }
+                    add_trait = leader_trait_scientist_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_bionic_implant
+                }
+                if = {
+                    limit = { leader_class = ruler }
+                    add_trait = leader_trait_ruler_bionic_implant
+				}
+				set_skill = 10
+            }
+    	}
+	}
+}
+
+country_event = {
+    id = origin_tech.103
+    hide_window = yes
+ 	is_triggered_only = yes
+    
+    immediate = {
+        every_country = {
+            limit = {
+                species = { has_trait = trait_master_mind }
+			}
+			every_owned_leader = {
+                limit = {
+                    is_same_species = root
+                    NOR = {
+                        has_trait =    leader_trait_admiral_master_mind
+                        has_trait =    leader_trait_general_master_mind
+                        has_trait =    leader_trait_governor_master_mind
+                        has_trait =    leader_trait_scientist_master_mind
+                        has_trait =    leader_trait_ruler_master_mind
+                    }
+                }
+                if = {
+                    limit = { leader_class = admiral }
+                    add_trait = leader_trait_admiral_master_mind
+                    add_ruler_trait = leader_trait_ruler_master_mind
+                }
+                if = {
+                    limit = { leader_class = general }
+                    add_trait = leader_trait_general_master_mind
+                    add_ruler_trait = leader_trait_ruler_master_mind
+                }
+                if = {
+                    limit = { leader_class = governor }
+                    add_trait = leader_trait_governor_master_mind
+                    add_ruler_trait = leader_trait_ruler_master_mind
+                }
+                if = {
+                    limit = { leader_class = scientist }
+                    add_trait = leader_trait_scientist_master_mind
+                    add_ruler_trait = leader_trait_ruler_master_mind
+                }
+                if = {
+                    limit = { leader_class = ruler }
+                    add_trait = leader_trait_ruler_master_mind
+				}
+				set_skill = 10
+            }
+			every_owned_leader = {
+                limit = {
+                    is_same_species = root
+                    NOR = {
+                        has_trait =    leader_trait_admiral_bionic_implant
+                        has_trait =    leader_trait_general_bionic_implant
+                        has_trait =    leader_trait_governor_bionic_implant
+                        has_trait =    leader_trait_scientist_bionic_implant
+                        has_trait =    leader_trait_ruler_master_mind
+                    }
+                }
+                if = {
+                    limit = { leader_class = admiral }
+                    add_trait = leader_trait_admiral_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_master_mind
+                }
+                if = {
+                    limit = { leader_class = general }
+                    add_trait = leader_trait_general_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_master_mind
+                }
+                if = {
+                    limit = { leader_class = governor }
+                    add_trait = leader_trait_governor_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_master_mind
+                }
+                if = {
+                    limit = { leader_class = scientist }
+                    add_trait = leader_trait_scientist_bionic_implant
+                    add_ruler_trait = leader_trait_ruler_master_mind
+                }
+                if = {
+                    limit = { leader_class = ruler }
+                    add_trait = leader_trait_ruler_master_mind
+				}
+				set_skill = 10
+            }
+    	}
+	}
+}
+
+# Planet Colonized
+planet_event = {
+	id = origin_tech.105
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		owner = { 
+			OR = {
+				is_country_type = sbtg_stellarborne_empire
+				is_country_type = sbtg_stellarborne_empire_passive
+				is_country_type = sbtg_stellarborne_empire_active	
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = { 
+				NOR = {
+					habitable_structure = yes
+				}
+			}
+			change_pc = pc_goodman_gaia_world
+			change_planet_size = 100
+			remove_all_districts = yes
+			while = {
+				count = 50
+				add_district = district_sofe_omega_city
+			}
+			while = {
+				count = 25
+				add_district = district_sofe_omega_logistics
+			}
+			while = {
+				count = 25
+				add_district = district_sofe_omega_progression
+			}
+			if = {
+				limit = {
+					has_building = building_colony_shelter
+				 }
+				 remove_building = building_colony_shelter
+				 add_building = building_heaven_sanctuary			
+			}
+			if = {
+				limit = {
+					has_building = building_capital
+				 }
+				 remove_building = building_capital
+				 add_building = building_heaven_sanctuary			
+			}
+			if = {
+				limit = {
+					has_building = building_major_capital
+				 }
+				 remove_building = building_major_capital
+				 add_building = building_heaven_sanctuary			
+			}
+			if = {
+				limit = {
+					has_building = building_system_capital
+				 }
+				 remove_building = building_system_capital
+				 add_building = building_heaven_sanctuary			
+			}
+			if = {
+				limit = {
+					has_building = building_hab_capital
+				 }
+				 remove_building = building_hab_capital
+				 add_building = building_heaven_sanctuary			
+			}
+			if = {
+				limit = {
+					has_building = building_hab_major_capital
+				 }
+				 remove_building = building_hab_major_capital
+				 add_building = building_heaven_sanctuary			
+			}		
+			
+			
+			if = {
+				limit = {
+					has_building = building_deployment_post
+				 }
+				 remove_building = building_deployment_post
+				 add_building = building_heaven_sanctuary			
+			}
+			if = {
+				limit = {
+					has_building = building_machine_capital
+				 }
+				 remove_building = building_machine_capital
+				 add_building = building_heaven_sanctuary
+			}
+			if = {
+				limit = {
+					has_building = building_machine_major_capital
+				 }
+				 remove_building = building_machine_major_capital
+				 add_building = building_heaven_sanctuary			
+			}
+			if = {
+				limit = {
+					has_building = building_machine_system_capital
+				 }
+				 remove_building = building_machine_system_capital
+				 add_building = building_heaven_sanctuary			
+			}
+
+			if = {
+				limit = {
+					has_building = building_hive_capital
+				 }
+				 remove_building = building_hive_capital
+				 add_building = building_heaven_sanctuary			
+			}
+			if = {
+				limit = {
+					has_building = building_hive_major_capital
+				 }
+				 remove_building = building_hive_major_capital
+				 add_building = building_heaven_sanctuary			
+			}
+		}
+		hidden_effect = {
+
+		}
+	}
+}
+
+#LIght Matter Supply
+country_event = {
+	id = origin_tech.7
+	title = origin_tech.7.name
+	desc = origin_tech.7.desc
+	picture = GFX_evt_origin_ascension
+	show_sound = event_mystic_reveal
+	
+	trigger = {
+		has_country_flag = winner_of_sofe
+		has_technology = tech_dark_matter_power_core_oe
+		NOT = { has_global_flag = active_sofe_crisis }
+		NOR = {
+			is_at_war_with = event_target:sofe_crisis_country
+			has_country_flag = delay_before_lm_supply
+		}
+		NOR = { 
+			has_valid_civic = "civic_fanatic_purifiers"
+			has_valid_civic = "civic_hive_devouring_swarm"
+			has_valid_civic = "civic_machine_terminator"
+		} 
+		has_country_resource = {
+			type = acot_sr_light_matter
+			amount <= 5000
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 5
+	}
+	
+	immediate = {
+		set_timed_country_flag = {
+			flag = delay_before_lm_supply
+			days = 1800
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		add_resource = {
+			acot_sr_light_matter = 2500
+		}
+	}
+}

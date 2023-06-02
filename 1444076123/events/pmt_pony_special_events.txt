@@ -1,0 +1,1439 @@
+###################
+# Special Events #
+###################
+
+namespace = pmtspecial
+
+@triumph_duration_short = 1800
+
+
+
+country_event = {
+    id = pmtspecial.1
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+	    pmt_pony_species_trigger = yes
+		is_country_type = default
+		years_passed > 10
+		NOT = { has_country_flag = pmtspecial_1 }
+	}
+	
+	immediate = {
+	    random_list = {
+		    10 = {
+				country_event = { id = pmtspecial.2 }
+				set_country_flag = pmtspecial_1
+			}
+			90 = {
+			    modifier = {
+				    factor = 0
+					has_country_flag = "elements_of_harmony"
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.2
+	title = "pmtspecial.2.title"
+	desc = "pmtspecial.2.desc"
+	picture = GFX_evt_everfree_forest
+	location = event_target:chosen_planet
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	
+	immediate = {
+	    set_country_flag = everfree_forest
+		country_event = { id = pmtspecial.3 days = 90 random = 45 }
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			save_event_target_as = chosen_planet
+		}
+	}
+	
+	option = {
+	    name = "pmtspecial.2.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			add_deposit = d_everfree_forest
+		}		
+	}
+}
+
+country_event = {
+    id = pmtspecial.3
+	title = "pmtspecial.3.title"
+	desc = "pmtspecial.3.desc"
+	picture = GFX_evt_tree_of_harmony
+	location = root
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.3.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			add_deposit = d_tree_of_harmony
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.100
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+	    has_country_flag = everfree_forest
+		NOT = {
+		    has_country_flag = everfree_forest_evt
+		}
+	}
+	
+	immediate = {
+	    random_list = {
+		    10 = {
+			    country_event = { id = pmtspecial.10 days = 1 random = 180 }
+			}
+			10 = {
+			    country_event = { id = pmtspecial.20 days = 1 random = 180 }
+			}
+			10 = {
+			    country_event = { id = pmtspecial.30 days = 1 random = 180 }
+			}
+			10 = { }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.10
+	title = "pmtspecial.10.title"
+	desc = "pmtspecial.10.desc"
+	picture = GFX_evt_timberwolf
+	location = root
+	show_sound = event_air_raid_siren
+	is_triggered_only = yes
+	
+	immediate = {
+	    set_country_flag = everfree_forest_evt
+	}
+	
+	option = {
+	    name = "pmtspecial.10.a"
+		hidden_effect={
+		    FROM = {
+				random_list = {
+		        	10 = {
+			   	    	country_event = { id = pmtspecial.11 days = 135 random = 45 } #fail
+			    	}
+			    	10 = {
+			        	country_event = { id = pmtspecial.12 days = 135 random = 45 } #success
+					}
+				}	
+			}
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.11
+	title = "pmtspecial.11.title"
+	desc = "pmtspecial.11.desc"
+	picture = GFX_evt_timberwolf
+	location = root
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.11.a"
+		owner = {
+		    random_planet_within_border = {
+				limit = {
+					has_planet_flag = Equestria
+				}
+				random_owned_pop = {
+					kill_pop = yes
+				}
+			}
+			add_modifier = {
+		        modifier = "everfree_forest_threat"
+			    days = 360
+		    }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.12
+	title = "pmtspecial.12.title"
+	desc = "pmtspecial.12.desc"
+	picture = GFX_evt_timberwolf
+	location = root
+	show_sound = event_celebration
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.12.a"
+		owner = {
+		    random_planet_within_border = {
+				limit = {
+					has_planet_flag = Equestria
+				}
+		        add_modifier = {
+			        modifier = "threat_scavenging"
+				    days = 360
+			    }
+			}
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.20
+	title = "pmtspecial.20.title"
+	desc = "pmtspecial.20.desc"
+	picture = GFX_evt_cockatrice
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+	    set_country_flag = everfree_forest_evt
+	}
+	
+	option = {
+	    name = "pmtspecial.20.a"
+		add_resource = {
+			society_research = 100
+		} 
+		hidden_effect={
+		    country_event = { id = pmtspecial.21 days = 135 random = 45 } 
+		}
+	}
+	option = {
+	    name = "pmtspecial.20.b"
+		hidden_effect = {
+		    random_list = {
+			    10 = {
+			        country_event = { id = pmtspecial.22 days = 135 random = 45 } #fail
+			    }
+			    10 = {
+			        country_event = { id = pmtspecial.23 days = 135 random = 45 } #success
+                }
+			}
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.21
+	title = "pmtspecial.20.title"
+	desc = "pmtspecial.21.desc"
+	picture = GFX_evt_cockatrice
+	location = root
+	show_sound = event_factions
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.21.a"
+		hidden_effect = {
+		    country_event = { id = pmtspecial.22 days = 90 random = 30 } #fail
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.22
+	title = "pmtspecial.20.title"
+	desc = "pmtspecial.22.desc"
+	picture = GFX_evt_cockatrice
+	location = root
+	show_sound = event_factions
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.22.a"
+		add_resource = {
+			influence = -50
+		}
+	}
+	option = {
+	    name = "pmtspecial.22.b"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+		    add_modifier = {
+		        modifier = "everfree_forest_threat"
+			    days = 360
+		    }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.23
+	title = "pmtspecial.20.title"
+	desc = "pmtspecial.23.desc"
+	picture = GFX_evt_cockatrice
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.23.a"
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier3researchreward
+			min = @tier3researchmin
+			max = @tier3researchmax
+		}
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+		    add_modifier = {
+		        modifier = "threat_scavenging"
+			    days = 360
+		    }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.30
+	title = "pmtspecial.30.title"
+	desc = "pmtspecial.30.desc"
+	picture = GFX_evt_parasprite
+	location = root
+	is_triggered_only = yes
+	
+	immediate = {
+	    set_country_flag = everfree_forest_evt
+	}
+	
+	option = {
+	    name = "pmtspecial.30.a"
+		hidden_effect = {
+		    country_event = { id = pmtspecial.31 days = 135 random = 45 }
+		}
+	}
+	option = {
+	    name = "pmtspecial.30.b"
+		hidden_effect={
+		    random_list = {
+		        10 = {
+			        country_event = { id = pmtspecial.32 days = 135 random = 45 } #1
+			    }
+			    10 = {
+			        country_event = { id = pmtspecial.33 days = 135 random = 45 } #2
+                }
+			}
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.31
+	title = "pmtspecial.30.title"
+	desc = "pmtspecial.31.desc"
+	picture = GFX_evt_parasprite
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.31.a"
+		add_resource = {
+			food = -250
+		}
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			add_modifier = {
+				modifier = "parasprite_disaster"
+				days = 90
+			}
+		}
+		hidden_effect = {
+		    country_event = { id = pmtspecial.34 days = 135 random = 45 }
+		}
+	}
+	option = {
+	    name = "pmtspecial.31.b"
+		add_resource = {
+			food = -250
+		}
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			add_modifier = {
+				modifier = "parasprite_disaster"
+				days = 90
+			}
+		}
+		hidden_effect = {
+		    country_event = { id = pmtspecial.35 days = 15 }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.34
+	title = "pmtspecial.30.title"
+	desc = "pmtspecial.34.desc"
+	picture = GFX_evt_parasprite
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.34.a"
+		add_resource = {
+			food = -500
+		}
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+		    add_modifier = {
+		        modifier = "everfree_forest_threat"
+			    days = 360
+		    }
+			add_modifier = {
+				modifier = "parasprite_disaster"
+				days = 180
+			}
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.35
+	title = "pmtspecial.30.title"
+	desc = "pmtspecial.35.desc"
+	picture = GFX_evt_parasprite
+	location = root
+	show_sound = event_celebration
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.35.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+		    add_modifier = {
+		        modifier = "threat_scavenging"
+			    days = 360
+		    }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.32
+	title = "pmtspecial.30.title"
+	desc = "pmtspecial.32.desc"
+	picture = GFX_evt_parasprite
+	location = root
+	show_sound = event_celebration
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.32.a"
+		add_resource = {
+			food = -500
+		}
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+		    add_modifier = {
+		        modifier = "threat_scavenging"
+			    days = 360
+		    }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.33
+	title = "pmtspecial.30.title"
+	desc = "pmtspecial.33.desc"
+	picture = GFX_evt_parasprite
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.33.a"
+		add_resource = {
+			food = -500
+		}
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			add_modifier = {
+				modifier = "parasprite_disaster"
+				days = 180
+			}
+		}
+		hidden_effect = {
+		    country_event = { id = pmtspecial.36 days = 15 }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.36
+	title = "pmtspecial.30.title"
+	desc = "pmtspecial.36.desc"
+	picture = GFX_evt_parasprite
+	location = root
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.36.a"
+		hidden_effect = {
+		    country_event = { id = pmtspecial.37 days = 10 }
+		}
+	}
+}
+
+country_event = {
+    id = pmtspecial.37
+	title = "pmtspecial.30.title"
+	desc = "pmtspecial.37.desc"
+	picture = GFX_evt_parasprite
+	location = root
+	show_sound = event_celebration
+	is_triggered_only = yes
+	
+	option = {
+	    name = "pmtspecial.37.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+		    add_modifier = {
+		        modifier = "threat_scavenging"
+			    days = 360
+		    }
+		}
+	}
+}
+
+#country_event = {
+#	id = harmony.1
+#	hide_window = yes
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#		random_list = {
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = honest
+#				}
+#				add_modifier = {
+#					modifier = honest
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = kindness
+#				}
+#				add_modifier = {
+#					modifier = kindness
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = laughter
+#				}
+#				add_modifier = {
+#					modifier = laughter
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = generously
+#				}
+#				add_modifier = {
+#					modifier = generously
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = loyalty
+#				}
+#				add_modifier = {
+#					modifier = loyalty
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = magic
+#				}
+#				add_modifier = {
+#					modifier = magic
+#					days = @triumph_duration_short
+#				}
+#			}
+#		}
+#
+#		random_list = {
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = honest
+#				}
+#				add_modifier = {
+#					modifier = honest
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = kindness
+#				}
+#				add_modifier = {
+#					modifier = kindness
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = laughter
+#				}
+#				add_modifier = {
+#					modifier = laughter
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = generously
+#				}
+#				add_modifier = {
+#					modifier = generously
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = loyalty
+#				}
+#				add_modifier = {
+#					modifier = loyalty
+#					days = @triumph_duration_short
+#				}
+#			}
+#			10 = {
+#				modifier = {
+#					factor = 0
+#					has_modifier = magic
+#				}
+#				add_modifier = {
+#					modifier = magic
+#					days = @triumph_duration_short
+#				}	
+#			}
+#		}
+#	}
+#}
+
+### Observation Events
+country_event = {
+	id = pmtspecial.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_active_preftl_spynetwork = yes
+	}
+
+	immediate = {
+		random_list = {
+			50 = { }
+			1 = { #pony cult
+				modifier = {
+					factor = 0
+					OR = {
+						is_regular_empire = no
+						has_policy_flag = interference_subtle
+						has_policy_flag = interference_not_allowed
+					}
+				}
+				modifier = {
+					factor = 0.5
+					owner = {
+						OR = {
+							has_country_flag = late_medieval_age
+							has_country_flag = renaissance_age
+						}
+					}
+				}
+				modifier = {
+					factor = 0.67
+					owner = {
+						OR = {
+							has_country_flag = steam_age
+							has_country_flag = industrial_age
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					owner = {
+						species_portrait = human
+					}
+				}
+				country_event = { id = pmtspecial.110 days = 1 random = 20 }
+			}
+		}
+	}
+}
+
+# observation events: pony cult
+country_event = {
+	id = pmtspecial.110
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		pmt_pony_species_trigger = yes
+		NOT = { has_country_flag = pony_cult_evt }
+		is_regular_empire = yes
+		any_spynetwork = {
+			owner = { is_same_value = root }
+			target = {
+				is_country_type = primitive
+				is_gestalt = no
+				is_pre_industrial = no
+				NOT = { pmt_pony_species_trigger = yes }
+				OR = {
+					has_country_flag = late_medieval_age
+					has_country_flag = renaissance_age
+					has_country_flag = steam_age
+					has_country_flag = industrial_age
+					has_country_flag = machine_age
+				}
+				NOR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+				has_country_flag = preftl_espionage_operation_targeted_by@root
+				NOR = {
+					has_country_flag = ongoing_preftl_espionage_chain
+					is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+				}
+			}
+			is_running_espionage_operation = no
+		}
+	}
+
+	immediate = {
+		random_country = {
+			limit = {
+				is_country_type = primitive
+				is_gestalt = no
+				is_pre_industrial = no
+				NOT = { pmt_pony_species_trigger = yes }
+				OR = {
+					has_country_flag = late_medieval_age
+					has_country_flag = renaissance_age
+					has_country_flag = steam_age
+					has_country_flag = industrial_age
+					has_country_flag = machine_age
+				}
+				NOR = {
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_spiritualist
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophobe
+				}
+				has_country_flag = preftl_espionage_operation_targeted_by@root
+				NOR = {
+					has_country_flag = ongoing_preftl_espionage_chain
+					is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+				}
+			}
+			set_country_flag = ongoing_preftl_espionage_chain
+			save_event_target_as = rogue_agent_country
+			capital_scope = {
+				save_event_target_as = rogue_agent_planet
+			}
+		}
+		set_country_flag = pony_cult_evt
+		country_event = { id = pmtspecial.111 }
+	}
+}
+
+country_event = {
+	id = pmtspecial.111
+	title = "pmtspecial.111.title"
+	desc = "pmtspecial.111.desc"
+	picture = GFX_evt_landing_ship
+	show_sound = event_ship_thrusters
+	location = event_target:rogue_agent_planet
+	is_triggered_only = yes
+
+	option = {
+		name = "pmtspecial.111.a"
+		hidden_effect = {
+			country_event = { id = pmtspecial.112 days = 540 random = 180 }
+		}
+	}
+
+	option = {
+		name = "pmtspecial.111.b"
+		hidden_effect = {
+			random_list = {
+				2 = {
+					country_event = { id = pmtspecial.113 days = 540 random = 180 }
+				}
+				1 = {
+					country_event = { id = pmtspecial.114 days = 540 random = 180 }
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = pmtspecial.112
+	title = "pmtspecial.112.title"
+	desc = "pmtspecial.112.desc"
+	picture = GFX_evt_society_research
+	show_sound = event_conversation
+	location = event_target:rogue_agent_planet
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:rogue_agent_country = {
+			random_list = {
+				75 = { shift_ethic = ethic_spiritualist }
+				25 = { shift_ethic = ethic_fanatic_spiritualist }
+			}
+			every_owned_pop = { pop_change_ethic = ethic_spiritualist }
+		}
+	}
+
+	option = {
+		name = "pmtspecial.112.a"
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier1researchreward
+			min = @tier1researchmin
+			max = @tier1researchmax
+		}
+		tooltip = {
+			event_target:rogue_agent_country = {
+				shift_ethic = ethic_spiritualist
+			}
+		}
+	}
+}
+
+country_event = {
+	id = pmtspecial.113
+	title = "pmtspecial.113.title"
+	desc = "pmtspecial.113.desc"
+	picture = GFX_evt_society_research
+	show_sound = event_conversation
+	location = event_target:rogue_agent_planet
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:rogue_agent_country = {
+			random_list = {
+				75 = { shift_ethic = ethic_xenophobe }
+				25 = { shift_ethic = ethic_fanatic_xenophobe }
+			}
+			every_owned_pop = { pop_change_ethic = ethic_xenophobe }
+		}
+	}
+
+	option = {
+		name = "pmtspecial.113.a"
+		tooltip = {
+			event_target:rogue_agent_country = {
+				shift_ethic = ethic_xenophobe
+			}
+		}
+		event_target:rogue_agent_country = {
+			add_awareness = 10
+		}
+		random_spynetwork = {
+			limit = {
+				owner = { is_same_value = root }
+				target = { is_same_value = event_target:rogue_agent_country }
+			}
+			add_spy_network_level = -10
+		}
+	}
+}
+
+country_event = {
+	id = pmtspecial.114
+	title = "pmtspecial.114.title"
+	desc = "pmtspecial.114.desc"
+	picture = GFX_evt_society_research
+	show_sound = event_conversation
+	location = event_target:rogue_agent_planet
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:rogue_agent_country = {
+			random_list = {
+				75 = { shift_ethic = ethic_xenophile }
+				25 = { shift_ethic = ethic_fanatic_xenophile }
+			}
+			every_owned_pop = { pop_change_ethic = ethic_xenophile }
+		}
+	}
+
+	option = {
+		name = "pmtspecial.114.a"
+		add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier1researchreward
+			min = @tier1researchmin
+			max = @tier1researchmax
+		}
+		tooltip = {
+			event_target:rogue_agent_country = {
+				shift_ethic = ethic_xenophile
+			}
+		}
+		event_target:rogue_agent_country = {
+			add_awareness = 10
+		}
+	}
+}
+
+### Mirror Pool
+planet_event = {
+	id = pmtspecial.120
+	title = "pmtspecial.120.title"
+	desc = "pmtspecial.120.desc"
+	picture = GFX_evt_mirror_pool
+	show_sound = event_mystic_reveal
+	location = root
+	is_triggered_only = yes
+
+	pre_triggers = {
+		has_owner = yes
+		is_homeworld = no
+		original_owner = yes
+		is_ai = no
+		has_ground_combat = no
+		is_capital = no
+	}
+
+	trigger = {
+		NOT = { has_planet_flag = colony_event }
+		NOT = {
+			owner = { has_country_flag = mirror_pool_colony_event }
+		}
+		num_pops > 0
+		OR = {
+			is_planet_class = pc_tropical
+			is_planet_class = pc_continental
+			is_planet_class = pc_gaia
+		}
+	}
+
+	immediate = {
+		set_planet_flag = colony_event
+		owner = { set_country_flag = mirror_pool_colony_event }
+	}
+
+	option = {
+		name = "pmtspecial.120.a"
+	}
+
+	option = {
+		name = "pmtspecial.120.b"
+		add_deposit = d_mirror_pool
+	}
+}
+
+### Multiplayer setting    on_game_start
+event = {
+	id = pmtspecial.1000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_multiplayer = yes
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				any_country = {
+					is_country_type = default
+					is_ai = no
+					pmt_pony_species_trigger = yes
+					has_origin = origin_mlp_mainline
+				}
+			}
+			random_country = {
+				limit = {
+					is_country_type = default
+					is_ai = no
+					pmt_pony_species_trigger = yes
+					has_origin = origin_mlp_mainline
+				}
+				set_country_flag = trigger_event_country_pony
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					is_country_type = default
+					is_ai = no
+					pmt_crystal_pony_species_trigger = yes
+					has_origin = origin_crystal_empire
+				}
+			}
+			random_country = {
+				limit = {
+					is_country_type = default
+					is_ai = no
+					pmt_crystal_pony_species_trigger = yes
+					has_origin = origin_crystal_empire
+				}
+				set_country_flag = trigger_event_country_crystal_pony
+			}
+		}
+		if = {
+			limit = {
+				is_country_type = default
+				is_ai = no
+				pmt_griffin_species_trigger = yes
+			}
+			random_country = {
+				limit = {
+					is_country_type = default
+					is_ai = no
+					pmt_griffin_species_trigger = yes
+				}
+				set_country_flag = trigger_event_country_griffin
+			}
+		}
+		if = {
+			limit = {
+				is_country_type = default
+				is_ai = no
+				pmt_kirin_species_trigger = yes
+			}
+			random_country = {
+				limit = {
+					is_country_type = default
+					is_ai = no
+					pmt_kirin_species_trigger = yes
+				}
+				set_country_flag = trigger_event_country_kirin
+			}
+		}	}
+}
+
+### PMT Relic alert
+country_event = {
+	id = pmtspecial.1001
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_message = {
+			type = MESSAGE_TYPE_PMT_RELIC_AVAILABLE
+			localization = MESSAGE_PMT_RELIC_AVAILABLE
+			days = 180
+			target = capital_scope.solar_system
+		}
+	}
+}
+
+# Check using mod
+event = {
+	id = pmtspecial.1002
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				any_country = {
+					pmt_mod_pony_mod_species_trigger = yes
+				}
+			}
+			set_global_flag = using_pony_mod
+		}
+		else = {
+			set_global_flag = using_pony_stuff
+		}
+	}
+}
+
+# Civic Alicorn Ascension game start
+event = {
+	id = pmtspecial.1003
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		# Change civic if non pony
+		every_country = {
+			limit = {
+				has_civic = civic_alicorn_ascension
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			force_remove_civic = civic_alicorn_ascension
+			if = {
+				limit = {
+					has_global_flag = using_pony_mod
+				}
+				force_add_civic = civic_alicorn_monarchy
+			}
+			else = {
+				force_add_civic = pony_stuff_gov_united_ponies 
+			}
+		}
+		# civic leader
+		every_country = {
+			limit = {
+				has_civic = civic_alicorn_ascension
+			}
+			ruler = {
+				save_event_target_as = civic_alicorn_ascension_ruler
+			}
+			create_country = {	# To avoid trait notice
+				name = "NAME_princess_celestia"
+				type = global_event
+				auto_delete = yes
+				flag = {
+					icon = {
+						category = "special"
+						file = "unknown.dds"
+					}
+					background = {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors = {
+						"red"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					clone_leader = {
+						target = event_target:civic_alicorn_ascension_ruler
+						name = "NAME_princess_celestia"
+						hide_age = yes
+						skip_background_generation = yes
+						custom_catch_phrase = princess_celestia_catch_phrase
+						custom_description = princess_celestia_backstory
+						gender = female
+						effect = {
+							save_global_event_target_as = princess_celestia
+							set_leader_flag = legendary_leader
+							add_trait_no_notify = leader_trait_pmt_alicorn
+							add_trait_no_notify = leader_trait_princess_celestia
+							if = {
+								limit = {
+									has_global_flag = using_pony_mod
+								}
+								change_leader_portrait = "celestia"
+							}
+							else = {
+								change_leader_portrait = "pony_ruler_01"
+							}
+						}
+					}
+				}
+			}
+			ruler = {
+				exile_leader_as = civic_alicorn_ascension_replaced_ruler
+			}
+			set_leader = event_target:princess_celestia
+			country_event = { id = pmtspecial.1004 days = 1 }	#To delay the notification
+		}
+	}
+}
+
+country_event = {
+	id = pmtspecial.1004
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		create_message = {
+			type = MESSAGE_RECRUITED_LEADER
+			localization =  MESSAGE_RECRUITED_LEADER_DESC
+			days = @toast_message_days
+			target = event_target:princess_celestia
+			variable = {
+				type = name
+				localization = LEADER
+				scope = event_target:princess_celestia
+			}
+			variable = {
+				key = "border"
+				value = "GFX_border_legendary" 
+			}
+		}
+		random_list = {
+			10 = { play_sound = celestia_portrait_01 }
+			10 = { play_sound = celestia_portrait_02 }
+			10 = { play_sound = celestia_portrait_03 }
+		}
+	}
+}
+
+# Gain Alicorn trait when level up
+country_event = {
+	id = pmtspecial.1005
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_civic = civic_alicorn_ascension
+	}
+
+	immediate = {
+		From = {
+			if = {
+				limit = {
+					NOT = { has_trait = leader_trait_pmt_alicorn }
+					species = {
+						pmt_pony_species_trigger = yes
+					}
+				}
+				if = {
+					limit = {
+						has_skill > 1
+						has_skill < 4
+					}
+					random_list = {
+						990 = {
+							modifier = {
+								subtract = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|1|
+							}
+						}
+						#1%-2%
+						10 = {
+							modifier = {
+								add = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|1|
+							}
+							add_trait = leader_trait_pmt_alicorn
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_skill = 4
+					}
+					random_list = {
+						950 = {
+							modifier = {
+								subtract = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|5|
+							}
+						}
+						#5%-10%
+						50 = {
+							modifier = {
+								add = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|5|
+							}
+							add_trait = leader_trait_pmt_alicorn
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_skill > 4
+						has_skill < 8
+					}
+					random_list = {
+						980 = {
+							modifier = {
+								subtract = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|2|
+							}
+						}
+						#2%-4%
+						20 = {
+							modifier = {
+								add = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|2|
+							}
+							add_trait = leader_trait_pmt_alicorn
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_skill = 8
+					}
+					random_list = {
+						900 = {
+							modifier = {
+								subtract = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|10|
+							}
+						}
+						#10%-20%
+						100 = {
+							modifier = {
+								add = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|10|
+							}
+							add_trait = leader_trait_pmt_alicorn
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_skill > 8
+					}
+					random_list = {
+						960 = {
+							modifier = {
+								subtract = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|4|
+							}
+						}
+						#4%-8%
+						40 = {
+							modifier = {
+								add = value:councilor_qualification_accreditation_officer_level|TYPE|councilor_qualification_accreditation_officer|MULT|4|
+							}
+							add_trait = leader_trait_pmt_alicorn
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Harmony paragon leader dead
+country_event = {
+	id = pmtspecial.1006
+	title = "pmtspecial.1006.title"
+	desc = "pmtspecial.1006.desc"
+	picture = GFX_evt_find_harmony
+	show_sound = event_life_support_fail
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = ap_harmony_times
+		FROM = {
+			OR = {
+				has_trait = leader_trait_harmony_paragon_honest
+				has_trait = leader_trait_harmony_paragon_kindness
+				has_trait = leader_trait_harmony_paragon_laughter
+				has_trait = leader_trait_harmony_paragon_generously
+				has_trait = leader_trait_harmony_paragon_loyalty
+				has_trait = leader_trait_harmony_paragon_magic
+			}
+		}
+	}
+
+	option = {
+		name = "pmtspecial.1006.a"
+		trigger = {
+			count_owned_leader = {
+				limit = {
+					NOR = {
+						has_leader_flag = renowned_leader
+						has_leader_flag = legendary_leader
+					}
+				}
+				count >= 6
+			}
+		}
+		start_situation = {
+			type = situation_designate_harmony_paragon
+		}
+	}
+
+	option = {
+		name = "pmtspecial.1006.b"
+	}
+}
+
+# Harmony paragon leader dismissed
+country_event = {
+	id = pmtspecial.1007
+	title = "pmtspecial.1007.title"
+	desc = "pmtspecial.1007.desc"
+	picture = GFX_evt_find_harmony
+	show_sound = event_life_support_fail
+	is_triggered_only = yes
+
+	trigger = {
+		has_ascension_perk = ap_harmony_times
+		FROM = {
+			OR = {
+				has_trait = leader_trait_harmony_paragon_honest
+				has_trait = leader_trait_harmony_paragon_kindness
+				has_trait = leader_trait_harmony_paragon_laughter
+				has_trait = leader_trait_harmony_paragon_generously
+				has_trait = leader_trait_harmony_paragon_loyalty
+				has_trait = leader_trait_harmony_paragon_magic
+			}
+		}
+	}
+
+	option = {
+		name = "pmtspecial.1007.a"
+		trigger = {
+			count_owned_leader = {
+				limit = {
+					NOR = {
+						has_leader_flag = renowned_leader
+						has_leader_flag = legendary_leader
+					}
+				}
+				count >= 6
+			}
+		}
+		start_situation = {
+			type = situation_designate_harmony_paragon
+		}
+	}
+
+	option = {
+		name = "pmtspecial.1007.b"
+	}
+}

@@ -1,0 +1,143 @@
+@small_planet_threshold = 18
+@free_districts_verylow_threshold = 3
+@free_districts_low_threshold = 5
+@free_districts_medium_threshold = 10
+@free_districts_high_threshold = 15
+@built_districts_low_threshold = 3
+@built_districts_medium_threshold = 4
+@built_districts_high_threshold = 8
+
+#Crystal Planting Center
+col_crystal_planting = {
+	icon = GFX_colony_type_crystal_planting
+
+	potential = {
+		exists = owner
+		owner = {
+			pmt_pony_species_trigger = yes
+		}
+		is_special_colony_type = no
+	}
+
+	planet_modifier = {
+		planet_crystal_growers_produces_mult = 0.15
+		planet_grinders_produces_mult = 0.15
+		planet_gasifiers_produces_mult = 0.15
+		planet_building_crystal_farm_build_speed_mult = 0.25
+		planet_building_modular_crystal_plantation_build_speed_mult = 0.25
+		planet_building_compound_crystal_growth_factory_build_speed_mult = 0.25
+		planet_building_crystal_gasification_plant_build_speed_mult = 0.25
+		planet_building_crystal_grinding_plant_build_speed_mult = 0.25
+	}
+
+	weight_modifier = {
+		base = 1
+		modifier = {
+			add = 1
+			num_free_districts = { type = district_mining value <= @free_districts_low_threshold }
+			num_free_districts = { type = district_farming value <= @free_districts_low_threshold }
+			num_free_districts = { type = district_generator value <= @free_districts_low_threshold }
+			OR = {
+				AND = {
+					num_districts = {
+						type = district_city
+						value >= 1
+					}
+					num_free_districts = { type = district_city value <= @free_districts_medium_threshold }
+				}
+				AND = {
+					num_districts = {
+						type = district_nexus
+						value >= 1
+					}
+					num_free_districts = { type = district_nexus value <= @free_districts_medium_threshold }
+				}
+				AND = {
+					num_districts = {
+						type = district_hive
+						value >= 1
+					}
+					num_free_districts = { type = district_hive value <= @free_districts_medium_threshold }
+				}
+			}
+			OR = {
+				owner = { has_monthly_income = { resource = volatile_motes value < 0 } }
+				owner = { has_monthly_income = { resource = exotic_gases value < 0 } }
+				owner = { has_monthly_income = { resource = rare_crystals value < 0 } }
+			}
+		}
+		modifier = {
+			add = 5
+			has_designation = col_crystal_planting
+		}
+		modifier = {
+			add = 2
+			num_buildings = { type = building_crystal_gasification_plant value >= 2 }
+		}
+		modifier = {
+			add = 3
+			num_buildings = { type = building_crystal_gasification_plant value >= 3 }
+		}
+		modifier = {
+			add = 4
+			num_buildings = { type = building_crystal_gasification_plant value >= 4 }
+		}
+		modifier = {
+			add = 2
+			OR = {
+				num_buildings = { type = building_crystal_farm value >= 1 }
+				num_buildings = { type = building_modular_crystal_plantation value >= 1 }
+				num_buildings = { type = building_compound_crystal_growth_factory value >= 1 }
+			}
+		}
+		modifier = {
+			add = 3
+			OR = {
+				num_buildings = { type = building_crystal_farm value >= 2 }
+				num_buildings = { type = building_modular_crystal_plantation value >= 2 }
+				num_buildings = { type = building_compound_crystal_growth_factory value >= 2 }
+			}
+		}
+		modifier = {
+			add = 4
+			OR = {
+				num_buildings = { type = building_crystal_farm value >= 3 }
+				num_buildings = { type = building_modular_crystal_plantation value >= 3 }
+				num_buildings = { type = building_compound_crystal_growth_factory value >= 3 }
+			}
+		}
+		modifier = {
+			add = 2
+			num_buildings = { type = building_crystal_grinding_plant value >= 2 }
+		}
+		modifier = {
+			add = 3
+			num_buildings = { type = building_crystal_grinding_plant value >= 3 }
+		}
+		modifier = {
+			add = 4
+			num_buildings = { type = building_crystal_grinding_plant value >= 4 }
+		}
+		modifier = {
+			add = 10
+				OR = {
+					num_buildings = { type = building_crystal_gasification_plant value >= 5 }
+					OR = {
+						num_buildings = { type = building_crystal_farm value >= 4 }
+						num_buildings = { type = building_modular_crystal_plantation value >= 4 }
+						num_buildings = { type = building_compound_crystal_growth_factory value >= 4 }
+					}
+					num_buildings = { type = building_crystal_grinding_plant value >= 5 }
+				}
+		}
+		modifier = {
+			factor = 0
+			exists = sector
+			sector = {
+				has_any_sector_focus = yes
+				not = { has_sector_focus = "manufacturing" }
+				not = { has_sector_focus = "balanced" }
+			}
+		}
+	}
+}

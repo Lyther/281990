@@ -1,0 +1,499 @@
+#reloadable with 'reload stats'
+# This file is where you start when you want to configure something new, then go to sections
+
+@corvette_collision_radius = 2.0
+@corvette_formation_priority = 4
+
+@destroyer_collision_radius = 2.5
+@destroyer_formation_priority = 2
+
+@cruiser_collision_radius = 3.5
+@cruiser_formation_priority = 3
+
+@battleship_collision_radius = 6
+@battleship_formation_priority = 5
+
+@titan_collision_radius = 12
+@titan_formation_priority = 1
+
+@build_block_radius_none = 0
+@build_block_radius_civilian = 20
+@build_block_radius_military = 200
+
+@speed_very_slow = 80
+@speed_slow = 100
+@speed_default = 120
+@speed_fast = 140
+@speed_very_fast = 160
+
+######### GIGA FORTRESS #########
+
+acot_giga_fortress = {
+	entity = starbase_citadel_entity
+	formation_priority = @colossus_formation_priority
+	max_speed = 80
+	acceleration = 0.1
+	rotation_speed = 0.1
+	collision_radius = @colossus_collision_radius
+	max_hitpoints = 500000
+	modifier = {
+		ship_evasion_add = 15
+		ship_armor_add = 250000
+		ship_shield_add = 250000
+	}
+	ship_modifier = {
+	}
+	size_multiplier = 32
+	fleet_slot_size = 32
+	section_slots = {
+		"core" = { locator = "part1" }
+		#"1" = { locator = "part2" }
+		#"2" = { locator = "part3" }
+		"3" = { locator = "part4" }
+		"4" = { locator = "part5" }
+		"5" = { locator = "part6" }
+		"6" = { locator = "part7" }
+	}
+	num_target_locators = 0
+	is_space_station = no
+	icon = ship_size_military_32
+	base_buildtime = 1200
+	can_have_federation_design = no
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	enable_3dview_in_ship_browser = yes #if yes, ship design will have a 3d view in the ship browser
+
+	prerequisites = { tech_giga_fortress }
+
+	class = shipclass_military_special
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "sensor_components"
+	required_component_set = "combat_computers"
+	required_component_set = "ship_aura_components"
+	required_component_set = "ship_aura_components"
+
+	potential_construction = {
+		always = no
+	}
+
+	possible_construction = {
+		always = no
+	}
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 10000
+		}
+		upkeep = {
+			energy = @colossus_upkeep_energy
+			alloys = @colossus_upkeep_alloys
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 10
+	}
+
+	ai_ship_data = {
+		min = 1
+		max = 10
+	}
+}
+
+acot_void_sphere_ship = {
+	entity = techno_sphere_entity
+	formation_priority = @colossus_formation_priority
+	max_speed = 40
+	acceleration = 0.1
+	rotation_speed = 0.1
+	collision_radius = @colossus_collision_radius
+	max_hitpoints = 500000
+	modifier = {
+		ship_evasion_add = 5
+		ship_armor_add = 250000
+		ship_shield_add = 250000
+	}
+	ship_modifier = {
+	}
+	size_multiplier = 30
+	fleet_slot_size = 30
+	section_slots = {
+		"core" = { locator = "part1" }
+		#"1" = { locator = "part2" }
+		#"2" = { locator = "part3" }
+		#"3" = { locator = "part4" }
+		#"4" = { locator = "part5" }
+		#"5" = { locator = "part6" }
+		#"6" = { locator = "part7" }
+	}
+	num_target_locators = 0
+	is_space_station = no
+	icon = ship_size_military_32
+	base_buildtime = @colossus_build_time
+	can_have_federation_design = no
+	is_designable = no
+	enable_default_design = yes	#if yes, countries will have an auto-generated design at start
+	enable_3dview_in_ship_browser = no #if yes, ship design will have a 3d view in the ship browser
+
+	#prerequisites = { tech_giga_fortress }
+
+	class = shipclass_military_special
+
+	required_component_set = "power_core"
+	required_component_set = "ftl_components"
+	required_component_set = "sensor_components"
+	required_component_set = "ship_aura_components"
+	required_component_set = "ship_aura_components"
+
+	#construction_type = starbase_shipyard
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 10000
+		}
+		upkeep = {
+			energy = @colossus_upkeep_energy
+			alloys = @colossus_upkeep_alloys
+		}
+	}
+
+	min_upgrade_cost = {
+		alloys = 10
+	}
+
+	ai_ship_data = {
+		min = 1
+		max = 10
+	}
+}
+
+
+# Enclave
+acot_curators_enclave_station = {
+	is_space_object = yes
+	graphical_culture = no
+	max_speed = 0.0
+	acceleration = 0.0
+	rotation_speed = 0.10
+	modifier = {
+		ship_evasion_mult = -1
+	}
+	max_hitpoints = 80000
+	combat_size_multiplier = 20
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { 
+		"core" = { locator = "part1" }
+	}
+	num_target_locators = 0
+	is_space_station = yes
+	build_block_radius = @build_block_radius_civilian
+	
+
+	class = shipclass_military_station
+	is_designable = no
+}
+
+
+# Fallen Empire Large Ship
+acot_curators_bc = {
+	formation_priority = @battleship_formation_priority
+	max_speed = @speed_slow
+	acceleration = 0.2
+	rotation_speed = 0.15
+	collision_radius = @battleship_collision_radius
+	modifier = {
+		ship_evasion_add = 10
+	}
+	max_hitpoints = 4000
+	size_multiplier = 8
+	fleet_slot_size = 4
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 5
+	
+	combat_disengage_chance = 0
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 2000
+		}
+	}
+
+	base_buildtime = 600
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+# Fallen Empire Small Ship
+acot_curators_escort = {
+	formation_priority = @destroyer_formation_priority
+	max_speed = @speed_fast
+	acceleration = 0.3
+	rotation_speed = 0.2
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_evasion_add = 35
+	}
+	max_hitpoints = 2000
+	size_multiplier = 2
+	fleet_slot_size = 2
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	icon_frame = 3
+	is_space_station = no
+	
+	combat_disengage_chance = 0
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 500
+		}
+	}
+
+	base_buildtime = 200
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+# Fallen Empire Small Ship
+acot_curators_oracle = {
+	formation_priority = @destroyer_formation_priority
+	max_speed = @speed_fast
+	acceleration = 0.3
+	rotation_speed = 0.2
+	collision_radius = @destroyer_collision_radius
+	modifier = {
+		ship_evasion_add = 35
+	}
+	max_hitpoints = 2000
+	size_multiplier = 2
+	fleet_slot_size = 2
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	icon_frame = 3
+	is_space_station = no
+	
+	combat_disengage_chance = 0
+
+	resources = {
+		category = ships
+		cost = {
+			alloys = 500
+		}
+	}
+
+	base_buildtime = 200
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+
+########### STELLARITE ENEMIES ############
+
+# Bomb Stellarite
+acot_bomb_stellarite = {
+	entity = space_cloud_entity
+	is_space_object = yes
+	graphical_culture = no
+	can_be_inspected = no
+	max_speed = 0
+	acceleration = 0
+	rotation_speed = 0
+	collision_radius = 25
+	modifier = {
+		ship_shield_add = 600000
+		ship_armor_add = 600000
+		ship_evasion_add = 20
+	}
+	max_hitpoints = 1200000
+	combat_size_multiplier = 50
+	size_multiplier = 10
+	fleet_slot_size = 10
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 12
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+# Stellarite
+acot_large_stellarite = {
+	is_space_object = yes
+	graphical_culture = no
+	can_be_inspected = no
+	max_speed = 100
+	acceleration = 0.2
+	rotation_speed = 0.01
+	collision_radius = 25
+	modifier = {
+		ship_shield_add = 1200000
+		ship_armor_add = 1200000
+		ship_shield_regen_add_static = 12000
+		ship_armor_regen_add_static = 12000
+		ship_hull_regen_add_static = 24000
+		ship_evasion_add = 15
+	}
+	max_hitpoints = 2400000
+	combat_size_multiplier = 50
+	size_multiplier = 32
+	fleet_slot_size = 32
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 12
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+# Stellarite
+acot_dragon_stellarite = {
+	is_space_object = yes
+	graphical_culture = no
+	can_be_inspected = no
+	max_speed = 160
+	acceleration = 0.2
+	rotation_speed = 0.01
+	collision_radius = 25
+	modifier = {
+		ship_shield_add = 10000000
+		ship_armor_add = 10000000
+		ship_shield_regen_add_static = 100000
+		ship_armor_regen_add_static = 100000
+		ship_hull_regen_add_static = 100000
+		ship_evasion_add = 5
+	}
+	max_hitpoints = 20000000
+	combat_size_multiplier = 50
+	size_multiplier = 32
+	fleet_slot_size = 32
+	section_slots = { "mid" = { locator = "part1" } }
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 12
+	
+	class = shipclass_military
+	is_designable = no
+}
+
+# Tuborek Flagship
+acot_tuborek_flagship = {
+	formation_priority = 60
+	is_space_object = yes
+	max_speed = 65
+	acceleration = 0.1
+	rotation_speed = 0.1
+	collision_radius = 7
+	modifier = {
+		ship_evasion_add = 15
+		ship_shield_add = 25000000
+		ship_armor_add = 25000000
+	}
+	max_hitpoints = 50000000
+	combat_size_multiplier = 150
+	size_multiplier = 160
+	fleet_slot_size = 160
+	section_slots = { 
+		"bottom" = { locator = "bottom" } 
+		"hub" = { locator = "hub" } 
+
+		### TOP ###
+		"front1" = { locator = "front1" } 
+		"front1down" = { locator = "front1down" } 
+		"front2" = { locator = "front2" }  
+		"front2down" = { locator = "front2down" } 
+		"front3" = { locator = "front3" } 
+		"front3down" = { locator = "front3down" }  
+		"front_jug" = { locator = "front_jug" }  
+
+		"back1" = { locator = "back1" } 
+		"back1down" = { locator = "back1down" } 
+		"back2" = { locator = "back2" }  
+		"back2down" = { locator = "back2down" } 
+		"back3" = { locator = "back3" } 
+		"back3down" = { locator = "back3down" }  
+		"back_jug" = { locator = "back_jug" }  
+
+		"left1" = { locator = "left1" } 
+		"left1down" = { locator = "left1down" } 
+		"left2" = { locator = "left2" }  
+		"left2down" = { locator = "left2down" } 
+		"left3" = { locator = "left3" } 
+		"left3down" = { locator = "left3down" }  
+		"left_jug" = { locator = "left_jug" }  
+
+		"right1" = { locator = "right1" } 
+		"right1down" = { locator = "right1down" } 
+		"right2" = { locator = "right2" }  
+		"right2down" = { locator = "right2down" } 
+		"right3" = { locator = "right3" } 
+		"right3down" = { locator = "right3down" }  
+		"right_jug" = { locator = "right_jug" }  		
+		### BOTTOM ###
+		"b_front1" = { locator = "b_front1" } 
+		"b_front1down" = { locator = "b_front1down" } 
+		"b_front2" = { locator = "b_front2" }  
+		"b_front2down" = { locator = "b_front2down" } 
+		"b_front3" = { locator = "b_front3" } 
+		"b_front3down" = { locator = "b_front3down" }  
+		"b_front4" = { locator = "b_front4" } 
+		"b_front4down" = { locator = "b_front4down" }  
+		"b_front_jug" = { locator = "b_front_jug" }  
+
+		"b_back1" = { locator = "b_back1" } 
+		"b_back1down" = { locator = "b_back1down" } 
+		"b_back2" = { locator = "b_back2" }  
+		"b_back2down" = { locator = "b_back2down" } 
+		"b_back3" = { locator = "b_back3" } 
+		"b_back3down" = { locator = "b_back3down" }  
+		"b_back4" = { locator = "b_back4" } 
+		"b_back4down" = { locator = "b_back4down" }  
+		"b_back_jug" = { locator = "b_back_jug" }  
+
+		"b_left1" = { locator = "b_left1" } 
+		"b_left1down" = { locator = "b_left1down" } 
+		"b_left2" = { locator = "b_left2" }  
+		"b_left2down" = { locator = "b_left2down" } 
+		"b_left3" = { locator = "b_left3" } 
+		"b_left3down" = { locator = "b_left3down" }  
+		"b_left4" = { locator = "b_left4" } 
+		"b_left4down" = { locator = "b_left4down" }  
+		"b_left_jug" = { locator = "b_left_jug" }  
+
+		"b_right1" = { locator = "b_right1" } 
+		"b_right1down" = { locator = "b_right1down" } 
+		"b_right2" = { locator = "b_right2" }  
+		"b_right2down" = { locator = "b_right2down" } 
+		"b_right3" = { locator = "b_right3" } 
+		"b_right3down" = { locator = "b_right3down" }  
+		"b_right4" = { locator = "b_right4" } 
+		"b_right4down" = { locator = "b_right4down" }  
+		"b_right_jug" = { locator = "b_right_jug" }  	
+	}
+	num_target_locators = 0
+	is_space_station = no
+	icon_frame = 5
+	
+	resources = {
+		category = starbase_stations
+		cost = {
+		}
+		upkeep = {
+		}
+	}
+
+	class = shipclass_military
+	is_designable = no
+}

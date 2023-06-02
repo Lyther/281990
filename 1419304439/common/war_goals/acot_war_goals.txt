@@ -1,0 +1,230 @@
+# See wg_example.txt for an explanation
+
+acot_wg_mountain_king = {
+	casus_belli = acot_cb_mountain_king
+
+	total_war = yes
+
+	hide_if_no_cb = yes
+	defender_default = no
+	
+	cede_claims = occupied_only
+
+	surrender_acceptance = -10000
+	war_exhaustion = 0
+
+	set_defender_wargoal = acot_wg_mountain_king
+
+	potential = {
+		always = yes # event only
+	}
+	possible = {
+		always = yes
+	}
+
+	on_accept = {
+		hidden_effect = {
+			save_event_target_as = mountain_king_victor
+			from = { save_event_target_as = mountain_king_loser }	
+			if = {
+				limit = { 
+					is_fallen_empire = no
+				}
+				country_event = { id = acot_war_in_hell.16 }
+				hidden_effect = {
+					every_playable_country = {
+						limit = {
+							NOT = {
+								is_same_value = root
+							}
+						}
+						country_event = { id = acot_war_in_hell.20 }
+					} 
+				}
+			}
+			if = {
+				limit = { 
+					is_fallen_empire = yes
+				}
+				country_event = { id = acot_war_in_hell.17 }
+				every_playable_country = {
+					country_event = { id = acot_war_in_hell.21 }
+				}
+			}
+		}
+	}
+
+	allowed_peace_offers = {
+		status_quo
+	}
+	
+	on_status_quo = {
+		declare_war = {
+			target = FROM
+			attacker_war_goal = acot_wg_mountain_king
+		}
+	}
+	
+	ai_weight = {
+		weight = 10000
+	}
+}
+
+acot_wg_steal_databank = {
+	casus_belli = acot_cb_databank_claim
+
+	hide_if_no_cb = yes
+	defender_default = no
+	
+	surrender_acceptance = -50
+
+	potential = {
+		THIS = {
+			has_country_flag = allow_databank_steal
+			NOT = {
+				has_country_flag = has_databank
+			}
+		}
+	}
+	possible = {
+		always = yes
+	}
+
+	allowed_peace_offers = {
+		status_quo
+		surrender
+		demand_surrender
+	}
+
+	on_accept = {
+		custom_tooltip = wg_humiliation_fe_accept
+		save_event_target_as = fallen_empire_humiliator
+		from = { fallen_empire_humiliate_effect = yes }	
+		THIS = {
+			remove_country_flag = allow_databank_steal
+		}	
+		country_event = { id = acot_alpha_matter_events.100 days = 1 }	
+	}
+	
+	
+	ai_weight = {
+		weight = 100
+	}
+}
+
+acot_wg_rebel_fe = {
+	casus_belli = cb_event
+	
+	hide_if_no_cb = yes
+
+	allowed_peace_offers = {
+		status_quo
+		surrender
+		demand_surrender
+	}
+
+	set_defender_wargoal = acot_wg_aggressor_fe
+
+	potential = {
+		always = no
+	}
+	possible = {
+		always = yes
+	}
+	on_accept = {
+		end_event_chain = acot_origin_fe_rebel_chain
+		custom_tooltip = wg_humiliation_fe_accept
+		save_event_target_as = fallen_empire_humiliator
+		from = {
+			fallen_empire_humiliate_effect = yes		
+		}
+	}
+	on_status_quo = {
+		end_event_chain = acot_origin_fe_rebel_chain
+	}
+
+	ai_weight = {
+		weight = 5
+	}
+}
+
+acot_wg_aggressor_fe = {
+	casus_belli = cb_event
+	set_defender_wargoal = wg_end_threat
+	
+	hide_if_no_cb = yes
+
+	allowed_peace_offers = {
+		status_quo
+		surrender
+		demand_surrender
+	}
+	
+	cede_claims = occupied_only
+
+	potential = {
+		always = no
+	}
+	possible = {
+		always = yes
+	}
+	on_accept = {
+		from = {
+			end_event_chain = acot_origin_fe_rebel_chain
+		}
+		if = {
+			limit = { from = { has_been_declared_crisis = yes } }
+			# do nothing;
+			# FEs may go to war against BtC empires, just not vassalize them
+		}
+		else_if = {
+			limit = {
+				is_xenophile = yes
+			}
+			from = {
+				set_subject_of = {
+					who = root
+					preset = preset_signatory
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_xenophobe = yes
+			}
+			from = {
+				set_subject_of = {
+					who = root
+					preset = preset_thrall
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				is_spiritualist = yes
+			}
+			from = {
+				set_subject_of = {
+					who = root
+					preset = preset_dominion
+				}
+				shift_ethic = ethic_fanatic_spiritualist
+			}
+		}
+		else_if = {
+			limit = {
+				is_materialist = yes
+			}
+			from = {
+				set_subject_of = {
+					who = root
+					preset = preset_satellite
+				}
+			}
+		}
+	}
+	
+	ai_weight = {
+		weight = 100
+	}
+}

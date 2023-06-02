@@ -1,0 +1,1238 @@
+############DARK MATTER EVENTS
+
+
+namespace = acot_dark_matter_event
+
+
+#Dark Matter Rumor
+country_event = {
+	id = acot_dark_matter_event.1
+	title = acot_dark_matter_event.1.name
+	desc = {
+		text = acot_dark_matter_event.1.desc.a
+		trigger = {
+			NOR = {
+				any_country = {
+					has_technology = tech_dark_matter_power_core
+					has_established_contact = root
+				}
+			}
+		}
+	}
+	desc = {
+		text = acot_dark_matter_event.1.desc.b
+		trigger = {
+			any_country = {
+				has_technology = tech_dark_matter_power_core
+				has_established_contact = root
+			}
+		}
+	}
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+
+	trigger = {
+		is_country_type = default
+		num_researched_techs_of_tier = {
+			value >= 5
+			tier >= 4
+		}
+		has_technology = "tech_mine_dark_matter"
+		NOR = {
+			has_country_flag = hear_dark_rumor
+			has_technology = "tech_dark_matter_power_core"
+			has_tech_option = tech_dark_matter_power_core
+		}
+    }
+	
+	mean_time_to_happen = {
+		years = 5
+	}
+
+	immediate = {
+		set_country_flag = hear_dark_rumor
+		if = {
+			limit = {
+				NOT = {
+					exists = event_target:dm_curators
+				}
+			 }	
+			 random_country = {
+				limit = {
+					is_country_type = enclave
+					has_country_flag = curator_enclave_country
+				}
+				save_global_event_target_as = dm_curators 
+			}	
+		}
+	}
+	
+	option = {
+		name = acot_dark_matter_event.1.a
+		trigger = {
+			is_ai = no
+		}
+		begin_event_chain = {
+			event_chain = acot_dm_tech_chain
+		}
+		capital_scope = {
+			create_point_of_interest = {
+				id = acot_dm_find_enigmatic.2
+				name = "acot_dm_tech_find_enigmatic_2"
+				desc = "acot_dm_tech_find_enigmatic_2_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}	
+			create_point_of_interest = {
+				id = acot_dm_find_enigmatic.1
+				name = "acot_dm_tech_find_enigmatic_1"
+				desc = "acot_dm_tech_find_enigmatic_1_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}	
+			if = {
+				limit = {
+					owner = {
+						NOR = {
+							has_country_flag = attacked_curators
+							is_homicidal = yes
+						}					
+					} 
+					any_country = {
+						has_country_flag = curator_enclave_country
+						has_established_contact = root
+					}
+				}
+				create_point_of_interest = {
+					id = acot_dm_find_enigmatic.3
+					name = "acot_dm_tech_find_enigmatic_3"
+					desc = "acot_dm_tech_find_enigmatic_3_desc"
+					event_chain = acot_dm_tech_chain
+					location = this
+				}				
+			}		
+			enable_special_project = {
+				name = "RESEARCH_DARK_POWER_NORMAL"
+				owner = root
+			}
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			is_ai = yes
+			NOT = {
+				has_global_flag = acot_ai_simple_event_forbidden
+			}
+		}		
+		set_country_flag = learned_dark_rumor
+		add_research_option = tech_dark_matter_generation
+		add_research_option = tech_dark_matter_strategy
+		add_research_option = tech_dark_matter_container
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			is_ai = yes
+			has_global_flag = acot_ai_simple_event_forbidden
+		}		
+		set_country_flag = learned_dark_rumor
+		random_list = {
+			60 = {
+				modifier = {
+					factor = 0
+					any_owned_leader = {
+						leader_class = scientist
+						has_skill <= 5 
+						NOT = {
+							has_trait = leader_trait_curator
+						}
+					}
+				}
+				hidden_effect = {
+					random_owned_leader = {
+						limit = {
+							has_skill >= 5
+							leader_class = scientist
+							NOT = {
+								has_trait = leader_trait_curator
+							}
+						}
+						kill_leader = {
+							show_notification = no
+							type = scientist
+						}	
+					}
+					random_list = {
+						### STONE FREE
+						50 = {
+							country_event = { id = acot_dark_matter_event.4 days = 5 }
+						}
+						### DETECTED BY FE
+						50 = {
+							modifier = {
+								factor = 0
+								NOT = {
+									any_country = {
+										is_fallen_empire = yes
+										is_fallen_machine_empire = no
+									}
+								}
+							}
+							country_event = { id = acot_dark_matter_event.41 days = 5 }
+						}
+					}
+				}
+			}
+			40 = {
+				enable_special_project = {
+					name = "RESEARCH_DARK_POWER_NORMAL"
+					owner = root
+				}
+			}
+		}
+	}
+}
+
+#####################################################################################
+
+#Dark Matter Gift to AI
+country_event = {
+	id = acot_dark_matter_event.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			last_increased_tech = tech_dark_matter_generation
+			last_increased_tech = tech_dark_matter_container
+			last_increased_tech = tech_dark_matter_strategy
+		}
+		NOR = {
+			has_technology = "tech_dark_matter_power_core"
+			has_tech_option = tech_dark_matter_power_core
+		}
+	}
+	
+	
+	immediate = {
+		### ENGINEERING ###
+		if = {
+			limit = {
+				last_increased_tech = tech_dark_matter_generation
+			 }
+			 add_research_option = tech_dark_matter_container
+			 add_tech_progress = {
+				tech = tech_dark_matter_container
+				progress = 0.25
+			}
+		}
+		### SOCIETY ###
+		else_if = {
+			limit = {
+				last_increased_tech = tech_dark_matter_container
+			 }
+			 add_research_option = tech_dark_matter_strategy
+			 add_tech_progress = {
+				 tech = tech_dark_matter_strategy
+				 progress = 0.25
+			 }
+		}
+		### ALL ###
+		else_if = {
+			limit = {
+				last_increased_tech = tech_dark_matter_strategy
+			 }
+			 add_tech_progress = {
+				 tech = tech_dark_matter_power_core
+				 progress = 0.25
+			 }
+		}
+	}
+}
+
+######################################################################
+
+#Dark Matter Rumor DEFAULT
+country_event = {
+	id = acot_dark_matter_event.2
+	title = acot_dark_matter_event.2.name
+	desc = acot_dark_matter_event.2.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_conversation
+	
+	is_triggered_only = yes
+
+	
+    immediate = {
+		set_country_flag = learned_dark_rumor
+		remove_point_of_interest = acot_dm_find_enigmatic.1
+		remove_point_of_interest = acot_dm_find_enigmatic.3
+    }
+	
+    option = {
+        name = acot_dark_matter_event.2.a
+        custom_tooltip = acot_dark_matter_event.2.a.desc
+		IF = {
+			limit = {
+				any_owned_leader = {
+					leader_class = scientist
+					has_level >= 6
+					OR = {
+						has_trait = "leader_trait_expertise_particles"
+						has_trait = "leader_trait_curator"
+						has_trait = "leader_trait_spark_of_genius"
+						has_trait = "leader_trait_scientist_erudite"
+						has_trait = "leader_trait_scientist_psionic"
+						has_trait = "leader_trait_scientist_synthetic"
+						has_trait = "leader_trait_scientist_brainslug"
+						has_trait = "leader_trait_scientist_chosen"
+					}
+				}
+			}
+			add_research_option = tech_dark_matter_generation
+		}
+		IF = {
+			limit = {
+				any_owned_leader = {
+					leader_class = scientist
+					has_level >= 6
+					OR = {
+						has_trait = "leader_trait_expertise_military_theory"
+						has_trait = "leader_trait_curator"
+						has_trait = "leader_trait_spark_of_genius"
+						has_trait = "leader_trait_scientist_erudite"
+						has_trait = "leader_trait_scientist_psionic"
+						has_trait = "leader_trait_scientist_synthetic"
+						has_trait = "leader_trait_scientist_brainslug"
+						has_trait = "leader_trait_scientist_chosen"
+					}
+				}
+			}
+			add_research_option = tech_dark_matter_strategy
+		}
+		IF = {
+			limit = {
+				any_owned_leader = {
+					leader_class = scientist
+					has_level >= 6
+					OR = {
+						has_trait = "leader_trait_expertise_materials"
+						has_trait = "leader_trait_curator"
+						has_trait = "leader_trait_spark_of_genius"
+						has_trait = "leader_trait_scientist_erudite"
+						has_trait = "leader_trait_scientist_psionic"
+						has_trait = "leader_trait_scientist_synthetic"
+						has_trait = "leader_trait_scientist_brainslug"
+						has_trait = "leader_trait_scientist_chosen"
+					}
+				}
+			}
+			add_research_option = tech_dark_matter_container
+		}
+		capital_scope = {
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.1
+				name = "acot_dm_tech_physics"
+				desc = "acot_dm_tech_physics_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}	
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.2
+				name = "acot_dm_tech_engineers"
+				desc = "acot_dm_tech_engineers_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.3
+				name = "acot_dm_tech_social"
+				desc = "acot_dm_tech_social_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}		
+		}
+    }
+}
+
+# FE Kill Count  (CALCULATED FOR AWARDS)
+country_event = {
+	id = acot_dark_matter_event.3
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {	
+		has_event_chain = acot_dm_tech_chain
+		FROM = { 
+			OR = {
+				is_fallen_empire = yes
+				is_same_value = event_target:curator_enclave_country
+				has_technology = tech_dark_matter_power_core
+			}
+			is_pirate = no
+		}
+	}
+	
+	immediate = {
+		change_variable = { 
+			which = "acot_dm_ship_score" 
+			value = 1
+		}
+	}
+}
+
+# FE Kill Achieved
+country_event = {
+	id = acot_dark_matter_event.300
+	title = acot_dark_matter_event.300.name
+	desc = acot_dark_matter_event.300.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+
+	mean_time_to_happen = {
+		days = 30
+	}
+
+	trigger = {
+		has_event_chain = acot_dm_tech_chain
+		check_variable = {
+			which = "acot_dm_ship_score" 
+			value >= 10
+		}
+		NOR = {
+			has_country_flag = learned_dark_rumor
+			has_technology = tech_dark_matter_power_core
+		}
+	}
+	
+	
+	immediate = {
+		set_country_flag = learned_dark_rumor
+		if = {
+			limit = {
+				has_special_project = RESEARCH_DARK_POWER_NORMAL
+			 }
+			 abort_special_project = {
+				type = RESEARCH_DARK_POWER_NORMAL
+			}	
+		}
+		remove_point_of_interest = acot_dm_find_enigmatic.1
+		remove_point_of_interest = acot_dm_find_enigmatic.2
+		remove_point_of_interest = acot_dm_find_enigmatic.3
+	}
+	
+    option = {
+        name = acot_dark_matter_event.300.a
+		add_research_option = tech_dark_matter_generation
+		add_research_option = tech_dark_matter_container
+		add_research_option = tech_dark_matter_strategy
+		capital_scope = {
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.1
+				name = "acot_dm_tech_physics"
+				desc = "acot_dm_tech_physics_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}	
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.2
+				name = "acot_dm_tech_engineers"
+				desc = "acot_dm_tech_engineers_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}		
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.3
+				name = "acot_dm_tech_social"
+				desc = "acot_dm_tech_social_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}			
+		}
+    }
+}
+
+
+###########################################################################
+
+#WARNING! YOU ARE TALKING TO CURATOR
+country_event = {
+	id = acot_dark_matter_event.40
+	title = acot_dark_matter_event.40.name
+	desc = {
+		text = acot_dark_matter_event.40.desc.a
+		trigger = {
+			NOT = {		
+				has_country_flag = asked_curator_dark_design_help	
+			}
+		}
+	}
+	desc = {
+		text = acot_dark_matter_event.40.desc.b
+		trigger = {
+			has_country_flag = asked_curator_dark_design_help
+		}
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+
+	custom_gui = "enclave_curator_window"
+
+	picture_event_data = {
+		portrait = event_target:dm_curators
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+
+	option = {
+		name = acot_dark_matter_event.40.a
+		custom_gui = "enclave_curator_option"
+		is_dialog_only = yes
+		response_text = acot_dark_matter_event.40.a.explain
+	}
+
+	option = {
+		name = acot_dark_matter_event.40.b
+		custom_gui = "enclave_curator_option"
+		response_text = acot_dark_matter_event.40.b.explain
+		default_hide_option = yes
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = asked_curator_dark_design_help
+				}
+			 }
+			set_country_flag = asked_curator_dark_design_help
+		}	
+	}
+
+	option = {
+		name = acot_dark_matter_event.40.c
+		custom_gui = "enclave_curator_option"
+		response_text = acot_dark_matter_event.40.c.explain	
+		custom_tooltip = acot_dark_matter_event.40.c.tooltip	
+		allow = {
+			any_owned_leader = {
+				leader_class = scientist
+				has_skill >= 5 
+				NOT = {
+					has_trait = leader_trait_curator
+				}
+			}
+		}	
+		hidden_effect = {
+			random_owned_leader = {
+				limit = {
+					has_skill >= 5
+					leader_class = scientist
+					NOT = {
+						has_trait = leader_trait_curator
+					}
+				}
+				kill_leader = {
+					show_notification = no
+					type = scientist
+				}	
+			}
+			random_list = {
+				### STONE FREE
+				50 = {
+					country_event = { id = acot_dark_matter_event.4 days = 5 }
+				}
+				### DETECTED BY FE
+				50 = {
+					modifier = {
+						factor = 0
+						NOT = {
+							any_country = {
+								is_fallen_empire = yes
+								is_fallen_machine_empire = no
+							}
+						}
+					}
+					country_event = { id = acot_dark_matter_event.41 days = 5 }
+				}
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+}
+
+#Dark Matter CURATOR GOOD
+country_event = {
+	id = acot_dark_matter_event.4
+	title = acot_dark_matter_event.4.name
+	desc = acot_dark_matter_event.4.desc.a
+	picture = GFX_evt_ancient_databank
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+    immediate = {
+		set_country_flag = learned_dark_rumor
+		if = {
+			limit = {
+				has_special_project = RESEARCH_DARK_POWER_NORMAL
+			 }
+			 abort_special_project = {
+				type = RESEARCH_DARK_POWER_NORMAL
+			}	
+		}
+		remove_point_of_interest = acot_dm_find_enigmatic.1
+		remove_point_of_interest = acot_dm_find_enigmatic.2
+		remove_point_of_interest = acot_dm_find_enigmatic.3
+    }
+	
+    option = {
+        name = acot_dark_matter_event.4.a
+		custom_tooltip = acot_dark_matter_event.4.a.desc
+		add_research_option = tech_dark_matter_generation
+		add_research_option = tech_dark_matter_container
+		add_research_option = tech_dark_matter_strategy
+		capital_scope = {
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.1
+				name = "acot_dm_tech_physics"
+				desc = "acot_dm_tech_physics_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}	
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.2
+				name = "acot_dm_tech_engineers"
+				desc = "acot_dm_tech_engineers_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}		
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.3
+				name = "acot_dm_tech_social"
+				desc = "acot_dm_tech_social_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}			
+		}
+    }
+}
+
+
+#Dark Matter CURATOR BAD
+country_event = {
+	id = acot_dark_matter_event.41
+	title = acot_dark_matter_event.4.name
+	desc = acot_dark_matter_event.4.desc.b
+	picture = GFX_evt_ancient_databank
+	show_sound = event_mystic_reveal
+	
+	is_triggered_only = yes
+	
+    immediate = {
+		set_country_flag = learned_dark_rumor
+		if = {
+			limit = {
+				has_special_project = RESEARCH_DARK_POWER_NORMAL
+			 }
+			 abort_special_project = {
+				type = RESEARCH_DARK_POWER_NORMAL
+			}	
+		}
+		remove_point_of_interest = acot_dm_find_enigmatic.1
+		remove_point_of_interest = acot_dm_find_enigmatic.3
+    }
+	
+    option = {
+        name = acot_dark_matter_event.4.b
+		custom_tooltip = acot_dark_matter_event.4.b.desc
+		add_research_option = tech_dark_matter_generation
+		add_research_option = tech_dark_matter_container
+		add_research_option = tech_dark_matter_strategy
+		every_country = {
+			limit = {
+				is_fallen_empire = yes
+				is_fallen_empire_machine = no
+			}
+			add_opinion_modifier = {
+				who = ROOT
+				modifier = opinion_failed_fallen_empire_task
+			}
+		}
+		capital_scope = {
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.1
+				name = "acot_dm_tech_physics"
+				desc = "acot_dm_tech_physics_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}	
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.2
+				name = "acot_dm_tech_engineers"
+				desc = "acot_dm_tech_engineers_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}		
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.3
+				name = "acot_dm_tech_social"
+				desc = "acot_dm_tech_social_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}	
+		}
+    }
+}
+
+####################################################################################################
+
+#Dark Matter Power Generation Learned
+country_event = {
+	id = acot_dark_matter_event.5
+	title = acot_dark_matter_event.5.name
+	desc = acot_dark_matter_event.5.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_power_dm
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_dark_matter_generation
+		NOR = {
+			has_country_flag = know_dark_power_generation
+			has_technology = "tech_dark_matter_power_core"
+			has_tech_option = tech_dark_matter_power_core
+		}
+	}
+	
+	
+	immediate = {
+		set_country_flag = know_dark_power_generation
+		add_resource = {
+			sr_dark_matter = 100
+		}
+	}
+	
+    option = {
+        name = acot_dark_matter_event.5.a
+		remove_point_of_interest = acot_dm_tech_poi.1
+		hidden_effect = {
+			IF = {
+				limit = {
+					has_technology = tech_dark_matter_generation
+					has_technology = tech_dark_matter_container
+					has_technology = tech_dark_matter_strategy
+				}
+			country_event = {
+				id = acot_dark_matter_event.700 days = 5 }
+			}
+		}
+    }
+}
+
+#Dark Matter Power Container Learned
+country_event = {
+	id = acot_dark_matter_event.6
+	title = acot_dark_matter_event.6.name
+	desc = acot_dark_matter_event.6.desc
+	picture = GFX_evt_engineering_research
+	show_sound = event_container_dm
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_dark_matter_container
+		NOR = {
+			has_country_flag = know_dark_power_container
+			has_technology = "tech_dark_matter_power_core"
+			has_tech_option = tech_dark_matter_power_core
+		}
+	}
+
+	
+	immediate = {
+		set_country_flag = know_dark_power_container
+	}
+	
+    option = {
+        name = acot_dark_matter_event.6.a
+		remove_point_of_interest = acot_dm_tech_poi.2
+		hidden_effect = {
+			IF = {
+				limit = {
+					has_technology = tech_dark_matter_generation
+					has_technology = tech_dark_matter_container
+					has_technology = tech_dark_matter_strategy
+				}
+			country_event = {
+				id = acot_dark_matter_event.700 days = 5 }
+			}
+		}
+    }
+}
+
+#Dark Matter Power Application Learned
+country_event = {
+	id = acot_dark_matter_event.7
+	title = acot_dark_matter_event.7.name
+	desc = acot_dark_matter_event.7.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_dark_matter_strategy
+		NOR = {
+			has_country_flag = know_dark_power_strategy
+			has_technology = "tech_dark_matter_power_core"
+			has_tech_option = tech_dark_matter_power_core
+		}
+	}
+	
+	immediate = {
+		set_country_flag = know_dark_power_strategy
+	}
+	
+    option = {
+        name = acot_dark_matter_event.7.a
+		remove_point_of_interest = acot_dm_tech_poi.3
+		hidden_effect = {
+			IF = {
+				limit = {
+					has_technology = tech_dark_matter_generation
+					has_technology = tech_dark_matter_container
+					has_technology = tech_dark_matter_strategy
+					NOT = {
+						has_country_flag = earned_dm
+					}
+				}
+			country_event = {
+				id = acot_dark_matter_event.700 days = 5 }
+			}
+		}
+    }
+}
+
+#Dark Matter Learned All
+country_event = {
+	id = acot_dark_matter_event.700
+	title = acot_dark_matter_event.700.name
+	desc = acot_dark_matter_event.700.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = earned_dm
+	}
+	
+    option = {
+        name = acot_dark_matter_event.700.a
+		add_research_option = tech_dark_matter_power_core
+		add_tech_progress = {
+			tech = tech_dark_matter_power_core
+			progress = 0.80
+		}
+		add_tech_progress = {
+			tech = tech_dark_matter_propulsion
+			progress = 0.50
+		}
+		add_tech_progress = {
+			tech = tech_dark_matter_deflector
+			progress = 0.50
+		}
+    }
+}
+
+#Dark Matter Power FINAL
+country_event = {
+	id = acot_dark_matter_event.8
+	title = acot_dark_matter_event.8.name
+	desc = acot_dark_matter_event.8.desc
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	trigger = {
+		is_playable_country = yes
+		last_increased_tech = tech_dark_matter_power_core
+		NOR = {	
+			has_country_flag = know_dark_power_final 
+			has_origin = origin_tier_dm_start
+		}
+	}
+	
+	immediate = {
+		set_country_flag = know_dark_power_final
+	}
+	
+    option = {
+        name = acot_dark_matter_event.8.a
+		custom_tooltip = acot_dark_matter_event.8.a.desc
+		add_research_option = tech_dark_matter_deflector
+		add_research_option = tech_dark_matter_propulsion
+		save_event_target_as = new_dm_country
+		if = {
+			limit = {
+				NOT = { has_technology = tech_dark_matter_generation }
+			}
+		set_country_flag = know_dark_power_generation
+		give_technology = { tech = tech_dark_matter_generation message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_dark_matter_container }
+			}
+			set_country_flag = know_dark_power_container
+		give_technology = { tech = tech_dark_matter_container message = no }
+		}
+		if = {
+			limit = {
+				NOT = { has_technology = tech_dark_matter_strategy }
+			}
+			set_country_flag = know_dark_power_strategy
+		give_technology = { tech = tech_dark_matter_strategy message = no }
+		}
+		if = {
+			limit = { 
+				is_ai = yes
+			}
+			add_resource = {
+				sr_dark_matter = 500
+			}
+		}
+		capital_scope = {
+			create_point_of_interest = {
+				id = acot_dm_tech_poi.5
+				name = "acot_dm_tech_find_enigmatic_5"
+				desc = "acot_dm_tech_find_enigmatic_5_desc"
+				event_chain = acot_dm_tech_chain
+				location = this
+			}			
+		}
+		hidden_effect = {
+			every_playable_country = {
+				limit = {
+					ROOT = {
+						is_playable_country = yes
+					}
+					NOT = {
+						is_same_value = root
+					}
+				}
+				country_event = { id = acot_dark_matter_event.9 }
+			}			
+		}
+    }
+}
+
+#Dark Matter Power Annoucement
+country_event = {
+	id = acot_dark_matter_event.9
+	title = acot_dark_matter_event.9.name
+	desc = acot_dark_matter_event.9.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+	
+    option = {
+        name = acot_dark_matter_event.9.a
+	}
+}
+
+#Delta Rumor
+country_event = {
+	id = acot_dark_matter_event.10
+	title = acot_dark_matter_event.10.name
+	desc = acot_dark_matter_event.10.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+
+	trigger = {
+		NOT = {
+			has_global_flag = acot_delta_forbidden
+		}
+		is_playable_country = yes
+		has_technology = "tech_mine_dark_matter"
+		has_technology = "tech_dark_matter_power_core"
+		NOR = {
+			has_technology = tech_mine_dark_energy
+			has_technology = tech_dark_matter_power_core_dm
+			has_tech_option = tech_mine_dark_energy
+			has_country_flag = hear_delta_rumor
+		}
+    }
+	
+	mean_time_to_happen = {
+		years = 2
+	}
+
+	immediate = {
+		set_country_flag = hear_delta_rumor
+		remove_point_of_interest = acot_dm_tech_poi.5
+	}
+	
+	option = {
+		name = acot_dark_matter_event.10.a
+		add_research_option = tech_mine_dark_energy
+	}
+}
+
+#Dark Matter Power Generation Learned
+country_event = {
+	id = acot_dark_matter_event.11
+	title = acot_dark_matter_event.11.name
+	desc = acot_dark_matter_event.11.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_power_dm
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_mine_dark_energy
+		NOR = {
+			has_technology = "tech_dark_matter_power_core_dm"
+			has_tech_option = tech_dark_matter_power_core_dm
+			has_origin = origin_tier_dm_start
+		}
+	}
+	
+	
+	immediate = {
+	}
+	
+    option = {
+        name = acot_dark_matter_event.11.a
+		trigger = {
+			is_human_species = no
+		}
+		custom_tooltip = acot_dark_matter_event.11.a.tooltip.a
+		remove_point_of_interest = acot_dm_tech_poi.1
+		add_resource = {
+			acot_sr_dark_energy = 100
+		}
+		add_research_option = tech_dark_matter_power_core_dm
+    }
+	option = {
+        name = acot_dark_matter_event.11.a
+		trigger = {
+			is_human_species = yes
+		}
+		custom_tooltip = acot_dark_matter_event.11.a.tooltip.b
+		remove_point_of_interest = acot_dm_tech_poi.1
+		add_resource = {
+			acot_sr_dark_energy = 100
+		}
+		add_research_option = tech_dark_matter_power_core_dm
+    }
+}
+
+country_event = {
+	id = acot_dark_matter_event.12
+	title = acot_dark_matter_event.12.name
+	desc = acot_dark_matter_event.12.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_power_dm
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_dark_matter_power_core_dm
+		NOR = {
+			has_country_flag = acot_finished_delta
+			has_origin = origin_tier_dm_start
+		}
+	}
+	
+	
+	immediate = {
+		set_country_flag = acot_finished_delta
+		set_timed_country_flag = {
+			flag = ae_dark_power_delay
+			years = 15
+		}
+		if = {
+			limit = {
+				has_event_chain = acot_dm_tech_chain
+			 }
+			end_event_chain = acot_dm_tech_chain
+		}
+	}
+	
+    option = {
+        name = acot_dark_matter_event.12.a
+		remove_point_of_interest = acot_dm_tech_poi.1
+		add_research_option = tech_laser_dm
+		add_tech_progress = {
+			tech = tech_laser_dm
+			progress = 0.25
+		}
+		add_research_option = tech_plasma_dm
+		add_tech_progress = {
+			tech = tech_plasma_dm
+			progress = 0.25
+		}
+		add_research_option = tech_disruptor_dm
+		add_tech_progress = {
+			tech = tech_disruptor_dm
+			progress = 0.25
+		}
+		add_research_option = tech_point_defense_dm
+		add_tech_progress = {
+			tech = tech_point_defense_dm
+			progress = 0.25
+		}
+    }
+    option = {
+        name = acot_dark_matter_event.12.b
+		remove_point_of_interest = acot_dm_tech_poi.1
+		add_research_option = tech_mass_driver_dm
+		add_tech_progress = {
+			tech = tech_mass_driver_dm
+			progress = 0.33
+		}
+		add_research_option = tech_autocannons_dm
+		add_tech_progress = {
+			tech = tech_autocannons_dm
+			progress = 0.33
+		}
+		add_research_option = tech_flak_batteries_dm
+		add_tech_progress = {
+			tech = tech_flak_batteries_dm
+			progress = 0.33
+		}
+    }
+	option = {
+        name = acot_dark_matter_event.12.c
+		remove_point_of_interest = acot_dm_tech_poi.1
+		add_research_option = tech_missile_dm
+		add_tech_progress = {
+			tech = tech_missile_dm
+			progress = 0.33
+		}
+		add_research_option = tech_torpedo_dm
+		add_tech_progress = {
+			tech = tech_torpedo_dm
+			progress = 0.33
+		}
+		add_research_option = tech_swarmer_missile_dm
+		add_tech_progress = {
+			tech = tech_swarmer_missile_dm
+			progress = 0.33
+		}
+    }
+	option = {
+        name = acot_dark_matter_event.12.d
+		remove_point_of_interest = acot_dm_tech_poi.1
+		add_research_option = tech_strike_craft_bomber_dm
+		add_tech_progress = {
+			tech = tech_strike_craft_bomber_dm
+			progress = 0.50
+		}
+		add_research_option = tech_strike_craft_gunship_dm
+		add_tech_progress = {
+			tech = tech_strike_craft_gunship_dm
+			progress = 0.50
+		}
+    }
+	option = {
+        name = acot_dark_matter_event.12.e
+		remove_point_of_interest = acot_dm_tech_poi.1
+		add_research_option = tech_armor_dm
+		add_tech_progress = {
+			tech = tech_armor_dm
+			progress = 0.50
+		}
+		add_research_option = tech_dark_matter_deflector_dm
+		add_tech_progress = {
+			tech = tech_dark_matter_deflector_dm
+			progress = 0.50
+		}
+    }
+	option = {
+        name = acot_dark_matter_event.12.f
+		remove_point_of_interest = acot_dm_tech_poi.1
+		add_research_option = tech_thrusters_dm
+		add_tech_progress = {
+			tech = tech_thrusters_dm
+			progress = 0.33
+		}
+		add_research_option = tech_sensors_dm
+		add_tech_progress = {
+			tech = tech_sensors_dm
+			progress = 0.33
+		}
+		add_research_option = tech_dm_combat_computer
+		add_tech_progress = {
+			tech = tech_dm_combat_computer
+			progress = 0.33
+		}
+    }
+	option = {
+        name = acot_dark_matter_event.12.g
+		remove_point_of_interest = acot_dm_tech_poi.1
+		IF = {
+			limit = {
+				is_regular_empire = yes
+			}
+			add_research_option = tech_dm_ancient_palace
+			add_tech_progress = {
+				tech = tech_dm_ancient_palace
+				progress = 0.25
+			}
+			add_research_option = tech_acot_army_dm
+			add_tech_progress = {
+				tech = tech_acot_army_dm
+				progress = 0.25
+			}
+		}
+		else_if = {
+			limit = {
+				is_hive_empire = yes
+			}
+			add_research_option = tech_dm_ancient_hive_cluster
+			add_tech_progress = {
+				tech = tech_dm_ancient_hive_cluster
+				progress = 0.25
+			}
+			add_research_option = tech_acot_army_hive_dm
+			add_tech_progress = {
+				tech = tech_acot_army_hive_dm
+				progress = 0.25
+			}
+		}
+		else_if = {
+			limit = {
+				is_machine_empire = yes
+			}
+			add_research_option = tech_dm_ancient_control_center
+			add_tech_progress = {
+				tech = tech_dm_ancient_control_center
+				progress = 0.25
+			}
+			add_research_option = tech_acot_army_machine_dm
+			add_tech_progress = {
+				tech = tech_acot_army_machine_dm
+				progress = 0.25
+			}
+		}
+		add_research_option = tech_dark_matter_generator
+		add_tech_progress = {
+			tech = tech_dark_matter_generator
+			progress = 0.25
+		}
+		add_research_option = tech_dark_energy_pylon
+		add_tech_progress = {
+			tech = tech_dark_energy_pylon
+			progress = 0.25
+		}
+    }
+}

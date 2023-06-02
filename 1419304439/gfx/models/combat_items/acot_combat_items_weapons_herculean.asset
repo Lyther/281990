@@ -1,0 +1,584 @@
+# #################################################################################### #
+#           Herculean Tier			     	 
+# #################################################################################### #
+
+# ########################################## #
+#           Herculean Artillery  			     	 #
+# ########################################## #
+
+
+# WINDUP
+
+entity = {
+	name = "acot_herculean_artillery_windup_entity"
+	
+	default_state = "attack"
+	get_state_from_parent = no
+	state = {
+		name = "attack" looping = yes state_time = 0.8
+		event = { time = 0.0 use_parent_nodes = yes node = xl_windup_8 particle = "acot_kinetic_artillery_ae_windup_effect" }
+		event = { time = 0.0 use_parent_nodes = yes node = xl_windup_7 particle = "acot_kinetic_artillery_ae_windup_effect" }
+		event = { time = 0.2 use_parent_nodes = yes node = xl_windup_6 particle = "acot_kinetic_artillery_ae_windup_effect" }
+		event = { time = 0.2 use_parent_nodes = yes node = xl_windup_5 particle = "acot_kinetic_artillery_ae_windup_effect" }
+		event = { time = 0.4 use_parent_nodes = yes node = xl_windup_4 particle = "acot_kinetic_artillery_ae_windup_effect" }
+		event = { time = 0.4 use_parent_nodes = yes node = xl_windup_3 particle = "acot_kinetic_artillery_ae_windup_effect" }
+		event = { time = 0.6 use_parent_nodes = yes node = xl_windup_2 particle = "acot_kinetic_artillery_ae_windup_effect" }
+		event = { time = 0.6 use_parent_nodes = yes node = xl_windup_1 particle = "acot_kinetic_artillery_ae_windup_effect" }
+		
+		event = { time = 0.0 use_parent_nodes = yes node = xl_gun_01 particle = "acot_kinetic_artillery_ae_muzzle_windup_effect" trigger_once = yes keep_particle = yes }
+	}
+}
+
+entity = {
+	name = "acot_herculean_artillery_windup_se_entity"
+	
+	default_state = "attack"
+	get_state_from_parent = no
+	state = {
+		name = "attack" looping = yes state_time = 0.8
+		event = { time = 0.0 use_parent_nodes = yes node = xl_windup_8 particle = "acot_artillery_se_windup_effect" }
+		event = { time = 0.0 use_parent_nodes = yes node = xl_windup_7 particle = "acot_artillery_se_windup_effect" }
+		event = { time = 0.2 use_parent_nodes = yes node = xl_windup_6 particle = "acot_artillery_se_windup_effect" }
+		event = { time = 0.2 use_parent_nodes = yes node = xl_windup_5 particle = "acot_artillery_se_windup_effect" }
+		event = { time = 0.4 use_parent_nodes = yes node = xl_windup_4 particle = "acot_artillery_se_windup_effect" }
+		event = { time = 0.4 use_parent_nodes = yes node = xl_windup_3 particle = "acot_artillery_se_windup_effect" }
+		event = { time = 0.6 use_parent_nodes = yes node = xl_windup_2 particle = "acot_artillery_se_windup_effect" }
+		event = { time = 0.6 use_parent_nodes = yes node = xl_windup_1 particle = "acot_artillery_se_windup_effect" }
+		
+		event = { time = 0.0 use_parent_nodes = yes node = xl_gun_01 particle = "acot_kinetic_artillery_ae_muzzle_windup_effect" trigger_once = yes keep_particle = yes }
+	}
+}
+
+
+# MUZZLE FLASH
+
+entity = {
+	name = "acot_herculean_artillery_muzzle_entity"
+	cull_radius = 1.0
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 7 looping = no
+		event = { time = 0 particle = "acot_kinetic_artillery_ae_muzzle_particle" keep_particle = yes sound = { soundeffect = dm_artillery_fire } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_adv_kinectic_fire" } }
+	}
+}
+
+entity = {
+	name = "acot_herculean_artillery_muzzle_se_entity"
+	cull_radius = 1.0
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 7 looping = no
+		event = { time = 0 particle = "acot_artillery_se_muzzle" keep_particle = yes sound = { soundeffect = dm_artillery_fire } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_adv_kinectic_fire" } }
+	}
+}
+
+# PROJECTILE
+
+entity = {
+	name = "acot_herculean_artillery_entity"
+	
+	locator = { name = "bullet1" position = { -2 0 0 } }
+	locator = { name = "bullet2" position = { 2 0 0 } }
+
+	attach = { bullet1 = "acot_herculean_artillery_bullet_entity" }	
+	attach = { bullet2 = "acot_herculean_artillery_bullet_entity" }	
+
+	default_state = idle
+	state = { name = "idle"
+		#event = { time = 0 particle = "acot_kinetic_artillery_ae_idle_particle" keep_particle = yes }
+	}
+	
+	scale = 2
+}
+
+entity = {
+	name = "acot_herculean_artillery_bullet_entity"
+	pdxmesh = "acot_kinetic_artillery_ae_tracer_round_mesh"
+	
+
+	default_state = idle
+	state = { name = "idle"
+		#event = { time = 0 particle = "acot_kinetic_artillery_ae_idle_particle" keep_particle = yes }
+	}
+	
+	scale = 1
+}
+
+entity = {
+	name = "acot_herculean_artillery_se_entity"
+	
+	locator = { name = "bullet1" position = { -2 0 0 } }
+	locator = { name = "bullet2" position = { 2 0 0 } }
+
+	attach = { bullet1 = "acot_herculean_artillery_bullet_se_entity" }	
+	attach = { bullet2 = "acot_herculean_artillery_bullet_se_entity" }	
+
+	default_state = idle
+	state = { name = "idle"
+		#event = { time = 0 particle = "acot_kinetic_artillery_ae_idle_particle" keep_particle = yes }
+	}
+	
+	scale = 2
+}
+
+entity = {
+	name = "acot_herculean_artillery_bullet_se_entity"
+	pdxmesh = "acot_kinetic_artillery_se_tracer_round_mesh"
+	
+
+	default_state = idle
+	state = { name = "idle"
+		#event = { time = 0 particle = "acot_kinetic_artillery_ae_idle_particle" keep_particle = yes }
+	}
+	
+	scale = 1
+}
+
+# HIT EFFECT
+
+
+entity = {
+	name = "acot_herculean_artillery_hit_entity"
+	cull_radius = 1.0
+	
+	state = { name = "explode_med_hp" state_time = 5.0 looping = no
+		event = { time = 0.0 particle = "acot_kinetic_artillery_ae_hit_effect" sound = { soundeffect = adv_kinectic_hit } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_adv_kinectic_hit" } }
+	}
+	default_state = "explode_med_hp"
+	scale = 3
+}
+
+
+entity = {
+	name = "acot_herculean_artillery_shield_hit_entity"
+	cull_radius = 1.0
+	
+	state = { name = "explode_med_hp" state_time = 5 looping = no
+		event = { time = 0.0 particle = "acot_kinetic_artillery_ae_hit_effect" }
+		event = { time = 0.0 particle = "projectile_medium_shield_hit_effect" }
+		event = { trigger_once = yes sound = { soundeffect = "distance_shield_hit" } } 
+	}
+	default_state = "explode_med_hp"
+	scale = 3
+}
+
+entity = {
+	name = "acot_herculean_artillery_hit_se_entity"
+	cull_radius = 1.0
+	
+	state = { name = "explode_med_hp" state_time = 5.0 looping = no
+		event = { time = 0.0 particle = "acot_artillery_se_hit_effect" sound = { soundeffect = adv_kinectic_hit } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_adv_kinectic_hit" } }
+	}
+	default_state = "explode_med_hp"
+	scale = 3
+}
+
+
+entity = {
+	name = "acot_herculean_artillery_shield_hit_se_entity"
+	cull_radius = 1.0
+	
+	state = { name = "explode_med_hp" state_time = 5 looping = no
+		event = { time = 0.0 particle = "acot_artillery_se_hit_effect" }
+		event = { time = 0.0 particle = "projectile_medium_shield_hit_effect" }
+		event = { trigger_once = yes sound = { soundeffect = "distance_shield_hit" } } 
+	}
+	default_state = "explode_med_hp"
+	scale = 3
+}
+
+# ########################################## #
+#           Herculean Spirit Weapon  			     	 #
+# ########################################## #
+
+entity = {
+	name = "acot_herculean_spirit_e8_windup_entity"
+	
+	scale = 5.0
+
+	default_state = "attack"
+	get_state_from_parent = no
+	state = {
+		name = "attack" looping = yes state_time = 0.1
+		event = { trigger_once = yes sound = { soundeffect = "phanon_yamato_charge" } }
+		event = { time = 0.0 use_parent_nodes = yes node = primary_weapon_windup_08 particle = "acot_herculean_spirit_windup_effect" trigger_once = yes }
+		event = { time = 0.0 use_parent_nodes = yes node = primary_weapon_windup_07 particle = "acot_herculean_spirit_windup_effect" trigger_once = yes }
+		event = { time = 0.0 use_parent_nodes = yes node = primary_weapon_windup_06 particle = "acot_herculean_spirit_windup_effect" trigger_once = yes }
+		event = { time = 0.0 use_parent_nodes = yes node = primary_weapon_windup_05 particle = "acot_herculean_spirit_windup_effect" trigger_once = yes }
+		event = { time = 0.0 use_parent_nodes = yes node = primary_weapon_windup_04 particle = "acot_herculean_spirit_windup_effect" trigger_once = yes }
+		event = { time = 0.0 use_parent_nodes = yes node = primary_weapon_windup_03 particle = "acot_herculean_spirit_windup_effect" trigger_once = yes }
+		event = { time = 0.0 use_parent_nodes = yes node = primary_weapon_windup_02 particle = "acot_herculean_spirit_windup_effect" trigger_once = yes }
+		event = { time = 0.0 use_parent_nodes = yes node = primary_weapon_windup_01 particle = "acot_herculean_spirit_windup_effect" trigger_once = yes }
+		
+		event = { time = 0.0 use_parent_nodes = yes node = xl_gun_01 particle = "acot_herculean_spirit_muzzle_windup" trigger_once = yes keep_particle = no }
+		event = { time = 0.0 use_parent_nodes = yes node = titan_gun_01 particle = "acot_herculean_spirit_windup_effect_1" trigger_once = yes keep_particle = yes }
+	}
+	state = { name = "stop" state_time = 0.5 looping = no }
+}
+
+# MUZZLE FLASH
+
+entity = {
+	name = "acot_herculean_spirit_e8_muzzle_entity"
+	cull_radius = 1.0
+	
+	scale = 5.0
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 7.0 looping = no
+		event = { time = 0 particle = "acot_herculean_spirit_muzzle" keep_particle = yes }
+		
+		event = { trigger_once = yes sound = { soundeffect = "phanon_yamato_fire" } }
+	}
+}
+
+# PROJECTILE ENTITY
+
+entity = {
+	name = "acot_herculean_spirit_e8_entity"
+	pdxmesh = "alpha_precursor_colossus_spirit_mesh"
+
+	scale = 2.00
+
+	game_data = {
+		raytrace_projectiles = no
+		dissolve_on_death = 3.0
+		ship_color = hsv { 0.85 1.0 0.94 1.0 }
+   	}
+
+	locator = { name = "outercore" position = { 0 0 0 } }
+
+	attach = { outercore = "acot_herculean_spirit_soul_e8_entity" }	
+
+	default_state = "idle"
+	# Actual idle state when being in idle/moving.
+	state = { name = "idle" animation = "open" looping = no next_state = "idle" animation_blend_time = 5
+	}
+	state = { name = "moving" animation = "open" looping = yes next_state = "moving"
+	}
+	state = { name = "death" animation = "opened_death" looping = no animation_blend_time = 2
+		
+		event = { time = 0.0 node = "explosion_locator_01" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 3.0 node = "explosion_locator_02" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 4.0 node = "explosion_locator_03" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 6.0 node = "explosion_locator_04" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 8.0 node = "explosion_locator_05" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+	}
+	
+	#locator = { name = "planet_killer_gun_01" position = { 0 0 0 } } # Actual locator in mesh.
+}
+
+entity = {
+	name = "acot_herculean_spirit_soul_e8_entity"
+	cull_radius = 1.0
+	
+	scale = 10.0
+
+	default_state = idle
+	state = { name = "idle"
+		event = { time = 0 particle = "large_acot_plasma_cannon_ae_idle_particle" keep_particle = yes }
+		event = { time = 0 particle = "large_acot_plasma_cannon_ae_idle_drops_particle" keep_particle = yes }
+	}
+}
+
+# HIT ENTITIES
+
+entity = {
+	name = "acot_herculean_spirit_e8_hit_entity"
+	pdxmesh = "alpha_precursor_colossus_spirit_mesh"
+
+	scale = 2
+
+	game_data = {
+		raytrace_projectiles = no
+		dissolve_on_death = 3.0
+		ship_color = hsv { 0.85 1.0 0.94 1.0 }
+   	}
+	
+	locator = { name = "outercore" position = { 0 0 0 } }
+
+	attach = { outercore = "acot_herculean_spirit_soul_e8_hit_entity" }	
+
+	default_state = "death"
+	# Actual idle state when being in idle/moving.
+	state = { name = "death" animation = "opened_death" looping = no animation_blend_time = 2
+	
+		event = { particle = "acot_herculean_spirit_hit_effect" keep_particle = yes sound = { soundeffect = planet_killer_hit_layer_1 }	}
+		event = { time = 1 particle = "acot_herculean_spirit_explosion_effect" keep_particle = yes sound = { soundeffect = shattered_planet_explosion }	}
+
+		event = { time = 0.0 node = "explosion_locator_01" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 1.0 node = "explosion_locator_02" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 2.0 node = "explosion_locator_03" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 3.0 node = "explosion_locator_04" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 3.0 node = "explosion_locator_05" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+	}
+}
+
+entity = {
+	name = "acot_herculean_spirit_soul_e8_hit_entity"
+	cull_radius = 1.0
+
+	scale = 8.00
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 1.0 looping = no
+		event = { particle = "acot_herculean_spirit_hit_effect" keep_particle = yes sound = { soundeffect = planet_killer_hit_layer_1 }	}
+		event = { time = 1 particle = "acot_herculean_spirit_explosion_effect" keep_particle = yes sound = { soundeffect = shattered_planet_explosion }	}
+		}
+	state = { name = "stop" state_time = 0.5 looping = no }
+}
+
+# SHIELD HIT ENTITIES
+
+entity = {
+	name = "acot_herculean_spirit_e8_shield_hit_entity"
+	pdxmesh = "alpha_precursor_colossus_spirit_mesh"
+	cull_radius = 1.0
+	
+	scale = 2
+
+	game_data = {
+		raytrace_projectiles = no
+		dissolve_on_death = 3.0
+		ship_color = hsv { 0.85 1.0 0.94 1.0 }
+   	}
+
+	locator = { name = "outercore" position = { 0 0 0 } }
+
+	attach = { outercore = "acot_herculean_spirit_soul_e8_hit_entity" }	
+
+	default_state = "death"
+	# Actual idle state when being in idle/moving.
+	state = { name = "death" animation = "opened_death" looping = no animation_blend_time = 2
+	
+		event = { particle = "acot_herculean_spirit_hit_effect" keep_particle = yes sound = { soundeffect = planet_killer_hit_layer_1 }	}
+		event = { time = 1 particle = "acot_herculean_spirit_explosion_effect" keep_particle = yes sound = { soundeffect = shattered_planet_explosion }	}
+		start_event = { particle = "titan_laser_shield_hit_effect" }
+
+		event = { time = 0.0 node = "explosion_locator_01" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 1.0 node = "explosion_locator_02" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 2.0 node = "explosion_locator_03" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 3.0 node = "explosion_locator_04" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+		event = { time = 4.0 node = "explosion_locator_05" particle = "acot_ae_ship_explosion_particle" sound = { soundeffect = "ship_destroyed" } keep_particle = yes trigger_once = yes }
+	}
+}
+
+############################ STELLARITE BOMBERUS
+
+entity = {
+	name = "acot_stellarite_bomb_explosion_entity"
+	cull_radius = 1.0
+
+	scale = 8.00
+
+	default_state = "idle"
+	state = { name = "idle" state_time = 1.0 looping = no
+		event = { particle = "acot_stellarite_bomb_spawn" keep_particle = yes sound = { soundeffect = planet_killer_hit_layer_1 }	}
+		event = { time = 1 particle = "acot_stellarite_bomb_explosion" keep_particle = yes sound = { soundeffect = shattered_planet_explosion }	}
+		}
+	state = { name = "stop" state_time = 0.5 looping = no }
+}
+
+########################################
+
+######## EMISSARY CREATE BEAM #######
+
+# WINDUP
+
+entity = {
+	name = "acot_emissary_beam_create_windup_entity"
+	
+	default_state = "attack"
+	get_state_from_parent = no
+	state = {
+		name = "attack" looping = no state_time = 0.1
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_windup_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_windup_layer_2" } }
+		
+		event = { time = 0.0 particle = "assimilate_muzzle_windup_effect" trigger_once = yes keep_particle = yes }
+	}
+}
+
+# MUZZLE FLASH
+
+entity = {
+	name = "acot_emissary_beam_create_muzzle_entity"
+	cull_radius = 1.0
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 7.0 looping = no
+		event = { time = 0 particle = "assimilate_laser_muzzle_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_2" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_3" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_2" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_3" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "colossus_assimilate_beam" stop_on_state_change = yes } }
+
+	}
+}
+
+# HIT ENTITIES
+
+entity = {
+	name = "acot_emissary_beam_create_hit_entity"
+	pdxmesh = "assimilate_hit_effect_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" looping = yes animation = "idle"
+		start_event = { particle = "assimilate_laser_hit_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_1" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_2" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_3" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_hit_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_hit_layer_2" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_hit_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_hit_layer_2" } }
+
+	}
+	state = { name = "stop" animation = "idle" state_time = 0.5 looping = no }
+	
+	#scale = 0.9
+}
+
+######## EMISSARY LAND BEAM #######
+
+# WINDUP
+
+entity = {
+	name = "acot_emissary_beam_landing_windup_entity"
+	
+	default_state = "attack"
+	get_state_from_parent = no
+	state = {
+		name = "attack" looping = no state_time = 0.1
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_windup_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_windup_layer_2" } }
+		
+		event = { time = 0.0 particle = "assimilate_muzzle_windup_effect" trigger_once = yes keep_particle = yes }
+	}
+}
+
+# MUZZLE FLASH
+
+entity = {
+	name = "acot_emissary_beam_landing_muzzle_entity"
+	cull_radius = 1.0
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 7.0 looping = no
+		event = { time = 0 particle = "assimilate_laser_muzzle_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_2" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_3" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_2" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_3" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "colossus_assimilate_beam" stop_on_state_change = yes } }
+
+	}
+}
+
+# HIT ENTITIES
+
+entity = {
+	name = "acot_emissary_beam_landing_hit_entity"
+	pdxmesh = "assimilate_hit_effect_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" looping = yes animation = "idle"
+		start_event = { particle = "assimilate_laser_hit_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_1" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_2" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_3" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_hit_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_hit_layer_2" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_hit_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_hit_layer_2" } }
+
+	}
+	state = { name = "stop" animation = "idle" state_time = 0.5 looping = no }
+	
+	#scale = 0.9
+}
+
+######## EMISSARY REMOVE BEAM #######
+
+# WINDUP
+
+entity = {
+	name = "acot_emissary_beam_remove_windup_entity"
+	
+	default_state = "attack"
+	get_state_from_parent = no
+	state = {
+		name = "attack" looping = no state_time = 0.1
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_windup_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_windup_layer_2" } }
+		
+		event = { time = 0.0 particle = "assimilate_muzzle_windup_effect" trigger_once = yes keep_particle = yes }
+	}
+}
+
+# MUZZLE FLASH
+
+entity = {
+	name = "acot_emissary_beam_remove_muzzle_entity"
+	cull_radius = 1.0
+	
+	default_state = "idle"
+	state = { name = "idle" state_time = 7.0 looping = no
+		event = { time = 0 particle = "assimilate_laser_muzzle_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_2" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_fire_layer_3" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_2" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_fire_layer_3" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "colossus_assimilate_beam" stop_on_state_change = yes } }
+
+	}
+}
+
+# HIT ENTITIES
+
+entity = {
+	name = "acot_emissary_beam_remove_hit_entity"
+	pdxmesh = "assimilate_hit_effect_mesh"
+	
+	default_state = "idle"
+	state = { name = "idle" looping = yes animation = "idle"
+		start_event = { particle = "assimilate_laser_hit_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_1" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_2" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		start_event = { node = "effect_3" particle = "assimilate_nano_effect" keep_particle = yes trigger_once = yes }
+		
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_hit_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "assimilate_hit_layer_2" } }
+
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_hit_layer_1" } }
+		event = { trigger_once = yes sound = { soundeffect = "distance_assimilate_hit_layer_2" } }
+
+	}
+	state = { name = "stop" animation = "idle" state_time = 0.5 looping = no }
+	
+	#scale = 0.9
+}

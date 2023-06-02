@@ -1,0 +1,2475 @@
+
+#########################################
+#
+# on_action_events
+#
+#########################################
+
+namespace = acot_diplo
+
+event = {
+    id = acot_diplo.1
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        if = {
+            limit = { 
+                NOT = {
+                    has_global_flag = acot_diplo_forbidden
+                }
+                any_country = {
+                    has_technology = tech_dark_matter_power_core
+                    is_playable_country = yes
+                    NOR = {  
+                        is_country_type = fallen_empire
+                        is_country_type = awakened_fallen_empire
+                        has_country_flag = about_to_be_negotiated
+                        has_valid_civic = civic_fanatic_purifiers
+                        has_valid_civic = civic_machine_terminator
+                        has_valid_civic = civic_hive_devouring_swarm
+                    }                      
+                }
+            }  
+            random_list = {
+                70 = { }
+                30 = {
+                    if = {
+                        limit = {
+                            any_country = {
+                                has_technology = tech_dark_matter_power_core
+                                is_playable_country = yes
+                                NOR = {  
+                                    is_country_type = fallen_empire
+                                    is_country_type = awakened_fallen_empire
+                                    has_country_flag = about_to_be_negotiated
+                                    has_valid_civic = civic_fanatic_purifiers
+                                    has_valid_civic = civic_machine_terminator
+                                    has_valid_civic = civic_hive_devouring_swarm
+                                }                               
+                            }
+                         }
+                         random_country = {
+                            limit = {
+                                has_technology = tech_dark_matter_power_core
+                                NOR = {  
+                                    is_country_type = fallen_empire
+                                    is_country_type = awakened_fallen_empire
+                                    has_country_flag = about_to_be_negotiated
+                                    has_valid_civic = civic_fanatic_purifiers
+                                    has_valid_civic = civic_machine_terminator
+                                    has_valid_civic = civic_hive_devouring_swarm
+                                }                
+                            }
+                            country_event = { id = acot_diplo.2  }
+                        }                       
+                    }
+                    else = {
+                        
+                    }
+                }
+            } 
+        }
+    }
+}
+
+country_event = {
+    id = acot_diplo.2
+    hide_window = yes
+    trigger = {
+        NOT = {
+            has_global_flag = acot_diplo_forbidden
+        }
+        has_technology = tech_dark_matter_power_core
+        is_playable_country = yes
+        NOR = {  
+            is_country_type = fallen_empire
+            is_country_type = awakened_fallen_empire
+            has_country_flag = about_to_be_negotiated
+            has_valid_civic = civic_fanatic_purifiers
+            has_valid_civic = civic_machine_terminator
+            has_valid_civic = civic_hive_devouring_swarm
+        }  
+    }
+
+    mean_time_to_happen = {
+        years = 10
+    }
+
+    immediate = {
+        if = {
+            limit = { 
+                any_country = {
+                    is_ai = yes
+                    is_country_type = default
+                    has_established_contact = root
+                    has_technology = tech_zero_point_power
+                    has_technology = tech_mine_dark_matter
+                    OR = {   
+                        is_in_federation_with = root
+                        is_friendly_to = root
+                        is_cordial_to = root
+                        is_neighbor_of = root
+                    }
+                    NOR = {
+                        is_unfriendly_to = root
+                        is_rival = root
+                        is_hostile_to = root
+                        is_disloyal_to = root
+                        has_technology = tech_dark_matter_power_core
+                        has_tech_option = tech_dark_matter_power_core
+                        has_country_flag = delay_before_ask_dm
+                    }
+                }
+            }
+            set_country_flag = about_to_be_negotiated
+            random_country = {
+                limit = {
+                    is_ai = yes
+                    is_country_type = default
+                    has_established_contact = root
+                    has_technology = tech_zero_point_power
+                    has_technology = tech_mine_dark_matter
+                    OR = {
+                        is_in_federation_with = root
+                        is_friendly_to = root
+                        is_cordial_to = root
+                        is_neighbor_of = root
+                    }
+                    NOR = {
+                        is_unfriendly_to = root
+                        is_rival = root
+                        is_hostile_to = root
+                        is_disloyal_to = root
+                        has_technology = tech_dark_matter_power_core
+                        has_tech_option = tech_dark_matter_power_core
+                        has_country_flag = delay_before_ask_dm
+                    }                  
+                }
+                save_event_target_as = interested_buyer
+            }
+            country_event = { id = acot_diplo.3  }           
+        }
+        else = {
+            
+        }
+    }
+}
+
+country_event = {
+	id = acot_diplo.3
+	title = acot_diplo.3.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:interested_buyer
+		planet_background = event_target:interested_buyer
+		graphical_culture = event_target:interested_buyer
+		city_level = event_target:interested_buyer
+		room = event_target:interested_buyer.ruler
+	}
+		
+
+	desc = {
+		text = acot_diplo.3.desc.friendly
+		trigger = {
+			event_target:interested_buyer = { 
+				OR = {
+                    is_friendly_to = ROOT
+                    is_cordial_to = ROOT
+                    has_defensive_pact = root
+                    is_in_federation_with = ROOT
+				}
+			}
+		}
+	}
+	desc = {
+		text = acot_diplo.3.desc.neutral
+		trigger = {
+			event_target:interested_buyer = { 
+				NOR = {
+                    is_friendly_to = ROOT
+                    is_cordial_to = ROOT
+                    has_defensive_pact = root
+                    is_in_federation_with = ROOT
+				}
+			}
+		}
+	}
+
+
+	option = {
+		name = acot_diplo.3.a
+        response_text = acot_diplo.3.a.response
+        custom_tooltip = dm_with_assist_tooltip
+        add_resource = {
+            energy = 250000
+        }
+        if = {
+            limit = {
+                event_target:interested_buyer = {
+                    resource_stockpile_compare = {
+                        resource = energy
+                        value >= 250000
+                    }
+                }
+             }
+             add_resource = {
+                energy = 250000
+            }
+        }
+        event_target:interested_buyer = { 
+            add_research_option = tech_dark_matter_power_core
+            set_country_flag = have_received_dm
+            add_tech_progress = {
+                tech = tech_dark_matter_power_core
+                progress = 0.50
+            }
+            if = {
+                limit = {
+                    ROOT = {
+                        has_technology = tech_dark_matter_propulsion
+                    }
+                 }
+                 add_research_option = tech_dark_matter_propulsion
+            }
+            if = {
+                limit = {
+                    ROOT = {
+                        has_technology = tech_dark_matter_deflector
+                    }
+                 }
+                 add_research_option = tech_dark_matter_deflector
+            }
+            add_opinion_modifier = { who = root modifier = triggered_opinion_give_dm_with_assist }
+        }
+		hidden_effect = {
+			remove_country_flag = about_to_be_negotiated
+        }
+        
+        ai_chance = {
+            factor = 5
+            modifier = {
+                factor = 10
+                OR = {
+                    is_friendly_to = from
+                    is_in_federation_with = from            
+                }
+            }
+        }
+	}
+
+	option = {
+		name = acot_diplo.3.b
+        response_text = acot_diplo.3.b.response
+        custom_tooltip = dm_with_assist_tooltip
+        add_resource = {
+            energy = 100000
+        }
+        if = {
+            limit = {
+                event_target:interested_buyer = {
+                    resource_stockpile_compare = {
+                        resource = energy
+                        value >= 100000
+                    }
+                }
+             }
+             add_resource = {
+                energy = 100000
+            }
+        }
+        event_target:interested_buyer = { 
+            set_country_flag = have_received_dm
+            add_research_option = tech_dark_matter_power_core
+            add_opinion_modifier = { who = root modifier = triggered_opinion_give_dm_normal }
+        }
+		hidden_effect = {
+			remove_country_flag = about_to_be_negotiated
+        }
+        
+        ai_chance = {
+            factor = 5
+            modifier = {
+                factor = 10
+                OR = {
+                    is_cordial_to = from        
+                }
+            }
+        }
+	}
+
+	option = {
+		name = acot_diplo.3.c
+        response_text = acot_diplo.3.c.response
+        custom_tooltip = dm_with_assist_tooltip
+        trigger = {
+            NOR = {
+                has_country_flag = taught_how_to_dm
+            }
+        }
+        add_opinion_modifier = { who = root modifier = triggered_opinion_give_dm_normal_neighbour }
+        add_resource = {
+            energy = 50000
+        }
+        if = {
+            limit = {
+                event_target:interested_buyer = {
+                    resource_stockpile_compare = {
+                        resource = energy
+                        value >= 50000
+                    }
+                }
+             }
+             add_resource = {
+                energy = 50000
+            }
+        }
+        event_target:interested_buyer = { 
+            set_timed_country_flag = {
+                flag = delay_before_ask_dm
+                days = 3600
+            }
+            set_country_flag = taught_how_to_dm
+            random_owned_leader = {
+                limit = {
+                    leader_class = scientist
+                    is_researching_area = society
+                }
+                if = {
+                    limit = { 
+                        has_skill <= 5 
+                     }
+                     set_skill = 6
+                }
+                if = {
+                    limit = { 
+                        NOT = { has_trait = leader_trait_spark_of_genius }
+                     }
+                     add_trait = leader_trait_spark_of_genius
+                }
+            }
+            random_owned_leader = {
+                limit = {
+                    leader_class = scientist
+                    is_researching_area = physics
+                }
+                if = {
+                    limit = { 
+                        has_skill <= 5 
+                     }
+                     set_skill = 6
+                }
+                if = {
+                    limit = { 
+                        NOT = { has_trait = leader_trait_spark_of_genius }
+                     }
+                     add_trait = leader_trait_spark_of_genius
+                }
+            }
+            random_owned_leader = {
+                limit = {
+                    leader_class = scientist
+                    is_researching_area = engineering
+                }
+                if = {
+                    limit = { 
+                        has_skill <= 5 
+                     }
+                     set_skill = 6
+                }
+                if = {
+                    limit = { 
+                        NOT = { has_trait = leader_trait_spark_of_genius }
+                     }
+                     add_trait = leader_trait_spark_of_genius
+                }
+            }
+        }
+		hidden_effect = {
+			remove_country_flag = about_to_be_negotiated
+        }
+        
+	}
+
+	option = {
+		name = acot_diplo.3.d
+        response_text = acot_diplo.3.d.response
+        trigger = {
+            event_target:interested_buyer = { 
+                OR = {
+                    is_friendly_to = ROOT
+                    is_cordial_to = ROOT
+                    has_defensive_pact = root
+                    is_in_federation_with = ROOT
+                }
+            }         
+        }
+        event_target:interested_buyer = {
+            add_opinion_modifier = { who = root modifier = triggered_opinion_refuse_dm_friendly }
+            if = {
+                limit = { has_country_flag = asked_for_dm } 
+                set_timed_country_flag = {
+                    flag = delay_before_ask_dm
+                    days = 3600
+                }   
+            }
+            else = {
+                set_timed_country_flag = {
+                    flag = delay_before_ask_dm
+                    days = 1800
+                }    
+                set_country_flag = asked_for_dm
+                break = yes             
+            }         
+        }
+		hidden_effect = {
+			remove_country_flag = about_to_be_negotiated
+        }
+        
+        ai_chance = {
+            factor = 5
+            modifier = {
+                factor = 7
+                NOR = {
+                    is_cordial_to = from  
+                    is_friendly_to = from
+                }
+            }
+            modifier = {
+                factor = 10
+                OR = {
+                    has_ethic = ethic_fanatic_xenophobe
+                    has_ethic = ethic_xenophobe
+                }
+            }
+        }
+    }
+    
+	option = {
+		name = acot_diplo.3.drisma
+        response_text = acot_diplo.3.drisma.response
+        trigger = {
+            any_owned_leader = {
+                is_councilor = yes
+                leader_class = scientist
+                has_level >= 6    
+                has_trait = leader_trait_charismatic
+            }
+            event_target:interested_buyer = { 
+                OR = {
+                    is_friendly_to = ROOT
+                    is_cordial_to = ROOT
+                    has_defensive_pact = root
+                    is_in_federation_with = ROOT
+                }
+            }         
+        }
+        event_target:interested_buyer = {
+            if = {
+                limit = { has_country_flag = asked_for_dm } 
+                set_timed_country_flag = {
+                    flag = delay_before_ask_dm
+                    days = 3600
+                }   
+            }
+            else = {
+                set_timed_country_flag = {
+                    flag = delay_before_ask_dm
+                    days = 1800
+                }    
+                set_country_flag = asked_for_dm
+                break = yes             
+            }         
+        }
+		hidden_effect = {
+			remove_country_flag = about_to_be_negotiated
+        }
+        
+        ai_chance = {
+            factor = 5
+            modifier = {
+                factor = 7
+                NOR = {
+                    is_cordial_to = from  
+                    is_friendly_to = from
+                }
+            }
+            modifier = {
+                factor = 10
+                OR = {
+                    has_ethic = ethic_fanatic_xenophobe
+                    has_ethic = ethic_xenophobe
+                }
+            }
+        }
+    }
+
+	option = {
+		name = acot_diplo.3.e
+        response_text = acot_diplo.3.e.response
+        trigger = {
+            event_target:interested_buyer = { 
+                NOR = {
+                    is_friendly_to = ROOT
+                    is_cordial_to = ROOT
+                    has_defensive_pact = root
+                    is_in_federation_with = ROOT
+                }
+            }         
+        }
+
+        event_target:interested_buyer = {
+            add_opinion_modifier = { who = root modifier = triggered_opinion_refuse_dm_neutral }
+            if = {
+                limit = { has_country_flag = asked_for_dm } 
+                set_timed_country_flag = {
+                    flag = delay_before_ask_dm
+                    days = 3600
+                }   
+            }
+            else = {
+                set_timed_country_flag = {
+                    flag = delay_before_ask_dm
+                    days = 1800
+                }    
+                set_country_flag = asked_for_dm
+                break = yes             
+            }
+        }
+		hidden_effect = {
+			remove_country_flag = about_to_be_negotiated
+        }
+        
+        ai_chance = {
+            factor = 5
+            modifier = {
+                factor = 7
+                NOR = {
+                    is_cordial_to = from  
+                    is_friendly_to = from
+                }
+            }
+            modifier = {
+                factor = 10
+                OR = {
+                    has_ethic = ethic_fanatic_xenophobe
+                    has_ethic = ethic_xenophobe
+                }
+            }
+        }
+    }
+    
+	option = {
+		name = acot_diplo.3.f
+        response_text = acot_diplo.3.f.response
+        trigger = {
+            event_target:interested_buyer = { 
+                any_owned_megastructure = {
+                    is_megastructure_type = lgate_base
+                }
+            }         
+        }
+        event_target:interested_buyer = { 
+            set_country_flag = have_received_dm
+            add_research_option = tech_dark_matter_power_core
+            add_opinion_modifier = { who = root modifier = triggered_opinion_give_dm_normal }
+            random_system = {
+                limit = {
+                    is_owned_by = event_target:interested_buyer 
+                    has_megastructure = lgate_base
+                }
+                random_fleet_in_system = {
+                    limit = {
+                        any_owned_ship = {
+                            is_ship_class = shipclass_starbase
+                        }
+                    }
+                    set_owner = ROOT
+                }
+                every_system_planet = {
+                    limit = {
+                        OR = {
+                            habitable_planet = yes
+                            habitable_structure = yes
+                        }
+                    }
+                    set_owner = ROOT
+                }
+            }
+        }
+		hidden_effect = {
+			remove_country_flag = about_to_be_negotiated
+        }        
+    }
+    
+	option = {
+		name = acot_diplo.3.g
+        response_text = acot_diplo.3.g.response
+        trigger = {
+            event_target:interested_buyer = { 
+                any_owned_megastructure = {
+                    is_megastructure_type = sofe_outer_gate
+                }
+            }         
+        }
+        event_target:interested_buyer = { 
+            set_country_flag = have_received_dm
+            add_research_option = tech_dark_matter_power_core
+            add_opinion_modifier = { who = root modifier = triggered_opinion_give_dm_normal }
+            random_system = {
+                limit = {
+                    is_owned_by = event_target:interested_buyer 
+                    has_megastructure = sofe_outer_gate
+                }
+                random_fleet_in_system = {
+                    limit = {
+                        any_owned_ship = {
+                            is_ship_class = shipclass_starbase
+                        }
+                    }
+                    set_owner = ROOT
+                }
+                every_system_planet = {
+                    limit = {
+                        OR = {
+                            habitable_planet = yes
+                            habitable_structure = yes
+                        }
+                    }
+                    set_owner = ROOT
+                }
+            }
+        }
+		hidden_effect = {
+			remove_country_flag = about_to_be_negotiated
+        }        
+	}
+}
+
+
+country_event = {
+    id = acot_diplo.4
+    hide_window = yes
+    trigger = {
+        is_country_type = default
+        has_technology = tech_dark_matter_power_core
+        NOR = {  
+            has_ascension_perk = ap_enigmatic_engineering          
+            has_country_flag = will_not_have_ambushed_ship
+        }     
+       NOT = {
+          has_global_flag = acot_diplo_forbidden
+        }
+        any_owned_ship = {
+            is_ship_class = shipclass_science_ship
+            leader = {
+                has_skill <= 5
+            }
+            NOR = {
+                is_inside_border = root
+                solar_system = {
+                    NOR = {
+                        has_owner = yes
+                        any_ship_in_system = {
+                            is_ship_class = shipclass_military
+                        }                       
+                    }
+                }
+            }
+        }     
+        any_country = {
+            is_ai = yes
+            is_country_type = default
+            has_established_contact = root
+            NOR = {
+                has_country_flag = hiring_in_progress   
+                is_in_federation_with = root
+                is_friendly_to = root
+                is_cordial_to = root
+                has_technology = tech_dark_matter_power_core
+            }
+            OR = {
+                is_unfriendly_to = root
+                is_rival = root
+                is_hostile_to = root
+            }
+        }  
+   }
+
+   mean_time_to_happen = {
+       years = 10
+   }
+
+    immediate = {
+        set_timed_country_flag = {
+            flag = will_not_have_ambushed_ship
+            days = 3600
+        }
+        ############SELLECT THE HIRER#############
+         random_country = {
+            limit = {
+                is_ai = yes
+                is_country_type = default
+                has_established_contact = root
+                NOR = {   
+                    has_country_flag = hiring_in_progress   
+                    is_in_federation_with = root
+                    is_friendly_to = root
+                    is_cordial_to = root
+                    has_technology = tech_dark_matter_power_core
+                }
+                OR = {
+                    is_unfriendly_to = root
+                    is_rival = root
+                    is_hostile_to = root
+                }                  
+            }
+            save_event_target_as = raiding_hirer_country
+            set_country_flag = hiring_in_progress
+            capital_scope = {
+                save_event_target_as = raiding_hirer_capital
+                set_planet_flag = raiding_hirer_capital_planet
+            }
+        }
+            #######RANDOM A SCIENCE SHIP################
+        random_owned_ship = {
+            limit = {
+                is_ship_class = shipclass_science_ship
+                leader = {
+                    has_skill <= 5
+                }
+                NOR = {
+                    is_inside_border = root
+                    solar_system = {
+                        has_owner = yes
+                        any_ship_in_system = {
+                            is_ship_class = shipclass_military
+                        }    
+                    }
+                }
+            }  
+            save_event_target_as = kidnapped_science_ship             
+        }
+        ########CREATE A RAIDER####################
+        create_country = {
+            type = acot_techno_pirate
+            name = "Pubstompah"
+        }
+        last_created_country = {
+            save_event_target_as = pirate_of_science_ship
+            set_country_flag = raider_hired_by@event_target:raiding_hirer_country
+            create_fleet = {
+                name = "NAME_Raiding_Fleet"
+                effect = {
+                    set_owner = event_target:pirate_of_science_ship # For ship names
+                    create_techno_raiders_small = yes
+                    set_location = event_target:kidnapped_science_ship
+                    set_fleet_stance = aggressive
+                    set_aggro_range_measure_from = self
+                    set_aggro_range = 250
+                    set_fleet_flag = science_ship_raider_fleet
+                    auto_move_to_planet = {
+                        target = event_target:raiding_hirer_capital
+                        clear_auto_move_on_arrival = no
+                    }
+                }
+            }
+            set_faction_hostility = {
+                target = root
+                set_hostile = yes
+                set_neutral = no
+                set_friendly = no
+            }
+            set_faction_hostility = {
+                target = event_target:raiding_hirer_country
+                set_hostile = no
+                set_neutral = no
+                set_friendly = yes
+            }
+            establish_communications_no_message = root
+            every_country = {
+                establish_communications_no_message = event_target:pirate_of_science_ship            
+            }
+        }
+        event_target:raiding_hirer_country = {
+            set_country_flag = hirer_of@event_target:pirate_of_science_ship
+        }
+        destroy_ship = event_target:kidnapped_science_ship
+        country_event = { id = acot_diplo.5  }        
+    }
+}
+
+country_event = {
+    id = acot_diplo.5
+    title = acot_diplo.5.name
+    desc = acot_diplo.5.desc
+    picture = GFX_evt_pirates_attacking_cargo
+    show_sound = event_red_alert
+    is_triggered_only = yes
+
+
+    immediate = {
+    }
+
+    option = {
+        name = acot_diplo.5.a
+        hidden_effect = {
+            country_event = { id = acot_diplo.50 }
+        }    
+    }
+}
+
+country_event = {
+	id = acot_diplo.50
+	title = acot_diplo.8.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+    
+    desc = {
+		text = acot_diplo.8.desc.a
+	}
+    desc = {
+		text = acot_diplo.8.desc.b
+	}
+    desc = {
+		text = acot_diplo.8.desc.c
+	}
+
+    option = {
+        name = acot_diplo.8.a
+        default_hide_option = yes
+    }
+
+    option = {
+        name = acot_diplo.8.b
+    }
+
+}
+
+fleet_event = {
+    id = acot_diplo.6
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        OWNER = {
+            is_country_type = acot_techno_pirate
+        }
+        FROM = {
+            has_planet_flag = raiding_hirer_capital_planet
+        }
+    }
+
+    immediate = {
+        owner = {
+            remove_country_flag = raider_hired_by@event_target:raiding_hirer_country      
+            destroy_country = yes
+            every_owned_fleet = {
+                destroy_fleet = this
+            }     
+        }
+        FROM = {
+            remove_planet_flag = raiding_hirer_capital_planet
+            owner = {
+                remove_country_flag = hirer_of@event_target:pirate_of_science_ship   
+                remove_country_flag = hiring_in_progress   
+                give_technology = { tech = tech_dark_matter_power_core }
+                give_technology = { tech = tech_dark_matter_propulsion }
+                give_technology = { tech = tech_dark_matter_deflector }               
+            }
+        }
+    }
+
+}
+
+
+################################# CURATORS #######################################
+
+
+# Curator Guardians Menu
+country_event = {
+	id = acot_diplo.800
+    base = leviathans.500
+
+	title = acot_curator_ask_title
+	desc = acot_curator_ask_desc
+
+	immediate = {
+	}
+
+	after = {
+	}
+
+	# Outer Gates First Access
+	option = {
+        name =  acot_diplo.800.a
+        custom_tooltip = acot_curator_ask_opinion_check
+		trigger = {
+            NOT = {
+                has_country_flag = curator_permit_outergate
+            }
+            OR = {
+                has_event_chain = sofe_outergate_chain
+                has_global_flag = outergates_activated_globally
+            }
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = acot_curator_ask_opinion_check_fail
+				event_target:curator_enclave_country = {
+					trust = { 
+						who = root
+						value >= 75
+					}
+				}
+			}
+        }
+        event_target:curator_enclave_country = {
+            add_trust = {
+                amount = -75
+                who = root
+            }
+        } 
+		hidden_effect = {
+            set_country_flag = curator_permit_outergate
+			country_event = { id = acot_diplo.801 }
+		}
+    }
+	# Outer Gates
+	option = {
+		name =  acot_diplo.800.a
+		trigger = {
+            has_country_flag = curator_permit_outergate
+            OR = {
+                has_event_chain = sofe_outergate_chain
+                has_global_flag = outergates_activated_globally
+            }
+		}
+		hidden_effect = {
+			country_event = { id = acot_diplo.801 }
+		}
+    }
+
+################################################
+
+	# Fallen Empires First Access
+	option = {
+        name = acot_diplo.800.b
+        custom_tooltip = acot_curator_ask_opinion_check
+		trigger = {
+            NOT = {
+                has_country_flag = curator_permit_fallen
+            }
+            num_fallen_empires >= 1
+        }
+        allow = {
+			custom_tooltip = {
+				fail_text = acot_curator_ask_opinion_check_fail
+				event_target:curator_enclave_country = {
+					trust = { 
+						who = root
+						value >= 50
+					}
+				}
+			}
+        }
+        event_target:curator_enclave_country = {
+            add_trust = {
+                amount = -50
+                who = root
+            }
+        } 
+		hidden_effect = {
+            set_country_flag = curator_permit_fallen
+			country_event = { id = acot_diplo.811}
+		}
+    }
+
+	option = {
+		name = acot_diplo.800.b
+		trigger = {
+            has_country_flag = curator_permit_fallen
+            num_fallen_empires >= 1
+		}
+		hidden_effect = {
+			country_event = { id = acot_diplo.811}
+		}
+    }
+    
+################################################
+
+	# Stellarite Sigma First Pass
+	option = {
+        name = acot_diplo.800.c
+        custom_tooltip = acot_curator_ask_opinion_check
+		trigger = {
+            NOT = {
+                has_country_flag = curator_permit_stellarite
+            }
+            OR = {
+                any_country = {
+                    OR = {
+                        has_event_chain = acot_stellarite_chain
+                        has_technology = tech_dark_matter_power_core_se
+                    }
+                    has_communications = root
+                }
+                has_event_chain = acot_stellarite_chain
+                has_technology = tech_dark_matter_power_core_se
+            }
+        }
+        allow = {
+			custom_tooltip = {
+				fail_text = acot_curator_ask_opinion_check_fail
+				event_target:curator_enclave_country = {
+					trust = { 
+						who = root
+						value >= 25
+					}
+				}
+			}
+        }
+        event_target:curator_enclave_country = {
+            add_trust = {
+                amount = -25
+                who = root
+            }
+        } 
+        
+		hidden_effect = {
+            set_country_flag = curator_permit_stellarite
+			country_event = { id =  acot_diplo.821 }
+		}
+    }
+
+	option = {
+		name = acot_diplo.800.c
+		trigger = {
+            has_country_flag = curator_permit_stellarite
+            OR = {
+                any_country = {
+                    OR = {
+                        has_event_chain = acot_stellarite_chain
+                        has_technology = tech_dark_matter_power_core_se
+                    }
+                    has_communications = root
+                }
+                has_event_chain = acot_stellarite_chain
+                has_technology = tech_dark_matter_power_core_se
+            }
+        }
+        
+		hidden_effect = {
+			country_event = { id =  acot_diplo.821 }
+		}
+    }
+    
+################################################
+
+	# Curator Orders
+	option = {
+		name = acot_diplo.800.d
+		hidden_effect = {
+			country_event = { id =  acot_diplo.831 }
+		}
+    }
+    
+################################################
+
+	# Phanon First Access
+	option = {
+        name = acot_diplo.800.e
+        custom_tooltip = acot_curator_ask_opinion_check
+		trigger = {
+            NOT = {
+                has_country_flag = curator_permit_phanon
+            }
+			any_country = {
+				has_communications = root
+			}
+        }
+        allow = {
+			custom_tooltip = {
+				fail_text = acot_curator_ask_opinion_check_fail
+				event_target:curator_enclave_country = {
+					trust = { 
+						who = root
+						value >= 100
+					}
+				}
+			}
+        }
+        event_target:curator_enclave_country = {
+            add_trust = {
+                amount = -100
+                who = root
+            }
+        } 
+		hidden_effect = {
+            set_country_flag = curator_permit_phanon
+			country_event = { id =  acot_diplo.841 }
+		}
+    }
+
+	# Phanon
+	option = {
+		name = acot_diplo.800.e
+        custom_gui = "enclave_curator_option"
+		trigger = {
+            has_country_flag = curator_permit_phanon
+			any_country = {
+                has_country_flag = phanon_base_country
+				has_communications = root
+			}
+		}
+		hidden_effect = {
+			country_event = { id =  acot_diplo.841 }
+		}
+    }
+    
+################################################
+
+	# Shroud and Psionics
+	option = {
+		name = acot_diplo.800.f
+		trigger = {
+            OR = {
+                any_country = {
+                    has_technology = tech_psionic_theory
+                    has_communications = root
+                }
+                has_technology = tech_psionic_theory
+            }
+		}
+		hidden_effect = {
+			country_event = { id =  acot_diplo.851 }
+		}
+    }
+    
+################################################
+
+	# Dark Matter
+	option = {
+		name = acot_diplo.800.g
+		trigger = {
+            OR = {
+                any_country = {
+                    OR = {
+                        has_technology = tech_mine_dark_matter
+                        has_technology = tech_mine_dark_energy
+                        has_technology = tech_dark_matter_power_core
+                    }
+                    has_communications = root
+                }
+                has_technology = tech_mine_dark_matter
+                has_technology = tech_mine_dark_energy
+                has_technology = tech_dark_matter_power_core
+            }
+		}
+		hidden_effect = {
+			country_event = { id =  acot_diplo.861 }
+		}
+    }
+    
+################################################
+
+	# Precursor First Check
+	option = {
+        name = acot_diplo.800.h
+        custom_tooltip = acot_curator_ask_opinion_check
+		trigger = {
+            NOT = {
+                has_country_flag = curator_permit_precursor
+            }
+            OR = {
+                any_country = {
+                    is_country_type = acot_databank
+                    has_communications = root
+                }
+                has_event_chain = acot_alpha_tech_chain
+                has_technology = tech_precursor_design
+            }
+        }
+        allow = {
+			custom_tooltip = {
+				fail_text = acot_curator_ask_opinion_check_fail
+				event_target:curator_enclave_country = {
+					trust = { 
+						who = root
+						value >= 50
+					}
+				}
+			}
+        }
+        event_target:curator_enclave_country = {
+            add_trust = {
+                amount = -50
+                who = root
+            }
+        } 
+		hidden_effect = {
+            set_country_flag = curator_permit_precursor
+			country_event = { id =  acot_diplo.871 }
+		}
+    }
+
+	# PRECURSOR
+	option = {
+		name = acot_diplo.800.h
+		trigger = {
+            has_country_flag = hear_precursor_rumor
+        }
+		hidden_effect = {
+			country_event = { id =  acot_diplo.871 }
+		}
+    }
+
+################################################
+    
+	# SOPHIA
+	option = {
+        name = acot_diplo.800.i
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            OR = {
+                any_country = {
+                    is_country_type = acot_databank
+                    has_communications = root
+                }
+                has_event_chain = acot_alpha_tech_chain
+                has_technology = tech_precursor_design
+            }
+		}
+		hidden_effect = {
+            set_country_flag = curator_permit_precursor
+			country_event = { id =  acot_diplo.881 }
+		}
+    }
+
+################################################
+
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+################################################################################################################################################
+
+# Outer Gates
+country_event = {
+	id = acot_diplo.801
+    base = leviathans.500
+	title = acot_diplo.801.name
+	desc = acot_diplo.801.desc
+	
+	diplomatic = yes
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_diplo.801.a
+		response_text = acot_diplo.801.a.response
+		is_dialog_only = yes
+		trigger = {
+			has_event_chain = sofe_outergate_chain
+		}
+	}
+	option = {
+		name = acot_diplo.801.b
+		response_text = acot_diplo.801.b.response
+		is_dialog_only = yes
+		trigger = {
+			has_event_chain = sofe_outergate_chain
+		}
+	}
+	option = {
+		name = acot_diplo.801.c
+		response_text = acot_diplo.801.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.801.d
+		response_text = acot_diplo.801.d.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.801.e
+		response_text = acot_diplo.801.e.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.801.f
+		response_text = acot_diplo.801.f.response
+		trigger = {
+			any_country = {
+				OR = {
+					is_country_type = sbtg_sentinel_active
+					is_country_type = sbtg_sentinel_dormant
+				}
+				num_ships >= 1
+			}
+		}
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.801.g
+		response_text = acot_diplo.801.g.response
+		is_dialog_only = yes
+		trigger = {
+			has_event_chain = sofe_outergate_chain
+            NOT = {
+                has_global_flag = sofe_shield_weaken
+            }
+		}
+	}
+    option = {
+		name = acot_diplo.801.g
+		response_text = acot_diplo.801.g.response.b
+		is_dialog_only = yes
+		trigger = {
+			has_event_chain = sofe_outergate_chain
+            has_global_flag = sofe_shield_weaken
+		}
+	}
+	option = {
+		name = acot_diplo.801.h
+		response_text = acot_diplo.801.h.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.801.i
+        response_text = acot_diplo.801.i.response
+		trigger = {
+			has_event_chain = sofe_outergate_chain
+			NOT = {
+				has_country_flag = has_keystone
+			}
+			has_country_flag = allow_keystone_steal
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value <= 100
+                }
+            }
+		}
+        is_dialog_only = yes
+		hidden_effect = {			
+		}
+    }
+    option = {
+		name = acot_diplo.801.i
+        response_text = acot_diplo.801.i.response
+		trigger = {
+			has_event_chain = sofe_outergate_chain
+			NOT = {
+				has_country_flag = has_keystone
+			}
+			has_country_flag = allow_keystone_steal
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value >= 100
+                }
+            }
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 50000 }
+			resource_stockpile_compare = { resource = acot_sr_dark_energy value >= 5000 }
+			resource_stockpile_compare = { resource = sr_dark_matter value >= 5000 }
+			resource_stockpile_compare = { resource = minor_artifacts value >= 5 }
+		}
+		add_resource = { 
+			energy = -50000 
+			acot_sr_dark_energy= -5000 
+			sr_dark_matter= -5000 
+			minor_artifacts= -5 
+		}
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = -100
+			}
+		}
+		hidden_effect = {
+			country_event = { id = sofe_gateway.606 days = 5 }					
+		}
+    }
+	option = {
+		name = acot_diplo.801.j
+        response_text = acot_diplo.801.j.response
+        trigger = {
+            always = no
+			NOT = {
+				has_country_flag = ask_curator_stellarite_origin
+            }
+            NOR = {
+                has_event_chain = acot_stellarite_chain
+                has_technology = tech_dark_matter_power_core_se
+			}
+        }
+        set_country_flag = ask_curator_stellarite_origin
+		is_dialog_only = yes
+    }
+    option = {
+		name = acot_diplo.801.k
+        response_text = acot_diplo.801.k.response
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            has_country_flag = ask_curator_stellarite_origin
+            NOR = {
+                has_event_chain = acot_stellarite_chain
+                has_technology = tech_dark_matter_power_core_se
+			}
+        }
+		allow = {
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value >= 100
+                }
+            }
+		}
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = -100
+			}
+		}
+        set_country_flag = learned_stellarite_from_outergate_ask
+		is_dialog_only = yes
+        custom_gui = "enclave_curator_option"
+        hidden_effect = {    
+            if = {
+                limit = { 
+                    NOT = {
+                        has_event_chain = acot_stellarite_chain
+                    }
+                }
+                begin_event_chain = {
+                    event_chain = acot_stellarite_chain
+                }
+                capital_scope = {
+                    create_point_of_interest = {
+                        id = acot_stellarite_tech_poi.1
+                        name = "acot_stellarite_experiment"
+                        desc = "acot_stellarite_experiment_desc"
+                        event_chain = acot_stellarite_chain
+                        location = this
+                    }				
+                }
+            }   	          
+        }
+	}
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+################################################################################################################################################
+
+# Fallen Empires
+country_event = {
+	id = acot_diplo.811
+	title = acot_diplo.811.name
+	desc = acot_diplo.811.desc
+
+	diplomatic = yes
+	base = leviathans.500
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_diplo.811.a
+		response_text = acot_diplo.811.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.811.b
+		response_text = acot_diplo.811.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.811.c
+		response_text = acot_diplo.811.c.response
+        trigger = {
+            NOT = {
+                has_country_flag = asked_curator_dark_matter
+            }
+        }
+        set_country_flag = asked_curator_dark_matter
+		is_dialog_only = yes
+    }
+    option = {
+		name = acot_diplo.811.d
+        response_text = acot_diplo.811.d.response
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            has_country_flag = asked_curator_dark_matter
+            NOR = {
+                has_event_chain = acot_dm_tech_chain
+                has_technology = tech_dark_matter_power_core
+            }
+        }
+        allow = {
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value >= 50
+                }
+            }
+		}
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = -50
+			}
+        }
+        begin_event_chain = {
+			event_chain = acot_dm_tech_chain
+		}
+        hidden_effect = {
+            set_country_flag = hear_dark_rumor
+            capital_scope = {
+                create_point_of_interest = {
+                    id = acot_dm_find_enigmatic.2
+                    name = "acot_dm_tech_find_enigmatic_2"
+                    desc = "acot_dm_tech_find_enigmatic_2_desc"
+                    event_chain = acot_dm_tech_chain
+                    location = this
+                }	
+                create_point_of_interest = {
+                    id = acot_dm_find_enigmatic.1
+                    name = "acot_dm_tech_find_enigmatic_1"
+                    desc = "acot_dm_tech_find_enigmatic_1_desc"
+                    event_chain = acot_dm_tech_chain
+                    location = this
+                }	
+                if = {
+                    limit = {
+                        owner = {
+                            NOR = {
+                                has_country_flag = attacked_curators
+                                is_homicidal = yes
+                            }					
+                        } 
+                        any_country = {
+                            has_country_flag = curator_enclave_country
+                            has_established_contact = root
+                        }
+                    }
+                    create_point_of_interest = {
+                        id = acot_dm_find_enigmatic.3
+                        name = "acot_dm_tech_find_enigmatic_3"
+                        desc = "acot_dm_tech_find_enigmatic_3_desc"
+                        event_chain = acot_dm_tech_chain
+                        location = this
+                    }				
+                }		
+                if = {
+                    limit = {
+                        any_country = {
+                            is_same_value = event_target:phanon_base_country
+                            has_established_contact = root
+                        }
+                    }
+                    create_point_of_interest = {
+                        id = acot_dm_find_enigmatic.4
+                        name = "acot_dm_tech_find_enigmatic_4"
+                        desc = "acot_dm_tech_find_enigmatic_4_desc"
+                        event_chain = acot_dm_tech_chain
+                        location = this
+                    }				
+                }
+                enable_special_project = {
+                    name = "RESEARCH_DARK_POWER_NORMAL"
+                    location = this
+                    owner = root
+                }
+            }
+        }
+		is_dialog_only = yes
+    }
+	option = {
+		name = acot_diplo.811.e
+		response_text = acot_diplo.811.e.response
+        trigger = {
+            
+            NOT = {
+                has_country_flag = asked_curator_precursor_ship
+            }
+        }
+        set_country_flag = asked_curator_precursor_ship
+		is_dialog_only = yes
+    }
+    option = {
+		name = acot_diplo.811.f
+        response_text = acot_diplo.811.f.response
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            has_technology = tech_dark_matter_power_core
+            has_country_flag = asked_curator_precursor_ship
+            NOR = {
+                has_event_chain = acot_alpha_tech_chain
+                has_technology = tech_precursor_design
+                has_country_flag = has_databank
+            }
+        }
+        allow = {
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value >= 75
+                }
+            }
+		}
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = -75
+			}
+		}
+		is_dialog_only = yes
+        custom_gui = "enclave_curator_option"
+        hidden_effect = {
+            set_country_flag = hear_precursor_rumor       
+            set_country_flag = allow_databank_steal       
+            if = {
+                limit = { 
+                    NOT = {
+                        has_event_chain = acot_alpha_tech_chain
+                    }
+                }
+                begin_event_chain = {
+                    event_chain = acot_alpha_tech_chain
+                }
+                capital_scope = {
+                    IF = {
+                        limit = {
+                            any_country = {
+                                is_fallen_empire = yes
+                            }
+                        }
+                        create_point_of_interest = {
+                            id = acot_alpha_research.1
+                            name = "acot_databank_attack_fe"
+                            desc = "acot_databank_attack_fe_desc"
+                            event_chain = acot_alpha_tech_chain
+                            location = this
+                        }	
+                        create_point_of_interest = {
+                            id = acot_alpha_research.2
+                            name = "acot_databank_trick_fe"
+                            desc = "acot_databank_trick_fe_desc"
+                            event_chain = acot_alpha_tech_chain
+                            location = this
+                        }	
+                    }	
+                    create_point_of_interest = {
+                        id = acot_alpha_research.3
+                        name = "acot_databank_ask_pmc"
+                        desc = "acot_databank_ask_pmc_desc"
+                        event_chain = acot_alpha_tech_chain
+                        location = this
+                    }	
+                    IF = {
+                        limit = {
+                            any_country = {
+                                has_country_flag = curator_enclave_country
+                            }
+                            owner = {
+                                NOR = {
+                                    is_homicidal = yes
+                                    has_country_flag = attacked_curators
+                                }
+                            }
+                        }
+                        create_point_of_interest = {
+                            id = acot_alpha_research.4
+                            name = "acot_databank_ask_curator"
+                            desc = "acot_databank_ask_curator_desc"
+                            event_chain = acot_alpha_tech_chain
+                            location = this
+                        }
+                    }	
+                    create_point_of_interest = {
+                        id = acot_alpha_research.5
+                        name = "acot_databank_self_assembly"
+                        desc = "acot_databank_self_assembly_desc"
+                        event_chain = acot_alpha_tech_chain
+                        location = this
+                    }
+                }
+            }   	          
+        }
+    }
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+################################################################################################################################################
+
+# Stellarite
+country_event = {
+	id = acot_diplo.821
+	title = acot_diplo.821.name
+	desc = acot_diplo.821.desc
+	
+	diplomatic = yes
+	base = leviathans.500
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_diplo.821.a
+		response_text = acot_diplo.821.a.response
+		is_dialog_only = yes
+    }
+    option = {
+		name = acot_diplo.821.b
+        response_text = acot_diplo.821.b.response
+        trigger = {
+            NOT = {
+                has_country_flag = stellarite_tech_enable
+            }
+            has_event_chain = acot_stellarite_chain
+        }
+		is_dialog_only = yes
+    }
+    option = {
+		name = acot_diplo.821.c
+        response_text = acot_diplo.821.c.response
+        trigger = {
+            always = no
+            has_technology = tech_dark_matter_power_core_se
+            has_event_chain = sofe_outergate_chain
+        }
+		is_dialog_only = yes
+	}
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+################################################################################################################################################
+
+# Curators
+country_event = {
+	id = acot_diplo.831
+	title = acot_diplo.831.name
+	desc = acot_diplo.831.desc
+	
+	diplomatic = yes
+	base = leviathans.500
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_diplo.831.a
+		response_text = acot_diplo.831.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = acot_diplo.831.b
+		response_text = acot_diplo.831.b.response
+		is_dialog_only = yes
+        hidden_effect = {
+            IF = {
+                limit = {
+                    NOT = {
+                        has_country_flag = asked_curator_archon
+                    }
+                }
+            set_country_flag = asked_curator_archon
+            }
+        }
+	}
+
+	option = {
+		name = acot_diplo.831.c
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            has_country_flag = asked_curator_archon
+            has_technology = tech_dark_matter_power_core
+            NOR = {
+                has_country_flag = curator_archon_permitted
+                has_global_flag = acot_curator_archon_forbidden
+            }            
+        }
+        allow = {
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value >= 100
+                }
+            }
+		}
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = -100
+			}
+		}
+        set_country_flag = curator_archon_permitted
+		response_text = acot_diplo.831.c.response
+		is_dialog_only = yes
+	}
+
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+################################################################################################################################################
+
+# Phanon Crops
+country_event = {
+	id = acot_diplo.841
+	title = acot_diplo.841.name
+	desc = acot_diplo.841.desc
+	
+	diplomatic = yes
+	base = leviathans.500
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_diplo.841.a
+		response_text = acot_diplo.841.a.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.841.b
+		response_text = acot_diplo.841.b.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.841.
+        trigger = {
+            always = no
+        }
+		response_text = acot_diplo.841.c.response
+		is_dialog_only = yes
+	}
+	option = {
+		name = acot_diplo.841.d
+		response_text = acot_diplo.841.d.response
+		is_dialog_only = yes
+        trigger = {
+            always = no
+        }
+        set_country_flag = asked_curator_panada
+	}
+	option = {
+		name = acot_diplo.841.e
+		response_text = acot_diplo.841.e.response
+        custom_tooltip = acot_curator_ask_opinion_check
+		is_dialog_only = yes
+        trigger = {
+            has_country_flag = asked_curator_panada
+            NOT = {
+                has_country_flag = phanon_panada_enabled
+            }            
+        }
+        set_country_flag = phanon_panada_enabled
+        allow = {
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value >= 100
+                }
+            }
+		}
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = -100
+			}
+		}
+	}
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+################################################################################################################################################
+
+# Psionics
+country_event = {
+	id = acot_diplo.851
+	title = acot_diplo.851.name
+	desc = acot_diplo.851.desc
+	
+	diplomatic = yes
+	base = leviathans.500
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_diplo.851.a
+		response_text = acot_diplo.851.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = acot_diplo.851.b
+        response_text = acot_diplo.851.b.response
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            NOR = {
+                has_technology = tech_psionic_theory
+                has_tech_option = tech_psionic_theory
+            }
+        }
+        allow = {
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value >= 25
+                }
+            }
+		}
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = -25
+			}
+        }
+        add_research_option = tech_psionic_theory
+        add_tech_progress = {
+            tech = tech_psionic_theory
+            progress = 0.50
+        }
+	}
+
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+################################################################################################################################################
+
+# Enigmatic Power
+country_event = {
+	id = acot_diplo.861
+	title = acot_diplo.861.name
+	desc = acot_diplo.861.desc
+	
+	diplomatic = yes
+	base = leviathans.500
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	# DM Clue
+	option = {
+		name =  acot_dark_matter_event.40.ask_curator
+		trigger = {
+			has_event_chain = acot_dm_tech_chain
+			NOR = {
+                has_country_flag = learned_dark_rumor
+				has_technology = tech_dark_matter_power_core
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = leviathans.500.d.opinion
+				event_target:curator_enclave_country = {
+					trust = { 
+						who = root
+						value >= 50
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = acot_dark_matter_event.40 }
+		}
+	}
+
+	option = {
+		name = acot_diplo.861.a
+		response_text = acot_diplo.861.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = acot_diplo.861.b
+		response_text = acot_diplo.861.b.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = acot_diplo.861.c
+		response_text = acot_diplo.861.c.response
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            has_technology = tech_dark_matter_power_core
+            has_country_flag = asked_curator_precursor_ship
+            NOR = {
+                has_event_chain = acot_alpha_tech_chain
+                has_technology = tech_precursor_design
+                has_country_flag = has_databank
+            }
+        }
+        allow = {
+            event_target:curator_enclave_country = {
+                trust = {
+                    who = root
+                    value >= 75
+                }
+            }
+		}
+		event_target:curator_enclave_country = {
+			add_trust = {
+				who = root
+				amount = -75
+			}
+		}
+		is_dialog_only = yes
+        custom_gui = "enclave_curator_option"
+        hidden_effect = {
+            set_country_flag = hear_precursor_rumor       
+            set_country_flag = allow_databank_steal       
+            if = {
+                limit = { 
+                    NOT = {
+                        has_event_chain = acot_alpha_tech_chain
+                    }
+                }
+                begin_event_chain = {
+                    event_chain = acot_alpha_tech_chain
+                }
+                capital_scope = {
+                    IF = {
+                        limit = {
+                            any_country = {
+                                is_fallen_empire = yes
+                            }
+                        }
+                        create_point_of_interest = {
+                            id = acot_alpha_research.1
+                            name = "acot_databank_attack_fe"
+                            desc = "acot_databank_attack_fe_desc"
+                            event_chain = acot_alpha_tech_chain
+                            location = this
+                        }	
+                        create_point_of_interest = {
+                            id = acot_alpha_research.2
+                            name = "acot_databank_trick_fe"
+                            desc = "acot_databank_trick_fe_desc"
+                            event_chain = acot_alpha_tech_chain
+                            location = this
+                        }	
+                    }	
+                    create_point_of_interest = {
+                        id = acot_alpha_research.3
+                        name = "acot_databank_ask_pmc"
+                        desc = "acot_databank_ask_pmc_desc"
+                        event_chain = acot_alpha_tech_chain
+                        location = this
+                    }	
+                    IF = {
+                        limit = {
+                            any_country = {
+                                has_country_flag = curator_enclave_country
+                            }
+                            owner = {
+                                NOR = {
+                                    is_homicidal = yes
+                                    has_country_flag = attacked_curators
+                                }
+                            }
+                        }
+                        create_point_of_interest = {
+                            id = acot_alpha_research.4
+                            name = "acot_databank_ask_curator"
+                            desc = "acot_databank_ask_curator_desc"
+                            event_chain = acot_alpha_tech_chain
+                            location = this
+                        }
+                    }	
+                    create_point_of_interest = {
+                        id = acot_alpha_research.5
+                        name = "acot_databank_self_assembly"
+                        desc = "acot_databank_self_assembly_desc"
+                        event_chain = acot_alpha_tech_chain
+                        location = this
+                    }
+                }
+            }   	          
+        }
+	}
+
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+################################################################################################################################################
+
+# Orecursiors
+country_event = {
+	id = acot_diplo.871
+	title = acot_diplo.871.name
+	desc = acot_diplo.871.desc
+	
+	diplomatic = yes
+	base = leviathans.500
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_diplo.871.a
+		response_text = acot_diplo.871.a.response
+		is_dialog_only = yes
+	}
+
+	# Databank Clue
+	option = {
+		name =  acot_alpha_matter_events.ask_curator
+		trigger = {
+			has_event_chain = acot_alpha_tech_chain
+			has_country_flag = allow_databank_steal
+			NOT = {
+				has_country_flag = has_databank
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = leviathans.500.d.opinion
+				event_target:curator_enclave_country = {
+					trust = { 
+						who = root
+						value >= 50
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = acot_alpha_matter_events.104 }
+		}
+	}
+
+    ### HELP PHYSIC
+	option = {
+		name = acot_diplo.871.b
+        response_text = acot_diplo.871.b.response
+        custom_tooltip = acot_curator_alpha_assist_delay_text
+        trigger = {
+            has_tech_option = tech_precursor_design_physics
+            NOT = {
+                has_technology = tech_precursor_design_physics
+            }
+        }
+        allow = {
+            resource_stockpile_compare = { resource = energy value >= 50000 }      
+            event_target:curator_enclave_country = {
+                trust = { 
+                    who = root
+                    value >= 50 #75
+                }
+            }
+            NOT = {
+                has_country_flag = acot_curator_alpha_assist_delay
+            }
+        }
+        custom_gui = "enclave_curator_option"
+        add_resource = {
+            energy = -50000
+        }
+        event_target:curator_enclave_country = {
+            add_trust = {
+                amount = -50
+                who = root
+            }
+        } 
+        add_tech_progress = {
+            tech = tech_precursor_design_physics
+            progress = 0.20
+        }
+        hidden_effect = {
+            set_timed_country_flag = { flag = acot_curator_alpha_assist_delay years = 1 }
+        }
+	}
+
+    ### HELP ENGINEER
+	option = {
+		name = acot_diplo.871.c
+        response_text = acot_diplo.871.c.response
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            has_tech_option = tech_precursor_design_engineering
+            NOT = {
+                has_technology = tech_precursor_design_engineering
+            }
+        }
+        allow = {
+            resource_stockpile_compare = { resource = energy value >= 50000 }      
+            event_target:curator_enclave_country = {
+                trust = { 
+                    who = root
+                    value >= 50 #75
+                }
+            }    
+            NOT = {
+                has_country_flag = acot_curator_alpha_assist_delay
+            }
+        }
+        custom_gui = "enclave_curator_option"
+        add_resource = {
+            energy = -50000
+        }
+        event_target:curator_enclave_country = {
+            add_trust = {
+                amount = -50
+                who = root
+            }
+        } 
+        add_tech_progress = {
+            tech = tech_precursor_design_engineering
+            progress = 0.20
+        }
+        hidden_effect = {
+            set_timed_country_flag = { flag = acot_curator_alpha_assist_delay years = 1 }
+        }
+    }
+    
+    ### HELP SOCIETY
+	option = {
+		name = acot_diplo.871.d
+        response_text = acot_diplo.871.d.response
+        custom_tooltip = acot_curator_ask_opinion_check
+        trigger = {
+            has_tech_option = tech_precursor_design_history
+            NOT = {
+                has_technology = tech_precursor_design_history
+            }
+        }
+        allow = {
+            resource_stockpile_compare = { resource = energy value >= 50000 }      
+            event_target:curator_enclave_country = {
+                trust = { 
+                    who = root
+                    value >= 50 #75
+                }
+            }    
+            NOT = {
+                has_country_flag = acot_curator_alpha_assist_delay
+            }
+        }
+        custom_gui = "enclave_curator_option"
+        add_resource = {
+            energy = -50000
+        }
+        event_target:curator_enclave_country = {
+            add_trust = {
+                amount = -50
+                who = root
+            }
+        } 
+        add_tech_progress = {
+            tech = tech_precursor_design_history
+            progress = 0.20
+        }
+        hidden_effect = {
+            set_timed_country_flag = { flag = acot_curator_alpha_assist_delay years = 1 }
+        }
+	}
+
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}
+
+
+
+######################################################
+
+# Orecursiors
+country_event = {
+	id = acot_diplo.881
+	title = acot_diplo.881.name
+	desc = acot_diplo.881.desc
+	
+	diplomatic = yes
+	base = leviathans.500
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_diplo.881.a
+		response_text = acot_diplo.881.a.response
+		is_dialog_only = yes
+	}
+
+    option = {
+		name = acot_diplo.881.b
+		response_text = acot_diplo.881.b.response
+		is_dialog_only = yes
+	}
+
+    option = {
+		name = acot_diplo.881.c
+        trigger = {
+            has_country_flag = acot_databank_tos_agreed
+            has_established_contact = event_target:acot_precursor_databank_country
+        }
+		response_text = acot_diplo.881.c.response
+		is_dialog_only = yes
+	}
+
+	option = { # Back
+		name = leviathans.506.d
+		hidden_effect = {
+			country_event = { id = leviathans.500 }
+		}
+	}
+	option = { # Sign Off
+		name = GOODBYE
+		default_hide_option = yes
+	}
+}

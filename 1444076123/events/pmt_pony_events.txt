@@ -1,0 +1,4388 @@
+###################
+# Mainline Events #
+###################
+
+namespace = harmony
+
+
+
+
+###################
+#### S1 Events ####
+###################
+
+### Elements Of Harmony Events
+country_event = {
+	id = harmony.0
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+	    pmt_pony_species_trigger = yes
+		is_country_type = default
+		years_passed >= 5
+        NOT = {
+            has_country_flag = find_harmony
+        }
+		has_origin = origin_mlp_mainline
+	}
+
+	immediate = {
+		country_event = { id = harmony.1 days = 360 random = 180 }
+		set_country_flag = find_harmony
+	}
+}
+
+country_event = {
+    id = harmony.1
+	title = "harmony.1.title"
+	desc = {
+		trigger = {
+			NOR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+		text = "harmony.1.desc.1"
+	}
+	desc = {
+		trigger = {
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+		text = "harmony.1.desc.2"
+	}
+	picture = GFX_evt_find_harmony
+	location = root
+	show_sound = event_conversation
+	is_triggered_only = yes
+	
+	immediate = {
+	    hidden_effect = {
+			set_country_flag = harmony_0
+		}
+	}
+	
+	option = {
+	    name = "harmony.1.a"
+		owner = {
+		    begin_event_chain = {
+			    event_chain = "harmony_chain"
+				target = THIS
+			}
+		}
+	}
+}
+
+country_event = {
+    id = harmony.100
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+	    has_country_flag = harmony_0
+	}
+
+	immediate = {
+	    random_list = {
+		    50 = {
+			    modifier = {
+				    factor = 0
+					has_country_flag = harmony_1
+				}
+				country_event = { id = harmony.10 days = 1 random = 90 } 
+			}
+			50 = {
+			    modifier = {
+				    factor = 0
+					has_country_flag = harmony_2
+				}
+				country_event = { id = harmony.20 days = 1 random = 90 } 
+			}
+			50 = {
+			    modifier = {
+				    factor = 0
+					has_country_flag = harmony_3
+				}
+				country_event = { id = harmony.30 days = 1 random = 90 } 
+			}
+			50 = {
+			    modifier = {
+				    factor = 0
+					has_country_flag = harmony_4
+				}
+				country_event = { id = harmony.40 days = 1 random = 90 } 
+			}
+			50 = {
+			    modifier = {
+				    factor = 0
+					OR = {
+						has_country_flag = harmony_5
+						NOT = {
+							any_owned_leader = {
+								leader_class = scientist
+								is_ruler = no
+							}
+						}
+					}
+				}
+				country_event = { id = harmony.50 days = 1 random = 90 } 
+			}
+			50 = {
+			    modifier = {
+				    factor = 0
+					has_country_flag = harmony_6
+				}
+				modifier = {
+					factor = 0
+					NAND = {
+						has_country_flag = harmony_1
+						has_country_flag = harmony_2
+						has_country_flag = harmony_3
+						has_country_flag = harmony_4
+						has_country_flag = harmony_5
+					}
+				}
+				country_event = { id = harmony.60 days = 1 random = 90 } 
+			}
+		}
+	}
+}
+
+#country_event = {
+#    id = harmony.1
+#	title = "harmony.1.title"
+#	desc = "harmony.1.desc"
+#	picture = GFX_evt_harmony_honest
+#	location = root
+#	show_sound = event_mystic_reveal
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#	    hidden_effect = {
+#		    owner = { set_country_flag = harmony_1 }
+#		}
+#	}
+#	
+#	option = {
+#	    name = "harmony.a"
+#		owner = {
+#			add_event_chain_counter = { 
+#				event_chain = "harmony_chain" 
+#				counter = "elements_of_harmony" 
+#				amount = 1 
+#			}
+#		    add_modifier = {
+#		        modifier = "honest"
+#			    days = -1
+#		    }
+#		}
+#	}
+#}
+
+country_event = {
+	id = harmony.10
+	title = "harmony.10.title"
+	desc = "harmony.10.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:harmony_10_compony
+		room = ethic_spaceship_room
+	}
+
+	immediate = {
+		set_country_flag = harmony_1
+		random_list = {
+			10 = { set_country_flag = harmony_10 }
+			90 = {  }
+		}
+		create_species = {
+			class = random_non_machine
+			portrait = random
+		}
+		last_created_species = {
+			save_event_target_as = harmony_10_compony
+		}
+	}
+
+	option = {
+		name = "harmony.10.a"
+		hidden_effect = {
+			country_event = { id = harmony.11 }
+		}
+	}
+
+	option = {
+		name = "harmony.10.b"
+		response_text = harmony.10.b.response
+		hidden_effect = {
+			country_event = { id = harmony.12 days = 180 random = 60 }
+		}
+	}
+
+	option = {
+		name = "harmony.10.c"
+		trigger = {
+			OR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+				has_country_flag = harmony_10
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.13 days = 60 random = 30 }
+			if = {
+				limit = { has_country_flag = harmony_10 }
+				remove_country_flag = harmony_10
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.11
+	title = "harmony.10.title"
+	desc = "harmony.11.desc"
+	diplomatic = yes
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = event_target:harmony_10_compony
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = "harmony.11.a"
+		response_text = harmony.11.a.response
+		hidden_effect = {
+			country_event = { id = harmony.14 days = 180 random = 60 }
+		}
+	}
+
+	option = {
+		name = "harmony.11.b"
+		response_text = harmony.11.b.response
+		add_resource = {
+			energy = -200
+		}
+		hidden_effect = {
+			country_event = { id = harmony.14 days = 180 random = 60 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.12
+	title = "harmony.10.title"
+	desc = "harmony.12.desc"
+	picture = GFX_evt_tradestation_interior
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.12.a"
+		add_resource = {
+			energy = -200
+		}
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+		    add_modifier = {
+		        modifier = "honest"
+			    days = -1
+		    }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.13
+	title = "harmony.10.title"
+	desc = "harmony.13.desc"
+	picture = GFX_evt_tradestation_interior
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.13.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+		    add_modifier = {
+		        modifier = "honest"
+			    days = -1
+		    }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.14
+	title = "harmony.10.title"
+	desc = "harmony.14.desc"
+	picture = GFX_evt_tradestation_interior
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.14.a"
+		add_event_chain_counter = { 
+			event_chain = "harmony_chain" 
+			counter = "elements_of_harmony" 
+			amount = 1 
+		}
+		add_modifier = {
+			modifier = "honest"
+			days = -1
+		}
+	}
+}
+
+#country_event = {
+#    id = harmony.2
+#	title = "harmony.2.title"
+#	desc = "harmony.2.desc"
+#	picture = GFX_evt_harmony_kindness
+#	location = root
+#	show_sound = event_mystic_reveal
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#	    hidden_effect = {
+#		    owner = { set_country_flag = harmony_2 }
+#		}
+#	}
+#	
+#	option = {
+#	    name = "harmony.a"
+#		owner = {
+#			add_event_chain_counter = { 
+#				event_chain = "harmony_chain" 
+#				counter = "elements_of_harmony" 
+#				amount = 1 
+#			}
+#			add_modifier = {
+#		        modifier = "kindness"
+#			    days = -1
+#		    }
+#		}
+#	}
+#}
+
+country_event = {
+	id = harmony.20
+	title = "harmony.20.title"
+	desc = "harmony.20.desc"
+	picture = GFX_evt_everfree_forest
+	is_triggered_only = yes
+	location = event_target:chosen_leader
+
+	immediate = {
+		set_country_flag = harmony_2
+		random_owned_leader = {
+			limit = { is_ruler = no }
+			save_event_target_as = chosen_leader
+			set_leader_flag = harmony_event_leader_kindness
+		}
+	}
+
+	option = {
+		name = "harmony.20.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			random_owned_pop = { kill_pop = yes }
+			add_modifier = {
+				modifier = "everfree_forest_threat"
+				days = 60
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.21 days = 45 random = 15 }
+		}
+	}
+
+	option = {
+		name = "harmony.20.b"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			random_owned_pop = { kill_pop = yes }
+			add_modifier = {
+				modifier = "everfree_forest_threat"
+				days = 60
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.22 days = 45 random = 15 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.21
+	title = "harmony.20.title"
+	desc = "harmony.21.desc"
+	picture = GFX_evt_everfree_forest
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.21.a"
+		hidden_effect = {
+			country_event = { id = harmony.22 days = 30 random = 10 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.22
+	title = "harmony.20.title"
+	desc = "harmony.22.desc"
+	picture = GFX_evt_everfree_forest
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.22.a"
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+			add_modifier = {
+		      	modifier = "kindness"
+		    	days = -1
+		   	}
+		}
+	}
+}
+
+#country_event = {
+#    id = harmony.3
+#	title = "harmony.3.title"
+#	desc = "harmony.3.desc"
+#	picture = GFX_evt_harmony_laughter
+#	location = root
+#	show_sound = event_mystic_reveal
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#	    hidden_effect = {
+#		    owner = { set_country_flag = harmony_3 }
+#		}
+#	}
+#	
+#	option = {
+#	    name = "harmony.a"
+#		owner = {
+#			add_event_chain_counter = { 
+#				event_chain = "harmony_chain" 
+#				counter = "elements_of_harmony" 
+#				amount = 1 
+#			}
+#			add_modifier = {
+#		        modifier = "laughter"
+#			    days = -1
+#		    }
+#		}
+#	}
+#}
+
+country_event = {
+	id = harmony.30
+	title = "harmony.30.title"
+	desc = "harmony.30.desc"
+	picture = GFX_evt_pony_celebration
+	is_triggered_only = yes
+	show_sound = event_celebration
+	location = event_target:chosen_planet
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_colony = yes
+				owner = { is_primitive = no }
+			}
+			set_planet_flag = pony_celebration
+			save_event_target_as = chosen_planet
+		}
+		set_country_flag = harmony_3
+	}
+
+	option = {
+		name = "harmony.30.a"
+		random_planet_within_border = {
+			limit = { has_planet_flag = pony_celebration }
+			add_modifier = {
+				modifier = pm_celebration
+				days = 60
+			}
+		}
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+			add_modifier = {
+		        modifier = "laughter"
+			    days = -1
+		    }
+		}
+	}
+
+	option = {
+		name = "harmony.30.b"
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 100 }
+		}
+		add_resource = { energy = -100 }
+		random_planet_within_border = {
+			limit = { has_planet_flag = pony_celebration }
+			add_modifier = {
+				modifier = pm_celebration
+				days = 30
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.31 days = 35 random = 5 }
+		}
+	}
+
+	option = {
+		name = "harmony.30.c"
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 200 }
+			resource_stockpile_compare = { resource = influence value >= 10 }
+		}
+		add_resource = {
+			energy = -200
+			influence = -10
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pony_celebration }
+			add_modifier = {
+				modifier = pm_celebration
+				days = 60
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.32 days = 15 random = 5 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.31
+	title = "harmony.30.title"
+	desc = "harmony.31.desc"
+	picture = GFX_evt_pony_celebration
+	is_triggered_only = yes
+	show_sound = event_celebration
+
+	option = {
+		name = "harmony.31.a"
+		random_planet_within_border = {
+			limit = { has_planet_flag = pony_celebration }
+			add_modifier = {
+				modifier = pm_celebration
+				days = 90
+			}
+		}
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+			add_modifier = {
+		        modifier = "laughter"
+			    days = -1
+		    }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.32
+	title = "harmony.30.title"
+	desc = "harmony.32.desc"
+	picture = GFX_evt_pony_celebration
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.32.a"
+		hidden_effect = {
+			country_event = { id = harmony.33 days = 45 random = 15 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.33
+	title = "harmony.30.title"
+	desc = "harmony.33.desc"
+	picture = GFX_evt_pony_celebration
+	is_triggered_only = yes
+	show_sound = event_celebration
+
+	option = {
+		name = "harmony.33.a"
+		add_modifier = {
+			modifier = celebration
+			days = 120
+		}
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+			add_modifier = {
+		        modifier = "laughter"
+			    days = -1
+		    }
+		}
+	}
+}
+
+#country_event = {
+#    id = harmony.4
+#	title = "harmony.4.title"
+#	desc = "harmony.4.desc"
+#	picture = GFX_evt_harmony_generously
+#	location = root
+#	show_sound = event_mystic_reveal
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#	    hidden_effect = {
+#		    owner = { set_country_flag = harmony_4 }
+#		}
+#	}
+#	
+#	option = {
+#	    name = "harmony.a"
+#		owner = {
+#			add_event_chain_counter = { 
+#				event_chain = "harmony_chain" 
+#				counter = "elements_of_harmony" 
+#				amount = 1 
+#			}
+#			add_modifier = {
+#		        modifier = "generously"
+#			    days = -1
+#		    }
+#		}
+#	}
+#}
+
+country_event = {
+	id = harmony.40
+	title = "harmony.40.title"
+	desc = "harmony.40.desc"
+	picture = GFX_evt_galactic_market
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = harmony_4
+	}
+
+	option = {
+		name = "harmony.40.a"
+		capital_scope = {
+			add_modifier = {
+				modifier = art_foundation
+				days = -1
+			}
+		}
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+			add_modifier = {
+	        	modifier = "generously"
+		    	days = -1
+	    	}
+		}
+	}
+}
+
+#country_event = {
+#    id = harmony.5
+#	title = "harmony.5.title"
+#	desc = "harmony.5.desc"
+#	picture = GFX_evt_harmony_loyalty
+#	location = root
+#	show_sound = event_mystic_reveal
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#	    hidden_effect = {
+#		    owner = { set_country_flag = harmony_5 }
+#		}
+#	}
+#	
+#	option = {
+#	    name = "harmony.a"
+#		owner = {
+#			add_event_chain_counter = { 
+#				event_chain = "harmony_chain" 
+#				counter = "elements_of_harmony" 
+#				amount = 1 
+#			}
+#			add_modifier = {
+#		        modifier = "loyalty"
+#			    days = -1
+#		    }
+#		}
+#	}
+#}
+
+country_event = {
+	id = harmony.50
+	title = "harmony.50.title"
+	desc = "harmony.50.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+	location = event_target:chosen_leader
+
+	picture_event_data = {
+		portrait = event_target:harmony_50_tech
+		room = ethic_spaceship_room
+	}
+
+	immediate = {
+		set_country_flag = harmony_5
+		create_species = {
+			class = random_non_machine
+			portrait = random
+		}
+		last_created_species = {
+			save_event_target_as = harmony_50_tech
+		}
+		random_owned_leader = {
+			limit = {
+				leader_class = scientist
+				is_ruler = no
+			}
+			save_event_target_as = chosen_leader
+			set_leader_flag = harmony_event_leader_loyalty
+		}
+	}
+
+	option = {
+		name = "harmony.50.a"
+		response_text = harmony.50.a.response
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = "harmony.50.b"
+		response_text = harmony.50.b.response
+		random_owned_leader = {
+			limit = { has_leader_flag = harmony_event_leader_loyalty }
+			add_trait_no_notify = leader_trait_further_study
+		}
+		hidden_effect = {
+			country_event = { id = harmony.51 days = 120 random = 30 }
+		}
+	}
+
+	option = {
+		name = "harmony.50.c"
+		response_text = harmony.50.c.response
+		hidden_effect = {
+			country_event = { id = harmony.54 days = 60 random = 30 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.51
+	title = "harmony.50.title"
+	desc = "harmony.51.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:harmony_50_tech
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = "harmony.51.a"
+		response_text = harmony.51.a.response
+		random_owned_leader = {
+			limit = { has_leader_flag = harmony_event_leader_loyalty }
+			if = {
+				limit = {
+					NOT = { has_trait = leader_trait_spark_of_genius }
+					NOT = { has_trait = leader_trait_spark_of_genius_2 }
+				}
+				add_trait_no_notify = leader_trait_spark_of_genius
+			}
+			else_if = {
+				limit = {
+					has_trait = leader_trait_spark_of_genius
+					NOT = { has_trait = leader_trait_spark_of_genius_2 }
+				}
+				add_trait_no_notify = leader_trait_spark_of_genius_2
+			}
+			else = {
+				add_experience = 200
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.52 days = 90 random = 30 }
+		}
+	}
+
+	option = {
+		name = "harmony.51.b"
+		response_text = harmony.51.b.response
+		random_owned_leader = {
+			limit = { has_leader_flag = harmony_event_leader_loyalty }
+			if = {
+				limit = {
+					NOT = { has_trait = leader_trait_spark_of_genius }
+					NOT = { has_trait = leader_trait_spark_of_genius_2 }
+				}
+				add_trait_no_notify = leader_trait_spark_of_genius
+			}
+			else_if = {
+				limit = {
+					has_trait = leader_trait_spark_of_genius
+					NOT = { has_trait = leader_trait_spark_of_genius_2 }
+				}
+				add_trait_no_notify = leader_trait_spark_of_genius_2
+			}
+			else = {
+				add_experience = 200
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.53 days = 30 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.52
+	title = "harmony.50.title"
+	desc = "harmony.52.desc"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.52.a"
+		random_owned_leader = {
+			limit = { has_leader_flag = harmony_event_leader_loyalty }
+			remove_trait = leader_trait_further_study
+			add_trait_no_notify = leader_trait_heart_of_loyalty
+		}
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+			add_modifier = {
+		        modifier = "loyalty"
+			    days = -1
+		    }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.53
+	title = "harmony.50.title"
+	desc = "harmony.53.desc"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.53.a"
+		random_owned_leader = {
+			limit = { has_leader_flag = harmony_event_leader_loyalty }
+			remove_trait = leader_trait_further_study
+			add_trait_no_notify = leader_trait_heart_of_loyalty
+		}
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+			add_modifier = {
+		        modifier = "loyalty"
+			    days = -1
+		    }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.54
+	title = "harmony.50.title"
+	desc = "harmony.54.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = event_target:harmony_50_tech
+		room = ethic_spaceship_room
+	}
+
+	option = {
+		name = "harmony.54.a"
+		response_text = harmony.51.a.response
+		add_random_research_option = {
+			add_progress = 1
+		}
+		random_owned_leader = {
+			limit = { has_leader_flag = harmony_event_leader_loyalty }
+			add_trait_no_notify = leader_trait_further_study
+		}
+		hidden_effect = {
+			country_event = { id = harmony.55 days = 90 random = 30 }
+		}
+	}
+
+	option = {
+		name = "harmony.54.b"
+		response_text = harmony.51.b.response
+		hidden_effect = {
+			country_event = { id = harmony.53 days = 30 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.55
+	title = "harmony.50.title"
+	desc = "harmony.55.desc"
+	picture = GFX_evt_smugglers_in_bar
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.55.a"
+		random_owned_leader = {
+			limit = { has_leader_flag = harmony_event_leader_loyalty }
+			remove_trait = leader_trait_further_study
+			add_trait_no_notify = leader_trait_heart_of_loyalty
+		}
+		owner = {
+			add_event_chain_counter = { 
+				event_chain = "harmony_chain" 
+				counter = "elements_of_harmony" 
+				amount = 1 
+			}
+			add_modifier = {
+		        modifier = "loyalty"
+			    days = -1
+		    }
+		}
+	}
+}
+
+#country_event = {
+#    id = harmony.6
+#	title = "harmony.6.title"
+#	desc = "harmony.6.desc"
+#	picture = GFX_evt_harmony_magic
+#	location = root
+#	show_sound = event_mystic_reveal
+#	is_triggered_only = yes
+#	
+#	immediate = {
+#	    hidden_effect = {
+#		    owner = { set_country_flag = harmony_6 }
+#		}
+#	}
+#	
+#	option = {
+#	    name = "harmony.a"
+#		owner = {
+#			add_event_chain_counter = { 
+#				event_chain = "harmony_chain" 
+#				counter = "elements_of_harmony" 
+#				amount = 1 
+#			}
+#			add_modifier = {
+#		        modifier = "magic"
+#			    days = -1
+#		    }
+#		}
+#	}
+#}
+
+country_event = {
+    id = harmony.60
+	title = "harmony.60.title"
+	desc = "harmony.60.desc"
+	picture = GFX_evt_alien_propaganda
+	is_triggered_only = yes
+	location = event_target:chosen_planet
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				is_colony = yes
+				owner = { is_primitive = no }
+			}
+			save_event_target_as = chosen_planet
+			set_planet_flag = "magic_competition"
+		}
+		set_country_flag = harmony_6
+	}
+	
+	option = {
+		name = "harmony.60.a"
+		hidden_effect = {
+			country_event = { id = harmony.61 days = 150 random = 30 }
+		}
+	}
+
+	option = {
+		name = "harmony.60.b"
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 100 }
+		}
+		add_resource = { energy = -100 }
+		hidden_effect = {
+			set_country_flag = "magic_competition_1"
+			country_event = { id = harmony.61 days = 150 random = 30 }
+		}
+	}
+
+	option = {
+		name = "harmony.60.c"
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 100 }
+			resource_stockpile_compare = { resource = influence value >= 30 }
+		}
+		add_resource = {
+			energy = -100
+			influence = -30
+		}
+		hidden_effect = {
+			set_country_flag = "magic_competition_2"
+			country_event = { id = harmony.61 days = 150 random = 30 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.61
+	title = "harmony.60.title"
+	desc = "harmony.61.desc"
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.61"
+		trigger = { 
+			NOT = { has_country_flag = "magic_competition_2" }
+		}
+		hidden_effect = {
+			country_event = { id = harmony.62 days = 60 random = 15 }
+		}
+	}
+
+	option = {
+		name = "harmony.61"
+		trigger = {
+			has_country_flag = "magic_competition_2"
+		}
+		hidden_effect = {
+			country_event = { id = harmony.63 days = 60 random = 15 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.62
+	title = "harmony.60.title"
+	desc = "harmony.62.desc"
+	picture = GFX_evt_alien_propaganda
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.62.a"
+		trigger = {
+			NOT = { has_country_flag = "magic_competition_1" }
+		}
+		add_event_chain_counter = { 
+			event_chain = "harmony_chain" 
+			counter = "elements_of_harmony" 
+			amount = 1 
+		}
+		add_modifier = {
+			modifier = "magic"
+			days = -1
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = "magic_competition" }
+			add_modifier = {
+				modifier = "magic_competition"
+				days = 360
+			}
+			hidden_effect = {
+				remove_planet_flag = "magic_competition"
+			}
+		}
+		hidden_effect = {
+			set_country_flag = end_harmony_60
+		}
+	}
+
+	option = {
+		name = "harmony.62.b"
+		trigger = {
+			has_country_flag = "magic_competition_1"
+		}
+		hidden_effect = {
+			remove_country_flag = "magic_competition_1"
+			set_country_flag = end_harmony_60
+		}
+		add_event_chain_counter = { 
+			event_chain = "harmony_chain" 
+			counter = "elements_of_harmony" 
+			amount = 1 
+		}
+		add_modifier = {
+			modifier = "magic"
+			days = -1
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = "magic_competition" }
+			add_modifier = {
+				modifier = "magic_competition"
+				days = 720
+			}
+			hidden_effect = {
+				remove_planet_flag = "magic_competition"
+			}
+		}
+		add_resource = {
+			influence = 20
+		}
+	}
+}
+
+country_event = {
+	id = harmony.63
+	title = "harmony.60.title"
+	desc = "harmony.63.desc"
+	picture = GFX_evt_alien_propaganda
+	location = root
+	show_sound = event_celebration
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.63.a"
+		hidden_effect = {
+			remove_country_flag = "magic_competition_2"
+			set_country_flag = end_harmony_60
+		}
+		add_event_chain_counter = { 
+			event_chain = "harmony_chain" 
+			counter = "elements_of_harmony" 
+			amount = 1 
+		}
+		add_modifier = {
+			modifier = "magic"
+			days = -1
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = "magic_competition" }
+			add_modifier = {
+				modifier = "magic_competition"
+				days = 720
+			}
+			hidden_effect = {
+				remove_planet_flag = "magic_competition"
+			}
+		}
+		add_resource = {
+			influence = 50
+		}
+	}
+
+	option = {
+		name = "harmony.63.b"
+		hidden_effect = {
+			remove_country_flag = "magic_competition_2"
+			set_country_flag = end_harmony_60
+		}
+		add_event_chain_counter = { 
+			event_chain = "harmony_chain" 
+			counter = "elements_of_harmony" 
+			amount = 1 
+		}
+		add_modifier = {
+			modifier = "magic"
+			days = -1
+		}
+		custom_tooltip = "harmony.63.tooltip"
+		create_leader = {
+			class = general
+			species = owner_main_species
+			name = random
+			skill = 3
+			traits = {
+				trait = leader_trait_great_magician
+			}
+		}
+	}
+}
+
+country_event = {
+    id = harmony.200
+	title = "harmony.200.title"
+	desc = "harmony.200.desc"
+	picture = GFX_evt_find_harmony
+	location = root
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_country_flag = end_harmony_chain }
+		has_country_flag = harmony_1
+		has_country_flag = harmony_2
+		has_country_flag = harmony_3
+		has_country_flag = harmony_4
+		has_country_flag = harmony_5
+		has_country_flag = harmony_6
+		has_country_flag = end_harmony_60
+	}
+	
+	option = {
+	    name = "harmony.200.a"
+		owner = {
+		    end_event_chain = "harmony_chain"
+			set_country_flag = "elements_of_harmony"
+			remove_country_flag = harmony_0
+		}
+		hidden_effect = {
+			set_country_flag = end_harmony_chain
+		}
+	}
+}
+
+### Nightmare Moon Events ###
+
+country_event = {
+	id = harmony.300
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		OR  = {
+			is_multiplayer = no
+			has_country_flag = trigger_event_country_pony
+		}
+		has_country_flag = find_harmony
+		is_ai = no
+		NOT = { has_country_flag = nightmare_start }
+		has_origin = origin_mlp_mainline
+	}
+
+	immediate = {
+		random_list = {
+			10 = {
+				country_event = { id = harmony.1000 }
+				set_country_flag = nightmare_start
+			}
+			90 = {
+				modifier = {
+					factor = 0
+					years_passed >= 10
+				}
+			}
+			40 = {
+				modifier = {
+					factor = 0
+					years_passed < 10
+					years_passed >= 18
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					years_passed < 18
+					years_passed >= 20
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1000
+	title = "harmony.1000.title"
+	desc = "harmony.1000.desc"
+	picture = GFX_evt_old_books
+	is_triggered_only = yes
+	location = event_target:chosen_leader
+
+	immediate = {
+		random_owned_leader = {
+			limit = { leader_class = scientist }
+			save_event_target_as = chosen_leader
+			set_leader_flag = leader_nightmare
+		}
+		country_event = { id = harmony.1003 }
+	}
+
+	option = {
+		name = "harmony.1000.a"
+		hidden_effect = {
+			country_event = { id = harmony.1010 days = 120 random = 30 }
+		}
+	}
+
+	option = {
+		name = "harmony.1000.b"
+		hidden_effect = {
+			country_event = { id = harmony.1010 days = 120 random = 30 }
+		}
+	}
+
+	option = {
+		name = "harmony.1000.c"
+		capital_scope = {
+			enable_special_project = {
+				name = INVESTIGATING_LEGENDS
+				location = this
+				owner = root
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1010 days = 120 random = 30 }
+			set_country_flag = investigating_legends
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1002
+	title = "harmony.1002.title"
+	desc = "harmony.1002.desc"
+	picture = GFX_evt_old_books
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1002.a"
+		hidden_effect = {
+			set_country_flag = investigated_legends
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1003
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_planet = { 
+			limit = { is_capital = yes }
+			solar_system = {
+				set_star_flag = pony_capital_system
+			}
+		}
+		random_system_within_border = {
+			limit = {
+				has_star_flag = pony_capital_system
+			}
+			if = {
+				limit = {
+					any_system_planet = {
+						is_moon = yes
+						OR = {
+							is_planet_class = pc_barren
+							is_planet_class = pc_barren_cold
+							is_planet_class = pc_frozen
+							is_planet_class = pc_molten
+							is_planet_class = pc_toxic
+						}
+					}
+				}
+				random_system_planet = {
+					limit = {
+						is_moon = yes
+						OR = {
+							is_planet_class = pc_barren
+							is_planet_class = pc_barren_cold
+							is_planet_class = pc_frozen
+							is_planet_class = pc_molten
+							is_planet_class = pc_toxic
+						}
+					}
+					set_planet_flag = pmt_seal
+				}
+			}
+			else = {
+				random_system_planet = {
+					limit = {
+						NOT = { is_capital = yes }
+					}
+					set_planet_flag = pmt_seal
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1010
+	title = "harmony.1010.title"
+	desc = "harmony.1010.desc"
+	picture = GFX_evt_zro_3
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1010.a"
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = leader_nightmare
+			}
+			add_trait_no_notify = leader_trait_nightmare
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1020 days = 90 }
+		}
+	}
+
+	option = {
+		name = "harmony.1010.b"
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = leader_nightmare
+			}
+			add_trait_no_notify = leader_trait_nightmare
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1020 days = 30 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1020
+	title = "harmony.1010.title"
+	desc = "harmony.1020.desc"
+	picture = GFX_evt_zro_3
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1020.a"
+		add_modifier = {
+			modifier = nightmare
+			days = -1
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1030 days = 30 }
+		}
+	}
+
+	option = {
+		name = "harmony.1020.b"
+		add_modifier = {
+			modifier = nightmare
+			days = -1
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1030 days = 30 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1030
+	title = "harmony.1010.title"
+	desc = "harmony.1030.desc"
+	picture = GFX_evt_seal
+	location = from
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1030.a"
+		random_planet_within_border = {
+			limit = { has_planet_flag = pmt_seal }
+			enable_special_project = {
+				name = MYSTERIOUS_CALL
+				location = this
+				owner = root
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1040
+	title = "harmony.1040.title"
+	desc = "harmony.1040.desc"
+	picture = GFX_evt_seal
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1040.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = pmt_seal
+			}
+			add_modifier = {
+				modifier = pm_seal
+				days = -1
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1050 days = 90 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1041
+	title = "harmony.1040.title"
+	desc = "harmony.1041.desc"
+	picture = GFX_evt_seal
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1040.a"
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = pmt_seal
+			}
+			add_modifier = {
+				modifier = pm_seal
+				days = -1
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1050 days = 90 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1050
+	title = "harmony.1050.title"
+	desc = "harmony.1050.desc"
+	picture = GFX_evt_seal
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1050.a"
+		hidden_effect = {
+			country_event = { id = harmony.1060 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1060
+	title = "harmony.1060.title"
+	desc = "harmony.1060.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		portrait = nightmare_moon
+		room = ethic_spaceship_room
+	}
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				has_modifier = pm_seal
+			}
+			remove_modifier = pm_seal
+		}
+	}
+
+	option = {
+		name = "harmony.1060.a"
+		is_dialog_only = yes
+		response_text = harmony.1060.a.response
+	}
+
+	option = {
+		name = "harmony.1060.b"
+		is_dialog_only = yes
+		response_text = harmony.1060.b.response
+	}
+
+	option = {
+		name = "harmony.1060.c"
+		response_text = harmony.1060.c.response
+		trigger = {
+			NOT = { has_country_flag = investigated_legends }
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1070 days = 5 }
+			country_event = { id = harmony.1061 days = 60 }
+			set_country_flag = start_fight_with_nightmare
+		}
+	}
+
+	option = {
+		name = "harmony.1060.d"
+		response_text = harmony.1060.d.response
+		trigger = {
+			has_country_flag = investigated_legends
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = harmony_1
+					has_country_flag = harmony_2
+					has_country_flag = harmony_3
+					has_country_flag = harmony_4
+					has_country_flag = harmony_5
+					has_country_flag = harmony_6
+				}
+			}
+			custom_tooltip = "harmony.1060.d_1"
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_country_flag = harmony_1
+					has_country_flag = harmony_2
+					has_country_flag = harmony_3
+					has_country_flag = harmony_4
+					has_country_flag = harmony_5
+					has_country_flag = harmony_6
+				}
+				NAND = {
+					has_country_flag = harmony_1
+					has_country_flag = harmony_2
+					has_country_flag = harmony_3
+					has_country_flag = harmony_4
+					has_country_flag = harmony_5
+					has_country_flag = harmony_6
+				}
+			}
+			add_modifier = {
+				modifier = power_of_harmony_1
+				days = -1
+			}
+			custom_tooltip = "harmony.1060.d_2"
+		}
+		else_if = {
+			limit = {
+				has_country_flag = harmony_1
+				has_country_flag = harmony_2
+				has_country_flag = harmony_3
+				has_country_flag = harmony_4
+				has_country_flag = harmony_5
+				has_country_flag = harmony_6
+			}
+			add_modifier = {
+				modifier = power_of_harmony_2
+				days = -1
+			}
+			custom_tooltip = "harmony.1060.d_3"
+		}
+		hidden_effect = {
+			country_event = { id = harmony.1070 days = 5 }
+			set_country_flag = power_of_harmony
+			set_country_flag = start_fight_with_nightmare
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1061
+	title = "harmony.1061.title"
+	desc = "harmony.1061.desc"
+	picture = GFX_evt_old_books
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1061.a"
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = harmony_1
+					has_country_flag = harmony_2
+					has_country_flag = harmony_3
+					has_country_flag = harmony_4
+					has_country_flag = harmony_5
+					has_country_flag = harmony_6
+				}
+			}
+			custom_tooltip = "harmony.1060.d_1"
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_country_flag = harmony_1
+					has_country_flag = harmony_2
+					has_country_flag = harmony_3
+					has_country_flag = harmony_4
+					has_country_flag = harmony_5
+					has_country_flag = harmony_6
+				}
+				NAND = {
+					has_country_flag = harmony_1
+					has_country_flag = harmony_2
+					has_country_flag = harmony_3
+					has_country_flag = harmony_4
+					has_country_flag = harmony_5
+					has_country_flag = harmony_6
+				}
+			}
+			add_modifier = {
+				modifier = power_of_harmony_1
+				days = -1
+			}
+			custom_tooltip = "harmony.1060.d_2"
+		}
+		else_if = {
+			limit = {
+				has_country_flag = harmony_1
+				has_country_flag = harmony_2
+				has_country_flag = harmony_3
+				has_country_flag = harmony_4
+				has_country_flag = harmony_5
+				has_country_flag = harmony_6
+			}
+			add_modifier = {
+				modifier = power_of_harmony_2
+				days = -1
+			}
+			custom_tooltip = "harmony.1060.d_3"
+		}
+		hidden_effect = {
+			set_country_flag = power_of_harmony
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1062
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = power_of_harmony
+		NOT = { has_country_flag = end_harmony_1062_2 }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = end_harmony_1062_1
+				}
+				NOT = { has_modifier = power_of_harmony_1 }
+				NOT = { has_modifier = power_of_harmony_2 }
+				NAND = {
+					has_country_flag = harmony_1
+					has_country_flag = harmony_2
+					has_country_flag = harmony_3
+					has_country_flag = harmony_4
+					has_country_flag = harmony_5
+					has_country_flag = harmony_6
+				}
+				OR = {
+					has_country_flag = harmony_1
+					has_country_flag = harmony_2
+					has_country_flag = harmony_3
+					has_country_flag = harmony_4
+					has_country_flag = harmony_5
+					has_country_flag = harmony_6
+				}
+			}
+			add_modifier = {
+				modifier = power_of_harmony_1
+				days = -1
+			}
+			set_country_flag = end_harmony_1062_1
+		}
+		else_if = {
+			limit = {
+				has_modifier = power_of_harmony_1
+				NOT = { has_modifier = power_of_harmony_2 }
+				has_country_flag = harmony_1
+				has_country_flag = harmony_2
+				has_country_flag = harmony_3
+				has_country_flag = harmony_4
+				has_country_flag = harmony_5
+				has_country_flag = harmony_6
+				NOT = { has_country_flag = end_harmony_1062_2 }
+			}
+			remove_modifier = power_of_harmony_1
+			add_modifier = {
+				modifier = power_of_harmony_2
+				days = -1
+			}
+			set_country_flag = end_harmony_1062_2
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1070
+	title = "harmony.1060.title"
+	desc = "harmony.1070.desc"
+	picture = GFX_evt_seal
+	show_sound = event_dangerous_animals
+	location = from
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = pmt_seal
+			}
+			solar_system = {
+				create_country = {
+					name = "NAME_Nightmare_Moon"
+					type = nightmare_moon
+					flag = {
+						icon = {
+							category = "ornate"
+							file = "flag_spherical_14.dds"
+						}
+						background = {
+							category = "backgrounds"
+							file = "new_dawn.dds"
+						}
+						colors = {
+							"dark_blue"
+							"dark_blue"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						set_faction_hostility = {
+							target = root.owner
+							set_hostile = yes
+							set_neutral = no
+							set_friendly = no
+						}
+						save_global_event_target_as = nightmare_country
+						set_country_flag = fight_nightmare_country
+						if = {
+							limit = {
+								has_global_flag = using_pony_mod
+							}
+							create_species = {
+								name = "Alicorn"
+								class = mod_pony
+								portrait = "nmm"
+							}
+						}
+						else = {
+							create_species = {
+								name = "Alicorn"
+								class = PONY
+								portrait = "pony_ruler_03"
+							}
+						}
+						create_leader = {
+							class = admiral
+							species = last_created_species
+							name = "Nightmare_Moon"
+							gender = female
+							event_leader = yes
+							skill = 3
+							randomize_traits = no
+							hide_age = yes
+							traits = {
+								trait = leader_trait_nightmare_moon
+							}
+						}
+						create_fleet = {
+							name = "NAME_Nightmare_Fleet"
+							settings = {
+								spawn_debris = no
+								is_boss = yes
+							}
+							effect = {
+								set_owner = event_target:nightmare_country
+								create_ship = {
+									name = 	"NAME_Nightmare_Moon"
+									design = "NAME_Nightmare_Moon"
+									graphical_culture = "extra_dimensional_01"
+								}
+								assign_leader = last_created_leader
+								while = {
+									count = 2
+									create_ship = {
+										name = "NAME_Nightmare"
+										design = "NAME_Nightmare"
+										graphical_culture = "extra_dimensional_01"
+									}
+								}
+								while = {
+									count = 3
+									create_ship = {
+										name = "NAME_Bat_Pony"
+										design = "NAME_Bat_Pony"
+										graphical_culture = "extra_dimensional_01"
+									}
+								}
+								set_location = {
+									target = PREVPREVPREV
+									distance = 10
+									angle = 90
+									direction = in_system
+								}
+								set_fleet_stance = aggressive
+								set_aggro_range_measure_from = self
+								set_aggro_range = 350
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "harmony.1070.a"
+		random_owned_leader = {
+			limit = {
+				has_leader_flag = leader_nightmare
+			}
+			remove_trait = leader_trait_nightmare
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1080
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = { has_country_flag = fight_nightmare_country }
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				has_country_flag = start_fight_with_nightmare
+			}
+			country_event = { id = harmony.1085 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1085
+	title = "harmony.1085.title"
+	desc = "harmony.1085.desc"
+	picture = GFX_evt_seal
+	location = FromFromFrom
+	trackable = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1085.a"
+		custom_tooltip = "harmony.1085.a.tooltip"
+		create_leader = {
+			class = governor
+			species = owner_main_species
+			name = "Princess_Luna"
+			skill = 3
+			hide_age = yes
+			skip_background_generation = yes
+			custom_catch_phrase = princess_luna_catch_phrase
+			custom_description = princess_luna_backstory
+			gender = female
+			event_leader = no
+			traits = {
+				trait = leader_trait_pmt_alicorn
+				trait = leader_trait_princess_luna
+				trait = leader_trait_dream_weaver
+			}
+			effect = {
+				save_global_event_target_as = princess_luna
+				set_leader_flag = legendary_leader
+			}
+		}
+		hidden_effect = {
+			last_created_leader = {
+				if = {
+					limit = {
+						has_global_flag = using_pony_mod
+					}
+					change_leader_portrait = "luna"
+				}
+				else = {
+					change_leader_portrait = "pony_ruler_02"
+				}
+			}
+		}
+		remove_modifier = nightmare
+		if = {
+			limit = {
+				has_modifier = power_of_harmony_1
+			}
+			remove_modifier = power_of_harmony_1
+		}
+		if = {
+			limit = {
+				has_modifier = power_of_harmony_2
+			}
+			remove_modifier = power_of_harmony_2
+		}
+		
+		hidden_effect = {
+			country_event = { id = harmony.1090 days = 60 random = 30 }
+			set_country_flag = end_nightmare_moon_evt
+			remove_country_flag = start_fight_with_nightmare
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			root.ruler = {
+				switch = {
+					trigger = has_ethic
+					ethic_xenophile = { event_target:princess_luna = { change_background_ethic = ethic_xenophile } }
+					ethic_xenophobe = { event_target:princess_luna = { change_background_ethic = ethic_xenophobe } }
+					ethic_militarist = { event_target:princess_luna = { change_background_ethic = ethic_militarist } }
+					ethic_pacifist = { event_target:princess_luna = { change_background_ethic = ethic_pacifist } }
+					ethic_egalitarian = { event_target:princess_luna = { change_background_ethic = ethic_egalitarian } }
+					ethic_authoritarian = { event_target:princess_luna = { change_background_ethic = ethic_authoritarian } }
+					ethic_spiritualist = { event_target:princess_luna = { change_background_ethic = ethic_spiritualist } }
+					ethic_materialist = { event_target:princess_luna = { change_background_ethic = ethic_materialist } }
+				}
+			}
+			create_message = {
+				type = MESSAGE_RECRUITED_LEADER
+				localization =  MESSAGE_RECRUITED_LEADER_DESC
+				days = @toast_message_days
+				target = event_target:princess_luna
+				variable = {
+					type = name
+					localization = LEADER
+					scope = event_target:princess_luna
+				}
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary" 
+				}
+			}
+			random_list = {
+				10 = { play_sound = luna_portrait_01 }
+				10 = { play_sound = luna_portrait_02 }
+				10 = { play_sound = luna_portrait_03 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.1090
+	title = "harmony.1090.title"
+	desc = "harmony.1090.desc"
+	picture = GFX_evt_physics_research
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.1090.a"
+		add_relic = r_nightmare_armor
+		hidden_effect = {
+			country_event = { id = pmtspecial.1001 }		#Alert message
+		}
+	}
+}
+
+#######################
+#### S2、S3 Events ####
+#######################
+
+### Discord Events
+
+country_event = {
+	id = harmony.2000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = end_nightmare_moon_evt
+		years_passed > 40
+		NOT = { has_country_flag = start_discord_evt }
+	}
+
+	immediate = {
+		random_list = {
+			20 = {
+				modifier = {
+					factor = 0
+					years_passed >= 70
+				}
+			}
+			10 = {
+				country_event = { id = harmony.2100 days = 3 }
+				set_country_flag = start_discord_evt
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2100
+	title = "harmony.2100.title"
+	desc = "harmony.2100.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_scanner
+	location = event_target:enter_chaosville
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			limit = {
+				has_planet_flag = Equestria
+			}
+			save_event_target_as = equestria_capital
+		}
+		random_system_within_border = {
+			limit = {
+				distance = {
+					source = event_target:equestria_capital
+					use_bypasses = no
+					min_jumps = 0
+					max_jumps = 5
+				}
+			}
+			set_star_flag = enter_chaosville
+			save_event_target_as = enter_chaosville
+		}
+	}
+
+	option = {
+		name = "harmony.2100.a"
+		random_system_within_border = {
+			limit = {
+				has_star_flag = enter_chaosville
+			}
+			random_system_planet = {
+				enable_special_project = {
+					name = UNSTABLE_SPACE
+					location = this
+					owner = root
+				}
+				hidden_effect = {
+					create_ambient_object = {
+						type = "psi_storm_1"
+						location = this
+					}
+					last_created_ambient_object = {
+						set_ambient_object_flag = unstable_space_planet_effect
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2101
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_system_within_border = {
+			limit = {
+				has_star_flag = enter_chaosville
+			}
+			spawn_system = {
+				min_distance = 5
+				max_distance = 15
+				max_jumps = 0
+				initializer = "chaosville_system"
+			}
+			#add_extra_hyperlane_to_spawned_system_effect = yes
+
+			star = {
+				create_ambient_object = {
+					type = "extradimensional_2"
+					location = this
+				}
+			}
+		}
+		country_event = { id = harmony.2102 days = 2 }
+		every_ambient_object = {
+			limit = { has_ambient_object_flag = unstable_space_planet_effect }
+			destroy_ambient_object = this
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2102
+	title = "harmony.2102.title"
+	desc = "harmony.2102.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_scanner
+	location = event_target:chaosville
+	is_triggered_only = yes
+
+	immediate = {
+		random_system = {
+			limit = {
+				has_star_flag = chaosville_system
+			}
+			save_event_target_as = chaosville
+		}
+		set_country_flag = survey_chaosville
+	}
+
+	option = {
+		name = "harmony.2102.a"
+		begin_event_chain = {
+			event_chain = "chaosville_chain"
+			target = ROOT
+		}
+		create_point_of_interest = {
+			id = chaosville.1
+			name = "chaosville_1_poi"
+			desc = "chaosville_1_poi_desc"
+			event_chain = chaosville_chain
+			location = event_target:chaosville
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2103
+	title = "harmony.2103.title"
+	desc = "harmony.2103.desc"
+	picture = GFX_evt_shrouded_planet
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			has_country_flag = survey_chaosville
+		}
+		FROM = { has_star_flag = chaosville_system }
+	}
+	
+	option = {
+		name = "harmony.2103.a"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			end_event_chain = "chaosville_chain"
+			hidden_effect = {
+				country_event = { id = harmony.2200 days = 3 }
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2104
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		FROM = {
+			OR = {
+				has_planet_flag = chaosville_0
+				has_planet_flag = chaosville_1
+				has_planet_flag = chaosville_2
+				has_planet_flag = chaosville_3
+				has_planet_flag = chaosville_4
+				has_planet_flag = chaosville_5
+			}
+		}
+	}
+
+	immediate = {
+		FROM = {
+			if = {
+				limit = {
+					NOR = {
+						has_modifier = chaos_planet
+						has_modifier = chaosville_planet_0
+						has_modifier = chaosville_planet_1
+					}
+				}
+				add_modifier = {
+					modifier = chaos_planet
+					days = -1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2200
+	title = "harmony.2200.title"
+	desc = "harmony.2200.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2200.a"
+		hidden_effect = {
+			country_event = { id = harmony.2210 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2210
+	title = "harmony.2000.name"
+	desc = "harmony.2210.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2210.a"
+		hidden_effect = {
+			country_event = { id = harmony.2220 }
+		}
+	}
+
+	option = {
+		name = "harmony.2210.e"
+		trigger = {
+			OR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+		hidden_effect = {
+			country_event = { id = harmony.2211 }
+		}
+	}
+
+	option = {
+		name = "harmony.2210.b"
+		response_text = "harmony.2210.b.response"
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = "harmony.2210.c"
+		response_text = "harmony.2210.c.response"
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = "harmony.2210.d"
+		response_text = "harmony.2210.d.response"
+		is_dialog_only = yes
+	}
+}
+
+country_event = {
+	id = harmony.2211
+	title = "harmony.2000.name"
+	desc = "harmony.2211.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2211.a"
+		add_modifier = {
+			modifier = power_of_harmony_3
+			days = -1
+		}
+		hidden_effect = {
+			country_event = { id = harmony.2400 days = 30 }
+			set_country_flag = discord_militarist_choise
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2220
+	title = "harmony.2000.name"
+	desc = "harmony.2220.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2220.a"
+		response_text = "harmony.2220.a.response"
+		custom_tooltip = "harmony.2220.a.tooltip"
+		hidden_effect = {
+			remove_modifier = magic
+			remove_modifier = laughter
+			remove_modifier = kindness
+			remove_modifier = loyalty
+			remove_modifier = honest
+			remove_modifier = generously
+			country_event = { id = harmony.2221 days = 5 }
+			country_event = { id = harmony.2300 days = 720 }	#not try to find any harmony in 2 years
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2221
+	title = "harmony.2221.title"
+	desc = "harmony.2221.desc"
+	picture = GFX_evt_find_harmony
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2221.a"
+		begin_event_chain = {
+			event_chain = disappear_chain
+			target = ROOT
+		}
+		hidden_effect = {
+			set_variable = {
+				which = num_harmony_clue
+				value = 0
+			}
+			while = {
+				count = 6
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = {
+								any_planet_within_border = {
+									OR = {
+										is_planet_class = pc_gas_giant
+										is_planet_class = pc_molten
+										is_planet_class = pc_barren
+										is_planet_class = pc_barren_cold
+										is_planet_class = pc_toxic
+										is_planet_class = pc_frozen
+									}
+									NOT = { has_planet_flag = disappear_chain_planet }
+								}
+							}
+						}
+						random_planet_within_border = {
+							limit = {
+								OR = {
+									is_planet_class = pc_gas_giant
+									is_planet_class = pc_molten
+									is_planet_class = pc_barren
+									is_planet_class = pc_barren_cold
+									is_planet_class = pc_toxic
+									is_planet_class = pc_frozen
+								}
+								NOT = { has_planet_flag = disappear_chain_planet }
+							}
+							enable_special_project = {
+								name = "DISAPPEAR_CHAIN_0"
+								location = THIS
+								owner = ROOT
+							}
+							set_planet_flag = disappear_chain_planet
+						}
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = {
+								any_planet_within_border = {
+									OR = {
+										is_planet_class = pc_desert
+										is_planet_class = pc_arid
+										is_planet_class = pc_savannah
+										is_planet_class = pc_tundra
+										is_planet_class = pc_arctic
+										is_planet_class = pc_alpine
+										is_planet_class = pc_tropical
+										is_planet_class = pc_continental
+										is_planet_class = pc_ocean
+									}
+									is_colony = no
+									NOT = { has_planet_flag = disappear_chain_planet }
+								}
+							}
+						}
+						random_planet_within_border = {
+							limit = {
+								OR = {
+									is_planet_class = pc_desert
+									is_planet_class = pc_arid
+									is_planet_class = pc_savannah
+									is_planet_class = pc_tundra
+									is_planet_class = pc_arctic
+									is_planet_class = pc_alpine
+									is_planet_class = pc_tropical
+									is_planet_class = pc_continental
+									is_planet_class = pc_ocean
+								}
+								is_colony = no
+								NOT = { has_planet_flag = disappear_chain_planet }
+							}
+							enable_special_project = {
+								name = "DISAPPEAR_CHAIN_0"
+								location = THIS
+								owner = ROOT
+							}
+							set_planet_flag = disappear_chain_planet
+						}
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							NOT = {
+								any_planet_within_border = {
+									is_colony = yes
+									owner = { is_primitive = no }
+									NOT = { has_planet_flag = disappear_chain_planet }
+								}
+							}
+						}
+						random_planet_within_border = {
+							limit = {
+								is_colony = yes
+								owner = { is_primitive = no }
+								NOT = { has_planet_flag = disappear_chain_planet }
+							}
+							enable_special_project = {
+								name = "DISAPPEAR_CHAIN_0"
+								location = THIS
+								owner = ROOT
+							}
+							set_planet_flag = disappear_chain_planet
+						}
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							any_planet_within_border = {
+								OR = {
+									is_planet_class = pc_gas_giant
+									is_planet_class = pc_molten
+									is_planet_class = pc_barren
+									is_planet_class = pc_barren_cold
+									is_planet_class = pc_toxic
+									is_planet_class = pc_frozen
+									is_planet_class = pc_desert
+									is_planet_class = pc_arid
+									is_planet_class = pc_savannah
+									is_planet_class = pc_tundra
+									is_planet_class = pc_arctic
+									is_planet_class = pc_alpine
+									is_planet_class = pc_tropical
+									is_planet_class = pc_continental
+									is_planet_class = pc_ocean
+									is_colony = yes
+								}
+								NOT = { owner = { is_primitive = yes } }
+								NOT = { has_planet_flag = disappear_chain_planet }
+							}
+						}
+						random_planet_within_border = {
+							limit = {
+								NOT = { owner = { is_primitive = yes } }
+								NOT = { has_planet_flag = disappear_chain_planet }
+							}
+							enable_special_project = {
+								name = "DISAPPEAR_CHAIN_0"
+								location = THIS
+								owner = ROOT
+							}
+							set_planet_flag = disappear_chain_planet
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2230
+	title = "harmony.2230.title"
+	desc = "harmony.2230.desc"
+	picture = GFX_evt_find_harmony
+	location = fromfrom
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2230.a"
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = finding_disappeared_harmony }
+					}
+					set_country_flag = finding_disappeared_harmony
+				}
+			}
+			if = {
+				limit = {
+					FROMFROM = {
+						is_colony = no
+						OR = {
+							is_planet_class = pc_gas_giant
+							is_planet_class = pc_molten
+							is_planet_class = pc_barren
+							is_planet_class = pc_barren_cold
+							is_planet_class = pc_toxic
+							is_planet_class = pc_frozen
+							is_planet_class = pc_desert
+							is_planet_class = pc_arid
+							is_planet_class = pc_savannah
+							is_planet_class = pc_tundra
+							is_planet_class = pc_arctic
+							is_planet_class = pc_alpine
+							is_planet_class = pc_tropical
+							is_planet_class = pc_continental
+							is_planet_class = pc_ocean
+						}
+					}
+				}
+				ship_event = { id = harmony.2231 }
+			}
+			else_if = {
+				limit = {
+					FROMFROM = {
+						is_colony = yes	
+					}
+				}
+				random_list = {
+					5 = { ship_event = { id = harmony.2232 } }
+					5 = { ship_event = { id = harmony.2233 } }
+					5 = { ship_event = { id = harmony.2234 } }
+					5 = { ship_event = { id = harmony.2235 } }
+				}
+			}
+			else = {
+				ship_event = { id = harmony.2236 }
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2231
+	title = "harmony.2231.title"
+	desc = "harmony.2231.desc"
+	picture = GFX_evt_shrouded_planet
+	show_sound = pc_shroud_eaten
+	location = fromfromfrom
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2231.a"
+		owner = {
+			add_event_chain_counter = {
+				event_chain = disappear_chain
+				counter = harmony_clue
+				amount = 1
+			}
+			hidden_effect = {
+				change_variable = {
+					which = num_harmony_clue
+					value = 1
+				}
+			}
+		}
+		custom_tooltip = "harmony.2231.a.tooltip"
+		hidden_effect = {
+			fromfromfrom = {
+				change_pc = pc_shrouded
+				clear_deposits = yes
+				random_list = {
+					5 = { add_deposit = d_physics_1 }
+					5 = { add_deposit = d_physics_2 }
+					5 = { add_deposit = d_physics_3 }
+					5 = { add_deposit = d_physics_4 }
+				}
+				add_modifier = {
+					modifier = chaos_planet
+					days = -1
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2232
+	title = "harmony.2232.title"
+	desc = "harmony.2232.desc"
+	picture = GFX_evt_chocolate_rain
+	location = fromfromfrom
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2232.a"
+		owner = {
+			add_event_chain_counter = {
+				event_chain = disappear_chain
+				counter = harmony_clue
+				amount = 1
+			}
+			hidden_effect = {
+				change_variable = {
+					which = num_harmony_clue
+					value = 1
+				}
+			}
+		}
+		fromfromfrom = {
+			add_modifier = {
+				modifier = "pm_chocolate_rain"
+				days = -1
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2233
+	title = "harmony.2233.title"
+	desc = "harmony.2233.desc"
+	picture = GFX_evt_changing_weather
+	location = fromfromfrom
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2233.a"
+		owner = {
+			add_event_chain_counter = {
+				event_chain = disappear_chain
+				counter = harmony_clue
+				amount = 1
+			}
+			hidden_effect = {
+				change_variable = {
+					which = num_harmony_clue
+					value = 1
+				}
+			}
+		}
+		fromfromfrom = {
+			add_modifier = {
+				modifier = "pm_changing_weather"
+				days = -1
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2234
+	title = "harmony.2234.title"
+	desc = "harmony.2234.desc"
+	picture = GFX_evt_gravity
+	location = fromfromfrom
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2234.a"
+		owner = {
+			add_event_chain_counter = {
+				event_chain = disappear_chain
+				counter = harmony_clue
+				amount = 1
+			}
+			hidden_effect = {
+				change_variable = {
+					which = num_harmony_clue
+					value = 1
+				}
+			}
+		}
+		fromfromfrom = {
+			add_modifier = {
+				modifier = "pm_gravity"
+				days = -1
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2235
+	title = "harmony.2235.title"
+	desc = "harmony.2235.desc"
+	picture = GFX_evt_burning_settlement
+	location = fromfromfrom
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2235.a"
+		owner = {
+			add_event_chain_counter = {
+				event_chain = disappear_chain
+				counter = harmony_clue
+				amount = 1
+			}
+			hidden_effect = {
+				change_variable = {
+					which = num_harmony_clue
+					value = 1
+				}
+			}
+		}
+		fromfromfrom = {
+			add_modifier = {
+				modifier = "pm_abnormality"
+				days = -1
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2236
+	title = "harmony.2236.title"
+	desc = "harmony.2236.desc"
+	picture = GFX_evt_atmospheric_entry
+	location = fromfromfrom
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2236.a"
+		owner = {
+			add_event_chain_counter = {
+				event_chain = disappear_chain
+				counter = harmony_clue
+				amount = 1
+			}
+			hidden_effect = {
+				change_variable = {
+					which = num_harmony_clue
+					value = 1
+				}
+			}
+		}
+		fromfromfrom = {
+			add_deposit = d_physics_1
+			add_modifier = {
+				modifier = chaos_planet
+				days = -1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2240
+	title = "harmony.2000.name"
+	desc = "harmony.2240.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	trigger = {
+		check_variable = {
+			which = num_harmony_clue
+			value >= 6
+		}
+		NOT = { has_country_flag = found_nothing_6 }
+	}
+
+	immediate = {
+		set_country_flag = found_nothing_6
+	}
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2240.a"
+		end_event_chain = "disappear_chain"
+		hidden_effect = {
+			country_event = { id = harmony.2241 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2241
+	title = "harmony.2000.name"
+	desc = "harmony.2241.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2241.a"
+		response_text = "harmony.2241.a.response"
+		hidden_effect = {
+			country_event = { id = harmony.2400 days = 30 }
+		}				#fight choise(not has harmony)
+	}
+
+	option = {
+		name = "harmony.2241.b"
+		hidden_effect = {
+			country_event = { id = harmony.2250 }
+		}				#compromise choise
+	}
+}
+
+country_event = {
+	id = harmony.2250
+	title = "harmony.2000.name"
+	desc = "harmony.2250.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2250.a"
+		hidden_effect = {
+			country_event = { id = harmony.2400 days = 30 } #fight
+		}
+	}
+
+	option = {
+		name = "harmony.2250.b"
+		hidden_effect = {
+			country_event = { id = harmony.2251 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2251
+	title = "harmony.2000.name"
+	desc = "harmony.2251.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2250.a"
+		trigger = {
+			NOT = { has_country_flag = discord_compromise }
+		}
+		hidden_effect = {
+			country_event = { id = harmony.2400 days = 30 } #fight
+			remove_country_flag = discord_compromise
+		}
+	}
+
+	option = {
+		name = "harmony.2251.a"
+		hidden_effect = {
+			country_event = { id = harmony.2252 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2252
+	title = "harmony.2000.name"
+	desc = "harmony.2252.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2252.a"
+		hidden_effect = {
+			country_event = { id = harmony.2253 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2253
+	title = "harmony.2000.name"
+	desc = "harmony.2253.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	immediate = {
+		country_event = { id = harmony.2500 days = 5 }	#compromise choise
+	}
+
+	option = {
+		name = "harmony.2253.a"
+		if = {
+			limit = {
+				NOT = { has_country_flag = return_harmony }
+			}
+			custom_tooltip = "harmony.2253.a.tooltip"
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_modifier = magic }
+					}
+					add_modifier = {
+						modifier = magic
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = laughter }
+					}
+					add_modifier = {
+						modifier = laughter
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = kindness }
+					}
+					add_modifier = {
+						modifier = kindness
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = loyalty }
+					}
+					add_modifier = {
+						modifier = loyalty
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = honest }
+					}
+					add_modifier = {
+						modifier = honest
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = generously }
+					}
+					add_modifier = {
+						modifier = generously
+						days = -1
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = return_harmony
+			}
+			remove_country_flag = return_harmony
+		}
+	}
+}
+
+country_event = {						#not try to find harmony in 2 years
+	id = harmony.2300
+	title = "harmony.2000.name"
+	desc = "harmony.2300.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	trigger = {
+		NOT = { has_country_flag = finding_disappeared_harmony }
+	}
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2300.a"
+		response_text = "harmony.2241.a.response"
+		end_event_chain = "disappear_chain"
+		custom_tooltip = "harmony.2253.a.tooltip"
+		add_modifier = {
+			modifier = power_of_harmony_3
+			days = -1
+		}
+		hidden_effect = {
+			set_country_flag = return_harmony
+			if = {
+				limit = {
+					NOT = { has_modifier = magic }
+				}
+				add_modifier = {
+					modifier = magic
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = laughter }
+				}
+				add_modifier = {
+					modifier = laughter
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = kindness }
+				}
+				add_modifier = {
+					modifier = kindness
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = loyalty }
+				}
+				add_modifier = {
+					modifier = loyalty
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = honest }
+				}
+				add_modifier = {
+					modifier = honest
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = generously }
+				}
+				add_modifier = {
+					modifier = generously
+					days = -1
+				}
+			}
+			country_event = { id = harmony.2400 days = 30 }
+		}			#fight choise (has harmony)
+	}
+
+	option = {
+		name = "harmony.2300.b"
+		end_event_chain = "disappear_chain"
+		custom_tooltip = "harmony.2253.a.tooltip"
+		hidden_effect = {
+			set_country_flag = return_harmony
+			if = {
+				limit = {
+					NOT = { has_modifier = magic }
+				}
+				add_modifier = {
+					modifier = magic
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = laughter }
+				}
+				add_modifier = {
+					modifier = laughter
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = kindness }
+				}
+				add_modifier = {
+					modifier = kindness
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = loyalty }
+				}
+				add_modifier = {
+					modifier = loyalty
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = honest }
+				}
+				add_modifier = {
+					modifier = honest
+					days = -1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_modifier = generously }
+				}
+				add_modifier = {
+					modifier = generously
+					days = -1
+				}
+			}
+			country_event = { id = harmony.2301 }
+		}				#compromise choise
+	}
+}
+
+country_event = {
+	id = harmony.2301
+	title = "harmony.2000.name"
+	desc = "harmony.2301.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	immediate = {
+		set_country_flag = discord_compromise
+	}
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	option = {
+		name = "harmony.2301.a"
+		hidden_effect = {
+			country_event = { id = harmony.2251 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2400
+	title = "harmony.2400.title"
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = discord_militarist_choise }
+		}
+		text = "harmony.2400.desc.1"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = discord_militarist_choise
+		}
+		text = "harmony.2400.desc.2"
+	}
+	picture = GFX_evt_dimensional_horror
+	show_sound = event_red_alert
+	location = event_target:discord_fleet
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = fight_discord_country
+		random_system = {
+			limit = {
+				has_star_flag = chaosville_system
+				#distance = {
+				#	source = event_target:enter_chaosville
+				#	max_jumps = 1
+				#}
+				#distance_to_empire = {
+				#	who = ROOT
+				#	distance <= 15
+				#}
+			}
+			random_system_planet = {
+				limit = { is_planet_class = pc_black_hole }
+				create_country = {
+					name = "NAME_Discord"
+					type = discord
+					flag = {
+						icon = {
+							category = "zoological"
+							file = "flag_zoological_3.dds"
+						}
+						background = {
+							category = "backgrounds"
+							file = "triangle_split.dds"
+						}
+						colors = {
+							"dark_grey"
+							"brown"
+							"null"
+							"null"
+						}
+					}
+					effect = {
+						set_faction_hostility = {
+							target = root.owner
+							set_hostile = yes
+							set_neutral = no
+							set_friendly = no
+						}
+						save_global_event_target_as = discord_country
+						set_country_flag = discord_country
+					}
+				}
+				create_fleet = {
+					name = "NAME_Discord"
+					settings = {
+						spawn_debris = no
+						is_boss = yes
+					}
+					effect = {
+						set_owner = event_target:discord_country
+						create_ship = {
+							name = "NAME_Discord"
+							design = "NAME_Discord"
+						}
+						set_location = {
+							target = PREV
+							distance = 100
+							angle = random
+						}
+						set_fleet_flag = discord_fleet
+						save_event_target_as = discord_fleet
+					}
+				}
+				last_created_fleet = {
+					create_ambient_object = {
+						type = "horror_spawn_object"
+						location = THIS
+						use_3d_location = yes
+						duration = 50
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "harmony.2400.a"
+	}
+}
+
+country_event = {
+	id = harmony.2401
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = fight_discord_country
+		NOT = { has_country_flag = beat_discord }
+		NOT = { has_country_flag = discord_militarist_choise }
+	}
+
+	immediate = {
+		random_list = {
+			20 = { }		# >= 70 year 1/3
+			10 = {
+				modifier = {
+					factor = 0
+					years_passed > 50
+				}
+			}		# 40-50 year 1/6
+			10 = {
+				modifier = {
+					factor = 0
+					years_passed > 60
+				}
+			}		# 50-60 year 1/5
+			10 = {
+				modifier = {
+					factor = 0
+					years_passed > 70
+				}
+			}		# 60-70 year 1/4
+			10 = {
+				country_event = { id = harmony.2402 days = 3 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2402
+	title = "harmony.2402.title"
+	desc = "harmony.2402.desc"
+	picture = GFX_evt_shrouded_planet
+	show_sound = event_red_alert
+	location = event_target:discord_vision_location
+	is_triggered_only = yes
+
+	immediate = {
+		random_planet_within_border = {
+			save_event_target_as = discord_vision_location
+			create_fleet = {
+				name = "NAME_Discord_Vision"
+				settings = {
+					spawn_debris = no
+					#is_boss = yes
+				}
+				effect = {
+					set_owner = event_target:discord_country
+					create_ship = {
+						name = "NAME_Discord_Vision"
+						design = "NAME_Discord_Vision"
+						graphical_culture = "extra_dimensional_01"
+					}
+					set_location = {
+						target = PREV
+						distance = 10
+						angle = 90
+						direction = in_system
+					}
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 350
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "harmony.2402.a"
+	}
+}
+
+country_event = {
+	id = harmony.2405
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			has_country_flag = discord_country
+		}
+		fromfromfrom = {
+			has_fleet_flag = discord_fleet
+		}
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				has_country_flag = fight_discord_country
+			}
+			country_event = { id = harmony.2410 }
+			country_event = { id = harmony.2610 days = 360 }
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2410
+	title = "harmony.2000.name"
+	desc = "harmony.2410.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	trigger = {
+		has_country_flag = fight_discord_country
+	}
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	immediate = {
+		set_country_flag = beat_discord
+		remove_country_flag = fight_discord_country
+		random_system = {
+			limit = {
+				has_star_flag = chaosville_system
+				#distance = {
+				#	source = event_target:enter_chaosville
+				#	max_jumps = 1
+				#}
+				#distance_to_empire = {
+				#	who = ROOT
+				#	distance <= 15
+				#}
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_0
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				random_list = {
+					10 = { add_deposit = d_physics_4 }
+					20 = { add_deposit = d_physics_5 }
+					20 = { add_deposit = d_physics_6 }
+					5 = { add_deposit = d_physics_10 }
+				}
+				random_list = {
+					20 = { add_deposit = d_dark_matter_deposit_1 }
+					10 = { add_deposit = d_dark_matter_deposit_2 }
+				}
+				set_planet_flag = changed_chaosville
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_1
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_1 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_2
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_1 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_3
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_1 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_4
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_1 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_5
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_1 = yes
+			}
+		}
+	}
+
+	option = {
+		name = "harmony.2410.a"
+		custom_tooltip = "harmony.2410.tooltip"
+		if = {
+			limit = {
+				has_modifier = power_of_harmony_3
+			}
+			remove_modifier = power_of_harmony_3
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_country_flag = return_harmony
+					has_country_flag = discord_militarist_choise
+				}
+			}
+			custom_tooltip = "harmony.2253.a.tooltip"
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_modifier = magic }
+					}
+					add_modifier = {
+						modifier = magic
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = laughter }
+					}
+					add_modifier = {
+						modifier = laughter
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = kindness }
+					}
+					add_modifier = {
+						modifier = kindness
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = loyalty }
+					}
+					add_modifier = {
+						modifier = loyalty
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = honest }
+					}
+					add_modifier = {
+						modifier = honest
+						days = -1
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_modifier = generously }
+					}
+					add_modifier = {
+						modifier = generously
+						days = -1
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = return_harmony
+			}
+			remove_country_flag = return_harmony
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = discord_militarist_choise
+				}
+				country_event = { id = harmony.2411 days = 1 random = 30 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2411
+	title = "harmony.2411.title"
+	desc = "harmony.2411.desc"
+	picture = GFX_evt_shrouded_planet
+	show_sound = pc_shroud_eaten
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = fight_with_discord
+		set_country_flag = finished_discord_event
+		set_variable = {
+			which = discord_chosen_planet
+			value = 0
+		}
+		while = {
+			count = 6
+			random_list = {
+				5 = {
+					modifier = {
+						factor = 0
+						NOT = {
+							any_planet_within_border = {
+								OR = {
+									is_planet_class = pc_gas_giant
+									is_planet_class = pc_molten
+									is_planet_class = pc_barren
+									is_planet_class = pc_barren_cold
+									is_planet_class = pc_toxic
+									is_planet_class = pc_frozen
+									is_planet_class = pc_desert
+									is_planet_class = pc_arid
+									is_planet_class = pc_savannah
+									is_planet_class = pc_tundra
+									is_planet_class = pc_arctic
+									is_planet_class = pc_alpine
+									is_planet_class = pc_tropical
+									is_planet_class = pc_continental
+									is_planet_class = pc_ocean
+								}
+								is_colony = no
+								NOT = { has_planet_flag = discord_chosen_planet }
+								NOT = { has_planet_flag = changed_chaosville }
+							}
+						}	
+					}
+					change_variable = {
+						which = discord_chosen_planet
+						value = 1
+					}
+					random_planet_within_border = {
+						limit = {
+							OR = {
+								is_planet_class = pc_gas_giant
+								is_planet_class = pc_molten
+								is_planet_class = pc_barren
+								is_planet_class = pc_barren_cold
+								is_planet_class = pc_toxic
+								is_planet_class = pc_frozen
+								is_planet_class = pc_desert
+								is_planet_class = pc_arid
+								is_planet_class = pc_savannah
+								is_planet_class = pc_tundra
+								is_planet_class = pc_arctic
+								is_planet_class = pc_alpine
+								is_planet_class = pc_tropical
+								is_planet_class = pc_continental
+								is_planet_class = pc_ocean
+							}
+							is_colony = no
+							NOT = { has_planet_flag = discord_chosen_planet }
+							NOT = { has_planet_flag = changed_chaosville }
+						}
+						set_planet_flag = discord_chosen_planet
+						change_pc = pc_shrouded
+						clear_deposits = yes
+						random_list = {
+							5 = { add_deposit = d_physics_1 }
+							5 = { add_deposit = d_physics_2 }
+						}
+						add_modifier = {
+							modifier = chaos_planet
+							days = -1
+						}
+						discord_militarist_chosen_planet_target = yes
+					}
+				}
+				5 = {
+					modifier = {
+						factor = 0
+						NOT = {
+							any_planet_within_border = {
+								is_colony = yes
+								NOT = { has_planet_flag = discord_chosen_planet }
+								NOT = { has_planet_flag = changed_chaosville }
+								owner = { is_primitive = no }
+							}
+						}
+					}
+					change_variable = {
+						which = discord_chosen_planet
+						value = 1
+					}
+					random_planet_within_border = {
+						limit = {
+							is_colony = yes
+							NOT = { has_planet_flag = discord_chosen_planet }
+							NOT = { has_planet_flag = changed_chaosville }
+							owner = { is_primitive = no }
+						}
+						set_planet_flag = discord_chosen_planet
+						discord_militarist_chosen_planet_target = yes
+						random_list = {
+							5 = {
+								add_modifier = {
+									modifier = "pm_chocolate_rain"
+									days = -1
+								}
+							}
+							5 = {
+								add_modifier = {
+									modifier = "pm_changing_weather"
+									days = -1
+								}
+							}
+							5 = {
+								add_modifier = {
+									modifier = "pm_gravity"
+									days = -1
+								}
+							}
+							5 = {
+								add_modifier = {
+									modifier = "pm_abnormality"
+									days = -1
+								}
+							}
+						}
+					}
+				}
+				5 = {
+					modifier = {
+						factor = 0
+						any_planet_within_border = {
+							OR = {
+								is_planet_class = pc_gas_giant
+								is_planet_class = pc_molten
+								is_planet_class = pc_barren
+								is_planet_class = pc_barren_cold
+								is_planet_class = pc_toxic
+								is_planet_class = pc_frozen
+								is_planet_class = pc_desert
+								is_planet_class = pc_arid
+								is_planet_class = pc_savannah
+								is_planet_class = pc_tundra
+								is_planet_class = pc_arctic
+								is_planet_class = pc_alpine
+								is_planet_class = pc_tropical
+								is_planet_class = pc_continental
+								is_planet_class = pc_ocean
+								is_colony = yes
+							}
+							NOT = { has_planet_flag = discord_chosen_planet }
+							NOT = { has_planet_flag = changed_chaosville }
+							NOT = { owner = { is_primitive = yes } }
+						}
+					}
+					change_variable = {
+						which = discord_chosen_planet
+						value = 1
+					}
+					random_planet_within_border = {
+						limit = {
+							NOT = { has_planet_flag = discord_chosen_planet }
+							NOT = { has_planet_flag = changed_chaosville }
+							NOT = { owner = { is_primitive = yes } }
+						}
+						add_deposit = d_physics_1
+						add_modifier = {
+							modifier = chaos_planet
+							days = -1
+						}
+						set_planet_flag = discord_chosen_planet
+						discord_militarist_chosen_planet_target = yes
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "harmony.2411.a"
+		custom_tooltip = "harmony.2411.tooltip"
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = discord_militarist_choise
+				}
+				remove_country_flag = discord_militarist_choise
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2500
+	title = "harmony.2500.title"
+	desc = "harmony.2500.desc"
+	picture = GFX_evt_binary_stars
+	show_sound = pc_shroud_eaten
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = compromise_with_discord
+		set_country_flag = finished_discord_event
+		remove_chaos_planet_modifier = yes
+		random_system = {
+			limit = {
+				has_star_flag = chaosville_system
+				#distance = {
+				#	source = event_target:enter_chaosville
+				#	max_jumps = 1
+				#}
+				#distance_to_empire = {
+				#	who = ROOT
+				#	distance <= 15
+				#}
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_0
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_0 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_1
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_1 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_2
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_2 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_3
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_3 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_4
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_1 = yes
+			}
+			random_system_planet = {
+				limit = {
+					has_planet_flag = chaosville_5
+					NOT = { has_planet_flag = changed_chaosville }
+				}
+				change_chaosville_planet_1 = yes
+			}
+		}
+	}
+
+	option = {
+		name = "harmony.2500.a"
+		if = {
+			limit = {
+				has_country_flag = finding_disappeared_harmony
+			}
+			custom_tooltip = "harmony.2500.a.tooltip"
+		}
+	}
+}
+
+### Subsequent events of Discord events
+#on_action on_five_year_pulse
+country_event = {
+	id = harmony.2600
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {		# DON'T FORGET TRIGGER!!!
+		random_list = {
+			10 = { }
+			10 = {
+				#compormise
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = harmony_2630_flag
+						}
+						modifier = {
+							factor = 10
+							has_technology = tech_titans
+						}
+						country_event = { id = harmony.2630 }
+					}
+				}
+
+				#fight
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = harmony_2620_flag
+						}
+						country_event = { id = harmony.2620 }
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = { has_technology = tech_titans }
+								NOT = {	has_country_flag = harmony_2620_flag }
+								has_country_flag = harmony_2635_flag
+							}
+						}
+						country_event = { id = harmony.2635 }
+					}
+				}
+			}
+		}
+	}
+}
+
+#Give IMP tech
+country_event = {
+	id = harmony.2610
+	title = "harmony.2610.title"
+	desc = "harmony.2610.desc"
+	picture = GFX_evt_asteroid_field
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2610.a"
+		random_system = {
+			limit = {
+				has_star_flag = chaosville_system
+				#distance = {
+				#	source = event_target:enter_chaosville
+				#	max_jumps = 1
+				#}
+				#distance_to_empire = {
+				#	who = ROOT
+				#	distance <= 15
+				#}
+			}
+			random_system_planet = {
+				limit = { is_planet_class = pc_black_hole }
+				enable_special_project = {
+					name = "DEBRIS_OF_DISCORD"
+					location = THIS
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2611
+	title = "harmony.2610.title"
+	desc = "harmony.2611.desc"
+	picture = GFX_evt_genetic_modification
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "harmony.2611.a"
+		owner = {
+			if = {
+				limit = {
+					owner = {
+						is_organic_species = yes
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_technology = tech_genome_mapping }
+					}
+					add_research_option = tech_genome_mapping
+					add_tech_progress = {
+						tech = tech_genome_mapping
+						progress = 0.9
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_technology = tech_gene_tailoring }
+					}
+					add_research_option = tech_gene_tailoring
+					add_tech_progress = {
+						tech = tech_gene_tailoring
+						progress = 0.6
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_technology = tech_glandular_acclimation }
+					}
+					add_research_option = tech_glandular_acclimation
+					add_tech_progress = {
+						tech = tech_glandular_acclimation
+						progress = 0.3
+					}
+				}
+				else = {
+					add_monthly_resource_mult = {
+						resource = society_research
+						value = @tier3researchreward
+						min = @tier3researchmin
+						max = @tier3researchmax
+					}
+				}
+			}
+			else = {
+				add_monthly_resource_mult = {
+					resource = society_research
+					value = 120
+					min = 8000
+					max = 16000
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "harmony.2611.b"
+		trigger = {
+			owner = {
+				is_organic_species = yes
+			}
+		}
+		owner = {
+			add_research_option = tech_IMP_application
+		}
+	}
+}
+
+#Give gaia(defeat Discord choise)
+country_event = {
+	id = harmony.2620
+	title = "harmony.2620.title"
+	desc = "harmony.2620.desc"
+	picture = GFX_evt_shrouded_planet
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	trigger = {
+		any_system_within_border = {
+			has_star_flag = chaosville_system
+		}
+		has_country_flag = finished_discord_event
+		has_country_flag = fight_with_discord
+	}
+
+	immediate = {
+		set_country_flag = harmony_2620_flag
+	}
+
+	option = {
+		name = "harmony.2620.a"
+		random_system = {
+			limit = {
+				has_star_flag = chaosville_system
+				#distance = {
+				#	source = event_target:enter_chaosville
+				#	max_jumps = 1
+				#}
+				#distance_to_empire = {
+				#	who = ROOT
+				#	distance <= 15
+				#}
+			}
+			random_system_planet = {
+				limit = { has_planet_flag = chaosville_2 }
+				enable_special_project = {
+					name = "STABILIZE_REALITY"
+					location = THIS
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2621
+	title = "harmony.2620.title"
+	desc = "harmony.2621.desc"
+	picture = GFX_evt_gaia
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+	location = FROMFROM
+
+	immediate = {
+		FROMFROM = {
+			if = {
+				limit = { has_modifier = chaosville_planet_0 }
+				remove_modifier = chaosville_planet_0
+			}
+			if = {
+				limit = { has_research_station = yes }
+				research_station = { dismantle = yes }
+			}
+			if = {
+				limit = { has_deposit = d_physics_1 }
+				remove_deposit = d_physics_1
+			}
+			if = {
+				limit = { has_deposit = d_physics_2 }
+				remove_deposit = d_physics_2
+			}
+			if = {
+				limit = { has_deposit = d_physics_3 }
+				remove_deposit = d_physics_3
+			}
+			if = {
+				limit = { has_deposit = d_physics_4 }
+				remove_deposit = d_physics_4
+			}
+			change_chaosville_planet_2 = yes
+		}
+	}
+
+	option = {
+		name = "harmony.2621.a"
+		custom_tooltip = "harmony.2621.tooltip"
+	}
+}
+
+#Give Chaos Beam
+#compormise
+country_event = {
+	id = harmony.2630
+	title = "harmony.2000.name"
+	desc = "harmony.2630.desc"
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = no_video_feed_room
+	}
+
+	trigger = {
+		has_country_flag = finished_discord_event
+		has_country_flag = compromise_with_discord
+	}
+
+	immediate = {
+		set_country_flag = harmony_2630_flag
+	}
+
+	option = {
+		name = "harmony.2630.a"
+		response_text = "harmony.2630.a.response"
+		is_dialog_only = yes
+	}
+
+	option = {
+		name = "harmony.2630.b"
+		if = {
+			limit = { host_has_dlc = "Apocalypse" }
+			if = {
+				limit = { has_technology = tech_titans }
+				add_research_option = tech_chaos_magic
+				add_tech_progress = {
+					tech = tech_chaos_magic
+					progress = 0.5
+				}
+			}
+			else = {
+				add_research_option = tech_chaos_magic
+			}
+		}
+		else_if = {
+			limit = {
+				NAND = {
+					host_has_dlc = "Apocalypse"
+					has_technology = tech_bypass_spell
+				}
+			}
+			add_research_option = tech_bypass_spell
+			add_tech_progress = {
+				tech = tech_bypass_spell
+				progress = 0.5
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { host_has_dlc = "Apocalypse" }
+				has_technology = tech_bypass_spell
+			}
+			add_resource = {
+				physics_research = 10000
+				society_research = 10000
+				engineering_research = 10000
+			}
+		}
+	}
+}
+
+#fight
+country_event = {
+	id = harmony.2635
+	title = "harmony.2635.title"
+	desc = "harmony.2635.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_scanner
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_flag = finished_discord_event
+		has_country_flag = fight_with_discord
+	}
+
+	immediate = {
+		set_country_flag = harmony_2635_flag
+	}
+
+	option = {
+		name = "harmony.2635.a"
+		random_system_within_border = {
+			limit = {
+				has_star_flag = chaosville_system
+				#distance = {
+				#	source = event_target:enter_chaosville
+				#	max_jumps = 1
+				#}
+				#distance_to_empire = {
+				#	who = ROOT
+				#	distance <= 15
+				#}
+			}
+			random_system_planet = {
+				limit = { is_planet_class = pc_black_hole }
+				enable_special_project = {
+					name = "INVESTIGATE_MAGIC_DISTURBANCE"
+					location = THIS
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+ship_event = {
+	id = harmony.2636
+	title = "harmony.2635.title"
+	desc = "harmony.2636.desc"
+	picture = GFX_evt_glitchy_matrix
+	show_sound = event_scanner
+	is_triggered_only = yes
+	location = FROMFROM
+
+	option = {
+		name = "harmony.2636.a"
+		hidden_effect = {
+			owner = {
+				country_event = { id = harmony.2637 days = 180 random = 60 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = harmony.2637
+	title = "harmony.2635.title"
+	desc = "harmony.2637.desc"
+	picture = GFX_evt_decryption
+	show_sound = event_ship_bridge
+	is_triggered_only = yes
+
+	option = {
+		name = "harmony.2637.a"
+		add_research_option = tech_chaos_magic
+		add_tech_progress = {
+			tech = tech_chaos_magic
+			progress = 0.05
+		}
+	}
+}
+
+######

@@ -1,0 +1,3745 @@
+namespace = changelingcountry
+
+
+
+
+### Tech Events ###
+
+### Starbase
+# when researched tech
+country_event = {
+	id = changelingcountry.1
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_chrysalis_stone
+	}
+
+	immediate = {
+		every_owned_starbase = {
+			limit = { is_orbital_ring = no }
+			fleet = {
+				every_controlled_ship = {
+					limit = {
+						is_ship_class = shipclass_starbase
+					}
+					if = {
+						limit = { NOT = { has_component = STARBASE_CHRYSALIS_STONE } }
+						starbase = {
+							add_starbase_component = {
+								component = STARBASE_CHRYSALIS_STONE
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# when build new starbase
+ship_event = {
+	id = changelingcountry.2
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			pmt_changeling_species_trigger = yes
+			has_technology = tech_chrysalis_stone
+		}
+	}
+
+	immediate = {
+		owner = {
+			country_event = { id = changelingcountry.3 days = 1 }
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.3
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_owned_starbase = {
+			limit = { is_orbital_ring = no }
+			fleet = {
+				every_controlled_ship = {
+					limit = {
+						is_ship_class = shipclass_starbase
+					}
+					if = {
+						limit = { NOT = { has_component = STARBASE_CHRYSALIS_STONE } }
+						starbase = {
+							add_starbase_component = {
+								component = STARBASE_CHRYSALIS_STONE
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# when starbase changes owner
+ship_event = {
+	id = changelingcountry.4
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		exists = starbase
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				owner = {
+					NOT = { has_technology = tech_chrysalis_stone }
+				}
+				has_component = STARBASE_CHRYSALIS_STONE
+			}
+			starbase = {
+				remove_starbase_component = {
+					component = STARBASE_CHRYSALIS_STONE
+				}
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_technology = tech_chrysalis_stone
+				}
+				NOT = { has_component = STARBASE_CHRYSALIS_STONE }
+			}
+			starbase = {
+				add_starbase_component = {
+					component = STARBASE_CHRYSALIS_STONE
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				owner = {
+					NOT = { pmt_changeling_species_trigger = yes }
+				}
+				starbase = {
+					has_starbase_building = the_queens_will
+				}
+			}
+			starbase = {
+				remove_starbase_building = {
+					building = the_queens_will
+				}
+			}
+		}
+	}
+}
+
+
+
+### Operations ###
+
+### Infiltration of public opinion
+
+# 1st evt
+espionage_operation_event = {
+	id = changelingcountry.101
+	title = "changelingcountry.101.title"
+	desc = "changelingcountry.101.desc"
+	espionage_operation = yes
+	picture = GFX_evt_intelligence_report
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = { name = ACKNOWLEDGED }
+}
+
+# 2nd evt
+espionage_operation_event = {
+	id = changelingcountry.102
+	title = "changelingcountry.102.title"
+	desc = "changelingcountry.102.desc"
+	espionage_operation = yes
+	picture = GFX_evt_acquire_asset
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = { name = GOOD }
+}
+
+# 3rd evt
+espionage_operation_event = {
+	id = changelingcountry.103
+	title = "changelingcountry.103.title"
+	desc = "changelingcountry.103.desc"
+	espionage_operation = yes
+	picture = GFX_evt_decryption
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+	}
+
+	option = {
+		name = GOOD
+		hidden_effect = {
+			if = {
+				limit = {
+					target = {
+						opinion_level = {
+							who = root.owner
+							level >= good
+						}
+					}
+				}
+				target = {
+					country_event = { id = changelingcountry.111 days = 15 }
+				}
+			}
+			else_if = {
+				limit = {
+					target = {
+						opinion_level = {
+							who = root.owner
+							level < good
+						}
+						opinion_level = {
+							who = root.owner
+							level > poor
+						}
+					}
+				}
+				if = {
+					limit = {
+						root.owner = {
+							relative_encryption_decryption = { target = root.target value >= 1.0 }
+						}
+					}
+					target = {
+						country_event = { id = changelingcountry.111 days = 15 }
+					}
+				}
+				else = {
+					target = {
+						country_event = { id = changelingcountry.112 days = 15 }
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					target = {
+						opinion_level = {
+							who = root.owner
+							level <= poor
+						}
+					}
+				}
+				if = {
+					limit = {
+						root.owner = {
+							relative_encryption_decryption = { target = root.target value >= 1.2 }
+						}
+					}
+					target = {
+						country_event = { id = changelingcountry.111 days = 15 }
+					}
+				}
+				else = {
+					target = {
+						country_event = { id = changelingcountry.112 days = 15 }
+					}
+				}
+			}
+		}
+	}
+
+	after = {
+		set_espionage_operation_progress_locked = no
+	}
+}
+
+# Events
+country_event = {
+	id = changelingcountry.111
+	title = "changelingcountry.111.title"
+	desc = {
+		trigger = {
+			from.target = {
+				opinion_level = {
+					who = from.owner	#from = operation
+					level >= good
+				}
+			}
+		}
+		text = "changelingcountry.111.desc.a"
+	}
+	desc = {
+		trigger = {
+			from.target = {
+				opinion_level = {
+					who = from.owner
+					level < good
+				}
+				opinion_level = {
+					who = from.owner
+					level > poor
+				}
+			}
+		}
+		text = "changelingcountry.111.desc.b"
+	}
+	desc = {
+		trigger = {
+			from.target = {
+				opinion_level = {
+					who = from.owner
+					level <= poor
+				}
+			}
+		}
+		text = "changelingcountry.111.desc.c"
+	}
+	picture = GFX_evt_news_room
+	show_sound = event_factions
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.111.a"
+		trigger = {
+			from.target = {
+				opinion_level = {
+					who = from.owner
+					level >= good
+				}
+			}
+		}
+		tooltip = {
+			add_opinion_modifier = {
+				who = from.owner
+				modifier = opinion_infiltration_of_public_opinion_1
+			}
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = from.owner }
+				}
+				federation = { add_cohesion = 20 }
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.111.b"
+		trigger = {
+			from.target = {
+				opinion_level = {
+					who = from.owner
+					level < good
+				}
+				opinion_level = {
+					who = from.owner
+					level > poor
+				}
+			}
+		}
+		tooltip = {
+			add_opinion_modifier = {
+				who = from.owner
+				modifier = opinion_infiltration_of_public_opinion_1
+			}
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = from.owner }
+				}
+				federation = { add_cohesion = 20 }
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.111.c"
+		trigger = {
+			from.target = {
+				opinion_level = {
+					who = from.owner
+					level <= poor
+				}
+			}
+		}
+		tooltip = {
+			add_opinion_modifier = {
+				who = from.owner
+				modifier = opinion_infiltration_of_public_opinion_1
+			}
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = from.owner }
+				}
+				federation = { add_cohesion = 20 }
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			from.owner = {
+				country_event = { id = changelingcountry.121 days = 15 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.112
+	title = "changelingcountry.112.title"
+	desc = "changelingcountry.112.desc"
+	picture = GFX_evt_news_room
+	show_sound = event_factions
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.112.a"
+		tooltip = {
+			add_opinion_modifier = {
+				who = from.owner
+				modifier = opinion_infiltration_of_public_opinion_1
+			}
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = from.owner }
+				}
+				federation = { add_cohesion = 20 }
+			}
+		}
+		hidden_effect = {
+			from.owner = {
+				country_event = { id = changelingcountry.121 days = 15 }
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+
+	option = {
+		name = "changelingcountry.112.b"
+		tooltip = {
+			add_opinion_modifier = {
+				who = from.owner
+				modifier = opinion_infiltration_of_public_opinion_2
+			}
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = from.owner }
+				}
+				federation = { add_cohesion = -20 }
+			}
+		}
+		hidden_effect = {
+			from.owner = {
+				country_event = { id = changelingcountry.122 days = 15 }
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 30
+				from.target = {
+					opinion_level = {
+						who = from.owner
+						level <= poor
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.121
+	title = "changelingcountry.121.title"
+	desc = "changelingcountry.121.desc"
+	picture = GFX_evt_news_room
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.121.a"
+		from = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_infiltration_of_public_opinion_1
+			}
+		}
+		if = {
+			limit = {
+				has_federation = yes
+				federation = { is_same_value = from }	#from = target (country)
+			}
+			federation = { add_cohesion = 20 }
+		}
+		if = {
+			limit = {
+				from = {
+					opinion_level = {
+						who = root
+						level >= good
+					}
+				}
+			}
+			add_resource = {
+				influence = 10
+			}
+		}
+		if = {
+			limit = {
+				from = {
+					opinion_level = {
+						who = root
+						level >= good
+					}
+				}
+			}
+			locked_random_list = {
+				25 = {
+					add_favors = {
+						target = from
+						value = 1
+					}
+				}
+				60 = {
+					add_favors = {
+						target = from
+						value = 5
+					}
+				}
+				15 = {
+					add_favors = {
+						target = from
+						value = 10
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				from = {
+					opinion_level = {
+						who = from.owner
+						level < good
+					}
+					opinion_level = {
+						who = from.owner
+						level > poor
+					}
+				}
+			}
+			locked_random_list = {
+				10 = { }
+				10 = {
+					locked_random_list = {
+						60 = {
+							add_favors = {
+								target = from
+								value = 1
+							}
+						}
+						30 = {
+							add_favors = {
+								target = from
+								value = 5
+							}
+						}
+						10 = {
+							add_favors = {
+								target = from
+								value = 10
+							}
+						}
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				opinion_level = {
+					who = from.owner
+					level <= poor
+				}
+			}
+			locked_random_list = {
+				20 = { }
+				10 = {
+					locked_random_list = {
+						80 = {
+							add_favors = {
+								target = from
+								value = 1
+							}
+						}
+						15 = {
+							add_favors = {
+								target = from
+								value = 5
+							}
+						}
+						5 = {
+							add_favors = {
+								target = from
+								value = 10
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	after = {
+		destroy_espionage_operation = fromfrom #fromfrom = operation
+	}
+}
+
+country_event = {
+	id = changelingcountry.122
+	title = "changelingcountry.122.title"
+	desc = "changelingcountry.122.desc"
+	picture = GFX_evt_smear_campaign
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.122.a"
+		from = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_infiltration_of_public_opinion_2
+			}
+		}
+		if = {
+			limit = {
+				has_federation = yes
+				federation = { is_same_value = from }
+			}
+			federation = { add_cohesion = -20 }
+		}
+	}
+
+	after = {
+		destroy_espionage_operation = fromfrom #fromfrom = operation
+	}
+}
+
+### Steal warehouse
+
+# 1st
+espionage_operation_event = {
+	id = changelingcountry.201
+	title = "changelingcountry.201.title"
+	desc = "changelingcountry.201.desc"
+	espionage_operation = yes
+	picture = GFX_evt_acquire_asset
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = { name = ACKNOWLEDGED }
+}
+
+# 2nd
+espionage_operation_event = {
+	id = changelingcountry.202
+	title = "changelingcountry.202.title"
+	desc = "changelingcountry.202.desc"
+	espionage_operation = yes
+	picture = GFX_evt_decryption
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+
+		target = {
+			if = {
+				limit = {
+					NOT = { is_variable_set = strengthening_security_num }
+				}
+				set_variable = {
+					which = strengthening_security_num
+					value = 0
+				}
+			}
+		}
+	}
+
+	option = {
+		name = GOOD
+		hidden_effect = {
+			target = {
+				# check if target has enough resource
+				if = {
+					limit = {
+						OR = {
+							resource_stockpile_compare = { resource = energy value >= 500 }
+							resource_stockpile_compare = { resource = minerals value >= 500 }
+							resource_stockpile_compare = { resource = food value >= 500 }
+							resource_stockpile_compare = { resource = consumer_goods value >= 500 }
+							resource_stockpile_compare = { resource = alloys value >= 500 }
+						}
+					}
+					# energy
+					if = {
+						limit = {
+							resource_stockpile_compare = { resource = energy value >= 2000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_energy_2k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = energy value >= 1000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_energy_1k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = energy value >= 500 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_energy@root.target
+						}
+					}
+					# minerals
+					if = {
+						limit = {
+							resource_stockpile_compare = { resource = minerals value >= 2000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_minerals_2k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = minerals value >= 1000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_minerals_1k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = minerals value >= 500 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_minerals@root.target
+						}
+					}
+					# food
+					if = {
+						limit = {
+							resource_stockpile_compare = { resource = food value >= 2000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_food_2k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = food value >= 1000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_food_1k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = food value >= 500 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_food@root.target
+						}
+					}
+					# consumer goods
+					if = {
+						limit = {
+							resource_stockpile_compare = { resource = consumer_goods value >= 2000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_consumer_goods_2k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = consumer_goods value >= 1000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_consumer_goods_1k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = consumer_goods value >= 500 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_consumer_goods@root.target
+						}
+					}
+					# alloys
+					if = {
+						limit = {
+							resource_stockpile_compare = { resource = alloys value >= 2000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_alloys_2k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = alloys value >= 1000 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_alloys_1k@root.target
+						}
+					}
+					else_if = {
+						limit = {
+							resource_stockpile_compare = { resource = alloys value >= 500 }
+						}
+						root.owner = {
+							set_country_flag = has_resource_alloys@root.target
+						}
+					}
+				}
+				else = {
+					root.owner = {
+						set_country_flag = has_no_enough_resource@root.target
+					}
+				}
+			}
+			random_list = {
+				1 = {
+					modifier = {
+						factor = 0	# 0%
+						root.target = {
+							check_variable = {
+								which = strengthening_security_num
+								value = 0
+							}
+						}
+					}
+					modifier = {
+						factor = 10	# 1%
+						root.target = {
+							OR = {
+								check_variable = {
+									which = strengthening_security_num
+									value = 1
+								}
+								check_variable = {
+									which = strengthening_security_num
+									value = 2
+								}
+							}
+						}
+					}
+					modifier = {
+						factor = 31	# 3%
+						root.target = {
+							OR = {
+								check_variable = {
+									which = strengthening_security_num
+									value = 3
+								}
+								check_variable = {
+									which = strengthening_security_num
+									value = 4
+								}
+							}
+						}
+					}
+					modifier = {
+						factor = 53	# 5%
+						root.target = {
+							check_variable = {
+								which = strengthening_security_num
+								value >= 5
+							}
+							check_variable = {
+								which = strengthening_security_num
+								value <= 9
+							}
+						}
+					}
+					modifier = {
+						factor = 87	# 8%
+						root.target = {
+							check_variable = {
+								which = strengthening_security_num
+								value >= 10
+							}
+							check_variable = {
+								which = strengthening_security_num
+								value <= 14
+							}
+						}
+					}
+					modifier = {
+						factor = 112	# 10%
+						root.target = {
+							check_variable = {
+								which = strengthening_security_num
+								value = 15
+							}
+						}
+					}
+					target = {
+						country_event = { id = changelingcountry.213 days = 15 }
+					}
+				}
+				1000 = {
+					if = {
+						limit = {
+							owner = {
+								NOT = { has_country_flag = has_no_enough_resource@root.target }
+							}
+						}
+						owner = {
+							country_event = { id = changelingcountry.211 }
+						}
+					}
+					else = {
+						owner = {
+							country_event = { id = changelingcountry.212 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	after = {
+		set_espionage_operation_progress_locked = no
+		custom_tooltip = changelingcountry.202.tooltip
+		root.owner = {
+			set_timed_country_flag = {
+				flag = operation_steal_warehouse_cooldown_flag@root.target
+				days = 360
+			}
+		}
+	}
+}
+
+# Events
+country_event = {
+	id = changelingcountry.211
+	title = "changelingcountry.211.title"
+	desc = "changelingcountry.211.desc"
+	picture = GFX_evt_gunrunning
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {		#from = operation
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						has_country_flag = has_resource_energy_2k@from.target
+						has_country_flag = has_resource_energy_1k@from.target
+						has_country_flag = has_resource_energy@from.target
+					}
+				}
+				if = {
+					limit = { has_country_flag = has_resource_energy_2k@from.target }
+					set_country_flag = steal_resouce_energy_2k@from.target
+					from.target = {
+						add_resource = { energy = -2000 }
+					}
+				}
+				else_if = {
+					limit = { has_country_flag = has_resource_energy_1k@from.target }
+					set_country_flag = steal_resouce_energy_1k@from.target
+					from.target = {
+						add_resource = { energy = -1000 }
+					}
+				}
+				else = {
+					set_country_flag = steal_resouce_energy@from.target
+					from.target = {
+						add_resource = { energy = -500 }
+					}
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						has_country_flag = has_resource_minerals_2k@from.target
+						has_country_flag = has_resource_minerals_1k@from.target
+						has_country_flag = has_resource_minerals@from.target
+					}
+				}
+				if = {
+					limit = { has_country_flag = has_resource_minerals_2k@from.target }
+					set_country_flag = steal_resouce_minerals_2k@from.target
+					from.target = {
+						add_resource = { minerals = -2000 }
+					}
+				}
+				else_if = {
+					limit = { has_country_flag = has_resource_minerals_1k@from.target }
+					set_country_flag = steal_resouce_minerals_1k@from.target
+					from.target = {
+						add_resource = { minerals = -1000 }
+					}
+				}
+				else = {
+					set_country_flag = steal_resouce_minerals@from.target
+					from.target = {
+						add_resource = { minerals = -500 }
+					}
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						has_country_flag = has_resource_food_2k@from.target
+						has_country_flag = has_resource_food_1k@from.target
+						has_country_flag = has_resource_food@from.target
+					}
+				}
+				if = {
+					limit = { has_country_flag = has_resource_food_2k@from.target }
+					set_country_flag = steal_resouce_food_2k@from.target
+					from.target = {
+						add_resource = { food = -2000 }
+					}
+				}
+				else_if = {
+					limit = { has_country_flag = has_resource_food_1k@from.target }
+					set_country_flag = steal_resouce_food_1k@from.target
+					from.target = {
+						add_resource = { food = -1000 }
+					}
+				}
+				else = {
+					set_country_flag = steal_resouce_food@from.target
+					from.target = {
+						add_resource = { food = -500 }
+					}
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						has_country_flag = has_resource_consumer_goods_2k@from.target
+						has_country_flag = has_resource_consumer_goods_1k@from.target
+						has_country_flag = has_resource_consumer_goods@from.target
+					}
+				}
+				if = {
+					limit = { has_country_flag = has_resource_consumer_goods_2k@from.target }
+					set_country_flag = steal_resouce_consumer_goods_2k@from.target
+					from.target = {
+						add_resource = { consumer_goods = -2000 }
+					}
+				}
+				else_if = {
+					limit = { has_country_flag = has_resource_consumer_goods_1k@from.target }
+					set_country_flag = steal_resouce_consumer_goods_1k@from.target
+					from.target = {
+						add_resource = { consumer_goods = -1000 }
+					}
+				}
+				else = {
+					set_country_flag = steal_resouce_consumer_goods@from.target
+					from.target = {
+						add_resource = { consumer_goods = -500 }
+					}
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOR = {
+						has_country_flag = has_resource_alloys_2k@from.target
+						has_country_flag = has_resource_alloys_1k@from.target
+						has_country_flag = has_resource_alloys@from.target
+					}
+				}
+				if = {
+					limit = { has_country_flag = has_resource_alloys_2k@from.target }
+					set_country_flag = steal_resouce_alloys_2k@from.target
+					from.target = {
+						add_resource = { alloys = -2000 }
+					}
+				}
+				else_if = {
+					limit = { has_country_flag = has_resource_alloys_1k@from.target }
+					set_country_flag = steal_resouce_alloys_1k@from.target
+					from.target = {
+						add_resource = { alloys = -1000 }
+					}
+				}
+				else = {
+					set_country_flag = steal_resouce_alloys@from.target
+					from.target = {
+						add_resource = { alloys = -500 }
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.211.a"
+		if = {
+			limit = { has_country_flag = steal_resouce_energy_2k@from.target }
+			add_resource = { energy = 2000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_energy_1k@from.target }
+			add_resource = { energy = 1000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_energy@from.target }
+			add_resource = { energy = 500 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_minerals_2k@from.target }
+			add_resource = { minerals = 2000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_minerals_1k@from.target }
+			add_resource = { minerals = 1000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_minerals@from.target }
+			add_resource = { minerals = 500 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_food_2k@from.target }
+			add_resource = { food = 2000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_food_1k@from.target }
+			add_resource = { food = 1000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_food@from.target }
+			add_resource = { food = 500 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_consumer_goods_2k@from.target }
+			add_resource = { consumer_goods = 2000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_consumer_goods_1k@from.target }
+			add_resource = { consumer_goods = 1000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_consumer_goods@from.target }
+			add_resource = { consumer_goods = 500 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_alloys_2k@from.target }
+			add_resource = { alloys = 2000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_alloys_1k@from.target }
+			add_resource = { alloys = 1000 }
+		}
+		else_if = {
+			limit = { has_country_flag = steal_resouce_alloys@from.target }
+			add_resource = { alloys = 500 }
+		}
+		custom_tooltip = "steal_warehouse_evt_tooltip_1"
+		hidden_effect = {
+			from.target = {
+				country_event = { id = changelingcountry.220 days = 1 }
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = has_resource_energy_2k@from.target
+			remove_country_flag = has_resource_energy_1k@from.target
+			remove_country_flag = has_resource_energy@from.target
+			remove_country_flag = has_resource_minerals_2k@from.target
+			remove_country_flag = has_resource_minerals_1k@from.target
+			remove_country_flag = has_resource_minerals@from.target
+			remove_country_flag = has_resource_food_2k@from.target
+			remove_country_flag = has_resource_food_1k@from.target
+			remove_country_flag = has_resource_food@from.target
+			remove_country_flag = has_resource_consumer_goods_2k@from.target
+			remove_country_flag = has_resource_consumer_goods_1k@from.target
+			remove_country_flag = has_resource_consumer_goods@from.target
+			remove_country_flag = has_resource_alloys_2k@from.target
+			remove_country_flag = has_resource_alloys_1k@from.target
+			remove_country_flag = has_resource_alloys@from.target
+		}
+		destroy_espionage_operation = from #from = operation
+	}
+}
+
+country_event = {
+	id = changelingcountry.212
+	title = "changelingcountry.211.title"
+	desc = "changelingcountry.212.desc"
+	picture = GFX_evt_gunrunning
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.212.a"
+		add_resource = { energy = 500 }
+		custom_tooltip = "steal_warehouse_evt_tooltip_1"
+		hidden_effect = {
+			from.target = {
+				country_event = { id = changelingcountry.220 days = 15 }
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = has_resource_energy_2k@from.target
+			remove_country_flag = has_resource_energy_1k@from.target
+			remove_country_flag = has_resource_energy@from.target
+			remove_country_flag = has_resource_minerals_2k@from.target
+			remove_country_flag = has_resource_minerals_1k@from.target
+			remove_country_flag = has_resource_minerals@from.target
+			remove_country_flag = has_resource_food_2k@from.target
+			remove_country_flag = has_resource_food_1k@from.target
+			remove_country_flag = has_resource_food@from.target
+			remove_country_flag = has_resource_consumer_goods_2k@from.target
+			remove_country_flag = has_resource_consumer_goods_1k@from.target
+			remove_country_flag = has_resource_consumer_goods@from.target
+			remove_country_flag = has_resource_alloys_2k@from.target
+			remove_country_flag = has_resource_alloys_1k@from.target
+			remove_country_flag = has_resource_alloys@from.target
+		}
+		destroy_espionage_operation = from #from = operation
+	}
+}
+
+country_event = {
+	id = changelingcountry.213
+	title = "changelingcountry.213.title"
+	desc = "changelingcountry.213.desc"
+	picture = GFX_evt_gunrunning
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.213.a"
+		ai_chance = {
+			factor = 20
+		}
+		hidden_effect = {
+			from.owner = {
+				remove_country_flag = steal_resouce_energy_2k@root		#from = operation
+				remove_country_flag = steal_resouce_energy_1k@root
+				remove_country_flag = steal_resouce_energy@root
+				remove_country_flag = steal_resouce_minerals_2k@root
+				remove_country_flag = steal_resouce_minerals_1k@root
+				remove_country_flag = steal_resouce_minerals@root
+				remove_country_flag = steal_resouce_food_2k@root
+				remove_country_flag = steal_resouce_food_1k@root
+				remove_country_flag = steal_resouce_food@root
+				remove_country_flag = steal_resouce_consumer_goods_2k@root
+				remove_country_flag = steal_resouce_consumer_goods_1k@root
+				remove_country_flag = steal_resouce_consumer_goods@root
+				remove_country_flag = steal_resouce_alloys_2k@root
+				remove_country_flag = steal_resouce_alloys_1k@root
+				remove_country_flag = steal_resouce_alloys@root
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.213.b"
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 200 }
+			custom_tooltip = {
+				fail_text = "strengthening_security_tooltip"
+				check_variable = {
+					which = strengthening_security_num
+					value < 15
+				}
+			}
+		}
+		add_resource = {
+			energy = -200
+		}
+		hidden_effect = {
+			change_variable = {
+				which = strengthening_security_num
+				value = 1
+			}
+			set_country_flag = changelingcountry_213_chioce
+			from.owner = {
+				remove_country_flag = steal_resouce_energy_2k@root
+				remove_country_flag = steal_resouce_energy_1k@root
+				remove_country_flag = steal_resouce_energy@root
+				remove_country_flag = steal_resouce_minerals_2k@root
+				remove_country_flag = steal_resouce_minerals_1k@root
+				remove_country_flag = steal_resouce_minerals@root
+				remove_country_flag = steal_resouce_food_2k@root
+				remove_country_flag = steal_resouce_food_1k@root
+				remove_country_flag = steal_resouce_food@root
+				remove_country_flag = steal_resouce_consumer_goods_2k@root
+				remove_country_flag = steal_resouce_consumer_goods_1k@root
+				remove_country_flag = steal_resouce_consumer_goods@root
+				remove_country_flag = steal_resouce_alloys_2k@root
+				remove_country_flag = steal_resouce_alloys_1k@root
+				remove_country_flag = steal_resouce_alloys@root
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				resource_stockpile_compare = { resource = energy value < 400 }
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.213.c"
+		trigger = {
+			has_country_flag = changelingcountry_213_chioce
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 200 }
+		}
+		add_resource = {
+			energy = -200
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					from.owner = {
+						relative_encryption_decryption = { target = root value >= 1.2 }
+					}
+				}
+				from.owner = {
+					country_event = { id = changelingcountry.231 days = 15 }
+				}
+			}
+			else = {
+				from.owner = {
+					country_event = { id = changelingcountry.232 days = 15 }
+				}
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 0
+				has_country_flag = investigate_warehouse_theft@fromfrom.owner
+			}
+			modifier = {
+				factor = 0
+				resource_stockpile_compare = { resource = energy value < 400 }
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			from.owner = {
+				country_event = { id = changelingcountry.221 days = 15 }
+				remove_country_flag = has_resource_energy_2k@from.target
+				remove_country_flag = has_resource_energy_1k@from.target
+				remove_country_flag = has_resource_energy@from.target
+				remove_country_flag = has_resource_minerals_2k@from.target
+				remove_country_flag = has_resource_minerals_1k@from.target
+				remove_country_flag = has_resource_minerals@from.target
+				remove_country_flag = has_resource_food_2k@from.target
+				remove_country_flag = has_resource_food_1k@from.target
+				remove_country_flag = has_resource_food@from.target
+				remove_country_flag = has_resource_consumer_goods_2k@from.target
+				remove_country_flag = has_resource_consumer_goods_1k@from.target
+				remove_country_flag = has_resource_consumer_goods@from.target
+				remove_country_flag = has_resource_alloys_2k@from.target
+				remove_country_flag = has_resource_alloys_1k@from.target
+				remove_country_flag = has_resource_alloys@from.target
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.220
+	title = "changelingcountry.220.title"
+	desc = {
+		trigger = {
+			from = {
+				NOT = { has_country_flag = has_no_enough_resource@root }
+			}
+		}
+		text = "changelingcountry.220.desc.a"
+	}
+	desc = {
+		trigger = {
+			from = {
+				has_country_flag = has_no_enough_resource@root
+			}
+		}
+		text = "changelingcountry.220.desc.b"
+	}
+	picture = GFX_evt_gunrunning
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.220.a"
+		trigger = {
+			from = {
+				NOT = { has_country_flag = has_no_enough_resource@root }
+			}
+		}
+		custom_tooltip = "chanelingcountry.220.tooltip"
+		tooltip = {
+			steal_warehouse_victim_effect = yes
+		}
+		hidden_effect = {
+			from = {
+				remove_country_flag = steal_resouce_energy_2k@root
+				remove_country_flag = steal_resouce_energy_1k@root
+				remove_country_flag = steal_resouce_energy@root
+				remove_country_flag = steal_resouce_minerals_2k@root
+				remove_country_flag = steal_resouce_minerals_1k@root
+				remove_country_flag = steal_resouce_minerals@root
+				remove_country_flag = steal_resouce_food_2k@root
+				remove_country_flag = steal_resouce_food_1k@root
+				remove_country_flag = steal_resouce_food@root
+				remove_country_flag = steal_resouce_consumer_goods_2k@root
+				remove_country_flag = steal_resouce_consumer_goods_1k@root
+				remove_country_flag = steal_resouce_consumer_goods@root
+				remove_country_flag = steal_resouce_alloys_2k@root
+				remove_country_flag = steal_resouce_alloys_1k@root
+				remove_country_flag = steal_resouce_alloys@root
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+
+	option = {
+		name = "changelingcountry.220.b"
+		trigger = {
+			from = {
+				NOT = { has_country_flag = has_no_enough_resource@root }
+			}
+		}
+		add_resource = {
+			energy = -200
+		}
+		custom_tooltip = "chanelingcountry.220.tooltip"
+		tooltip = {
+			steal_warehouse_victim_effect = yes
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 200 }
+			custom_tooltip = {
+				fail_text = "strengthening_security_tooltip"
+				check_variable = {
+					which = strengthening_security_num
+					value < 15
+				}
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = strengthening_security_num
+				value = 1
+			}
+			from = {
+				remove_country_flag = steal_resouce_energy_2k@root
+				remove_country_flag = steal_resouce_energy_1k@root
+				remove_country_flag = steal_resouce_energy@root
+				remove_country_flag = steal_resouce_minerals_2k@root
+				remove_country_flag = steal_resouce_minerals_1k@root
+				remove_country_flag = steal_resouce_minerals@root
+				remove_country_flag = steal_resouce_food_2k@root
+				remove_country_flag = steal_resouce_food_1k@root
+				remove_country_flag = steal_resouce_food@root
+				remove_country_flag = steal_resouce_consumer_goods_2k@root
+				remove_country_flag = steal_resouce_consumer_goods_1k@root
+				remove_country_flag = steal_resouce_consumer_goods@root
+				remove_country_flag = steal_resouce_alloys_2k@root
+				remove_country_flag = steal_resouce_alloys_1k@root
+				remove_country_flag = steal_resouce_alloys@root
+			}
+		}
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 0
+				resource_stockpile_compare = { resource = energy value < 400 }
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.220.c"
+		trigger = {
+			from = {
+				NOT = { has_country_flag = has_no_enough_resource@root }
+			}
+		}
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 200 }
+		}
+		add_resource = {
+			energy = -200
+		}
+		custom_tooltip = "chanelingcountry.220.tooltip"
+		tooltip = {
+			steal_warehouse_victim_effect = yes
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					from = {
+						relative_encryption_decryption = { target = root value >= 1.2 }	#from = operation owner (country)
+					}
+				}
+				country_event = { id = changelingcountry.231 days = 90 }
+			}
+			else = {
+				country_event = { id = changelingcountry.232 days = 90 }
+			}
+		}
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0
+				has_country_flag = investigate_warehouse_theft@fromfrom.owner
+			}
+			modifier = {
+				factor = 0
+				resource_stockpile_compare = { resource = energy value < 400 }
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.220.d"
+		trigger = {
+			from = {
+				has_country_flag = has_no_enough_resource@root
+			}
+		}
+	}
+
+	after = {
+		from = {
+			remove_country_flag = has_no_enough_resource@root
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.221
+	title = "changelingcountry.221.title"
+	desc = "changelingcountry.221.desc"
+	picture = GFX_evt_worrying_signal
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.221.a"
+		add_resource = { energy = 500 }
+		custom_tooltip = "steal_warehouse_evt_tooltip_2"	#from = target (country)
+	}
+
+	after = {
+		destroy_espionage_operation = fromfrom #fromfrom = operation
+	}
+}
+
+country_event = {
+	id = changelingcountry.231
+	title = "changelingcountry.231.title"
+	desc = "changelingcountry.231.desc"
+	picture = GFX_evt_worrying_signal
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.231.a"
+		hidden_effect = {
+			set_timed_country_flag = {
+				flag = investigate_warehouse_theft@fromfrom.owner	# for ai_chance
+				days = 1800
+			}
+		}
+	}
+
+	after = {
+		remove_country_flag = steal_resouce_energy_2k@from
+		remove_country_flag = steal_resouce_energy_1k@from
+		remove_country_flag = steal_resouce_energy@from
+		remove_country_flag = steal_resouce_minerals_2k@from
+		remove_country_flag = steal_resouce_minerals_1k@from
+		remove_country_flag = steal_resouce_minerals@from
+		remove_country_flag = steal_resouce_food_2k@from
+		remove_country_flag = steal_resouce_food_1k@from
+		remove_country_flag = steal_resouce_food@from
+		remove_country_flag = steal_resouce_consumer_goods_2k@from
+		remove_country_flag = steal_resouce_consumer_goods_1k@from
+		remove_country_flag = steal_resouce_consumer_goods@from
+		remove_country_flag = steal_resouce_alloys_2k@from
+		remove_country_flag = steal_resouce_alloys_1k@from
+		remove_country_flag = steal_resouce_alloys@from
+	}
+}
+
+country_event = {
+	id = changelingcountry.232
+	title = "changelingcountry.232.title"
+	desc = "changelingcountry.232.desc"
+	picture = GFX_evt_ship_offloading_cargo
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.232.a"
+		hidden_effect = {
+			fromfrom.owner = {
+				country_event = { id = changelingcountry.240 days = 15 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.240
+	title = "changelingcountry.240.title"
+	desc = "changelingcountry.240.desc"
+	picture = GFX_evt_smear_campaign
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.240.a"
+		if = {
+			limit = {
+				has_federation = yes
+				federation = { is_same_value = from }
+			}
+			federation = { add_cohesion = -20 }
+		}
+		if = {
+			limit = {
+				has_country_flag = steal_resouce_energy_2k@from
+			}
+			add_resource = { energy = -2000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_energy_1k@from
+			}
+			add_resource = { energy = -1000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_energy@from
+			}
+			add_resource = { energy = -500 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_minerals_2k@from
+			}
+			add_resource = { minerals = -2000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_minerals_1k@from
+			}
+			add_resource = { minerals = -1000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_minerals@from
+			}
+			add_resource = { minerals = -500 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_food_2k@from
+			}
+			add_resource = { food = -2000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_food_1k@from
+			}
+			add_resource = { food = -1000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_food@from
+			}
+			add_resource = { food = -500 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_consumer_goods_2k@from
+			}
+			add_resource = { consumer_goods = -2000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_consumer_goods_1k@from
+			}
+			add_resource = { consumer_goods = -1000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_consumer_goods@from
+			}
+			add_resource = { consumer_goods = -500 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_alloys_2k@from
+			}
+			add_resource = { alloys = -2000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_alloys_1k@from
+			}
+			add_resource = { alloys = -1000 }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = steal_resouce_alloys@from
+			}
+			add_resource = { alloys = -500 }
+		}
+		hidden_effect = {
+			from = {
+				country_event = { id = changelingcountry.241 days = 15 }
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 100
+				OR = {
+					resource_stockpile_compare = { resource = energy value >= 500 }
+					resource_stockpile_compare = { resource = minerals value >= 500 }
+					resource_stockpile_compare = { resource = food value >= 500 }
+					resource_stockpile_compare = { resource = consumer_goods value >= 500 }
+					resource_stockpile_compare = { resource = alloys value >= 500 }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.240.b"
+		from = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_steal_warehouse
+			}
+		}
+		if = {
+			limit = {
+				has_federation = yes
+				federation = { is_same_value = from }
+			}
+			federation = { add_cohesion = -20 }
+		}
+		if = {
+			limit = {
+				NOT = { has_modifier = diplo_steal_warehouse }
+			}
+			add_modifier = {
+				modifier = diplo_steal_warehouse
+				days = 720
+			}
+		}
+		hidden_effect = {
+			from = {
+				country_event = { id = changelingcountry.242 days = 15 }
+			}
+		}
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 100
+				from = {
+					opinion_level = {
+						who = root
+						level <= poor
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.241
+	title = "changelingcountry.241.title"
+	desc = "changelingcountry.241.desc"
+	picture = GFX_evt_ship_offloading_cargo
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.241.a"
+		tooltip = {
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = from }
+				}
+				federation = { add_cohesion = -20 }
+			}
+		}
+		if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_energy_2k@root }
+			}
+			add_resource = { energy = 2000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_energy_1k@root }
+			}
+			add_resource = { energy = 1000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_energy@root }
+			}
+			add_resource = { energy = 500 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_minerals_2k@root }
+			}
+			add_resource = { minerals = 2000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_minerals_1k@root }
+			}
+			add_resource = { minerals = 1000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_minerals@root }
+			}
+			add_resource = { minerals = 500 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_food_2k@root }
+			}
+			add_resource = { food = 2000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_food_1k@root }
+			}
+			add_resource = { food = 1000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_food@root }
+			}
+			add_resource = { food = 500 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_consumer_goods_2k@root }
+			}
+			add_resource = { consumer_goods = 2000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_consumer_goods_1k@root }
+			}
+			add_resource = { consumer_goods = 1000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_consumer_goods@root }
+			}
+			add_resource = { consumer_goods = 500 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_alloys_2k@root }
+			}
+			add_resource = { alloys = 2000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_alloys_1k@root }
+			}
+			add_resource = { alloys = 1000 }
+		}
+		else_if = {
+			limit = {
+				from = { has_country_flag = steal_resouce_alloys@root }
+			}
+			add_resource = { alloys = 500 }
+		}
+	}
+
+	after = {
+		from = {
+			remove_country_flag = steal_resouce_energy_2k@root
+			remove_country_flag = steal_resouce_energy_1k@root
+			remove_country_flag = steal_resouce_energy@root
+			remove_country_flag = steal_resouce_minerals_2k@root
+			remove_country_flag = steal_resouce_minerals_1k@root
+			remove_country_flag = steal_resouce_minerals@root
+			remove_country_flag = steal_resouce_food_2k@root
+			remove_country_flag = steal_resouce_food_1k@root
+			remove_country_flag = steal_resouce_food@root
+			remove_country_flag = steal_resouce_consumer_goods_2k@root
+			remove_country_flag = steal_resouce_consumer_goods_1k@root
+			remove_country_flag = steal_resouce_consumer_goods@root
+			remove_country_flag = steal_resouce_alloys_2k@root
+			remove_country_flag = steal_resouce_alloys_1k@root
+			remove_country_flag = steal_resouce_alloys@root
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.242
+	title = "changelingcountry.242.title"
+	desc = "changelingcountry.242.desc"
+	picture = GFX_evt_spy_network
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.242.a"
+		tooltip = {
+			add_opinion_modifier = {
+				who = from
+				modifier = opinion_steal_warehouse
+			}
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = from }
+				}
+				federation = { add_cohesion = -20 }
+			}
+		}
+		custom_tooltip = "changelingcountry.242.tooltip"
+	}
+
+	after = {
+		from = {
+			remove_country_flag = steal_resouce_energy_2k@root
+			remove_country_flag = steal_resouce_energy_1k@root
+			remove_country_flag = steal_resouce_energy@root
+			remove_country_flag = steal_resouce_minerals_2k@root
+			remove_country_flag = steal_resouce_minerals_1k@root
+			remove_country_flag = steal_resouce_minerals@root
+			remove_country_flag = steal_resouce_food_2k@root
+			remove_country_flag = steal_resouce_food_1k@root
+			remove_country_flag = steal_resouce_food@root
+			remove_country_flag = steal_resouce_consumer_goods_2k@root
+			remove_country_flag = steal_resouce_consumer_goods_1k@root
+			remove_country_flag = steal_resouce_consumer_goods@root
+			remove_country_flag = steal_resouce_alloys_2k@root
+			remove_country_flag = steal_resouce_alloys_1k@root
+			remove_country_flag = steal_resouce_alloys@root
+		}
+	}
+}
+
+### Internal turbulence
+
+# 1st evt
+espionage_operation_event = {
+	id = changelingcountry.301
+	title = "changelingcountry.301.title"
+	desc = "changelingcountry.301.desc"
+	espionage_operation = yes
+	picture = GFX_evt_spymaster
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = { name = ACKNOWLEDGED }
+}
+
+# 2nd evt
+espionage_operation_event = {
+	id = changelingcountry.302
+	title = "changelingcountry.302.title"
+	desc = "changelingcountry.302.desc"
+	espionage_operation = yes
+	picture = GFX_evt_intelligence_report
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = { name = GOOD }
+}
+
+# 3rd evt
+espionage_operation_event = {
+	id = changelingcountry.303
+	title = "changelingcountry.303.title"
+	desc = "changelingcountry.303.desc"
+	espionage_operation = yes
+	picture = GFX_evt_worrying_signal
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+	}
+
+	option = {
+		name = GOOD
+		custom_tooltip = "changelingcountry.303.tooltip"
+		hidden_effect = {
+			if = {
+				limit = {
+					root.owner = {
+						relative_encryption_decryption = { target = root.target value >= 1.3 }
+					}
+				}
+				root.target = {
+					country_event = { id = changelingcountry.310 days = 30 }
+				}
+			}
+			else = {
+				root.target = {
+					country_event = { id = changelingcountry.312 days = 15 }
+				}
+			}
+		}
+	}
+
+	after = {
+		set_espionage_operation_progress_locked = no
+		root.owner = {
+			set_timed_country_flag = {
+				flag = operation_internal_turbulence_cooldown_flag@root.target
+				days = 1080
+			}
+		}
+	}
+}
+
+# Events
+
+country_event = {
+	id = changelingcountry.310
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		country_event = { id = changelingcountry.311 }		#Transition event, to make sure 311 and 312 are same level
+	}
+}
+
+country_event = {
+	id = changelingcountry.311
+	title = "changelingcountry.311.title"
+	desc = {
+		trigger = {
+			NOR = {
+				has_country_flag = changelingcountry_312_a@fromfrom.owner
+				has_country_flag = changelingcountry_312_b@fromfrom.owner
+			}
+		}
+		text = "changelingcountry.311.desc.a"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = changelingcountry_312_a@fromfrom.owner
+		}
+		text = "changelingcountry.311.desc.b"
+	}
+	desc = {
+		trigger = {
+			has_country_flag = changelingcountry_312_b@fromfrom.owner
+		}
+		text = "changelingcountry.311.desc.c"
+	}
+	picture = GFX_evt_open_revolt
+	show_sound = event_planetary_riot
+	is_triggered_only = yes
+	location = event_target:internal_turbulence_planet
+
+	option = {
+		name = "changelingcountry.311.a"
+		add_modifier = {
+			modifier = operation_mass_unrest
+			days = 720
+		}
+		random_planet_within_border = {
+			limit = {
+				is_colony = yes
+				owner = { is_primitive = no }
+			}
+			add_modifier = {
+				modifier = pm_operation_mass_unrest
+				days = 720
+			}
+			save_event_target_as = internal_turbulence_planet
+		}
+		hidden_effect = {
+			fromfrom.owner = {
+				country_event = { id = changelingcountry.331 days = 15 }	#fromfrom = operation
+			}
+		}
+	}
+
+	after = {
+		remove_country_flag = changelingcountry_312_a@fromfrom.owner
+		remove_country_flag = changelingcountry_312_b@fromfrom.owner
+	}
+}
+
+country_event = {
+	id = changelingcountry.312
+	title = "changelingcountry.312.title"
+	desc = "changelingcountry.312.desc"
+	picture = GFX_evt_mysterious_signal
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.312.a"
+		hidden_effect = {
+			country_event = { id = changelingcountry.311 days = 15 }
+			set_country_flag = changelingcountry_312_a@from.owner
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+
+	option = {
+		name = "changelingcountry.312.b"
+		allow = {
+			resource_stockpile_compare = { resource = energy value >= 500 }
+			resource_stockpile_compare = { resource = influence value >= 50 }
+		}
+		add_resource = {
+			energy = -500
+			influence = -50
+		}
+		hidden_effect = {
+			set_country_flag = changelingcountry_312_b@from.owner
+			random_list = {
+				75 = {
+					country_event = { id = changelingcountry.311 days = 15 }
+				}
+				25 = {
+					if = {
+						limit = {
+							from.owner = {
+								relative_encryption_decryption = { target = from.target value >= 1.5 }
+							}
+						}
+						country_event = { id = changelingcountry.321 days = 30 }
+					}
+					else = {
+						country_event = { id = changelingcountry.322 days = 30 }
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.321
+	title = "changelingcountry.321.title"
+	desc = "changelingcountry.321.desc"
+	picture = GFX_evt_partition
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.321.a"
+		hidden_effect = {
+			fromfrom.owner = {
+				country_event = { id = changelingcountry.332 days = 15 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.322
+	title = "changelingcountry.322.title"
+	desc = "changelingcountry.322.desc"
+	picture = GFX_evt_partition
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.322.a"
+		hidden_effect = {
+			fromfrom.owner = {
+				country_event = { id = changelingcountry.332 days = 15 }
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+
+	option = {
+		name = "changelingcountry.322.b"
+		tooltip = {
+			add_opinion_modifier = {
+				who = fromfrom.owner
+				modifier = opinion_internal_turbulence
+			}
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = fromfrom.owner }
+				}
+				federation = { add_cohesion = -20 }
+			}
+		}
+		hidden_effect = {
+			fromfrom.owner = {
+				country_event = { id = changelingcountry.333 days = 15 }
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.331
+	title = "changelingcountry.331.title"
+	desc = "changelingcountry.331.desc"
+	picture = GFX_evt_open_revolt
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.331.a"
+	}
+
+	after = {
+		destroy_espionage_operation = fromfromfrom #fromfromfrom = operation
+	}
+}
+
+country_event = {
+	id = changelingcountry.332
+	title = "changelingcountry.332.title"
+	desc = "changelingcountry.332.desc"
+	picture = GFX_evt_news_room
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.332.a"
+	}
+
+	after = {
+		destroy_espionage_operation = fromfromfrom #fromfromfrom = operation
+	}
+}
+
+country_event = {
+	id = changelingcountry.333
+	title = "changelingcountry.333.title"
+	desc = "changelingcountry.333.desc"
+	picture = GFX_evt_alien_segregation
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.333.a"
+		from = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_internal_turbulence
+			}
+		}
+		if = {
+			limit = {
+				has_federation = yes
+				federation = { is_same_value = from }
+			}
+			federation = { add_cohesion = -20 }
+		}
+	}
+
+	after = {
+		destroy_espionage_operation = fromfromfrom #fromfromfrom = operation
+	}
+}
+
+### Assassinate leader
+# 1st evt
+espionage_operation_event = {
+	id = changelingcountry.401
+	title = "changelingcountry.401.title"
+	desc = {
+		text = "changelingcountry.401.desc.a"
+		trigger = {
+			root.owner = {
+				NOT = {
+					has_country_flag = has_no_leader@root.target
+				}
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.401.desc.b"
+		trigger = {
+			root.owner = {
+				has_country_flag = has_no_leader@root.target
+			}
+		}
+	}
+	espionage_operation = yes
+	picture = GFX_evt_acquire_asset
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+		root.owner = {
+			country_event = { id = changelingcountry.405 }
+		}
+		root.target = {
+			# check target leader
+			if = {
+				limit = {
+					any_owned_leader = {
+						OR = {
+							leader_class = governor
+							leader_class = general
+							leader_class = admiral
+							leader_class = scientist
+							leader_class = envoy
+							is_ruler = yes
+						}
+					}
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							is_ruler = no
+							leader_class = governor
+						}
+					}
+					root.owner = { set_country_flag = has_leader_governor@root.target }
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							is_ruler = no
+							leader_class = general
+						}
+					}
+					root.owner = { set_country_flag = has_leader_general@root.target }
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							is_ruler = no
+							leader_class = admiral
+						}
+					}
+					root.owner = { set_country_flag = has_leader_admiral@root.target }
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							is_ruler = no
+							leader_class = scientist
+						}
+					}
+					root.owner = { set_country_flag = has_leader_scientist@root.target }
+				}
+				if = {
+					limit = {
+						any_owned_leader = { leader_class = envoy }
+					}
+					root.owner = { set_country_flag = has_leader_envoy@root.target }
+				}
+				if = {
+					limit = {
+						any_owned_leader = { is_ruler = yes }
+					}
+					root.owner = { set_country_flag = has_leader_ruler@root.target }
+				}
+			}
+			else = {
+				root.owner = { set_country_flag = has_no_leader@root.target }
+			}
+		}
+		root.owner = {
+			# pick up 3 kinds of leader
+			while = {
+				count = 3
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = { has_country_flag = has_leader_governor@root.target }
+								has_country_flag = option_leader_governor@root.target
+							}
+						}
+						set_country_flag = option_leader_governor@root.target
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = { has_country_flag = has_leader_general@root.target }
+								has_country_flag = option_leader_general@root.target
+							}
+						}
+						set_country_flag = option_leader_general@root.target
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = { has_country_flag = has_leader_admiral@root.target }
+								has_country_flag = option_leader_admiral@root.target
+							}
+						}
+						set_country_flag = option_leader_admiral@root.target
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = { has_country_flag = has_leader_scientist@root.target }
+								has_country_flag = option_leader_scientist@root.target
+							}
+						}
+						set_country_flag = option_leader_scientist@root.target
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = { has_country_flag = has_leader_envoy@root.target }
+								has_country_flag = option_leader_envoy@root.target
+							}
+						}
+						set_country_flag = option_leader_envoy@root.target
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								NOT = { has_country_flag = has_leader_ruler@root.target }
+								has_country_flag = option_leader_ruler@root.target
+							}
+						}
+						set_country_flag = option_leader_ruler@root.target
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.401.a"
+		trigger = {
+			root.owner = { has_country_flag = option_leader_governor@root.target }
+		}
+		hidden_effect = {
+			root.owner = {
+				set_country_flag = chose_leader_governor@root.target
+				set_country_flag = leader_factor_medium_risk@root.target	#assess risk factor(leader factor)
+			}
+			set_espionage_operation_progress_locked = no
+		}
+	}
+
+	option = {
+		name = "changelingcountry.401.b"
+		trigger = {
+			root.owner = { has_country_flag = option_leader_general@root.target }
+		}
+		hidden_effect = {
+			root.owner = {
+				set_country_flag = chose_leader_general@root.target
+				set_country_flag = leader_factor_low_risk@root.target
+			}
+			set_espionage_operation_progress_locked = no
+		}
+	}
+
+	option = {
+		name = "changelingcountry.401.c"
+		trigger = {
+			root.owner = { has_country_flag = option_leader_admiral@root.target }
+		}
+		hidden_effect = {
+			root.owner = {
+				set_country_flag = chose_leader_admiral@root.target
+				set_country_flag = leader_factor_low_risk@root.target
+			}
+			set_espionage_operation_progress_locked = no
+		}
+	}
+
+	option = {
+		name = "changelingcountry.401.d"
+		trigger = {
+			root.owner = { has_country_flag = option_leader_scientist@root.target }
+		}
+		hidden_effect = {
+			root.owner = {
+				set_country_flag = chose_leader_scientist@root.target
+				set_country_flag = leader_factor_medium_risk@root.target
+			}
+			set_espionage_operation_progress_locked = no
+		}
+	}
+
+	option = {
+		name = "changelingcountry.401.e"
+		trigger = {
+			root.owner = { has_country_flag = option_leader_envoy@root.target }
+		}
+		hidden_effect = {
+			root.owner = {
+				set_country_flag = chose_leader_envoy@root.target
+				set_country_flag = leader_factor_low_risk@root.target
+			}
+			set_espionage_operation_progress_locked = no
+		}
+	}
+
+	option = {
+		name = "changelingcountry.401.f"
+		trigger = {
+			root.owner = { has_country_flag = option_leader_ruler@root.target }
+		}
+		hidden_effect = {
+			root.owner = {
+				set_country_flag = chose_leader_ruler@root.target
+				set_country_flag = leader_factor_high_risk@root.target
+			}
+			set_espionage_operation_progress_locked = no
+		}
+	}
+
+	option = {
+		name = "changelingcountry.401.g"
+		trigger = {
+			root.owner = { has_country_flag = has_no_leader@root.target }
+		}
+		root = {
+            destroy_espionage_operation = this
+        }
+	}
+
+	option = {
+		name = "changelingcountry.401.h"
+		trigger = {
+			NOT = {
+				root.owner = { has_country_flag = has_no_leader@root.target }
+			}
+		}
+		root = {
+            destroy_espionage_operation = this
+        }
+	}
+
+	after = {
+		hidden_effect = {
+			root.owner = {
+				#
+				remove_country_flag = has_leader_governor@root.target
+				remove_country_flag = has_leader_general@root.target
+				remove_country_flag = has_leader_admiral@root.target
+				remove_country_flag = has_leader_scientist@root.target
+				remove_country_flag = has_leader_envoy@root.target
+				remove_country_flag = has_leader_ruler@root.target
+				remove_country_flag = has_no_leader@root.target
+				#
+				remove_country_flag = option_leader_governor@root.target
+				remove_country_flag = option_leader_general@root.target
+				remove_country_flag = option_leader_admiral@root.target
+				remove_country_flag = option_leader_scientist@root.target
+				remove_country_flag = option_leader_envoy@root.target
+				remove_country_flag = option_leader_ruler@root.target
+				#
+				set_country_flag = operation_assassinate_leader_tutorial
+			}
+		}
+	}
+}
+
+# 2nd evt
+espionage_operation_event = {
+	id = changelingcountry.402
+	title = "changelingcountry.402.title"
+	desc = {
+        text = "changelingcountry.402.desc.a"
+        trigger = {
+			root.target = {
+				exists = event_target:leader_option_1
+            	exists = event_target:leader_option_2
+			}
+        }
+    }
+    desc = {
+        text = "changelingcountry.402.desc.b"
+        trigger = {
+			root.target = {
+				exists = event_target:leader_option_1
+            	NOT = { exists = event_target:leader_option_2 }
+			}
+        }
+    }
+    desc = {
+        text = "changelingcountry.402.desc.c"
+        trigger = {
+			root.target = {
+				NOT = {
+                	exists = event_target:leader_option_1
+            	}
+			}
+        }
+    }
+	espionage_operation = yes
+	picture = GFX_evt_decryption
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+		# chose at most 3 leader (accroding to the chiose by 401)
+		root.target = {
+			# governor
+			if = {
+				limit = {
+					root.owner = { has_country_flag = chose_leader_governor@root.target }
+				}
+				while = {
+					count = 3
+					if = {
+						limit = {
+							any_owned_leader = {
+								is_ruler = no
+								leader_class = governor
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+						}
+						random_owned_leader = {
+							limit = {
+								is_ruler = no
+								leader_class = governor
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+							if = {
+								limit = { NOT = { exists = event_target:leader_option_1 } }
+								save_event_target_as = leader_option_1
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_2 } }
+								save_event_target_as = leader_option_2
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_3 } }
+								save_event_target_as = leader_option_3
+							}
+						}
+					}
+				}
+			}
+			# general
+			else_if = {
+				limit = {
+					root.owner = { has_country_flag = chose_leader_general@root.target }
+				}
+				while = {
+					count = 3
+					if = {
+						limit = {
+							any_owned_leader = {
+								is_ruler = no
+								leader_class = general
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+						}
+						random_owned_leader = {
+							limit = {
+								is_ruler = no
+								leader_class = general
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+							if = {
+								limit = { NOT = { exists = event_target:leader_option_1 } }
+								save_event_target_as = leader_option_1
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_2 } }
+								save_event_target_as = leader_option_2
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_3 } }
+								save_event_target_as = leader_option_3
+							}
+						}
+					}
+				}
+			}
+			# admiral
+			else_if = {
+				limit = {
+					root.owner = { has_country_flag = chose_leader_admiral@root.target }
+				}
+				while = {
+					count = 3
+					if = {
+						limit = {
+							any_owned_leader = {
+								is_ruler = no
+								leader_class = admiral
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+						}
+						random_owned_leader = {
+							limit = {
+								is_ruler = no
+								leader_class = admiral
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+							if = {
+								limit = { NOT = { exists = event_target:leader_option_1 } }
+								save_event_target_as = leader_option_1
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_2 } }
+								save_event_target_as = leader_option_2
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_3 } }
+								save_event_target_as = leader_option_3
+							}
+						}
+					}
+				}
+			}
+			# scientist
+			else_if = {
+				limit = {
+					root.owner = { has_country_flag = chose_leader_scientist@root.target }
+				}
+				while = {
+					count = 3
+					if = {
+						limit = {
+							any_owned_leader = {
+								is_ruler = no
+								leader_class = scientist
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+						}
+						random_owned_leader = {
+							limit = {
+								is_ruler = no
+								leader_class = scientist
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+							if = {
+								limit = { NOT = { exists = event_target:leader_option_1 } }
+								save_event_target_as = leader_option_1
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_2 } }
+								save_event_target_as = leader_option_2
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_3 } }
+								save_event_target_as = leader_option_3
+							}
+						}
+					}
+				}
+			}
+			# envoy
+			else_if = {
+				limit = {
+					root.owner = { has_country_flag = chose_leader_envoy@root.target }
+				}
+				while = {
+					count = 3
+					if = {
+						limit = {
+							any_owned_leader = {
+								leader_class = envoy
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+						}
+						random_owned_leader = {
+							limit = {
+								leader_class = envoy
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+							if = {
+								limit = { NOT = { exists = event_target:leader_option_1 } }
+								save_event_target_as = leader_option_1
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_2 } }
+								save_event_target_as = leader_option_2
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_3 } }
+								save_event_target_as = leader_option_3
+							}
+						}
+					}
+				}
+			}
+			# ruler
+			else_if = {
+				limit = {
+					root.owner = { has_country_flag = chose_leader_ruler@root.target }
+				}
+				while = {
+					count = 3
+					if = {
+						limit = {
+							any_owned_leader = {
+								is_ruler = yes
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+						}
+						random_owned_leader = {
+							limit = {
+								is_ruler = yes
+								NOR = {
+									AND = {
+										exists = event_target:leader_option_1
+										is_same_value = event_target:leader_option_1
+									}
+									AND = {
+										exists = event_target:leader_option_2
+										is_same_value = event_target:leader_option_2
+									}
+									AND = {
+										exists = event_target:leader_option_3
+										is_same_value = event_target:leader_option_3
+									}
+								}
+							}
+							if = {
+								limit = { NOT = { exists = event_target:leader_option_1 } }
+								save_event_target_as = leader_option_1
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_2 } }
+								save_event_target_as = leader_option_2
+							}
+							else_if = {
+								limit = { NOT = { exists = event_target:leader_option_3 } }
+								save_event_target_as = leader_option_3
+							}
+						}
+					}
+				}
+			}
+		}
+		# assess risk
+		operation_assess_risk = yes
+	}
+
+	option = {
+		name = "changelingcountry.402.a"
+		trigger = {
+			root.target = {
+				exists = event_target:leader_option_1
+			}
+		}
+		# display risk
+		if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_1 = {
+						has_leader_flag = assassinate_risk_prety_low@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_prety_low_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_1 = {
+						has_leader_flag = assassinate_risk_low@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_low_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_1 = {
+						has_leader_flag = assassinate_risk_medium@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_medium_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_1 = {
+						has_leader_flag = assassinate_risk_high@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_high_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_1 = {
+						has_leader_flag = assassinate_risk_prety_high@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_prety_high_risk"
+		}
+		hidden_effect = {
+			set_espionage_operation_progress_locked = no
+			root.target = {
+				event_target:leader_option_1 = {
+					set_leader_flag = assassinate_chosen_leader@root.owner
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.402.b"
+		trigger = {
+			root.target = {
+				exists = event_target:leader_option_2
+			}
+		}
+		if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_2 = {
+						has_leader_flag = assassinate_risk_prety_low@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_prety_low_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_2 = {
+						has_leader_flag = assassinate_risk_low@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_low_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_2 = {
+						has_leader_flag = assassinate_risk_medium@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_medium_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_2 = {
+						has_leader_flag = assassinate_risk_high@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_high_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_2 = {
+						has_leader_flag = assassinate_risk_prety_high@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_prety_high_risk"
+		}
+		hidden_effect = {
+			set_espionage_operation_progress_locked = no
+			root.target = {
+				event_target:leader_option_2 = {
+					set_leader_flag = assassinate_chosen_leader@root.owner
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.402.c"
+		trigger = {
+			root.target = {
+				exists = event_target:leader_option_3
+			}
+		}
+		if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_3 = {
+						has_leader_flag = assassinate_risk_prety_low@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_prety_low_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_3 = {
+						has_leader_flag = assassinate_risk_low@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_low_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_3 = {
+						has_leader_flag = assassinate_risk_medium@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_medium_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_3 = {
+						has_leader_flag = assassinate_risk_high@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_high_risk"
+		}
+		else_if = {
+			limit = {
+				root.target = {
+					event_target:leader_option_3 = {
+						has_leader_flag = assassinate_risk_prety_high@root.owner
+					}
+				}
+			}
+			custom_tooltip = "operation_prety_high_risk"
+		}
+		hidden_effect = {
+			set_espionage_operation_progress_locked = no
+			root.target = {
+				event_target:leader_option_3 = {
+					set_leader_flag = assassinate_chosen_leader@root.owner
+				}
+			}
+		}
+		hidden_effect = {
+			set_espionage_operation_progress_locked = no
+		}
+	}
+
+	option = {
+		name = "changelingcountry.402.d"
+		trigger = {
+			root.target = {
+				NOT = { exists = event_target:leader_option_1 }
+			}
+		}
+		hidden_effect = {
+			destroy_espionage_operation = this
+		}
+	}
+
+	option = {
+		name = "changelingcountry.402.e"
+		trigger = {
+			root.owner = {
+				OR = {
+					exists = event_target:leader_option_1
+					exists = event_target:leader_option_2
+					exists = event_target:leader_option_3
+				}
+			}
+		}
+		hidden_effect = {
+			destroy_espionage_operation = this
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			root.owner = {
+				#
+				remove_country_flag = chose_leader_governor@root.target
+				remove_country_flag = chose_leader_general@root.target
+				remove_country_flag = chose_leader_admiral@root.target
+				remove_country_flag = chose_leader_scientist@root.target
+				remove_country_flag = chose_leader_envoy@root.target
+				remove_country_flag = chose_leader_ruler@root.target
+				#
+				remove_country_flag = encryption_factor_low_risk@root.target
+				remove_country_flag = encryption_factor_medium_risk@root.target
+				remove_country_flag = encryption_factor_high_risk@root.target
+				#
+				remove_country_flag = leader_factor_low_risk@root.target
+				remove_country_flag = leader_factor_medium_risk@root.target
+				remove_country_flag = leader_factor_high_risk@root.target
+			}
+		}
+	}
+}
+
+# 3rd evt
+espionage_operation_event = {
+	id = changelingcountry.403
+	title = "changelingcountry.403.title"
+	desc = {
+		text = "changelingcountry.403.desc.a"
+		trigger = {
+			root.target = {
+				exists = event_target:assassinate_chosen_leader
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.403.desc.b"
+		trigger = {
+			root.target = {
+				NOT = { exists = event_target:assassinate_chosen_leader }
+			}
+		}
+	}
+	espionage_operation = yes
+	picture = GFX_evt_smugglers_in_bar
+	show_sound = event_default
+	is_triggered_only = yes
+
+	immediate = {
+		set_espionage_operation_progress_locked = yes
+		root.target = {
+			if = {
+				limit = {
+					any_owned_leader = {
+						has_leader_flag = assassinate_chosen_leader@root.owner
+					}
+				}
+				random_owned_leader = {
+					limit = {
+						has_leader_flag = assassinate_chosen_leader@root.owner
+					}
+					save_event_target_as = assassinate_chosen_leader
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.403.a"
+		trigger = {
+			root.target = {
+				exists = event_target:assassinate_chosen_leader
+			}
+		}
+		custom_tooltip = "changelingcountry.403.tooltip"
+		hidden_effect = {
+			root.target = {
+				if = {
+					limit = {
+						event_target:assassinate_chosen_leader = {
+							has_leader_flag = assassinate_risk_prety_low@root.owner
+						}
+					}
+					country_event = { id = changelingcountry.411 days = 30 }
+				}
+				else_if = {
+					limit = {
+						event_target:assassinate_chosen_leader = {
+							has_leader_flag = assassinate_risk_low@root.owner
+						}
+					}
+					random_list = {
+						80 = {
+							country_event = { id = changelingcountry.411 days = 30 }
+						}
+						20 = {
+							if = {
+								limit = {
+									root.owner = {
+										relative_encryption_decryption = { target = root.target value > 1.5 }
+									}
+								}
+								country_event = { id = changelingcountry.412 days = 30 }
+							}
+							else = {
+								country_event = { id = changelingcountry.413 days = 30 }
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						event_target:assassinate_chosen_leader = {
+							has_leader_flag = assassinate_risk_medium@root.owner
+						}
+					}
+					random_list = {
+						50 = {
+							country_event = { id = changelingcountry.411 days = 30 }
+						}
+						50 = {
+							if = {
+								limit = {
+									root.owner = {
+										relative_encryption_decryption = { target = root.target value > 1.5 }
+									}
+								}
+								country_event = { id = changelingcountry.412 days = 30 }
+							}
+							else = {
+								country_event = { id = changelingcountry.413 days = 30 }
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						event_target:assassinate_chosen_leader = {
+							has_leader_flag = assassinate_risk_high@root.owner
+						}
+					}
+					random_list = {
+						30 = {
+							country_event = { id = changelingcountry.411 days = 30 }
+						}
+						70 = {
+							if = {
+								limit = {
+									root.owner = {
+										relative_encryption_decryption = { target = root.target value > 1.5 }
+									}
+								}
+								country_event = { id = changelingcountry.412 days = 30 }
+							}
+							else = {
+								country_event = { id = changelingcountry.413 days = 30 }
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						event_target:assassinate_chosen_leader = {
+							has_leader_flag = assassinate_risk_prety_high@root.owner
+						}
+					}
+					random_list = {
+						10 = {
+							country_event = { id = changelingcountry.411 days = 30 }
+						}
+						90 = {
+							if = {
+								limit = {
+									root.owner = {
+										relative_encryption_decryption = { target = root.target value > 1.5 }
+									}
+								}
+								country_event = { id = changelingcountry.412 days = 30 }
+							}
+							else = {
+								country_event = { id = changelingcountry.413 days = 30 }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.403.b"
+		trigger = {
+			root.target = {
+				NOT ={ exists = event_target:assassinate_chosen_leader }
+			}
+		}
+		custom_tooltip = "changelingcountry.403.tooltip"
+		hidden_effect = {
+			destroy_espionage_operation = this
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			set_espionage_operation_progress_locked = no
+			root.owner = {
+				set_timed_country_flag = {
+					flag = operation_assassinate_leader_cooldown_flag@root.target
+					days = 2160
+				}
+			}
+			root.target = {
+				while = {
+					count = 3
+					every_owned_leader = {
+						remove_leader_flag = assassinate_risk_prety_low@root.owner
+						remove_leader_flag = assassinate_risk_low@root.owner
+						remove_leader_flag = assassinate_risk_medium@root.owner
+						remove_leader_flag = assassinate_risk_high@root.owner
+						remove_leader_flag = assassinate_risk_prety_high@root.owner
+					}
+				}
+			}
+		}
+	}
+}
+
+# Events
+
+country_event = {
+	id = changelingcountry.405
+	title = "changelingcountry.405.title"
+	desc = "changelingcountry.405.desc"
+	picture = GFX_evt_decryption
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_country_flag = operation_assassinate_leader_tutorial
+		}
+	}
+
+	option = {
+		name = "changelingcountry.405.a"
+		custom_tooltip = "changelingcountry.405.tooltip"
+	}
+}
+
+country_event = {
+	id = changelingcountry.411
+	title = "changelingcountry.411.title"
+	desc = {
+		text = "changelingcountry.411.desc.a"
+		trigger = {
+			event_target:assassinate_chosen_leader = {
+				is_ruler = no
+				is_councilor = no
+				leader_class = scientist
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.411.desc.b"
+		trigger = {
+			event_target:assassinate_chosen_leader = {
+				is_ruler = no
+				is_councilor_type = councilor_research
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.411.desc.c"
+		trigger = {
+			event_target:assassinate_chosen_leader = {
+				is_ruler = no
+				is_councilor = no
+				leader_class = governor
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.411.desc.d"
+		trigger = {
+			event_target:assassinate_chosen_leader = {
+				is_ruler = no
+				is_councilor = no
+				leader_class = general
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.411.desc.e"
+		trigger = {
+			event_target:assassinate_chosen_leader = {
+				is_ruler = no
+				is_councilor = no
+				leader_class = admiral
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.411.desc.f"
+		trigger = {
+			event_target:assassinate_chosen_leader = {
+				leader_class = envoy
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.411.desc.g"
+		trigger = {
+			event_target:assassinate_chosen_leader = {
+				is_ruler = yes
+			}
+		}
+	}
+	desc = {
+		text = "changelingcountry.411.desc.h"
+		trigger = {
+			event_target:assassinate_chosen_leader = {
+				is_ruler = no
+				is_councilor = yes
+			}
+		}
+	}
+	picture = GFX_evt_emergency_workers
+	show_sound = event_life_support_fail
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:assassinate_chosen_leader = {
+			kill_leader = {
+				show_notification = no
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.405.a"
+		tooltip = {
+			event_target:assassinate_chosen_leader = {
+				kill_leader = {
+					show_notification = no
+				}
+			}
+		}
+		hidden_effect = {
+			from.owner = {
+				country_event = { id = changelingcountry.421 days = 15 }	# from = operation
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.412
+	title = "changelingcountry.412.title"
+	desc = "changelingcountry.412.desc"
+	picture = GFX_evt_cover_blown
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.412.a"
+		hidden_effect = {
+			from.owner = {
+				country_event = { id = changelingcountry.422 days = 15 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.413
+	title = "changelingcountry.413.title"
+	desc = "changelingcountry.413.desc"
+	picture = GFX_evt_cover_blown
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.413.a"
+		tooltip = {
+			add_opinion_modifier = {
+				who = from.owner
+				modifier = opinion_assassinate_leader
+			}
+			if = {
+				limit = {
+					has_federation = yes
+					federation = { is_same_value = from.owner }
+				}
+				federation = { add_cohesion = -30 }
+			}
+		}
+		hidden_effect = {
+			from.owner = {
+				country_event = { id = changelingcountry.423 days = 15 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = changelingcountry.421
+	title = "changelingcountry.421.title"
+	desc = "changelingcountry.421.desc"
+	picture = GFX_evt_emergency_workers
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+
+	option = {
+		name = "changelingcountry.421.a"
+	}
+
+	after = {
+		destroy_espionage_operation = fromfrom #fromfrom = operation
+	}
+}
+
+country_event = {
+	id = changelingcountry.422
+	title = "changelingcountry.422.title"
+	desc = "changelingcountry.422.desc"
+	picture = GFX_evt_spymaster
+	show_sound = event_administrative_work
+	is_triggered_only = yes
+
+	immediate = {
+		from = {
+			event_target:assassinate_chosen_leader = {
+				remove_leader_flag = assassinate_chosen_leader
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.422.a"
+	}
+
+	after = {
+		destroy_espionage_operation = fromfrom #fromfrom = operation
+	}
+}
+
+country_event = {
+	id = changelingcountry.423
+	title = "changelingcountry.423.title"
+	desc = "changelingcountry.423.desc"
+	picture = GFX_evt_smear_campaign
+	show_sound = event_radio_chatter
+	is_triggered_only = yes
+
+	immediate = {
+		from = {
+			event_target:assassinate_chosen_leader = {
+				remove_leader_flag = assassinate_chosen_leader
+			}
+		}
+	}
+
+	option = {
+		name = "changelingcountry.423.a"
+		from = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_assassinate_leader
+			}
+		}
+		if = {
+			limit = {
+				has_federation = yes
+				federation = { is_same_value = from }
+			}
+			federation = { add_cohesion = -30 }
+		}
+	}
+
+	after = {
+		destroy_espionage_operation = fromfrom #fromfrom = operation
+	}
+}

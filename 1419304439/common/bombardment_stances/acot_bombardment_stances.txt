@@ -1,0 +1,168 @@
+#example = {
+#	# root = fleet
+#	trigger = {		
+#		always = yes
+#	}
+#	
+#	icon_frame = 1	# This is the frame for the shared icon file, will also need a GFX_fleet_order_button_ground_support_NAME entry
+#	default = yes	# Is this the default stance that new fleets will use?
+#	
+#	stop_when_armies_dead = yes	# Will this stance continue to bombard planets where all defensive armies are dead? default = no
+#	abduct_pops = no	# Will this stance attempt to abduct pops to your own planets instead of killing them? default = no
+#
+#	planet_damage = 0.5		# General scale of damage to planet, default = 1.0
+#	army_damage = 1.0		# General scale of damage to armies, default = 1.0
+#	
+#	kill_pop_chance = 0.2		# Chance that a pop is killed when planetary damage reaches 100%, default = 0
+#	min_pops_to_kill_pop = 8	# Will not kill/abduct pops if pops < this number already, default = 0
+#	add_blocker_chance = 0.2	# Chance that blocker is added to tile hen planetary damage reaches 100%, default = 0
+#	max_blockers = 3			# Will not add bombardment blockers if bombardment blockers >= this number already, default = 0 (if set to -1, unrestricted number)
+#	
+#	# root = fleet
+#	# from = planet
+#	ai_weight = {
+#		weight = 1
+#	}
+#}
+
+
+########################
+
+punishment = {
+	trigger = {
+		NOT = { has_global_flag = acot_exterminatus_forbidden }
+		OR = {
+			owner = { is_country_type = awakened_fallen_empire }
+			owner = { is_country_type = fallen_empire }		
+			owner = { has_technology = tech_bombardment_dm }
+		}
+	  }
+	default = yes
+	
+	stop_when_armies_dead = no
+	abduct_pops = no
+
+	planet_damage = 6.0
+	army_damage = 12.0
+	
+	kill_pop_chance = {
+		base = 2.0
+	}
+	min_pops_to_kill_pop = 0
+	
+	# root = fleet
+	# from = planet
+	ai_weight = {
+		weight = 100
+		modifier = {
+			factor = 100
+			OR = {
+				owner = { has_ethic = ethic_fanatic_xenophile }
+				owner = { has_ethic = ethic_fanatic_pacifist }
+				owner = { has_valid_civic = civic_machine_servitor }				
+				owner = { has_valid_civic = civic_machine_assimilator }			
+				owner = { is_country_type = sbtg_stellarborne_empire }		
+				owner = { is_country_type = sbtg_stellarborne_empire_active }				
+			}
+		}
+	}
+}
+
+exterminatus = {
+	trigger = {
+		NOT = { has_global_flag = acot_exterminatus_forbidden }
+		OR = {				
+			owner = { has_technology = tech_bombardment_ae }
+		}
+		owner = {
+			is_fallen_empire = no
+		}
+	  }
+	default = no
+	
+	stop_when_armies_dead = no
+	abduct_pops = no
+
+	planet_damage = 12.00
+	army_damage = 24.00
+	
+	kill_pop_chance = {
+		base = 5.0
+	}
+	min_pops_to_kill_pop = 0
+	
+	# root = fleet
+	# from = planet
+	ai_weight = {
+		weight = 100
+		modifier = {
+			factor = 0.01
+			exists = from
+			from = { 
+				owner = { NOT = { is_hostile = root.owner } }
+			}
+		}
+		modifier = {
+			factor = 1000
+			owner = { is_country_type = sbtg_stellarborne_empire }
+		}
+		modifier = {
+			factor = 100
+			OR = {
+				owner = { has_ethic = ethic_fanatic_xenophobe }
+				owner = { has_ethic = ethic_xenophobe }
+				owner = { has_ethic = ethic_fanatic_militarist }
+				owner = { has_ethic = ethic_militarist }
+				owner = { has_valid_civic = civic_fanatic_purifiers }				
+				owner = { has_valid_civic = civic_hive_devouring_swarm }				
+				owner = { has_valid_civic = civic_machine_terminator }
+			}
+		}
+	}
+}
+
+final_destionation = {
+	trigger = {
+		owner = { is_fallen_empire = no }
+		OR = {
+			owner = { is_country_type = sbtg_stellarborne_empire }	
+			owner = { is_country_type = sbtg_stellarborne_empire_active }		
+			owner = { has_technology = tech_bombardment_se }
+		}
+	}
+	default = no
+	
+	stop_when_armies_dead = no
+	abduct_pops = no
+
+	planet_damage = 12.00
+	army_damage = 24.00
+	
+	kill_pop_chance = {
+		base = 20.0
+	}
+	min_pops_to_kill_pop = 0
+	
+	# root = fleet
+	# from = planet
+	ai_weight = {
+		weight = 1000
+		modifier = {
+			factor = 0.01
+			exists = from
+			from = { 
+				owner = { NOT = { is_hostile = root.owner } }
+			}
+		}
+		modifier = {
+			factor = 10000
+			owner = { is_country_type = sbtg_stellarborne_empire }
+		}
+		modifier = {
+			factor = 10000
+			OR = {
+				owner = { is_country_type = sbtg_stellarborne_empire_active }	
+			}
+		}
+	}
+}

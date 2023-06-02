@@ -1,0 +1,2440 @@
+############DARK MATTER EVENTS
+
+
+namespace = acot_alpha_matter_events
+
+
+#ALPHA EXISTENCE
+country_event = {
+	id = acot_alpha_matter_events.1
+	title = acot_alpha_matter_events.1.name
+	desc = {
+		trigger = {
+			is_country_type = default
+		}
+		text = acot_alpha_matter_events.1.a.desc
+	}
+	desc = {
+		trigger = {
+			is_country_type = ascended_empire
+		}
+		text = acot_alpha_matter_events.1.b.desc
+	}
+	picture = GFX_evt_ancient_records
+	show_sound = event_mystery
+
+	trigger = {
+		NOT = {
+			has_global_flag = acot_alpha_forbidden
+		}
+		OR = {
+			is_country_type = default
+			AND = {
+				is_country_type = ascended_empire
+				resource_stockpile_compare = {
+					resource = unity
+					value >= 50000
+				}
+			}
+		}
+		has_technology = "tech_dark_matter_power_core_dm"
+		has_technology = "tech_mine_dark_energy"
+		has_technology = "tech_mine_dark_matter"
+		NOR = {
+			has_country_flag = hear_precursor_rumor
+			has_technology = "tech_precursor_design"
+			has_tech_option = "tech_precursor_design"
+			has_technology = "tech_dark_matter_power_core_ae"
+			has_tech_option = "tech_dark_matter_power_core_ae"
+		}		
+		OR  = {
+			any_owned_planet = {
+				OR = {
+					has_building = building_fe_dome
+					has_building = building_dimensional_fabricator
+					has_building = building_ancient_palace
+					has_building = building_fe_xeno_zoo
+					has_building = building_ancient_control_center
+					has_building = building_affluence_center
+					has_building = building_nourishment_center
+					has_building = building_class_4_singularity
+					has_building = building_nano_forge
+					has_building = building_master_archive
+					has_building = building_ancient_cryo_chamber
+					has_building = building_fe_stronghold
+					has_building = building_giga_fortress_fe
+				}
+			}
+			any_owned_ship = {
+				OR = {
+					is_ship_size = small_ship_fallen_empire
+					is_ship_size = large_ship_fallen_empire
+					is_ship_size = massive_ship_fallen_empire
+					is_ship_size = military_station_small_fallen_empire
+				}	
+			}
+			any_neighbor_country = {
+				is_fallen_empire = yes
+			}
+			any_owned_planet = {
+				OR ={
+					has_planet_flag = fallen_empire_world
+					is_planet_class = pc_dark_fractured
+					is_planet_class = pc_dark_fractured_ae
+				}
+			}
+			has_precursaor_tech = yes
+		}
+    }
+	
+	mean_time_to_happen = {
+		years = 2
+	}
+
+	immediate = {
+		set_country_flag = hear_precursor_rumor
+	}
+	
+	option = {
+		name = acot_alpha_matter_events.1.a
+		trigger = {
+			is_country_type = default
+			is_ai = no
+		}
+		set_country_flag = allow_databank_steal
+		begin_event_chain = {
+			event_chain = acot_alpha_tech_chain
+		}
+		capital_scope = {
+			IF = {
+				limit = {
+					any_country = {
+						is_fallen_empire = yes
+					}
+				}
+				create_point_of_interest = {
+					id = acot_alpha_research.1
+					name = "acot_databank_attack_fe"
+					desc = "acot_databank_attack_fe_desc"
+					event_chain = acot_alpha_tech_chain
+					location = this
+				}	
+				create_point_of_interest = {
+					id = acot_alpha_research.2
+					name = "acot_databank_trick_fe"
+					desc = "acot_databank_trick_fe_desc"
+					event_chain = acot_alpha_tech_chain
+					location = this
+				}	
+			}	
+			IF = {
+				limit = {
+					any_country = {
+						has_country_flag = curator_enclave_country
+					}
+					owner = {
+						NOR = {
+							is_homicidal = yes
+							has_country_flag = attacked_curators
+						}
+					}
+				}
+				create_point_of_interest = {
+					id = acot_alpha_research.4
+					name = "acot_databank_ask_curator"
+					desc = "acot_databank_ask_curator_desc"
+					event_chain = acot_alpha_tech_chain
+					location = this
+				}
+			}	
+
+			create_point_of_interest = {
+				id = acot_alpha_research.5
+				name = "acot_databank_self_assembly"
+				desc = "acot_databank_self_assembly_desc"
+				event_chain = acot_alpha_tech_chain
+				location = this
+			}
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.1.b
+		custom_tooltip = acot_alpha_matter_events.1.b.explain
+		trigger = {
+			NOT = {
+				is_country_type = default
+			}
+			is_ai = no
+		}
+		allow = {
+			resource_stockpile_compare = {
+				resource = unity
+				value >= 50000
+			}
+		}
+		add_resource = {
+			unity = -50000
+		}
+		set_country_flag = allow_databank_steal
+		begin_event_chain = {
+			event_chain = acot_alpha_tech_chain
+		}
+		capital_scope = {
+			IF = {
+				limit = {
+					any_country = {
+						is_fallen_empire = yes
+					}
+				}
+				create_point_of_interest = {
+					id = acot_alpha_research.1
+					name = "acot_databank_attack_fe"
+					desc = "acot_databank_attack_fe_desc"
+					event_chain = acot_alpha_tech_chain
+					location = this
+				}	
+				create_point_of_interest = {
+					id = acot_alpha_research.2
+					name = "acot_databank_trick_fe"
+					desc = "acot_databank_trick_fe_desc"
+					event_chain = acot_alpha_tech_chain
+					location = this
+				}	
+			}	
+			create_point_of_interest = {
+				id = acot_alpha_research.3
+				name = "acot_databank_ask_pmc"
+				desc = "acot_databank_ask_pmc_desc"
+				event_chain = acot_alpha_tech_chain
+				location = this
+			}	
+			IF = {
+				limit = {
+					any_country = {
+						has_country_flag = curator_enclave_country
+					}
+					owner = {
+						NOR = {
+							is_homicidal = yes
+							has_country_flag = attacked_curators
+						}
+					}
+				}
+				create_point_of_interest = {
+					id = acot_alpha_research.4
+					name = "acot_databank_ask_curator"
+					desc = "acot_databank_ask_curator_desc"
+					event_chain = acot_alpha_tech_chain
+					location = this
+				}
+			}	
+
+			create_point_of_interest = {
+				id = acot_alpha_research.4
+				name = "acot_databank_self_assembly"
+				desc = "acot_databank_self_assembly_desc"
+				event_chain = acot_alpha_tech_chain
+				location = this
+			}
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.1.c
+		trigger = {
+			NOT = {
+				is_country_type = default
+			}
+			is_ai = no
+		}
+	}
+
+	### AI IS TOO STUPID TO RELIABLY UNDERSTAND COMPLEX SYSTEMS WITHOUT BUNCH OF  CODES
+	option = {
+		name = EXCELLENT
+		trigger = {
+			is_ai = yes
+			NOT = {
+				has_global_flag = acot_ai_simple_event_forbidden
+			}
+		}		
+		add_research_option = tech_precursor_design
+		add_research_option = tech_dark_matter_power_core_ae
+		set_country_flag = learned_dm_alpha_existence
+	}
+
+	### AI IS TOO STUPID TO RELIABLY UNDERSTAND COMPLEX SYSTEMS WITHOUT BUNCH OF  CODES
+	option = {
+		name = EXCELLENT
+		trigger = {
+			is_ai = yes
+			has_global_flag = acot_ai_simple_event_forbidden
+		}		
+		set_country_flag = allow_databank_steal
+		begin_event_chain = {
+			event_chain = acot_alpha_tech_chain
+		}
+		random_list = {
+			60 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						has_established_contact = event_target:curator_enclave_country
+					}
+				}
+				modifier = {
+					factor = 0
+					resource_stockpile_compare = {
+						resource = energy
+						value <= 100000	
+					}
+					resource_stockpile_compare = {
+						resource = acot_sr_dark_energy
+						value <= 10000	
+					}
+					resource_stockpile_compare = {
+						resource = sr_dark_matter
+						value <= 10000	
+					}
+				}	
+				add_resource = {
+					energy = -100000
+					sr_dark_matter = -10000
+					acot_sr_dark_energy = -10000
+				}
+				hidden_effect = {
+					country_event = { id = acot_alpha_matter_events.1040 days = 30 }
+				}
+			}
+			40 = {
+				country_event = { id = acot_alpha_matter_events.9000 days = 5 }
+			}
+		}
+	}
+}
+
+
+#WARNING! YOU ARE TALKING TO RAPTORUS
+country_event = {
+	id = acot_alpha_matter_events.103
+	title = acot_alpha_matter_events.103.name
+	desc = {
+		text = acot_alpha_matter_events.103.desc
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+
+	picture_event_data = {
+		room = sofe_smuggler_room
+	}
+
+	immediate = {
+		set_country_flag = acot_phanon_diplomacy_engaged
+	}
+
+	after = {
+		set_country_flag = met_the_smuggler	
+		hidden_effect = {
+			remove_country_flag = acot_phanon_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.103.a
+		is_dialog_only = yes
+		response_text = acot_alpha_matter_events.103.a.response
+	}
+
+	option = {
+		name = acot_alpha_matter_events.103.b
+		response_text = acot_alpha_matter_events.103.b.response
+		is_dialog_only = yes	
+	}
+
+	option = {
+		name = acot_alpha_matter_events.103.c
+		response_text = acot_alpha_matter_events.103.c.response
+		default_hide_option = yes		
+	}
+
+	option = {
+		set_country_flag = hired_phanon_precursor
+		name =  acot_alpha_matter_events.103.d
+		response_text =  acot_alpha_matter_events.103.d.response
+		allow = {
+			resource_stockpile_compare = {
+				resource = alloys
+				value >= 5000	
+			}
+			resource_stockpile_compare = {
+				resource = minerals
+				value >= 100000	
+			}
+		}	
+		trigger = {
+			NOT = {
+				has_country_flag = known_the_smuggler				
+			}
+		}
+		add_resource = {
+			minerals = -100000
+			alloys = -5000
+		}
+		hidden_effect = {
+			set_country_flag = known_the_smuggler
+			country_event = { id = acot_alpha_matter_events.1030 days = 30 }
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.103.d
+		response_text = acot_alpha_matter_events.103.d.response
+		allow = {
+			resource_stockpile_compare = {
+				resource = alloys
+				value >= 5000	
+			}
+			resource_stockpile_compare = {
+				resource = minerals
+				value >= 50000	
+			}
+		}	
+		trigger = {
+			has_country_flag = known_the_smuggler	
+		}
+		add_resource = {
+			minerals = -50000
+			alloys = -5000
+		}
+		hidden_effect = {
+			country_event = { id = acot_alpha_matter_events.1030 days = 15 }
+		}
+	}
+
+}
+
+#WARNING! YOU ARE TALKING TO CRUATOR
+country_event = {
+	id = acot_alpha_matter_events.104
+	title = acot_alpha_matter_events.104.name
+	desc = {
+		text = acot_alpha_matter_events.104.desc
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+
+	custom_gui = "enclave_curator_window"
+
+	picture_event_data = {
+		portrait = event_target:curator_enclave_country
+		room = enclave_curator_room
+	}
+
+	immediate = {
+		set_country_flag = curator_enclave_diplomacy_engaged
+	}
+
+	after = {
+		hidden_effect = {
+			remove_country_flag = curator_enclave_diplomacy_engaged
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.104.a
+		is_dialog_only = yes
+		response_text = acot_alpha_matter_events.104.a.response
+	}
+
+	option = {
+		name = acot_alpha_matter_events.104.b
+		response_text = acot_alpha_matter_events.104.b.response
+		is_dialog_only = yes	
+	}
+
+	option = {
+		name = acot_alpha_matter_events.104.c
+		response_text = acot_alpha_matter_events.104.c.response
+		default_hide_option = yes		
+	}
+
+	option = {
+		name =  acot_alpha_matter_events.104.d
+		response_text =  acot_alpha_matter_events.104.d.response
+		allow = {
+			resource_stockpile_compare = {
+				resource = energy
+				value >= 100000	
+			}
+			resource_stockpile_compare = {
+				resource = acot_sr_dark_energy
+				value >= 10000	
+			}
+			resource_stockpile_compare = {
+				resource = sr_dark_matter
+				value >= 10000	
+			}
+		}	
+		add_resource = {
+			energy = -100000
+			sr_dark_matter = -10000
+			acot_sr_dark_energy = -10000
+		}
+		hidden_effect = {
+			country_event = { id = acot_alpha_matter_events.1040 days = 30 }
+		}
+	}
+
+}
+
+# DATABANK Acquired Smogggol
+country_event = {
+	id = acot_alpha_matter_events.1030
+	title = acot_alpha_matter_events.1030.name
+	desc = acot_alpha_matter_events.1030.desc
+	picture = GFX_evt_ancient_databank
+	show_sound = event_mystery
+
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = has_databank
+		hidden_effect = {		
+			remove_point_of_interest = acot_alpha_research.1
+			remove_point_of_interest = acot_alpha_research.2	
+			remove_point_of_interest = acot_alpha_research.3
+			remove_point_of_interest = acot_alpha_research.4	
+			remove_point_of_interest = acot_alpha_research.5
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.1030.a
+		default_hide_option = yes
+		add_research_option = tech_precursor_design
+	}
+}
+
+# DATABANK Acquired Curator
+country_event = {
+	id = acot_alpha_matter_events.1040
+	title = acot_alpha_matter_events.1040.name
+	desc = acot_alpha_matter_events.1040.desc
+	picture = GFX_evt_ancient_databank
+	show_sound = event_mystery
+
+	is_triggered_only = yes
+
+
+	
+	immediate = {
+		set_country_flag = has_databank
+		hidden_effect = {		
+			remove_point_of_interest = acot_alpha_research.1
+			remove_point_of_interest = acot_alpha_research.2	
+			remove_point_of_interest = acot_alpha_research.3
+			remove_point_of_interest = acot_alpha_research.4	
+			remove_point_of_interest = acot_alpha_research.5
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.1040.a
+		default_hide_option = yes
+		add_research_option = tech_precursor_design
+	}
+}
+
+# DATABANK Acquired Normal
+country_event = {
+	id = acot_alpha_matter_events.100
+	title = acot_alpha_matter_events.100.name
+	desc = acot_alpha_matter_events.100.desc
+	picture = GFX_evt_ancient_databank
+	show_sound = event_mystery
+
+	is_triggered_only = yes
+
+
+	immediate = {
+		set_country_flag = has_databank
+		hidden_effect = {		
+			remove_point_of_interest = acot_alpha_research.1
+			remove_point_of_interest = acot_alpha_research.2	
+			remove_point_of_interest = acot_alpha_research.3
+			remove_point_of_interest = acot_alpha_research.4	
+			remove_point_of_interest = acot_alpha_research.5
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.100.a
+		default_hide_option = yes
+		add_research_option = tech_precursor_design
+	}
+}
+
+
+
+
+# DATABANK OPINION CHECK
+country_event = {
+	id = acot_alpha_matter_events.101
+	hide_window = yes
+	show_sound = event_mystic_reveal
+    trigger = {
+        NOR = {
+			has_country_flag = has_databank
+		}
+		has_country_flag = hear_precursor_rumor
+        is_country_type = default
+        any_country = {
+			is_ai = yes
+			is_country_type = fallen_empire
+            is_at_war = no
+            NOT = {
+                has_ethic = ethic_gestalt_consciousness
+			}
+			is_patronizing_to = root
+        }
+    }
+
+    mean_time_to_happen = {
+        years = 4
+    }
+
+
+	
+	immediate = {
+		random_country = {
+            limit = {
+				is_ai = yes
+				is_country_type = fallen_empire
+				is_at_war = no
+				NOT = {
+					has_ethic = ethic_gestalt_consciousness
+				}
+				is_patronizing_to = root        
+            }
+            save_event_target_as = FallenEmpireTaskOrigin
+        }
+        save_event_target_as = FallenEmpireTaskTarget
+        country_event = { id = acot_alpha_matter_events.102  }     
+	}
+}
+
+country_event = {
+	id = acot_alpha_matter_events.102
+	title = acot_alpha_matter_events.102.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:FallenEmpireTaskOrigin
+		planet_background = event_target:FallenEmpireTaskOrigin
+		graphical_culture = event_target:FallenEmpireTaskOrigin
+		city_level = event_target:FallenEmpireTaskOrigin
+		room = event_target:FallenEmpireTaskOrigin.ruler
+	}
+    
+    desc = {
+		text = acot_alpha_matter_events.102.desc.spiritualist
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+	}
+    desc = {
+		text = acot_alpha_matter_events.102.desc.materialist
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+    desc = {
+		text = acot_alpha_matter_events.102.desc.xenophile
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+	}
+	desc = {
+		text = acot_alpha_matter_events.102.desc.xenophobe
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+    }
+
+    option = {
+        name = acot_alpha_matter_events.102.a
+        response_text = acot_alpha_matter_events.102.a.response
+		#custom_tooltip = acot_alpha_matter_events.102.a.tooltip
+		default_hide_option = yes
+		every_owned_leader = {
+			IF = {
+				limit = {
+					NOT = {
+						has_skill <= 2
+					}
+				}
+			}
+			add_skill = -2
+		}
+		every_owned_leader = {
+			IF = {
+				limit = {
+					NOT = {
+						has_trait = leader_trait_substance_abuser_2
+					}
+				}
+			}
+			add_trait = leader_trait_substance_abuser_2
+		}
+		every_owned_leader = {
+			IF = {
+				limit = {
+					NOT = {
+						has_trait = leader_trait_fallible
+					}
+				}
+			}
+			add_trait = leader_trait_fallible
+		}
+		every_owned_leader = {
+			IF = {
+				limit = {
+					NOT = {
+						has_trait = leader_trait_melancholic_2
+					}
+				}
+			}
+			add_trait = leader_trait_melancholic_2
+		}
+		every_owned_leader = {
+			IF = {
+				limit = {
+					NOT = {
+						has_trait = leader_trait_volatile_2
+					}
+				}
+			}
+			add_trait = leader_trait_volatile_2
+		}
+        hidden_effect = {       
+			country_event = { id = acot_alpha_matter_events.100 days = 1 }	   
+        }
+        ai_chance = {
+            factor = 100
+            modifier = {
+                factor = 5
+                OR = {
+                    is_xenophile= yes
+                    is_pacifist = yes
+                }
+            }
+        }
+	}
+	
+    option = {
+        name = acot_alpha_matter_events.102.b
+        response_text = acot_alpha_matter_events.102.b.response
+        save_event_target_as = FallenEmpireTaskTarget
+        event_target:FallenEmpireTaskOrigin = { 
+            add_opinion_modifier = { 
+                who = root modifier = opinion_majorly_failed_fallen_empire_task
+             }  
+        }	
+        ai_chance = {
+            factor = 50
+            modifier = {
+				factor = 0
+                OR = {
+					relative_power = {
+						who = event_target:FallenEmpireTaskOrigin
+						value >= superior
+					}
+                }
+            }
+        }
+    }
+}
+
+# DATABANK Analyzed
+country_event = {
+	id = acot_alpha_matter_events.2
+	title = acot_alpha_matter_events.2.name
+	desc = acot_alpha_matter_events.2.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_curious
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_technology = tech_dark_matter_power_core_ae
+		}
+		last_increased_tech = tech_precursor_design
+	}
+	
+	immediate = {
+		IF = {
+			limit = {
+				NOT = {
+					exists = event_target:acot_precursor_databank_country
+				}
+			}
+			create_country = {
+				name = "NAME_ACOT_DATABANK"
+				type = acot_databank
+				flag = {
+					icon = {
+						category = "spherical"
+						file = "flag_spherical_23.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "v.dds"
+					}
+					colors={
+						"black"
+						"teal"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					set_country_flag = acot_precursor_databank_country
+					save_global_event_target_as = acot_precursor_databank_country
+				}
+			}
+		}
+		establish_communications_no_message = event_target:acot_precursor_databank_country
+		hidden_effect = {		
+			remove_point_of_interest = acot_alpha_research.1
+			remove_point_of_interest = acot_alpha_research.2	
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.2.a
+		default_hide_option = yes
+		trigger = {
+			is_ai = no
+		}
+		hidden_effect = {
+			country_event = {
+				id = acot_precursor_databank.101 
+			}
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.2.b
+		trigger = {
+			is_ai = no
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		default_hide_option = yes
+		trigger = {
+			is_ai = yes
+		}
+		add_research_option = tech_precursor_design_engineering
+		add_research_option = tech_precursor_design_history
+		add_research_option = tech_precursor_design_physics
+	}
+
+}
+
+#Dark Matter Power FINAL
+country_event = {
+	id = acot_alpha_matter_events.3
+	title = acot_alpha_matter_events.3.name
+	desc = {
+		trigger = {
+			last_increased_tech = tech_precursor_design_engineering		
+		}
+		text = acot_alpha_matter_events.3.desc.engi
+	}
+	desc = {
+		trigger = {
+			last_increased_tech = tech_precursor_design_history		
+		}
+		text = acot_alpha_matter_events.3.desc.hist
+	}
+	desc = {
+		trigger = {
+			last_increased_tech = tech_precursor_design_physics		
+		}
+		text = acot_alpha_matter_events.3.desc.phys
+	}
+	picture = GFX_evt_matter_decompressor
+	show_sound = event_curious
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			last_increased_tech = tech_precursor_design_engineering
+			last_increased_tech = tech_precursor_design_history
+			last_increased_tech = tech_precursor_design_physics
+		}
+	}
+	
+	immediate = {
+		change_variable = {
+			which = acot_alpha_tech_score
+			value = 1
+		}
+	}
+	
+    option = {
+		name = acot_alpha_matter_events.3.a
+		add_resource = {
+			influence = 50
+		}
+		default_hide_option = yes
+		hidden_effect = {
+			if ={
+				limit = {
+					check_variable = {
+						which = acot_alpha_tech_score
+						value = 3
+					}
+				}
+				country_event = { id = acot_alpha_matter_events.4 days = 1 }	   
+			}
+		}
+    }
+}
+
+#Dark Matter Power FINAL
+country_event = {
+	id = acot_alpha_matter_events.4
+	title = acot_alpha_matter_events.4.name
+	desc = acot_alpha_matter_events.4.desc
+	picture = GFX_evt_matter_decompressor
+	show_sound = event_mystery
+	is_triggered_only = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+	}
+	
+    option = {
+		name = acot_alpha_matter_events.4.a
+		default_hide_option = yes
+		add_research_option = tech_dark_matter_power_core_ae
+	}
+	
+	option = {
+		name = acot_alpha_matter_events.4.b
+		trigger = {
+			is_ai = no
+		}
+		every_owned_leader = {
+			limit = {
+				NOT = {
+					is_councilor = yes
+				}
+			}
+			kill_leader = {
+			}
+		}
+		ai_chance = {
+			factor = 0
+		}
+    }
+}
+
+#ALPHA COMPLETED
+country_event = {
+	id = acot_alpha_matter_events.5
+	title = acot_alpha_matter_events.5.name
+	desc = acot_alpha_matter_events.5.desc
+	picture = GFX_evt_matter_decompressor
+	show_sound = event_completed
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = default
+		last_increased_tech = tech_dark_matter_power_core_ae
+	}
+	
+	immediate = {
+		end_event_chain = acot_alpha_tech_chain
+	}
+	
+    option = {
+		name = acot_alpha_matter_events.5.a
+		default_hide_option = yes
+    }
+
+	after = {
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			country_event = {
+				id = acot_alpha_matter_events.6 days = 360
+			}
+		}
+	}
+}
+
+# AI PRECURSOR SHIP STUFFS
+country_event = {
+	id = acot_alpha_matter_events.6
+	hide_window = yes 
+	
+	is_triggered_only = yes
+
+	immediate = {
+		IF = {
+			limit = {
+				NOT = {
+					has_technology = tech_precursor_escort
+				}
+			}
+			add_research_option = tech_precursor_escort
+			add_tech_progress = {
+				tech = tech_precursor_escort
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				NOT = {
+					has_technology = tech_precursor_guardian
+				}
+			}
+			add_research_option = tech_precursor_guardian
+			add_tech_progress = {
+				tech = tech_precursor_guardian
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_escort
+				NOT = {
+					has_technology = tech_precursor_bc
+				}
+			}
+			add_research_option = tech_precursor_bc
+			add_tech_progress = {
+				tech = tech_precursor_bc
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_bc
+				NOT = {
+					has_technology = tech_precursor_titan
+				}
+			}
+			add_research_option = tech_precursor_titan
+			add_tech_progress = {
+				tech = tech_precursor_titan
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_bc
+				NOT = {
+					has_technology = tech_precursor_sentinel
+				}
+			}
+			add_research_option = tech_precursor_sentinel
+			add_tech_progress = {
+				tech = tech_precursor_sentinel
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_bc
+				NOT = {
+					has_technology = tech_precursor_assault_carrier
+				}
+			}
+			add_research_option = tech_precursor_assault_carrier
+			add_tech_progress = {
+				tech = tech_precursor_assault_carrier
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_titan
+				NOT = {
+					has_technology = tech_precursor_citadel
+				}
+			}
+			add_research_option = tech_precursor_citadel
+			add_tech_progress = {
+				tech = tech_precursor_citadel
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_titan
+				NOT = {
+					has_technology = tech_precursor_enigmalith
+				}
+			}
+			add_research_option = tech_precursor_enigmalith
+			add_tech_progress = {
+				tech = tech_precursor_enigmalith
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_bc
+				NOT = {
+					has_technology = tech_precursor_science
+				}
+			}
+			add_research_option = tech_precursor_science
+			add_tech_progress = {
+				tech = tech_precursor_science
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_science
+				NOT = {
+					has_technology = tech_precursor_construcor
+				}
+			}
+			add_research_option = tech_precursor_construcor
+			add_tech_progress = {
+				tech = tech_precursor_construcor
+				progress = 0.10
+			}
+		}
+		IF = {
+			limit = {
+				has_technology = tech_precursor_construcor
+				NOT = {
+					has_technology = tech_precursor_colonizer
+				}
+			}
+			add_research_option = tech_precursor_colonizer
+			add_tech_progress = {
+				tech = tech_precursor_colonizer
+				progress = 0.10
+			}
+		}
+	}
+
+	after = {
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			country_event = {
+				id = acot_alpha_matter_events.6 days = 360
+			}
+		}
+	}
+}
+
+# Alpha Precursor Attempt Shit
+country_event = {
+	id = acot_alpha_matter_events.9000
+	hide_window = yes 
+	
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			45 = { country_event = { id = acot_alpha_matter_events.9001 } } ## FAILED
+			25 = { country_event = { id = acot_alpha_matter_events.9002 } } ## FAILED AND IT CREATES ROGUE BERSERK AI
+			25 = { country_event = { id = acot_alpha_matter_events.9003 } } ## SUCCESS
+			5 = { country_event = { id = acot_alpha_matter_events.9004 } } ## CRITICAL MISSION FAILURE. AI GIVES A LOT OF SHITS TO RANDOM AI
+		}
+	}
+}
+
+country_event = {
+	id = acot_alpha_matter_events.9001
+	title =  acot_alpha_matter_events.9001.name
+	desc =  acot_alpha_matter_events.9001.desc
+	picture = GFX_evt_ancient_records
+	
+	is_triggered_only = yes
+
+	option = {
+		name = acot_alpha_matter_events.9001.a  
+    }
+
+	after = {
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			country_event = {
+				id = acot_alpha_matter_events.9000 days = 720
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_alpha_matter_events.9002
+	title =  acot_alpha_matter_events.9002.name
+	desc =  acot_alpha_matter_events.9002.desc
+	picture = GFX_evt_large_explosion
+	show_sound = event_super_explosion
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					exists = event_target:acot_crazed_ai
+				}
+			 }
+			 create_country = {
+				type = acot_crazed_machine
+				name = "Prototype KABAL"
+				flag = {
+					icon= {
+						category = "special"
+						file = "extradimensional_01.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "circle.dds"
+					}
+					colors={
+						"black"
+						"red"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					establish_communications_no_message = root.owner
+					save_global_event_target_as = acot_crazed_ai
+					
+				}
+			}		
+		}
+		random_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+			}
+			set_owner = event_target:acot_crazed_ai				
+		}		
+		random_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+			}
+			set_owner = event_target:acot_crazed_ai				
+		}	
+		random_owned_fleet = {
+			limit = {
+				is_ship_class = shipclass_military
+			}
+			set_owner = event_target:acot_crazed_ai				
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.9002.a  
+    }
+
+	after = {
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			country_event = {
+				id = acot_alpha_matter_events.9000 days = 720
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_alpha_matter_events.9003
+	title =  acot_alpha_matter_events.9003.name
+	desc =  acot_alpha_matter_events.9003.desc
+	picture = GFX_evt_ancient_databank
+	show_sound = event_laboratory_sound
+	
+	is_triggered_only = yes
+
+	immediate = {
+		set_country_flag = has_databank
+		hidden_effect = {		
+			remove_point_of_interest = acot_alpha_research.1
+			remove_point_of_interest = acot_alpha_research.2	
+			remove_point_of_interest = acot_alpha_research.3
+			remove_point_of_interest = acot_alpha_research.4	
+			remove_point_of_interest = acot_alpha_research.5
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.9003.a  
+		default_hide_option = yes
+		add_research_option = tech_precursor_design
+	}
+}
+
+country_event = {
+	id = acot_alpha_matter_events.9004
+	title =  acot_alpha_matter_events.9004.name
+	desc =  acot_alpha_matter_events.9004.desc
+	picture = GFX_evt_synth_sabotage
+	show_sound = event_red_alert
+	
+	is_triggered_only = yes
+
+	immediate = {
+		# uprising on colony
+		if = {
+			limit = {
+				any_owned_planet = {
+					is_capital = no
+				}
+			}
+			random_owned_planet = {
+				limit = {
+					is_capital = no
+				}
+				planet_event = { id = acot_alpha_matter_events.9005 }
+			}
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.9004.a  
+
+		hidden_effect = {
+		}
+	}
+
+	after = {
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			country_event = {
+				id = acot_alpha_matter_events.9000 days = 720
+			}
+		}
+	}
+}
+
+planet_event = { #uprising
+	id = acot_alpha_matter_events.9005
+	title =  acot_alpha_matter_events.9005.name
+	desc =  acot_alpha_matter_events.9005.desc
+	picture = GFX_acot_precursor_uprising
+	show_sound = event_ai_started
+	is_triggered_only = yes
+
+	pre_triggers = {
+		has_owner = yes
+	}
+
+	immediate = {
+		owner = {
+			save_event_target_as = organic_empire
+		}
+		owner = { save_event_target_as = current_uprising_originator }
+		set_planet_flag = machup_capital@root.owner
+		# event lock all fleets to prevent exploits
+		owner = { every_owned_fleet = { set_event_locked = yes } }
+		# find and flag planets
+		owner = {
+			effect_on_blob = {
+				center = root.solar_system
+				owned_planets_percentage = 0.70
+				planet_limit = {
+					OR = {
+						controller = { is_same_value = root.owner }
+						solar_system = {
+							exists = starbase
+							starbase = { owner = { is_same_value = root.owner } }
+						}
+					}
+					solar_system = { # never flip any planets in the capital system
+						NOT = { any_system_planet = { is_same_value = root.owner.capital_scope } }
+					}
+				}
+				effect = {
+					set_star_flag = machup_system_flip
+				}
+			}
+		}
+		# create machine species
+		create_species = {
+			name = "Marked of Precursor"
+			class = MACHINE
+			portrait = random
+			traits = {
+				trait = trait_machine_unit
+			}
+			immortal = yes
+		}
+		# create machine country
+		owner = {
+			create_country = {
+				name = random
+				type = default
+				species = last_created_species
+				ignore_initial_colony_error = yes
+				day_zero_contact = no
+				ethos = { ethic = ethic_gestalt_consciousness }
+				authority = auth_machine_intelligence
+				civics = {
+					civic = civic_acot_rogue_precursor
+					civic = civic_acot_rogue_precursor_fleet
+					civic = civic_acot_rogue_precursor_data
+				}
+				flag = random
+				origin = origin_separatists
+				effect = {
+					random_list = {
+						25 = { set_empire_name = "Databank: BRAINIAC" }
+						25 = { set_empire_name = "Databank: KABAL" }
+						25 = { set_empire_name = "Databank: EVA" }
+						25 = { set_empire_name = "Databank: ZOCOM" }
+						25 = { set_empire_name = "Databank: CORTANA" }
+						25 = { set_empire_name = "Databank: R2D2" }
+						25 = { set_empire_name = "Databank: JOJO" }
+						25 = { set_empire_name = "Databank: STROHEIM" }
+						25 = { set_empire_name = "Databank: MURICA" }
+						25 = { set_empire_name = "Databank: EDI" }
+						25 = { set_empire_name = "Databank: GETH" }
+						25 = { set_empire_name = "Databank: PANADA" }												
+					}
+					create_leader = {
+						name = "Databank Host Unit"
+						class = admiral
+						skill = 10
+						species = this
+					}
+					assign_leader = last_created_leader
+					modify_species = {
+						species = this
+						add_trait = trait_machine_unit
+						add_traits_at_start_of_list = yes
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_acot_robot_scv
+						add_traits_at_start_of_list = yes
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_acot_robot_superman_engines
+						add_traits_at_start_of_list = yes
+					}
+					modify_species = {
+						species = this
+						add_trait = trait_acot_robot_heavy_duty
+						add_traits_at_start_of_list = yes
+					}
+					save_event_target_as = current_uprising
+					country_event = { id = acot_alpha_matter_events.9006 } # setup happens here now
+				}
+			}
+		}
+	}
+
+	option = {
+		name = acot_alpha_matter_events.9005.a
+		custom_tooltip = syndaw.1020.a.tooltip
+	}
+
+	option = {
+		name = acot_alpha_matter_events.9005.b
+		trigger = {
+			always = no
+		}
+		custom_tooltip = syndaw.1020.b.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					event_target:organic_empire = { num_owned_planets > 0 }
+				}
+				event_target:current_uprising = {
+					set_player = event_target:current_uprising_originator
+				}				
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			event_target:current_uprising_originator = {
+				every_owned_fleet = {
+					set_event_locked = no
+				}
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = acot_alpha_matter_events.9006
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {  }
+
+	immediate = {
+		# saving uprising and host as event targets
+		save_event_target_as = current_uprising
+		from.owner = { save_event_target_as = current_uprising_originator }
+
+		country_event = { id = acot_test_event.0 }
+		country_event = { id = acot_test_event.1 }
+
+		# setting flags
+		set_country_flag = machine_uprising_country@from.owner
+		set_country_flag = machine_uprising_country
+		set_relation_flag = {
+			who = event_target:current_uprising_originator
+			flag = uprising_to_host_flag
+		}
+		from.owner = {
+			set_country_flag = machine_uprising_originator@root
+			set_country_flag = machine_uprising_originator
+			set_relation_flag = {
+				who = root
+				flag = host_to_uprising_flag
+			}
+		}
+
+		# setting graphical culture
+		set_graphical_culture = event_target:current_uprising_originator
+
+		# establish comms
+		every_country = {
+			limit = {
+				is_playable_country = yes
+				OR = {
+					has_communications = event_target:current_uprising_originator
+					intel_level = {
+						level > low
+						system = event_target:current_uprising_originator.capital_scope.solar_system
+					}
+					any_system = {
+						has_star_flag = machup_system_flip
+						prev = {
+							intel_level = {
+								level > low
+								system = prev
+							}
+						}
+					}
+				}
+			}
+			establish_communications_no_message = root
+			establish_contact = { who = root location = from }
+		}
+
+		# baseline resource stockpile
+		add_resource = {
+			energy = 500000
+			minerals = 500000
+			influence = 1000
+			alloys = 500000
+			acot_sr_dark_energy = 50000
+			sr_dark_matter = 50000
+			unity = 500000
+			minor_artifacts = 500
+			food = 500000
+			volatile_motes = 50000
+			exotic_gases = 50000
+			rare_crystals = 50000
+		}
+
+		# Machine Uprising opinion modifier
+		add_opinion_modifier = {
+			who = event_target:current_uprising_originator
+			modifier = opinion_machine_uprising_originator
+		}
+
+		event_target:current_uprising_originator = {
+			add_opinion_modifier = {
+				who = root
+				modifier = opinion_machine_uprising
+			}
+		}
+
+		# clear new contact opinion modifier
+		if = {
+			limit = {
+				has_opinion_modifier = {
+					who = event_target:current_uprising_originator
+					modifier = opinion_new_contact
+				}
+			}
+			remove_opinion_modifier = {
+				who = event_target:current_uprising_originator
+				modifier = opinion_new_contact
+			}
+		}
+
+		# flip capital planet and add at least 10 Machine pops
+		from = {
+			# flip military stations
+			solar_system = {
+				every_fleet_in_system = {
+					limit = {
+						exists = owner
+						owner = { is_same_value = event_target:current_uprising_originator }
+						any_owned_ship = { is_ship_class = shipclass_military_station }
+					}
+					set_owner = root
+				}
+			}
+			set_owner = root
+			set_controller = root
+			set_capital = yes
+
+			solar_system = {
+				if = {
+					limit = {
+						exists = starbase
+						starbase = {
+							has_starbase_size <= starbase_starport					
+						}
+					}
+					random_fleet_in_system = {
+						limit = {
+							is_ship_class = shipclass_starbase
+						}
+						destroy_fleet = this
+					}
+					create_starbase = {
+						size = acot_precusor_starbase
+						module = acot_starbase_shipyard
+						module = acot_starbase_shipyard
+						module = acot_starbase_shipyard
+						module = acot_starbase_shipyard
+						module = acot_starbase_gun_battery
+						module = acot_starbase_gun_battery
+						owner = root
+					}
+				}
+				else_if = {
+					limit = {
+						exists = starbase
+						starbase = {
+							has_starbase_size >= starbase_starhold		
+						}
+					}
+					random_fleet_in_system = {
+						limit = {
+							is_ship_class = shipclass_starbase
+						}
+						destroy_fleet = this
+					}
+					create_starbase = {
+						size = acot_precusor_starfortress
+						module = acot_starbase_shipyard
+						module = acot_starbase_shipyard
+						module = acot_starbase_shipyard
+						module = acot_starbase_shipyard
+						module = acot_starbase_gun_battery
+						module = acot_starbase_gun_battery
+						owner = root
+					}
+				}
+				else = {
+					create_starbase = {
+						size = starbase_citadel
+						module = shipyard
+						module = shipyard
+						module = shipyard
+						module = shipyard
+						module = shipyard
+						module = shipyard
+						owner = root
+					}
+				}
+			}
+
+			while = {
+				#limit = { free_housing > 0 }
+				count = 30
+				create_pop = {
+					species = root
+				}
+			}
+			
+			if = {
+				limit = {
+					count_owned_pop = {
+						count < 5
+						limit = { is_exact_same_species = root }
+					}
+				}
+				while = {
+					limit = {
+						count_owned_pop = {
+							count < 5
+							limit = { is_exact_same_species = root }
+						}
+					}
+					random_owned_pop = {
+						limit = { NOT = { is_exact_same_species = root } }
+						kill_pop = yes
+						prev = {
+							create_pop = {
+								species = root
+							}						
+						}
+					}
+				}
+			}
+
+			# create armies
+			while = {
+				count = 30
+				create_army = {
+					owner = root
+					type = acot_army_machine_ae
+					species = owner_main_species
+				}
+			}
+			owner = {
+				create_leader = {
+					class = general
+					name = random
+					skill = 10
+					species = owner_main_species
+				}
+			}	
+			while = {
+				count = 1
+				create_army = {
+					owner = root
+					type = acot_army_machine_hero
+					species = owner_main_species
+				}
+				assign_leader = last_created_leader
+			}
+
+			# flip remaining flagged planets
+			while = {
+				count = 100
+				limit = {
+					any_system = {
+						has_star_flag = machup_system_flip
+						exists = starbase
+						starbase = {
+							owner = { is_same_value = event_target:current_uprising_originator }
+						}
+					}
+				}
+				random_system = {
+					limit = {
+						has_star_flag = machup_system_flip
+						exists = starbase
+						starbase = {
+							owner = { is_same_value = event_target:current_uprising_originator }
+						}
+					}
+					starbase = { set_owner = root }
+				}
+			}
+			event_target:current_uprising_originator = {
+				if = {
+					limit = {
+						NOT = {
+							exists = event_target:acot_crazed_ai
+						}
+					 }
+					 create_country = {
+						type = acot_crazed_machine
+						name = "Prototype KABAL"
+						flag = {
+							icon= {
+								category = "special"
+								file = "extradimensional_01.dds"
+							}
+							background= {
+								category = "backgrounds"
+								file = "circle.dds"
+							}
+							colors={
+								"black"
+								"red"
+								"null"
+								"null"
+							}
+						}
+						effect = {
+							establish_communications_no_message = root.owner
+							save_global_event_target_as = acot_crazed_ai
+							
+						}
+					}		
+				}
+				random_owned_fleet = {
+					limit = {
+						is_ship_class = shipclass_military
+					}
+					set_event_locked = no
+					set_owner = event_target:acot_crazed_ai				
+				}		
+				random_owned_fleet = {
+					limit = {
+						is_ship_class = shipclass_military
+					}
+					set_event_locked = no
+					set_owner = event_target:acot_crazed_ai				
+				}	
+				random_owned_fleet = {
+					limit = {
+						is_ship_class = shipclass_military
+					}
+					set_event_locked = no
+					set_owner = event_target:acot_crazed_ai				
+				}
+				event_target:acot_crazed_ai	= {
+					set_faction_hostility = {
+						set_friendly = yes
+						target = root
+					}
+				}
+				every_owned_planet = {
+					limit = {
+						solar_system = {
+							#has_star_flag = machup_system_flip@event_target:current_uprising_originator
+							has_star_flag = machup_system_flip
+						}
+					}
+
+
+					# flip military stations
+					solar_system = {
+						every_fleet_in_system = {
+							limit = {
+								exists = owner
+								owner = { is_same_value = event_target:current_uprising_originator }
+								any_owned_ship = { is_ship_class = shipclass_military_station }
+							}
+							set_owner = root
+						}
+					}
+
+					planet_event = {
+						id = acot_test_event.12
+					}
+
+					set_planet_flag = been_flipped
+					set_owner = root
+					set_controller = root
+
+					while = {
+						limit = { free_housing > 0 }
+						create_pop = {
+							species = root
+						}
+					}
+
+					if = {
+						limit = {
+							count_owned_pop = {
+								count < 5
+								limit = { is_exact_same_species = root }
+							}
+						}
+						while = {
+							limit = {
+								count_owned_pop = {
+									count < 5
+									limit = { is_exact_same_species = root }
+								}
+							}
+							random_owned_pop = {
+								limit = { NOT = { is_exact_same_species = root } }
+								kill_pop = yes
+								prev = {
+									create_pop = {
+										species = root
+									}								
+								}
+							}
+						}
+					}
+
+					# create armies on planets
+					while = {
+						count = 30
+						create_army = {
+							owner = root
+							type = acot_army_machine_ae
+							species = owner_main_species
+						}
+					}
+					owner = {
+						create_leader = {
+							class = general
+							name = random
+							skill = 10
+							species = owner_main_species
+						}
+					}	
+					while = {
+						count = 1
+						create_army = {
+							owner = root
+							type = acot_army_machine_hero
+							species = owner_main_species
+						}
+					}
+					last_created_army = {
+						assign_leader = last_created_leader
+					}
+				}
+			}
+			every_system = {
+				limit = {
+					has_star_flag = machup_system_flip
+				}
+				remove_star_flag = machup_system_flip
+			}
+		}
+
+		# get host's technologies
+		copy_techs_from = {
+			target = event_target:current_uprising_originator
+			except = {
+			}
+		}
+		# get fe's technologies
+		copy_techs_from = {
+			target = event_target:acot_crazed_ai
+			except = {
+			}
+		}
+
+		# survey host's surveyed planets
+		every_galaxy_planet = {
+			limit = {
+				is_surveyed = {
+					who = event_target:current_uprising_originator
+					status = yes
+				}
+			}
+			set_surveyed = {
+				surveyed = yes
+				surveyor = root
+			}
+		}
+
+		# declare war on host
+		declare_war = {
+			target = event_target:current_uprising_originator
+			name = "NAME_Machine_Uprising_War"
+			# "[This.MainDefender.GetAdj] Machine Uprising"
+			attacker_war_goal = "wg_machine_uprising"
+		}
+
+		# create fleets
+		create_fleet = {
+			effect = {
+				set_owner = root
+
+				create_ship = {
+					name = random
+					random_existing_design = titan
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = random
+						random_existing_design = battleship
+					}
+				}
+				while = {
+					count = 30
+					create_ship = {
+						name = random
+						random_existing_design = cruiser
+					}
+				}
+				while = {
+					count = 40
+					create_ship = {
+						name = random
+						random_existing_design = destroyer
+					}
+				}
+
+				set_fleet_stance = aggressive				
+				
+				owner = {
+					create_leader = {
+						class = admiral
+						name = random
+						skill = 10
+						species = owner_main_species
+					}
+				}
+				set_leader = last_created_leader
+			}			
+		}
+		random_owned_planet = {
+			last_created_fleet = {
+				set_location = prev
+			}
+		}
+
+		create_fleet = {
+			effect = {
+				set_owner = root
+
+				create_ship = {
+					name = random
+					random_existing_design = titan
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = random
+						random_existing_design = battleship
+					}
+				}
+				while = {
+					count = 30
+					create_ship = {
+						name = random
+						random_existing_design = cruiser
+					}
+				}
+				while = {
+					count = 40
+					create_ship = {
+						name = random
+						random_existing_design = destroyer
+					}
+				}
+
+				set_fleet_stance = aggressive				
+				
+				owner = {
+					create_leader = {
+						class = admiral
+						name = random
+						skill = 10
+						species = owner_main_species
+					}
+				}
+				set_leader = last_created_leader
+			}			
+		}
+		random_owned_planet = {
+			last_created_fleet = {
+				set_location = prev
+			}
+		}
+
+		create_fleet = {
+			effect = {
+				set_owner = root
+
+				create_ship = {
+					name = random
+					random_existing_design = titan
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = random
+						random_existing_design = battleship
+					}
+				}
+				while = {
+					count = 30
+					create_ship = {
+						name = random
+						random_existing_design = cruiser
+					}
+				}
+				while = {
+					count = 40
+					create_ship = {
+						name = random
+						random_existing_design = destroyer
+					}
+				}
+
+				set_fleet_stance = aggressive				
+				
+				owner = {
+					create_leader = {
+						class = admiral
+						name = random
+						skill = 10
+						species = owner_main_species
+					}
+				}
+				set_leader = last_created_leader
+			}			
+		}
+		random_owned_planet = {
+			last_created_fleet = {
+				set_location = prev
+			}
+		}
+
+		create_fleet = {
+			effect = {
+				set_owner = root
+
+				create_ship = {
+					name = random
+					random_existing_design = precursor_titan
+				}
+				while = {
+					count = 10
+					create_ship = {
+						name = random
+						random_existing_design = precursor_battlecruiser
+					}
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = random
+						random_existing_design = precursor_escort
+					}
+				}
+
+				set_fleet_stance = aggressive				
+				
+				owner = {
+					create_leader = {
+						class = admiral
+						name = random
+						skill = 10
+						species = owner_main_species
+					}
+				}
+				set_leader = last_created_leader
+			}			
+		}
+		random_owned_planet = {
+			last_created_fleet = {
+				set_location = prev
+			}
+		}
+
+		create_fleet = {
+			effect = {
+				set_owner = root
+
+				create_ship = {
+					name = random
+					random_existing_design = precursor_titan
+				}
+				while = {
+					count = 10
+					create_ship = {
+						name = random
+						random_existing_design = precursor_battlecruiser
+					}
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = random
+						random_existing_design = precursor_escort
+					}
+				}
+
+				set_fleet_stance = aggressive				
+				
+				owner = {
+					create_leader = {
+						class = admiral
+						name = random
+						skill = 10
+						species = owner_main_species
+					}
+				}
+				set_leader = last_created_leader
+			}			
+		}
+		random_owned_planet = {
+			last_created_fleet = {
+				set_location = prev
+			}
+		}
+
+		create_fleet = {
+			effect = {
+				set_owner = root
+
+				create_ship = {
+					name = random
+					random_existing_design = precursor_titan
+				}
+				while = {
+					count = 10
+					create_ship = {
+						name = random
+						random_existing_design = precursor_battlecruiser
+					}
+				}
+				while = {
+					count = 20
+					create_ship = {
+						name = random
+						random_existing_design = precursor_escort
+					}
+				}
+
+				set_fleet_stance = aggressive				
+				
+				owner = {
+					create_leader = {
+						class = admiral
+						name = random
+						skill = 10
+						species = owner_main_species
+					}
+				}
+				set_leader = last_created_leader
+			}			
+		}
+		
+		random_owned_planet = {
+			last_created_fleet = {
+				set_location = prev
+			}
+		}
+
+		# add modifier for AI, including 10x naval cap
+		if = {
+			limit = { is_ai = yes }
+			add_modifier = {
+				modifier = uprising_ai_buff
+				days = -1
+			}
+		}
+		# add modifier for player, 10x naval cap
+		else = {
+			add_modifier = {
+				modifier = uprising_player_buff
+				days = 4800
+			}
+		}
+		#science
+		while = {
+			count = 2
+			create_fleet = {
+				effect = {
+					set_owner = root
+	
+					create_ship = {
+						name = random
+						random_existing_design = precursor_science
+					}
+	
+					set_fleet_stance = evasive				
+					set_location = root.capital_scope
+					
+					owner = {
+						create_leader = {
+							class = scientist
+							sub_type = survey
+							name = random
+							skill = 10
+							species = owner_main_species
+						}
+					}
+					set_leader = last_created_leader
+				}			
+			}
+		}
+		#scientist
+		owner = {
+			create_leader = {
+				class = scientist
+				sub_type = engineering
+				name = random
+				skill = 10
+				species = owner_main_species
+			}
+		}		
+		assign_leader = last_created_leader
+		owner = {
+			create_leader = {
+				class = scientist
+				sub_type = society
+				name = random
+				skill = 10
+				species = owner_main_species
+			}
+		}		
+		assign_leader = last_created_leader
+		owner = {
+			create_leader = {
+				class = scientist
+				sub_type = physics
+				name = random
+				skill = 10
+				species = owner_main_species
+			}
+		}	
+		assign_leader = last_created_leader	
+
+		owner = {
+			create_leader = {
+				class = governor
+				name = random
+				skill = 10
+				species = owner_main_species
+			}
+		}		
+		owner = {
+			create_leader = {
+				class = governor
+				name = random
+				skill = 10
+				species = owner_main_species
+			}
+		}	
+
+		#constructor
+		while = {
+			count = 2
+			create_fleet = {
+				effect = {
+					set_owner = root
+					
+					create_ship = {
+						name = random
+						random_existing_design = precursor_constructor
+					}
+					
+					set_fleet_stance = evasive
+					set_location = root.capital_scope
+				}
+			}
+		}
+
+		every_owned_fleet = {
+			#limit = { event_locked = yes }
+			set_event_locked = no
+		}
+		every_playable_country = {
+			limit = {
+				NOT = {
+					has_technology = tech_precursor_design
+				}
+				NOR = {
+					is_same_value = root
+					is_same_value = event_target:current_uprising_originator
+				}
+			}
+			country_event = { id = acot_alpha_matter_events.9007 days = 5 }
+		}
+		observer_event = { id = observer.81 }
+	}
+}
+
+
+# Machine Uprising begins notification
+country_event = {
+	id = acot_alpha_matter_events.9007
+	title =  acot_alpha_matter_events.9007.name
+	desc = {
+		trigger = {
+			NOT = {
+				has_technology = tech_precursor_design
+			}
+		}
+		text =  acot_alpha_matter_events.9007.desc.a
+	}
+	desc = {
+		trigger = {
+			has_technology = tech_precursor_design
+		}
+		text = acot_alpha_matter_events.9007.desc.b
+	}
+	picture = GFX_acot_precursor_uprising
+	location = fromfrom
+	is_triggered_only = yes
+	show_sound = event_ai_started
+
+	immediate = {
+		IF = {
+			limit = {
+				NOT = {
+					has_technology = tech_precursor_design
+				}				
+			}
+			random_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				set_owner = event_target:acot_crazed_ai				
+			}		
+			random_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				set_owner = event_target:acot_crazed_ai				
+			}	
+			random_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				set_owner = event_target:acot_crazed_ai				
+			}
+		}
+	}
+
+	trigger = {
+	}
+
+	option = {
+		trigger = {
+			NOT = {
+				has_technology = tech_precursor_design
+			}				
+		}
+		name =  acot_alpha_matter_events.9007.a
+		custom_tooltip = acot_alpha_matter_events.9007.a.explain
+	}
+
+	option = {
+		trigger = {
+			has_technology = tech_precursor_design			
+		}
+		name =  acot_alpha_matter_events.9007.b
+		custom_tooltip = acot_alpha_matter_events.9007.b.explain
+	}
+}

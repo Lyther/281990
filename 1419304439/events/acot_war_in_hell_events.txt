@@ -1,0 +1,1755 @@
+
+#########################################
+#
+# on_action_events
+#
+#########################################
+
+namespace = acot_war_in_hell
+
+
+### WAR IN HELL CHECK
+country_event = {
+    id = acot_war_in_hell.0
+    hide_window = yes
+    trigger = {
+        NOR = {
+            has_global_flag = acot_dangerous_forbidden
+            has_global_flag = acot_war_in_hell_active
+        }
+        has_technology = tech_dark_matter_power_core_ae
+        is_country_type = default
+        any_country = {
+            is_ai = yes
+            OR = {
+                has_country_flag = fallen_empire_1
+                has_country_flag = fallen_empire_2
+                has_country_flag = fallen_empire_3
+                has_country_flag = fallen_empire_4
+            }
+            NOT = {
+                has_ethic = ethic_gestalt_consciousness
+            }
+            NOT = {
+                has_country_flag = awakened_by_wih
+            }
+            NOT = {
+                is_same_value = root
+            }
+        }
+    }
+
+    mean_time_to_happen = {
+        years = 15
+    }
+
+    immediate = {
+        random_country = {
+            limit = {
+                is_ai = yes
+                OR = {
+                    has_country_flag = fallen_empire_1
+                    has_country_flag = fallen_empire_2
+                    has_country_flag = fallen_empire_3
+                    has_country_flag = fallen_empire_4
+                }
+                NOT = {
+                    has_ethic = ethic_gestalt_consciousness
+                }    
+                NOT = {
+                    is_same_value = root
+                }  
+                NOT = {
+                    has_country_flag = awakened_by_wih
+                }           
+            }
+            save_event_target_as = FallenEmpireTaskOrigin
+            set_country_flag = awakened_by_wih
+        }
+        save_event_target_as = FallenEmpireTaskTarget
+        country_event = { id = acot_war_in_hell.1  }     
+    }
+}
+
+
+country_event = {
+	id = acot_war_in_hell.1
+	title = acot_war_in_hell.1.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:FallenEmpireTaskOrigin
+		planet_background = event_target:FallenEmpireTaskOrigin
+		graphical_culture = event_target:FallenEmpireTaskOrigin
+		city_level = event_target:FallenEmpireTaskOrigin
+		room = event_target:FallenEmpireTaskOrigin.ruler
+	}
+    
+    desc = {
+		text = acot_war_in_hell.1.desc.spiritualist
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+	}
+    desc = {
+		text = acot_war_in_hell.1.desc.materialist
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+    desc = {
+		text = acot_war_in_hell.1.desc.xenophile
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+	}
+	desc = {
+		text = acot_war_in_hell.1.desc.xenophobe
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+    }
+
+    option = {
+        name = acot_war_in_hell.1.a
+        custom_tooltip = acot_war_in_hell.1.a.tooltip
+        response_text = acot_war_in_hell.1.a.response
+        set_country_flag = prepare_to_die_by_fe
+        save_event_target_as = FallenEmpireTaskTarget
+        add_opinion_modifier = { 
+            who = event_target:FallenEmpireTaskOrigin modifier = triggered_opinion_war_in_hell_fe
+         }  
+        event_target:FallenEmpireTaskOrigin = { 
+            add_opinion_modifier = { 
+                who = root modifier = triggered_opinion_war_in_hell_fe
+             }  
+        }	
+        hidden_effect = {
+            event_target:FallenEmpireTaskOrigin = { 
+                country_event = { id = acot_war_in_hell.2 }	
+            }	          
+        }
+        ai_chance = {
+            factor = 2
+            modifier = {
+                factor = 5
+                OR = {
+                    is_militarist = yes
+                    is_xenophobe = yes
+                }
+            }
+            modifier = {
+                factor = 0
+                OR = {
+                    fleet_power <= 100000
+                }
+            }
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.1.b
+        response_text = acot_war_in_hell.1.b.response
+        custom_tooltip = acot_war_in_hell.1.b.tooltip
+        hidden_effect = {
+            event_target:FallenEmpireTaskOrigin = { 
+                country_event = { id = acot_war_in_hell.3 }	
+                country_event = { id = acot_war_in_hell.301 days = 1800 random = 900 }	
+            }	          
+        }
+        ai_chance = {
+            factor = 0.5
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.1.c
+        response_text = acot_war_in_hell.1.c.response
+        custom_tooltip = acot_war_in_hell.1.c.tooltip
+        allow = {
+            relative_power = {
+                category = fleet
+                who = event_target:FallenEmpireTaskOrigin
+                value >= equivalent
+            }
+        }
+        event_target:FallenEmpireTaskOrigin = { 
+            add_opinion_modifier = { 
+                who = root modifier = opinion_majorly_failed_fallen_empire_task
+             }  
+        }	
+        hidden_effect = {
+            random_list = {
+                50 = {
+                    modifier = {
+                        factor = 2
+                        relative_power = {
+                            who = event_target:FallenEmpireTaskOrigin
+                            value >= overwhelming
+                        }
+                    }
+                }
+                50 = {
+
+                    event_target:FallenEmpireTaskOrigin = { 
+                        country_event = { id = acot_war_in_hell.3 days = 30 random = 15 }	
+                    }	
+                }
+            }	          
+        }
+        ai_chance = {
+            factor = 0.5
+        }
+    }
+
+
+    option = {
+        name = acot_war_in_hell.1.d
+        response_text = acot_war_in_hell.1.d.response
+        custom_tooltip = acot_war_in_hell.1.d.tooltip
+        trigger = {
+            any_owned_leader = {
+                is_councilor = yes
+                has_level >= 10   
+                has_trait = leader_trait_charismatic
+            }
+        }
+        hidden_effect = {
+            event_target:FallenEmpireTaskOrigin = { 
+                event_target:FallenEmpireTaskTarget = {
+                    set_country_flag = prepare_to_die_by_fe
+                }
+                country_event = { id = acot_war_in_hell.14 days = 15 }	
+            }	          
+        }
+        ai_chance = {
+            factor = 5
+        }
+    }
+}
+
+####AFE AWAKENING TO RECLAIM GALOHAREH
+country_event = {
+	id = acot_war_in_hell.2
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+        set_global_flag = acot_war_in_hell_active
+        set_country_flag = mountain_king_declarer_fe
+        if = {
+            limit = { 
+                is_country_type = fallen_empire
+             }
+             set_country_type = awakened_fallen_empire
+             change_government = {
+                civics = {
+                    civic = civic_revanchist_fervor
+                    civic = civic_ancient_caches_of_technology
+                }
+            }
+        }
+
+        add_resource = { minerals = 500000 }
+        add_resource = { energy = 500000 }
+        add_resource = { food = 50000 }
+        add_resource = { influence = 1000 }
+        add_resource = { alloys = 50000 }
+        add_resource = { consumer_goods = 50000 }
+        add_resource = { sr_dark_matter = 50000 }
+        add_resource = { volatile_motes = 50000 }
+        add_resource = { exotic_gases = 50000 }
+        add_resource = { rare_crystals = 50000 }
+        add_resource = { acot_sr_dark_energy = 50000 }
+        add_resource = { minor_artifacts = 5000 }
+
+        add_modifier = {
+            modifier = acot_war_in_hell_buff
+            years = 10
+        }
+    # Run Fleet Reinforcement Cycles
+    
+        set_variable = {
+            which = acot_wih_fe_fleet_resource
+            value = 10
+        }
+        set_variable = {
+            which = acot_wih_pleb_fleet_resource
+            value = 10
+        }
+        set_variable = {
+            which = acot_wih_pirate_fleet_resource
+            value = 10
+        }
+        set_variable = {
+            which = acot_wih_fe_desperation
+            value = 0
+        }
+
+        country_event = { id = acot_war_in_hell.4 days = 30 }
+        every_playable_country = {
+            country_event = { id = acot_war_in_hell.200 }                
+        }
+
+		# Establish communications
+		every_country = {
+			limit = {
+                is_playable_country = yes
+				NOT = { has_communications = root }
+			}
+			establish_communications_no_message = root
+			root = { save_event_target_as = contact_empire }
+            country_event = { id = action.1 }
+        }
+	}
+}
+
+####ANNOUCEMENT####
+country_event = {
+	id = acot_war_in_hell.200
+	title = acot_war_in_hell.200.name
+    desc = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget
+        }
+        text = acot_war_in_hell.200.desc.a
+    }
+    desc = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget              
+            }
+        }
+        text = acot_war_in_hell.200.desc.b
+    }
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget
+        }
+		name = acot_war_in_hell.200.a
+    }
+    
+	option = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget              
+            }
+        }
+		name = acot_war_in_hell.200.b
+	}
+
+	option = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget        
+            }
+            has_origin = origin_scion
+        }
+		name = acot_war_in_hell.200.c
+	}
+}
+
+####AFE AWAKENING
+country_event = {
+	id = acot_war_in_hell.3
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+        if = {
+            limit = { 
+                is_country_type = fallen_empire
+             }
+             set_country_type = awakened_fallen_empire
+             change_government = {
+                civics = {
+                    civic = civic_revanchist_fervor
+                    civic = civic_ancient_caches_of_technology
+                }
+            }
+
+    	# Changing country type resets resources, so give them full stores
+
+            add_resource = { minerals = 500000 }
+            add_resource = { energy = 500000 }
+            add_resource = { food = 50000 }
+            add_resource = { influence = 1000 }
+            add_resource = { alloys = 50000 }
+            add_resource = { consumer_goods = 50000 }
+            add_resource = { sr_dark_matter = 50000 }
+            add_resource = { volatile_motes = 50000 }
+            add_resource = { exotic_gases = 50000 }
+            add_resource = { rare_crystals = 50000 }
+            add_resource = { acot_sr_dark_energy = 50000 }
+            add_resource = { minor_artifacts = 5000 }
+
+            country_event = { id = fallen_empires.13 }
+            country_event = { id = fallen_empires.13 }
+            country_event = { id = fallen_empires.13 }
+            every_playable_country = {
+                country_event = { id = acot_war_in_hell.300 }                
+            }
+        }
+
+		# Establish communications
+		every_country = {
+			limit = {
+                is_playable_country = yes
+				NOT = { has_communications = root }
+			}
+
+			establish_communications_no_message = root
+			root = { save_event_target_as = contact_empire }
+			country_event = { id = action.1 }
+        }
+
+	}
+}
+
+####ANNOUCEMENT####
+country_event = {
+	id = acot_war_in_hell.300
+	title = acot_war_in_hell.300.name
+    desc = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget
+        }
+        text = acot_war_in_hell.300.desc.a
+    }
+    desc = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget              
+            }
+        }
+        text = acot_war_in_hell.300.desc.b
+    }
+	picture = GFX_evt_fallen_empire
+	show_sound = event_alien_signal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget
+        }
+		name = acot_war_in_hell.300.a
+    }
+    
+	option = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget              
+            }
+        }
+		name = acot_war_in_hell.300.b
+	}
+}
+
+####AFE UPGRADES TO ALPHA
+country_event = {
+	id = acot_war_in_hell.301
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+
+        set_country_flag = ae_tier_permitted
+
+        # Give them Alpha Techs and Shits
+
+        give_technology = { tech = tech_autocannons_ae }
+        give_technology = { tech = tech_arc_emitter_ae }	
+        give_technology = { tech = tech_disruptor_ae }
+        give_technology = { tech = tech_energy_lance_ae }			
+        give_technology = { tech = tech_energy_torpedo_ae }
+        give_technology = { tech = tech_flak_batteries_ae }	
+        give_technology = { tech = tech_kinetic_artillery_ae }
+        give_technology = { tech = tech_laser_ae }			
+        give_technology = { tech = tech_mass_accelerator_ae }		
+        give_technology = { tech = tech_mass_driver_ae }	
+        give_technology = { tech = tech_missile_ae }		
+        give_technology = { tech = tech_perdition_beam_ae }	
+        give_technology = { tech = tech_plasma_ae }	
+        give_technology = { tech = tech_point_defense_ae }	
+        give_technology = { tech = tech_strike_craft_bomber_ae }	
+        give_technology = { tech = tech_swarmer_missile_ae }	
+        give_technology = { tech = tech_torpedo_ae }	
+        give_technology = { tech = tech_sensor_ae }	
+        give_technology = { tech = tech_armor_ae }	
+        give_technology = { tech = tech_dark_matter_power_core_ae }	
+        give_technology = { tech = tech_thrusters_ae }				
+        give_technology = { tech = tech_dark_matter_deflector_ae }	
+        give_technology = { tech = tech_enigmatic_drive_ae }	
+        give_technology = { tech = tech_macrocannon_ae }			
+
+        give_technology = { tech = tech_darkmatter_afterburners_ae }
+        give_technology = { tech = tech_darkmatter_star_charter_ae }				
+        give_technology = { tech = tech_darkmatter_aura_energy_drainer_ae }	
+        give_technology = { tech = tech_darkmatter_hyper_jump_drive_ae }	
+        give_technology = { tech = tech_darkmatter_reactive_drone_ae }				
+        give_technology = { tech = tech_darkmatter_reactor_booster_ae }	
+        give_technology = { tech = tech_darkmatter_shield_supercharger_ae }     
+        
+        if = {
+            limit = {
+                is_fallen_empire_machine = yes
+             }
+             add_global_ship_design = "NAME_AE_Omega"
+             add_global_ship_design = "NAME_AE_Alpha"
+             add_global_ship_design = "NAME_AE_Beta"
+             add_global_ship_design = "NAME_AE_Gamma"
+             add_global_ship_design = "NAME_AE_Theta"
+             add_global_ship_design = "NAME_AE_Tau"
+             add_global_ship_design = "NAME_AE_Sigma"			               
+        }
+        else_if = {
+            limit = {
+                is_fallen_empire_spiritualist = yes
+             }
+             add_global_ship_design = "NAME_AE_Cleanser"				
+             add_global_ship_design = "NAME_AE_Eternal"
+             add_global_ship_design = "NAME_AE_Avatar"
+             add_global_ship_design = "NAME_AE_Zealot"
+             add_global_ship_design = "NAME_AE_Penitent"
+             add_global_ship_design = "NAME_AE_Faith"
+             add_global_ship_design = "NAME_AE_Pilgrim"			               
+        }
+        else_if = {
+            limit = {
+                is_fallen_empire_materialist = yes
+             }
+             add_global_ship_design = "NAME_AE_Enforcer"
+             add_global_ship_design = "NAME_AE_Savant"
+             add_global_ship_design = "NAME_AE_Scholar"
+             add_global_ship_design = "NAME_AE_Sage"
+             add_global_ship_design = "NAME_AE_Cloaker"
+             add_global_ship_design = "NAME_AE_Librarian"
+             add_global_ship_design = "NAME_AE_Archivist"				               
+        }
+        else_if = {
+            limit = {
+                is_fallen_empire_xenophobe = yes
+             }
+             add_global_ship_design = "NAME_AE_Reaper"
+             add_global_ship_design = "NAME_AE_Imperium"
+             add_global_ship_design = "NAME_AE_Supremacy"
+             add_global_ship_design = "NAME_AE_Glory"
+             add_global_ship_design = "NAME_AE_Devastator"
+             add_global_ship_design = "NAME_AE_Servitor"
+             add_global_ship_design = "NAME_AE_Destiny"			               
+        }
+        else_if = {
+            limit = {
+                is_fallen_empire_xenophile = yes
+             }
+             add_global_ship_design = "NAME_AE_Adjuster"
+             add_global_ship_design = "NAME_AE_Keeper"
+             add_global_ship_design = "NAME_AE_Custodian"
+             add_global_ship_design = "NAME_AE_Warden"
+             add_global_ship_design = "NAME_AE_Watcher"
+             add_global_ship_design = "NAME_AE_Seeder"
+             add_global_ship_design = "NAME_AE_Builder"				               
+        }
+	}
+}
+
+# Fallen Empire WIH Reinforcement Event
+country_event = {
+	id = acot_war_in_hell.4
+	title = OK
+	desc = OK
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+        IF = {
+            limit = {
+                exists = root
+                is_at_war = no        
+            }
+            ### BUY MORE FLEETS FROM LEGENDARY SMUGGLER
+            IF = {
+                limit = {
+                    check_variable = {
+                        which = acot_wih_fe_fleet_resource
+                        value <= 5
+                    }
+                    resource_income_compare = {
+                        resource = energy
+                        value >= 50000
+                    }
+                }
+                change_variable = {
+                    which = acot_wih_fe_fleet_resource
+                    value = 1
+                }
+                add_resource = {
+                    energy = -50000
+                }
+            }
+            ### REINFORCE FLEETS ###
+
+            IF = {
+                limit = {
+                    check_variable = {
+                        which = acot_wih_fe_fleet_resource
+                        value > 5
+                    }
+                    NOT = {
+                        check_variable = {
+                            which = acot_wih_fe_fleet_resource
+                            value <= 0
+                        }                       
+                    }
+                }
+                capital_scope = {
+                    ### FUL FE FLEET
+                    create_fallen_empire_wih_fleet = yes
+                    create_fallen_empire_wih_fleet = yes
+                    create_fallen_empire_wih_fleet = yes    
+                    create_fallen_empire_wih_fleet = yes    
+                }
+                change_variable = {
+                    which = acot_wih_fe_fleet_resource
+                    value = -1
+                }
+                every_playable_country = {
+                    limit = {
+                        NOT = {
+                            is_same_value = root
+                        }
+                    }
+                    country_event = { id = acot_war_in_hell.400 }                
+                }
+            }
+            ### HALF FE FLEET
+            ELSE_IF = {
+                limit = {
+                    check_variable = {
+                        which = acot_wih_fe_fleet_resource
+                        value <= 5
+                    }
+                    NOT = {
+                        check_variable = {
+                            which = acot_wih_fe_fleet_resource
+                            value <= 0
+                        }                       
+                    }
+                }
+                capital_scope = {
+                    ### FUL FE FLEET
+                    create_fallen_empire_wih_fleet = yes
+                    create_fallen_empire_wih_fleet = yes
+                }
+                change_variable = {
+                    which = acot_wih_fe_fleet_resource
+                    value = -1
+                }
+                every_playable_country = {
+                    limit = {
+                        NOT = {
+                            is_same_value = root
+                        }
+                    }
+                    country_event = { id = acot_war_in_hell.401 }                
+                }
+            }
+            ### PMC FLEET
+            IF = {
+                limit = {
+                    check_variable = {
+                        which = acot_wih_pleb_fleet_resource
+                        value > 0
+                    }
+                    check_variable = {
+                        which = acot_wih_fe_fleet_resource
+                        value <= 5
+                    }
+                }
+                capital_scope = {
+                    ### FUL FE FLEET
+                    #create_pmc_wih_fleet = yes
+                    #create_pmc_wih_fleet = yes 
+                }
+                change_variable = {
+                    which = acot_wih_pleb_fleet_resource
+                    value = -1
+                }
+#              every_playable_country = {
+#                   limit = {
+#                       NOT = {
+#                            is_same_value = root
+#                        }
+#                   }
+#                   country_event = { id = acot_war_in_hell.401 }                
+#               }
+            }
+             ### PIRATE FLEET
+            IF = {
+                limit = {
+                    check_variable = {
+                        which = acot_wih_pirate_fleet_resource
+                        value > 0
+                    }
+                    check_variable = {
+                        which = acot_wih_pleb_fleet_resource
+                        value <= 5
+                    }
+                }
+                capital_scope = {
+                    ### FUL FE FLEET
+                   # create_pirate_wih_fleet = yes
+                   # create_pirate_wih_fleet = yes
+                }
+                change_variable = {
+                    which = acot_wih_pirate_fleet_resource
+                    value = -1
+                }
+                every_playable_country = {
+                    limit = {
+                        NOT = {
+                            is_same_value = root
+                        }
+                    }
+                    #country_event = { id = acot_war_in_hell.401 }                
+                }
+            }
+             ### NO BUDGET MUST DECLARE WAR
+             IF = {
+                limit = {
+                    check_variable = {
+                        #which = acot_wih_pirate_fleet_resource
+                        which = acot_wih_fe_fleet_resource
+                        value > 0
+                    }
+                }
+                save_event_target_as = FallenEmpireTaskOrigin
+                random_country = {
+                    limit = {
+                        has_country_flag = prepare_to_die_by_fe
+                    }    
+                    save_event_target_as = FallenEmpireTaskTarget
+                    country_event = { id = acot_war_in_hell.6  }          
+                }
+            }      
+
+            # RECHECK FOR MORE FLEETS
+            country_event = {  id = acot_war_in_hell.4 days = 180 }
+        }
+	}
+}
+
+####FULL FLEET ANNOUCEMENT####
+country_event = {
+	id = acot_war_in_hell.400
+	title = acot_war_in_hell.400.name
+	desc = acot_war_in_hell.400.desc
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget
+        }
+		name = acot_war_in_hell.400.a
+    }
+    
+	option = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget              
+            }
+        }
+		name = acot_war_in_hell.400.b
+	}
+}
+
+###HALF FLEET ####
+country_event = {
+	id = acot_war_in_hell.401
+	title = acot_war_in_hell.400.name
+	desc = acot_war_in_hell.401.desc
+	picture = GFX_evt_fallen_empire_awakes
+	show_sound = event_alien_signal
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget
+        }
+		name = acot_war_in_hell.401.a
+    }
+    
+	option = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget              
+            }
+        }
+		name = acot_war_in_hell.401.b
+	}
+}
+
+
+####WARGOAL GO####
+country_event = {
+	id = acot_war_in_hell.5
+    hide_window = yes
+
+    trigger = {
+        NOT = {
+            has_global_flag = acot_dangerous_forbidden
+        }
+        has_country_flag = prepare_to_die_by_fe
+        any_country = {
+            is_ai = yes
+            is_country_type = awakened_fallen_empire
+            is_at_war = no
+            has_country_flag = mountain_king_declarer_fe
+            OR = {
+                relative_power = {
+                    who = ROOT
+                    category = fleet
+                    value = equivalent
+                }
+                relative_power = {
+                    who = ROOT
+                    category = fleet
+                    value = superior
+                }
+                relative_power = {
+                    who = ROOT
+                    category = fleet
+                    value = overwhelming
+                }
+            }
+            NOT = {
+                has_ethic = ethic_gestalt_consciousness
+            }
+            NOT = {
+                is_at_war_with = root
+            }
+        }
+    }
+
+    mean_time_to_happen = {
+        years = 1
+    }
+
+    immediate = {
+        random_country = {
+            limit = {
+                is_ai = yes
+                is_country_type = awakened_fallen_empire
+                is_at_war = no
+                has_country_flag = mountain_king_declarer_fe
+                OR = {
+                    relative_power = {
+                        who = ROOT
+                        category = fleet
+                        value = superior
+                    }
+                    relative_power = {
+                        who = ROOT
+                        category = fleet
+                        value = overwhelming
+                    }
+                }
+                NOT = {
+                    has_ethic = ethic_gestalt_consciousness
+                }   
+                NOR = {
+                    is_at_war_with = root
+                }              
+            }
+            save_event_target_as = FallenEmpireTaskOrigin
+            establish_communications_no_message = event_target:FallenEmpireTaskTarget
+        }    
+        save_event_target_as = FallenEmpireTaskTarget
+        country_event = { id = acot_war_in_hell.6  }     
+    }
+}
+
+country_event = {
+	id = acot_war_in_hell.6
+	title = acot_war_in_hell.6.name
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	
+	picture_event_data = {
+		portrait = event_target:FallenEmpireTaskOrigin
+		planet_background = event_target:FallenEmpireTaskOrigin
+		graphical_culture = event_target:FallenEmpireTaskOrigin
+		city_level = event_target:FallenEmpireTaskOrigin
+		room = event_target:FallenEmpireTaskOrigin.ruler
+	}
+    
+    desc = {
+		text = acot_war_in_hell.6.desc.spiritualist
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+	}
+    desc = {
+		text = acot_war_in_hell.6.desc.materialist
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+    desc = {
+		text = acot_war_in_hell.6.desc.xenophile
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+	}
+	desc = {
+		text = acot_war_in_hell.6.desc.xenophobe
+		trigger = {
+			event_target:FallenEmpireTaskOrigin = { 
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+    }
+
+    immediate = {
+        event_target:FallenEmpireTaskOrigin = {
+            declare_war = {
+                target = event_target:FallenEmpireTaskTarget
+                attacker_war_goal = acot_wg_mountain_king
+            }           
+        }   
+        IF = {
+            limit = {
+                is_ai = yes
+            }
+            add_modifier = {
+                modifier = acot_war_in_hell_buff
+                years = 10
+            }
+            if = {
+                limit = {
+                    resource_stockpile_compare = {
+                        resource = energy
+                        value >= 50000
+                    }
+                }
+                capital_scope = {
+                    create_fleet = {
+                        settings = {
+                            can_change_composition = no
+                        }
+                        effect = {
+                            set_owner = prev.owner
+                            ### TITAN
+                            IF = {
+                                limit = {
+                                    root = {
+                                        has_technology = tech_precursor_titan
+                                    }
+                                }
+                                while = {
+                                    count = 1
+                                    create_ship = {
+                                        random_existing_design = precursor_titan
+                                    }
+                                } 
+                            }
+                            else = {
+                                while = {
+                                    count = 1
+                                    create_ship = {
+                                        random_existing_design = titan
+                                    }
+                                }                       
+                            }
+                            ### BB/BC
+                            IF = {
+                                limit = {
+                                    root = {
+                                        has_technology = tech_precursor_bc
+                                    }
+                                }
+                                while = {
+                                    count = 15
+                                    create_ship = {
+                                        random_existing_design = precursor_battlecruiser
+                                    }
+                                } 
+                            }
+                            else = {
+                                while = {
+                                    count = 15
+                                    create_ship = {
+                                        random_existing_design = battleship
+                                    }
+                                }                       
+                            }
+                            ### CRUSAR/ESCARGOT
+                            IF = {
+                                limit = {
+                                    root = {
+                                        has_technology = tech_precursor_escort
+                                    }
+                                }
+                                while = {
+                                    count = 25
+                                    create_ship = {
+                                        random_existing_design = precursor_escort
+                                    }
+                                } 
+                            }
+                            else = {
+                                while = {
+                                    count = 25
+                                    create_ship = {
+                                        random_existing_design = cruiser
+                                    }
+                                }                       
+                            }
+                            set_location = {
+                                target = prev
+                                distance = 30
+                                angle = random 
+                            }
+                        }
+                    }	
+                }
+            }
+            ### ADD ANOTHER FLEET
+            if = {
+                limit = {
+                    resource_stockpile_compare = {
+                        resource = energy
+                        value >= 100000
+                    }
+                }
+                capital_scope = {
+                    create_fleet = {
+                        settings = {
+                            can_change_composition = no
+                        }
+                        effect = {
+                            set_owner = prev.owner
+                            ### TITAN
+                            IF = {
+                                limit = {
+                                    root = {
+                                        has_technology = tech_precursor_titan
+                                    }
+                                }
+                                while = {
+                                    count = 1
+                                    create_ship = {
+                                        random_existing_design = precursor_titan
+                                    }
+                                } 
+                            }
+                            else = {
+                                while = {
+                                    count = 1
+                                    create_ship = {
+                                        random_existing_design = titan
+                                    }
+                                }                       
+                            }
+                            ### BB/BC
+                            IF = {
+                                limit = {
+                                    root = {
+                                        has_technology = tech_precursor_bc
+                                    }
+                                }
+                                while = {
+                                    count = 15
+                                    create_ship = {
+                                        random_existing_design = precursor_battlecruiser
+                                    }
+                                } 
+                            }
+                            else = {
+                                while = {
+                                    count = 15
+                                    create_ship = {
+                                        random_existing_design = battleship
+                                    }
+                                }                       
+                            }
+                            ### CRUSAR/ESCARGOT
+                            IF = {
+                                limit = {
+                                    root = {
+                                        has_technology = tech_precursor_escort
+                                    }
+                                }
+                                while = {
+                                    count = 25
+                                    create_ship = {
+                                        random_existing_design = precursor_escort
+                                    }
+                                } 
+                            }
+                            else = {
+                                while = {
+                                    count = 25
+                                    create_ship = {
+                                        random_existing_design = cruiser
+                                    }
+                                }                       
+                            }
+                            set_location = {
+                                target = prev
+                                distance = 30
+                                angle = random 
+                            }
+                        }
+                    }	
+                }
+            }
+        }    
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.default
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.mat
+        trigger = {
+            is_materialist = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.spirit
+        trigger = {
+            is_spiritualist = yes
+        }
+
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.paci
+        trigger = {
+            is_pacifist = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.mili
+        trigger = {
+            is_militarist = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.phile
+        trigger = {
+            is_xenophile = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.phobe
+        trigger = {
+            is_xenophobe = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.ega
+        trigger = {
+            is_egalitarian = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.auth
+        trigger = {
+            is_authoritarian = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.hive
+        trigger = {
+            is_hive_empire = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.machine
+        trigger = {
+            is_machine_empire = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.mega
+        trigger = {
+            is_megacorp = yes
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.swarm
+        trigger = {
+            has_valid_civic = civic_hive_devouring_swarm
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.termin
+        trigger = {
+            has_valid_civic = civic_machine_terminator
+        }
+    }
+
+    option = {
+        name = acot_war_in_hell.6.a.purifier
+        trigger = {
+            has_valid_civic = civic_fanatic_purifiers
+        }
+    }
+
+}
+
+#Wargoal Win - Default
+country_event = {
+	id = acot_war_in_hell.16
+	hide_window = yes
+	
+	is_triggered_only = yes
+	picture = GFX_evt_fallen_empire
+    
+	trigger = {
+        is_country_type = awakened_fallen_empire
+        has_country_flag = mountain_king_declarer_fe
+        has_global_flag = acot_war_in_hell_active
+	}
+
+    immediate = {
+        every_country = {
+            limit = {
+                has_country_flag = prepare_to_die_by_fe  
+            }
+            save_event_target_as = mountain_king_victor
+            remove_country_flag = prepare_to_die_by_fe
+            remove_global_flag = acot_war_in_hell_active
+            set_timed_country_flag = {
+                flag = acot_mountain_king_winner
+                years = 10
+            }
+            country_event = { id = acot_war_in_hell.1600 }               
+        }
+    }
+
+}
+
+country_event = {
+	id = acot_war_in_hell.1600
+    title = acot_war_in_hell.16.name
+    desc = acot_war_in_hell.16.desc
+		
+	
+	is_triggered_only = yes
+	picture = GFX_evt_fallen_empire
+    
+
+    immediate = {
+    }
+
+
+    option = {
+        name = acot_war_in_hell.16.a
+        random_list = {
+            10 = { 
+				modifier = {
+                    factor = 0
+                    OR = {
+                        has_technology = tech_precursor_escort
+                        has_tech_option = tech_precursor_escort
+                    }
+				}
+                add_research_option = tech_precursor_escort            	   
+            }
+            10 = { 
+				modifier = {
+                    factor = 0
+                    OR = {
+                        has_technology = tech_precursor_bc
+                        has_tech_option = tech_precursor_bc
+                    }
+				}
+                add_research_option = tech_precursor_bc      
+            }
+            10 = { 
+				modifier = {
+                    factor = 0
+                    OR = {
+                        has_technology = tech_precursor_guardian
+                        has_tech_option = tech_precursor_guardian
+                    }
+					has_technology = tech_precursor_guardian
+				}
+                add_research_option = tech_precursor_guardian          	   
+            }
+            10 = { 
+				modifier = {
+                    factor = 0
+                    OR = {
+                        has_technology = tech_precursor_assault_carrier
+                        has_tech_option = tech_precursor_assault_carrier
+                    }
+					has_technology = tech_precursor_assault_carrier
+				}
+                add_research_option = tech_precursor_assault_carrier       	   
+            }
+            10 = { 
+				modifier = {
+                    factor = 0
+                    OR = {
+                        has_technology = tech_precursor_sentinel
+                        has_tech_option = tech_precursor_sentinel
+                    }
+					has_technology = tech_precursor_sentinel
+				}
+                add_research_option = tech_precursor_sentinel         	   
+            }
+            10 = { 
+				modifier = {
+                    factor = 0
+                    OR = {
+                        has_technology = tech_precursor_titan
+                        has_tech_option = tech_precursor_titan
+                    }
+					has_technology = tech_precursor_titan
+				}
+                add_research_option = tech_precursor_titan          	   
+            }
+            10 = { 
+				modifier = {
+                    factor = 0
+                    OR = {
+                        has_technology = tech_precursor_citadel
+                        has_tech_option = tech_precursor_citadel
+                    }
+					has_technology = tech_precursor_citadel
+				}
+                add_research_option = tech_precursor_citadel    
+      	   
+            }
+            10 = { 
+				modifier = {
+                    factor = 0
+                    has_technology = tech_precursor_colonizer
+                    has_technology = tech_precursor_construcor
+                    has_technology = tech_precursor_science
+				}
+                add_research_option = tech_precursor_colonizer    
+                add_research_option = tech_precursor_construcor  
+                add_research_option = tech_precursor_science          	   
+            }
+            10 = { 
+				modifier = {
+                    factor = 0
+                    has_technology = tech_precursor_enigmalith
+                    has_technology = tech_precursor_world_shaper
+				}
+                add_research_option = tech_precursor_enigmalith    
+                add_research_option = tech_precursor_world_shaper         	   
+            }
+        }  
+        add_resource = {
+            energy = 250000
+            minerals = 250000
+            food = 250000
+            alloys = 100000
+            consumer_goods = 100000
+            sr_dark_matter = 5000
+            acot_sr_dark_energy = 5000
+            volatile_motes = 25000
+            rare_crystals = 25000
+            exotic_gases = 25000
+            minor_artifacts = 2500
+            unity = 1000000
+            influence = 1000
+        }
+        every_country = {
+            limit = {
+                is_country_type = default
+                NOR = {
+                    is_same_value = root
+                    has_origin = origin_scion
+                }
+            }
+            add_opinion_modifier = { who = root modifier = triggered_opinion_beat_the_fe }
+        }
+    }
+}
+
+
+#Wargoal Win - FE
+country_event = {
+	id = acot_war_in_hell.17
+    hide_window = yes
+	
+	is_triggered_only = yes
+    
+	trigger = {
+        has_country_flag = prepare_to_die_by_fe
+        has_global_flag = acot_war_in_hell_active
+	}
+
+    immediate = {
+        remove_global_flag = acot_war_in_hell_active
+        every_country = {
+            limit = {
+                has_country_flag = mountain_king_declarer_fe
+            }
+            save_event_target_as = mountain_king_victor
+            remove_country_flag = mountain_king_declarer_fe
+            country_event = { id = acot_war_in_hell.1700 }
+        }
+    }
+
+}   
+
+#Wargoal Win - FE
+country_event = {
+	id = acot_war_in_hell.1700
+    title = EXCELLENT
+    desc = EXCELLENT
+	picture = GFX_evt_fallen_empire
+	is_triggered_only = yes
+    
+
+
+
+    option = {
+        name = EXCELLENT
+        hidden_effect = {  
+            event_target:mountain_king_victor = {
+                remove_country_flag = mountain_king_declarer_fe
+                set_country_flag = ae_tier_permitted
+
+                give_technology = { tech = tech_autocannons_ae }
+                give_technology = { tech = tech_arc_emitter_ae }	
+                give_technology = { tech = tech_disruptor_ae }
+                give_technology = { tech = tech_energy_lance_ae }			
+                give_technology = { tech = tech_energy_torpedo_ae }
+                give_technology = { tech = tech_flak_batteries_ae }	
+                give_technology = { tech = tech_kinetic_artillery_ae }
+                give_technology = { tech = tech_laser_ae }			
+                give_technology = { tech = tech_mass_accelerator_ae }		
+                give_technology = { tech = tech_mass_driver_ae }	
+                give_technology = { tech = tech_missile_ae }		
+                give_technology = { tech = tech_perdition_beam_ae }	
+                give_technology = { tech = tech_plasma_ae }	
+                give_technology = { tech = tech_point_defense_ae }	
+                give_technology = { tech = tech_strike_craft_bomber_ae }	
+                give_technology = { tech = tech_swarmer_missile_ae }	
+                give_technology = { tech = tech_torpedo_ae }	
+                give_technology = { tech = tech_sensor_ae }	
+                give_technology = { tech = tech_armor_ae }	
+                give_technology = { tech = tech_dark_matter_power_core_ae }	
+                give_technology = { tech = tech_thrusters_ae }				
+                give_technology = { tech = tech_dark_matter_deflector_ae }	
+                give_technology = { tech = tech_enigmatic_drive_ae }	
+                give_technology = { tech = tech_macrocannon_ae }			
+        
+                give_technology = { tech = tech_darkmatter_afterburners_ae }
+                give_technology = { tech = tech_darkmatter_star_charter_ae }				
+                give_technology = { tech = tech_darkmatter_aura_energy_drainer_ae }	
+                give_technology = { tech = tech_darkmatter_hyper_jump_drive_ae }	
+                give_technology = { tech = tech_darkmatter_reactive_drone_ae }				
+                give_technology = { tech = tech_darkmatter_reactor_booster_ae }	
+                give_technology = { tech = tech_darkmatter_shield_supercharger_ae } 
+                give_technology = { tech = tech_precursor_citadel } 
+
+                if = {
+                    limit = {
+                        is_fallen_empire_machine = yes
+                     }
+                     add_global_ship_design = "NAME_AE_Omega"
+                     add_global_ship_design = "NAME_AE_Alpha"
+                     add_global_ship_design = "NAME_AE_Beta"
+                     add_global_ship_design = "NAME_AE_Gamma"
+                     add_global_ship_design = "NAME_AE_Theta"
+                     add_global_ship_design = "NAME_AE_Tau"
+                     add_global_ship_design = "NAME_AE_Sigma"			               
+                }
+                if = {
+                    limit = {
+                        is_fallen_empire_spiritualist = yes
+                     }
+                     add_global_ship_design = "NAME_AE_Cleanser"				
+                     add_global_ship_design = "NAME_AE_Eternal"
+                     add_global_ship_design = "NAME_AE_Avatar"
+                     add_global_ship_design = "NAME_AE_Zealot"
+                     add_global_ship_design = "NAME_AE_Penitent"
+                     add_global_ship_design = "NAME_AE_Faith"
+                     add_global_ship_design = "NAME_AE_Pilgrim"			               
+                }
+                if = {
+                    limit = {
+                        is_fallen_empire_materialist = yes
+                     }
+                     add_global_ship_design = "NAME_AE_Enforcer"
+                     add_global_ship_design = "NAME_AE_Savant"
+                     add_global_ship_design = "NAME_AE_Scholar"
+                     add_global_ship_design = "NAME_AE_Sage"
+                     add_global_ship_design = "NAME_AE_Cloaker"
+                     add_global_ship_design = "NAME_AE_Librarian"
+                     add_global_ship_design = "NAME_AE_Archivist"				               
+                }
+                if = {
+                    limit = {
+                        is_fallen_empire_xenophobe = yes
+                     }
+                     add_global_ship_design = "NAME_AE_Reaper"
+                     add_global_ship_design = "NAME_AE_Imperium"
+                     add_global_ship_design = "NAME_AE_Supremacy"
+                     add_global_ship_design = "NAME_AE_Glory"
+                     add_global_ship_design = "NAME_AE_Devastator"
+                     add_global_ship_design = "NAME_AE_Servitor"
+                     add_global_ship_design = "NAME_AE_Destiny"			               
+                }
+                if = {
+                    limit = {
+                        is_fallen_empire_xenophile = yes
+                     }
+                     add_global_ship_design = "NAME_AE_Adjuster"
+                     add_global_ship_design = "NAME_AE_Keeper"
+                     add_global_ship_design = "NAME_AE_Custodian"
+                     add_global_ship_design = "NAME_AE_Warden"
+                     add_global_ship_design = "NAME_AE_Watcher"
+                     add_global_ship_design = "NAME_AE_Seeder"
+                     add_global_ship_design = "NAME_AE_Builder"				               
+                }
+            }
+         }
+    }   
+}   
+
+######################################################################
+
+####BOMBLOL#####
+country_event = {
+    id = acot_war_in_hell.14
+    hide_window = yes
+	location = from
+
+	is_triggered_only = yes
+
+    immediate = {
+        capital_scope = {
+            if = {
+                limit = {
+                    habitable_planet = yes
+                    NOR = {
+                        is_planet_class = pc_ringworld_habitable
+                        is_planet_class = pc_habitat          
+                    }
+                 }
+                 change_pc = pc_molten               
+            }
+            if = {
+                limit = {
+                    is_planet_class = pc_ringworld_habitable
+                 }
+                 change_pc = pc_ringworld_habitable_damaged               
+            }
+            solar_system = {
+                every_fleet_in_system = {
+                    destroy_fleet = this
+                }
+            }
+        }
+        every_playable_country = {
+            country_event = { id = acot_war_in_hell.18 }
+        }
+        country_event = { id = acot_war_in_hell.2 days = 30 }	
+    }
+}
+
+country_event = {
+    id = acot_war_in_hell.15
+    hide_window = yes
+	location = from
+
+	is_triggered_only = yes
+
+    immediate = {
+        every_owned_planet = {
+            if = {
+                limit = {
+                    habitable_planet = yes
+                    NOR = {
+                        is_planet_class = pc_ringworld_habitable
+                        is_planet_class = pc_habitat          
+                    }
+                 }
+                 change_pc = pc_molten               
+            }
+            if = {
+                limit = {
+                    is_planet_class = pc_ringworld_habitable
+                 }
+                 change_pc = pc_ringworld_habitable_damaged               
+            }          
+        }
+        destroy_country = yes
+        every_playable_country = {
+            country_event = { id = acot_war_in_hell.19 }
+        }
+    }
+}
+
+
+####ANNOUCEMENT####
+country_event = {
+	id = acot_war_in_hell.18
+	title = acot_war_in_hell.18.name
+	desc = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget        
+            }
+        }
+        text = acot_war_in_hell.18.desc.others
+    }
+    desc = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget     
+        }
+        text = acot_war_in_hell.18.desc
+    }
+	picture = GFX_evt_fallen_empire
+	show_sound = event_ship_explosion
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget
+        }
+		name = acot_war_in_hell.18.a
+    }
+    
+	option = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget              
+            }
+        }
+		name = acot_war_in_hell.18.b
+	}
+}
+
+country_event = {
+	id = acot_war_in_hell.19
+	title = acot_war_in_hell.19.name
+	desc = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget        
+            }
+        }
+        text = acot_war_in_hell.19.desc.others
+    }
+    desc = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget     
+        }
+        text = acot_war_in_hell.19.desc
+    }
+	picture = GFX_evt_fallen_empire
+	show_sound = event_ship_explosion
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+        trigger = {
+            is_same_value = event_target:FallenEmpireTaskTarget
+        }
+		name = acot_war_in_hell.18.a
+    }
+    
+	option = {
+        trigger = {
+            NOT = {
+                is_same_value = event_target:FallenEmpireTaskTarget              
+            }
+        }
+		name = acot_war_in_hell.18.b
+	}
+}
+
+#Wargoal Win - Default
+country_event = {
+	id = acot_war_in_hell.20
+    title = acot_war_in_hell.20.name
+    desc = acot_war_in_hell.20.desc
+    picture = GFX_evt_fallen_empire
+    show_sound = event_mystic_reveal_light
+	
+	is_triggered_only = yes
+
+    
+    option = {
+        name = acot_war_in_hell.20.a
+    }
+}
+
+#Wargoal Win - Default
+country_event = {
+	id = acot_war_in_hell.21
+    title = acot_war_in_hell.21.name
+    desc = acot_war_in_hell.21.desc
+    picture = GFX_evt_fallen_empire
+    show_sound = event_mystic_reveal_light
+	
+	is_triggered_only = yes
+
+    
+    option = {
+        name = acot_war_in_hell.21.a
+    }
+}

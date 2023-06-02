@@ -1,0 +1,328 @@
+#Tooltips will be generated from these rules when they fail. Use of custom_tooltip is recommended
+#There are still multiple hard-coded rules that apply in addition to these.
+#If rules here evaluate to true, there might still be other rules that make the action unavailable.
+#If a rule here evaluates to false the action will become unavailable
+
+
+
+# Check if full sensor range in entire galaxy
+# root: country
+has_full_sensor_range = {
+	OR = {
+		has_megastructure = spy_orb_4
+		has_megastructure = spy_orb_restored
+		has_megastructure = sofe_omega_spy_orb_center
+	}
+}
+
+
+# Root = country attempting to target system for movement
+# This = system being targeted
+can_enter_system_by_jump = {
+	custom_tooltip = {
+		success_text = "debug: can jump"
+		fail_text = cannot_jump_to_system
+
+		# Sealed system
+		OR = {
+			NOT = { has_star_flag = sealed_system }
+			AND = {
+				root = { has_country_flag = entered_sealed_system }
+				has_star_flag = sealed_system
+			}
+		}
+
+		# L-Cluster
+		NOT = { has_star_flag = lcluster }
+		# Outer-Cluster
+		NOT = { has_star_flag = outercluster }
+	}
+}
+
+# Root = claimer
+# This = system
+can_add_claim = {	
+	hidden_trigger = {
+		if = {
+			limit = {
+				root = { 
+					NOR = { 
+						is_country_type = default 
+						is_country_type = ascended_empire
+						is_country_type = eternal_empire
+					} 
+				}
+			}
+			always = yes
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_POLICY
+		OR = {
+			root = { has_policy_flag = unrestricted_wars }	
+			AND = {
+				exists = owner
+				owner = { is_gestalt = yes }
+			}
+			AND = {
+				exists = owner
+				owner = {
+					any_war = {
+						any_attacker = { is_same_value = prevprev }
+						any_defender = { is_same_value = root }
+					}			
+				}				
+			}			
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_NOT_VALID_EMPIRE 
+		NAND = {
+			exists = owner		
+			owner = {
+				NOR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
+					is_country_type = ascended_empire
+					is_country_type = lost_empire
+					is_country_type = eternal_empire
+					is_country_type = sbtg_stellarborne_empire_active
+					is_country_type = sofe_light_seeker					
+				}
+			}
+		}
+	}	
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_PLAYABLE_OE
+		NOT = { root = { 
+			OR = {
+				#has_valid_civic = civic_sofe_pursuit_answer
+				#has_valid_civic = civic_sofe_inner_strength
+				}
+			}	
+		}
+	}	
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_DEVOURING_SWARM
+		NOT = { root = { has_valid_civic = civic_hive_devouring_swarm }	}
+	}	
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_ASSIMILATOR
+		NOT = { root = { has_valid_civic = civic_machine_assimilator }}
+	}	
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_PURIFIERS		 
+		NAND = {
+			exists = owner
+			root = { has_valid_civic = civic_fanatic_purifiers }		
+			NOT = {	owner = { is_same_species = root } }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_EXTERMINATOR
+		NAND = {
+			exists = owner
+			root = { has_valid_civic = civic_machine_terminator }
+			owner = {
+				NOR = {
+					is_same_species = root
+					has_country_flag = synthetic_empire
+					has_authority = auth_machine_intelligence
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_THEY_THREAT
+		NAND = {
+			exists = owner
+			owner = {
+				OR = {
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_machine_terminator
+					has_valid_civic = civic_machine_assimilator
+				}
+			}
+			root = {
+				NOR = {
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_machine_terminator		
+					has_valid_civic = civic_machine_assimilator
+				}
+			}			
+		}
+	}
+}
+
+# Root = taker country
+# This = giver country
+can_get_claim_from_lost_system = {
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_NOT_VALID_EMPIRE
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+			is_country_type = ascended_empire
+			is_country_type = lost_empire
+			is_country_type = eternal_empire
+			is_country_type = sbtg_stellarborne_empire_active
+			is_country_type = sofe_light_seeker			
+		}
+		root = {
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+				is_country_type = ascended_empire
+				is_country_type = lost_empire
+				is_country_type = eternal_empire
+				is_country_type = sbtg_stellarborne_empire_active
+				is_country_type = sofe_light_seeker				
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_DEVOURING_SWARM
+		NOT = { has_valid_civic = civic_hive_devouring_swarm }
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_ASSIMILATOR
+		NOT = { has_valid_civic = civic_machine_assimilator }
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_PURIFIERS
+		NAND = {
+			has_valid_civic = civic_fanatic_purifiers
+			NOT = {	is_same_species = root }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_EXTERMINATOR
+		NAND = {
+			has_valid_civic = civic_machine_terminator
+			NOR = {
+				is_same_species = root
+				has_country_flag = synthetic_empire
+				has_authority = auth_machine_intelligence
+			}
+		}
+	}
+}
+
+# this = system
+# root = country
+# Determines if AI-controlled empires should restrict (and thus avoid) a system
+# Used by regular empires, fallen empires & crises
+ai_should_restrict_system = {
+	OR = {
+		AND = {
+			root = { 
+				OR = {
+					is_country_type = fallen_empire 
+					is_country_type = lost_empire
+					is_country_type = eternal_empire	
+				}
+			}
+			exists = owner
+			owner = { is_country_type = awakened_marauders }
+		}
+		AND = {
+			root = { is_country_type = default }
+			exists = owner
+			owner = { is_country_type = sbtg_stellarborne_empire }
+		}	
+		AND = {
+			root = { is_country_type = awakened_marauders }
+			exists = owner
+			owner = {
+				OR = {
+					is_country_type = fallen_empire
+					is_country_type = lost_empire
+				}
+			}
+		}
+		AND = {
+			root = {
+				OR = {
+					is_country_type = fallen_empire
+					is_country_type = lost_empire
+					is_country_type = awakened_marauders
+				}
+			}
+			any_ship_in_system = {
+				exists = owner
+				owner = {
+					OR = {
+                        is_guardian_country = yes
+						is_country_type = sbtg_sentinel_active
+					}
+				}
+			}
+		}
+	}
+}
+
+
+# this = country
+can_spawn_occupation_armies = {
+	OR = {
+		is_country_type = default
+		is_country_type = fallen_empire
+		is_country_type = awakened_fallen_empire
+		is_country_type = ascended_empire
+		is_country_type = lost_empire
+		is_progenitor_empires = yes
+		is_country_type = sbtg_light_seeker	
+	}
+}
+
+
+can_use_galactic_market = {
+	OR = {
+		is_country_type = default
+		is_country_type = ascended_empire
+		is_country_type = sbtg_stellarborne_empire_active
+	}
+	NOR = {
+		has_civic = civic_fanatic_purifiers
+		has_civic = civic_hive_devouring_swarm
+		has_civic = civic_machine_terminator
+	}	
+}
+
+can_be_part_of_galactic_community = {
+    OR = {
+        is_country_type = default
+        is_country_type = sbtg_stellarborne_empire_active
+    }
+    NOR = {
+        has_civic = civic_fanatic_purifiers
+        has_civic = civic_hive_devouring_swarm
+        has_civic = civic_machine_terminator
+    }
+}
+
+can_see_galactic_community = {
+    OR = {
+        has_country_flag = galcom_form_aye
+        has_country_flag = galcom_form_nay
+        is_galactic_community_member = yes
+        is_country_type = sbtg_stellarborne_empire_active
+    }
+}
+
+can_be_part_of_galactic_council = {
+    OR = {
+        is_country_type = default
+        is_country_type = sbtg_stellarborne_empire_active
+    }
+    NOR = {
+        has_civic = civic_fanatic_purifiers
+        has_civic = civic_hive_devouring_swarm
+        has_civic = civic_machine_terminator
+    }
+}

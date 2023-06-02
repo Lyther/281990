@@ -1,0 +1,2672 @@
+############DARK MATTER EVENTS
+
+
+namespace = stellarite_events
+
+
+#Stellar
+country_event = {
+	id = stellarite_events.1
+	title = stellarite_events.1.name
+	desc = {
+		text = stellarite_events.1.desc.a
+		trigger = {
+			NOR = {
+				has_country_flag = hear_stellarite
+				has_country_flag = learned_stellarite_from_outergate_ask
+			}
+		}
+	}
+	desc = {
+		text = stellarite_events.1.desc.b
+		trigger = {
+			has_country_flag = hear_stellarite
+			NOT = {
+				has_country_flag = learned_stellarite_from_outergate_ask
+			}
+		}
+	}
+	desc = {
+		text = stellarite_events.1.desc.b
+		trigger = {
+			has_country_flag = learned_stellarite_from_outergate_ask
+		}
+	}
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+
+	trigger = {
+		is_ai = no
+		NOT = {
+			has_global_flag = acot_sigma_forbidden
+		}
+		NOR = {
+			has_country_flag = acot_stellarite_project_begin
+			has_technology = "tech_dark_matter_power_core_se"
+			has_tech_option = tech_dark_matter_power_core_se
+		}
+		has_technology = tech_dark_matter_power_core_ae
+		has_established_contact = event_target:acot_precursor_databank_country
+		is_playable_country = yes
+		is_fallen_empire = no 
+		OR = {
+			end_game_years_passed >= 0
+			mid_game_years_passed >= 50
+		}
+    }
+	
+	mean_time_to_happen = {
+			years = 20
+	}
+
+	immediate = {
+		set_country_flag = hear_stellarite
+		set_country_flag = acot_stellarite_project_begin
+	}
+	
+	option = {
+		name = stellarite_events.1.a
+		default_hide_option = yes
+		trigger = {
+			is_ai = no
+		}
+		hidden_effect = {
+			country_event = { id = stellarite_events.100 }		
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+	
+	option = {
+		name = stellarite_events.1.b
+		trigger = {
+			NOT = {
+				has_global_flag = sofe_activated
+			}
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Stellar - For AI
+country_event = {
+	id = stellarite_events.101
+	hide_window = yes
+
+	trigger = {
+		is_ai = yes
+		NOT = {
+			has_global_flag = acot_sigma_forbidden
+		}
+		NOR = {
+				has_country_flag = hear_stellarite
+				has_technology = "tech_dark_matter_power_core_se"
+				has_tech_option = tech_dark_matter_power_core_se
+		}
+		has_technology = tech_dark_matter_power_core_ae
+		has_established_contact = event_target:acot_precursor_databank_country
+		is_playable_country = yes
+		is_fallen_empire = no # SIR NO SIR
+		OR = {
+			AND = {
+				NOT = {
+					has_global_flag = acot_ai_simple_event_forbidden	
+				}		
+				resource_stockpile_compare = {
+					resource = acot_sr_dark_energy
+					value >= 1000
+				}
+				resource_stockpile_compare = {
+					resource = sr_dark_matter
+					value >= 1000
+				}
+			}
+			AND = {
+				has_global_flag = acot_ai_simple_event_forbidden			
+				resource_stockpile_compare = {
+					resource = acot_sr_dark_energy
+					value >= 10000
+				}
+				resource_stockpile_compare = {
+					resource = sr_dark_matter
+					value >= 10000
+				}
+			}
+			OR = {
+				end_game_years_passed >= 0
+				mid_game_years_passed >= 50
+			}
+		}
+		NOT = {
+			has_global_flag = acot_stellarite_saturated
+		}
+    }
+	
+	mean_time_to_happen = {
+		years = 20
+	}
+
+	immediate = {
+		set_country_flag = hear_stellarite
+		IF = {
+			limit = {
+				NOT = {
+					has_global_flag = acot_stellarite_saturated
+				}
+			}
+			IF = {
+				limit = {
+					NOT = {
+						has_global_flag = acot_ai_simple_event_forbidden	
+					}			
+				}
+				add_resource = {
+					sr_dark_matter = -1000
+					acot_sr_dark_energy = -1000
+				}
+			}
+			IF = {
+				limit = {
+					has_global_flag = acot_ai_simple_event_forbidden			
+				}
+				add_resource = {
+					sr_dark_matter = -10000
+					acot_sr_dark_energy = -10000
+				}
+			}
+			if = {
+				limit = { 
+					NOT = {
+						has_event_chain = acot_stellarite_chain
+					}
+				}
+				begin_event_chain = {
+					event_chain = acot_stellarite_chain
+				}
+				capital_scope = {
+					create_point_of_interest = {
+						id = acot_stellarite_tech_poi.1
+						name = "acot_stellarite_experiment"
+						desc = "acot_stellarite_experiment_desc"
+						event_chain = acot_stellarite_chain
+						location = this
+					}				
+				}
+			}
+			enable_special_project = {
+				name = RESEARCH_STELLARITE_POWER
+			}
+			hidden_effect = {
+				remove_country_flag = acot_databank_diplomacy_engaged		
+			}
+		}
+		ELSE = {
+			IF = {
+				limit = {
+					NOT = {
+						has_global_flag = acot_ai_simple_event_forbidden	
+					}			
+				}
+				add_resource = {
+					sr_dark_matter = -1000
+					acot_sr_dark_energy = -1000
+				}
+			}
+			IF = {
+				limit = {
+					has_global_flag = acot_ai_simple_event_forbidden			
+				}
+				add_resource = {
+					sr_dark_matter = -10000
+					acot_sr_dark_energy = -10000
+				}
+			}
+			if = {
+				limit = { 
+					NOT = {
+						has_event_chain = acot_stellarite_chain
+					}
+				}
+				begin_event_chain = {
+					event_chain = acot_stellarite_chain
+				}
+				capital_scope = {
+					create_point_of_interest = {
+						id = acot_stellarite_tech_poi.1
+						name = "acot_stellarite_experiment"
+						desc = "acot_stellarite_experiment_desc"
+						event_chain = acot_stellarite_chain
+						location = this
+					}				
+				}
+			}
+			enable_special_project = {
+				name = RESEARCH_STELLARITE_POWER_CHEAP
+			}
+			hidden_effect = {
+				remove_country_flag = acot_databank_diplomacy_engaged	
+			}			
+		}
+	}
+}
+
+# Databank CONTRACKT For Stellarite
+country_event = {
+	id = stellarite_events.100
+	title = stellarite_events.100.name
+	desc = {
+		text = stellarite_events.100.desc.a
+		trigger = {
+			NOR = {
+				has_country_flag = acot_stellarite_topic_started
+				has_country_flag = acot_stellarite_topic_started
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+	}
+	desc = {
+		text = stellarite_events.100.desc.b
+		trigger = {
+			has_country_flag = acot_stellarite_topic_started
+			NOR = {
+				has_country_flag = acot_stellarite_topic_started
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+	}
+	desc = {
+		text = stellarite_events.100.desc.c
+		trigger = {
+			has_global_flag = acot_stellarite_saturated
+			NOT = {
+				has_country_flag = acot_stellarite_topic_started
+			}
+		}
+	}
+	desc = {
+		text = stellarite_events.100.desc.c
+		trigger = {
+			has_global_flag = acot_stellarite_saturated
+			has_country_flag = acot_stellarite_topic_started
+		}
+	}
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+
+	picture_event_data = {
+		room = acot_sophia_room
+		portrait = event_target:acot_sophia_ruler
+	}
+	
+	trigger = {
+	}
+
+	immediate = {
+		set_country_flag = acot_databank_diplomacy_engaged
+		IF = {
+			limit = {
+				NOT = {
+					has_country_flag = acot_stellarite_topic_started
+				}
+			}
+			set_country_flag = acot_stellarite_topic_started
+		}
+	}
+
+	after = {
+	}
+
+	### ASK FIRST STAR
+	option = {
+        name = stellarite_events.100.a
+		response_text = stellarite_events.100.a.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+	
+	### ASK USEFULNESS
+	option = {
+        name = stellarite_events.100.b
+		trigger = {
+			NOT = {
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+		response_text = stellarite_events.100.b.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+	option = {
+        name = stellarite_events.100.b
+		trigger = {
+			has_global_flag = acot_stellarite_saturated
+		}
+		response_text = stellarite_events.100.b2.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+
+	### ASK CONNECTION
+	option = {
+		name = stellarite_events.100.c
+		response_text = stellarite_events.100.c.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+
+	### ASK RISK
+	option = {
+        name = stellarite_events.100.d
+		trigger = {
+			NOT = {
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+		response_text = stellarite_events.100.d.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+	option = {
+        name = stellarite_events.100.d
+		trigger = {
+			has_global_flag = acot_stellarite_saturated
+		}		
+		response_text = stellarite_events.100.d2.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+
+	### ACCEPT
+	option = {
+        name = stellarite_events.100.e
+		default_hide_option = yes
+		trigger = {
+			is_ai = no
+		}
+		hidden_effect = {
+			remove_country_flag = acot_databank_diplomacy_engaged
+			country_event = { id = stellarite_events.2 }		
+		}
+	}
+
+	###  DO NOT AGREE AND EXIT
+	option = {
+		name = stellarite_events.100.f
+		response_text = stellarite_events.100.f.response
+		hidden_effect = {
+			remove_country_flag = acot_databank_diplomacy_engaged
+		}
+	}
+
+}
+
+#COMFIRMATION WINDOWS
+country_event = {
+	id = stellarite_events.2
+	title = stellarite_events.2.name
+	desc = {
+		text = stellarite_events.2.desc.a
+		trigger = {
+			NOT = {
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+	}
+	desc = {
+		text = stellarite_events.2.desc.b
+		trigger = {
+			has_global_flag = acot_stellarite_saturated
+		}
+	}
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+
+	picture_event_data = {
+		room = acot_sophia_room
+		portrait = event_target:acot_sophia_ruler
+	}
+	
+	trigger = {
+	}
+
+	immediate = {
+		set_country_flag = acot_databank_diplomacy_engaged
+	}
+
+	after = {
+	}
+
+	### ASK PROCEDURE
+	option = {
+        name = stellarite_events.2.a
+		trigger = {
+			NOT = {
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+		response_text = stellarite_events.2.a.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+	option = {
+        name = stellarite_events.2.a
+		trigger = {
+			has_global_flag = acot_stellarite_saturated
+		}		
+		response_text = stellarite_events.2.a2.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+	
+	### ASK RISK
+	option = {
+        name = stellarite_events.2.b
+		trigger = {
+			NOT = {
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+		response_text = stellarite_events.2.b.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+	option = {
+        name = stellarite_events.2.b
+		trigger = {
+			has_global_flag = acot_stellarite_saturated
+		}
+		response_text = stellarite_events.2.b2.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+
+	### ASK MOTIVE
+	option = {
+		name = stellarite_events.2.c
+		response_text = stellarite_events.2.c.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+
+	### ASK FE
+	option = {
+		name = stellarite_events.2.d
+		response_text = stellarite_events.2.d.response
+		is_dialog_only = yes
+		trigger = {
+			any_country = {
+				is_fallen_empire = yes
+			}
+		}
+		hidden_effect = {
+		}
+	}
+
+	### ACCEPT
+	option = {
+        name = stellarite_events.2.e
+		response_text = stellarite_events.2.e.response
+		default_hide_option = yes
+		trigger = {
+			NOT = {
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+		allow = {
+			resource_stockpile_compare = {
+				resource = sr_dark_matter
+				value >= 10000
+			}
+			resource_stockpile_compare = {
+				resource = acot_sr_dark_energy
+				value >= 10000
+			}
+		}
+		add_resource = {
+			sr_dark_matter = -10000
+			acot_sr_dark_energy = -10000
+		}
+		if = {
+			limit = { 
+				NOT = {
+					has_event_chain = acot_stellarite_chain
+				}
+			}
+			begin_event_chain = {
+				event_chain = acot_stellarite_chain
+			}
+			capital_scope = {
+				create_point_of_interest = {
+					id = acot_stellarite_tech_poi.1
+					name = "acot_stellarite_experiment"
+					desc = "acot_stellarite_experiment_desc"
+					event_chain = acot_stellarite_chain
+					location = this
+				}				
+			}
+		}
+		enable_special_project = {
+			name = RESEARCH_STELLARITE_POWER
+		}
+		hidden_effect = {
+			remove_country_flag = acot_databank_diplomacy_engaged
+			country_event = { id = stellarite_events.3 }		
+		}
+	}
+	option = {
+        name = stellarite_events.2.e
+		response_text = stellarite_events.2.e.response
+		default_hide_option = yes
+		trigger = {
+			has_global_flag = acot_stellarite_saturated		
+		}
+		allow = {
+			resource_stockpile_compare = {
+				resource = sr_dark_matter
+				value >= 2500
+			}
+			resource_stockpile_compare = {
+				resource = acot_sr_dark_energy
+				value >= 2500
+			}
+		}
+		add_resource = {
+			sr_dark_matter = -2500
+			acot_sr_dark_energy = -2500
+		}
+		if = {
+			limit = { 
+				NOT = {
+					has_event_chain = acot_stellarite_chain
+				}
+			}
+			begin_event_chain = {
+				event_chain = acot_stellarite_chain
+			}
+			capital_scope = {
+				create_point_of_interest = {
+					id = acot_stellarite_tech_poi.1
+					name = "acot_stellarite_experiment"
+					desc = "acot_stellarite_experiment_desc"
+					event_chain = acot_stellarite_chain
+					location = this
+				}				
+			}
+		}
+		enable_special_project = {
+			name = RESEARCH_STELLARITE_POWER
+		}
+		hidden_effect = {
+			remove_country_flag = acot_databank_diplomacy_engaged
+			country_event = { id = stellarite_events.3 }		
+		}
+	}
+
+	###  DO NOT AGREE AND EXIT
+	option = {
+		name = stellarite_events.2.f
+		response_text = stellarite_events.2.f.response
+		hidden_effect = {
+			remove_country_flag = acot_databank_diplomacy_engaged
+		}
+	}
+
+}
+
+#Stellarite Power Gained
+country_event = {
+	id = stellarite_events.3
+	title = stellarite_events.3.name
+	desc = {
+		text = stellarite_events.3.desc.a
+		trigger = {
+			NOT = {
+				has_global_flag = acot_stellarite_saturated
+			}
+		}
+	}
+	desc = {
+		text = stellarite_events.3.desc.b
+		trigger = {
+			has_global_flag = acot_stellarite_saturated
+		}
+	}
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+    immediate = {
+    }
+
+	after = {
+		IF = {
+			limit = {
+				NOT = {
+					has_global_flag = acot_stellarite_saturated
+				}
+			}
+			set_global_flag = acot_stellarite_saturated
+		}	
+	}
+	
+    option = {
+		name = stellarite_events.3.a
+		set_country_flag = stellarite_tech_enable
+		add_research_option = tech_dark_matter_power_core_se
+		add_tech_progress = {
+			tech = tech_dark_matter_power_core_se
+			progress = 0.10
+		}
+		add_resource = {
+			acot_sr_stellarite = 500
+		}
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			add_resource = {
+				acot_sr_stellarite = 4500
+			}
+		}
+		hidden_effect = {
+			remove_point_of_interest = acot_stellarite_tech_poi.1
+		}
+    }
+}
+
+#Stellarite Power Success
+country_event = {
+	id = stellarite_events.5
+	title = stellarite_events.5.name
+	desc = stellarite_events.5.desc
+	picture = GFX_evt_physics_research
+	show_sound = event_yes_yes
+	is_triggered_only = yes
+
+	trigger = {
+		last_increased_tech = tech_dark_matter_power_core_se
+		is_playable_country = yes
+	}
+	
+	
+	immediate = {
+	}
+	
+    option = {
+		name = stellarite_events.5.a
+		if = {
+			limit = {
+				has_event_chain = acot_stellarite_chain
+			}
+			end_event_chain = acot_stellarite_chain			
+		}
+		hidden_effect = {
+			remove_point_of_interest = acot_stellarite_tech_poi.1
+			country_event = {
+				id = stellarite_events.500
+			}
+		}
+    }
+
+	after = {
+		save_event_target_as = new_stellarite_empire
+		every_playable_country = {
+			limit = {
+				NOR = {
+					is_same_value = root
+				}
+			}
+			#country_event = {
+			#	id = stellarite_events.501
+			#}
+		}
+	}
+}
+
+# Databank CONTRACKT For Stellarite
+country_event = {
+	id = stellarite_events.500
+	title = stellarite_events.500.name
+	desc = stellarite_events.500.desc
+	
+	is_triggered_only = yes
+	diplomatic = yes
+	custom_gui = "enclave_curator_window"
+
+	picture_event_data = {
+		room = acot_sophia_room
+		portrait = event_target:acot_sophia_ruler
+	}
+	
+	trigger = {
+	}
+
+	immediate = {
+		set_country_flag = acot_databank_diplomacy_engaged
+	}
+
+	after = {
+	}
+
+	### AOT
+	option = {
+        name = stellarite_events.500.a
+		response_text = stellarite_events.500.a.response
+		is_dialog_only = yes
+		hidden_effect = {
+		}
+	}
+	
+	### EXPLOSION
+	option = {
+        name = stellarite_events.500.b
+		response_text = stellarite_events.500.b.response
+		is_dialog_only = yes
+	}
+
+	### VENTI
+	option = {
+		name = stellarite_events.500.c
+		response_text = stellarite_events.500.c.response
+		is_dialog_only = yes
+	}
+
+	### END
+	option = {
+		name = stellarite_events.500.d
+		response_text = stellarite_events.500.d.response
+		hidden_effect = {
+			remove_country_flag = acot_databank_diplomacy_engaged
+		}
+	}
+}
+
+#Stellarite Annoucemnents
+country_event = {
+	id = stellarite_events.501
+	title = stellarite_events.501.name
+	desc = {
+		trigger = {
+			has_technology = tech_dark_matter_power_core_se
+		}
+		text = stellarite_events.501.desc.c
+	}
+	desc = {
+		trigger = {
+			has_established_contact = event_target:acot_precursor_databank_country	
+			NOT = {
+				has_technology = tech_dark_matter_power_core_se	
+			}
+		}
+		text = stellarite_events.501.desc
+	}
+	desc = {
+		trigger = {
+			NOR = {
+				has_established_contact = event_target:acot_precursor_databank_country	
+				has_technology = tech_dark_matter_power_core_se		
+			}
+		}
+		text = stellarite_events.501.desc.b
+	}
+	picture = GFX_evt_physics_research
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	trigger = {
+    }
+
+	immediate = {
+	}
+	
+	option = {
+		name = stellarite_events.501.a
+		trigger = {
+			NOT = {
+				has_technology = tech_dark_matter_power_core_se	
+			}
+			is_ai = no
+			has_technology = tech_dark_matter_power_core_ae
+			has_established_contact = event_target:acot_precursor_databank_country
+		}
+		default_hide_option = yes
+		hidden_effect = {
+			set_country_flag = hear_stellarite
+			country_event = { id = stellarite_events.100 }	
+		}
+	}
+	
+	option = {
+		name = EXCELLENT
+		default_hide_option = yes
+		trigger = {
+			NOT = {
+				has_technology = tech_dark_matter_power_core_se	
+			}
+			is_ai = yes
+		}
+		ai_chance = {
+			factor = 100
+		}
+	}
+
+	option = {
+		name = stellarite_events.501.b
+		trigger = {
+			NOR = {
+				has_established_contact = event_target:acot_precursor_databank_country		
+				has_technology = tech_dark_matter_power_core_se	
+			}
+		}
+		default_hide_option = yes
+	}
+
+	option = {
+		name = stellarite_events.501.c
+		trigger = {
+			has_technology = tech_dark_matter_power_core_se
+		}
+		default_hide_option = yes
+	}
+}
+
+######### ANOMALY
+
+country_event = {
+	id = stellarite_events.10
+	title = stellarite_events.10.name
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = got_ownt_by_stellarite_once				
+			}
+		}
+		text = 	stellarite_events.10.desc
+	}
+	desc = {
+		trigger = {
+			has_country_flag = got_ownt_by_stellarite_once
+		}
+		text = 	stellarite_events.10.a.desc
+	}
+	picture = GFX_evt_stellarites
+	location = root
+	show_sound = event_mystery
+
+	mean_time_to_happen = {
+		years = 10
+	}
+
+	trigger = {
+		NOT = { has_country_flag = stellarite_punisher_delay }
+		NOT = {
+			has_global_flag = acot_stellar_anomaly_forbidden
+		}
+		has_technology = "tech_dark_matter_power_core_se"	
+		resource_stockpile_compare = {
+				resource = acot_sr_stellarite
+				value >= 5000
+		}
+		is_playable_country = yes
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = stellarite_punisher_delay
+			years = 5
+		}		
+	}
+
+	option = {
+		name = stellarite_events.10.a
+		custom_tooltip = stellarite_events.10.a.tooltip
+		allow = {
+			resource_stockpile_compare = {
+				resource = acot_sr_stellarite
+				value >= 5000
+			}
+		}
+		add_resource = {
+			acot_sr_stellarite = -5000
+		}
+		hidden_effect = {
+		}
+	}
+
+	option = {
+		name = stellarite_events.10.b
+		custom_tooltip = stellarite_events.10.b.tooltip
+		trigger = {				
+		}
+		hidden_effect = {
+			random_list = {
+				## FAIL ENITIRELY
+				20 = {
+					modifier = {
+						factor = 0
+						resource_stockpile_compare = {
+							resource = acot_sr_stellarite
+							value > 10000
+						}					
+					}
+					country_event = {
+						id = stellarite_events.1000
+					}
+				}
+				## FAILING BUT SALVAGABLE
+				33 = {
+					modifier = {
+						factor = 0
+						resource_stockpile_compare = {
+							resource = acot_sr_stellarite
+							value > 15000
+						}					
+					}
+					random_system_within_border = {
+						limit = {
+							any_system_planet = {
+								is_star = yes
+							}
+						}
+						save_event_target_as = stellarite_forming_location
+					}
+					country_event = {
+						id = stellarite_events.1001
+					}
+				}
+				## GOOD SHIT
+				33 = {
+					modifier = {
+						add = 33
+						resource_stockpile_compare = {
+							resource = acot_sr_stellarite
+							value >= 15000
+						}					
+					}
+					random_system_within_border = {
+						save_event_target_as = stellarite_forming_location
+					}
+					country_event = {
+						id = stellarite_events.1002
+					}
+				}
+				## GOOD SHIT
+				33 = {
+					modifier = {
+						add = 33
+						resource_stockpile_compare = {
+							resource = acot_sr_stellarite
+							value >= 20000
+						}					
+					}
+					random_system_within_border = {
+						save_event_target_as = stellarite_forming_location
+					}
+					country_event = {
+						id = stellarite_events.1003
+					}
+				}
+			}	
+			set_timed_country_flag = {
+				flag = stellarite_punisher_delay
+				years = 20
+			}
+		}
+	}
+
+	option = {
+		name = stellarite_events.10.c
+		custom_tooltip = stellarite_events.10.c.tooltip
+		trigger = {
+			always = no
+		}
+		hidden_effect = {
+			#country_event = { id = stellarite_events.1001 }
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		trigger = {
+			always = no
+		}
+		hidden_effect = {
+			country_event = { id = stellarite_events.1001 }
+			set_timed_country_flag = {
+				flag = stellarite_punisher_delay
+				years = 30
+			}
+			random_owned_planet = {
+				create_fleet = {
+					name = "Midgardsomr"
+					effect = {
+						random_list = {
+							10 = { set_name = "Midgardsomr" }
+							10 = { set_name = "Tiamat" }
+							10 = { set_name = "Nidhogg" }
+							10 = { set_name = "Hraesvaelgyr" }
+							10 = { set_name = "Vidofnir" }
+							10 = { set_name = "Smaug" }
+							10 = { set_name = "Deathwing" }
+							10 = { set_name = "Alextrasza" }
+							10 = { set_name = "Ysera" }
+							10 = { set_name = "Sapphiron" }
+							10 = { set_name = "Sindragoza" }
+							10 = { set_name = "Malygos" }
+							10 = { set_name = "Midgardsomr" }
+						}
+						set_owner = event_target:stellarite_punisher
+						create_ship = {
+							design = NAME_ACOT_Dragon_Stellarite
+							name = "Class-25 Stellarite Anomaly Signature"
+							effect = {
+								set_ship_flag = dragon_give_stellarite
+							}
+						}
+						set_fleet_flag = dragon_give_stellarite
+						set_location = {
+							target = prev
+							distance = 10
+							angle = random
+						}
+					}
+					settings = {
+						is_boss = yes
+						spawn_debris = no
+					}
+				}
+			}	
+		}
+	}
+
+	after = {
+		if = {
+			limit = { 
+				NOT = { has_country_flag = got_ownt_by_stellarite_once	 }
+			 }
+			set_country_flag = got_ownt_by_stellarite_once
+		}
+	}
+}
+
+#JELLY FAIL TO SPAWN
+country_event = {
+	id = stellarite_events.1000
+	title = stellarite_events.1000.name
+	desc = stellarite_events.1000.desc
+	picture = GFX_evt_stellarites
+	show_sound = event_mystery
+	is_triggered_only = yes
+
+	trigger = {
+    }
+	
+	immediate = {
+	}
+	
+	option = {
+		name = stellarite_events.1000.a
+		add_resource = {
+			acot_sr_stellarite = 250
+		}
+	}
+}
+
+#JELLY FAILING TO SPAWN BUT CAN SALVAGE
+country_event = {
+	id = stellarite_events.1001
+	title = stellarite_events.1001.name
+	desc = stellarite_events.1001.desc
+	picture = GFX_evt_stellarites
+	show_sound = event_screams
+	is_triggered_only = yes
+	location = event_target:stellarite_forming_location
+
+	trigger = {
+    }
+	
+	immediate = {
+	}
+	
+	option = {
+		name = stellarite_events.1001.a
+	}
+
+	option = {
+		name = stellarite_events.1001.b
+		hidden_effect = {
+			random_system_within_border = {
+				limit = {
+					any_system_planet = {
+						is_star = yes
+					}
+				}
+				save_event_target_as = stellarite_forming_location
+			}
+			country_event = { id = stellarite_events.1002 }
+		}
+	}
+}
+
+# JELLY SPAWN
+country_event = {
+	id = stellarite_events.1002
+	title = stellarite_events.1002.name
+	desc = stellarite_events.1002.desc
+	picture = GFX_evt_stellarites
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+	location = event_target:stellarite_forming_location
+
+	trigger = {
+    }
+	
+	immediate = {
+		create_country = {
+			type = acot_crazed_stellarite
+			name = "Stellarite Anomaly"
+			flag = {
+				icon= {
+					category = "special"
+					file = "extradimensional_01.dds"
+				}
+				background= {
+					category = "backgrounds"
+					file = "circle.dds"
+				}
+				colors={
+					"black"
+					"red"
+					"null"
+					"null"
+				}
+			}
+			effect = {
+			}
+		}	
+		last_created_country = {
+			establish_communications_no_message = root.owner
+			save_event_target_as = stellarite_punisher
+		}
+		event_target:stellarite_forming_location = {
+			random_system_planet = {
+				save_event_target_as = stellarite_forming_planet
+				create_fleet = {
+					name = "Stellarite Anomaly"
+					effect = {
+						set_owner = event_target:stellarite_punisher
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 250
+						create_ship = {
+							design = NAME_ACOT_Large_Stellarite
+							name = "Stellarite Anomaly"
+						}
+						set_location = {
+							target = event_target:stellarite_forming_planet
+							distance = 10
+							angle = random
+						}
+					}
+					settings = {
+						is_boss = yes
+						spawn_debris = no
+						can_change_composition = no
+						can_upgrade = no
+					}
+				}
+				last_created_fleet = {
+					set_fleet_flag = stellarite_punisher_fleet
+					random_list = {
+						33 = {
+
+						}
+						33 = {
+							set_fleet_flag = stellarite_punisher_strong
+						}
+						33 = {
+							set_fleet_flag = stellarite_punisher_fading
+						}
+					}
+					fleet_event = {
+						id = stellarite_events.1004 days = 3600 random = 1800
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = stellarite_events.1002.a
+		custom_tooltip = stellarite_events.1002.a.tooltip
+	}
+
+	option = {
+		name = stellarite_events.1002.b
+		custom_tooltip = stellarite_events.1002.b.tooltip
+		hidden_effect = {
+			event_target:stellarite_punisher = {
+				set_faction_hostility = {
+					set_hostile = yes
+					target = root
+				}
+			}
+		}
+	}
+}
+
+# JELLY SPAWN - PET
+country_event = {
+	id = stellarite_events.1003
+	title = stellarite_events.1003.name
+	desc = stellarite_events.1003.desc
+	picture = GFX_evt_stellarites
+	show_sound = event_mystic_reveal_light
+	is_triggered_only = yes
+
+	trigger = {
+    }
+	
+	immediate = {	
+		event_target:stellarite_forming_location = {
+			random_system_planet = {
+				save_event_target_as = stellarite_forming_planet
+				create_fleet = {
+					name = "Stellarite Anomaly"
+					effect = {
+						set_owner = root
+						set_fleet_stance = aggressive
+						set_aggro_range_measure_from = self
+						set_aggro_range = 250
+						create_ship = {
+							design = NAME_ACOT_Large_Stellarite
+							name = "Stellarite Anomaly"
+						}
+						set_location = {
+							target = event_target:stellarite_forming_planet
+							distance = 10
+							angle = random
+						}
+					}
+					settings = {
+						is_boss = yes
+						spawn_debris = no
+						can_change_composition = no
+						can_upgrade = no
+					}
+				}
+				last_created_fleet = {
+					set_fleet_flag = stellarite_punisher_fleet
+					random_list = {
+						33 = {
+
+						}
+						33 = {
+							set_fleet_flag = stellarite_punisher_strong
+							add_modifier = {
+								modifier = acot_stellarite_strong_buff
+							}
+						}
+						33 = {
+							set_fleet_flag = stellarite_punisher_fading
+							add_modifier = {
+								modifier = acot_stellarite_fading_debuff
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = stellarite_events.1003.a
+		custom_tooltip = stellarite_events.1003.a.tooltip
+		hidden_effect = {
+			last_created_fleet = {
+				set_owner = root
+				fleet_event = {
+					id = stellarite_events.1004 days = 3600 random = 1800
+				}
+			}
+		}
+	}
+
+	option = {
+		name = stellarite_events.1003.b
+		custom_tooltip = stellarite_events.1003.b.tooltip
+		add_resource = {
+			acot_sr_stellarite = 5000
+			society_research = 500
+			physics_research = 250
+		}
+		hidden_effect = {
+			last_created_fleet = {
+				destroy_fleet = this
+			}
+		}
+	}
+}
+
+# JELLY SPAWN - FADE
+fleet_event = {
+	id = stellarite_events.1004
+	title = stellarite_events.1004.name
+	desc = {
+		trigger = {
+			NOR = {
+				has_fleet_flag = stellarite_punisher_fading
+				has_fleet_flag = stellarite_punisher_strong
+			}
+		}
+		text = stellarite_events.1004.desc.a
+	}
+	desc = {
+		trigger = {
+			has_fleet_flag = stellarite_punisher_fading
+		}
+		text = stellarite_events.1004.desc.b
+	}
+	desc = {
+		trigger = {
+			has_fleet_flag = stellarite_punisher_strong
+		}
+		text = stellarite_events.1004.desc.c
+	}
+	picture = GFX_evt_stellarites
+	show_sound = event_mystery
+	is_triggered_only = yes
+
+	trigger = {
+    }
+	
+	immediate = {	
+		IF = {
+			limit = {
+				has_fleet_flag = stellarite_punisher_fading
+			}
+			delete_fleet = this
+		}
+		ELSE_IF = {
+			limit = {
+				has_fleet_flag = stellarite_punisher_strong
+			}
+			remove_fleet_flag = stellarite_punisher_strong
+			remove_modifier = acot_stellarite_strong_buff
+		}
+	}
+	
+	option = {
+		name = stellarite_events.1004.a
+		trigger = {
+			NOR = {
+				has_fleet_flag = stellarite_punisher_fading
+				has_fleet_flag = stellarite_punisher_strong
+			}
+		}
+		allow = {
+			owner = {
+				resource_stockpile_compare = {
+					resource = acot_sr_stellarite
+					value >= 5000
+				}
+			}
+		}
+		owner = {
+			add_resource = {
+				acot_sr_stellarite = -5000
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					has_fleet_flag = stellarite_punisher_strong
+				}
+				remove_fleet_flag = stellarite_punisher_strong
+				remove_modifier = acot_stellarite_strong_buff
+			}		
+			ELSE_IF = {
+				limit = {
+					NOT = {
+						has_fleet_flag = stellarite_punisher_strong
+					}
+				}
+				remove_fleet_flag = stellarite_punisher_fading
+				remove_modifier = acot_stellarite_fading_debuff
+			}	
+		}
+	}
+
+	option = {
+		name = stellarite_events.1004.b
+		trigger = {
+			NOR = {
+				has_fleet_flag = stellarite_punisher_fading
+				has_fleet_flag = stellarite_punisher_strong
+			}
+		}
+		owner = {
+			add_resource = {
+				acot_sr_stellarite = 500
+				society_research = 250
+				physics_research = 100
+			}
+		}
+		hidden_effect = {
+			destroy_fleet = this
+		}
+	}
+
+	option = {
+		name = stellarite_events.1004.c
+		trigger = {
+			has_fleet_flag = stellarite_punisher_fading
+		}
+		owner = {
+			add_resource = {
+				acot_sr_stellarite = 200
+				society_research = 50
+				physics_research = 25
+			}
+		}
+		hidden_effect = {
+			destroy_fleet = this
+		}
+	}
+
+	option = {
+		name = stellarite_events.1004.d
+		trigger = {
+			has_fleet_flag = stellarite_punisher_fading
+		}
+		owner = {
+			add_resource = {
+				acot_sr_stellarite = 200
+				society_research = 50
+				physics_research = 25
+			}
+		}
+		hidden_effect = {
+			destroy_fleet = this
+		}
+	}
+
+	option = {
+		name = stellarite_events.1004.e
+		trigger = {
+			has_fleet_flag = stellarite_punisher_strong
+		}
+	}
+
+	option = {
+		name = stellarite_events.1004.f
+		trigger = {
+			has_fleet_flag = stellarite_punisher_strong
+		}
+		owner = {
+			add_resource = {
+				acot_sr_stellarite = 1200
+				society_research = 600
+				physics_research = 300
+			}
+		}
+		hidden_effect = {
+			destroy_fleet = this
+		}
+	}
+}
+
+#STELLARITE DEFEAT
+country_event = {
+	id = stellarite_events.1005
+	title = stellarite_events.1005.name
+	desc = {
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_large_stellarite
+				fleet = {
+					has_fleet_flag = stellarite_punisher_strong
+				}
+			}		
+			has_technology = tech_dark_matter_power_core_se		
+		}
+		text = stellarite_events.1005.desc.a
+	}
+	desc = {
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_large_stellarite
+				fleet = {
+					NOR = {
+						has_fleet_flag = stellarite_punisher_strong
+						has_fleet_flag = stellarite_punisher_fading
+					}
+				}
+			}		
+			has_technology = tech_dark_matter_power_core_se		
+		}
+		text = stellarite_events.1005.desc.b
+	}
+	desc = {
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_large_stellarite
+				fleet = {
+					has_fleet_flag = stellarite_punisher_fading
+				}
+			}		
+			has_technology = tech_dark_matter_power_core_se		
+		}
+		text = stellarite_events.1005.desc.c
+	}
+	desc = {
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_large_stellarite
+			}	
+			NOT = {
+				has_technology = tech_dark_matter_power_core_se	
+			}		
+		}
+		text = stellarite_events.1005.desc.d
+	}
+	### BOOMB
+	desc = {
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_bomb_stellarite
+			}	
+			has_technology = tech_dark_matter_power_core_se	
+		}
+		text = stellarite_events.1005.desc.d
+	}
+	desc = {
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_bomb_stellarite
+			}	
+			NOT = {
+				has_technology = tech_dark_matter_power_core_se	
+			}		
+		}
+		text = stellarite_events.1005.desc.d
+	}
+	picture = GFX_evt_stellarites
+	show_sound = event_mystery
+	
+	is_triggered_only = yes
+
+	
+	trigger = {
+		is_playable_country = yes
+		FromFromFrom = {
+			OR = {
+				is_ship_size = acot_large_stellarite
+				is_ship_size = acot_bomb_stellarite
+			}
+		}		
+	}
+
+
+	
+    immediate = {
+		IF = {
+			limit = {
+				FromFromFrom = {
+					is_ship_size = acot_large_stellarite
+					fleet = {
+						has_fleet_flag = stellarite_punisher_strong
+					}
+				}	
+			}
+						#### SPAWN THING
+			create_country = {
+				type = acot_bomb_stellarite
+				name = "Stellarite Bomb"
+				flag = {
+					icon= {
+						category = "special"
+						file = "extradimensional_01.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "circle.dds"
+					}
+					colors={
+						"black"
+						"yellow"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+				}
+			}	
+			last_created_country = {
+				establish_communications_no_message = root.owner
+				save_event_target_as = stellarite_bomber
+			}
+			create_fleet = {
+				name = "Stellarite Energy Bomb"
+				effect = {
+					set_owner = event_target:stellarite_bomber
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 250
+					create_ship = {
+						design = NAME_ACOT_Bomb_Stellarite
+						name = "Stellarite Energy Bomb"
+					}
+					set_location = {
+						target = FromFromFrom
+						distance = 0
+						angle = 0
+					}
+				}
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+					can_change_composition = no
+					can_upgrade = no
+				}
+			}
+			last_created_fleet = {
+				fleet_event = { id = stellarite_events.16 days = 120 }
+				create_ambient_object = {
+					type = acot_stellarite_bomb_spawn
+					location = this
+		
+					use_3d_location = yes
+					base_angle_towards = star
+					entity_face_object = star
+					entity_offset = { min = 0 max = 0 }
+		
+					entity_offset_height = 10
+		
+					duration = 20
+					scale = 4.0
+		
+				}
+			}
+		}
+    }
+	
+    option = {
+		name = stellarite_events.1005.a
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_large_stellarite
+			}	
+			has_technology = tech_dark_matter_power_core_se	
+		}
+		IF = {
+			limit = {
+				FromFromFrom = {
+					fleet = {
+						has_fleet_flag = stellarite_punisher_strong
+					}
+				}					
+			}
+			add_resource = {
+				acot_sr_stellarite = 2500
+				society_research = 1250
+				physics_research = 625
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				FromFromFrom = {
+					fleet = {
+						has_fleet_flag = stellarite_punisher_fading
+					}
+				}					
+			}
+			add_resource = {
+				acot_sr_stellarite = 500
+				society_research = 250
+				physics_research = 125
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				FromFromFrom = {
+					fleet = {
+						NOR = {
+							has_fleet_flag = stellarite_punisher_strong
+							has_fleet_flag = stellarite_punisher_fading
+						}
+					}
+				}					
+			}
+			add_resource = {
+				acot_sr_stellarite = 1200
+				society_research = 600
+				physics_research = 300
+			}
+		}
+	}
+	
+    option = {
+		name = stellarite_events.1010.b
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_large_stellarite
+			}	
+			NOT = {
+				has_technology = tech_dark_matter_power_core_se	
+			}	
+		}
+		add_resource = {
+			society_research = 300
+			physics_research = 150
+		}
+	}
+
+	### BOOOM BOOOM
+
+	option = {
+		name = stellarite_events.1005.a
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_bomb_stellarite
+			}	
+			has_technology = tech_dark_matter_power_core_se	
+		}
+		add_resource = {
+			acot_sr_stellarite = 1200
+			society_research = 600
+			physics_research = 300
+		}
+	}
+	
+    option = {
+		name = stellarite_events.1010.b
+		trigger = {
+			FromFromFrom = {
+				is_ship_size = acot_bomb_stellarite
+			}	
+			NOT = {
+				has_technology = tech_dark_matter_power_core_se	
+			}	
+		}
+		add_resource = {
+			society_research = 300
+			physics_research = 150
+		}
+	}
+}
+
+#DRAGON SPAWN
+country_event = {
+	id = stellarite_events.1011
+	title = stellarite_events.1011.name
+	desc = { 
+		trigger = {
+			NOT = {
+				has_country_flag = encountered_stellarit_dragon
+			}
+		}
+		text = stellarite_events.1011.desc.b
+	}
+	desc = { 
+		trigger = {
+			has_country_flag = encountered_stellarit_dragon
+		}
+		text = stellarite_events.1011.desc.b
+	}
+	picture = GFX_acot_stellarwyrm
+	show_sound = event_screams
+	is_triggered_only = yes
+
+	trigger = {
+    }
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = encountered_stellarit_dragon
+				}
+ 			}
+			 set_country_flag = encountered_stellarit_dragon
+		}	
+	}
+	
+	option = {
+		name = stellarite_events.1011.a
+	}
+
+	option = {
+		name = stellarite_events.1011.b
+	}
+}
+
+#DRAGON DEFEAT
+country_event = {
+	id = stellarite_events.1010
+	title = stellarite_events.1010.name
+	desc = {
+		trigger = {
+			FromFromFrom = {
+				NOT = {
+					has_ship_flag = dragon_give_stellarite
+				}
+			}				
+		}
+		text = stellarite_events.1010.desc.a
+	}
+	desc = {
+		trigger = {
+			FromFromFrom = {
+				has_ship_flag = dragon_give_stellarite
+			}				
+		}
+		text = stellarite_events.1010.desc.b
+	}
+	picture = GFX_acot_stellarwyrm
+	show_sound = event_screams
+	
+	is_triggered_only = yes
+
+	
+	trigger = {
+		is_playable_country = yes
+		FromFromFrom = {
+			OR = {
+				is_ship_size = acot_dragon_stellarite
+			}
+		}		
+	}
+
+
+	
+    immediate = {
+    }
+	
+    option = {
+		name = stellarite_events.1010.a
+		trigger = {
+			FromFromFrom = {
+				NOT = {
+					has_ship_flag = dragon_give_stellarite
+				}
+			}	
+		}
+		add_resource = {
+			acot_sr_stellarite = 25000
+		}
+	}
+	
+    option = {
+		name = stellarite_events.1010.b
+		trigger = {
+			FromFromFrom = {
+				has_ship_flag = dragon_give_stellarite
+			}	
+		}
+		add_resource = {
+			acot_sr_stellarite = 50000
+		}
+	}
+}
+
+
+#Stellarite Generator Amount Check
+country_event = {
+	id = stellarite_events.11
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = acot_stellar_anomaly_forbidden
+		}
+		any_owned_planet = {
+			has_modifier = acot_modifier_supercharged_reactor_stellarite		
+		}
+	}
+
+	immediate = {
+		### REMOVE MODIFIER AND FLAG IF NOT HAS PROPER BUILDERING
+		every_owned_planet = {
+			limit = {
+				has_modifier = acot_modifier_supercharged_reactor_stellarite
+				NOR = {
+					has_building = building_stellarite_generator
+					has_building = building_stellarite_generator_ae
+				}
+			}
+			remove_modifier = acot_modifier_supercharged_reactor_stellarite
+			IF = {
+				limit = {
+					has_planet_flag = acot_stellarite_no_more_report
+					NOR = {
+						has_building = building_stellarite_generator
+						has_building = building_stellarite_generator_ae
+					}
+				}
+				remove_planet_flag = acot_stellarite_no_more_report
+			}
+		}
+		every_owned_planet = {
+			limit = {
+				has_modifier = acot_modifier_supercharged_reactor_stellarite
+				OR = {
+					has_building = building_stellarite_generator
+					has_building = building_stellarite_generator_ae
+				}
+			}
+			IF = {
+				limit = {
+					OR = {
+						num_buildings = {
+							type = building_stellarite_generator
+							value = 1
+						}
+						num_buildings = {
+							type = building_stellarite_generator_ae
+							value = 1
+						}
+					}
+				}
+				add_planet_devastation = 2
+			}
+			ELSE_IF = {
+				limit = {
+					OR = {
+						num_buildings = {
+							type = building_stellarite_generator
+							value = 2
+						}
+						num_buildings = {
+							type = building_stellarite_generator_ae
+							value = 2
+						}
+					}
+				}
+				add_planet_devastation = 4
+			}
+			ELSE_IF = {
+				limit = {
+					OR = {
+						num_buildings = {
+							type = building_stellarite_generator
+							value = 3
+						}
+						num_buildings = {
+							type = building_stellarite_generator_ae
+							value = 3
+						}
+					}
+				}
+				add_planet_devastation = 6
+			}
+			ELSE_IF = {
+				limit = {
+					OR = {
+						num_buildings = {
+							type = building_stellarite_generator
+							value = 4
+						}
+						num_buildings = {
+							type = building_stellarite_generator_ae
+							value = 4
+						}
+					}
+				}
+				add_planet_devastation = 8
+			}
+			ELSE_IF = {
+				limit = {
+					OR = {
+						num_buildings = {
+							type = building_stellarite_generator
+							value = 5
+						}
+						num_buildings = {
+							type = building_stellarite_generator_ae
+							value = 5
+						}
+					}
+				}
+				add_planet_devastation = 10
+			}
+		}
+		every_owned_planet = {
+			limit = {
+				has_modifier = acot_modifier_supercharged_reactor_stellarite
+				OR = {
+					has_building = building_stellarite_generator
+					has_building = building_stellarite_generator_ae
+				}
+				planet_devastation >= 50
+			}
+			### HANDLE PLANET DEVASTATION
+			IF = {
+				limit = {
+					planet_devastation >= 50
+					planet_devastation < 90
+				}
+				save_event_target_as = stellarite_fucked_up_planet
+				random_list = {
+					35 = {
+						owner = {
+							country_event = { id = stellarite_events.14 }
+						}
+					}
+					35 = {
+						IF = {
+							limit = {
+								NOT = {
+									has_planet_flag = acot_stellarite_no_more_report
+								}
+							}
+							owner = {
+								country_event = { id = stellarite_events.12 }
+							}
+						}
+						remove_last_built_building = yes
+						random_owned_pop = {
+							kill_pop = yes
+						}
+					}
+					30 = {
+						modifier = {
+							factor = 2
+							planet_devastation >= 75
+						}
+						IF = {
+							limit = {
+								NOT = {
+									has_planet_flag = acot_stellarite_no_more_report
+								}
+							}
+							owner = {
+								country_event = { id = stellarite_events.12 }
+							}
+						}
+						remove_last_built_district = yes
+						remove_last_built_building = yes
+						while = {
+							count = 5
+							random_owned_pop = {
+								kill_pop = yes
+							}
+						}
+					}
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					planet_devastation >= 90
+				}
+				random_list = {
+					50 = {
+						while = {
+							count = 3
+							remove_last_built_district = yes
+							remove_last_built_building = yes
+						}
+						IF = {
+							limit = {
+								NOT = {
+									has_planet_flag = acot_stellarite_no_more_report
+								}
+							}
+							owner = {
+								country_event = { id = stellarite_events.12 }
+							}
+						}
+						while = {
+							count = 10
+							random_owned_pop = {
+								kill_pop = yes
+							}
+						}
+					}
+					50 = {
+						modifier = {
+							factor = 2
+							planet_devastation >= 99
+						}
+						owner = {
+							country_event = { id = stellarite_events.13 }
+						}
+						every_owned_pop = {
+							kill_pop = yes
+						}
+						remove_all_buildings = yes
+						destroy_colony = yes
+						remove_modifier = acot_modifier_supercharged_reactor_stellarite
+						IF = {
+							limit = {
+								is_artificial = no
+								is_ringworld = no
+								NOR = {
+									is_planet_class = pc_ringworld_habitable
+									is_planet_class = pc_habitat
+								}
+							}
+							change_pc = pc_shattered
+						}
+					}
+				}
+			}			
+		}
+	}
+}
+
+#Stellarite Annoucemnents
+country_event = {
+	id = stellarite_events.12
+	title = stellarite_events.12.name
+	desc = stellarite_events.12.desc
+	picture = GFX_evt_nuclear_explosion
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+	location = event_target:stellarite_fucked_up_planet
+
+	trigger = {
+    }
+	
+	
+	option = {
+		name = stellarite_events.12.a
+		event_target:stellarite_fucked_up_planet = {
+			remove_modifier = acot_modifier_supercharged_reactor_stellarite
+			IF = {
+				limit = {
+					has_planet_flag = acot_stellarite_no_more_report
+				}
+				remove_planet_flag = acot_stellarite_no_more_report
+			}
+		}
+	}
+	option = {
+		name = stellarite_events.12.b
+		custom_tooltip = stellarite_events.12.b.tooltip
+		event_target:stellarite_fucked_up_planet = {
+			set_timed_planet_flag = {
+				flag = acot_stellarite_no_more_report
+				days = 360
+			}
+		}		
+	}
+}
+
+#Stellarite Annoucemnents
+country_event = {
+	id = stellarite_events.13
+	title = stellarite_events.13.name
+	desc = stellarite_events.13.desc
+	picture = GFX_evt_nuclear_explosion
+	show_sound = event_ship_explosion
+	is_triggered_only = yes
+	location = event_target:stellarite_fucked_up_planet
+
+	trigger = {
+    }
+	
+	
+	option = {
+		name = stellarite_events.13.a
+		event_target:stellarite_fucked_up_planet = {
+			IF = {
+				limit = {
+					has_planet_flag = acot_stellarite_no_more_report
+				}
+				remove_planet_flag = acot_stellarite_no_more_report
+			}
+		}
+	}
+	option = {
+		name = stellarite_events.13.b
+		event_target:stellarite_fucked_up_planet = {
+			IF = {
+				limit = {
+					has_planet_flag = acot_stellarite_no_more_report
+				}
+				remove_planet_flag = acot_stellarite_no_more_report
+			}
+		}
+	}
+}
+
+#Stellarite Annoucemnents
+country_event = {
+	id = stellarite_events.14
+	title = stellarite_events.14.name
+	desc = stellarite_events.14.desc
+	picture = GFX_evt_nuclear_explosion
+	show_sound = event_red_alert
+	is_triggered_only = yes
+	location = event_target:stellarite_fucked_up_planet
+
+	trigger = {
+    }
+	
+	
+	option = {
+		name = stellarite_events.14.a
+		event_target:stellarite_fucked_up_planet = {
+			remove_modifier = acot_modifier_supercharged_reactor_stellarite
+		}
+	}
+	option = {
+		name = stellarite_events.14.b
+	}
+}
+
+#Stellarite Honorary Discharge
+planet_event = {
+	id = stellarite_events.15
+	title = stellarite_events.15.name
+	desc = stellarite_events.15.desc
+	picture = GFX_evt_synth_sabotage
+	show_sound = event_red_alert
+	is_triggered_only = yes
+	location = root
+
+	trigger = {
+    }
+	
+	immediate = {
+		set_planet_flag = acot_stellarite_discharge_authorized
+	}
+	
+	option = {
+		name = stellarite_events.15.a
+		hidden_effect = {
+			create_ambient_object = {
+				type = acot_stellarite_bomb_explosion
+				location = root
+	
+				use_3d_location = yes
+				base_angle_towards = star
+				entity_face_object = star
+				entity_offset = { min = 0 max = 0 }
+	
+				entity_offset_height = 10
+	
+				duration = 50
+				scale = 0.15
+			}
+			#### KILL PLANET
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator
+						value = 1
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 10000
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator
+						value = 2
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 20000
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator
+						value >= 3
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 30000
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator
+						value = 4
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 40000
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator
+						value >= 5
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 50000
+						}
+					}
+				}
+			}
+			######### STELLARITE UPGRADED
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator_ae
+						value = 1
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 20000
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator_ae
+						value = 2
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 40000
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator_ae
+						value >= 3
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 60000
+						}
+					}
+				}
+			}			
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator_ae
+						value = 4
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 80000
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_generator_ae
+						value >= 5
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 100000
+						}
+					}
+				}
+			}	
+			######### STELLARITE NEXUS
+			if = {
+				limit = {
+					num_buildings = {
+						type = building_stellarite_nexus
+						value >= 1
+					}
+				}
+				save_event_target_as = imminent_bombing
+				solar_system = {
+					every_fleet_in_system = {
+						limit = {
+							exists = orbit
+							orbit = { is_planet = event_target:imminent_bombing }
+						}
+						every_owned_ship = {
+							reduce_hp = 50000
+						}
+					}
+				}
+			}	
+			every_owned_pop = {
+				kill_pop = yes
+			}
+			remove_all_buildings = yes
+			reroll_deposits = yes
+			destroy_colony = yes
+			reset_planet = yes
+			clear_planet_modifiers = yes
+			if = {
+				limit = {
+					is_artificial = no
+				}
+				change_pc = pc_shattered
+			}
+			#### SPAWN THING
+			create_country = {
+				type = acot_bomb_stellarite
+				name = "Stellarite Bomb"
+				flag = {
+					icon= {
+						category = "special"
+						file = "extradimensional_01.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "circle.dds"
+					}
+					colors={
+						"black"
+						"yellow"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+				}
+			}	
+			last_created_country = {
+				establish_communications_no_message = root.owner
+				save_event_target_as = stellarite_bomber
+			}
+			create_fleet = {
+				name = "Stellarite Energy Bomb"
+				effect = {
+					set_owner = event_target:stellarite_bomber
+					set_fleet_stance = aggressive
+					set_aggro_range_measure_from = self
+					set_aggro_range = 250
+					create_ship = {
+						design = NAME_ACOT_Bomb_Stellarite
+						name = "Stellarite Energy Bomb"
+					}
+					set_location = {
+						target = root
+						distance = 0
+						angle = 0
+					}
+				}
+				settings = {
+					is_boss = yes
+					spawn_debris = no
+					can_change_composition = no
+					can_upgrade = no
+				}
+			}
+			last_created_fleet = {
+				fleet_event = { id = stellarite_events.16 days = 120 }
+				create_ambient_object = {
+					type = acot_stellarite_bomb_spawn
+					location = this
+		
+					use_3d_location = yes
+					base_angle_towards = star
+					entity_face_object = star
+					entity_offset = { min = 0 max = 0 }
+		
+					entity_offset_height = 10
+		
+					duration = 20
+					scale = 4.0
+				}
+			}
+
+		}
+	}
+	option = {
+		name = stellarite_events.15.b	
+		remove_planet_flag = acot_stellarite_discharge_authorized
+	}
+}
+
+# BOMB EXPLODE - EXPLODELIOUS
+fleet_event = {
+	id = stellarite_events.16
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+    }
+	
+	immediate = {	
+		IF = {
+			limit = {
+				exists = root
+			}
+			create_ambient_object = {
+				type = acot_stellarite_bomb_explosion
+				location = root
+	
+				use_3d_location = yes
+				base_angle_towards = star
+				entity_face_object = star
+				entity_offset = { min = 0 max = 0 }
+	
+				entity_offset_height = 10
+	
+				duration = 50
+				scale = 0.25
+			}
+			solar_system = {
+				save_event_target_as = imminent_bombing
+				every_ship_in_system = {
+					limit = {
+						fleet = {
+							solar_system = {
+								is_same_value = event_target:imminent_bombing
+							}
+						}
+					}
+					reduce_hp = 100000
+				}				
+			}
+			delete_fleet = this
+		}
+	}
+
+}

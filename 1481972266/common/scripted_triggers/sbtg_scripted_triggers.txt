@@ -1,0 +1,244 @@
+#	Example:
+# 
+#	example_trigger = {
+#		is_country_type = default
+#		free_leader_slots > 0
+#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+#		example_trigger = yes
+#	}
+#
+
+
+is_crisis_faction = {
+	OR = {
+		is_country_type = swarm
+		is_country_type = extradimensional
+		is_country_type = extradimensional_2
+		is_country_type = extradimensional_3
+		is_country_type = ai_empire
+		is_country_type = gray_goo
+		is_country_type = awakened_marauders
+		is_country_type = sbtg_stellarborne_empire
+	}
+}
+
+can_destroy_planet_with_ACOT_PLANET_KILLER_NANITE = {
+	custom_tooltip = {
+		fail_text = is_a_golden_world
+		NOR = {
+			is_planet_class = pc_golden_world
+			is_planet_class = pc_golden_world_habitable		
+		}
+	}
+	custom_tooltip = {
+		fail_text = is_not_hostile
+		OR = {
+			AND = {
+				#exists = space_owner
+				space_owner = {
+					OR = {
+						is_same_value = from.owner
+						is_at_war_with = from.owner
+						is_country_type = swarm
+						is_country_type = extradimensional
+						is_country_type = extradimensional_2
+						is_country_type = extradimensional_3
+						is_country_type = ai_empire
+					}
+				}
+			}
+			AND = { # Ownelerless
+				NOT = {
+					exists = space_owner
+				}
+				NOT = {
+					is_at_war_with = from.owner
+				}
+			}
+			AND = { # primitive
+				exists = space_owner
+				exists = owner
+				owner = {
+					is_primitive = yes
+				}
+				space_owner = {
+					OR = {
+						is_at_war_with = from.owner
+						is_country_type = swarm
+						is_country_type = extradimensional
+						is_country_type = extradimensional_2
+						is_country_type = extradimensional_3
+						is_country_type = ai_empire
+					}
+				}
+			}
+		}
+		NOT = {
+			is_owned_by = event_target:origin_crisis_country		
+		}
+	}
+}
+
+is_progenitor_empires = {
+	OR = {
+		is_country_type = sbtg_stellarborne_empire
+		is_country_type = sbtg_stellarborne_empire_passive
+		is_country_type = sbtg_stellarborne_empire_active
+	}		
+}
+
+is_progenitor_worlds = {
+	OR = {
+		is_planet_class = pc_golden_world
+		is_planet_class = pc_golden_world_habitable
+		is_planet_class = pc_omega_ringworld_habitable
+		is_planet_class = pc_omega_ringworld_seam
+		is_planet_class = pc_omega_ringworld_tech
+		is_planet_class = pc_gaia
+		is_planet_class = pc_goodman_gaia_world	
+		is_planet_class = pc_golden_fortress
+	}		
+}
+
+
+planet_can_be_liberated_from_owner = {
+	owner = {
+		NOR = {
+			is_country_type = awakened_fallen_empire
+			is_country_type = fallen_empire
+			is_country_type = ascended_empire
+			is_country_type = eternal_empire
+			is_country_type = lost_empire
+			is_country_type = eternal_empire
+			is_progenitor_empires = yes
+			is_country_type = sbtg_light_seeker				
+			has_authority = auth_hive_mind
+			has_authority = auth_machine_intelligence
+		}
+	}
+}
+
+is_country_type_with_subjects = {
+	OR = {
+		is_country_type = default
+		is_country_type = awakened_fallen_empire
+		is_country_type = ascended_empire
+		is_country_type = eternal_empire
+		is_progenitor_empires = yes		
+	}
+}
+
+
+has_comms_with_alien_empire = {
+	any_relation = {	
+		has_communications = root
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+			is_country_type = ascended_empire
+			is_country_type = lost_empire
+			is_progenitor_empires = yes
+			is_country_type = sbtg_light_seeker	
+		}
+	}
+}
+
+has_comms_with_alien_civilization = {
+	any_relation = {	
+		has_communications = root
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+			is_country_type = ascended_empire
+			is_country_type = lost_empire
+			is_country_type = enclave
+			is_country_type = nomad
+			is_country_type = dormant_marauders
+			is_country_type = awakened_marauders
+			is_country_type = eternal_empire
+			is_progenitor_empires = yes
+			is_country_type = sbtg_light_seeker	
+		}
+	}
+}
+
+has_total_war_cb = {
+	OR = {
+		#attacker checks
+		AND = {
+			OR = {
+				is_country_type = default
+				is_country_type = awakened_fallen_empire
+				is_country_type = fallen_empire
+				is_country_type = ascended_empire
+				is_country_type = eternal_empire
+				is_progenitor_empires = yes
+			}
+			OR = {
+				is_country_type = awakened_fallen_empire
+				is_country_type = ascended_empire
+				is_country_type = eternal_empire
+				is_progenitor_empires = yes
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_machine_assimilator
+				AND = {
+					has_valid_civic = civic_machine_terminator
+					from = {
+						NOR = {
+							has_country_flag = synthetic_empire
+							has_authority = auth_machine_intelligence
+						}
+					}				
+				}
+				AND = {
+					has_valid_civic = civic_fanatic_purifiers
+					NOT = { is_same_species = from }
+				}
+			}			
+		}
+		#end threat checks
+		AND = {
+			OR = {
+				is_country_type = default
+				is_country_type = ascended_empire
+				is_country_type = eternal_empire
+				is_progenitor_empires = yes
+			}
+			NOR = {
+				is_country_type = awakened_fallen_empire
+				has_valid_civic = civic_fanatic_purifiers
+				has_valid_civic = civic_hive_devouring_swarm
+				has_valid_civic = civic_machine_assimilator
+				has_valid_civic = civic_machine_terminator				
+			}
+			from = {
+				OR = {
+					is_country_type = awakened_fallen_empire
+					is_country_type = ascended_empire
+					is_country_type = eternal_empire
+					is_progenitor_empires = yes
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_machine_assimilator
+					has_valid_civic = civic_machine_terminator							
+				}	
+			}		
+		}
+	}
+}
+
+has_galactic_wonders = {
+	OR = {
+		has_ascension_perk = ap_tw_mechanist
+		has_ascension_perk = ap_galactic_wonders_utopia
+		has_ascension_perk = ap_galactic_wonders_megacorp
+		has_ascension_perk = ap_galactic_wonders_utopia_and_megacorp
+	}
+}

@@ -1,0 +1,3145 @@
+namespace = acot_startup
+
+event = {
+	id = acot_startup.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_global_flag = acot_activated
+		set_global_flag = acot_live_version
+		every_country = {
+			limit = {
+				is_fallen_empire = yes
+			}
+			every_owned_leader = {
+				set_skill = 10
+			}
+		}
+		every_galaxy_planet = {
+			limit = {
+				is_ringworld = no
+				exists = owner
+				owner = {
+					is_fallen_empire = yes
+				}
+			}
+			owner = {
+				save_event_target_as = fallen_owner
+			}
+			add_modifier = {
+				modifier = acot_modifier_defense_upgrade_2
+			}
+			add_modifier = {
+				modifier = acot_modifier_fortification_2
+			}
+			while = {
+				count = 20
+				create_army = {
+					owner = event_target:fallen_owner
+					type = acot_defensive_cannon_dm
+					#species = prev.owner.species
+					land_army = yes
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = prev.owner
+					create_fallen_empire_platform = yes
+					set_location = {
+						target = prev
+						distance = 10
+						angle = 0
+					}				
+				}
+			}	
+			create_fleet = {
+				effect = {
+					set_owner = prev.owner
+					create_fallen_empire_platform = yes
+					set_location = {
+						target = prev
+						distance = 10
+						angle = 90
+					}				
+				}
+			}	
+			create_fleet = {
+				effect = {
+					set_owner = prev.owner
+					create_fallen_empire_platform = yes
+					set_location = {
+						target = prev
+						distance = 10
+						angle = 180
+					}				
+				}
+			}	
+			create_fleet = {
+				effect = {
+					set_owner = prev.owner
+					create_fallen_empire_platform = yes
+					set_location = {
+						target = prev
+						distance = 10
+						angle = 270
+					}				
+				}
+			}			
+		}
+		IF = {
+			limit = {
+				NOT = {
+					exists = event_target:lifeform_country
+				}				
+			}
+			create_country = {
+				type = void_lifeforms_1
+				name = "Void Lifeforms"
+				flag = {
+					icon = {
+						category = "spherical"
+						file = "flag_spherical_23.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "v.dds"
+					}
+					colors={
+						"black"
+						"teal"
+						"null"
+						"null"
+					}
+				}
+				effect = {
+					save_global_event_target_as = lifeform_country	
+					every_playable_country = {
+						establish_communications_no_message = event_target:lifeform_country	
+						set_faction_hostility = {
+							target = event_target:lifeform_country		
+							set_hostile = yes
+						}					
+					}			
+				}
+			}
+		}
+		create_species = {
+			name = "Void Lifeforms"
+			class = random_non_machine
+			portrait = random
+			traits = random
+			effect = {
+				save_event_target_as = void_lifeform_species
+			}
+		}
+		IF = {
+			limit = {
+				NOT = {
+					exists = event_target:phanon_security
+				}				
+			}
+			create_country = {
+				type = void_lifeforms_1
+				name = "Phanon Security"
+				flag = {
+					background= {
+						category = "backgrounds"
+						file = "v.dds"
+					}
+					icon = {
+						category = phanon
+						file = flag_phanon.dds
+					}
+					colors={
+						"red"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = phanon_security	
+					every_playable_country = {
+						establish_communications_no_message = event_target:phanon_security	
+						set_faction_hostility = {
+							target = event_target:phanon_security		
+							set_hostile = yes
+						}					
+					}
+					set_faction_hostility = {
+						target = event_target:phanon_base_country
+						set_friendly = yes
+					}							
+				}
+			}
+		}
+		every_galaxy_planet = {
+			limit = {
+				OR = {
+					is_planet_class = pc_dark_fractured_ae
+					is_planet_class = pc_dark_fractured
+				}
+				has_owner = no
+			}
+			create_country = {
+				type = acot_ancient_guardian
+				name = "Ancient Guardian"
+				flag = {
+					icon = {
+						category = "blocky"
+						file = "flag_blocky_16.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "v.dds"
+					}
+					colors={
+						"blue"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				ignore_initial_colony_error = yes
+				effect = {
+					save_event_target_as = acot_guardian_country	
+					every_playable_country = {
+						establish_communications_no_message = event_target:acot_guardian_country					
+					}			
+				}
+			}
+			random_list = {
+				25 = {
+					create_fleet = {
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:acot_guardian_country	
+							create_ship = {
+								name = random
+								design = "NAME_Remover"
+								graphical_culture = fallen_empire_02
+							}
+							set_location = {
+								target = prev
+								distance = 15
+								angle = random 
+							}			
+						}
+					}
+					create_fleet = {
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:acot_guardian_country	
+							while = {
+								count = 3
+								create_ship = {
+									name = random
+									design = "NAME_Sage"
+									graphical_culture = fallen_empire_02
+								}
+							}
+							while = {
+								count = 1
+								create_ship = {
+									name = random
+									design = "NAME_Scholar"
+									graphical_culture = fallen_empire_02
+								}
+							}
+							set_location = {
+								target = prev
+								distance = 45
+								angle = random 
+							}			
+						}
+					}
+				}
+				25 = {
+					create_fleet = {
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:acot_guardian_country	
+							create_ship = {
+								name = random
+								design = "NAME_Imperius"
+								graphical_culture = fallen_empire_01
+							}
+							set_location = {
+								target = prev
+								distance = 15
+								angle = random 
+							}			
+						}
+					}
+					create_fleet = {
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:acot_guardian_country	
+							while = {
+								count = 3
+								create_ship = {
+									name = random
+									design = "NAME_Zealot"
+									graphical_culture = fallen_empire_01
+								}
+							}
+							while = {
+								count = 1
+								create_ship = {
+									name = random
+									design = "NAME_Avatar"
+									graphical_culture = fallen_empire_01
+								}
+							}
+							set_location = {
+								target = prev
+								distance = 45
+								angle = random 
+							}			
+						}
+					}
+				}
+				25 = {
+					create_fleet = {
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:acot_guardian_country	
+							create_ship = {
+								name = random
+								design = "NAME_Vigilante"
+								graphical_culture = fallen_empire_03
+							}
+							set_location = {
+								target = prev
+								distance = 15
+								angle = random 
+							}			
+						}
+					}
+					create_fleet = {
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:acot_guardian_country	
+							while = {
+								count = 3
+								create_ship = {
+									name = random
+									design = "NAME_Warden"
+									graphical_culture = fallen_empire_03
+								}
+							}
+							while = {
+								count = 1
+								create_ship = {
+									name = random
+									design = "NAME_Custodian"
+									graphical_culture = fallen_empire_03
+								}
+							}
+							set_location = {
+								target = prev
+								distance = 45
+								angle = random 
+							}			
+						}
+					}
+				}
+				25 = {
+					create_fleet = {
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:acot_guardian_country	
+							create_ship = {
+								name = random
+								design = "NAME_Devolutionizer"
+								graphical_culture = fallen_empire_04
+							}
+							set_location = {
+								target = prev
+								distance = 15
+								angle = random 
+							}			
+						}
+					}
+					create_fleet = {
+						settings = {
+							spawn_debris = no
+						}
+						effect = {
+							set_owner = event_target:acot_guardian_country	
+							while = {
+								count = 3
+								create_ship = {
+									name = random
+									design = "NAME_Glory"
+									graphical_culture = fallen_empire_04
+								}
+							}
+							while = {
+								count = 1
+								create_ship = {
+									name = random
+									design = "NAME_Supremacy"
+									graphical_culture = fallen_empire_04
+								}
+							}
+							set_location = {
+								target = prev
+								distance = 45
+								angle = random 
+							}			
+						}
+					}
+				}
+			}
+			set_planet_flag = can_have_precursor_event
+			add_building = building_ancient_palace
+			while = {
+				count = 2
+				random_list = {
+					65 = {
+	
+					}
+					35 = {
+						add_building = building_nano_forge
+					}
+				}
+			}
+			while = {
+				count = 2
+				random_list = {
+					65 = {
+	
+					}
+					35 = {
+						add_building = building_dimensional_fabricator
+					}
+				}
+			}
+			while = {
+				count = 2
+				random_list = {
+					70 = {
+	
+					}
+					30 = {
+						add_building = building_nourishment_center
+					}
+				}
+			}
+			while = {
+				count = 1
+				random_list = {
+					75 = {
+	
+					}
+					25 = {
+						add_building = building_affluence_center
+					}
+				}
+			}
+			add_modifier = { modifier = acot_modifier_precursor_digsite }
+			while = {
+				count = 2
+				random_list = {
+					33 = {
+						modifier = {
+							factor = 0
+							has_deposit = d_acot_void_chasm
+						}
+						add_deposit = d_acot_void_chasm
+					}
+					33 = {
+						modifier = {
+							factor = 0
+							has_deposit = d_acot_void_rift
+						}	
+						add_deposit = d_acot_void_rift				
+					}
+					33 = {
+						modifier = {
+							factor = 0
+							has_deposit = d_acot_void_terrain
+						}
+						add_deposit = d_acot_void_terrain					
+					}
+				}
+			}
+			while = {
+				count = 3
+				random_list = {
+					20 = {
+						if = {
+							limit = { 
+								NOT = {
+									has_modifier = acot_modifier_fractured_mutants
+								}
+							}
+							add_modifier = { modifier = acot_modifier_fractured_mutants days = -1 }
+						}
+					}
+					20 = {
+						if = {
+							limit = { 
+								NOT = {
+									has_modifier = acot_modifier_fractured_lifeforms
+								}
+							}
+							add_modifier = { modifier = acot_modifier_fractured_lifeforms days = -1 }
+						}
+					}
+					20 = {
+						if = {
+							limit = { 
+								NOT = {
+									has_modifier = acot_modifier_fractured_sentient_crystal
+								}
+							}
+							add_modifier = { modifier = acot_modifier_fractured_sentient_crystal days = -1 }
+						}
+					}
+					20 = {
+						if = {
+							limit = { 
+								NOT = {
+									has_modifier = acot_modifier_fractured_machines
+								}
+							}
+							add_modifier = { modifier = acot_modifier_fractured_machines days = -1 }
+						}
+					}
+					20 = {
+						if = {
+							limit = { 
+								NOT = {
+									has_modifier = acot_modifier_fractured_plants
+								}
+							}
+							add_modifier = { modifier = acot_modifier_fractured_plants days = -1 }
+						}
+					}
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				is_country_type = acot_phanon_base
+			}
+			country_event = {
+				id = acot_startup.2 days = 1
+			}
+		}
+		IF = {
+			limit = {
+				NOT = {
+					exists = event_target:acot_tier_3_dummy_country
+				}
+			}
+			create_country = {
+				name = "Tier 3 Country"
+				type = acot_tier_3_country
+				flag = {
+					icon = {
+						category = "special"
+						file = "the_shroud.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"black"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = acot_tier_3_dummy_country
+				}
+			}
+		}
+		IF = {
+			limit = {
+				NOT = {
+					exists = event_target:acot_tier_5_dummy_country
+				}
+			}
+			create_country = {
+				name = "Tier 5 Country"
+				type = acot_tier_5_country
+				flag = {
+					icon = {
+						category = "special"
+						file = "the_shroud.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"black"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = acot_tier_5_dummy_country
+				}
+			}
+		}
+		IF = {
+			limit = {
+				NOT = {
+					exists = event_target:acot_tier_dm_dummy_country
+				}
+			}
+			create_country = {
+				name = "Tier DM Country"
+				type = acot_tier_dm_country
+				flag = {
+					icon = {
+						category = "special"
+						file = "the_shroud.dds"
+					}
+					background= {
+						category = "backgrounds"
+						file = "00_solid.dds"
+					}
+					colors={
+						"black"
+						"black"
+						"null"
+						"null"
+					}
+				}
+				ignore_initial_colony_error = yes
+				effect = {
+					save_global_event_target_as = acot_tier_dm_dummy_country
+				}
+			}
+		}
+		IF = {
+			limit = {
+				any_country = {
+					is_playable_country = yes
+					is_ai = no
+				}
+			}
+			random_country = {
+				limit = {
+					is_playable_country = yes
+					is_ai = no				
+				}
+				country_event = { id = acot_mod_options.0 }
+			}
+		}
+	}
+}
+
+### Reapplies Megastructurer Ownership
+country_event = {
+	id = acot_startup.2
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		every_system = {
+			limit = {
+				has_star_flag = phanon_base_system
+			}
+			every_fleet_in_system = {
+				limit = {
+					is_ship_class = shipclass_starbase
+				}
+				set_owner = event_target:curator_enclave_country
+			}
+			every_fleet_in_system = {
+				limit = {
+					is_ship_class = shipclass_starbase
+				}
+				set_owner = event_target:phanon_base_country
+			}
+		}
+	}
+}
+
+###############These sets of events are long and complicated because PDX has made life difficult for modders to make a proper custom-built starting systems with their copious and overuse of starting stuffs that tends to overwrite each and everything we have worked so hard for. Their empires must be purged.
+#########To this end, we will moblize our fleets into two groups, the Meme Fleet and the Anti-Shitty Unmodded Stellaris Fleet. The meme fleet will meme lesser starting systems, the ASUS fleet will delete all useless and crappy tash-tier things meant for plebs from our destined fate.
+country_event = {
+	id = acot_startup.3
+	hide_window = yes
+	is_triggered_only = yes
+	
+	
+
+	trigger = {
+		has_origin = origin_tier_three_start
+	}
+	
+	immediate = {
+		set_country_flag = tier_three_start
+		set_country_flag = custom_start_screen
+		add_resource = {
+			minerals = 5000
+			energy = 5000
+			alloys = 2500
+			volatile_motes = 250
+			rare_crystals = 250
+			exotic_gases = 250			
+			influence = 300
+			unity = 10000
+		}
+		IF = {
+			limit = {
+				country_uses_food = yes
+			}
+			add_resource = {
+				food = 5000
+			}
+		}
+		IF = {
+			limit = {
+				country_uses_consumer_goods = yes
+			}
+			add_resource = {
+				consumer_goods = 2500
+			}
+		}
+		copy_techs_from = {
+			target = event_target:acot_tier_3_dummy_country
+			except = {
+				tech_akx_worm_1
+				tech_akx_worm_2
+				tech_akx_worm_3
+				tech_psionic_theory
+				tech_nanite_assemblers
+				tech_nanite_repair_system
+				tech_nanite_transmutation
+				null_void_beam
+				tech_acot_swarm_strike_craft
+				tech_swarm_strike_craft_1
+				tech_acot_scourge_missile
+				tech_scourge_missile_1
+				tech_acot_matter_disintegrator
+				tech_extradimensional_weapon_1
+				tech_energy_lance_edi
+				tech_energy_lance_contingency
+				tech_perdition_beam_contingency
+			}
+		}
+		country_event = { id = acot_startup.301 days = 1 } #Overwrites other stupid stuffs that prevent our grand ascension.
+		capital_scope = { 
+			planet_event = { id = acot_startup.300 } 
+		}
+	}
+}
+
+### SETUP PLANETS
+planet_event = {
+	id = acot_startup.300
+	hide_window = yes
+	is_triggered_only = yes
+	#fire_only_once = yes
+
+	immediate = {
+		clear_blockers = yes
+		remove_all_buildings = yes
+		prevent_anomaly = yes
+		if = {
+			limit = { owner = { is_regular_empire = yes } }
+			# 3 jobs
+			add_building = building_major_capital
+			# 2 jobs
+			add_building = building_bureaucratic_1
+			add_building = building_bureaucratic_1
+			add_building = building_research_lab_1
+			add_building = building_research_lab_1
+			add_building = building_foundry_1
+			add_building = building_factory_1
+			add_building = building_clinic
+			# 4 jobs
+			if = {
+				limit = { owner = { is_megacorp = yes } }
+				add_building = building_commercial_zone
+			}
+		}
+		if = {
+			limit = { owner = { is_hive_empire = yes } }
+			# 5 jobs
+			add_building = building_hive_major_capital
+			add_building = building_hive_node
+			add_building = building_research_lab_1
+			add_building = building_research_lab_1
+			add_building = building_foundry_1
+			add_building = building_spawning_pool
+			add_building = building_hive_warren
+			add_building = building_hive_warren
+		}
+
+		# Replace capital building for machine empires
+		if = {
+			limit = { owner = { is_machine_empire = yes } }
+			add_building = building_machine_major_capital
+			add_building = building_machine_assembly_plant
+			add_building = building_uplink_node
+			add_building = building_research_lab_1
+			add_building = building_research_lab_1
+			add_building = building_foundry_1
+			#Servitors
+			if = {
+				limit = { owner = { has_civic = civic_machine_servitor } }
+				add_building = building_organic_sanctuary
+			}
+		}
+		if = {
+			limit = {
+				is_capital = yes
+			}
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			if = {
+				limit = { owner = { has_authority = auth_machine_intelligence } }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+			}
+			else_if = {
+				limit = { owner = { has_authority = auth_hive_mind } }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+			}
+			else = {
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+			}
+			if = {
+				limit = {
+					owner = { NOT = { has_authority = auth_machine_intelligence } }
+				}
+				add_district_and_planet_size_if_needed_effect = { district = district_farming }
+				add_district_and_planet_size_if_needed_effect = { district = district_farming }
+				add_district_and_planet_size_if_needed_effect = { district = district_farming }
+			}
+			if = {
+				limit = {
+					owner = { has_authority = auth_machine_intelligence }
+				}
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			}
+			if = {
+				limit = { owner = { is_gestalt = no } }
+				add_building = building_factory_1
+				add_building = building_commercial_zone
+			}
+			while = {
+				count = 30
+				create_pop = { species = owner_main_species }
+			}
+		}	
+	}
+}
+
+country_event = {
+	id = acot_startup.301
+	title = acot_startup.301.name
+	desc = acot_startup.301.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {		
+	}
+
+	option = {
+		name = acot_startup.301.a
+		custom_tooltip = acot_startup.301.a.tooltip
+	}
+	option = {
+		name = acot_startup.301.b
+		custom_tooltip = acot_startup.301.b.tooltip
+		hidden_effect = {
+			capital_scope = {
+				solar_system = {
+					every_neighbor_system = {
+						limit = {
+							NOR = {
+								exists = owner
+								any_fleet_in_system = {
+									owner = {
+										NOT = {
+											is_same_value = root
+										}
+									}
+								}
+							}
+						}
+						create_starbase = {
+							size = "starbase_outpost"
+							owner = root.owner
+		
+							
+							effect = {	
+							}
+						}
+					}			
+				}
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.301.c
+		custom_tooltip = acot_startup.301.c.tooltip
+		hidden_effect = {
+			capital_scope = {
+				solar_system = {
+					every_neighbor_system = {
+						limit = {
+							NOR = {
+								exists = owner
+								any_fleet_in_system = {
+									owner = {
+										NOT = {
+											is_same_value = root
+										}
+									}
+								}
+							}
+						}
+						save_event_target_as = recent_system
+						create_starbase = {
+							size = "starbase_outpost"
+							owner = root
+		
+							
+							effect = {	
+							}
+						}
+						every_neighbor_system = {
+							limit = {
+								NOR = {
+									exists = owner
+									is_same_value = event_target:recent_system
+									is_capital_system = yes
+									any_fleet_in_system = {
+										owner = {
+											NOT = {
+												is_same_value = root
+											}
+										}
+									}
+								}
+							}
+							create_starbase = {
+								size = "starbase_outpost"
+								owner = root
+								
+								effect = {	
+								}
+							}
+						}
+					}			
+				}
+			}			
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			every_planet_within_border = {
+				limit = {
+					has_deposit_for = shipclass_mining_station
+					has_mining_station = no
+				}
+				create_mining_station = {
+					owner = ROOT
+				}
+			}
+			every_planet_within_border = {
+				limit = {
+					has_deposit_for = shipclass_research_station
+					has_research_station = no
+				}
+				create_research_station = {
+					owner = ROOT
+				}
+			}
+			country_event = {
+				id = acot_startup.302
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.302
+	title = acot_startup.302.name
+	desc = acot_startup.302.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.302.a
+		custom_tooltip = acot_startup.302.a.tooltip
+	}
+	option = {
+		name = acot_startup.302.b
+		custom_tooltip = acot_startup.302.b.tooltip
+		hidden_effect = {
+			while = {
+				count = 2
+				random_planet_within_border = {
+					limit = {
+						is_a_habitable_planet_megastructure = yes	
+						habitability = {
+							who = root.species
+							value >= 0.5
+						}	
+						NOR = {
+							has_owner = yes
+							is_planet_class = pc_dark_fractured
+							is_planet_class = pc_dark_fractured_ae
+						}							
+					}
+					create_colony = { owner = root }
+					clear_blockers = yes
+		
+					remove_all_buildings = yes
+		
+					prevent_anomaly = yes
+					add_district_and_planet_size_if_needed_effect = { district = district_industrial }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					if = {
+						limit = { owner = { has_authority = auth_machine_intelligence } }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					}
+					else_if = {
+						limit = { owner = { has_authority = auth_hive_mind } }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					}
+					else = {
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+					}
+					if = {
+						limit = {
+							owner = { NOT = { has_authority = auth_machine_intelligence } }
+						}
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					}
+					if = {
+						limit = {
+							owner = { has_authority = auth_machine_intelligence }
+						}
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					}
+					while = {
+						count = 30
+						create_pop = { species = owner_main_species }
+					}
+					if = {
+						limit = { owner = { is_regular_empire = yes } }
+						# 3 jobs
+						add_building = building_system_capital
+						# 2 jobs
+						add_building = building_bureaucratic_1
+						add_building = building_bureaucratic_1
+						add_building = building_factory_1
+						add_building = building_food_processing_center
+						# 4 jobs
+						if = {
+							limit = { owner = { is_megacorp = yes } }
+							add_building = building_commercial_zone
+						}
+					}
+					if = {
+						limit = { owner = { is_hive_empire = yes } }
+						# 5 jobs
+						add_building = building_hive_major_capital
+						add_building = building_hive_node
+						add_building = building_hive_warren
+					}
+			
+					# Replace capital building for machine empires
+					if = {
+						limit = { owner = { is_machine_empire = yes } }
+						add_building = building_machine_system_capital
+						add_building = building_machine_assembly_plant
+						add_building = building_uplink_node
+					}	
+				}
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.302.c
+		custom_tooltip = acot_startup.302.c.tooltip
+		hidden_effect = {	
+			every_planet_within_border = {
+				limit = {
+					is_a_habitable_planet_megastructure = yes	
+					habitability = {
+						who = root.species
+						value >= 0.5
+					}	
+					NOR = {
+						has_owner = yes
+						is_planet_class = pc_dark_fractured
+						is_planet_class = pc_dark_fractured_ae
+					}							
+				}
+				create_colony = { owner = root }
+				clear_blockers = yes
+	
+				remove_all_buildings = yes
+	
+				prevent_anomaly = yes
+				add_district_and_planet_size_if_needed_effect = { district = district_industrial }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				if = {
+					limit = { owner = { has_authority = auth_machine_intelligence } }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				}
+				else_if = {
+					limit = { owner = { has_authority = auth_hive_mind } }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				}
+				else = {
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+				}
+				if = {
+					limit = {
+						owner = { NOT = { has_authority = auth_machine_intelligence } }
+					}
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+				}
+				if = {
+					limit = {
+						owner = { has_authority = auth_machine_intelligence }
+					}
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				}
+				while = {
+					count = 30
+					create_pop = { species = owner_main_species }
+				}
+				if = {
+					limit = { owner = { is_regular_empire = yes } }
+					# 3 jobs
+					add_building = building_system_capital
+					# 2 jobs
+					add_building = building_bureaucratic_1
+					add_building = building_bureaucratic_1
+					add_building = building_factory_1
+					add_building = building_food_processing_center
+					# 4 jobs
+					if = {
+						limit = { owner = { is_megacorp = yes } }
+						add_building = building_commercial_zone
+					}
+				}
+				if = {
+					limit = { owner = { is_hive_empire = yes } }
+					# 5 jobs
+					add_building = building_hive_major_capital
+					add_building = building_hive_node
+					add_building = building_hive_warren
+				}
+		
+				# Replace capital building for machine empires
+				if = {
+					limit = { owner = { is_machine_empire = yes } }
+					add_building = building_machine_system_capital
+					add_building = building_machine_assembly_plant
+					add_building = building_uplink_node
+				}									
+			}	
+		}
+	}
+
+	after = {
+		hidden_effect = {	
+			country_event = {
+				id = acot_startup.303
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.303
+	title = acot_startup.303.name
+	desc = acot_startup.303.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.303.a
+		custom_tooltip = acot_startup.303.c.tooltip
+	}
+	option = {
+		name = acot_startup.303.b
+		custom_tooltip = acot_startup.303.c.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				set_skill = 3
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.303.c
+		custom_tooltip = acot_startup.303.c.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				set_skill = 3
+			}
+			create_leader = {
+				class = admiral
+				skill = 3
+				species = owner_main_species
+			}
+			create_leader = {
+				class = general
+				skill = 3
+				species = owner_main_species
+			}
+			owner = {
+				create_leader = {
+					class = scientist
+					skill = 3
+					sub_type = survey
+					species = owner_main_species
+				}
+			}
+			capital_scope = {
+				create_fleet = {
+					effect = {
+						set_owner = root.owner	
+						create_ship = {
+							random_existing_design = science
+							graphical_culture = root.owner
+						}	
+						set_location = {
+							target = prev
+							distance = 50
+							angle = random 
+						}
+						assign_leader = last_created_leader		
+					}
+				}
+			}	
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = acot_startup.304
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.304
+	title = acot_startup.304.name
+	desc = acot_startup.304.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.304.a
+		custom_tooltip = acot_startup.304.a.tooltip
+	}
+	option = {
+		name = acot_startup.304.b
+		custom_tooltip = acot_startup.304.b.tooltip
+		hidden_effect = {
+			every_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				unassign_leader = this
+				delete_fleet = this				
+			}	
+			capital_scope = {
+				create_fleet = {
+					effect = {
+						set_owner = root.owner	
+						while = {
+							count = 6
+							create_ship = {
+								name = random
+								random_existing_design = corvette
+							}
+						}
+						while = {
+							count = 2
+							create_ship = {
+								name = random
+								random_existing_design = destroyer
+							}
+						}
+						while = {
+							count = 1
+							create_ship = {
+								name = random
+								random_existing_design = cruiser
+							}
+						}
+						assign_leader = event_target:admiral_reassign
+						set_location = {
+							target = prev
+							distance = 45
+							angle = random 
+						}				
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = acot_startup.304.c
+		custom_tooltip = acot_startup.304.c.tooltip
+		hidden_effect = {
+			every_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				unassign_leader = this
+				delete_fleet = this				
+			}	
+		}
+		capital_scope = {
+			create_fleet = {
+				effect = {
+					set_owner = root.owner	
+					while = {
+						count = 12
+						create_ship = {
+							name = random
+							random_existing_design = corvette
+						}
+					}
+					while = {
+						count = 6
+						create_ship = {
+							name = random
+							random_existing_design = destroyer
+						}
+					}
+					while = {
+						count = 2
+						create_ship = {
+							name = random
+							random_existing_design = cruiser
+						}
+					}
+					assign_leader = event_target:admiral_reassign
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random 
+					}				
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner	
+					create_ship = {
+						random_existing_design = constructor
+						graphical_culture = root.owner
+					}	
+					set_location = {
+						target = prev
+						distance = 30
+						angle = random 
+					}				
+				}
+			}		
+		}
+	}
+
+}
+
+country_event = {
+	id = acot_startup.4
+	hide_window = yes
+	is_triggered_only = yes
+	#fire_only_once = yes
+	
+	
+
+	trigger = {
+		has_origin = origin_tier_five_start
+	}
+	
+	immediate = {
+		set_country_flag = tier_five_start
+		set_country_flag = custom_start_screen
+		add_resource = {
+			minerals = 10000
+			energy = 10000
+			alloys = 5000
+			volatile_motes = 1000
+			rare_crystals = 1000
+			exotic_gases = 1000		
+			influence = 500
+			unity = 20000
+		}
+		IF = {
+			limit = {
+				country_uses_food = yes
+			}
+			add_resource = {
+				food = 10000
+			}
+		}
+		IF = {
+			limit = {
+				country_uses_consumer_goods = yes
+			}
+			add_resource = {
+				consumer_goods = 10000
+			}
+		}
+		copy_techs_from = {
+			target = event_target:acot_tier_5_dummy_country
+			except = {
+				tech_akx_worm_1
+				tech_akx_worm_2
+				tech_akx_worm_3
+				tech_psionic_theory
+				tech_nanite_assemblers
+				tech_nanite_repair_system
+				tech_nanite_transmutation
+				null_void_beam
+				tech_acot_swarm_strike_craft
+				tech_swarm_strike_craft_1
+				tech_acot_scourge_missile
+				tech_scourge_missile_1
+				tech_acot_matter_disintegrator
+				tech_extradimensional_weapon_1
+				tech_energy_lance_edi
+				tech_energy_lance_contingency
+				tech_perdition_beam_contingency
+			}
+		}
+		country_event = { id = acot_startup.401 days = 1 } #Overwrites other stupid stuffs that prevent our grand ascension.
+		capital_scope = { 
+			planet_event = { id = acot_startup.400 } 
+		}
+	}	
+}
+
+### SETUP PLANETS
+planet_event = {
+	id = acot_startup.400
+	hide_window = yes
+	is_triggered_only = yes
+	#fire_only_once = yes
+
+	immediate = {
+		clear_blockers = yes
+		remove_all_buildings = yes
+		prevent_anomaly = yes
+		if = {
+			limit = { owner = { is_regular_empire = yes } }
+			# 3 jobs
+			add_building = building_system_capital
+			# 2 jobs
+			add_building = building_bureaucratic_1
+			add_building = building_bureaucratic_1
+			add_building = building_research_lab_1
+			add_building = building_research_lab_1
+			add_building = building_foundry_1
+
+			add_building = building_mineral_purification_hub
+			add_building = building_energy_nexus
+			# 4 jobs
+			if = {
+				limit = { owner = { is_megacorp = yes } }
+				add_building = building_commercial_zone
+			}
+		}
+		if = {
+			limit = { owner = { is_hive_empire = yes } }
+			# 5 jobs
+			add_building = building_hive_major_capital
+			add_building = building_hive_node
+			add_building = building_research_lab_1
+			add_building = building_research_lab_1
+			add_building = building_foundry_1
+			add_building = building_hive_warren
+
+			add_building = building_mineral_purification_hub
+			add_building = building_energy_nexus
+		}
+
+		# Replace capital building for machine empires
+		if = {
+			limit = { owner = { is_machine_empire = yes } }
+			add_building = building_machine_system_capital
+			add_building = building_machine_assembly_plant
+			add_building = building_uplink_node
+			add_building = building_research_lab_1
+			add_building = building_research_lab_1
+			add_building = building_foundry_1
+
+			add_building = building_mineral_purification_hub
+			add_building = building_energy_nexus
+			#Servitors
+			if = {
+				limit = { owner = { has_civic = civic_machine_servitor } }
+				add_building = building_organic_sanctuary
+			}
+		}		
+		if = {
+			limit = {
+				is_capital = yes
+			}
+			add_district_and_planet_size_if_needed_effect = { district = district_industrial }
+			add_district_and_planet_size_if_needed_effect = { district = district_industrial }
+			add_district_and_planet_size_if_needed_effect = { district = district_industrial }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			if = {
+				limit = { owner = { has_authority = auth_machine_intelligence } }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+			}
+			else_if = {
+				limit = { owner = { has_authority = auth_hive_mind } }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+			}
+			else = {
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+			}
+			if = {
+				limit = {
+					owner = { NOT = { has_authority = auth_machine_intelligence } }
+				}
+				add_district_and_planet_size_if_needed_effect = { district = district_farming }
+			}
+			if = {
+				limit = {
+					owner = { has_authority = auth_machine_intelligence }
+				}
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			}
+			while = {
+				count = 50
+				create_pop = { species = owner_main_species }
+			}
+		}	
+	}
+}
+
+country_event = {
+	id = acot_startup.401
+	title = acot_startup.401.name
+	desc = acot_startup.401.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {		
+	}
+
+	option = {
+		name = acot_startup.401.a
+		custom_tooltip = acot_startup.401.a.tooltip
+	}
+	option = {
+		name = acot_startup.401.b
+		custom_tooltip = acot_startup.401.b.tooltip
+		hidden_effect = {
+			capital_scope = {
+				solar_system = {
+					every_neighbor_system = {
+						limit = {
+							NOR = {
+								exists = owner
+								any_fleet_in_system = {
+									owner = {
+										NOT = {
+											is_same_value = root
+										}
+									}
+								}
+							}
+						}
+						create_starbase = {
+							size = "starbase_outpost"
+							owner = root.owner
+		
+							
+							effect = {	
+							}
+						}
+					}			
+				}
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.401.c
+		custom_tooltip = acot_startup.401.c.tooltip
+		hidden_effect = {
+			capital_scope = {
+				solar_system = {
+					every_neighbor_system = {
+						limit = {
+							NOR = {
+								exists = owner
+								any_fleet_in_system = {
+									owner = {
+										NOT = {
+											is_same_value = root
+										}
+									}
+								}
+							}
+						}
+						save_event_target_as = recent_system
+						create_starbase = {
+							size = "starbase_outpost"
+							owner = root
+		
+							
+							effect = {	
+							}
+						}
+						every_neighbor_system = {
+							limit = {
+								NOR = {
+									exists = owner
+									is_same_value = event_target:recent_system
+									is_capital_system = yes
+									any_fleet_in_system = {
+										owner = {
+											NOT = {
+												is_same_value = root
+											}
+										}
+									}
+								}
+							}
+							create_starbase = {
+								size = "starbase_outpost"
+								owner = root
+								
+								effect = {	
+								}
+							}
+						}
+					}			
+				}
+			}			
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			every_planet_within_border = {
+				limit = {
+					has_deposit_for = shipclass_mining_station
+					has_mining_station = no
+				}
+				create_mining_station = {
+					owner = ROOT
+				}
+			}
+			every_planet_within_border = {
+				limit = {
+					has_deposit_for = shipclass_research_station
+					has_research_station = no
+				}
+				create_research_station = {
+					owner = ROOT
+				}
+			}
+			country_event = {
+				id = acot_startup.402
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.402
+	title = acot_startup.402.name
+	desc = acot_startup.402.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.402.a
+		custom_tooltip = acot_startup.402.a.tooltip
+	}
+	option = {
+		name = acot_startup.402.b
+		custom_tooltip = acot_startup.402.b.tooltip
+		hidden_effect = {
+			while = {
+				count = 2
+				random_planet_within_border = {
+					limit = {
+						is_a_habitable_planet_megastructure = yes	
+						habitability = {
+							who = root.species
+							value >= 0.5
+						}	
+						NOR = {
+							has_owner = yes
+							is_planet_class = pc_dark_fractured
+							is_planet_class = pc_dark_fractured_ae
+						}							
+					}
+					create_colony = { owner = root }
+					clear_blockers = yes
+		
+					remove_all_buildings = yes
+		
+					prevent_anomaly = yes
+					add_district_and_planet_size_if_needed_effect = { district = district_industrial }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					if = {
+						limit = { owner = { has_authority = auth_machine_intelligence } }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					}
+					else_if = {
+						limit = { owner = { has_authority = auth_hive_mind } }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					}
+					else = {
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+					}
+					if = {
+						limit = {
+							owner = { NOT = { has_authority = auth_machine_intelligence } }
+						}
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					}
+					if = {
+						limit = {
+							owner = { has_authority = auth_machine_intelligence }
+						}
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					}
+					while = {
+						count = 25
+						create_pop = { species = owner_main_species }
+					}
+					if = {
+						limit = { owner = { is_regular_empire = yes } }
+						# 3 jobs
+						add_building = building_major_capital
+						# 2 jobs
+						add_building = building_bureaucratic_1
+						add_building = building_bureaucratic_1
+						add_building = building_factory_1
+						# 4 jobs
+						if = {
+							limit = { owner = { is_megacorp = yes } }
+							add_building = building_commercial_zone
+						}
+					}
+					if = {
+						limit = { owner = { is_hive_empire = yes } }
+						# 5 jobs
+						add_building = building_hive_major_capital
+						add_building = building_hive_node
+						add_building = building_spawning_pool
+						add_building = building_hive_warren
+					}
+			
+					# Replace capital building for machine empires
+					if = {
+						limit = { owner = { is_machine_empire = yes } }
+						add_building = building_machine_major_capital
+						add_building = building_machine_assembly_plant
+					}		
+				}
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.402.c
+		custom_tooltip = acot_startup.402.c.tooltip
+		hidden_effect = {	
+			every_planet_within_border = {
+				limit = {
+					is_a_habitable_planet_megastructure = yes	
+					habitability = {
+						who = root.species
+						value >= 0.5
+					}	
+					NOR = {
+						has_owner = yes
+						is_planet_class = pc_dark_fractured
+						is_planet_class = pc_dark_fractured_ae
+					}							
+				}
+				create_colony = { owner = root }
+				clear_blockers = yes
+	
+				remove_all_buildings = yes
+	
+				prevent_anomaly = yes
+				add_district_and_planet_size_if_needed_effect = { district = district_industrial }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				if = {
+					limit = { owner = { has_authority = auth_machine_intelligence } }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				}
+				else_if = {
+					limit = { owner = { has_authority = auth_hive_mind } }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				}
+				else = {
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+				}
+				if = {
+					limit = {
+						owner = { NOT = { has_authority = auth_machine_intelligence } }
+					}
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+				}
+				if = {
+					limit = {
+						owner = { has_authority = auth_machine_intelligence }
+					}
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				}
+				while = {
+					count = 25
+					create_pop = { species = owner_main_species }
+				}
+				if = {
+					limit = { owner = { is_regular_empire = yes } }
+					# 3 jobs
+					add_building = building_major_capital
+					# 2 jobs
+					add_building = building_bureaucratic_1
+					add_building = building_bureaucratic_1
+					add_building = building_factory_1
+					# 4 jobs
+					if = {
+						limit = { owner = { is_megacorp = yes } }
+						add_building = building_commercial_zone
+					}
+				}
+				if = {
+					limit = { owner = { is_hive_empire = yes } }
+					# 5 jobs
+					add_building = building_hive_major_capital
+					add_building = building_hive_node
+					add_building = building_spawning_pool
+					add_building = building_hive_warren
+				}
+		
+				# Replace capital building for machine empires
+				if = {
+					limit = { owner = { is_machine_empire = yes } }
+					add_building = building_machine_major_capital
+					add_building = building_machine_assembly_plant
+				}								
+			}	
+		}
+	}
+
+	after = {
+		hidden_effect = {	
+			country_event = {
+				id = acot_startup.403
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.403
+	title = acot_startup.403.name
+	desc = acot_startup.403.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.403.a
+		custom_tooltip = acot_startup.403.a.tooltip
+	}
+	option = {
+		name = acot_startup.403.b
+		custom_tooltip = acot_startup.403.b.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				set_skill = 5
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.403.c
+		custom_tooltip = acot_startup.403.c.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				set_skill = 5
+			}
+			create_leader = {
+				class = admiral
+				skill = 5
+				species = owner_main_species
+			}
+			create_leader = {
+				class = general
+				skill = 5
+				species = owner_main_species
+			}
+			owner = {
+				create_leader = {
+					class = scientist
+					skill = 5
+					sub_type = survey
+					species = owner_main_species
+				}
+			}
+			capital_scope = {
+				create_fleet = {
+					effect = {
+						set_owner = root.owner	
+						create_ship = {
+							random_existing_design = science
+							graphical_culture = root.owner
+						}	
+						set_location = {
+							target = prev
+							distance = 50
+							angle = random 
+						}
+						assign_leader = last_created_leader		
+					}
+				}
+			}	
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = acot_startup.404
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.404
+	title = acot_startup.404.name
+	desc = acot_startup.404.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.404.a
+		custom_tooltip = acot_startup.404.a.tooltip
+	}
+	option = {
+		name = acot_startup.404.b
+		custom_tooltip = acot_startup.404.b.tooltip
+		hidden_effect = {
+			every_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				unassign_leader = this
+				delete_fleet = this				
+			}	
+			capital_scope = {
+				create_fleet = {
+					effect = {
+						set_owner = root.owner	
+						while = {
+							count = 8
+							create_ship = {
+								name = random
+								random_existing_design = corvette
+							}
+						}
+						while = {
+							count = 4
+							create_ship = {
+								name = random
+								random_existing_design = destroyer
+							}
+						}
+						while = {
+							count = 2
+							create_ship = {
+								name = random
+								random_existing_design = cruiser
+							}
+						}
+						while = {
+							count = 1
+							create_ship = {
+								name = random
+								random_existing_design = battleship
+							}
+						}
+						assign_leader = event_target:admiral_reassign
+						set_location = {
+							target = prev
+							distance = 45
+							angle = random 
+						}				
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = acot_startup.404.c
+		custom_tooltip = acot_startup.404.c.tooltip
+		hidden_effect = {
+			every_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				unassign_leader = this
+				delete_fleet = this				
+			}	
+		}
+		capital_scope = {
+			create_fleet = {
+				effect = {
+					set_owner = root.owner	
+					while = {
+						count = 16
+						create_ship = {
+							name = random
+							random_existing_design = corvette
+						}
+					}
+					while = {
+						count = 8
+						create_ship = {
+							name = random
+							random_existing_design = destroyer
+						}
+					}
+					while = {
+						count = 4
+						create_ship = {
+							name = random
+							random_existing_design = cruiser
+						}
+					}
+					while = {
+						count = 2
+						create_ship = {
+							name = random
+							random_existing_design = battleship
+						}
+					}
+					assign_leader = event_target:admiral_reassign
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random 
+					}				
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner	
+					create_ship = {
+						random_existing_design = constructor
+						graphical_culture = root.owner
+					}	
+					set_location = {
+						target = prev
+						distance = 30
+						angle = random 
+					}				
+				}
+			}		
+		}
+	}
+
+}
+
+country_event = {
+	id = acot_startup.5
+	hide_window = yes
+	is_triggered_only = yes
+	#fire_only_once = yes
+	
+	
+
+	trigger = {
+		has_origin = origin_tier_dm_start
+	}
+	
+	immediate = {
+		set_country_flag = tier_dm_start
+		set_country_flag = custom_start_screen
+		set_country_flag = acot_finished_delta
+		add_resource = {
+			minerals = 15000
+			energy = 15000
+			alloys = 7500
+			food = 7500
+			consumer_goods = 7500
+			volatile_motes = 750
+			rare_crystals = 750
+			exotic_gases = 750		
+			influence = 450
+			unity = 30000
+			acot_sr_dark_energy = 500
+			sr_dark_matter = 500
+		}
+		copy_techs_from = {
+			target = event_target:acot_tier_dm_dummy_country
+			except = {
+				tech_akx_worm_1
+				tech_akx_worm_2
+				tech_akx_worm_3
+				tech_psionic_theory
+				tech_nanite_assemblers
+				tech_nanite_repair_system
+				tech_nanite_transmutation
+				null_void_beam
+				tech_acot_swarm_strike_craft
+				tech_swarm_strike_craft_1
+				tech_acot_scourge_missile
+				tech_scourge_missile_1
+				tech_acot_matter_disintegrator
+				tech_extradimensional_weapon_1
+				tech_energy_lance_edi
+				tech_energy_lance_contingency
+				tech_perdition_beam_contingency
+			}
+		}
+		country_event = { id = acot_test_event.0 } #Overwrites other stupid stuffs that prevent our grand ascension.
+		country_event = { id = acot_startup.501 days = 1 } #Overwrites other stupid stuffs that prevent our grand ascension.
+		capital_scope = { 
+			planet_event = { id = acot_startup.500 } 
+		}	
+	}
+}
+
+### SETUP PLANETS
+planet_event = {
+	id = acot_startup.500
+	hide_window = yes
+	is_triggered_only = yes
+	#fire_only_once = yes
+
+	immediate = {
+		clear_blockers = yes
+		remove_all_buildings = yes
+		prevent_anomaly = yes
+		if = {
+			limit = { owner = { is_regular_empire = yes } }
+			add_building = building_dm_ancient_palace
+			add_building = building_fe_mansion
+			add_building = building_enigmatic_lab
+			add_building = building_enigmatic_lab
+			add_building = building_fe_alloy_forge
+			add_building = building_fe_factory
+			add_building = building_dark_energy_pylon
+			add_building = building_dark_energy_pylon
+			add_building = building_dark_matter_generator
+			add_building = building_dark_matter_generator
+			add_building = building_dark_matter_synthersizer
+			if = {
+				limit = { owner = { is_megacorp = yes } }
+				add_district_and_planet_size_if_needed_effect = {
+					district = district_city
+				}
+				add_building = building_commercial_zone
+			}
+		}
+		if = {
+			limit = { owner = { is_hive_empire = yes } }
+
+			add_building = building_dm_ancient_hive_cluster
+			add_building = building_enigmatic_lab
+			add_building = building_enigmatic_lab
+			add_building = building_fe_alloy_forge
+			add_building = building_fe_hive_depot
+			add_building = building_fe_hive_pool
+			add_building = building_dark_energy_pylon
+			add_building = building_dark_energy_pylon
+			add_building = building_dark_matter_generator
+			add_building = building_dark_matter_generator
+			add_building = building_dark_matter_synthersizer
+		}
+
+		# Replace capital building for machine empires
+		if = {
+			limit = { owner = { is_machine_empire = yes } }
+
+			add_building = building_dm_ancient_control_center
+			add_building = building_super_assembly_machine
+			add_building = building_dm_ancient_cryo_chamber
+			add_building = building_enigmatic_lab
+			add_building = building_enigmatic_lab
+			add_building = building_fe_alloy_forge
+			add_building = building_dark_energy_pylon
+			add_building = building_dark_energy_pylon
+			add_building = building_dark_matter_generator
+			add_building = building_dark_matter_generator
+			add_building = building_dark_matter_synthersizer	
+			#Servitors
+			if = {
+				limit = { owner = { has_civic = civic_machine_servitor } }
+				add_building = building_organic_sanctuary
+			}
+		}
+		if = {
+			limit = {
+				is_capital = yes
+			}
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_mining }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			if = {
+				limit = { owner = { has_authority = auth_machine_intelligence } }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+			}
+			else_if = {
+				limit = { owner = { has_authority = auth_hive_mind } }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				add_district_and_planet_size_if_needed_effect = { district = district_hive }
+			}
+			else = {
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+				add_district_and_planet_size_if_needed_effect = { district = district_city }
+			}
+			if = {
+				limit = {
+					owner = { NOT = { has_authority = auth_machine_intelligence } }
+				}
+				add_district_and_planet_size_if_needed_effect = { district = district_farming }
+				add_district_and_planet_size_if_needed_effect = { district = district_farming }
+				add_district_and_planet_size_if_needed_effect = { district = district_farming }
+			}
+			if = {
+				limit = {
+					owner = { has_authority = auth_machine_intelligence }
+				}
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+			}
+			if = {
+				limit = { owner = { is_gestalt = no } }
+				add_building = building_factory_1
+				add_building = building_commercial_zone
+			}
+			while = {
+				count = 40
+				create_pop = { species = owner_main_species }
+			}
+		}	
+	}
+}
+
+country_event = {
+	id = acot_startup.501
+	title = acot_startup.501.name
+	desc = acot_startup.501.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {		
+	}
+
+	option = {
+		name = acot_startup.501.a
+		custom_tooltip = acot_startup.501.a.tooltip
+	}
+	option = {
+		name = acot_startup.501.b
+		custom_tooltip = acot_startup.501.b.tooltip
+		hidden_effect = {
+			capital_scope = {
+				solar_system = {
+					every_neighbor_system = {
+						limit = {
+							NOR = {
+								exists = owner
+								any_fleet_in_system = {
+									owner = {
+										NOT = {
+											is_same_value = root
+										}
+									}
+								}
+							}
+						}
+						create_starbase = {
+							size = "starbase_outpost"
+							owner = root.owner
+		
+							
+							effect = {	
+							}
+						}
+					}			
+				}
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.501.c
+		custom_tooltip = acot_startup.501.c.tooltip
+		hidden_effect = {
+			capital_scope = {
+				solar_system = {
+					every_neighbor_system = {
+						limit = {
+							NOR = {
+								exists = owner
+								any_fleet_in_system = {
+									owner = {
+										NOT = {
+											is_same_value = root
+										}
+									}
+								}
+							}
+						}
+						save_event_target_as = recent_system
+						create_starbase = {
+							size = "starbase_outpost"
+							owner = root
+		
+							
+							effect = {	
+							}
+						}
+						every_neighbor_system = {
+							limit = {
+								NOR = {
+									exists = owner
+									is_same_value = event_target:recent_system
+									is_capital_system = yes
+									any_fleet_in_system = {
+										owner = {
+											NOT = {
+												is_same_value = root
+											}
+										}
+									}
+								}
+							}
+							create_starbase = {
+								size = "starbase_outpost"
+								owner = root
+								
+								effect = {	
+								}
+							}
+						}
+					}			
+				}
+			}			
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			every_planet_within_border = {
+				limit = {
+					has_deposit_for = shipclass_mining_station
+					has_mining_station = no
+				}
+				create_mining_station = {
+					owner = ROOT
+				}
+			}
+			every_planet_within_border = {
+				limit = {
+					has_deposit_for = shipclass_research_station
+					has_research_station = no
+				}
+				create_research_station = {
+					owner = ROOT
+				}
+			}
+			country_event = {
+				id = acot_startup.502
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.502
+	title = acot_startup.502.name
+	desc = acot_startup.502.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.502.a
+		custom_tooltip = acot_startup.502.a.tooltip
+	}
+	option = {
+		name = acot_startup.502.b
+		custom_tooltip = acot_startup.502.b.tooltip
+		hidden_effect = {
+			while = {
+				count = 2
+				random_planet_within_border = {
+					limit = {
+						is_a_habitable_planet_megastructure = yes	
+						habitability = {
+							who = root.species
+							value >= 0.5
+						}	
+						NOR = {
+							has_owner = yes
+							is_planet_class = pc_dark_fractured
+							is_planet_class = pc_dark_fractured_ae
+						}							
+					}
+					create_colony = { owner = root }
+					clear_blockers = yes
+		
+					remove_all_buildings = yes
+		
+					prevent_anomaly = yes
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_mining }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					if = {
+						limit = { owner = { has_authority = auth_machine_intelligence } }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+						add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					}
+					else_if = {
+						limit = { owner = { has_authority = auth_hive_mind } }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+						add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					}
+					else = {
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+						add_district_and_planet_size_if_needed_effect = { district = district_city }
+					}
+					if = {
+						limit = {
+							owner = { NOT = { has_authority = auth_machine_intelligence } }
+						}
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+						add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					}
+					if = {
+						limit = {
+							owner = { has_authority = auth_machine_intelligence }
+						}
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+						add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					}
+					while = {
+						count = 45
+						create_pop = { species = owner_main_species }
+					}
+					if = {
+						limit = { owner = { is_regular_empire = yes } }
+						add_building = building_dm_ancient_palace
+						add_building = building_fe_mansion
+						add_building = building_fe_mineral_processing_plant
+						add_building = building_fe_power_hub
+						add_building = building_fe_factory
+						add_building = building_dark_energy_pylon
+						add_building = building_dark_energy_pylon
+						add_building = building_dark_matter_generator
+						add_building = building_dark_matter_generator
+						if = {
+							limit = { owner = { is_megacorp = yes } }
+							add_district_and_planet_size_if_needed_effect = {
+								district = district_city
+							}
+							add_building = building_commercial_zone
+						}
+					}
+					if = {
+						limit = { owner = { is_hive_empire = yes } }
+			
+						add_building = building_dm_ancient_hive_cluster
+						add_building = building_fe_mineral_processing_plant
+						add_building = building_fe_power_hub
+						add_building = building_fe_hive_depot
+						add_building = building_fe_hive_pool
+						add_building = building_dark_energy_pylon
+						add_building = building_dark_energy_pylon
+						add_building = building_dark_matter_generator
+						add_building = building_dark_matter_generator
+					}
+					if = {
+						limit = { owner = { is_machine_empire = yes } }
+			
+						add_building = building_dm_ancient_control_center
+						add_building = building_dm_ancient_cryo_chamber
+						add_building = building_fe_mineral_processing_plant
+						add_building = building_fe_power_hub
+						add_building = building_dark_energy_pylon
+						add_building = building_dark_energy_pylon
+						add_building = building_dark_matter_generator
+						add_building = building_dark_matter_generator
+					}
+				}
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.502.c
+		custom_tooltip = acot_startup.502.c.tooltip
+		hidden_effect = {	
+			every_planet_within_border = {
+				limit = {
+					is_a_habitable_planet_megastructure = yes	
+					habitability = {
+						who = root.species
+						value >= 0.5
+					}	
+					NOR = {
+						has_owner = yes
+						is_planet_class = pc_dark_fractured
+						is_planet_class = pc_dark_fractured_ae
+					}							
+				}
+				create_colony = { owner = root }
+				clear_blockers = yes
+	
+				remove_all_buildings = yes
+	
+				prevent_anomaly = yes
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_mining }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				if = {
+					limit = { owner = { has_authority = auth_machine_intelligence } }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+					add_district_and_planet_size_if_needed_effect = { district = district_nexus }
+				}
+				else_if = {
+					limit = { owner = { has_authority = auth_hive_mind } }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+					add_district_and_planet_size_if_needed_effect = { district = district_hive }
+				}
+				else = {
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+					add_district_and_planet_size_if_needed_effect = { district = district_city }
+				}
+				if = {
+					limit = {
+						owner = { NOT = { has_authority = auth_machine_intelligence } }
+					}
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+					add_district_and_planet_size_if_needed_effect = { district = district_farming }
+				}
+				if = {
+					limit = {
+						owner = { has_authority = auth_machine_intelligence }
+					}
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+					add_district_and_planet_size_if_needed_effect = { district = district_generator }
+				}
+				while = {
+					count = 45
+					create_pop = { species = owner_main_species }
+				}
+				if = {
+					limit = { owner = { is_regular_empire = yes } }
+					add_building = building_dm_ancient_palace
+					add_building = building_fe_mansion
+					add_building = building_fe_mineral_processing_plant
+					add_building = building_fe_power_hub
+					add_building = building_fe_factory
+					add_building = building_dark_energy_pylon
+					add_building = building_dark_energy_pylon
+					add_building = building_dark_matter_generator
+					add_building = building_dark_matter_generator
+					if = {
+						limit = { owner = { is_megacorp = yes } }
+						add_district_and_planet_size_if_needed_effect = {
+							district = district_city
+						}
+						add_building = building_commercial_zone
+					}
+				}
+				if = {
+					limit = { owner = { is_hive_empire = yes } }
+		
+					add_building = building_dm_ancient_hive_cluster
+					add_building = building_fe_mineral_processing_plant
+					add_building = building_fe_power_hub
+					add_building = building_fe_hive_depot
+					add_building = building_fe_hive_pool
+					add_building = building_dark_energy_pylon
+					add_building = building_dark_energy_pylon
+					add_building = building_dark_matter_generator
+					add_building = building_dark_matter_generator
+				}
+				if = {
+					limit = { owner = { is_machine_empire = yes } }
+		
+					add_building = building_dm_ancient_control_center
+					add_building = building_dm_ancient_cryo_chamber
+					add_building = building_fe_mineral_processing_plant
+					add_building = building_fe_power_hub
+					add_building = building_dark_energy_pylon
+					add_building = building_dark_energy_pylon
+					add_building = building_dark_matter_generator
+					add_building = building_dark_matter_generator
+				}								
+			}	
+		}
+	}
+
+	after = {
+		hidden_effect = {	
+			country_event = {
+				id = acot_startup.503
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.503
+	title = acot_startup.503.name
+	desc = acot_startup.503.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.503.a
+		custom_tooltip = acot_startup.503.a.tooltip
+	}
+	option = {
+		name = acot_startup.503.b
+		custom_tooltip = acot_startup.503.b.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				set_skill = 10
+			}			
+		}
+	}
+	option = {
+		name = acot_startup.503.c
+		custom_tooltip = acot_startup.503.c.tooltip
+		hidden_effect = {
+			every_owned_leader = {
+				set_skill = 10
+			}
+			create_leader = {
+				class = admiral
+				skill = 10
+				species = owner_main_species
+			}
+			create_leader = {
+				class = general
+				skill = 10
+				species = owner_main_species
+			}
+			owner = {
+				create_leader = {
+					class = scientist
+					skill = 10
+					sub_type = survey
+					species = owner_main_species
+				}
+			}
+			capital_scope = {
+				create_fleet = {
+					effect = {
+						set_owner = root.owner	
+						create_ship = {
+							random_existing_design = science
+							graphical_culture = root.owner
+						}	
+						set_location = {
+							target = prev
+							distance = 50
+							angle = random 
+						}
+						assign_leader = last_created_leader		
+					}
+				}
+			}	
+			owner = {
+				create_leader = {
+					class = scientist
+					skill = 10
+					sub_type = survey
+					species = owner_main_species
+				}
+			}
+			capital_scope = {
+				create_fleet = {
+					effect = {
+						set_owner = root.owner	
+						create_ship = {
+							random_existing_design = science
+							graphical_culture = root.owner
+						}	
+						set_location = {
+							target = prev
+							distance = 75
+							angle = random 
+						}
+						assign_leader = last_created_leader		
+					}
+				}
+			}
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			country_event = {
+				id = acot_startup.504
+			}
+		}
+	}
+}
+
+country_event = {
+	id = acot_startup.504
+	title = acot_startup.504.name
+	desc = acot_startup.504.desc
+	is_triggered_only = yes
+	picture = GFX_evt_physics_research
+	
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.504.a
+		custom_tooltip = acot_startup.504.a.tooltip
+	}
+	option = {
+		name = acot_startup.504.b
+		custom_tooltip = acot_startup.504.b.tooltip
+		hidden_effect = {
+			every_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				unassign_leader = this
+				delete_fleet = this				
+			}	
+			capital_scope = {
+				create_fleet = {
+					effect = {
+						set_owner = root.owner	
+						while = {
+							count = 16
+							create_ship = {
+								name = random
+								random_existing_design = corvette
+							}
+						}
+						while = {
+							count = 8
+							create_ship = {
+								name = random
+								random_existing_design = destroyer
+							}
+						}
+						while = {
+							count = 4
+							create_ship = {
+								name = random
+								random_existing_design = cruiser
+							}
+						}
+						while = {
+							count = 2
+							create_ship = {
+								name = random
+								random_existing_design = battleship
+							}
+						}
+						while = {
+							count = 1
+							create_ship = {
+								name = random
+								random_existing_design = titan
+							}
+						}
+						assign_leader = event_target:admiral_reassign
+						set_location = {
+							target = prev
+							distance = 45
+							angle = random 
+						}				
+					}
+				}
+				create_fleet = {
+					effect = {
+						set_owner = root.owner	
+						while = {
+							count = 1
+							create_ship = {
+								name = random
+								random_existing_design = juggernaut
+							}
+						}
+						assign_leader = event_target:admiral_reassign
+						set_location = {
+							target = prev
+							distance = 60
+							angle = random 
+						}				
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = acot_startup.504.c
+		custom_tooltip = acot_startup.504.c.tooltip
+		hidden_effect = {
+			every_owned_fleet = {
+				limit = {
+					is_ship_class = shipclass_military
+				}
+				unassign_leader = this
+				delete_fleet = this				
+			}	
+		}
+		capital_scope = {
+			create_fleet = {
+				effect = {
+					set_owner = root.owner	
+					while = {
+						count = 20
+						create_ship = {
+							name = random
+							random_existing_design = corvette
+						}
+					}
+					while = {
+						count = 12
+						create_ship = {
+							name = random
+							random_existing_design = destroyer
+						}
+					}
+					while = {
+						count = 6
+						create_ship = {
+							name = random
+							random_existing_design = cruiser
+						}
+					}
+					while = {
+						count = 4
+						create_ship = {
+							name = random
+							random_existing_design = battleship
+						}
+					}
+					while = {
+						count = 1
+						create_ship = {
+							name = random
+							random_existing_design = titan
+						}
+					}
+					assign_leader = event_target:admiral_reassign
+					set_location = {
+						target = prev
+						distance = 45
+						angle = random 
+					}				
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner	
+					while = {
+						count = 1
+						create_ship = {
+							name = random
+							random_existing_design = juggernaut
+						}
+					}
+					assign_leader = event_target:admiral_reassign
+					set_location = {
+						target = prev
+						distance = 60
+						angle = random 
+					}				
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner	
+					while = {
+						count = 1
+						create_ship = {
+							name = random
+							random_existing_design = juggernaut
+						}
+					}
+					assign_leader = event_target:admiral_reassign
+					set_location = {
+						target = prev
+						distance = 85
+						angle = random 
+					}				
+				}
+			}
+			create_fleet = {
+				effect = {
+					set_owner = root.owner	
+					create_ship = {
+						random_existing_design = constructor
+						graphical_culture = root.owner
+					}	
+					set_location = {
+						target = prev
+						distance = 30
+						angle = random 
+					}				
+				}
+			}		
+		}
+	}
+
+}
+
+######################### WRONG VERSION
+
+event = {
+	id = acot_startup.9998
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = {
+			has_global_flag = acot_live_version
+		}
+	}
+
+	immediate = {
+		every_country = {
+			limit = {
+				is_ai = no
+			}
+			country_event = {
+				id = acot_startup.9999
+			}
+		}
+	}
+	after = {
+	}
+}
+
+country_event = {
+	id = acot_startup.9999
+	title = acot_startup.9999.name
+	desc = acot_startup.9999.desc
+	is_triggered_only = yes
+	picture = "GFX_evt_acot_the_end"
+	show_sound = event_red_alert
+	
+	trigger = {
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = acot_startup.9999.a
+		custom_tooltip = acot_startup.9999.a.tooltip
+		every_country = {
+			destroy_country = yes
+		}
+	}
+	option = {
+		name = acot_startup.9999.b
+		custom_tooltip = acot_startup.9999.b.tooltip
+		set_global_flag = acot_live_version
+	}
+
+	after = {
+	}
+}

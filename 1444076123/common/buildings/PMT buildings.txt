@@ -1,0 +1,1581 @@
+##################
+# Pony's Buildings
+##################
+
+# Society
+building_magic_military_academy = {
+    icon = "building_magic_military_academy"
+	base_buildtime = 300
+	base_cap_amount = 1
+
+	category = army
+
+	potential = {
+		always = yes
+		planet = {
+			NOR = {
+				is_planet_class = pc_habitat
+				has_modifier = resort_colony
+				has_modifier = slave_colony
+			}
+	    }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+		}
+	}
+	convert_to = {
+		building_military_academy
+	}
+	
+	allow = {
+		has_upgraded_capital = yes
+	}
+	
+	planet_modifier = {
+		job_soldier_add = 1
+		planet_army_build_speed_mult = 0.3
+		planet_crime_mult = -0.1
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 450
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+	
+	prerequisites = {
+        "tech_magic_application"
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = yes }
+		}
+		text = job_warrior_drone_effect_desc
+	}
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = { is_gestalt = no }
+		}
+		text = job_soldier_effect_desc
+	}
+
+	ai_weight = {
+	    weight = 0.5
+	}
+}
+
+building_magic_school = {
+	icon = "building_magic_school"
+	base_cap_amount = 1
+	base_buildtime = 240
+
+	category = unity
+
+	potential = {
+		exists = owner
+		owner = {
+		    pmt_pony_species_trigger = yes
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+		}
+	}
+	convert_to = {
+		building_temple
+		building_bureaucratic_1
+		building_hive_node
+		building_uplink_node
+	}
+
+	planet_modifier = {
+		job_magic_teacher_add = 2
+		planet_jobs_upkeep_mult = -0.1
+		planet_jobs_unity_produces_mult = 0.1
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 200
+		}
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	upgrades = {
+		building_magic_institute
+	}
+
+	prerequisites = {
+		"tech_magic_experience"
+	}
+
+	show_tech_unlock_if = {
+		owner = {
+			pmt_pony_species_trigger = yes
+		}
+	}
+	
+	triggered_desc = {
+		text = job_magic_teacher_effect_desc
+	}
+
+	ai_weight = {
+		weight = 25
+		modifier = {
+			factor = 0
+			owner = {
+				has_monthly_income = {
+					resource = consumer_goods
+					value < 8
+				}
+			}
+		}
+	}
+}
+
+building_magic_institute = {
+	icon = "building_magic_institute"
+	base_buildtime = 360
+    can_build = no
+
+	category = unity
+
+	potential = {
+		exists = owner
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+		}
+	}
+	convert_to = {
+		building_holotemple
+		building_bureaucratic_2
+		building_hive_cluster
+		building_network_junction
+	}
+
+	planet_modifier = {
+		job_magic_teacher_add = 5
+		planet_jobs_upkeep_mult = -0.1
+		planet_jobs_unity_produces_mult = 0.1
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 400
+		}
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	upgrades = {
+		building_magic_research_center
+	}
+
+	prerequisites = {
+		"tech_basic_magic_theory"
+	}
+
+	triggered_desc = {
+		text = job_magic_teacher_effect_desc
+	}
+
+	ai_weight = {
+		weight = 1
+		modifier = {
+			factor = 0
+			owner = {
+				has_monthly_income = {
+					resource = consumer_goods
+					value < 8
+				}
+			}
+		}
+	}
+}
+
+building_magic_research_center = {
+	icon = "building_magic_research_center"
+	base_buildtime = 480
+	can_build = no
+
+	category = unity
+
+	potential = {
+		exists = owner
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		has_major_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+			#buildings_no_crystals = yes
+		}
+	}
+	convert_to = {
+		building_sacred_nexus
+		building_bureaucratic_3
+		building_hive_confluence
+		building_system_conflux
+	}
+
+	planet_modifier = {
+		job_magic_teacher_add = 7
+		planet_jobs_upkeep_mult = -0.1
+		planet_jobs_unity_produces_mult = 0.1
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 600
+			rare_crystals = 50
+		}
+		upkeep = {
+			energy = 3
+			rare_crystals = 1
+		}
+	}
+	
+	upgrades = {
+		building_magic_palace
+	}
+	
+	prerequisites = {
+		"tech_advanced_magic_theory"
+	}
+
+	triggered_desc = {
+		text = job_magic_teacher_effect_desc
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			buildings_has_crystals = yes
+			owner = {
+				has_monthly_income = {
+					resource = consumer_goods
+					value > 8
+				}
+			}
+		}
+	}
+}
+
+building_magic_palace = {
+	icon = "building_magic_palace"
+	base_buildtime = 600
+	can_build = no
+
+	category = unity
+
+	potential = {
+		exists = owner
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		has_fully_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+
+			#buildings_no_crystals = yes
+			owner = {
+				is_ai = yes
+				has_deficit = rare_crystals
+				resource_stockpile_compare = { #can buy on market
+					resource = energy
+					value < 1500
+				}
+			}
+		}
+	}
+	convert_to = {
+		building_sacred_nexus
+		building_bureaucratic_3
+		building_hive_confluence
+		building_system_conflux
+	}
+
+	planet_modifier = {
+		job_magic_teacher_add = 10
+		planet_jobs_upkeep_mult = -0.1
+		planet_jobs_unity_produces_mult = 0.1
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 1000
+			rare_crystals = 100
+		}
+		upkeep = {
+			energy = 4
+			rare_crystals = 2
+		}
+	}
+
+	prerequisites = {
+		"tech_systemic_magic_theory"
+	}
+
+	triggered_desc = {
+		text = job_magic_teacher_effect_desc
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			buildings_has_crystals = yes
+			owner = {
+				has_monthly_income = {
+					resource = consumer_goods
+					value > 8
+				}
+			}
+		}
+	}
+}
+
+building_planetary_trade_portal = {
+	icon = "building_planetary_trade_portal"
+	base_buildtime = 640
+	base_cap_amount = 1
+
+	category = trade
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 500
+			rare_crystals = 50
+		}
+		upkeep = {
+			energy = 2
+			rare_crystals = 1
+		}
+	}
+
+	potential = {
+		NOT = { has_modifier = resort_colony }
+		NOT = { has_modifier = slave_colony }
+	}
+
+	planet_modifier = {
+		job_merchant_add = 1
+		job_clerk_add = 10
+		trade_value_mult = 0.05
+	}
+
+	country_modifier = {
+		country_trade_attractiveness = 0.01
+	}
+
+	prerequisites = {
+		"tech_portal_trade"
+	}
+
+	triggered_desc = {
+		text = job_clerk_effect_desc
+	}
+	triggered_desc = {
+		text = job_merchant_effect_desc
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 1
+			buildings_has_crystals = yes
+		}
+		modifier = {
+			factor = 10
+			exists = owner
+			owner = {
+				is_megacorp = yes
+			}
+		}
+	}
+
+	ai_resource_production = {
+		energy = 1
+		trigger = {
+			always = yes
+		}
+	}
+}
+
+# Engineering
+building_crystal_farm = {
+    icon = "building_crystal_farm"
+	base_buildtime = 500
+
+	category = manufacturing
+	
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 300
+		}
+		upkeep = {
+			energy = 4
+		}
+	}
+
+	potential = {
+	    NOT = { has_modifier = resort_colony }
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+		}
+	}
+	convert_to = {
+		building_crystal_plant
+	}
+
+	upgrades = { building_modular_crystal_plantation }
+
+	planet_modifier = {
+		job_crystal_grower_add = 2
+	}
+
+	prerequisites = {
+	    "tech_crystal_planting"
+	}
+
+	triggered_desc = {
+		text = job_crystal_grower_effect_desc
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			factor = 0
+			buildings_build_building = no
+		}
+		modifier = {
+			weight = 30
+			owner = {
+				has_monthly_income = {
+					resource = rare_crystals
+					value < 3
+				}
+			}
+		}
+		modifier = {
+			weight = 200
+			owner = {
+				has_monthly_income = {
+					resource = rare_crystals
+					value < 0
+				}
+			}
+		}
+	}
+
+	ai_resource_production = {
+		rare_crystals = 1
+		trigger = {
+			always = yes
+		}
+	}
+}
+
+building_modular_crystal_plantation = {
+    icon = "building_modular_crystal_plantation"
+	base_buildtime = 750
+	can_build = no
+
+	category = manufacturing
+	
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 450
+		}
+		upkeep = {
+			energy = 6
+		}
+	}
+
+	potential = {
+	    NOT = { has_modifier = resort_colony }
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+		}
+	}
+	convert_to = {
+		building_crystal_plant
+	}
+
+	upgrades = { building_compound_crystal_growth_factory }
+
+	planet_modifier = {
+		job_crystal_grower_add = 4
+	}
+
+	prerequisites = {
+	    "tech_modular_crystal_planting"
+	}
+
+	triggered_desc = {
+		text = job_crystal_grower_effect_desc
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			factor = 0
+			buildings_build_building = no
+		}
+		modifier = {
+			weight = 30
+			owner = {
+				has_monthly_income = {
+					resource = rare_crystals
+					value < 3
+				}
+			}
+		}
+		modifier = {
+			weight = 200
+			owner = {
+				has_monthly_income = {
+					resource = rare_crystals
+					value < 0
+				}
+			}
+		}
+	}
+
+	ai_resource_production = {
+		rare_crystals = 1
+		trigger = {
+			always = yes
+		}
+	}
+}
+
+building_compound_crystal_growth_factory = {
+    icon = "building_compound_crystal_growth_factory"
+	base_buildtime = 1000
+	can_build = no
+
+	category = manufacturing
+	
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 600
+		}
+		upkeep = {
+			energy = 8
+		}
+	}
+
+	potential = {
+	    NOT = { has_modifier = resort_colony }
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+		}
+	}
+	convert_to = {
+		building_crystal_plant
+	}
+
+	planet_modifier = {
+		job_crystal_grower_add = 6
+	}
+
+	prerequisites = {
+	    "tech_crystal_growth"
+	}
+
+	triggered_desc = {
+		text = job_crystal_grower_effect_desc
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			factor = 0
+			buildings_build_building = no
+		}
+		modifier = {
+			weight = 30
+			owner = {
+				has_monthly_income = {
+					resource = rare_crystals
+					value < 3
+				}
+			}
+		}
+		modifier = {
+			weight = 200
+			owner = {
+				has_monthly_income = {
+					resource = rare_crystals
+					value < 0
+				}
+			}
+		}
+	}
+
+	ai_resource_production = {
+		rare_crystals = 1
+		trigger = {
+			always = yes
+		}
+	}
+}
+
+building_crystal_grinding_plant = {
+    icon = "building_crystal_grinding_plant"
+	base_buildtime = 750
+
+	category = manufacturing
+	
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 450
+		}
+		upkeep = {
+			energy = 6
+		}
+	}
+
+	potential = {
+	    NOT = { has_modifier = resort_colony }
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+		}
+	}
+	convert_to = {
+		building_chemical_plant
+	}
+
+	planet_modifier = {
+		job_grinder_add = 4
+	}
+
+	prerequisites = {
+	    "tech_crystal_grinding"
+	}
+
+	triggered_desc = {
+		text = job_grinder_effect_desc
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			factor = 0
+			buildings_build_building = no
+		}
+		modifier = {
+			weight = 30
+			owner = {
+				has_monthly_income = {
+					resource = volatile_motes
+					value < 3
+				}
+			}
+		}
+		modifier = {
+			weight = 200
+			owner = {
+				has_monthly_income = {
+					resource = volatile_motes
+					value < 0
+				}
+			}
+		}
+	}
+
+	ai_resource_production = {
+		volatile_motes = 1
+		trigger = {
+			always = yes
+		}
+	}
+}
+
+building_crystal_gasification_plant = {
+    icon = "building_crystal_gasification_plant"
+	base_buildtime = 750
+
+	category = manufacturing
+	
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 450
+		}
+		upkeep = {
+			energy = 6
+		}
+	}
+
+	potential = {
+	    NOT = { has_modifier = resort_colony }
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				NOT = { pmt_pony_species_trigger = yes }
+			}
+			has_modifier = slave_colony
+		}
+	}
+	convert_to = {
+		building_refinery
+	}
+
+	planet_modifier = {
+		job_gasifier_add = 4
+	}
+
+	prerequisites = {
+	    "tech_crystal_gasification"
+	}
+
+	triggered_desc = {
+		text = job_gasifier_effect_desc
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			factor = 0
+			buildings_build_building = no
+		}
+		modifier = {
+			weight = 30
+			owner = {
+				has_monthly_income = {
+					resource = exotic_gases
+					value < 3
+				}
+			}
+		}
+		modifier = {
+			weight = 200
+			owner = {
+				has_monthly_income = {
+					resource = exotic_gases
+					value < 0
+				}
+			}
+		}
+	}
+
+	ai_resource_production = {
+		exotic_gases = 1
+		trigger = {
+			always = yes
+		}
+	}
+}
+
+
+
+
+
+#########################
+# Griffin's Buildings
+#########################
+
+building_mercenary_center = {
+	icon = "building_mercenary_center"
+	base_buildtime = 360
+
+	category = army
+
+	potential = {
+		always = yes
+		planet = {
+	        NOT = { is_planet_class = pc_habitat }	
+	    }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			NOT = { pmt_pony_species_trigger = yes }
+		}
+	}
+	convert_to = {
+		building_military_academy
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+	
+	planet_modifier = {
+		job_enforcer_add = 1
+		planet_crime_mult = -0.1
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 300
+		}
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	prerequisites = {
+        "tech_legalization_of_mercenaries"
+	}
+
+	triggered_desc = {
+		text = job_enforcer_effect_desc
+	}
+	
+	triggered_desc = {
+		text = building_mercenary_center_text
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 50
+			planet_crime > 15
+			NOR = {
+				has_building = building_precinct_house
+				has_building = building_hall_judgment
+			}
+		}
+	}
+}
+
+
+
+
+
+
+#############################
+# Crystal pony's Buildings
+#############################
+
+building_crystal_fair = {
+	icon = "building_crystal_fair"
+	base_buildtime = 720
+	base_cap_amount = 1
+
+	category = government
+
+	potential = {
+		exists = owner
+		owner = {
+			has_event_chain = alter_the_situation_2
+			NOT = { has_country_flag = crystal_building_1 }
+		}
+		has_planet_flag = crystal_empire_capital
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			AND = {
+				pmt_crystal_pony_species_trigger = yes
+				has_country_flag = defeat_king_sombra
+			}
+		}
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+	
+	planet_modifier = {
+		planet_jobs_produces_mult = 0.1
+		planet_jobs_upkeep_mult = 0.05
+		planet_pops_upkeep_mult = 0.05
+		trade_value_add = 3
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 300
+		}
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	triggered_desc = {
+		text = crystal_building_text
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 1000
+			planet_owner = {
+				has_origin = origin_crystal_empire
+			}
+		}
+	}
+}
+
+building_crystal_zoo = {
+	icon = "building_paradise_dome"
+	base_buildtime = 720
+	base_cap_amount = 1
+
+	category = government
+
+	potential = {
+		exists = owner
+		owner = {
+			has_event_chain = alter_the_situation_2
+			NOT = { has_country_flag = crystal_building_2 }
+		}
+		has_planet_flag = crystal_empire_capital
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			AND = {
+				pmt_crystal_pony_species_trigger = yes
+				has_country_flag = defeat_king_sombra
+			}
+		}
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+	
+	planet_modifier = {
+		planet_jobs_produces_mult = 0.1
+		planet_jobs_upkeep_mult = 0.05
+		planet_pops_upkeep_mult = 0.05
+		pop_happiness = 0.05
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 300
+		}
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	triggered_desc = {
+		text = crystal_building_text
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 1000
+			planet_owner = {
+				has_origin = origin_crystal_empire
+			}
+		}
+	}
+}
+
+building_crystal_sports_arena = {
+	icon = "building_organic_sanctuary"
+	base_buildtime = 720
+	base_cap_amount = 1
+
+	category = government
+
+	potential = {
+		exists = owner
+		owner = {
+			has_event_chain = alter_the_situation_2
+			NOT = { has_country_flag = crystal_building_3 }
+		}
+		has_planet_flag = crystal_empire_capital
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			AND = {
+				pmt_crystal_pony_species_trigger = yes
+				has_country_flag = defeat_king_sombra
+			}
+		}
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+	
+	planet_modifier = {
+		planet_jobs_produces_mult = 0.1
+		planet_jobs_upkeep_mult = 0.05
+		planet_pops_upkeep_mult = 0.05
+		planet_jobs_unity_produces_mult = 0.05
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 300
+		}
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	triggered_desc = {
+		text = crystal_building_text
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 1000
+			planet_owner = {
+				has_origin = origin_crystal_empire
+			}
+		}
+	}
+}
+
+building_crystal_library = {
+	icon = "building_magic_institute"
+	base_buildtime = 720
+	base_cap_amount = 1
+
+	category = unity
+
+	potential = {
+		exists = owner
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		owner = {
+			NOT = { pmt_crystal_pony_species_trigger = yes }
+		}
+	}
+	convert_to = {
+		building_holo_theatres
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+	
+	planet_modifier = {
+		pop_demotion_time_mult = -0.3
+		job_crystal_librarian_add = 5
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 600
+			rare_crystals = 60
+		}
+		upkeep = {
+			energy = 2
+			rare_crystals = 1
+		}
+	}
+
+	prerequisites = {
+        "tech_crystal_library"
+	}
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 50
+			free_jobs = 0
+		}
+	}
+}
+
+#########################
+# Changeling's Buildings
+#########################
+
+building_emotional_farm = {
+	icon = "building_food_processing_facility"
+	base_buildtime = 480
+	base_cap_amount = 1
+
+	category = resource
+
+	potential = {
+		exists = owner
+		NOR = {
+			is_planet_class = pc_machine
+			has_modifier = resort_colony
+		}
+	}
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				is_ai = yes
+				country_uses_food = no
+			}
+			is_planet_class = pc_machine
+			has_modifier = resort_colony
+			owner = {
+				NOT = { pmt_changeling_species_trigger = yes }
+			}
+		}
+	}
+	convert_to = {
+		building_food_processing_facility
+	}
+
+	#allow = {
+	#	buildings_simple_allow = yes
+	#}
+	
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+			}
+		}
+		modifier = {
+			job_emotional_nurturer_add = 3
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+			}
+		}
+		modifier = {
+			job_emotional_nurturer_drone_add = 3
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 300
+		}
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+			}
+		}
+		text = job_emotional_nurturer_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+			}
+		}
+		text = job_emotional_nurturer_drone_effect_desc
+	}
+
+	upgrades = {
+		building_emotional_cultivation_factory
+	}
+
+	prerequisites = {
+        "tech_emotional_cultivation"
+	}
+
+	ai_resource_production = {
+		food = 6
+		trigger = {
+			always = yes
+		}
+	}
+	ai_resource_production = {
+		food = 6
+		trigger = {
+			planet_resource_compare = {
+				resource = food
+				value >= 24
+				type = produces
+			}
+		}
+	}
+	ai_resource_production = {
+		food = 6
+		trigger = {
+			planet_resource_compare = {
+				resource = food
+				value >= 48
+				type = produces
+			}
+		}
+	}
+}
+
+building_emotional_cultivation_factory = {
+	icon = "building_food_processing_center"
+	base_buildtime = 720
+	can_build = no
+
+	category = resource
+
+	potential = {
+		exists = owner
+		NOR = {
+			is_planet_class = pc_machine
+			has_modifier = resort_colony
+		}
+	}
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				is_ai = yes
+				country_uses_food = no
+			}
+			is_planet_class = pc_machine
+			has_modifier = resort_colony
+			owner = {
+				NOT = { pmt_changeling_species_trigger = yes }
+			}
+		}
+	}
+	convert_to = {
+		building_food_processing_center
+	}
+
+	planet_modifier = {
+		planet_jobs_food_produces_mult = 0.25
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+			}
+		}
+		modifier = {
+			job_emotional_nurturer_add = 5
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+			}
+		}
+		modifier = {
+			job_emotional_nurturer_drone_add = 5
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 600
+			exotic_gases = 60
+		}
+		upkeep = {
+			energy = 3
+			exotic_gases = 1
+		}
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_regular_empire = yes
+			}
+		}
+		text = job_emotional_nurturer_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				is_hive_empire = yes
+			}
+		}
+		text = job_emotional_nurturer_drone_effect_desc
+	}
+
+	prerequisites = {
+        "tech_emotional_concentration"
+	}
+
+	ai_resource_production = {
+		food = 9
+		trigger = {
+			always = yes
+		}
+	}
+	ai_resource_production = {
+		food = 9
+		trigger = {
+			planet_resource_compare = {
+				resource = food
+				value >= 28
+				type = produces
+			}
+		}
+	}
+	ai_resource_production = {
+		food = 9
+		trigger = {
+			planet_resource_compare = {
+				resource = food
+				value >= 56
+				type = produces
+			}
+		}
+	}
+}
+
+building_changeling_hive = {
+	icon = "building_hive_warren"
+	base_buildtime = 480
+
+	category = government
+
+	potential = {
+		OR = {
+			NOT = { is_planet_class = pc_habitat }
+			has_planet_flag = advanced_habitat
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				pmt_changeling_species_trigger = yes
+				is_regular_empire = yes
+			}
+		}
+		modifier = {
+			planet_housing_add = 10
+			job_enforcer_add = 2
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				pmt_changeling_species_trigger = yes
+				is_hive_empire = yes
+			}
+		}
+		modifier = {
+			planet_housing_add = 10
+			job_patrol_drone_add = 2
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				NOT = { pmt_changeling_species_trigger = yes }
+			}
+		}
+		modifier = {
+			planet_housing_add = 5
+			planet_crime_mult = 0.1
+		}
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = 300
+		}
+		upkeep = {
+			energy = 1
+		}
+	}
+
+	triggered_desc = {
+		trigger = {
+			owner = {
+				pmt_changeling_species_trigger = yes
+				is_regular_empire = yes
+			}
+		}
+		text = job_enforcer_effect_desc
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				pmt_changeling_species_trigger = yes
+				is_hive_empire = yes
+			}
+		}
+		text = job_patrol_drone_effect_desc
+	}
+
+	prerequisites = { tech_changeling_hive }
+
+	ai_weight = {
+		weight = 0
+		modifier = {
+			weight = 25
+			planet_crime > 15
+			NOR = {
+				has_building = building_precinct_house
+				has_building = building_hall_judgment
+			}
+		}
+		modifier = {
+			weight = 25
+			num_housing <= 0 
+		}
+	}
+}

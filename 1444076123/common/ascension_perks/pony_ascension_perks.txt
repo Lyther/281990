@@ -1,0 +1,165 @@
+ap_harmony_times = {
+    possible = {
+	    custom_tooltip = {
+		    fail_text = "requires_ascension_perks_2"
+			num_ascension_perks > 1
+		}
+		custom_tooltip = {
+		    fail_text = "requires_finish_elements_of_harmony"
+			has_country_flag = "elements_of_harmony"
+		}
+		custom_tooltip = {
+		    fail_text = "requires_not_ap_dark_times"
+			NOT = { has_ascension_perk = ap_dark_times }
+		}
+	}
+	
+	modifier = {
+		species_empire_size_mult = -0.1
+		pop_amenities_usage_mult = -0.25
+		country_leader_cap_add = 6
+		leaders_upkeep_mult = -0.1
+		leaders_cost_mult = -0.1
+		#pop_ethic_militarist_attraction_mult = -0.5
+	}
+	
+	on_enabled = {
+		custom_tooltip = "ap_harmony_times_effect"
+	}
+
+	# on_enabled = {
+	# 	custom_tooltip = "ap_harmony_times_effect_opinion"
+	# }
+	
+	potential = {
+	    NOT = {
+		    has_ascension_perk = ap_harmony_times
+		}	
+		#NOR = {
+		#	has_ethic = ethic_militarist
+		#	has_ethic = ethic_fanatic_militarist
+		#}
+		pmt_pony_species_trigger = yes
+	}
+	
+	ai_weight = {
+	    factor = 10
+		modifier = {
+		    factor = 1.25
+			has_ethic = ethic_pacifist
+		}
+		modifier = {
+		    factor = 1.5
+			has_ethic = ethic_fanatic_pacifist
+		}
+	}
+}
+
+ap_dark_times = {
+    possible = {
+	    custom_tooltip = {
+		    fail_text = "requires_ascension_perks_2"
+			num_ascension_perks > 1
+		}
+		custom_tooltip = {
+		    fail_text = "requires_technology_tech_dark_magic"
+			has_technology = "tech_dark_magic"
+		}
+		custom_tooltip = {
+		    fail_text = "requires_not_ap_harmony_times"
+			NOT = { has_ascension_perk = ap_harmony_times }
+		}
+	}
+	
+	modifier = {
+		army_damage_mult = 1.0
+		ship_weapon_damage = 0.2
+		shipclass_starbase_damage_mult = 0.2
+		country_war_exhaustion_mult = -0.1
+	    #pop_ethic_pacifist_attraction_mult = -0.5
+	}
+
+	on_enabled = {
+		custom_tooltip = "ap_dark_times_effect"
+	}
+	
+	# on_enabled = {
+	# 	custom_tooltip = "ap_dark_times_effect_opinion"
+	# 	#hidden_effect = {
+	# 	#    remove_country_flag = pop_happiness_dark_magic
+	# 	#}
+	# }
+	
+	potential = {
+	    NOT = {
+		    has_ascension_perk = ap_dark_times
+		}
+		#NOR = {
+		#	has_ethic = ethic_pacifist
+		#	has_ethic = ethic_fanatic_pacifist
+		#}
+		pmt_pony_species_trigger = yes
+	}
+	
+	ai_weight = {
+	    factor = 10
+		modifier = {
+		    factor = 1.25
+			has_ethic = ethic_militarist
+		}
+		modifier = {
+		    factor = 1.5
+			has_ethic = ethic_fanatic_militarist
+		}
+	}
+}
+
+ap_lava_worlds = {
+	possible = {
+		custom_tooltip = {
+			fail_text = "requires_technology_tech_molten_world_mining"
+			has_technology = tech_molten_world_mining
+		}
+		custom_tooltip = {
+			fail_text = "requires_technology_tech_climate_restoration"
+			has_technology = tech_climate_restoration
+		}
+		custom_tooltip = {
+			fail_text = "requires_ascension_perks_1"
+			num_ascension_perks > 0
+		}
+	}
+
+	on_enabled = {
+		custom_tooltip = "allow_lava_world"
+		modify_species = {
+			species = owner_main_species
+			add_trait = trait_pc_lava_preference
+		}
+	}
+
+	potential = {
+		NOT = {
+			has_ascension_perk = ap_lava_worlds
+		}
+		pmt_dragon_species_trigger = yes
+		NOT = { has_authority = auth_hive_mind }
+		OR = {
+			NOT = { has_authority = auth_machine_intelligence }
+			has_valid_civic = civic_machine_servitor
+			has_valid_civic = civic_machine_assimilator
+		}
+	}
+
+	ai_weight = {
+		factor = 5
+		modifier = {
+			factor = 0
+			OR = {
+				has_origin = origin_void_dwellers
+				has_origin = origin_shattered_ring
+				has_trait = trait_aquatic
+			}
+		}
+	}
+}

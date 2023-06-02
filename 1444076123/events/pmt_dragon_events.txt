@@ -1,0 +1,323 @@
+namespace = dragoncountry
+
+country_event = {
+	id = dragoncountry.1
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		pmt_dragon_species_trigger = yes
+		is_country_type = default
+	}
+
+	immediate = {
+		capital_scope = {
+			random_list = {
+				10 = {
+					add_deposit = d_melting_surface_0
+				}
+				5 = {
+					add_deposit = d_melting_surface_0
+					add_deposit = d_melting_surface_0
+				}
+			}
+		}
+	}
+}
+
+### Rocs
+planet_event = {
+	id = dragoncountry.100
+	title = "dragoncountry.100.title"
+	desc = "dragoncountry.100.desc"
+	picture = GFX_evt_rocs
+	show_sound = event_alien_nature
+	location = root
+	is_triggered_only = yes
+
+	pre_triggers = {
+		has_owner = yes
+		is_homeworld = no
+		original_owner = yes
+		is_ai = no
+		has_ground_combat = no
+		is_capital = no
+	}
+
+	trigger = {
+		owner = {
+			NOT = { has_country_flag = rocs_colony_event }
+			pmt_dragon_species_trigger = yes
+		}
+		NOT = { has_planet_flag = colony_event }
+		num_pops > 0
+		any_owned_pop = {
+			pmt_dragon_species_trigger = yes
+		}
+	}
+
+	immediate = {
+		set_planet_flag = colony_event
+		owner = { set_country_flag = rocs_colony_event }
+	}
+
+	option = {
+		name = "dragoncountry.100.a"
+		hidden_effect = {
+			planet_event = { id = dragoncountry.110 days = 180 }
+		}
+	}
+
+	option = {
+		name = "dragoncountry.100.b"
+		owner = {
+			add_monthly_resource_mult = {
+			resource = society_research
+			value = @tier1researchreward
+			min = @tier1researchmin
+			max = @tier1researchmax
+			}
+		}
+		hidden_effect = {
+			planet_event = { id = dragoncountry.110 days = 360 }
+			owner = {
+				set_country_flag = rocs_colony_research
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = dragoncountry.110
+	title = "dragoncountry.100.name"
+	desc = "dragoncountry.110.desc"
+	picture = GFX_evt_rocs
+	location = root
+	is_triggered_only = yes
+
+	option = {
+		name = "dragoncountry.110.a"
+		hidden_effect = {
+			planet_event = { id = dragoncountry.120 days = 180 }
+			owner = { set_country_flag = rocs_choise_1 }
+		}
+	}
+
+	option = {
+		name = "dragoncountry.110.b"
+		allow = {
+			owner = {
+				resource_stockpile_compare = { resource = energy value >= 100 }
+			}
+		}
+		owner = {
+			add_resource = {
+				energy = -100
+			}
+		}
+		hidden_effect = {
+			planet_event = { id = dragoncountry.120 days = 360 }
+			owner = { set_country_flag = rocs_choise_2 }
+		}
+	}
+}
+
+planet_event = {
+	id = dragoncountry.120
+	title = "dragoncountry.100.name"
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = rocs_choise_1
+				NOT = { has_country_flag = rocs_colony_research }
+			}
+		}
+		text = "dragoncountry.120.desc.1"
+	}
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = rocs_choise_1
+				has_country_flag = rocs_colony_research
+			}
+		}
+		text = "dragoncountry.120.desc.2"
+	}
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = rocs_choise_2
+			}
+		}
+		text = "dragoncountry.120.desc.3"
+	}
+	picture = GFX_evt_rocs
+	location = root
+	is_triggered_only = yes
+
+	option = {
+		name = "dragoncountry.120.a"
+		add_modifier = {
+			modifier = pm_rocs
+			days = -1
+		}
+		hidden_effect = {
+			planet_event = { id = dragoncountry.131 days = 360 }
+		}
+	}
+
+	option = {
+		name = "dragoncountry.120.b"
+		add_modifier = {
+			modifier = pm_rocs
+			days = -1
+		}
+		hidden_effect = {
+			planet_event = { id = dragoncountry.132 days = 180 }
+		}
+	}
+}
+
+planet_event = {
+	id = dragoncountry.131
+	title = "dragoncountry.100.name"
+	desc = {
+		trigger = {
+			owner = {
+				NOT = { has_country_flag = rocs_colony_research }
+			}
+		}
+		text = "dragoncountry.131.desc.1"
+	}
+	desc = {
+		trigger = {
+			owner = {
+				has_country_flag = rocs_colony_research
+			}
+		}
+		text = "dragoncountry.131.desc.2"
+	}
+	picture = GFX_evt_rocs
+	location = root
+	is_triggered_only = yes
+
+	option = {
+		name = "dragoncountry.131.a"
+		remove_modifier = pm_rocs
+		hidden_effect = {
+			owner = {
+				if = {
+					limit = { has_country_flag = rocs_colony_research }
+					remove_country_flag = rocs_colony_research
+				}
+				if = {
+					limit = { has_country_flag = rocs_choise_1 }
+					remove_country_flag = rocs_choise_1
+				}
+				if = {
+					limit = { has_country_flag = rocs_choise_2 }
+					remove_country_flag = rocs_choise_2
+				}
+			}
+		}
+	}
+}
+
+planet_event = {
+	id = dragoncountry.132
+	title = "dragoncountry.100.name"
+	desc = "dragoncountry.132.desc"
+	picture = GFX_evt_rocs
+	location = root
+	is_triggered_only = yes
+
+	option = {
+		name = "dragoncountry.132.a"
+		if = {
+			limit = {
+				num_pops >= 2
+			}
+			random_owned_pop = {
+				limit = {
+					pmt_dragon_species_trigger = yes
+				}
+				kill_pop = yes
+			}
+		}
+		else = {
+			owner = {
+				add_resource = {
+					influence = -10
+				}
+			}
+		}
+		hidden_effect = {
+			planet_event = { id = dragoncountry.131 days = 180 }
+		}
+	}
+}
+
+planet_event = {
+	id = dragoncountry.140
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { is_planet_class = pc_lava }
+			if = { limit = { NOT = { has_deposit = d_lava_world } } add_deposit = d_lava_world }
+			if = { limit = { NOT = { has_deposit = d_lava_world_1 } } add_deposit = d_lava_world_1 }
+			if = { limit = { NOT = { has_deposit = d_lava_world_2 } } add_deposit = d_lava_world_2 }
+			if = { limit = { NOT = { has_deposit = d_lava_world_3 } } add_deposit = d_lava_world_3 }
+		}
+		if = {
+			limit = { NOT = { is_planet_class = pc_lava } }
+			if = { limit = { has_deposit = d_lava_world } remove_deposit = d_lava_world }
+			if = { limit = { has_deposit = d_lava_world_1 } remove_deposit = d_lava_world_1 }
+			if = { limit = { has_deposit = d_lava_world_2 } remove_deposit = d_lava_world_2 }
+			if = { limit = { has_deposit = d_lava_world_3 } remove_deposit = d_lava_world_3 }
+		}
+		solar_system = {
+			if = {
+				limit = {
+					exists = starbase
+				}
+				starbase = {
+					if = {
+						limit = {
+							has_starbase_building = magma_drilling_station
+							solar_system = {
+								count_system_planet = {
+									limit = {
+										OR = {
+											is_planet_class = pc_molten
+											is_planet_class = pc_barren
+											is_planet_class = pc_barren_cold
+											is_planet_class = pc_toxic
+											is_planet_class = pc_frozen
+										}
+									}
+									count = 0
+								}
+							}
+						}
+						remove_starbase_building = { building = magma_drilling_station }
+					}
+					if = {
+						limit = {
+							has_starbase_building = lava_extraction_station
+							solar_system = {
+								count_system_planet = {
+									limit = { is_planet_class = pc_molten }
+									count = 0
+								}
+							}
+						}
+						remove_starbase_building = { building = lava_extraction_station }
+					}
+				}
+			}
+		}
+	}
+}
