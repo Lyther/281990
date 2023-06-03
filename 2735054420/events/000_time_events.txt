@@ -43,6 +43,12 @@ country_event = {
 					save_event_target_as = old_time_system
 				}
 			}
+			every_owned_leader = {
+				limit = {
+					is_ruler = no
+				}
+				kill_leader = { show_notification = no }
+			}
 			every_owned_fleet = {
 				unassign_leader = this
 				delete_fleet = this
@@ -76,7 +82,7 @@ country_event = {
 							set_planet_flag = cannot_be_hit_by_aow_starfall_spear
 							save_global_event_target_as = time_core_planet
 							while = {
-								count = 28
+								count = 27
 								create_pop = {
 									species = root.species
 								}
@@ -150,8 +156,103 @@ country_event = {
 				}
 			}
 			country_event = { id = game_start.9 }
+			create_leader = {
+				class = governor
+				name = random
+				species = owner_main_species
+			}
+			capital_scope = {
+				assign_leader = last_created_leader
+			}
+			
+			# 领袖初始特质（统治者和领袖池不重复获得）
+			if = {
+				limit = { has_civic = civic_crusader_spirit_corporate }
+				every_owned_leader = {
+					limit = {
+						leader_class = admiral
+						is_ruler = no
+						is_pool_leader = no
+					}
+					add_trait_no_notify = leader_trait_corsair
+				}
+			}
+			if = {
+				limit = { has_civic = civic_crusader_spirit }
+				every_owned_leader = {
+					limit = {
+						leader_class = admiral
+						is_ruler = no
+						is_pool_leader = no
+					}
+					add_trait_no_notify = leader_trait_par_zealot
+				}
+				every_owned_leader = {
+					limit = {
+						leader_class = general
+						is_ruler = no
+						is_pool_leader = no
+					}
+					add_trait_no_notify = leader_trait_crusader
+				}
+			}
+			if = {
+				limit = { has_civic = civic_heroic_tales }
+				every_owned_leader = {
+					limit = {
+						is_ruler = no
+						is_pool_leader = no
+					}
+					add_trait_no_notify = "random_common"
+				}
+			}
+			if = {
+				limit = { has_civic = civic_technocracy }
+				every_owned_leader = {
+					limit = {
+						leader_class = scientist
+						is_ruler = no
+						is_pool_leader = no
+					}
+					add_random_expertise_trait_effect = yes
+				}
+			}
+			if = {
+				limit = { is_memory_vault_empire = yes }
+				every_owned_leader = {
+					limit = {
+						is_ruler = no
+						is_pool_leader = no
+					}
+					add_skill_without_trait_selection = 1
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_valid_civic = civic_distinguished_admiralty
+						has_valid_civic = civic_machine_warbots
+						has_valid_civic = civic_hive_strength_of_legions
+					}
+				}
+				every_owned_leader = {
+					if = {
+						limit = {
+							OR = {
+								leader_class = admiral
+								leader_class = general
+							}
+							is_ruler = no
+							is_pool_leader = no
+						}
+						add_skill_without_trait_selection = 2
+					}
+				}
+			}
+			
 			set_spawn_system_batch = end
 		}
+		
 		# 通用
 		set_country_flag = origin_time_empire
 		start_situation = {
@@ -1092,7 +1193,7 @@ country_event = {
 		custom_tooltip = "time.14.b.tooltip"
 		if = {
 			limit = {
-				has_authority = auth_machine_intelligence
+				is_machine_empire = yes
 			}
 			add_modifier = { modifier = dimension_traveler_horror_secret_modifier_machine_intelligence }
 		}
