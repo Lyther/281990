@@ -392,6 +392,23 @@ check_dimension_traveler_trait = {
 	check_dimension_traveler_generic_trait = { LEVEL = towel }
 	# 敲击维护者
 	check_dimension_traveler_generic_trait = { LEVEL = percussive_maintainer }
+	# 更多事件
+	check_dimension_traveler_generic_trait = { LEVEL = mem_blacksite_trait_fallen_empire_scientist }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_blacksite_trait_psionic_project }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_blacksite_trait_synthetic_project }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_blacksite_trait_synthetic_project_tamed }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_leader_trait_blacksite_special_counsel }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_leader_trait_blacksite_deputy_overseer }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_leader_trait_blacksite_high_inquisitor }
+	check_dimension_traveler_generic_trait_special = { LEVEL = mem_broken_clock }
+	check_dimension_traveler_generic_trait = { LEVEL = trait_mem_crawler_pet_owner }
+	check_dimension_traveler_generic_trait = { LEVEL = trait_mem_crawler_pet_owner_cloned }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_leader_trait_ancient_knowledge }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_leader_trait_reinvigorated }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_dread_pirate_relic_admiral }
+	check_dimension_traveler_generic_trait = { LEVEL = mem_leader_strange_insight }
+	# 事件拓展
+	check_dimension_traveler_generic_trait = { LEVEL = leader_trait_gasbag_pet }
 }
 
 #领袖
@@ -410,6 +427,27 @@ check_dimension_traveler_generic_trait = {
 				has_trait = gestalt_trait_admiral_$LEVEL$
 				has_trait = gestalt_trait_general_$LEVEL$
 				has_trait = leader_trait_$LEVEL$
+				has_trait = $LEVEL$
+			}
+			owner = {
+				NOT = { has_country_flag = dimension_traveler_trait_$LEVEL$ }
+			}
+		}
+		owner = {
+			set_country_flag = dimension_traveler_trait_$LEVEL$
+		}
+	}
+}
+
+#领袖
+check_dimension_traveler_generic_trait_special = {
+	if = {
+		limit = {
+			OR = {
+				has_trait = $LEVEL$_governor_trait
+				has_trait = $LEVEL$_scientist_trait
+				has_trait = $LEVEL$_admiral_trait
+				has_trait = $LEVEL$_general_trait
 			}
 			owner = {
 				NOT = { has_country_flag = dimension_traveler_trait_$LEVEL$ }
@@ -617,6 +655,24 @@ give_dimension_traveler_trait = {
 		FLAG = need
 		LEVEL = percussive_maintainer
 	}
+	
+	# 更多事件
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_blacksite_trait_fallen_empire_scientist }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_blacksite_trait_psionic_project }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_blacksite_trait_synthetic_project }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_blacksite_trait_synthetic_project_tamed }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_leader_trait_blacksite_special_counsel }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_leader_trait_blacksite_deputy_overseer }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_leader_trait_blacksite_high_inquisitor }
+	give_dimension_traveler_generic_trait_with_class_special = { LEVEL = mem_broken_clock }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = trait_mem_crawler_pet_owner }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = trait_mem_crawler_pet_owner_cloned }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_leader_trait_ancient_knowledge }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_leader_trait_reinvigorated }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_dread_pirate_relic_admiral }
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_leader_strange_insight }
+	# 事件拓展
+	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = leader_trait_gasbag_pet }
 }
 
 #领袖（无任何判定）（与职务有关）
@@ -695,6 +751,40 @@ give_dimension_traveler_class_trait = {
 			[[FLAG] owner = { has_country_flag = dimension_traveler_trait_$LEVEL$ }]
 		}
 		add_trait_no_notify = leader_trait_$LEVEL$
+	}
+}
+
+# 领袖（全名）（与职务无关）
+give_dimension_traveler_generic_trait_without_class_special = {
+	if = {
+		limit = {
+			owner = { has_country_flag = dimension_traveler_trait_$LEVEL$ }
+		}
+		add_trait_no_notify = $LEVEL$
+	}
+}
+
+# 领袖（全名）（与职务有关）
+give_dimension_traveler_generic_trait_with_class_special = {
+	if = {
+		limit = {
+			owner = { has_country_flag = dimension_traveler_trait_$LEVEL$ }
+		}
+		switch = {
+			trigger = leader_class
+			governor = {
+				add_trait_no_notify = $LEVEL$_governor_trait
+			}
+			scientist = {
+				add_trait_no_notify = $LEVEL$_scientist_trait
+			}
+			admiral = {
+				add_trait_no_notify = $LEVEL$_admiral_trait
+			}
+			general = {
+				add_trait_no_notify = $LEVEL$_general_trait
+			}
+		}
 	}
 }
 
