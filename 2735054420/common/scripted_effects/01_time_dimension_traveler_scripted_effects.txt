@@ -33,6 +33,7 @@ create_dimension_traveler_leader = {
 			give_dimension_traveler_trait = yes
 			set_dimension_traveler_ethic = yes
 			set_dimension_traveler_portrait = yes
+			owner = { clear_other_dimension_traveler = yes }
 			if = {
 				limit = {
 					owner = {
@@ -921,17 +922,25 @@ dimension_traveler_add_experience = {
 	}
 	owner = {
 		subtract_variable = {
-			which = dimension_traveler_experience #100
+			which = dimension_traveler_experience #100/0
 			value = prev.experience_has_gain #20
 		}
-		divide_variable = {
-			which = dimension_traveler_experience #80
-			value = prev.experience_gain #2
+		if = {
+			limit = {
+				check_variable = {
+					which = dimension_traveler_experience
+					value >= 0
+				}
+			}
+			divide_variable = {
+				which = dimension_traveler_experience #80
+				value = prev.experience_gain #2
+			}
 		}
 	}
 	clear_variable = experience_has_gain
 	clear_variable = experience_gain
-	add_experience = owner.dimension_traveler_experience #40x2+20=100
+	add_experience = owner.dimension_traveler_experience #40x2+20=100/-20+20=0
 }
 
 #领袖
@@ -943,6 +952,18 @@ refresh_dimension_traveler = {
 	set_name = NAME_Dimension_Traveler
 	set_gender = female
 	set_dimension_traveler_portrait = yes
+	owner = { clear_other_dimension_traveler = yes }
+}
+
+#国家（界旅者唯一）
+clear_other_dimension_traveler = {
+	every_owned_leader = {
+		limit = {
+			is_dimension_traveler = no
+			has_dimension_traveler_subclass = yes
+		}
+		kill_leader = { show_notification = no }
+	}
 }
 
 #领袖
@@ -1066,6 +1087,14 @@ play_dimension_traveler_response_sound = {
 			}
 		}
 		play_sound = dimension_traveler_response
+	}
+}
+
+# 国家
+give_dimension_traveler_subclass_resource = {
+	add_resource = {
+		$RESOURCE$ = 1
+		mult = prev.value:dimension_traveler_subclass_value|RESOURCE|$RESOURCE$|
 	}
 }
 
