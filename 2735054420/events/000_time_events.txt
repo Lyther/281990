@@ -2848,16 +2848,34 @@ country_event = {
 	}
 }
 
-# 旧档进入循环
+# 旧档科技补救
 event = {
 	id = time.1000
 	is_triggered_only = yes
 	hide_window = yes
 	
 	trigger = {
+		NOT = { has_global_flag = time_1000_triggered }
 	}
 	
 	immediate = {
+		set_global_flag = time_1000_triggered
+		every_playable_country = {
+			limit = {
+				any_situation = {
+					is_situation_type = situation_pc_time
+					# 旧档的1050~1499进度会在新档转入引力屏障阶段
+					situation_progress >= 1050
+					situation_progress < 1500
+				}
+			}
+			random_situation = {
+				limit = {
+					is_situation_type = situation_pc_time
+				}
+				situation_event = { id = time.130 }
+			}
+		}
 	}
 }
 
