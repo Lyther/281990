@@ -289,6 +289,10 @@ naval_admin = {
 		}
 	}
 
+	pop_modifier = {
+		pop_defense_armies_add = 1
+	}
+
 	resources = {
 		category = planet_soldiers
 		produces = {
@@ -1175,10 +1179,6 @@ palace_guard = {
 		is_sapient = yes
 	}
 
-	possible = {
-		battle_thrall_job_check_trigger = yes
-	}
-
 	resources = {
 		category = planet_enforcers
 		produces = {
@@ -1215,33 +1215,17 @@ palace_guard = {
 		}
 	}
 
+	possible = {
+		soldier_job_check_trigger = yes
+		owner = { is_gestalt = no }
+	}
+
 	weight = {
-		weight = @specialist_job_weight
-
-		modifier = {
-			mult = value:job_weights_modifier|JOB|enforcer|RESOURCE|unity|FACTOR|0.25|
-			owner = { has_active_tradition = tr_domination_judgment_corps }
-		}
-
+		weight = @soldier_job_weight
 		modifier = {
 			factor = 10
-			has_job = enforcer
-		}
-		modifier = {
-			factor = 10
-			planet = { planet_crime > 15}
-			NOT = { has_job = enforcer }
-		}
-		modifier = {
-			factor = 0.01
-			planet = { planet_crime <= 15}
-			NOT = { has_job = enforcer }
-		}
-
-		modifier = {
-			factor = 0.2
-			has_citizenship_rights = no
-			NOT = { has_trait = trait_mechanical }
+			exists = planet
+			planet = { has_modifier = martial_law }
 		}
 		modifier = {
 			factor = 2
@@ -1256,13 +1240,18 @@ palace_guard = {
 			has_trait = trait_strong
 		}
 		modifier = {
+			factor = 0.5
+			has_trait = trait_weak
+		}
+		modifier = {
+			factor = 0.1
+			is_enslaved = yes
+			NOT = { has_slavery_type = { type = slavery_military } }
+		}
+		modifier = {
 			factor = 10
 			is_enslaved = yes
 			has_slavery_type = { type = slavery_military }
-		}
-		modifier = {
-			factor = 0.50
-			has_trait = trait_weak
 		}
 		modifier = {
 			factor = 0.1
@@ -1281,9 +1270,8 @@ palace_guard = {
 			has_trait = trait_limited_regeneration
 		}
 		modifier = {
-			factor = 0.8
-			is_enslaved = yes
-			has_slavery_type = { type = slavery_indentured }
+			factor = 0
+			species = { can_be_soldier = no }
 		}
 		modifier = {
 			factor = 2
@@ -1303,11 +1291,6 @@ capital_security = {
 		is_being_assimilated = no
 		is_sapient = yes
 	}
-
-	possible = {
-		battle_thrall_job_check_trigger = yes
-	}
-
 	resources = {
 		category = planet_enforcers
 		produces = {
@@ -1344,33 +1327,17 @@ capital_security = {
 		}
 	}
 
+	possible = {
+		soldier_job_check_trigger = yes
+		owner = { is_gestalt = no }
+	}
+
 	weight = {
-		weight = @specialist_job_weight
-
-		modifier = {
-			mult = value:job_weights_modifier|JOB|enforcer|RESOURCE|unity|FACTOR|0.25|
-			owner = { has_active_tradition = tr_domination_judgment_corps }
-		}
-
+		weight = @soldier_job_weight
 		modifier = {
 			factor = 10
-			has_job = enforcer
-		}
-		modifier = {
-			factor = 10
-			planet = { planet_crime > 15}
-			NOT = { has_job = enforcer }
-		}
-		modifier = {
-			factor = 0.01
-			planet = { planet_crime <= 15}
-			NOT = { has_job = enforcer }
-		}
-
-		modifier = {
-			factor = 0.2
-			has_citizenship_rights = no
-			NOT = { has_trait = trait_mechanical }
+			exists = planet
+			planet = { has_modifier = martial_law }
 		}
 		modifier = {
 			factor = 2
@@ -1385,13 +1352,18 @@ capital_security = {
 			has_trait = trait_strong
 		}
 		modifier = {
+			factor = 0.5
+			has_trait = trait_weak
+		}
+		modifier = {
+			factor = 0.1
+			is_enslaved = yes
+			NOT = { has_slavery_type = { type = slavery_military } }
+		}
+		modifier = {
 			factor = 10
 			is_enslaved = yes
 			has_slavery_type = { type = slavery_military }
-		}
-		modifier = {
-			factor = 0.50
-			has_trait = trait_weak
 		}
 		modifier = {
 			factor = 0.1
@@ -1410,9 +1382,8 @@ capital_security = {
 			has_trait = trait_limited_regeneration
 		}
 		modifier = {
-			factor = 0.8
-			is_enslaved = yes
-			has_slavery_type = { type = slavery_indentured }
+			factor = 0
+			species = { can_be_soldier = no }
 		}
 		modifier = {
 			factor = 2
@@ -1420,6 +1391,7 @@ capital_security = {
 		}
 	}
 }
+
 pd_capital_bio_politician = {
 	category = bio_trophy
 	#is_capped_by_modifier = yes
