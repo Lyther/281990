@@ -13,6 +13,7 @@ event = {
 	
 	immediate = {
 		set_global_flag = time_mod_active
+		set_global_flag = time_1000_triggered_2
 	}
 }
 
@@ -298,6 +299,8 @@ country_event = {
 			add_district = district_time
 			add_district = district_time
 			time_repair_ruined_buildings = yes
+			refresh_pc_time_jobs_variable = yes
+			planet_event = { id = time.6 days = 29 }
 		}
 		ruler = {
 			add_trait_no_notify = leader_trait_ruler_time
@@ -476,6 +479,21 @@ country_event = {
 				alloys = -250
 			}
 		}
+	}
+}
+
+# 时空黑洞基础产出更新
+planet_event = {
+	id = time.6
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+	}
+	
+	immediate = {
+		planet_event = { id = time.6 days = 30 }
+		refresh_pc_time_jobs_variable = yes
 	}
 }
 
@@ -1286,6 +1304,7 @@ planet_event = {
 		add_deposit = d_endless_time
 		remove_all_districts = yes
 		add_district = district_endless_time
+		refresh_pc_time_jobs_variable = yes
 		planet_event = { id = time.26 }
 		planet_event = { id = time.50 days = 1080 random = 1440 }
 		every_owned_pop = {
@@ -1655,6 +1674,7 @@ planet_event = {
 		add_deposit = d_endless_time
 		remove_all_districts = yes
 		add_district = district_endless_time
+		refresh_pc_time_jobs_variable = yes
 		planet_event = { id = time.26 }
 		planet_event = { id = time.50 days = 1080 random = 1440 }
 		every_owned_pop = {
@@ -1711,7 +1731,7 @@ planet_event = {
 	}
 }
 
-# 神秘奇点理念建筑
+# 神秘奇点变量更新
 event = {
 	id = time.40
 	is_triggered_only = yes
@@ -2103,6 +2123,7 @@ planet_event = {
 			modifier = timesingularity
 			days = -1
 		}
+		refresh_pc_time_jobs_variable = yes
 		owner = {
 			ruler = {
 				if = {
@@ -2805,6 +2826,10 @@ situation_event = {
 
 	immediate = {
 		set_situation_locked = yes
+		owner = {
+			set_country_flag = situation_ap_time_give_up
+			unlock_council_selection = yes
+		}
 	}
 	
 	after = {
@@ -2855,25 +2880,23 @@ event = {
 	hide_window = yes
 	
 	trigger = {
-		NOT = { has_global_flag = time_1000_triggered }
+		NOT = { has_global_flag = time_1000_triggered_2 }
 	}
 	
 	immediate = {
-		set_global_flag = time_1000_triggered
+		set_global_flag = time_1000_triggered_2
 		every_playable_country = {
 			limit = {
-				any_situation = {
-					is_situation_type = situation_pc_time
-					# 旧档的1050~1499进度会在新档转入引力屏障阶段
-					situation_progress >= 1050
-					situation_progress < 1500
-				}
+				has_origin = origin_time
 			}
-			random_situation = {
+			every_owned_planet = {
 				limit = {
-					is_situation_type = situation_pc_time
+					OR = {
+						is_planet_class = pc_time
+						is_planet_class = pc_endless_time
+					}
 				}
-				situation_event = { id = time.130 }
+				planet_event = { id = time.6 }
 			}
 		}
 	}

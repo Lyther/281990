@@ -58,11 +58,11 @@ num_col_time_value = {
 		}
 	}
 	modifier = {
-		multiply = 2
+		multiply = 1.5
 		has_modifier = timesingularity
 	}
 	modifier = {
-		multiply = 3
+		multiply = 2
 		is_planet_class = pc_endless_time
 	}
 }
@@ -117,7 +117,7 @@ councilor_origin_time_1_level = {
 		parameters = {
 			type = councilor_origin_time_1
 		}
-		multiplier = 0.1
+		multiplier = 0.05
 		mode = add
 	}
 }
@@ -136,24 +136,29 @@ councilor_origin_time_2_level = {
 		parameters = {
 			type = councilor_origin_time_2
 		}
-		multiplier = 0.1
+		multiplier = 0.05
 		mode = add
 	}
 }
 
 
 
-num_time_researcher_produces_decay = {
-	base = 1.01
-	subtract = planet.modifier:time_researcher_produces_decay
-	min = value:num_time_researcher_produces_decay_min
-	max = 1
+num_time_researcher_modifier_loc_value_good = {
+	base = 100
+	multiply = planet.modifier:$MODIFIER$
+	add = 100
 }
 
-num_time_researcher_produces_decay_min = {
-	base = 0.5
+num_time_researcher_modifier_loc_value_bad = {
+	base = 100
+	multiply = planet.modifier:$MODIFIER$
+	max = value:num_time_researcher_modifier_loc_value_bad_max
+}
+
+num_time_researcher_modifier_loc_value_bad_max = {
+	base = 50
 	modifier = {
-		add = 0.1
+		subtract = 5
 		planet = {
 			has_district = district_endless_time
 			check_variable = {
@@ -163,7 +168,7 @@ num_time_researcher_produces_decay_min = {
 		}
 	}
 	modifier = {
-		add = 0.2
+		subtract = 10
 		planet = {
 			has_district = district_endless_time
 			check_variable = {
@@ -173,7 +178,50 @@ num_time_researcher_produces_decay_min = {
 		}
 	}
 	modifier = {
-		add = 0.3
+		subtract = 15
+		planet = {
+			has_district = district_endless_time
+			check_variable = {
+				which = district_time_level_up
+				value >= 3
+			}
+		}
+	}
+}
+
+
+
+num_time_researcher_produces_decay = {
+	base = 1
+	subtract = planet.modifier:time_researcher_produces_decay
+	min = value:num_time_researcher_produces_decay_min
+	max = 1
+}
+
+num_time_researcher_produces_decay_min = {
+	base = 0.5
+	modifier = {
+		add = 0.05
+		planet = {
+			has_district = district_endless_time
+			check_variable = {
+				which = district_time_level_up
+				value = 1
+			}
+		}
+	}
+	modifier = {
+		add = 0.1
+		planet = {
+			has_district = district_endless_time
+			check_variable = {
+				which = district_time_level_up
+				value = 2
+			}
+		}
+	}
+	modifier = {
+		add = 0.15
 		planet = {
 			has_district = district_endless_time
 			check_variable = {
