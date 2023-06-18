@@ -1,24 +1,41 @@
-# 特质图标不应用原版背景
 inline_script = {
 	script = trait/subtitle/council_yes
 	RARITY = $RARITY$
 	CLASS = $CLASS$
 }
 icon = {
+	layer = {
+		icon = "GFX_trait_bg"
+		color = "trait_bg_$BG|default$"
+	}
 	inline_script = trait/icon_element/rarity_$RARITY$
 	layer = {
 		icon = $ICON$
+		color = "trait_icon_default"
 	}
 	layer = {
 		icon = "GFX_trait_councilor"
 		visible = {
-			is_ruler = yes
+			OR = {
+				is_ruler = yes
+				is_heir = yes
+			}
+			owner = { has_authority = auth_imperial }
 		}
 	}
 	layer = {
 		icon = "GFX_trait_disabled"
 		visible = {
-			is_ruler = no
+			OR = {
+				AND = {
+					is_ruler = no
+					is_heir = no
+				}
+				is_councilor = no
+				owner = {
+					NOT = { has_authority = auth_imperial }
+				}
+			}
 		}
 	}
 	inline_script = trait/icon_element/tier_$TIER$

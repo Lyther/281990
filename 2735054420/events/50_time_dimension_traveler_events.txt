@@ -5135,6 +5135,59 @@ country_event = {
 				set_country_flag = dimension_traveler_horror_general
 			}
 		}
+		# 防止已读不回
+		set_timed_country_flag = {
+			flag = dimension_traveler_horror_cooldown
+			days = 30
+		}
+	}
+	
+	abort_trigger = {
+		NOT = { has_country_flag = dimension_traveler_horror_cooldown }
+	}
+	
+	abort_effect = {
+		# 清除标识
+		remove_country_flag = dimension_traveler_horror_governor
+		remove_country_flag = dimension_traveler_horror_scientist
+		remove_country_flag = dimension_traveler_horror_admiral
+		remove_country_flag = dimension_traveler_horror_general
+		# 冷却
+		remove_country_flag = dimension_traveler_horror_cooldown
+		set_timed_country_flag = {
+			flag = dimension_traveler_horror_cooldown
+			days = 360
+		}
+		# 提醒
+		if = {
+			limit = {
+				has_country_flag = dimension_traveler_trait_time_secret
+				has_country_flag = dimension_traveler_trait_circle_secret
+				has_country_flag = dimension_traveler_trait_dimension_secret
+			}
+			create_message = {
+				type = DIMENSION_TRAVELER_HORROR_ABORT
+				localization =  DIMENSION_TRAVELER_HORROR_ABORT_DESC
+				days = @toast_message_days
+				target = event_target:dimension_traveler_portrait_leader
+				variable = {
+					key = "border"
+					value = "GFX_border_legendary" 
+				}
+			}
+		}
+		else = {
+			create_message = {
+				type = DIMENSION_TRAVELER_HORROR_ABORT
+				localization =  DIMENSION_TRAVELER_HORROR_ABORT_DESC
+				days = @toast_message_days
+				target = event_target:dimension_traveler_portrait_leader
+				variable = {
+					key = "border"
+					value = "GFX_border_veteran" 
+				}
+			}
+		}
 	}
 	
 	after = {
@@ -5157,6 +5210,7 @@ country_event = {
 			remove_country_flag = dimension_traveler_horror_admiral
 			remove_country_flag = dimension_traveler_horror_general
 			# 冷却
+			remove_country_flag = dimension_traveler_horror_cooldown
 			set_timed_country_flag = {
 				flag = dimension_traveler_horror_cooldown
 				days = 360

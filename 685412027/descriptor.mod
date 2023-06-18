@@ -1,9 +1,8 @@
-version="1.0.0"
-name="Pony Mod"
+version="1"
 tags={
 	"Species"
 }
-picture="fengmian.png"
-supported_version="3.*.*"
-path="D:/wendang/Paradox Interactive/Stellaris/mod/pony mod"
+name="Pony Mod"
+supported_version="3.8.*"
+path="C:/Users/12917/Documents/Paradox Interactive/Stellaris/mod/Pony Mod"
 remote_file_id="685412027"
