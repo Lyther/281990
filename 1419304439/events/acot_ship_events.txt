@@ -699,7 +699,7 @@ country_event = {
 		IF = {
 			limit = {
 				event_target:terraforming_planet = {
-					is_planet = yes
+					is_asteroid = no
 				}				
 			}
 			add_resource = {
@@ -2146,6 +2146,123 @@ fleet_event = {
 					delete_fleet = this
 				}
 			}
+		}
+	}
+}
+
+# ENGINEER
+country_event = {
+	id = acot_ships.14
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		FromFromFrom = {
+			has_component = AE_NAVY_ENGINEER_OFFICER
+		}
+	}
+
+	immediate = {
+		FromFromFrom = {
+			random_list = {
+				90  = {
+					repair_percentage = 0.25
+				}
+				10  = {
+					repair_ship = yes	
+				}
+			}
+			if = {
+				limit = { 
+					has_modifier = acot_navy_engineer_buff
+				}
+				remove_modifier = acot_navy_engineer_buff
+			}
+			add_modifier = { modifier = acot_navy_engineer_buff days = 10 }			
+		}
+	}
+}
+
+# COMMISSAR
+country_event = {
+	id = acot_ships.15
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		FromFromFrom = {
+			has_component = AE_NAVY_COMMMISSAR_OFFICER
+		}
+	}
+
+	immediate = {
+		FromFromFrom = {
+			if = {
+				limit = { 
+					has_modifier = acot_navy_commissar_buff
+				}
+				remove_modifier = acot_navy_commissar_buff
+			}
+			add_modifier = { modifier = acot_navy_commissar_buff days = 30 }			
+		}
+	}
+}
+
+# PRIESTESS
+country_event = {
+	id = acot_ships.16
+	hide_window = yes
+	
+	is_triggered_only = yes
+
+	trigger = {
+		FromFrom = {
+			has_component = AE_PRIEST_OFFICER
+		}
+	}
+
+	immediate = {
+		FromFrom = {
+			solar_system = {
+				every_ship_in_system = {
+					limit = {
+						fleet = {
+							owner = {
+								is_same_value = FromFrom.owner
+								is_spiritualist = yes
+							}
+						}
+					}
+					if = {
+						limit = {
+							NOT = {
+								has_component = AE_PRIEST_OFFICER
+							}
+						 }
+						 if = {
+							limit = { 
+								has_modifier = acot_navy_priest_buff
+							}
+							remove_modifier = acot_navy_priest_buff
+						}
+						add_modifier = { modifier = acot_navy_priest_buff days = 30 }	
+					}
+					else_if = {
+						limit = {
+							has_component = AE_PRIEST_OFFICER
+						 }
+						 if = {
+							limit = { 
+								has_modifier = acot_navy_priest_hard_buff
+							}
+							remove_modifier = acot_navy_priest_hard_buff
+						}
+						add_modifier = { modifier = acot_navy_priest_hard_buff days = 30 }	
+					}
+				}
+			}		
 		}
 	}
 }

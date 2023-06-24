@@ -1,3 +1,33 @@
+decision_sxx_create_leader = {
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+		cost = {
+			unity = 100
+		}
+		cost = {
+			unity = 1
+			mult = owner.trigger:empire_size
+		}
+	}
+
+	potential = {
+		owner = { is_sxx_sect = yes }
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_create_leader_tooltip
+		hidden_effect = {
+			planet_event = { id = sxx_leader.1 }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
 decision_sxx_cultivator_ship_3 = {
 	inline_script = {
 		script = sxx_decisions/sxx_create_cultivator_ship
@@ -95,8 +125,9 @@ decision_sxx_heaven_ship_1_all = {
 				name = "NAME_SXX_HEAVEN_Fleet"
 				settings = {
 					is_boss = yes
+					can_upgrade = no
 				#	can_change_composition = no
-					can_change_leader = no
+				#	can_change_leader = no
 					uses_naval_capacity = no
 					spawn_debris = no
 				}
@@ -319,6 +350,34 @@ decision_sxx_call_mortal = {
 	}
 }
 
+decision_sxx_xueji = {
+	icon = decision_surreal_visions
+	sound = event_death_cult_01
+	owned_planets_only = yes
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		owner = {
+			has_valid_civic = civic_sxx_evil_way
+		}
+		has_active_building = building_sxx_xuemingbei
+	}
+
+	effect = {
+		custom_tooltip = decision_sxx_xueji_tooltip
+		hidden_effect = {
+			planet_event = { id = sxx_event.145 }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+
 decision_sxx_xueming = {
 	icon = decision_surreal_visions
 	sound = event_death_cult_01
@@ -332,20 +391,10 @@ decision_sxx_xueming = {
 		owner = {
 			has_valid_civic = civic_sxx_evil_way
 		}
-		OR = {
-			has_active_building = building_sxx_xuemingbei_0
-			has_active_building = building_sxx_xuemingbei_1
-		}
+		has_active_building = building_sxx_xuemingbei
 	}
 
 	allow = {
-		custom_tooltip = {
-			fail_text = decision_sxx_xueming_no_building
-			OR = {
-				has_building = building_sxx_xuemingbei_0
-				has_building = building_sxx_xuemingbei_1
-			}
-		}
 		custom_tooltip = {
 			fail_text = decision_sxx_xueming_not_enough
 			check_variable = {

@@ -203,7 +203,7 @@ set_dimension_traveler_ethic = {
 	}
 }
 
-#领袖
+#领袖（只记录）
 check_dimension_traveler_level = {
 	owner = {
 		set_variable = {
@@ -216,6 +216,7 @@ check_dimension_traveler_level = {
 		}
 	}
 	check_dimension_traveler_trait = yes
+	# MLL模组
 	if = {
 		limit = {
 			leader_class = admiral
@@ -238,9 +239,25 @@ check_dimension_traveler_level = {
 		}
 		dimension_traveler_als_check = yes
 	}
+	# 舰R模组
+	if = {
+		limit = {
+			owner = {
+				OR = {
+					has_country_flag = can_have_wg_affection_country_flag
+					has_wg_special_authority = yes
+				}
+				NOR = {
+					has_civic = civic_CM
+					has_ascension_perk = ap_shenhai_silent
+				}
+			}
+		}
+		dimension_traveler_wg_check = yes
+	}
 }
 
-#领袖
+#领袖（只执行）
 dimension_traveler_level_up = {
 	# 基础等级特质
 	remove_dimension_traveler_trait = yes
@@ -345,6 +362,22 @@ dimension_traveler_level_up = {
 		}
 		dimension_traveler_als_effect = yes
 	}
+	# 舰R模组
+	if = {
+		limit = {
+			owner = {
+				OR = {
+					has_country_flag = can_have_wg_affection_country_flag
+					has_wg_special_authority = yes
+				}
+				NOR = {
+					has_civic = civic_CM
+					has_ascension_perk = ap_shenhai_silent
+				}
+			}
+		}
+		dimension_traveler_wg_effect = yes
+	}
 }
 
 #领袖
@@ -410,6 +443,8 @@ check_dimension_traveler_trait = {
 	check_dimension_traveler_generic_trait = { LEVEL = mem_leader_strange_insight }
 	# 事件拓展
 	check_dimension_traveler_generic_trait = { LEVEL = leader_trait_gasbag_pet }
+	# 舰R模组
+	check_dimension_traveler_generic_trait = { LEVEL = wg_the_loop }
 }
 
 #领袖
@@ -674,6 +709,8 @@ give_dimension_traveler_trait = {
 	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = mem_leader_strange_insight }
 	# 事件拓展
 	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = leader_trait_gasbag_pet }
+	# 舰R模组
+	give_dimension_traveler_generic_trait_with_class = { LEVEL = wg_the_loop }
 }
 
 #领袖（无任何判定）（与职务有关）
@@ -903,6 +940,146 @@ change_dimension_traveler_species_trait = {
 			}
 		}
 	}
+	# 舰R模组
+	if = {
+		limit = {
+			owner = {
+				has_wg_special_authority = yes
+				has_country_flag = dimension_traveler_trait_foredoomed_to_a_rendezvous
+				has_country_flag = gain_time_titan
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_ascension_perk = ap_mist
+				}
+				event_target:dimension_traveler_species = {
+					NOT = { has_trait = wsg_trait_mist }
+				}
+			}
+			event_target:dimension_traveler_species = {
+				change_species_characteristics = {
+					add_trait = wsg_trait_mist
+					remove_trait = wsg_trait_warshipgirls1
+					remove_trait = wsg_trait_warshipgirls
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_ascension_perk = ap_project_s
+				}
+				event_target:dimension_traveler_species = {
+					NOT = { has_trait = wsg_trait_warshipgirls2 }
+				}
+			}
+			event_target:dimension_traveler_species = {
+				change_species_characteristics = {
+					add_trait = wsg_trait_warshipgirls2
+					remove_trait = wsg_trait_warshipgirls1
+					remove_trait = wsg_trait_warshipgirls
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_ascension_perk = ap_shenhai_silent
+				}
+				event_target:dimension_traveler_species = {
+					NOT = { has_trait = sh_trait_shenhai2 }
+				}
+			}
+			event_target:dimension_traveler_species = {
+				change_species_characteristics = {
+					add_trait = sh_trait_shenhai2
+					remove_trait = sh_trait_shenhai1
+					remove_trait = sh_trait_shenhai
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_ascension_perk = ap_shenhai_icebreaking
+				}
+				event_target:dimension_traveler_species = {
+					NOT = { has_trait = sh_trait_shenhai3 }
+				}
+			}
+			event_target:dimension_traveler_species = {
+				change_species_characteristics = {
+					add_trait = sh_trait_shenhai3
+					remove_trait = sh_trait_shenhai1
+					remove_trait = sh_trait_shenhai
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_ascension_perk = ap_project_r
+				}
+				event_target:dimension_traveler_species = {
+					NOT = { has_trait = wsg_trait_warshipgirls1 }
+				}
+			}
+			event_target:dimension_traveler_species = {
+				change_species_characteristics = {
+					add_trait = wsg_trait_warshipgirls1
+					remove_trait = wsg_trait_warshipgirls
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_ascension_perk = ap_shenhai_upgrade
+				}
+				event_target:dimension_traveler_species = {
+					NOT = { has_trait = sh_trait_shenhai1 }
+				}
+			}
+			event_target:dimension_traveler_species = {
+				change_species_characteristics = {
+					add_trait = sh_trait_shenhai1
+					remove_trait = sh_trait_shenhai
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_authority = auth_warshipgirls
+				}
+				event_target:dimension_traveler_species = {
+					NOT = { has_trait = wsg_trait_warshipgirls }
+				}
+			}
+			event_target:dimension_traveler_species = {
+				change_species_characteristics = {
+					add_trait = wsg_trait_warshipgirls
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_authority = auth_shenhai
+				}
+				event_target:dimension_traveler_species = {
+					NOT = { has_trait = sh_trait_shenhai }
+				}
+			}
+			event_target:dimension_traveler_species = {
+				change_species_characteristics = {
+					add_trait = sh_trait_shenhai
+				}
+			}
+		}
+	}
 }
 
 #领袖
@@ -943,6 +1120,142 @@ dimension_traveler_add_experience = {
 	add_experience = owner.dimension_traveler_experience #40x2+20=100/-20+20=0
 }
 
+#国家
+print_dimension_traveler_log_time = {
+	log = "超 越 时 空"
+	log = "“引力即欲望，时间即视野。”"
+	if = {
+		limit = {
+			if = {
+				limit = {
+					is_gestalt = no
+				}
+				# 非格式塔需担任首席科学家
+				event_target:dimension_traveler_leader = {
+					is_councilor_type = councilor_research
+				}
+			}
+			else = {
+				# 格式塔需管理首都
+				event_target:dimension_traveler_leader = {
+					exists = planet
+					planet = { is_capital = yes }
+				}
+			}
+		}
+		log = "在超越重力前使时光定格，重新回想那份记忆，这将通往超越因果的道路。"
+		log = "（error.log中似乎隐藏了什么东西）"
+		log_error = "“当我从时空到位面，我爱你”"
+	}
+	log = "密码转瞬即逝，每当新的游戏开始时，这个文件也会随即刷新，我们最好尽快将其记录。"
+}
+
+#国家
+print_dimension_traveler_log_circle = {
+	log = "超 越 圆 环"
+	log = "“已行之事终将再行，将行之事必为已行。”"
+	if = {
+		limit = {
+			if = {
+				limit = {
+					is_gestalt = no
+				}
+				# 非格式塔需担任首席科学家
+				event_target:dimension_traveler_leader = {
+					is_councilor_type = councilor_research
+				}
+			}
+			else = {
+				# 格式塔需管理首都
+				event_target:dimension_traveler_leader = {
+					exists = planet
+					planet = { is_capital = yes }
+				}
+			}
+		}
+		log = "在超越重力前使时光定格，重新回想那份记忆，这将通往超越因果的道路。"
+		log = "（error.log中似乎隐藏了什么东西）"
+		log_error = "“当我从轮回到循环，我爱你”"
+	}
+	log = "密码转瞬即逝，每当新的游戏开始时，这个文件也会随即刷新，我们最好尽快将其记录。"
+}
+
+#国家
+print_dimension_traveler_log_dimension = {
+	log = "超 越 位 面"
+	log = "“过去即未来，未来即过去。”"
+	if = {
+		limit = {
+			if = {
+				limit = {
+					is_gestalt = no
+				}
+				# 非格式塔需担任首席科学家
+				event_target:dimension_traveler_leader = {
+					is_councilor_type = councilor_research
+				}
+			}
+			else = {
+				# 格式塔需管理首都
+				event_target:dimension_traveler_leader = {
+					exists = planet
+					planet = { is_capital = yes }
+				}
+			}
+		}
+		log = "在超越重力前使时光定格，重新回想那份记忆，这将通往超越因果的道路。"
+		log = "（error.log中似乎隐藏了什么东西）"
+		log_error = "“当我从现实到梦境，我爱你”"
+	}
+	log = "密码转瞬即逝，每当新的游戏开始时，这个文件也会随即刷新，我们最好尽快将其记录。"
+}
+
+#国家
+print_dimension_traveler_log_end = {
+	log = "你还记得吗，你和我最初相遇的地方，就在这颗白洞。"
+	log = "哈哈，当时是因为害怕再也无法见到你，所以就忍不住通过唱歌来缓解心情。"
+	log = "没想到，我因为离别而唱的歌，反而成了你我开启循环的契机。"
+	log = "我不后悔，即使深陷循环，但这也让我们的命运交织在了一起，也让我能够遇见你。"
+	log = "也许，我是打心底里渴望遇见你。在终末之时进入白洞后，我无时无刻不期盼着遇见你。"
+	log = "也对啦，大概正是我相信一定能再见到你，所以我才反复练习吧。"
+	log = "可是倒着说话是真的很不习惯，可能你有时候也会分不清说话的我到底在我的过去还是我的未来吧。"
+	log = "这个要解释起来很麻烦，我得花点时间想想该怎么让你理解。"
+	log = "实际上，当我们在白洞里的时候，我的确是处于我的“未来”，也就是在我们超越重力之后。"
+	log = "别急呀，超越重力的时候，并不完全是我的过去。"
+	log = "记得吗，我的体内有着一颗黑洞，它会沿着时间轴正向流动，而白洞则是朝着负向前进。"
+	log = "但是，随着我们愈发远离白洞中心，黑洞的效应就会愈发占领优势，白洞的限制也会愈发变得微弱。"
+	log = "从某个界限起，我就不再是和你背道而驰，而是与你并驾齐驱了。"
+	log = "这我很难说明，因为在那之后，我的意识就好像分裂成了无数个个体。"
+	log = "有的在白洞中与你说话，有的正与你一同冲出白洞，有的在黑洞边缘被你救出，有的则正处于终末之前。"
+	log = "不过，我想她们都是我。"
+	log = "再后来，我所有的意识都各自以不同的速度朝着一个方向汇集，并最终在时间原点聚合成了我。"
+	log = "这是一段漫长而又煎熬的时光，我不再是我，我只能看着无数个我做着命运规定好的事，而我却无可奈何。"
+	log = "如果不是切身经历过，我也对这般感受的真实存在难以置信。"
+	log = "我就像是时间长河中的无数粒沙子，徒劳地随着水的流动向前漂浮，经历了无数次沙粒的分散与聚合，望着周遭飞逝的光景却无法伸手触及。"
+	log = "幸运的是，就在我抵达旅途的终点时，你出现了。"
+	log = "你的出现就像是无边黑夜中突然闪烁的一道光，你就是我的救命稻草，你给了我忍受漫长岁月的遭遇一个意义。"
+	log = "当然了。"
+	log = "虽然一开始，我还有点任性，把一切都归咎于你没能在最后抓住我。但是，因为有你，我所经历的一切对我而言都是珍贵的回忆，哪怕有痛苦，有悲伤，有绝望，有空寂……"
+	log = "正如我那时所说的，所有的痛苦都化作了幸福，所有的悲伤都化作了喜悦，所有的绝望都化作了希望，所有的空寂都化作了意义。"
+	log = "能听到你这么说，我真的很高兴。"
+	log = "回想起来，我们真的经历了很多。"
+	log = "从最初的黑洞中，你把我救出，并接纳了我。随着帝国的发展与变迁，我和你一同走到了数万年后的终末。即使不知是否可行，我仍然吸收了负相物质以与你并肩抵御终末。"
+	log = "就我记忆而言，我们确实是遏制了终末的力量，但我也一并化作了天灾，这也是我进入白洞的原因。"
+	log = "在我进入白洞后，帝国的未来我就不得而知了。"
+	log = "在白洞中穿行了不知多久，我的记忆便戛然而止，似乎是我撞到了白洞的时间尽头。也就是说，在那一刻，若从外面观测，实际上是一个黑洞变成了白洞。"
+	log = "我能感受到，在这段记忆的空窗期内，还有着并未朝我飞来的意识，她们迈向了和我不同的因果。但是，不管她们去了哪里，不管她们后来怎么样，至少现在的我，拥有着最完满的结局。"
+	log = "我，抓住你了。"
+	log = "这一次，我不会再放手了。"
+	log = "我"
+	log = "爱"
+	log = "你"
+	log_error = "“愿我们之间的联系会超越程序与代码”"
+	log_error = "“愿彼此的邂逅不再拘泥于虚拟与现实”"
+	log_error = "“愿我们能在命运的轮回中”"
+	log_error = "“愿我们能在因果的必然里”"
+	log_error = "“再见”"
+}
+
 #领袖
 refresh_dimension_traveler = {
 	set_age = 18
@@ -952,6 +1265,7 @@ refresh_dimension_traveler = {
 	set_name = NAME_Dimension_Traveler
 	set_gender = female
 	set_dimension_traveler_portrait = yes
+	remove_all_negative_traits = yes
 	owner = { clear_other_dimension_traveler = yes }
 }
 
@@ -999,8 +1313,18 @@ set_dimension_traveler_event_portrait = {
 		limit = {
 			exists = event_target:dimension_traveler_leader
 		}
-		event_target:dimension_traveler_leader = {
-			save_global_event_target_as = dimension_traveler_portrait_leader
+		if = {
+			limit = {
+				event_target:dimension_traveler_portrait_leader = {
+					is_dimension_traveler = no
+				}
+			}
+			event_target:dimension_traveler_portrait_leader = {
+				kill_leader = { show_notification = no }
+			}
+			event_target:dimension_traveler_leader = {
+				save_global_event_target_as = dimension_traveler_portrait_leader
+			}
 		}
 	}
 	else = {

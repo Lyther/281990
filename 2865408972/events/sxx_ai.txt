@@ -764,12 +764,11 @@ country_event = {
 				if = {
 					limit = {
 						is_occupied_flag = no
-						NOR = {
-							has_building = building_sxx_xuemingbei_0
-							has_building = building_sxx_xuemingbei_1
+						NOT = {
+							has_active_building = building_sxx_xuemingbei
 						}
 					}
-					add_building = building_sxx_xuemingbei_0
+					add_building = building_sxx_xuemingbei
 				}
 			}
 		}
@@ -902,7 +901,7 @@ country_event = {
 	}
 }
 
-# 魔道ai血祭
+# 魔道ai占领血祭
 planet_event = {
 	id = sxx_ai.30
 
@@ -916,16 +915,27 @@ planet_event = {
 			has_valid_civic = civic_sxx_evil_way
 			capital_scope = {
 				is_occupied_flag = no
-				OR = {
-					has_active_building = building_sxx_xuemingbei_0
-					has_active_building = building_sxx_xuemingbei_1
-				}
+				has_active_building = building_sxx_xuemingbei
 			}
 		}
 	}
 
 	immediate = {
-		sxx_evil_ai_xueji_pop = yes
+		every_owned_pop = {
+			limit = {
+				is_sxx_fairy_pop = no
+				OR = {
+					AND = {
+						is_sxx_potential_depletion = yes
+						is_sxx_special_body = no
+					}
+					NOT = { has_pop_flag = sxx_cultivator }
+					is_being_purged = yes
+				}
+				planet = { count_owned_pop = { count > 1 } }
+			}
+			sxx_pop_xueji_effect = yes
+		}
 		from.capital_scope = {
 			change_variable = {
 				which = sxx_evil_break_count
@@ -937,7 +947,7 @@ planet_event = {
 	}
 }
 
-# 魔道ai血祭
+# 魔道ai占领血祭
 planet_event = {
 	id = sxx_ai.31
 
@@ -951,16 +961,27 @@ planet_event = {
 			has_valid_civic = civic_sxx_evil_way
 			capital_scope = {
 				is_occupied_flag = no
-				OR = {
-					has_active_building = building_sxx_xuemingbei_0
-					has_active_building = building_sxx_xuemingbei_1
-				}
+				has_active_building = building_sxx_xuemingbei
 			}
 		}
 	}
 
 	immediate = {
-		sxx_evil_xueji_pop = yes
+		every_owned_pop = {
+			limit = {
+				is_sxx_fairy_pop = no
+				OR = {
+					AND = {
+						is_sxx_potential_depletion = yes
+						is_sxx_special_body = no
+					}
+					NOT = { has_pop_flag = sxx_cultivator }
+					is_being_purged = yes
+				}
+				planet = { count_owned_pop = { count > 1 } }
+			}
+			sxx_pop_xueji_effect = yes
+		}
 		owner.capital_scope = {
 			change_variable = {
 				which = sxx_evil_break_count
@@ -968,6 +989,54 @@ planet_event = {
 			}
 		}
 		clear_variable = sxx_evil_break_count
+	}
+}
+
+# 魔道ai每年血祭
+country_event = {
+	id = sxx_ai.32
+
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_sxx_sect = yes
+		is_ai = yes
+		has_valid_civic = civic_sxx_evil_way
+		capital_scope = {
+			is_occupied_flag = no
+			has_active_building = building_sxx_xuemingbei
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				is_sxx_lianqi_planet = yes
+				is_occupied_flag = no
+			}
+			every_owned_pop = {
+				limit = {
+					is_sxx_fairy_pop = no
+					OR = {
+						AND = {
+							is_sxx_potential_depletion = yes
+							is_sxx_special_body = no
+						}
+						is_being_purged = yes
+					}
+					planet = { count_owned_pop = { count > 1 } }
+				}
+				sxx_pop_xueji_effect = yes
+			}
+			root.capital_scope = {
+				change_variable = {
+					which = sxx_evil_break_count
+					value = prev.sxx_evil_break_count
+				}
+			}
+			clear_variable = sxx_evil_break_count
+		}
 	}
 }
 
@@ -1286,5 +1355,71 @@ country_event = {
 
 	immediate = {
 		sxx_ai_get_practice_effect = { NUM = 21 GONGFA1 = 30000 GONGFA2 = 100000 STATE = final }
+	}
+}
+
+# on_yearly_pulse
+# ai每年更换领袖
+event = {
+	id = sxx_ai.500
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			limit = {
+				is_sxx_sect = yes
+				is_ai = yes
+			}
+			random_owned_leader = {
+				limit = {
+					is_variable_set = sxx_leader_state
+					check_variable = { which = sxx_leader_state value < 9 }
+					NOR = {
+						has_leader_flag = legendary_leader
+						has_leader_flag = sxx_xiuxian_leader
+					}
+					has_trait = leader_trait_sxx_lost_connection_with_body
+				}
+				weights = {
+					base = 9
+					subtract = value:sxx_get_leader_state
+				}
+				kill_leader = { show_notification = no }
+			}
+			if = {
+				limit = {
+					any_owned_leader = {
+						NOR = {
+							is_variable_set = sxx_leader_state
+							has_leader_flag = sxx_xiuxian_leader
+							has_leader_flag = legendary_leader
+						}
+					}
+					capital_scope = {
+						any_owned_pop = {
+							is_sxx_cultivable_cultivator = yes
+							NOT = { has_modifier = sxx_leader_pop_modifier }
+							has_citizenship_rights = yes
+						}
+					}
+				}
+				random_owned_leader = {
+					limit = {
+						NOR = {
+							is_variable_set = sxx_leader_state
+							has_leader_flag = sxx_xiuxian_leader
+							has_leader_flag = legendary_leader
+						}
+					}
+					save_event_target_as = sxx_ai_leader
+					prev.capital_scope = {
+						planet_event = { id = sxx_leader.1 }
+					}
+					kill_leader = { show_notification = no }
+				}
+			}
+		}
 	}
 }

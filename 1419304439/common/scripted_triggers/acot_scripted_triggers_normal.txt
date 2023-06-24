@@ -91,6 +91,12 @@ can_build_precursor_ship = {
 				is_megastructure_type = sofe_omega_nexus
 				is_megastructure_type = sofe_omega_spy_orb_center
 				is_megastructure_type = sofe_omega_dyson_sphere
+				any_ship_in_system = {
+					OR = {
+						is_precursor_starbase = yes
+						has_starbase_building = acot_precursor_database		
+					}
+				}
 			}
 		}
 		AND = {
@@ -116,13 +122,19 @@ can_build_phanon_ship = {
 			is_scope_type = megastructure
 			OR = {
 				is_megastructure_type = acot_phanon_master_reactor_sphere
+				any_ship_in_system = {
+					has_starbase_size >= acot_star_commander
+				}
+				any_ship_in_system = {
+					has_starbase_building = acot_sb_phanon_assembly
+				}
 			}
 		}
 		AND = {
 			is_scope_type = starbase
 			OR = {
 				has_starbase_size >= acot_star_commander
-				#has_starbase_size >= acot_precusor_phanon_starcitadel #NO LONGER IS ALLOWED SORRY MY MAN
+				has_starbase_building = acot_sb_phanon_assembly
 			}
 		}
 	}
@@ -379,3 +391,53 @@ is_acot_sbtg_arkship = { is_ship_size = sofe_ancient_weapon }
 is_acot_void_hole = { is_planet_class = pc_acot_void_hole }
 
 is_acot_herculean = { is_ship_size = precursor_colossus }
+
+is_acot_fractured_world = {
+	OR = {
+	  is_planet_class = pc_dark_fractured
+	  is_planet_class = pc_dark_fractured_ae
+	  is_planet_class = pc_dark_fractured_unstable
+	  is_planet_class = pc_dark_fractured_ae_unstable
+	}
+  }
+
+#### USE THIS IF THE PLANET SHOULD ONLY BE DAMAGED, BUT NOT DESTROYED AND ALTERED - This just destroys colony, and removes buildings/districts, but doesn't change planet class.
+acot_is_partially_affected_by_cascade = {
+	OR = {
+		is_planet_class = pc_shattered
+		is_planet_class = pc_shattered_2
+		is_planet_class = pc_shielded
+		is_planet_class = pc_acot_pmc_vault_unshielded
+		has_building = building_ae_dark_energy_psg
+	}
+}
+
+#### ONLY USE THIS IF THE PLANET IS TRULY CAPABLE OF BEING IMMUNE TO DIMENSIONAL FUCKERY.
+acot_is_not_affected_by_cascade = {
+	OR = {
+		is_planet_class = pc_dark_fractured
+		is_planet_class = pc_dark_fractured_ae
+		is_planet_class = pc_dark_fractured_unstable
+		is_planet_class = pc_dark_fractured_ae_unstable
+		is_planet_class = pc_acot_enigmopolis
+		is_planet_class = pc_acot_pmc_vault
+	}
+}
+
+#### USE THIS IF THE PLANET LOGICALLY SHOULD BE BLOWN UP, BUT THE OWNER HAS SOME WAYS TO BLOCK THE CASCADE SIGNAL
+acot_system_immune_to_cascade = {
+	OR = {
+        AND = {
+            exists = owner
+            owner = {
+                is_progenitor_empires = yes
+            }
+        }
+		has_star_flag = acot_star_cascade_cooldown
+		has_star_flag = acot_star_cascade_primed
+		has_star_flag = outergate
+		any_system_megastructure = {
+			is_megastructure_type = sofe_outer_gate
+		}
+	}
+}

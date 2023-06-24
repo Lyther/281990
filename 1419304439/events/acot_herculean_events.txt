@@ -1611,7 +1611,9 @@ planet_event = {
 				}			
 			}
 			every_system_planet = {
-				limit = { is_star = yes }
+				limit = { 
+					is_star = yes 
+				}
 				create_ambient_object = {
 					type = "star_explosion"
 					play_animation_once = yes
@@ -1661,18 +1663,7 @@ planet_event = {
 				limit = {
 					is_star = no
 					is_asteroid = no
-					NOR = {
-						is_planet_class = pc_shattered
-						is_planet_class = pc_shattered_2
-						is_planet_class = pc_shielded
-						is_planet_class = pc_dark_fractured
-						is_planet_class = pc_dark_fractured_ae
-						is_planet_class = pc_dark_fractured_unstable
-						is_planet_class = pc_dark_fractured_ae_unstable
-						is_planet_class = pc_acot_enigmopolis
-						is_planet_class = pc_acot_pmc_vault
-						is_planet_class = pc_acot_pmc_vault_unshielded
-					}
+					acot_is_not_affected_by_cascade = no
 				}
 				#Dismantle observation post
 				if = {
@@ -1688,11 +1679,17 @@ planet_event = {
 						exists = orbital_defence
 					}
 					destroy_fleet = orbital_defence
-				}					
-				if = {
+				}	
+				remove_all_buildings = yes
+				remove_all_districts = yes
+				IF = {
 					limit = { is_colony = yes }
-					remove_all_buildings = yes
 					destroy_colony = yes
+				}
+				if = {
+					limit = {
+						acot_is_partially_affected_by_cascade = no
+					}
 					if = {
 						limit = { is_planet_class = pc_habitat }
 						spawn_habitat_cracker_effect = yes
@@ -1700,7 +1697,16 @@ planet_event = {
 						set_planet_size = 5
 					}
 					else_if = {
-						limit = { is_ringworld = yes }
+						limit = { 
+							OR = {
+								is_ringworld = yes 
+								is_planet_class = pc_ringworld_tech
+								is_planet_class = pc_ringworld_tech_damaged
+								is_planet_class = pc_ringworld_seam
+								is_planet_class = pc_ringworld_seam_damaged
+								is_planet_class = pc_ringworld_habitable_damaged
+							} 
+						}
 						spawn_ringworld_cracker_effect = yes
 						change_pc = pc_acot_void_hole
 						set_planet_size = 10
@@ -1725,41 +1731,7 @@ planet_event = {
 							}
 						}
 					}
-				}
-				else_if = {
-					limit = { 
-						OR = {
-							is_planet_class = pc_ringworld_tech
-							is_planet_class = pc_ringworld_tech_damaged
-							is_planet_class = pc_ringworld_seam
-							is_planet_class = pc_ringworld_seam_damaged
-							is_planet_class = pc_ringworld_habitable_damaged
-						} 
-					}
-					spawn_ringworld_cracker_effect = yes
-					change_pc = pc_acot_void_hole
-					set_planet_size = 5
-				}
-				else = {
-					random_list = {
-						20 = {
-							modifier = {
-								factor = 0
-								planet_size <= 25
-							}
-							change_pc = pc_acot_void_hole
-						}
-						40 = {
-							change_pc = pc_dark_fractured_unstable
-						}
-						30 = {
-							change_pc = pc_dark_fractured_ae
-						}
-						10 = {
-							change_pc = pc_dark_fractured_ae_unstable
-						}
-					}
-				}
+				}				
 			}
 		}
 		solar_system = {
@@ -1801,14 +1773,7 @@ planet_event = {
 							is_hostile_to = event_target:herculean_owner
 						}
 					}
-					NOR = {
-						has_star_flag = acot_star_cascade_cooldown
-						has_star_flag = acot_star_cascade_primed
-						has_star_flag = outergate
-						any_system_megastructure = {
-							is_megastructure_type = sofe_outer_gate
-						}
-					}
+					acot_system_immune_to_cascade = no
 				}
 				set_star_flag = acot_star_cascade_primed
 				random_system_planet = {
@@ -1948,10 +1913,16 @@ planet_event = {
 					}
 					destroy_fleet = orbital_defence
 				}	
-				if = {
+				remove_all_buildings = yes
+				remove_all_districts = yes
+				IF = {
 					limit = { is_colony = yes }
-					remove_all_buildings = yes
 					destroy_colony = yes
+				}
+				if = {
+					limit = {
+						acot_is_partially_affected_by_cascade = no
+					}
 					if = {
 						limit = { is_planet_class = pc_habitat }
 						spawn_habitat_cracker_effect = yes
@@ -1959,7 +1930,16 @@ planet_event = {
 						set_planet_size = 5
 					}
 					else_if = {
-						limit = { is_ringworld = yes }
+						limit = { 
+							OR = {
+								is_ringworld = yes 
+								is_planet_class = pc_ringworld_tech
+								is_planet_class = pc_ringworld_tech_damaged
+								is_planet_class = pc_ringworld_seam
+								is_planet_class = pc_ringworld_seam_damaged
+								is_planet_class = pc_ringworld_habitable_damaged
+							} 
+						}
 						spawn_ringworld_cracker_effect = yes
 						change_pc = pc_acot_void_hole
 						set_planet_size = 10
@@ -1984,41 +1964,7 @@ planet_event = {
 							}
 						}
 					}
-				}
-				else_if = {
-					limit = { 
-						OR = {
-							is_planet_class = pc_ringworld_tech
-							is_planet_class = pc_ringworld_tech_damaged
-							is_planet_class = pc_ringworld_seam
-							is_planet_class = pc_ringworld_seam_damaged
-							is_planet_class = pc_ringworld_habitable_damaged
-						} 
-					}
-					spawn_ringworld_cracker_effect = yes
-					change_pc = pc_acot_void_hole
-					set_planet_size = 5
-				}
-				else = {
-					random_list = {
-						20 = {
-							modifier = {
-								factor = 0
-								planet_size <= 25
-							}
-							change_pc = pc_acot_void_hole
-						}
-						40 = {
-							change_pc = pc_dark_fractured_unstable
-						}
-						30 = {
-							change_pc = pc_dark_fractured_ae
-						}
-						10 = {
-							change_pc = pc_dark_fractured_ae_unstable
-						}
-					}
-				}
+				}	
 			}
 		}
 		solar_system = {
@@ -2060,17 +2006,7 @@ planet_event = {
 							is_hostile_to = event_target:herculean_owner
 						}
 					}
-					NOR = {
-						has_star_flag = acot_star_cascade_cooldown
-						has_star_flag = acot_star_cascade_primed
-						has_star_flag = outergate
-						any_system_megastructure = {
-							is_megastructure_type = sofe_outer_gate
-						}
-						solar_system = {
-							systems_blokkats_wont_stripmine = yes
-						}
-					}
+					acot_system_immune_to_cascade = no
 				}
 				set_star_flag = acot_star_cascade_primed
 				random_system_planet = {
@@ -2252,10 +2188,16 @@ planet_event = {
 					}
 					destroy_fleet = orbital_defence
 				}					
-				if = {
+				remove_all_buildings = yes
+				remove_all_districts = yes
+				IF = {
 					limit = { is_colony = yes }
-					remove_all_buildings = yes
 					destroy_colony = yes
+				}
+				if = {
+					limit = {
+						acot_is_partially_affected_by_cascade = no
+					}
 					if = {
 						limit = { is_planet_class = pc_habitat }
 						spawn_habitat_cracker_effect = yes
@@ -2263,7 +2205,16 @@ planet_event = {
 						set_planet_size = 5
 					}
 					else_if = {
-						limit = { is_ringworld = yes }
+						limit = { 
+							OR = {
+								is_ringworld = yes 
+								is_planet_class = pc_ringworld_tech
+								is_planet_class = pc_ringworld_tech_damaged
+								is_planet_class = pc_ringworld_seam
+								is_planet_class = pc_ringworld_seam_damaged
+								is_planet_class = pc_ringworld_habitable_damaged
+							} 
+						}
 						spawn_ringworld_cracker_effect = yes
 						change_pc = pc_acot_void_hole
 						set_planet_size = 10
@@ -2288,41 +2239,7 @@ planet_event = {
 							}
 						}
 					}
-				}
-				else_if = {
-					limit = { 
-						OR = {
-							is_planet_class = pc_ringworld_tech
-							is_planet_class = pc_ringworld_tech_damaged
-							is_planet_class = pc_ringworld_seam
-							is_planet_class = pc_ringworld_seam_damaged
-							is_planet_class = pc_ringworld_habitable_damaged
-						} 
-					}
-					spawn_ringworld_cracker_effect = yes
-					change_pc = pc_acot_void_hole
-					set_planet_size = 5
-				}
-				else = {
-					random_list = {
-						20 = {
-							modifier = {
-								factor = 0
-								planet_size <= 25
-							}
-							change_pc = pc_acot_void_hole
-						}
-						40 = {
-							change_pc = pc_dark_fractured_unstable
-						}
-						30 = {
-							change_pc = pc_dark_fractured_ae
-						}
-						10 = {
-							change_pc = pc_dark_fractured_ae_unstable
-						}
-					}
-				}
+				}	
 			}
 		}
 		solar_system = {
@@ -2500,10 +2417,16 @@ planet_event = {
 					}
 					destroy_fleet = orbital_defence
 				}					
-				if = {
+				remove_all_buildings = yes
+				remove_all_districts = yes
+				IF = {
 					limit = { is_colony = yes }
-					remove_all_buildings = yes
 					destroy_colony = yes
+				}
+				if = {
+					limit = {
+						acot_is_partially_affected_by_cascade = no
+					}
 					if = {
 						limit = { is_planet_class = pc_habitat }
 						spawn_habitat_cracker_effect = yes
@@ -2511,7 +2434,16 @@ planet_event = {
 						set_planet_size = 5
 					}
 					else_if = {
-						limit = { is_ringworld = yes }
+						limit = { 
+							OR = {
+								is_ringworld = yes 
+								is_planet_class = pc_ringworld_tech
+								is_planet_class = pc_ringworld_tech_damaged
+								is_planet_class = pc_ringworld_seam
+								is_planet_class = pc_ringworld_seam_damaged
+								is_planet_class = pc_ringworld_habitable_damaged
+							} 
+						}
 						spawn_ringworld_cracker_effect = yes
 						change_pc = pc_acot_void_hole
 						set_planet_size = 10
@@ -2536,41 +2468,7 @@ planet_event = {
 							}
 						}
 					}
-				}
-				else_if = {
-					limit = { 
-						OR = {
-							is_planet_class = pc_ringworld_tech
-							is_planet_class = pc_ringworld_tech_damaged
-							is_planet_class = pc_ringworld_seam
-							is_planet_class = pc_ringworld_seam_damaged
-							is_planet_class = pc_ringworld_habitable_damaged
-						} 
-					}
-					spawn_ringworld_cracker_effect = yes
-					change_pc = pc_acot_void_hole
-					set_planet_size = 5
-				}
-				else = {
-					random_list = {
-						20 = {
-							modifier = {
-								factor = 0
-								planet_size <= 25
-							}
-							change_pc = pc_acot_void_hole
-						}
-						40 = {
-							change_pc = pc_dark_fractured_unstable
-						}
-						30 = {
-							change_pc = pc_dark_fractured_ae
-						}
-						10 = {
-							change_pc = pc_dark_fractured_ae_unstable
-						}
-					}
-				}
+				}	
 			}
 		}
 		solar_system = {
@@ -2612,14 +2510,7 @@ planet_event = {
 							is_hostile_to = event_target:herculean_owner
 						}
 					}
-					NOR = {
-						has_star_flag = acot_star_cascade_cooldown
-						has_star_flag = acot_star_cascade_primed
-						has_star_flag = outergate
-						any_system_megastructure = {
-							is_megastructure_type = sofe_outer_gate
-						}
-					}
+					acot_system_immune_to_cascade = no
 				}
 				set_star_flag = acot_star_cascade_primed
 				random_system_planet = {
@@ -2644,14 +2535,7 @@ planet_event = {
 						is_hostile_to = event_target:herculean_owner
 					}
 				}
-				NOR = {
-					has_star_flag = acot_star_cascade_cooldown
-					has_star_flag = acot_star_cascade_primed
-					has_star_flag = outergate
-					any_system_megastructure = {
-						is_megastructure_type = sofe_outer_gate
-					}
-				}
+				acot_system_immune_to_cascade = no
 			}
 			set_star_flag = acot_star_cascade_primed
 			random_system_planet = {
@@ -2790,10 +2674,16 @@ planet_event = {
 					}
 					destroy_fleet = orbital_defence
 				}	
-				if = {
+				remove_all_buildings = yes
+				remove_all_districts = yes
+				IF = {
 					limit = { is_colony = yes }
-					remove_all_buildings = yes
 					destroy_colony = yes
+				}
+				if = {
+					limit = {
+						acot_is_partially_affected_by_cascade = no
+					}
 					if = {
 						limit = { is_planet_class = pc_habitat }
 						spawn_habitat_cracker_effect = yes
@@ -2801,7 +2691,16 @@ planet_event = {
 						set_planet_size = 5
 					}
 					else_if = {
-						limit = { is_ringworld = yes }
+						limit = { 
+							OR = {
+								is_ringworld = yes 
+								is_planet_class = pc_ringworld_tech
+								is_planet_class = pc_ringworld_tech_damaged
+								is_planet_class = pc_ringworld_seam
+								is_planet_class = pc_ringworld_seam_damaged
+								is_planet_class = pc_ringworld_habitable_damaged
+							} 
+						}
 						spawn_ringworld_cracker_effect = yes
 						change_pc = pc_acot_void_hole
 						set_planet_size = 10
@@ -2826,41 +2725,7 @@ planet_event = {
 							}
 						}
 					}
-				}
-				else_if = {
-					limit = { 
-						OR = {
-							is_planet_class = pc_ringworld_tech
-							is_planet_class = pc_ringworld_tech_damaged
-							is_planet_class = pc_ringworld_seam
-							is_planet_class = pc_ringworld_seam_damaged
-							is_planet_class = pc_ringworld_habitable_damaged
-						} 
-					}
-					spawn_ringworld_cracker_effect = yes
-					change_pc = pc_acot_void_hole
-					set_planet_size = 5
-				}
-				else = {
-					random_list = {
-						20 = {
-							modifier = {
-								factor = 0
-								planet_size <= 25
-							}
-							change_pc = pc_acot_void_hole
-						}
-						40 = {
-							change_pc = pc_dark_fractured_unstable
-						}
-						30 = {
-							change_pc = pc_dark_fractured_ae
-						}
-						10 = {
-							change_pc = pc_dark_fractured_ae_unstable
-						}
-					}
-				}
+				}	
 			}
 		}
 		solar_system = {
@@ -2902,17 +2767,7 @@ planet_event = {
 							is_hostile_to = event_target:herculean_owner
 						}
 					}
-					NOR = {
-						has_star_flag = acot_star_cascade_cooldown
-						has_star_flag = acot_star_cascade_primed
-						has_star_flag = outergate
-						any_system_megastructure = {
-							is_megastructure_type = sofe_outer_gate
-						}
-						solar_system = {
-							systems_blokkats_wont_stripmine = yes
-						}
-					}
+					acot_system_immune_to_cascade = no
 				}
 				set_star_flag = acot_star_cascade_primed
 				random_system_planet = {
@@ -2937,14 +2792,7 @@ planet_event = {
 						is_hostile_to = event_target:herculean_owner
 					}
 				}
-				NOR = {
-					has_star_flag = acot_star_cascade_cooldown
-					has_star_flag = acot_star_cascade_primed
-					has_star_flag = outergate
-					any_system_megastructure = {
-						is_megastructure_type = sofe_outer_gate
-					}
-				}
+				acot_system_immune_to_cascade = no
 			}
 			set_star_flag = acot_star_cascade_primed
 			random_system_planet = {

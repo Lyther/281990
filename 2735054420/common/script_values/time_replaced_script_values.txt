@@ -1,0 +1,23 @@
+country_num_unlockable_council_slots = {
+	# How many Civics do we have.
+	add = trigger:has_total_civic_points
+	subtract = trigger:has_unused_civic_points
+
+	# Exclude Galactic Sovereign which doesn't add a Councilor position.
+	modifier = {
+		OR = {
+			has_civic = civic_galactic_sovereign
+			has_civic = civic_galactic_sovereign_megacorp
+			has_civic = civic_psionic_sovereign
+		}
+		subtract = 1
+	}
+
+	# We only support unlocking 3 positions, even if we have more normal civics for some reason.
+	max = @max_unlocked_council_positions
+
+	# Subtract how many we've already unlocked.
+	add = 2 # 开局解锁2槽
+	subtract = trigger:has_unlocked_council_positions
+	min = 0
+}

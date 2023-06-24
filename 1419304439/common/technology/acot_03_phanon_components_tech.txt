@@ -3698,6 +3698,55 @@ tech_pmc_yamato_cannon = {
 }
 
 # Dark Matter Power Cores PHANON
+tech_enable_phanon_design = {
+	icon = tech_precursor_phanon_design
+	area = physics
+	category = { computing }
+	tier = 9
+	cost = @acot_tier10cost3
+	weight = @tier5weight3
+	ai_update_type = all
+	is_reverse_engineerable = no
+	is_rare = yes
+
+	potential = {
+		has_technology = tech_dark_matter_power_core_re
+		OR = {
+			has_technology = tech_phanon_fighter
+			has_technology = tech_phanon_cruiser
+			has_technology = tech_phanon_bb
+			has_technology = tech_phanon_plat_m
+			has_technology = tech_phanon_plat_l
+			has_technology = tech_phanon_mothership
+			has_technology = tech_phanon_titan
+		}
+		NOT = { has_global_flag = acot_phanon_forbidden }
+	}
+
+	prerequisites = {
+		tech_dark_matter_power_core_re
+	}
+	
+	weight_modifier = {
+		modifier = {
+			factor = 0
+				NOT = { has_technology = tech_dark_matter_power_core_re }
+		}
+		modifier = {
+			factor = 0
+			NOT = {
+				has_country_flag = acot_phanon_tech_stage_four_enabled
+			}
+		}
+	}
+
+	ai_weight = {
+		factor = 20
+	}
+
+}
+
+# Dark Matter Power Cores PHANON
 tech_precursor_phanon_design = {
 	area = physics
 	category = { computing }
@@ -3714,7 +3763,7 @@ tech_precursor_phanon_design = {
 	}
 
 	prerequisites = {
-		tech_dark_matter_power_core_re
+		tech_enable_phanon_design
 	}
 	
 	prereqfor_desc = {
@@ -3733,18 +3782,16 @@ tech_precursor_phanon_design = {
 		modifier = {
 			factor = 0
 			NOT = {
-				has_country_flag = acot_phanon_tech_stage_three_enabled
+				has_country_flag = acot_phanon_tech_stage_four_enabled
 			}
 		}
 	}
 
 	ai_weight = {
-		factor = 20
+		factor = 0
 	}
 
 }
-
-
 
 # Dark Matter Power Cores PHANON
 tech_phanon_army = {

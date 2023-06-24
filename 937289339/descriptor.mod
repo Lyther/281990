@@ -7,5 +7,5 @@ tags={
 	"Overhaul"
 }
 picture="thumbnail.png"
-supported_version="3.8.3"
+supported_version="3.8.4"
 remote_file_id="937289339"

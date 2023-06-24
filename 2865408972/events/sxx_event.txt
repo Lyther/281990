@@ -145,12 +145,10 @@ event = {
 					has_star_flag = sxx_precursor_4
 				}
 			}
-			random_list = {
-				10 = { set_star_flag = sxx_precursor_1 }
-				10 = { set_star_flag = sxx_precursor_2 }
-				10 = { set_star_flag = sxx_precursor_3 }
-				10 = { set_star_flag = sxx_precursor_4 }
-			}
+			set_star_flag = sxx_precursor_1
+			set_star_flag = sxx_precursor_2
+			set_star_flag = sxx_precursor_3
+			set_star_flag = sxx_precursor_4
 		}
 	}
 }
@@ -1378,7 +1376,7 @@ country_event = {
 	}
 }
 
-# 每月概率迁移散修炼丹炼器产灵石
+# 每月概率迁移散修炼丹炼器产灵石（已停用）
 country_event = {
 	id = sxx_event.110
 	hide_window = yes
@@ -1386,6 +1384,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
+		always = no
 		is_sxx_sect = yes
 		is_sxx_fallen_1 = no
 	}
@@ -1466,28 +1465,6 @@ country_event = {
 						planet = event_target:sxx_resettle_target
 					}
 				}
-			}
-		}
-	}
-}
-
-# 每年降级血冥碑
-event = {
-	id = sxx_event.120
-	hide_window = yes
-	is_triggered_only = yes
-	
-	immediate = {
-		every_country = {
-			limit = {
-				has_valid_civic = civic_sxx_evil_way
-			}
-			every_owned_planet = {
-				limit = {
-					has_building = building_sxx_xuemingbei_1
-				}
-				remove_building = building_sxx_xuemingbei_1
-				add_building = building_sxx_xuemingbei_0
 			}
 		}
 	}
@@ -1798,10 +1775,7 @@ country_event = {
 		every_owned_planet = {
 			if = {
 				limit = {
-					OR = {
-						has_active_building = building_sxx_xuemingbei_0
-						has_active_building = building_sxx_xuemingbei_1
-					}
+					has_active_building = building_sxx_xuemingbei
 				}
 				subtract_variable = {
 					which = sxx_evil_break_count
@@ -1821,47 +1795,12 @@ country_event = {
 	}
 }
 
-# 血丹师每月消耗血煞之力 & 无血冥碑清空血煞之力
+# 血祭UI
 planet_event = {
 	id = sxx_event.145
-	title = sxx_event.145.name
-	desc = sxx_event.145.desc
-
 	is_triggered_only = yes
-
-	trigger = {
-		OR = {
-			has_active_building = building_sxx_xuemingbei_0
-			has_active_building = building_sxx_xuemingbei_1
-		}
-		owner = { has_valid_civic = civic_sxx_evil_way }
-	}
-
-	immediate = {
-		every_owned_planet = {
-			if = {
-				limit = {
-					OR = {
-						has_active_building = building_sxx_xuemingbei_0
-						has_active_building = building_sxx_xuemingbei_1
-					}
-				}
-				subtract_variable = {
-					which = sxx_evil_break_count
-					value = value:sxx_xiuluo_pills_maker_xuesha_upkeep_value
-				}
-				if = {
-					limit = {
-						check_variable = { which = sxx_evil_break_count value <= 0 }
-					}
-					set_variable = { which = sxx_evil_break_count value = 0 }
-				}
-			}
-			else = {
-				set_variable = { which = sxx_evil_break_count value = 0 }
-			}
-		}
-	}
+	diplomatic = yes
+	custom_gui = sxx_xueji_ui
 }
 
 # on_released_as_vassal
@@ -1983,7 +1922,7 @@ country_event = {
 	}
 }
 
-# 每年突破领袖
+# 每年突破领袖（已废弃）
 country_event = {
 	id = sxx_event.190
 
@@ -1991,7 +1930,7 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		is_sxx_sect = yes
+		always = no
 	}
 
 	immediate = {
@@ -2024,147 +1963,117 @@ country_event = {
 				sxx_leader_break_state = yes
 			}
 		}
-
-		country_event = { id = sxx_event.200 } # 更新领袖特质
 	}
 }
 
-# 对应物种特质更改领袖特质
+# 领袖生成时调整为凡人 & 去灵根 & 改羽化 (改rule了，暂且停用）
 country_event = {
 	id = sxx_event.200
 
 	hide_window = yes
 	is_triggered_only = yes
 
-	immediate = {
-		every_owned_leader = {
-			species = {
-				switch = {
-					trigger = has_trait
-					trait_sxx_lianqi = { prev = { leader_add_sxx_state_trait = { STATE = lianqi } } }
-					trait_sxx_zhuji = { prev = { leader_add_sxx_state_trait = { STATE = zhuji } } }
-					trait_sxx_jindan = { prev = { leader_add_sxx_state_trait = { STATE = jindan } } }
-					trait_sxx_yuanying = { prev = { leader_add_sxx_state_trait = { STATE = yuanying } } }
-					trait_sxx_huashen = { prev = { leader_add_sxx_state_trait = { STATE = huashen } } }
-					trait_sxx_lianxu = { prev = { leader_add_sxx_state_trait = { STATE = lianxu } } }
-					trait_sxx_heti = { prev = { leader_add_sxx_state_trait = { STATE = heti } } }
-					trait_sxx_dacheng = { prev = { leader_add_sxx_state_trait = { STATE = dacheng } } }
-					trait_sxx_dujie = { prev = { leader_add_sxx_state_trait = { STATE = dujie } } }
-					#trait_sxx_zhenxian = { prev = { leader_add_sxx_state_trait = { STATE = zhenxian } } }
-					#trait_sxx_xianwang = { prev = { leader_add_sxx_state_trait = { STATE = xianwang } } }
-					#trait_sxx_xiandi = { prev = { leader_add_sxx_state_trait = { STATE = xiandi } } }
-					default = { prev = { leader_remove_xiuxian_leader_trait = yes } }
-				}
-			}
-		}
-	
-		every_pool_leader = {
-			species = {
-				switch = {
-					trigger = has_trait
-					trait_sxx_lianqi = { prev = { leader_add_sxx_state_trait = { STATE = lianqi } } }
-					trait_sxx_zhuji = { prev = { leader_add_sxx_state_trait = { STATE = zhuji } } }
-					trait_sxx_jindan = { prev = { leader_add_sxx_state_trait = { STATE = jindan } } }
-					trait_sxx_yuanying = { prev = { leader_add_sxx_state_trait = { STATE = yuanying } } }
-					trait_sxx_huashen = { prev = { leader_add_sxx_state_trait = { STATE = huashen } } }
-					trait_sxx_lianxu = { prev = { leader_add_sxx_state_trait = { STATE = lianxu } } }
-					trait_sxx_heti = { prev = { leader_add_sxx_state_trait = { STATE = heti } } }
-					trait_sxx_dacheng = { prev = { leader_add_sxx_state_trait = { STATE = dacheng } } }
-					trait_sxx_dujie = { prev = { leader_add_sxx_state_trait = { STATE = dujie } } }
-					#trait_sxx_zhenxian = { prev = { leader_add_sxx_state_trait = { STATE = zhenxian } } }
-					#trait_sxx_xianwang = { prev = { leader_add_sxx_state_trait = { STATE = xianwang } } }
-					#trait_sxx_xiandi = { prev = { leader_add_sxx_state_trait = { STATE = xiandi } } }
-					default = { prev = { leader_remove_xiuxian_leader_trait = yes } }
-				}
-			}
-		}
+	trigger = {
+		always = no
 	}
-}
-
-# 领袖生成时调整为凡人 & 加灵根 & 改羽化
-country_event = {
-	id = sxx_event.201
-
-	hide_window = yes
-	is_triggered_only = yes
 
 	immediate = {
 		from = {
 			if = {
 				limit = {
-					root = {
-						has_origin = origin_sxx_yuhua
-						NOT = { has_country_flag = synthetic_empire }
-					}
+					species = { has_trait = trait_sxx_yuhua }
 				}
-				if = {
-					limit = {
-						root = { has_country_flag = sxx_yuhua_awake }
-						species = { is_same_species = root.owner_main_species }
-					}
-					root = {
-						random_owned_species = {
-							weights = {
-								base = 1
-								modifier = {
-									add = 9999
-									has_trait = trait_sxx_linggen
-								}
-								modifier = {
-									factor = 100
-									has_citizenship_type = {
-										type = citizenship_full
-										country = root
-									}
-								}
-								modifier = {
-									factor = 30
-									has_citizenship_type = {
-										type = citizenship_limited
-										country = root
-									}
-								}
-								modifier = {
-									add = 10
-									has_citizenship_type = {
-										type = citizenship_slavery
-										country = root
-									}
+				root = {
+					random_owned_species = {
+						weights = {
+							base = 1
+							modifier = {
+								factor = 100
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
 								}
 							}
-							prevprev = {
-								change_species = prev
-								change_leader_portrait = species
+							modifier = {
+								factor = 30
+								has_citizenship_type = {
+									type = citizenship_limited
+									country = root
+								}
+							}
+							modifier = {
+								add = 10
+								has_citizenship_type = {
+									type = citizenship_slavery
+									country = root
+								}
 							}
 						}
-					}
-				}
-
-				if = {
-					limit = {
-						species = { NOT = { has_trait = trait_sxx_linggen } }
-						root = {
-							any_owned_species = {
-								is_same_species = prevprev.species
-								has_trait = trait_sxx_linggen
-							}
+						prevprev = {
+							change_species = prev
+							change_leader_portrait = species
 						}
-						NOR = {
-							has_leader_flag = renowned_leader
-							has_leader_flag = legendary_leader
-						}
-					}
-					modify_species = {
-						species = this
-						add_trait = trait_sxx_linggen
 					}
 				}
 			}
-
+			if = {
+				limit = {
+					species = { has_trait = trait_sxx_linggen }
+				}
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_linggen
+				}
+			}
 			sxx_remove_xiuxian_trait = yes
 		}
-	
 		every_pool_leader = {
+			if = {
+				limit = {
+					species = { has_trait = trait_sxx_yuhua }
+				}
+				root = {
+					random_owned_species = {
+						weights = {
+							base = 1
+							modifier = {
+								factor = 100
+								has_citizenship_type = {
+									type = citizenship_full
+									country = root
+								}
+							}
+							modifier = {
+								factor = 30
+								has_citizenship_type = {
+									type = citizenship_limited
+									country = root
+								}
+							}
+							modifier = {
+								add = 10
+								has_citizenship_type = {
+									type = citizenship_slavery
+									country = root
+								}
+							}
+						}
+						prevprev = {
+							change_species = prev
+							change_leader_portrait = species
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					species = { has_trait = trait_sxx_linggen }
+				}
+				modify_species = {
+					species = this
+					remove_trait = trait_sxx_linggen
+				}
+			}
 			sxx_remove_xiuxian_trait = yes
 		}
 	}
@@ -2533,7 +2442,7 @@ country_event = {
 	}
 }
 
-# 每十年一次，埋骨地亡魂大清洗
+# 每5年一次，埋骨地亡魂大清洗
 event = {
 	id = sxx_event.510
 	hide_window = yes
@@ -2818,6 +2727,31 @@ country_event = {
 		name = sxx_previous_page
 		hidden_effect = {
 			country_event = { id = sxx_event.2003 }
+		}
+	}
+	option = {
+		name = sxx_next_page
+		hidden_effect = {
+			country_event = { id = sxx_event.2005 }
+		}
+	}
+	option = {
+		name = sxx_close
+	}
+}
+
+country_event = {
+	id = sxx_event.2005
+	title = sxx_event.2000.name
+	desc = sxx_event.2005.desc
+	picture = GFX_evt_sxx_blessed_spot
+
+	is_triggered_only = yes
+
+	option = {
+		name = sxx_previous_page
+		hidden_effect = {
+			country_event = { id = sxx_event.2004 }
 		}
 	}
 	option = {

@@ -1,0 +1,122 @@
+# 暂时只使用通用好感度系统，以后再考虑专属好感度系统
+
+#领袖
+dimension_traveler_wg_check = {
+	if = {
+		limit = {
+			NOT = { is_variable_set = affection }
+		}
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = dimension_traveler_end
+				}
+			}
+			# 隐藏真结局初始
+			set_variable = {
+				which = affection
+				value = 50
+			}
+		}
+		else = {
+			set_variable = {
+				which = affection
+				value = 0
+			}
+		}
+	}
+	owner = {
+		set_variable = {
+			which = dimension_traveler_affection
+			value = prev.affection
+		}
+	}
+}
+
+#领袖
+dimension_traveler_wg_effect = {
+	set_leader_flag = wsg_special_affection_leader
+	wg_affection_normal_system_launch = yes
+	# 誓约
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = married_dimension_traveler
+			}
+		}
+		set_leader_flag = married
+	}
+	# 好感度数值
+	if = {
+		limit = {
+			owner = {
+				NOT = { is_variable_set = dimension_traveler_affection }
+			}
+		}
+		owner = {
+			if = {
+				limit = {
+					has_country_flag = dimension_traveler_end
+				}
+				# 隐藏真结局初始
+				set_variable = {
+					which = dimension_traveler_affection
+					value = 50
+				}
+			}
+			else = {
+				set_variable = {
+					which = dimension_traveler_affection
+					value = 0
+				}
+			}
+		}
+	}
+	set_variable = {
+		which = affection
+		value = owner.dimension_traveler_affection
+	}
+	# 好感度增长
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = dimension_traveler_end
+			}
+		}
+		set_variable = {
+			which = wg_leader_affection_increase
+			value = 25
+		}
+		set_variable = {
+			which = wg_leader_affection_reduce
+			value = 0
+		}
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = dimension_traveler_trait_time_secret
+				has_country_flag = dimension_traveler_trait_circle_secret
+				has_country_flag = dimension_traveler_trait_dimension_secret
+			}
+		}
+		set_variable = {
+			which = wg_leader_affection_increase
+			value = 20
+		}
+		set_variable = {
+			which = wg_leader_affection_reduce
+			value = 5
+		}
+	}
+	else = {
+		set_variable = {
+			which = wg_leader_affection_increase
+			value = 10
+		}
+		set_variable = {
+			which = wg_leader_affection_reduce
+			value = 10
+		}
+	}
+}

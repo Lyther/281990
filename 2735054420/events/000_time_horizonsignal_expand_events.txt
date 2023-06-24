@@ -971,6 +971,9 @@ planet_event = {
 	immediate = {
 		set_planet_flag = time_akx_waiting_world_break
 		remove_modifier = time_akx_waiting_world_4
+		every_owned_pop = {
+			make_akx_messenger = yes
+		}
 		owner = {
 			set_country_flag = master_akx_messenger
 			set_country_flag = time_akx_waiting_world_end_4
@@ -979,9 +982,7 @@ planet_event = {
 	
 	option = {
 		name = time_akx.32.a
-		every_owned_pop = {
-			make_akx_messenger = yes
-		}
+		custom_tooltip = time_akx.32.a.tooltip
 	}
 }
 
@@ -1093,6 +1094,27 @@ country_event = {
 	immediate = {
 		event_target:waiting_world = {
 			set_planet_flag = time_akx_waiting_world_end
+			every_owned_pop = {
+				limit = {
+					is_robot_pop = no
+				}
+				make_akx_waiting_world = yes
+				modify_species = {
+					species = this
+					add_trait = trait_repugnant
+				}
+				make_leashed_messenger = yes
+			}
+			every_owned_pop = {
+				limit = {
+					is_robot_pop = yes
+				}
+				make_akx_waiting_world = yes
+				modify_species = {
+					species = this
+					add_trait = trait_robot_uncanny
+				}
+			}
 		}
 		set_country_flag = time_akx_waiting_world_end_6
 		if = {
@@ -1136,27 +1158,7 @@ country_event = {
 	option = {
 		name = time_akx.35.a
 		event_target:waiting_world = {
-			every_owned_pop = {
-				limit = {
-					is_robot_pop = no
-				}
-				make_akx_waiting_world = yes
-				modify_species = {
-					species = this
-					add_trait = trait_repugnant
-				}
-				make_leashed_messenger = yes
-			}
-			every_owned_pop = {
-				limit = {
-					is_robot_pop = yes
-				}
-				make_akx_waiting_world = yes
-				modify_species = {
-					species = this
-					add_trait = trait_robot_uncanny
-				}
-			}
+			custom_tooltip = time_akx.35.a.tooltip
 		}
 	}
 }
@@ -2463,6 +2465,25 @@ country_event = {
 	option = {
 		name = time_akx.206.a
 		custom_tooltip = time_akx.206.a.tooltip
+		# 舰R
+		if = {
+			limit = {
+				has_wg_special_authority = yes
+				has_country_flag = dimension_traveler_trait_foredoomed_to_a_rendezvous
+				has_country_flag = gain_time_titan
+			}
+			custom_tooltip = time_akx.206.b.tooltip
+			if = {
+				limit = {
+					exists = event_target:dimension_traveler_leader
+				}
+				hidden_effect = {
+					event_target:dimension_traveler_leader = {
+						refresh_dimension_traveler = yes
+					}
+				}
+			}
+		}
 	}
 }
 

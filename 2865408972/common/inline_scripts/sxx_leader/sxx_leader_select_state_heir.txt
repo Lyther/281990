@@ -1,0 +1,73 @@
+trigger = {
+	owner = { is_sxx_$STATE$_country = yes }
+}
+allow = {
+	owner = {
+		any_owned_pop = {
+			has_pop_flag = sxx_$STATE$
+			is_sxx_cultivable_cultivator = yes
+			NOT = { has_modifier = sxx_leader_pop_modifier }
+			has_citizenship_rights = yes
+		}
+	}
+}
+hidden_effect = {
+	owner = {
+		random_owned_pop = {
+			limit = {
+				has_pop_flag = sxx_$STATE$
+				is_sxx_cultivable_cultivator = yes
+				NOT = { has_modifier = sxx_leader_pop_modifier }
+				has_citizenship_rights = yes
+			}
+			weights = {
+				base = 100
+				modifier = {
+					factor = 0.01
+					is_sxx_potential_depletion = yes
+				}
+				modifier = {
+					factor = 3
+					has_job_category = sxx_xiuxianzhe_3
+				}
+				modifier = {
+					factor = 2
+					has_job_category = sxx_xiuxianzhe_2
+				}
+				modifier = {
+					factor = 0.5
+					has_job_category = sxx_xiuxianzhe_4
+				}
+				modifier = {
+					factor = 1.5
+					is_same_species = owner_main_species
+				}
+				modifier = {
+					factor = 5
+					is_sxx_special_body = yes
+				}
+			}
+			save_event_target_as = sxx_selected_leader_pop
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = { root = { add_trait_no_notify = leader_trait_sxx_lianqi } }
+				sxx_zhuji = { root = { add_trait_no_notify = leader_trait_sxx_zhuji } } 
+				sxx_jindan = { root = { add_trait_no_notify = leader_trait_sxx_jindan } } 
+				sxx_yuanying = { root = { add_trait_no_notify = leader_trait_sxx_yuanying } } 
+				sxx_huashen = { root = { add_trait_no_notify = leader_trait_sxx_huashen } } 
+				sxx_lianxu = { root = { add_trait_no_notify = leader_trait_sxx_lianxu } } 
+				sxx_heti = { root = { add_trait_no_notify = leader_trait_sxx_heti } } 
+				sxx_dacheng = { root = { add_trait_no_notify = leader_trait_sxx_dacheng } } 
+				xx_dujie = { root = { add_trait_no_notify = leader_trait_sxx_dujie } } 
+				sxx_zhenxian = { root = { add_trait_no_notify = leader_trait_sxx_zhenxian } } 
+				sxx_xianwang = { root = { add_trait_no_notify = leader_trait_sxx_xianwang } } 
+				sxx_xiandi = { root = { add_trait_no_notify = leader_trait_sxx_xiandi } } 
+			}
+			add_modifier = { modifier = sxx_leader_pop_modifier }
+			set_pop_flag = sxx_leader_pop_of@root
+		}
+	}
+	set_leader_flag = sxx_pop_leader
+	change_species = event_target:sxx_selected_leader_pop
+	change_leader_portrait = species
+}

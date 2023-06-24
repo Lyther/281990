@@ -90,7 +90,34 @@ country_event = {
 			country_event = { id = leviathans.590 }
 		}
 	}
-
+	# Gestalt Trait
+	option = {
+		name = leviathans.500.e
+		trigger = {
+			is_homicidal = no
+			is_gestalt = yes
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = leviathans.500.e.opinion
+				event_target:curator_enclave_country = {
+					trust = {
+						who = root
+						value >= 50
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = leviathans.500.e.alreadyshared
+				NOT = {
+					any_owned_leader = { has_trait = leader_trait_curator }
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = leviathans.598 }
+		}
+	}
 	# Intel
 	option = {
 		name = leviathans.500.h
@@ -311,10 +338,66 @@ country_event = {
 			country_event = { id = leviathans.590 }
 		}
 	}
-
-	option = { # Think Tank
+	# Gestalt Trait
+	option = {
+		name = leviathans.500.e
+		trigger = {
+			is_homicidal = no
+			is_gestalt = yes
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = leviathans.500.e.opinion
+				event_target:curator_enclave_country = {
+					trust = {
+						who = root
+						value >= 50
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = leviathans.500.e.alreadyshared
+				NOT = {
+					any_owned_leader = { has_trait = leader_trait_curator }
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = leviathans.598 }
+		}
+	}
+	# Intel
+	option = {
+		name = leviathans.500.h
+		trigger = {
+			is_homicidal = no
+			any_country = {
+				valid_curators_intel_trade_target = yes
+			}
+		}
+		allow = {
+			custom_tooltip = {
+				fail_text = leviathans.500.d.opinion
+				event_target:curator_enclave_country = {
+					trust = {
+						who = root
+						value >= 50
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = { id = leviathans.599 }
+		}
+	}
+	# Think Tank
+	option = {
 		name = leviathans.500.f
 		trigger = {
+			is_homicidal = no
+			event_target:curator_enclave_country = {
+				NOT = { has_country_flag = think_tank@root }
+			}
 			any_system_within_border = {
 				has_star_flag = enclave
 				any_fleet_in_system = {
@@ -329,7 +412,7 @@ country_event = {
 			custom_tooltip = {
 				fail_text = leviathans.500.d.opinion
 				event_target:curator_enclave_country = {
-					trust = { 
+					trust = {
 						who = root
 						value >= 50
 					}
@@ -340,7 +423,6 @@ country_event = {
 			country_event = { id = leviathans.511 }
 		}
 	}
-
 	# Infinity Machine's secret (after finishing Infinity Sphere chain)
 	option = {
 		name = leviathans.500.g
@@ -353,7 +435,6 @@ country_event = {
 			country_event = { id = leviathans.4000 }
 		}
 	}
-	
 	# L-Cluster Clue
 	option = {
 		name = leviathans.500.i
@@ -378,7 +459,6 @@ country_event = {
 			country_event = { id = leviathans.600 }
 		}
 	}
-
 	# Ask for other shits
 	option = {
 		name = acot_curator_ask
@@ -386,16 +466,32 @@ country_event = {
 			country_event = { id = acot_diplo.800 }
 		}
 	}
-
+	# Goodbye
 	option = {
-		name = leviathans.500.e
-		default_hide_option = yes
-		hidden_effect = {
-			remove_country_flag = curator_enclave_diplomacy_engaged
+		name = {
+			trigger = { has_valid_civic = civic_fanatic_purifiers }
+			text = SCUM
 		}
+		name = {
+			trigger = { has_valid_civic = civic_hive_devouring_swarm }
+			text = TASTY
+		}
+		name = {
+			trigger = { has_valid_civic = civic_machine_terminator }
+			text = EXTERMINATE
+		}
+		name = {
+			trigger = {
+				NOR = {
+					has_valid_civic = civic_fanatic_purifiers
+					has_valid_civic = civic_hive_devouring_swarm
+					has_valid_civic = civic_machine_terminator
+				}
+			}
+			text = GOODBYE
+		}
+		default_hide_option = yes
 	}
-
-
 }
 
 # Curator Hire Scientist Menu
@@ -684,9 +780,9 @@ country_event = {
 						traits = {
 							trait = leader_trait_curator
 							trait = leader_trait_acot_curator_archon
-							trait = leader_trait_scientist_erudite
-							trait = leader_trait_scientist_cyborg
-							trait = leader_trait_scientist_psionic
+							trait = leader_trait_erudite
+							trait = leader_trait_cyborg
+							trait = leader_trait_psionic
 						}
 						event_leader = yes	# prevents this leader from leading factions and winning elections
 					}
@@ -703,9 +799,9 @@ country_event = {
 						traits = {
 							trait = leader_trait_curator
 							trait = leader_trait_acot_curator_archon
-							trait = leader_trait_scientist_erudite
-							trait = leader_trait_scientist_cyborg
-							trait = leader_trait_scientist_psionic
+							trait = leader_trait_erudite
+							trait = leader_trait_cyborg
+							trait = leader_trait_psionic
 						}
 						event_leader = yes	# prevents this leader from leading factions and winning elections
 					}
@@ -720,9 +816,9 @@ country_event = {
 						traits = {
 							trait = leader_trait_curator
 							trait = leader_trait_acot_curator_archon
-							trait = leader_trait_scientist_erudite
-							trait = leader_trait_scientist_cyborg
-							trait = leader_trait_scientist_psionic
+							trait = leader_trait_erudite
+							trait = leader_trait_cyborg
+							trait = leader_trait_psionic
 						}
 						event_leader = yes	# prevents this leader from leading factions and winning elections
 					}
@@ -739,9 +835,9 @@ country_event = {
 						traits = {
 							trait = leader_trait_curator
 							trait = leader_trait_acot_curator_archon
-							trait = leader_trait_scientist_erudite
-							trait = leader_trait_scientist_cyborg
-							trait = leader_trait_scientist_psionic
+							trait = leader_trait_erudite
+							trait = leader_trait_cyborg
+							trait = leader_trait_psionic
 						}
 						event_leader = yes	# prevents this leader from leading factions and winning elections
 					}
@@ -758,9 +854,9 @@ country_event = {
 						traits = {
 							trait = leader_trait_curator
 							trait = leader_trait_acot_curator_archon
-							trait = leader_trait_scientist_erudite
-							trait = leader_trait_scientist_cyborg
-							trait = leader_trait_scientist_psionic
+							trait = leader_trait_erudite
+							trait = leader_trait_cyborg
+							trait = leader_trait_psionic
 						}
 						event_leader = yes	# prevents this leader from leading factions and winning elections
 					}

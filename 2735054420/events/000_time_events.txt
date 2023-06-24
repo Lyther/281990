@@ -13,7 +13,7 @@ event = {
 	
 	immediate = {
 		set_global_flag = time_mod_active
-		set_global_flag = time_1000_triggered_2
+		set_global_flag = time_2000_triggered
 	}
 }
 
@@ -2214,7 +2214,7 @@ country_event = {
 				NOR = {
 					has_country_flag = worm_tomb_ending #触发时虫事件链的国家不可解锁（不过仍可靠破损的大门系列事件来解锁）
 					has_country_flag = gain_tradition_horror #已解锁的国家不再重复解锁
-					has_tradition = tr_time_horror_adopt #已采纳的国家不再重复解锁（主要针对破损的大门）
+					has_tradition = tr_horror_adopt #已采纳的国家不再重复解锁（主要针对破损的大门）
 				}
 			}
 			country_event = { id = time.501 }
@@ -2237,7 +2237,7 @@ country_event = {
 					NOR = {
 						has_country_flag = worm_tomb_ending #触发时虫事件链的国家不可解锁（不过仍可靠破损的大门系列事件来解锁）
 						has_country_flag = gain_tradition_horror #已解锁的国家不再重复解锁
-						has_tradition = tr_time_horror_adopt #已采纳的国家不再重复解锁（主要针对破损的大门）
+						has_tradition = tr_horror_adopt #已采纳的国家不再重复解锁（主要针对破损的大门）
 					}
 				}
 				country_event = { id = time.501 }
@@ -2864,30 +2864,62 @@ country_event = {
 	}
 }
 
-# 旧档科技补救
+# 开局解锁2槽
 event = {
 	id = time.1000
 	is_triggered_only = yes
 	hide_window = yes
 	
 	trigger = {
-		NOT = { has_global_flag = time_1000_triggered_2 }
+		has_paragon_dlc = yes # 防止无DLC时出现bug
 	}
 	
 	immediate = {
-		set_global_flag = time_1000_triggered_2
-		every_playable_country = {
+		every_country = {
 			limit = {
-				has_origin = origin_time
-			}
-			every_owned_planet = {
-				limit = {
-					OR = {
-						is_planet_class = pc_time
-						is_planet_class = pc_endless_time
-					}
+				is_gestalt = no
+				OR = {
+					is_country_type = default
+					is_country_type = fallen_empire
+					is_country_type = awakened_fallen_empire
 				}
-				planet_event = { id = time.6 }
+			}
+			while = {
+				count = 2
+				if = {
+					limit = {
+						check_variable_arithmetic = { which = value:country_num_unlockable_council_slots value > 0 }
+					}
+					unlock_council_slots = 1
+				}
+			}
+		}
+	}
+}
+
+# 界旅者回归（防坏档）
+event = {
+	id = time.2000
+	is_triggered_only = yes
+	hide_window = yes
+	
+	trigger = {
+		NOT = { has_global_flag = time_2000_triggered }
+	}
+	
+	immediate = {
+		set_global_flag = time_2000_triggered
+		if = {
+			limit = {
+				exists = event_target:dimension_traveler_owner
+			}
+			event_target:dimension_traveler_owner = {
+				if = {
+					limit = {
+						has_country_flag = dimension_traveler_returning
+					}
+					country_event = { id = dimension_traveler.66 days = 1 random = 29 }
+				}
 			}
 		}
 	}

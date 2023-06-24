@@ -1871,3 +1871,25 @@ choose_as_time_wanderer_planet = {
 		planet_event = { id = time_wanderer.3 }
 	}
 }
+
+# 国家
+declare_war_to_galaxy = {
+	save_event_target_as = declarer
+	every_country = {
+		limit = {
+			OR = {
+				is_country_type = default
+				is_country_type = fallen_empire
+				is_country_type = awakened_fallen_empire
+			}
+			NOT = { is_same_value = event_target:declarer }
+		}
+		establish_communications_no_message = event_target:declarer
+		event_target:declarer = {
+			declare_war = {
+				target = prev
+				attacker_war_goal = wg_time_wipe_them_out
+			}
+		}
+	}
+}

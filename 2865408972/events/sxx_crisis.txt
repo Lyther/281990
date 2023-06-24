@@ -178,6 +178,61 @@ country_event = {
 			}
 		}
 
+		create_leader = {
+			class = governor
+			species = owner_main_species
+			name = random
+			skill = 1
+		}
+		create_leader = {
+			class = scientist
+			species = owner_main_species
+			name = random
+			skill = 1
+		}
+
+		### 预留给觉醒后使用 ###
+		create_leader = {
+			class = governor
+			species = owner_main_species
+			name = random
+			skill = 1
+		}
+		create_leader = {
+			class = admiral
+			species = owner_main_species
+			name = random
+			skill = 1
+		}
+
+		every_owned_leader = {
+			limit = {
+				NOT = { has_leader_flag = sxx_pop_leader }
+			}
+			sxx_leader_set_state = { STATE = dujie VAR = 9 }
+			random_list = {
+				10 = { set_age = 1653 }
+				10 = { set_age = 1437 }
+				10 = { set_age = 1286 }
+				10 = { set_age = 1142 }
+				10 = { set_age = 1139 }
+				10 = { set_age = 1058 }
+				10 = { set_age = 1015 }
+				10 = { set_age = 984 }
+				10 = { set_age = 942 }
+				10 = { set_age = 921 }
+			}
+			if = {
+				limit = {
+					is_ruler = no
+					leader_class = admiral
+				}
+				add_trait_no_notify = subclass_admiral_tactician
+				add_trait_no_notify = leader_trait_sxx_zhanzhen
+			}
+			add_skill_without_trait_selection = 10
+		}
+
 		# 默认初始经验
 		every_owned_pop = {
 			limit = {
@@ -266,7 +321,6 @@ country_event = {
 	}
 }
 
-# 好像没触发
 # Triggered when two empires discover each other
 # This = Empire 1
 # From = Empire 2
@@ -282,7 +336,6 @@ country_event = {
 	}
 
 	immediate = {
-		country_event = { id = sxx_crisis.25 }
 		if = {
 			limit = {
 				from = {
@@ -293,13 +346,6 @@ country_event = {
 			from = { save_event_target_as = contact_empire }
 			country_event = { id = sxx_crisis.25 }
 		}
-		set_timed_relation_flag = {
-			flag = just_encountered
-			who = from
-			days = 5
-		}
-		#establish communications with a delay of a few days, in case there's any other relevant events pending
-		country_event = { id = first_contact_critters.1001 days = 5 }
 	}
 }
 
@@ -1514,6 +1560,8 @@ country_event = {
 				civic = civic_memorialist
 			}
 		}
+
+		unlock_council_slots = 2
 	
 		add_resource = { minerals = 50000 }
 		add_resource = { energy = 50000 }
@@ -2877,6 +2925,7 @@ ship_event = {
 						create_fleet = {
 							name = "NAME_SXX_Outer_Demon_Fleet_God_Other"
 							settings = {
+								can_upgrade = no
 								can_change_composition = no
 								can_change_leader = no
 								uses_naval_capacity = no
@@ -2981,6 +3030,7 @@ country_event = {
 					settings = {
 						spawn_debris = no
 						is_boss = yes
+						can_upgrade = no
 						can_change_composition = no
 						can_change_leader = no
 						uses_naval_capacity = no

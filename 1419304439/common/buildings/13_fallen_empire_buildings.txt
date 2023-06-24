@@ -1,13 +1,12 @@
-#####################
-# Primitive buildings
-#####################
+###########################
+# Fallen Empire buildings #
+###########################
 
 building_ancient_control_center = {
 	base_buildtime = 480
 	capital = yes
 	can_build = no
-	can_demolish = no
-	can_be_ruined = no
+	can_demolish = yes
 	position_priority = 0
 	
 	category = government
@@ -57,6 +56,7 @@ building_ancient_control_center = {
 			}
 		}
 		modifier = {
+			job_fe_maintenance_bot_add = 4
 			job_fe_guardian_bot_add = 5
 		}
 	}
@@ -80,8 +80,7 @@ building_ancient_palace = {
 	base_buildtime = 480
 	capital = yes
 	can_build = no
-	can_demolish = no
-	can_be_ruined = no
+	can_demolish = yes
 	position_priority = 0
 	
 	category = government
@@ -357,10 +356,19 @@ building_affluence_center = {
 			OR = {
 				owner = { is_fallen_empire = yes }
 				owner = {
-					check_variable = { which = affluence_center_build_count value >= 1 }
+					has_country_flag = affluence_center_can_build
 				}
+				has_planet_flag = fallen_empire_world
 			}
-			fail_text = "ancrel.10004.failtext"
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = ancrel.10004.failtext
+			owner = {
+				check_variable = { which = affluence_center_build_count value >= 1 }
+			}
 		}
 	}
 
@@ -389,51 +397,6 @@ building_affluence_center = {
 			change_variable = { which = affluence_center_build_count value = 1 }
 		}
 	}
-	ai_weight = {
-		weight = 1
-			modifier = {
-				factor = 50
-				owner = {
-				resource_income_compare = {
-					resource = consumer_goods
-					value < 10
-					}
-				}
-			}
-			modifier = {
-				factor = 0.05
-				owner = {
-				resource_income_compare = {
-					resource = consumer_goods
-					value > 40
-					}
-				}
-			}
-			modifier = {
-				factor = 0
-				owner = {
-					not = {
-						has_country_flag = just_destroyed_awakened_consgoods
-					}	
-					resource_income_compare = {
-						resource = consumer_goods
-						value > 150
-					}
-					resource_stockpile_compare = {
-						resource = consumer_goods
-						value > 5000
-					}
-				}
-			}
-		}
-		on_destroy = {
-			owner = {
-			set_timed_country_flag = {
-				flag = just_destroyed_awakened_consgoods
-				days = 40
-			} }
-		}		
-
 
 	upgrades = {
 		building_ae_affluence_center
@@ -451,13 +414,22 @@ building_nourishment_center = {
 			OR = {
 				owner = { is_fallen_empire = yes }
 				owner = {
-					check_variable = { which = nourishment_center_build_count value >= 1 }
+					has_country_flag = nourishment_center_can_build
 				}
+				has_planet_flag = fallen_empire_world
 			}
-			fail_text = "ancrel.10004.failtext"
 		}
 	}
 	
+	allow = {
+		custom_tooltip = {
+			fail_text = ancrel.10004.failtext
+			owner = {
+				check_variable = { which = nourishment_center_build_count value >= 1 }
+			}
+		}
+	}
+
 	planet_modifier = {
 		biological_pop_happiness = 0.20
 		BIOLOGICAL_pop_growth_speed = 0.10
@@ -482,58 +454,6 @@ building_nourishment_center = {
 			change_variable = { which = nourishment_center_build_count value = 1 }
 		}
 	}
-		
-	ai_weight = {
-		weight = 1
-		modifier = {
-			factor = 50
-			owner = {
-			resource_income_compare = {
-				resource = food
-				value < 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.05
-			owner = {
-			resource_income_compare = {
-				resource = food
-				value > 200
-				}
-			}
-			owner = {
-			resource_stockpile_compare = {
-				resource = food
-				value = 5000
-				}
-			}
-		}
-		modifier = {
-			factor = 0
-			owner = {
-				not = {
-					has_country_flag = just_destroyed_awakened_food
-				}	
-				resource_income_compare = {
-					resource = food
-					value > 500
-				}
-				resource_stockpile_compare = {
-					resource = food
-					value > 6000
-				}
-			}
-		}
-	}
-	on_destroy = {
-		owner = {
-		set_timed_country_flag = {
-			flag = just_destroyed_awakened_food
-			days = 40
-			} 
-		}
-	}
 
 	upgrades = {
 		building_ae_nourishment_center
@@ -550,10 +470,19 @@ building_dimensional_fabricator = {
 			OR = {
 				owner = { is_fallen_empire = yes }
 				owner = {
-					check_variable = { which = dimensional_fabricator_build_count value >= 1 }
+					has_country_flag = dimensional_fabricator_can_build
 				}
+				has_planet_flag = fallen_empire_world
 			}
-			fail_text = "ancrel.10004.failtext"
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = ancrel.10004.failtext
+			owner = {
+				check_variable = { which = dimensional_fabricator_build_count value >= 1 }
+			}
 		}
 	}
 	
@@ -576,94 +505,7 @@ building_dimensional_fabricator = {
 		upkeep = {
 		}
 	}
-	ai_weight = {
-		weight = 1
-		modifier = {
-			factor = 50
-			owner = {
-			or = {
-				resource_income_compare = {
-					resource = minerals
-					value < 300
-				}
-				resource_income_compare = {
-					resource = rare_crystals
-					value < 3
-				}
-				resource_income_compare = {
-					resource = exotic_gases
-					value < 3
-				}
-				resource_income_compare = {
-					resource = volatile_motes
-					value < 3
-					}
-				}	
-			}
-		}
-		modifier = {
-			factor = 0.05 
-			owner = {
-			and = {
-				resource_income_compare = {
-					resource = minerals
-					value > 500
-				}
-				resource_income_compare = {
-					resource = rare_crystals
-					value > 5
-				}
-				resource_income_compare = {
-					resource = exotic_gases
-					value > 5
-				}
-				resource_income_compare = {
-					resource = volatile_motes
-					value > 5
-						}
-					}
-				}
-			}
-		modifier = {
-			factor = 0
-			owner = {
-				not = {
-					has_country_flag = just_destroyed_awakened_minerals
-				}	
-				and = {
-					resource_income_compare = {
-						resource = minerals
-						value > 1000
-					}
-					resource_income_compare = {
-						resource = rare_crystals
-						value > 10
-					}
-					resource_income_compare = {
-						resource = exotic_gases
-						value > 10
-					}
-					resource_income_compare = {
-						resource = volatile_motes
-						value > 10
-					}
-					resource_stockpile_compare = {
-						resource = minerals
-						value > 5000
-						
-						}
-					}
-				}
-			}
-		}
-		on_destroy = {
-			owner = {
-			set_timed_country_flag = {
-				flag = just_destroyed_awakened_minerals
-				days = 40
-				} 
-			}
-		}
+
 	on_queued = {
 		owner = {
 			subtract_variable = { which = dimensional_fabricator_build_count value = 1 }
@@ -693,10 +535,19 @@ building_class_4_singularity = {
 			OR = {
 				owner = { is_fallen_empire = yes }
 				owner = {
-					check_variable = { which = class_4_singularity_build_count value >= 1 }
+					has_country_flag = class_4_singularity_can_build
 				}
+				has_planet_flag = fallen_empire_world
 			}
-			fail_text = "ancrel.10004.failtext"
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = ancrel.10004.failtext
+			owner = {
+				check_variable = { which = class_4_singularity_build_count value >= 1 }
+			}
 		}
 	}
 	
@@ -712,10 +563,7 @@ building_class_4_singularity = {
 			physics_research = 30
 		}
 	}
-		
-	upgrades = {
-		building_ae_class_4_singularity
-	}
+
 	on_queued = {
 		owner = {
 			subtract_variable = { which = class_4_singularity_build_count value = 1 }
@@ -728,50 +576,8 @@ building_class_4_singularity = {
 		}
 	}
 
-	ai_weight = {
-		weight = 1
-		modifier = {
-			factor = 50
-			owner = {
-			resource_income_compare = {
-				resource = energy
-				value < 100
-				}
-			}
-		}
-		modifier = {
-			factor = 0.05
-			owner = {
-			resource_income_compare = {
-				resource = energy
-				value > 500
-				}
-			}
-		}
-		modifier = {
-			factor = 0
-			owner = {
-				not = {
-					has_country_flag = just_destroyed_awakened_energy
-				}	
-				resource_income_compare = {
-					resource = energy
-					value > 500
-				}
-				resource_stockpile_compare = {
-					resource = energy
-					value > 10000
-				} 
-			}
-		}
-	}
-	on_destroy = {
-		owner = {
-			set_timed_country_flag = {
-				flag = just_destroyed_awakened_energy
-				days = 40
-			} 
-		}
+	upgrades = {
+		building_ae_class_4_singularity
 	}
 }
 
@@ -786,10 +592,19 @@ building_nano_forge = {
 			OR = {
 				owner = { is_fallen_empire = yes }
 				owner = {
-					check_variable = { which = nano_forge_build_count value >= 1 }
+					has_country_flag = nano_forge_can_build
 				}
+				has_planet_flag = fallen_empire_world
 			}
-			fail_text = "ancrel.10004.failtext"
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = ancrel.10004.failtext
+			owner = {
+				check_variable = { which = nano_forge_build_count value >= 1 }
+			}
 		}
 	}
 	
@@ -807,9 +622,6 @@ building_nano_forge = {
 		}
 	}
 		
-	upgrades = {
-		building_ae_nano_forge
-	}
 	on_queued = {
 		owner = {
 			subtract_variable = { which = nano_forge_build_count value = 1 }
@@ -822,53 +634,9 @@ building_nano_forge = {
 		}
 	}
 
-	ai_weight = {
-		weight = 5
-		modifier = {
-			factor = 0.05
-			owner = {
-			or = {
-				resource_income_compare = {
-					resource = energy
-					value < 0
-				}
-				resource_income_compare = {
-					resource = minerals
-					value < 50
-				}
-				resource_stockpile_compare = {
-					resource = alloys
-					value > 5000
-					}
-				}
-			}
-		}
-		modifier = {
-			factor = 0
-			owner = {
-				not = {
-					has_country_flag = just_destroyed_awakened_alloys
-				}	
-				resource_income_compare = {
-					resource = energy
-					value < 0
-				}
-				resource_stockpile_compare = {
-					resource = energy
-					value < 500
-				}
-			}
-		}
+	upgrades = {
+		building_ae_nano_forge
 	}
-	on_destroy = {
-		owner = {
-			set_timed_country_flag = {
-				flag = just_destroyed_awakened_alloys
-				days = 40
-			} 
-		}
-	}
-
 }
 
 building_master_archive = {
@@ -918,8 +686,7 @@ building_empyrean_shrine = {
 	can_demolish = yes
 	
 	potential = {
-		exists = owner
-	}	
+	}
 	
 	
 	triggered_planet_modifier = {
@@ -998,6 +765,7 @@ building_fe_xeno_zoo = {
 	capital = yes
 	can_build = no
 	can_demolish = yes
+	position_priority = 0
 	
 	potential = {
 		exists = owner
@@ -1017,6 +785,7 @@ building_fe_xeno_zoo = {
 		planet_amenities_add = 15
 		job_fe_xeno_keeper_add = 2
 		planet_housing_add = 30
+		planet_max_buildings_add = 15
 	}
 
 	resources = {
@@ -1039,10 +808,19 @@ building_fe_dome = {
 			OR = {
 				owner = { is_fallen_empire = yes }
 				owner = {
-					check_variable = { which = skydome_build_count value >= 1 }
+					has_country_flag = skydome_can_build
 				}
+				has_planet_flag = fallen_empire_world
 			}
-			fail_text = "ancrel.10004.failtext"
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = ancrel.10004.failtext
+			owner = {
+				check_variable = { which = skydome_build_count value >= 1 }
+			}
 		}
 	}
 	
@@ -1070,34 +848,6 @@ building_fe_dome = {
 		}
 	}
 
-	ai_weight = {
-		weight = 1
-		modifier = {
-			factor = 0.05
-			free_amenities > 20
-		}
-		modifier = {
-			factor = 50
-			free_amenities < -10
-		}
-		modifier = {
-			factor = 0
-			owner = {
-				not = { has_country_flag = just_destroyed_awakened_amenities } 
-			}
-			free_amenities > 50
-		}
-	}
-
-	on_destroy = {
-		owner = { 
-			set_timed_country_flag = {
-				flag = just_destroyed_awakened_amenities
-				days = 40
-			} 
-		}		
-	}
-
 	upgrades = {
 		building_ae_sky_dome
 	}
@@ -1107,7 +857,6 @@ building_fe_stronghold = {
 	can_build = no
 	
 	potential = {
-		exists = owner
 	}
 	
 	

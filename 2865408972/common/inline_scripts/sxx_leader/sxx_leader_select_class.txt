@@ -1,0 +1,44 @@
+create_leader = {
+	class = $CLASS$
+	species = event_target:sxx_selected_leader_pop
+	name = random
+	skill = 1
+	effect = {
+		set_owner = root
+		set_leader_flag = sxx_pop_leader
+		if = {
+			limit = {
+				root = { has_tradition = tr_aptitude_adopt }
+			}
+			add_trait_no_notify = "random_common"
+		}
+		event_target:sxx_selected_leader_pop = {
+			switch = {
+				trigger = has_pop_flag
+				sxx_lianqi = { prev = { add_trait_no_notify = leader_trait_sxx_lianqi } }
+				sxx_zhuji = { prev = { add_trait_no_notify = leader_trait_sxx_zhuji } } 
+				sxx_jindan = { prev = { add_trait_no_notify = leader_trait_sxx_jindan } } 
+				sxx_yuanying = { prev = { add_trait_no_notify = leader_trait_sxx_yuanying } } 
+				sxx_huashen = { prev = { add_trait_no_notify = leader_trait_sxx_huashen } } 
+				sxx_lianxu = { prev = { add_trait_no_notify = leader_trait_sxx_lianxu } } 
+				sxx_heti = { prev = { add_trait_no_notify = leader_trait_sxx_heti } } 
+				sxx_dacheng = { prev = { add_trait_no_notify = leader_trait_sxx_dacheng } } 
+				xx_dujie = { prev = { add_trait_no_notify = leader_trait_sxx_dujie } } 
+				sxx_zhenxian = { prev = { add_trait_no_notify = leader_trait_sxx_zhenxian } } 
+				sxx_xianwang = { prev = { add_trait_no_notify = leader_trait_sxx_xianwang } } 
+				sxx_xiandi = { prev = { add_trait_no_notify = leader_trait_sxx_xiandi } } 
+			}
+			add_modifier = { modifier = sxx_leader_pop_modifier }
+			set_pop_flag = sxx_leader_pop_of@prev
+		}
+	}
+}
+ai_chance = {
+	modifier = {
+		factor = 10
+		exists = event_target:sxx_ai_leader
+		event_target:sxx_ai_leader = {
+			leader_class = $CLASS$
+		}
+	}
+}
