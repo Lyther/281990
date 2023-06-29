@@ -88,6 +88,46 @@ fleet_event = {
 	}
 }
 
+# 吃第一个领袖
+ship_event = {
+	id = akx.9001
+	title = akx.9001.name
+	desc = akx.9001.desc
+	picture = GFX_evt_black_hole
+	show_sound = event_radio_chatter
+	location = this
+
+	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:horizonsignal_firstleader
+	}
+
+	immediate = {
+		leader = {
+			save_event_target_as = horizonsignal_firstleader
+		}
+	}
+
+	option = {
+		name = akx.9001.a
+		begin_event_chain = {
+			event_chain = WORM_CHAIN_1
+			target = root.owner
+		}
+		hidden_effect = {
+			ship_event = { id = akx.9005 }
+		}
+	}
+
+	option = {
+		name = akx.9001.b
+		custom_tooltip = akx.9001.b.tooltip
+		hidden_effect = { ship_event = { id = akx.9006 } }
+	}
+}
+
 # 吃第二个领袖（不吃统治者、继承人、事件领袖、传奇领袖、格式塔节点）
 country_event = {
 	id = akx.9010
@@ -98,6 +138,11 @@ country_event = {
 	location = event_target:horizonsignal_system
 
 	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:horizonsignal_secondleader
+	}
 
 	trigger = {
 		any_owned_leader = {
@@ -265,6 +310,11 @@ country_event = {
 	location = event_target:horizonsignal_black_hole
 
 	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:horizonsignal_thirdleader
+	}
 
 	immediate = {
 		random_owned_leader = {
@@ -833,6 +883,11 @@ fleet_event = {
 	location = root
 
 	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:mirrored_syzygy_admiral
+	}
 
 	trigger = {
 		owner = {
@@ -1681,12 +1736,12 @@ planet_event = {
 			}
 			if = {
 				limit = {
-					is_time_black_hole_star_class = no
+					is_time_black_hole_or_white_hole_star_class = no
 				}
 				every_system_planet = {
 					limit = {
 						is_star = yes
-						is_time_black_hole_planet_class = no
+						is_time_black_hole_or_white_hole_planet_class = no
 					}
 					change_pc = pc_black_hole
 				}

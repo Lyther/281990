@@ -1,0 +1,514 @@
+
+### Сюжет Талисмана
+
+# Прежний сюжет разделен на сообщения в начале и три инцидента/ситуации: для гештальта, для варианта со спонсируемой государственной лабораторией, и для частной лаборатории
+
+
+
+
+### ГОС ЛАБОРАТОРИЯ
+
+
+	# Progress
+	# 0	  50     100    150    170    200
+	# |____|______|______|______|______|
+	#103  104    105    106    107   108(end)
+
+apsr24_situation_talisman_government = {
+	picture = GFX_evt_apsr24_choosen_leader
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	
+	on_start = {
+		set_situation_locked = yes
+	}
+	
+	# завершение ситуации - выбор лидера 
+	on_progress_complete = {
+		custom_tooltip = apsr24_situation_talisman_government_finish_tooltip
+		hidden_effect = {
+			situation_event = { id = apsr.24108 }
+		}
+	}
+	
+	# сброс ситуации - если планета не принадлежит игроку
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+
+	# стартовое значение
+	start_value = 0
+	# прогресс в месяц
+	monthly_progress = {
+		# ничего не делать
+		base = 1
+		# помощь
+		modifier = {
+			add = 1
+			desc = apsr24_situation_talisman_government_sponsor
+			current_situation_approach = apsr24_situation_talisman_government_sponsor
+		}
+	}
+
+	# Этапы
+	stages = {
+		apsr24_situation_talisman_government_stage1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 50
+		}
+		
+		apsr24_situation_talisman_government_stage2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				situation_event = { id = apsr.24104 }
+			}
+		}
+		
+		apsr24_situation_talisman_government_stage3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 150
+			on_first_enter = {
+				situation_event = { id = apsr.24105 }
+			}
+		}
+		
+		apsr24_situation_talisman_government_stage4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 170
+			on_first_enter = {
+				situation_event = { id = apsr.24106 }
+			}
+		}
+		
+		apsr24_situation_talisman_government_stage5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			end = 200
+			on_first_enter = {
+				situation_event = { id = apsr.24107 }
+			}
+		}
+	}
+
+
+	# варианты влияния
+	# ничего не делать
+	approach = {
+		name = apsr24_situation_talisman_government_do_nothing
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		allow = {
+			custom_tooltip = apsr24_situation_talisman_government_approach_allow_tooltip
+			hidden_trigger = {
+				NOT = {
+					has_situation_flag = apsr24_situation_talisman_2
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = apsr24_situation_talisman_government_do_nothing_tooltip
+			set_situation_flag = apsr24_situation_talisman_1
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 60
+				influence = 1
+			}
+		}
+		ai_weight = {
+			base = 5
+		}
+	}
+	# помогать
+	approach = {
+		name = apsr24_situation_talisman_government_sponsor
+		icon = GFX_situation_approach_handshake
+		icon_background = GFX_situation_approach_bg_green
+		allow = {
+			custom_tooltip = apsr24_situation_talisman_government_approach_allow_tooltip
+			hidden_trigger = {
+				NOT = {
+					has_situation_flag = apsr24_situation_talisman_1
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = apsr24_situation_talisman_government_sponsor_tooltip
+			set_situation_flag = apsr24_situation_talisman_2
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 100
+				consumer_goods = 30
+				influence = 2
+			}
+		}
+		ai_weight = {
+			base = 3
+			modifier = {
+				factor = 3
+				owner = {
+					AND = {
+						has_monthly_income = { resource = energy value >= 100 }
+						has_monthly_income = { resource = consumer_goods value >= 30 }
+						has_monthly_income = { resource = influence value >= 2 }
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					AND = {
+						has_monthly_income = { resource = energy value >= 200 }
+						has_monthly_income = { resource = consumer_goods value >= 50 }
+						has_monthly_income = { resource = influence value >= 3 }
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+### ЧАСТНАЯ ЛАБОРАТОРИЯ
+
+
+	# Progress
+	# 0	  50     100    150    170    190    250    300
+	# |____|______|______|______|______|______|______|
+	#110  111    112    113    xxx    115    xxx    end
+
+apsr24_situation_talisman_private = {
+	picture = GFX_evt_apsr24_choosen_leader
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	
+	on_start = {
+		set_situation_locked = yes
+	}
+	
+	# завершение ситуации - результат решений игрока
+	on_progress_complete = {
+		custom_tooltip = apsr24_situation_talisman_private_finish_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_situation_flag = apsr24_situation_119 }
+				situation_event = { id = apsr.24119 }
+			}
+			else_if = {
+				limit = { has_situation_flag = apsr24_situation_122 }
+				situation_event = { id = apsr.24122 }
+			}
+			else_if = {
+				limit = { has_situation_flag = apsr24_situation_125 }
+				situation_event = { id = apsr.24125 }
+			}
+			else_if = {
+				limit = { has_situation_flag = apsr24_situation_134 }
+				situation_event = { id = apsr.24134 }
+			}
+			else_if = {
+				limit = { has_situation_flag = apsr24_situation_141 }
+				situation_event = { id = apsr.24141 }
+			}
+			else = {
+				situation_event = { id = apsr.24108 }
+			}
+		}
+	}
+	
+	# сброс ситуации - если планета не принадлежит игроку
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+
+	# стартовое значение
+	start_value = 0
+	# прогресс в месяц
+	monthly_progress = {
+		base = 1
+	}
+
+	# Этапы
+	stages = {
+		apsr24_situation_talisman_private_stage1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 50
+		}
+		
+		apsr24_situation_talisman_private_stage2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				situation_event = { id = apsr.24111 }
+			}
+		}
+		
+		apsr24_situation_talisman_private_stage3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 150
+			on_first_enter = {
+				situation_event = { id = apsr.24112 }
+			}
+		}
+		
+		apsr24_situation_talisman_private_stage4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 170
+			on_first_enter = {
+				situation_event = { id = apsr.24113 }
+			}
+		}
+		
+		apsr24_situation_talisman_private_stage5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			end = 190
+			on_first_enter = {
+				if = {
+					limit = { has_situation_flag = apsr24_situation_159 }
+					situation_event = { id = apsr.24159 }
+				}
+				else = {
+					situation_event = { id = apsr.24114 }
+				}
+			}
+		}
+		
+		apsr24_situation_talisman_private_stage6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_blue
+			end = 250
+			on_first_enter = {
+				situation_event = { id = apsr.24115 }
+			}
+		}
+		
+		apsr24_situation_talisman_private_stage7 = {
+			icon = GFX_situation_stage_7
+			icon_background = GFX_situation_stage_frame_blue
+			end = 300
+			on_first_enter = {
+				situation_event = { id = apsr.24116 }
+			}
+		}
+	}
+
+
+	# варианов влияния нет
+	approach = {
+		name = apsr24_situation_talisman_private_do_nothing
+		icon = GFX_situation_approach_balance_sheet
+		icon_background = GFX_situation_approach_bg_yellow
+		default = yes
+		on_select = {
+			custom_tooltip = apsr24_situation_talisman_private_do_nothing_tooltip
+		}
+		ai_weight = {
+			base = 1
+		}
+	}
+}
+
+
+
+
+### ГЕШТАЛЬТ
+
+
+	# Progress
+	# 0	   50    100    150    175    200    210
+	# |____|______|______|______|______|______|
+	#164  165    166    167    168    169    end
+
+apsr24_situation_talisman_gestalt = {
+	picture = GFX_evt_apsr24_detonator #GFX_evt_apsr24_choosen_leader
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	
+	on_start = {
+		set_situation_locked = yes
+	}
+	
+	# завершение ситуации - выбор бафа
+	on_progress_complete = {
+		custom_tooltip = apsr24_situation_talisman_gestalt_finish_tooltip
+		hidden_effect = {
+			if = {
+				limit = { has_situation_flag = apsr24_situation_buff10 }
+				situation_event = { id = apsr.24170 }
+			}
+			else_if = {
+				limit = { has_situation_flag = apsr24_situation_buff5 }
+				situation_event = { id = apsr.24171 }
+			}
+			else = {
+				situation_event = { id = apsr.24172 }
+			}
+		}
+	}
+	
+	# сброс ситуации - если планета не принадлежит игроку
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+
+	# стартовое значение
+	start_value = 0
+	# прогресс в месяц
+	monthly_progress = {
+		# ничего не делать
+		base = 1
+		# помощь
+		modifier = {
+			add = 1
+			desc = apsr24_situation_talisman_gestalt_sponsor
+			current_situation_approach = apsr24_situation_talisman_gestalt_sponsor
+		}
+	}
+
+	# Этапы
+	stages = {
+		apsr24_situation_talisman_gestalt_stage1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 50
+		}
+		
+		apsr24_situation_talisman_gestalt_stage2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 100
+			on_first_enter = {
+				situation_event = { id = apsr.24165 }
+			}
+		}
+		
+		apsr24_situation_talisman_gestalt_stage3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 150
+			on_first_enter = {
+				situation_event = { id = apsr.24166 }
+			}
+		}
+		
+		apsr24_situation_talisman_gestalt_stage4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 175
+			on_first_enter = {
+				situation_event = { id = apsr.24167 }
+			}
+		}
+		
+		apsr24_situation_talisman_gestalt_stage5 = {
+			icon = GFX_situation_stage_5
+			icon_background = GFX_situation_stage_frame_blue
+			end = 200
+			on_first_enter = {
+				situation_event = { id = apsr.24168 }
+			}
+		}
+		
+		apsr24_situation_talisman_gestalt_stage6 = {
+			icon = GFX_situation_stage_6
+			icon_background = GFX_situation_stage_frame_blue
+			end = 210
+			on_first_enter = {
+				situation_event = { id = apsr.24169 }
+			}
+		}
+	}
+
+
+	# варианты влияния
+	# ничего не делать
+	approach = {
+		name = apsr24_situation_talisman_gestalt_do_nothing
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		default = yes
+		allow = {
+			custom_tooltip = apsr24_situation_talisman_gestalt_approach_allow_tooltip
+			hidden_trigger = {
+				NOT = {
+					has_situation_flag = apsr24_situation_talisman_2
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = apsr24_situation_talisman_gestalt_do_nothing_tooltip
+			set_situation_flag = apsr24_situation_talisman_1
+		}
+		ai_weight = {
+			base = 5
+		}
+	}
+	# помогать
+	approach = {
+		name = apsr24_situation_talisman_gestalt_sponsor
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_yellow
+		allow = {
+			custom_tooltip = apsr24_situation_talisman_gestalt_approach_allow_tooltip
+			hidden_trigger = {
+				NOT = {
+					has_situation_flag = apsr24_situation_talisman_1
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = apsr24_situation_talisman_gestalt_sponsor_tooltip
+			set_situation_flag = apsr24_situation_talisman_2
+		}
+		resources = {
+			category = situations
+			upkeep = {
+				energy = 50
+			}
+		}
+		ai_weight = {
+			base = 3
+			modifier = {
+				factor = 3
+				owner = {
+					AND = {
+						has_monthly_income = { resource = energy value >= 60 }
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					AND = {
+						has_monthly_income = { resource = energy value >= 150 }
+					}
+				}
+			}
+		}
+	}
+}

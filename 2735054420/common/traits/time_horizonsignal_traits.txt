@@ -1144,49 +1144,237 @@ leader_trait_pass_black_hole = {
 		TIER = none
 		PRIORITY = @trait_sorting_priority_veteran_no_none
 	}
-	triggered_self_modifier = {
+	# 拓荒先锋
+	triggered_modifier = {
 		potential = {
 			leader_class = governor
+			OR = {
+				has_trait = subclass_governor_pioneer
+				is_dimension_traveler = yes
+			}
 		}
-		leader_governors_physics_research_produces_add = 6.66
-		leader_governors_society_research_produces_add = 6.66
-		leader_governors_engineering_research_produces_add = 6.66
-		leader_governors_sr_dark_matter_produces_add = 0.66
-		mult = trigger:has_skill
+		pop_growth_speed = 0.66
+		planet_pop_assembly_organic_mult = 0.66
+		planet_pop_assembly_mult = 0.66
 	}
-	triggered_self_modifier = {
+	# 实干家
+	triggered_modifier = {
+		potential = {
+			leader_class = governor
+			OR = {
+				has_trait = subclass_governor_economist
+				is_dimension_traveler = yes
+			}
+		}
+		planet_jobs_produces_mult = 0.66
+		planet_amenities_mult = 0.66
+		planet_building_build_speed_mult = 0.66
+	}
+	# 探索者
+	triggered_modifier = {
 		potential = {
 			leader_class = scientist
+			OR = {
+				has_trait = subclass_scientist_explorer
+				is_dimension_traveler = yes
+			}
 		}
-		leader_scientists_physics_research_produces_add = 6.66
-		leader_scientists_society_research_produces_add = 6.66
-		leader_scientists_engineering_research_produces_add = 6.66
-		leader_scientists_sr_dark_matter_produces_add = 0.66
-		mult = trigger:has_skill
+		science_ship_survey_speed = 0.66
+		ship_anomaly_research_speed_mult = 0.66
+		ship_archaeological_site_excavation_speed_mult = 0.66
 	}
-	triggered_self_modifier = {
+	# 分析者受限于蠢驴代码，必须拆分
+	
+	# 进攻者
+	triggered_modifier = {
 		potential = {
 			leader_class = admiral
+			OR = {
+				has_trait = subclass_admiral_aggressor
+				is_dimension_traveler = yes
+			}
 		}
-		leader_admirals_physics_research_produces_add = 6.66
-		leader_admirals_society_research_produces_add = 6.66
-		leader_admirals_engineering_research_produces_add = 6.66
-		leader_admirals_sr_dark_matter_produces_add = 0.66
-		mult = trigger:has_skill
+		ship_weapon_damage = 0.66
+		ship_fire_rate_mult = 0.66
+		ship_weapon_range_mult = 0.66
+	}
+	# 战术家
+	triggered_modifier = {
+		potential = {
+			leader_class = admiral
+			OR = {
+				has_trait = subclass_admiral_tactician
+				is_dimension_traveler = yes
+			}
+		}
+		ship_hull_regen_add_perc = 0.66
+		ship_armor_regen_add_perc = 0.66
+		ship_shield_regen_add_perc = 0.66
+	}
+	# 入侵者
+	triggered_modifier = {
+		potential = {
+			leader_class = general
+			has_trait = subclass_general_invader
+		}
+		army_damage_mult = 0.66
+		army_morale_damage_mult = 0.66
 	}
 	triggered_self_modifier = {
 		potential = {
 			leader_class = general
+			has_trait = subclass_general_invader
 		}
-		leader_generals_physics_research_produces_add = 6.66
-		leader_generals_society_research_produces_add = 6.66
-		leader_generals_engineering_research_produces_add = 6.66
-		leader_generals_sr_dark_matter_produces_add = 0.66
-		mult = trigger:has_skill
+		planet_combat_width_add = 6
+	}
+	# 保护者
+	triggered_modifier = {
+		potential = {
+			leader_class = general
+			has_trait = subclass_general_protector
+		}
+		army_health = 0.66
+		army_morale = 0.66
+	}
+	triggered_self_modifier = {
+		potential = {
+			leader_class = general
+			has_trait = subclass_general_protector
+		}
+		planet_combat_width_add = -6
+	}
+	# 陆军将领（界旅者）
+	triggered_modifier = {
+		potential = {
+			leader_class = general
+			is_dimension_traveler = yes
+		}
+		army_damage_mult = 0.66
+		army_morale_damage_mult = 0.66
+		army_health = 0.66
+		army_morale = 0.66
+		army_collateral_damage_mult = -0.66
+	}
+	triggered_self_modifier = {
+		potential = {
+			leader_class = general
+			is_dimension_traveler = yes
+		}
+		planet_combat_width_add = 6
+	}
+	# 通用
+	self_modifier = {
+		species_leader_exp_gain = 0.66
+		leaders_upkeep_mult = 0.66
+		negative_traits_leader = 6
+	}
+	leader_class = { admiral scientist general governor }
+	initial = no
+	randomized = no
+}
+
+leader_trait_pass_black_hole_analyst = {
+	immortal_leaders = yes
+	inline_script = {
+		script = trait/time_trait_icon
+		CLASS = leader
+		ICON = "GFX_leader_trait_pass_black_hole"
+		RARITY = veteran
+		COUNCIL = no
+		TIER = none
+		PRIORITY = @trait_sorting_priority_veteran_no_none
+	}
+	# 探索者（界旅者）
+	triggered_modifier = {
+		potential = {
+			is_dimension_traveler = yes
+		}
+		science_ship_survey_speed = 0.66
+		ship_anomaly_research_speed_mult = 0.66
+		ship_archaeological_site_excavation_speed_mult = 0.66
+	}
+	# 分析者
+	assist_research_planet_modifier = {
+		planet_housing_mult = 0.66
+		planet_decision_enact_speed_mult = 0.66
 	}
 	self_modifier = {
-		species_leader_exp_gain = 6.66
+		assist_research_mult = 0.66
+		species_leader_exp_gain = 0.66
 		leaders_upkeep_mult = 0.66
+		negative_traits_leader = 6
+	}
+	leader_class = { scientist }
+	initial = no
+	randomized = no
+}
+
+leader_trait_pass_black_hole_councilor = {
+	immortal_leaders = yes
+	councilor_trait = yes
+	inline_script = {
+		script = trait/time_trait_icon
+		CLASS = leader
+		ICON = "GFX_leader_trait_pass_black_hole"
+		RARITY = veteran
+		COUNCIL = yes
+		TIER = none
+		PRIORITY = @trait_sorting_priority_veteran_yes_none
+	}
+	# 统治者
+	triggered_modifier = {
+		potential = {
+			is_ruler = yes
+		}
+		councilor_skill_add = 6
+		country_leader_cap_add = 6
+		leader_trait_selection_options_add = 6
+	}
+	# 远见卓识
+	triggered_modifier = {
+		potential = {
+			leader_class = governor
+			has_trait = subclass_governor_visionary
+		}
+		council_agenda_progress_speed = 0.66
+		council_agenda_finishing_effect_duration_mult = 0.66
+		trade_value_mult = 0.66
+	}
+	# 研究者
+	triggered_modifier = {
+		potential = {
+			leader_class = scientist
+			has_trait = subclass_scientist_researcher
+		}
+		country_physics_tech_research_speed = 0.66
+		country_society_tech_research_speed = 0.66
+		country_engineering_tech_research_speed = 0.66
+	}
+	# 战略家
+	triggered_modifier = {
+		potential = {
+			leader_class = admiral
+			has_trait = subclass_admiral_strategist
+		}
+		shipclass_military_build_speed_mult = 0.66
+		ship_experience_gain_mult = 0.66
+		ship_disengage_chance_mult = 0.66
+	}
+	# 大元帅
+	triggered_modifier = {
+		potential = {
+			leader_class = general
+			has_trait = subclass_general_marshall
+		}
+		planet_army_build_speed_mult = 0.66
+		army_experience_gain_mult = 0.66
+		army_disengage_chance_mult = 0.66
+	}
+	# 通用
+	self_modifier = {
+		species_leader_exp_gain = 0.66
+		leaders_upkeep_mult = 0.66
+		negative_traits_leader = 6
 	}
 	leader_class = { admiral scientist general governor }
 	initial = no

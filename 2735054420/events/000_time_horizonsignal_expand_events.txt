@@ -12,10 +12,10 @@ country_event = {
 	immediate = {
 		country_event = { id = time_akx.1 days = 360 random = 720 }
 		random_list = {
-			5 = {
+			50 = {
 				#无事发生
 			}
-			1 = {
+			10 = {
 				modifier = {
 					factor = 0
 					NOR = {
@@ -47,7 +47,7 @@ country_event = {
 				}
 				country_event = { id = time_akx.2 } # 时螶之界拓展
 			}
-			1 = {
+			10 = {
 				modifier = {
 					factor = 0
 					NOT = { has_country_flag = akx_messenger_end }
@@ -66,7 +66,7 @@ country_event = {
 				}
 				country_event = { id = time_akx.3 } # 信使拓展
 			}
-			1 = {
+			10 = {
 				modifier = {
 					factor = 0
 					NOR = {
@@ -90,7 +90,7 @@ country_event = {
 				}
 				country_event = { id = time_akx.4 } # 命中相会拓展
 			}
-			1 = {
+			10 = {
 				modifier = {
 					factor = 0
 					NOR = {
@@ -112,7 +112,7 @@ country_event = {
 				}
 				country_event = { id = time_akx.5 } # 神之圆环拓展
 			}
-			1 = {
+			10 = {
 				modifier = {
 					factor = 0
 					NOT = {
@@ -2852,6 +2852,7 @@ country_event = {
 						is_asteroid = no
 						is_artificial = no
 						is_colonizable = no
+						NOT = { is_planet_class = pc_gas_giant }
 					}
 					save_global_event_target_as = new_coils_planet
 					change_pc = pc_nuked
@@ -3293,8 +3294,19 @@ ship_event = {
 	}
 	
 	immediate = {
+		leader = {
+			add_experience = 200
+		}
 		owner = {
 			country_event = { id = time_akx.402 days = 360 random = 720 }
+		}
+	}
+	
+	after = {
+		tooltip = {
+			leader = {
+				add_experience = 200
+			}
 		}
 	}
 	
@@ -3419,8 +3431,19 @@ ship_event = {
 	}
 	
 	immediate = {
+		leader = {
+			add_experience = 400
+		}
 		owner = {
 			country_event = { id = time_akx.404 days = 360 random = 720 }
+		}
+	}
+	
+	after = {
+		tooltip = {
+			leader = {
+				add_experience = 400
+			}
 		}
 	}
 	
@@ -3605,15 +3628,36 @@ ship_event = {
 				}
 			}
 		}
+		leader = {
+			add_experience = 600
+		}
 	}
 	
 	after = {
+		tooltip = {
+			leader = {
+				add_experience = 600
+			}
+		}
 		hidden_effect = {
-			owner = {
-				if = {
-					limit = {
+			if = {
+				limit = {
+					leader = {
+						is_dimension_traveler = yes
+					}
+				}
+				owner = {
+					set_country_flag = dimension_traveler_research_brief
+					country_event = { id = time_akx.406 days = 1 }
+				}
+			}
+			else_if = {
+				limit = {
+					owner = {
 						is_same_value = event_target:dimension_traveler_owner
 					}
+				}
+				owner = {
 					country_event = { id = time_akx.406 days = 5 }
 				}
 			}
@@ -3736,9 +3780,23 @@ country_event = {
 	
 	immediate = {
 		set_dimension_traveler_event_portrait = yes
-		set_country_flag = dimension_traveler_trait_brief
-		event_target:dimension_traveler_leader = {
-			add_trait = leader_trait_dimension_traveler_brief
+		if = {
+			limit = {
+				has_country_flag = dimension_traveler_research_brief
+			}
+			set_country_flag = dimension_traveler_trait_brief
+		}
+	}
+	
+	after = {
+		if = {
+			limit = {
+				has_country_flag = dimension_traveler_research_brief
+				exists = event_target:dimension_traveler_leader
+			}
+			event_target:dimension_traveler_leader = {
+				add_trait = leader_trait_dimension_traveler_brief
+			}
 		}
 	}
 

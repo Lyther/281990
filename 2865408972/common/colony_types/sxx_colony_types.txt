@@ -65,6 +65,7 @@ col_sxx_heaven = {
 	}
 }
 
+############################### 灵石 ##################################
 col_sxx_stones = {
 	icon = GFX_colony_type_sxx_stones
 
@@ -77,6 +78,7 @@ col_sxx_stones = {
 			uses_district_set = habitat
 		}
 		is_special_colony_type = no
+		is_capital = no
 	}
 
 	planet_modifier = {
@@ -137,6 +139,7 @@ col_ring_sxx_stones = {
 		exists = owner
 		owner = { is_sxx_sect = yes }
 		uses_district_set = ring_world
+		is_capital = no
 	}
 
 	planet_modifier = {
@@ -194,6 +197,7 @@ col_ecu_sxx_stones = {
 		exists = owner
 		owner = { is_sxx_sect = yes }
 		uses_district_set = city_world
+		is_capital = no
 	}
 
 	planet_modifier = {
@@ -248,6 +252,7 @@ col_habitat_sxx_stones = {
 		exists = owner
 		owner = { is_sxx_sect = yes }
 		uses_district_set = habitat
+		is_capital = no
 	}
 
 	planet_modifier = {
@@ -295,6 +300,8 @@ col_habitat_sxx_stones = {
 	}
 }
 
+############################## 灵药 #################################
+
 col_sxx_lingyao = {
 	icon = GFX_colony_type_farm
 
@@ -304,6 +311,7 @@ col_sxx_lingyao = {
 		uses_district_set = standard
 		is_planet_class = pc_sxx_blessed_spot
 		is_special_colony_type = no
+		is_capital = no
 	}
 
 	planet_modifier = {
@@ -334,6 +342,7 @@ col_ring_sxx_lingyao = {
 		exists = owner
 		owner = { is_sxx_sect = yes }
 		uses_district_set = ring_world
+		is_capital = no
 	}
 
 	planet_modifier = {
@@ -367,6 +376,7 @@ col_habitat_sxx_lingyao = {
 		owner = { is_sxx_sect = yes }
 		uses_district_set = habitat
 		has_modifier = sxx_tiangong
+		is_capital = no
 	}
 
 	planet_modifier = {
@@ -387,5 +397,167 @@ col_habitat_sxx_lingyao = {
 			mode = add
 			mult = 3
 		}
+	}
+}
+
+################################# 悟道 ###################################
+
+col_sxx_gongfa = {
+	icon = GFX_colony_type_sxx_gongfa
+
+	potential = {
+		exists = owner
+		owner = { is_sxx_sect = yes }
+		is_special_colony_type = no
+		is_capital = no
+	}
+
+	planet_modifier = {
+		pop_category_sxx_xiuxianzhe_sxx_gongfa_produces_mult = 0.1
+	}
+
+	weight_modifier = {
+		modifier = {
+			add = @stickiness
+			has_designation = col_sxx_gongfa
+		}
+		modifier = {
+			add = 5
+			is_sxx_lianqi_planet = yes
+		}
+	}
+}
+
+########### 首都 ############
+
+col_capital_sxx_stones = {
+	icon = GFX_colony_type_capital_sxx_stones
+
+	potential = {
+		is_capital = yes
+
+		exists = owner
+		owner = {
+			AND = {
+				is_country_type = default
+				is_gestalt = no
+				is_sxx_sect = yes
+				OR = {
+					is_ai = no
+					AND = {
+						years_passed > 25
+						num_owned_planets >= 5
+					}
+				}
+			}
+		}
+	}
+
+	planet_modifier = {
+		planet_stability_add = 5
+		planet_amenities_add = 10
+		pop_government_ethic_attraction = 1
+		planet_resettlement_unemployed_destination_mult = 0.1
+		planet_sxx_stones_makers_produces_mult = 0.15
+		planet_sxx_stones_miners_sxx_stones_produces_mult = 0.15
+		planet_sxx_secular_stones_miners_sxx_stones_produces_mult = 0.15
+	}
+
+	triggered_planet_modifier = {
+		potential = { uses_district_set = ring_world }
+		pop_growth_speed = 0.1
+		planet_pop_assembly_mult = 0.1
+		planet_pop_assembly_organic_mult = 0.1
+	}
+
+	weight_modifier = {
+		base = 0
+	}
+}
+
+col_capital_sxx_gongfa = {
+	icon = GFX_colony_type_capital_sxx_gongfa
+
+	potential = {
+		is_capital = yes
+
+		exists = owner
+		owner = {
+			AND = {
+				is_country_type = default
+				is_gestalt = no
+				is_sxx_sect = yes
+				OR = {
+					is_ai = no
+					AND = {
+						years_passed > 25
+						num_owned_planets >= 5
+					}
+				}
+			}
+		}
+	}
+
+	planet_modifier = {
+		planet_stability_add = 5
+		planet_amenities_add = 10
+		pop_government_ethic_attraction = 1
+		planet_resettlement_unemployed_destination_mult = 0.1
+		pop_category_sxx_xiuxianzhe_sxx_gongfa_produces_mult = 0.15
+	}
+
+	triggered_planet_modifier = {
+		potential = { uses_district_set = ring_world }
+		pop_growth_speed = 0.1
+		planet_pop_assembly_mult = 0.1
+		planet_pop_assembly_organic_mult = 0.1
+	}
+
+	weight_modifier = {
+		base = 0
+	}
+}
+
+col_capital_sxx_lingyao = { # 废弃
+	icon = GFX_colony_type_capital_sxx_lingyao
+
+	potential = {
+		always = no # 废弃
+		is_capital = yes
+
+		exists = owner
+		owner = {
+			AND = {
+				is_country_type = default
+				is_gestalt = no
+				is_sxx_sect = yes
+				OR = {
+					is_ai = no
+					AND = {
+						years_passed > 25
+						num_owned_planets >= 5
+					}
+				}
+			}
+		}
+	}
+
+	planet_modifier = {
+		planet_stability_add = 5
+		planet_amenities_add = 10
+		pop_government_ethic_attraction = 1
+		planet_resettlement_unemployed_destination_mult = 0.1
+		planet_sxx_farmer_disciples_produces_mult = 0.15
+	}
+
+	triggered_planet_modifier = {
+		potential = { uses_district_set = ring_world }
+		pop_growth_speed = 0.1
+		planet_pop_assembly_mult = 0.1
+		planet_pop_assembly_organic_mult = 0.1
+	}
+
+	weight_modifier = {
+		base = 0
 	}
 }

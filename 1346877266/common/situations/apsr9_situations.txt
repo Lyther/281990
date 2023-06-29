@@ -1,0 +1,312 @@
+
+### Сюжет изучения Этерния
+
+# Начинается при постройке Белой Мезы
+
+	# Progress
+	# 0	     250      600     1000    1500
+	# |_______|________|________|_______|
+	#      первый   второй   третий   финал       
+
+apsr9_situation_eternium = {
+	picture = GFX_evt_apsr9_mesa
+	complete_icon_frame = GFX_situation_outcome_frame_blue
+	complete_icon = GFX_situation_outcome_unknown
+	
+	on_start = {
+		set_situation_locked = yes
+	}
+	
+	# завершение ситуации - все удачно
+	on_progress_complete = {
+		custom_tooltip = apsr9_situation_eternium_finish_tooltip
+		hidden_effect = {
+			situation_event = { id = apsr.9005 }
+		}
+	}
+	
+	# сброс ситуации - если планета не принадлежит игроку - сброс флагов
+	on_abort = {
+		root.owner = {
+			remove_country_flag = apsr9001_check
+			clear_variable = apsr9_reward_count
+		}
+	}
+	abort_trigger = {
+		OR = {
+			NOT = { exists = target.owner }
+			target.owner = { NOT = { is_same_value = root.owner } }
+		}
+	}
+
+	# стартовое значение
+	start_value = 0
+	# прогресс в месяц
+	monthly_progress = {
+		# ничего не делать
+		base = 1
+		# если есть мегапроектирование, то +1
+		modifier = {
+			add = 1
+			desc = apsr9_approach_eternium_mega
+			owner = {
+				has_technology = tech_mega_engineering
+			}
+		}
+		# если идет эндгейм, то +1
+		modifier = {
+			add = 1
+			desc = apsr9_approach_eternium_endgame
+			end_game_years_passed >= 0
+		}
+		# ускорение если уже проводил исследования
+		modifier = {
+			add = 10
+			desc = apsr9_approach_eternium_repeat
+			OR = {
+				AND = {
+					owner = {
+						has_technology = tech_apsr9_upgrade_1
+					}
+					current_stage = apsr9_eternium_stage1
+				}
+				AND = {
+					owner = {
+						has_technology = tech_apsr9_upgrade_2
+					}
+					current_stage = apsr9_eternium_stage2
+				}
+				AND = {
+					owner = {
+						has_technology = tech_apsr9_upgrade_3
+					}
+					current_stage = apsr9_eternium_stage3
+				}
+			}
+		}
+		# если помогает, то скорость +50%
+		modifier = {
+			mult = 1.5
+			desc = apsr9_approach_eternium_sponsor
+			current_situation_approach = apsr9_approach_eternium_sponsor
+		}
+		# если спонсирует, то скорость +100%
+		modifier = {
+			mult = 2
+			desc = apsr9_approach_eternium_good_sponsor
+			current_situation_approach = apsr9_approach_eternium_good_sponsor
+		}
+	}
+
+	# Этапы
+	stages = {
+		apsr9_eternium_stage1 = {
+			icon = GFX_situation_stage_1
+			icon_background = GFX_situation_stage_frame_blue
+			end = 250
+		}
+		
+		apsr9_eternium_stage2 = {
+			icon = GFX_situation_stage_2
+			icon_background = GFX_situation_stage_frame_blue
+			end = 600
+			on_first_enter = {
+				if = {
+					limit = { NOT = { has_situation_flag = apsr9_boom } }
+					situation_event = { id = apsr.9002 }
+				}
+				else = {
+					situation_event = { id = apsr.9301 }
+				}
+			}
+		}
+
+		apsr9_eternium_stage3 = {
+			icon = GFX_situation_stage_3
+			icon_background = GFX_situation_stage_frame_blue
+			end = 1000
+			on_first_enter = {
+				if = {
+					limit = { NOT = { has_situation_flag = apsr9_boom } }
+					situation_event = { id = apsr.9003 }
+				}
+				else = {
+					situation_event = { id = apsr.9301 }
+				}
+			}
+		}
+
+		apsr9_eternium_stage4 = {
+			icon = GFX_situation_stage_4
+			icon_background = GFX_situation_stage_frame_blue
+			end = 1500
+			on_first_enter = {
+				if = {
+					limit = { NOT = { has_situation_flag = apsr9_boom } }
+					situation_event = { id = apsr.9004 }
+				}
+				else = {
+					situation_event = { id = apsr.9301 }
+				}
+			}
+		}
+	}
+
+
+	# варианты влияния
+	# ничего не делать
+	approach = {
+		name = apsr9_approach_eternium_do_nothing
+		icon = GFX_situation_approach_shrug
+		icon_background = GFX_situation_approach_bg_red
+		default = yes
+		allow = {
+			custom_tooltip = apsr9_approach_allow_tooltip
+			hidden_trigger = {
+				NOR = {
+					has_situation_flag = apsr9_approach_eternium_2
+					has_situation_flag = apsr9_approach_eternium_3
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = apsr9_approach_eternium_do_nothing_tooltip
+			set_situation_flag = apsr9_approach_eternium_1
+		}
+		ai_weight = {
+			base = 5
+		}
+	}
+	# помогать
+	approach = {
+		name = apsr9_approach_eternium_sponsor
+		icon = GFX_situation_approach_energy_credits
+		icon_background = GFX_situation_approach_bg_yellow
+		allow = {
+			custom_tooltip = apsr9_approach_allow_tooltip
+			hidden_trigger = {
+				NOR = {
+					has_situation_flag = apsr9_approach_eternium_1
+					has_situation_flag = apsr9_approach_eternium_3
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = apsr9_approach_eternium_sponsor_tooltip
+			set_situation_flag = apsr9_approach_eternium_2
+		}
+		resources = {
+			category = situations
+			# этап 1 - 5 энергии, 5 минералов
+			upkeep = {
+				trigger = {
+					current_stage = apsr9_eternium_stage1
+				}
+				energy = 5
+				minerals = 5
+			}
+			# этап 2 - 10 энергии, 10 минералов
+			upkeep = {
+				trigger = {
+					current_stage = apsr9_eternium_stage2
+				}
+				energy = 10
+				minerals = 10
+			}
+			# этап 3 - 20 энергии, 20 минералов
+			upkeep = {
+				trigger = {
+					current_stage = apsr9_eternium_stage3
+				}
+				energy = 20
+				minerals = 20
+			}
+			# этап 4 - 40 энергии, 40 минералов
+			upkeep = {
+				trigger = {
+					current_stage = apsr9_eternium_stage4
+				}
+				energy = 40
+				minerals = 40
+			}
+		}
+		ai_weight = {
+			base = 3
+			modifier = {
+				factor = 3
+				owner = {
+					AND = {
+						has_monthly_income = { resource = energy value >= 50 }
+						has_monthly_income = { resource = minerals value >= 50 }
+					}
+				}
+			}
+		}
+	}
+	# спонсировать
+	approach = {
+		name = apsr9_approach_eternium_good_sponsor
+		icon = GFX_situation_approach_handshake
+		icon_background = GFX_situation_approach_bg_green
+		allow = {
+			custom_tooltip = apsr9_approach_allow_tooltip
+			hidden_trigger = {
+				NOR = {
+					has_situation_flag = apsr9_approach_eternium_1
+					has_situation_flag = apsr9_approach_eternium_2
+				}
+			}
+		}
+		on_select = {
+			custom_tooltip = apsr9_approach_eternium_good_sponsor_tooltip
+			set_situation_flag = apsr9_approach_eternium_3
+		}
+		resources = {
+			category = situations
+			# этап 1 - 10 энергии, 10 минералов
+			upkeep = {
+				trigger = {
+					current_stage = apsr9_eternium_stage1
+				}
+				energy = 10
+				minerals = 10
+			}
+			# этап 2 - 25 энергии, 25 минералов
+			upkeep = {
+				trigger = {
+					current_stage = apsr9_eternium_stage2
+				}
+				energy = 25
+				minerals = 25
+			}
+			# этап 3 - 50 энергии, 50 минералов
+			upkeep = {
+				trigger = {
+					current_stage = apsr9_eternium_stage3
+				}
+				energy = 50
+				minerals = 50
+			}
+			# этап 4 - 100 энергии, 100 минералов
+			upkeep = {
+				trigger = {
+					current_stage = apsr9_eternium_stage4
+				}
+				energy = 100
+				minerals = 100
+			}
+		}
+		ai_weight = {
+			base = 2
+			modifier = {
+				factor = 7
+				owner = {
+					AND = {
+						has_monthly_income = { resource = energy value >= 100 }
+						has_monthly_income = { resource = minerals value >= 100 }
+					}
+				}
+			}
+		}
+	}
+}

@@ -411,7 +411,12 @@ check_dimension_traveler_trait = {
 	# 触碰虚境（2级）
 	check_dimension_traveler_generic_trait = { LEVEL = mind_wipe_02 }
 	# 来自深渊
-	check_dimension_traveler_generic_trait = { LEVEL = pass_black_hole }
+	if = {
+		limit = {
+			has_pass_black_hole = yes
+		}
+		owner = { set_country_flag = dimension_traveler_trait_pass_black_hole }
+	}
 	# 命中注定相会
 	check_dimension_traveler_generic_trait = { LEVEL = foredoomed_to_a_rendezvous }
 	# 屠龙者
@@ -445,6 +450,7 @@ check_dimension_traveler_trait = {
 	check_dimension_traveler_generic_trait = { LEVEL = leader_trait_gasbag_pet }
 	# 舰R模组
 	check_dimension_traveler_generic_trait = { LEVEL = wg_the_loop }
+	check_dimension_traveler_generic_trait = { LEVEL = wg_trait_heyed }
 }
 
 #领袖
@@ -653,7 +659,21 @@ give_dimension_traveler_trait = {
 	}
 	
 	give_dimension_traveler_generic_trait_without_class = { LEVEL = brief }
-	give_dimension_traveler_generic_trait_without_class = { LEVEL = pass_black_hole }
+	
+	if = {
+		limit = {
+			owner = { has_country_flag = dimension_traveler_trait_pass_black_hole }
+		}
+		if = {
+			limit = {
+				leader_class = scientist
+			}
+			add_trait_no_notify = leader_trait_pass_black_hole_analyst
+		}
+		else = {
+			add_trait_no_notify = leader_trait_pass_black_hole
+		}
+	}
 	
 	# 若不写FLAG = xxx，则不判定flag
 	give_dimension_traveler_class_trait = {
@@ -711,6 +731,7 @@ give_dimension_traveler_trait = {
 	give_dimension_traveler_generic_trait_without_class_special = { LEVEL = leader_trait_gasbag_pet }
 	# 舰R模组
 	give_dimension_traveler_generic_trait_with_class = { LEVEL = wg_the_loop }
+	give_dimension_traveler_generic_trait_with_class = { LEVEL = wg_trait_heyed }
 }
 
 #领袖（无任何判定）（与职务有关）

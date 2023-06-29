@@ -84,6 +84,7 @@ is_tm_black_hole = {
 		is_planet_class = pc_time_replace
 		is_planet_class = pc_endless_time
 		is_planet_class = pc_time_white_hole
+		is_planet_class = pc_core_of_truth
 	}
 }
 
@@ -125,28 +126,57 @@ can_be_chosen_by_akx_worm = {
 	}
 }
 
-# 星系
+# 星系（黑洞）
 is_time_black_hole_star_class = {
 	OR = {
 		is_star_class = sc_black_hole
 		is_star_class = sc_endless_time
 		is_star_class = sc_time_core
 		is_star_class = sc_endless_time_core
-		is_star_class = sc_white_hole
-		is_star_class = sc_time_white_hole
 		is_star_class = sc_bright_pearl
 	}
 }
 
-# 星球
+# 星系（白洞）
+is_time_white_hole_star_class = {
+	OR = {
+		is_star_class = sc_white_hole
+		is_star_class = sc_time_white_hole
+	}
+}
+
+# 星系（黑洞或白洞）
+is_time_black_hole_or_white_hole_star_class = {
+	OR = {
+		is_time_black_hole_star_class = yes
+		is_time_white_hole_star_class = yes
+	}
+}
+
+# 星球（黑洞）
 is_time_black_hole_planet_class = {
 	OR = {
 		is_planet_class = pc_black_hole
 		is_planet_class = pc_time
+		is_planet_class = pc_time_replace
 		is_planet_class = pc_endless_time
 		is_planet_class = pc_core_of_truth
+	}
+}
+
+# 星球（白洞）
+is_time_white_hole_planet_class = {
+	OR = {
 		is_planet_class = pc_white_hole
 		is_planet_class = pc_time_white_hole
+	}
+}
+
+# 星球（黑洞或白洞）
+is_time_black_hole_or_white_hole_planet_class = {
+	OR = {
+		is_time_black_hole_planet_class = yes
+		is_time_white_hole_planet_class = yes
 	}
 }
 
@@ -218,11 +248,11 @@ is_dimension_traveler_ignored_ethic = {
 }
 
 # 国家
-dimension_traveler_is_by_owner_side = {
+dimension_traveler_is_by_our_side = {
 	NOT = { has_country_flag = dimension_traveler_returning }
 	OR = {
 		event_target:dimension_traveler_leader = {
-			is_owned_by = event_target:dimension_traveler_owner
+			is_owned_by = prev
 		}
 		NOR = {
 			has_country_flag = dimension_traveler_governor_active
@@ -230,6 +260,14 @@ dimension_traveler_is_by_owner_side = {
 			has_country_flag = dimension_traveler_admiral_active
 			has_country_flag = dimension_traveler_general_active
 		}
+	}
+}
+
+# 国家
+dimension_traveler_is_our_leader = {
+	exists = event_target:dimension_traveler_leader
+	event_target:dimension_traveler_leader = {
+		is_owned_by = prev
 	}
 }
 
@@ -259,5 +297,6 @@ dimension_traveler_diplomacy_is_engaged = {
 		dimension_traveler.130
 		dimension_traveler.1001
 		dimension_traveler.1002
+		time_akx.406
 	}
 }

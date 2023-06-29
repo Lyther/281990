@@ -223,9 +223,10 @@ leader_trait_sxx_zhanzhen = {
 		potential = {
 			always = yes
 		}
+		command_limit_mult = 0.1
 		ship_shield_add = 100
 		ship_shield_hardening_add = 0.1
-		command_limit_mult = 0.1
+		ship_shield_regen_add_perc = 0.01
 		ship_shield_damage_mult = 0.05
 		ship_armor_damage_mult = 0.05
 		ship_hull_damage_mult = 0.05
@@ -233,7 +234,7 @@ leader_trait_sxx_zhanzhen = {
 		mult = sxx_leader_state
 	}
 	modifier = {
-		ship_base_speed_mult = -0.5
+		ship_speed_mult = -0.5
 		ship_evasion_mult = -0.5
 	}
 	leader_potential_add = {
@@ -641,6 +642,10 @@ leader_trait_sxx_stones_mine = {
 	}
 	leader_potential_add = {
 		sxx_leader_can_get_xiuxian_leader_trait = yes
+		OR = {
+			has_trait = subclass_governor_pioneer
+			has_trait = subclass_governor_economist
+		}
 	}
 	leader_class = { governor }
 	selectable_weight = @sxx_subclass_trait_weight
@@ -667,7 +672,157 @@ leader_trait_sxx_stones_mine_2 = {
 	}
 	leader_potential_add = {
 		sxx_leader_can_get_xiuxian_leader_trait = yes
+		OR = {
+			has_trait = subclass_governor_pioneer
+			has_trait = subclass_governor_economist
+		}
 	}
 	leader_class = { governor }
 	selectable_weight = @sxx_subclass_trait_weight
+}
+
+leader_trait_sxx_stones_make = {
+	veteran_class_locked_trait = yes
+	inline_script = {
+		script = trait/icon
+		CLASS = governor
+		ICON = GFX_leader_trait_sxx_stones_make
+		RARITY = veteran
+		COUNCIL = no
+		TIER = 1
+	}
+	triggered_modifier = {
+		potential = {
+			always = yes
+		}
+		planet_sxx_stones_makers_produces_mult = 0.05
+		mult = sxx_leader_state
+	}
+	leader_potential_add = {
+		sxx_leader_can_get_xiuxian_leader_trait = yes
+		OR = {
+			has_trait = subclass_governor_pioneer
+			has_trait = subclass_governor_economist
+		}
+	}
+	leader_class = { governor }
+	selectable_weight = @sxx_subclass_trait_weight
+}
+
+leader_trait_sxx_stones_make_2 = {
+	veteran_class_locked_trait = yes
+	replace_traits = { "leader_trait_sxx_stones_make" }
+	inline_script = {
+		script = trait/icon
+		CLASS = governor
+		ICON = GFX_leader_trait_sxx_stones_make
+		RARITY = veteran
+		COUNCIL = no
+		TIER = 2
+	}
+	triggered_modifier = {
+		potential = {
+			always = yes
+		}
+		planet_sxx_stones_makers_produces_mult = 0.1
+		mult = sxx_leader_state
+	}
+	leader_potential_add = {
+		sxx_leader_can_get_xiuxian_leader_trait = yes
+		OR = {
+			has_trait = subclass_governor_pioneer
+			has_trait = subclass_governor_economist
+		}
+	}
+	leader_class = { governor }
+	selectable_weight = @sxx_subclass_trait_weight
+}
+
+############################# 事件特质 ###############################
+
+leader_trait_sxx_qusi = {
+	cost = 0
+	councilor_trait = yes
+	inline_script = {
+		script = trait/icon
+		CLASS = leader
+		ICON = GFX_leader_trait_sxx_qusi
+		RARITY = paragon
+		COUNCIL = yes
+		TIER = none
+	}
+	modifier = {
+		country_claim_influence_cost_mult = -0.80
+	}
+	
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_sxx_hunhuan = {
+	cost = 0
+	inline_script = {
+		script = trait/icon
+		CLASS = leader
+		ICON = GFX_leader_trait_sxx_hunhuan
+		RARITY = paragon
+		COUNCIL = no
+		TIER = none
+	}
+	triggered_modifier = {
+		potential = {
+			always = yes
+		}
+		ship_fire_rate_mult = 0.001
+		mult = sxx_hunhuan_count
+	}
+	custom_tooltip_with_modifiers = leader_trait_sxx_hunhuan_effect
+	
+	leader_class = { admiral }
+	initial = no
+	randomized = no
+}
+
+leader_trait_sxx_qiya = {
+	##negative = yes
+	inline_script = {
+		script = trait/icon_negative_no_tiers
+		ICON = GFX_leader_trait_sxx_qiya
+		COUNCIL = no
+	}
+
+	triggered_self_modifier = {
+		potential = {
+			always = yes
+		}
+		leader_admirals_energy_upkeep_add = 5
+		leader_admirals_consumer_goods_upkeep_add = 5
+	}
+	
+	leader_class = { admiral }
+
+	initial = no
+	randomized = no
+}
+
+leader_trait_sxx_zhangtian_bottle = {
+	cost = 0
+	inline_script = {
+		script = trait/icon
+		CLASS = leader
+		ICON = GFX_leader_trait_sxx_zhangtian_bottle
+		RARITY = paragon
+		COUNCIL = no
+		TIER = none
+	}
+	inline_script = {
+		script = sxx_leader_trait/sxx_leader_resource_produces
+		RESOURCE = food
+		AMOUNT = 100
+	}
+	
+	leader_class = { governor admiral scientist general }
+	initial = no
+	randomized = no
 }

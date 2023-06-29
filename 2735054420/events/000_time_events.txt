@@ -13,7 +13,6 @@ event = {
 	
 	immediate = {
 		set_global_flag = time_mod_active
-		set_global_flag = time_2000_triggered
 	}
 }
 
@@ -123,6 +122,10 @@ country_event = {
 							add_deposit = d_flooded_reactor_pits
 							add_deposit = d_crumbling_mining_tunnels
 							add_deposit = d_relic_metal_boneyard
+							while = {
+								count = 9
+								add_deposit = d_ruined_arcology
+							}
 						}
 						create_starbase = {
 							size = starbase_starport
@@ -1206,14 +1209,11 @@ country_event = {
 		}
 		custom_tooltip = "time.14.a.tooltip"
 		custom_tooltip = "time.14.b.tooltip"
-		if = {
+		every_owned_leader = {
 			limit = {
-				is_machine_empire = yes
+				is_councilor = yes
 			}
-			add_modifier = { modifier = dimension_traveler_horror_secret_modifier_machine_intelligence }
-		}
-		else = {
-			add_modifier = { modifier = dimension_traveler_horror_secret_modifier_hive_mind }
+			add_trait = leader_trait_dimension_traveler_horror_secret_gestalt
 		}
 		hidden_effect = {
 			event_target:dimension_traveler_leader = {
@@ -2865,50 +2865,53 @@ country_event = {
 }
 
 # 开局解锁2槽
-event = {
+country_event = {
 	id = time.1000
 	is_triggered_only = yes
 	hide_window = yes
 	
 	trigger = {
 		has_paragon_dlc = yes # 防止无DLC时出现bug
+		is_gestalt = no
+		NOT = { has_country_flag = base_council_slots_unlocked }
+		has_government = yes
+		# 防止奇奇怪怪的MOD国家类型出现bug
+		OR = {
+			is_ai = no
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+			is_country_type = dormant_marauders
+			is_country_type = awakened_marauders
+		}
 	}
 	
 	immediate = {
-		every_country = {
-			limit = {
-				is_gestalt = no
-				OR = {
-					is_country_type = default
-					is_country_type = fallen_empire
-					is_country_type = awakened_fallen_empire
+		set_country_flag = base_council_slots_unlocked
+		while = {
+			count = 2
+			if = {
+				limit = {
+					check_variable_arithmetic = { which = value:country_num_unlockable_council_slots value > 0 }
 				}
-			}
-			while = {
-				count = 2
-				if = {
-					limit = {
-						check_variable_arithmetic = { which = value:country_num_unlockable_council_slots value > 0 }
-					}
-					unlock_council_slots = 1
-				}
+				unlock_council_slots = 1
 			}
 		}
 	}
 }
 
-# 界旅者回归（防坏档）
+# 格式塔界旅者更新
 event = {
 	id = time.2000
 	is_triggered_only = yes
 	hide_window = yes
 	
 	trigger = {
-		NOT = { has_global_flag = time_2000_triggered }
+		NOT = { has_global_flag = time_2000_triggered_2 }
 	}
 	
 	immediate = {
-		set_global_flag = time_2000_triggered
+		set_global_flag = time_2000_triggered_2
 		if = {
 			limit = {
 				exists = event_target:dimension_traveler_owner
@@ -2916,9 +2919,35 @@ event = {
 			event_target:dimension_traveler_owner = {
 				if = {
 					limit = {
-						has_country_flag = dimension_traveler_returning
+						OR = {
+							has_modifier = dimension_traveler_horror_secret_modifier_hive_mind
+							has_modifier = dimension_traveler_horror_secret_modifier_machine_intelligence
+						}
 					}
-					country_event = { id = dimension_traveler.66 days = 1 random = 29 }
+					every_owned_leader = {
+						limit = {
+							is_councilor = yes
+						}
+						add_trait = leader_trait_dimension_traveler_horror_secret_gestalt
+					}
+					remove_modifier = dimension_traveler_horror_secret_modifier_hive_mind
+					remove_modifier = dimension_traveler_horror_secret_modifier_machine_intelligence
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_modifier = dimension_traveler_horror_secret_true_modifier_hive_mind
+							has_modifier = dimension_traveler_horror_secret_true_modifier_machine_intelligence
+						}
+					}
+					every_owned_leader = {
+						limit = {
+							is_councilor = yes
+						}
+						add_trait = leader_trait_dimension_traveler_horror_secret_true_gestalt
+					}
+					remove_modifier = dimension_traveler_horror_secret_true_modifier_hive_mind
+					remove_modifier = dimension_traveler_horror_secret_true_modifier_machine_intelligence
 				}
 			}
 		}

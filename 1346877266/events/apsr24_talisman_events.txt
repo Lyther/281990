@@ -16,13 +16,14 @@ namespace = apsr
 ###                                                  ###
 ########################################################
 ########################################################
+###                                                  ###
+###     Обновлено под новые механики в июне 2023     ###
+###                                                  ###
+########################################################
 
 
 
-### сюжет (1хх) ###
-
-
-## Обычные империи
+### ОБЫЧНЫЕ
 
 # сообщение 1 - появление слухов о возможности стать избранным
 country_event = {
@@ -36,19 +37,18 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 2000 }
+		set_country_flag = apsr24_talisman_story_launch
+		set_global_flag = apsr24_talisman_detonator
 	}
 	
 	option = {
 		name = apsr.24101.button
 		custom_tooltip = apsr.24101.button.tooltip
 		hidden_effect = {
-			country_event = { id = apsr.24202 days = 350 random = 1200 }
+			country_event = { id = apsr.24102 days = 350 random = 1200 }
 		}
 	}
 }
-
 
 # сообщение 2 - новые слухи о том что некоторым удалось
 country_event = {
@@ -60,21 +60,18 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 300 }
+
+	trigger = {
+		any_owned_planet = {
+			has_modifier = "apsr24_planet_modifier"
+		}
 	}
 		
 	option = {
 		name = apsr.24102.button.A
 		custom_tooltip = apsr.24102.button.A.tooltip
 		hidden_effect = {
-			country_event = { id = apsr.24203 days = 20 }
-			add_modifier = {
-				modifier = "apsr24_talisman_research_sponsor"
-				days = -1
-			}		
+			country_event = { id = apsr.24103 days = 20 }
 		}
 	}
 	
@@ -82,11 +79,14 @@ country_event = {
 		name = apsr.24102.button.B
 		custom_tooltip = apsr.24102.button.B.tooltip
 		hidden_effect = {
-			country_event = { id = apsr.24210 days = 20 random = 100}
+			country_event = { id = apsr.24110 days = 20 random = 100}
 		}
 	}
 }
 
+
+
+### ГОС ЛАБОРАТОРИЯ ###
 
 # сообщение 3 - организация гос структуры по исследованию
 country_event = {
@@ -98,91 +98,141 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			has_modifier = "apsr24_planet_modifier"
+		}
+	}
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		random_owned_planet = {
+			limit = {
+				has_modifier = "apsr24_planet_modifier"
+			}
+			save_event_target_as = apsr24_situation_talisman_government
+		}
+		start_situation = {
+			type = apsr24_situation_talisman_government
+			target = event_target:apsr24_situation_talisman_government
+			effect = {
+				save_global_event_target_as = apsr24_situation_talisman_government_site
+			}
+		}
 	}
-		
+	after = {
+		event_target:apsr24_situation_talisman_government = {
+			add_deposit = apsr24_govement_base_deposit
+		}
+		event_target:apsr24_situation_talisman_government_site = {
+			set_situation_locked = no
+		}
+	}
+	
 	option = {
-		name = apsr.24103.button
-		custom_tooltip = apsr.24103.button.tooltip
+		name = apsr.24103.button1
+		custom_tooltip = apsr.24103.button1.tooltip
+		icon = {
+			icon = GFX_situation_approach_energy_credits
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		event_target:apsr24_situation_talisman_government_site = {
+			set_situation_approach = apsr24_situation_talisman_government_do_nothing
+		}
 		hidden_effect = {
-			country_event = { id = apsr.24204 days = 350 random = 700 }	
-			event_target:apsr24_resource_planet = {
-				add_deposit = apsr24_govement_base_deposit
+			event_target:apsr24_situation_talisman_government_site = {
+				set_situation_flag = apsr24_situation_talisman_1
+			}
+		}
+	}
+	
+	option = {
+		name = apsr.24103.button2
+		custom_tooltip = apsr.24103.button2.tooltip
+		icon = {
+			icon = GFX_situation_approach_handshake
+			icon_background = GFX_situation_approach_bg_green
+			text = set_situation_approach_icon_text
+		}
+		event_target:apsr24_situation_talisman_government_site = {
+			set_situation_approach = apsr24_situation_talisman_government_sponsor
+		}
+		hidden_effect = {
+			event_target:apsr24_situation_talisman_government_site = {
+				set_situation_flag = apsr24_situation_talisman_2
 			}
 		}
 	}
 }
 
-
 # сообщение 4 - сообщение что обнаружена система в появлении ресурсов
-country_event = {
+situation_event = {
 	id = apsr.24104
 	title = "apsr.24104.title"
 	desc = "apsr.24104.desc"
 	picture = GFX_evt_apsr24_formula
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
 		name = apsr.24104.button
 		custom_tooltip = apsr.24104.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24205 days = 350 random = 700 }	
-		}
 	}
 }
 
-
 # сообщение 5 - сообщение что нашли возможность вмешательства в генерацию
-country_event = {
+situation_event = {
 	id = apsr.24105
 	title = "apsr.24105.title"
 	desc = "apsr.24105.desc"
 	picture = GFX_evt_apsr24_formula
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1000 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
 		name = apsr.24105.button
 		custom_tooltip = apsr.24105.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24206 days = 350 random = 350 }	
-		}
 	}
 }
 
-
 # сообщение 6 - сообщение что возможность подтвердилась, предложение увеличить шанс появления определенных ресурсов 
-country_event = {
+situation_event = {
 	id = apsr.24106
 	title = "apsr.24106.title"
 	desc = "apsr.24106.desc"
 	picture = GFX_evt_apsr24_coil
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 500 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
@@ -190,7 +240,6 @@ country_event = {
 		custom_tooltip = apsr.24106.button.A.tooltip
 		hidden_effect = {
 			set_global_flag = apsr24_talisman_energy_focus
-			country_event = { id = apsr.24207 days = 30 random = 300 }	
 		}
 	}
 		
@@ -198,8 +247,7 @@ country_event = {
 		name = apsr.24106.button.B
 		custom_tooltip = apsr.24106.button.B.tooltip
 		hidden_effect = {
-			set_global_flag = apsr24_talisman_minerals_focus
-			country_event = { id = apsr.24207 days = 30 random = 300 }	
+			set_global_flag = apsr24_talisman_minerals_focus	
 		}
 	}
 		
@@ -207,8 +255,7 @@ country_event = {
 		name = apsr.24106.button.C
 		custom_tooltip = apsr.24106.button.C.tooltip
 		hidden_effect = {
-			set_global_flag = apsr24_talisman_food_focus
-			country_event = { id = apsr.24207 days = 30 random = 300 }	
+			set_global_flag = apsr24_talisman_food_focus	
 		}
 	}
 		
@@ -217,7 +264,6 @@ country_event = {
 		custom_tooltip = apsr.24106.button.D.tooltip
 		hidden_effect = {
 			set_global_flag = apsr24_talisman_goods_focus
-			country_event = { id = apsr.24207 days = 30 random = 300 }	
 		}
 	}
 		
@@ -226,7 +272,6 @@ country_event = {
 		custom_tooltip = apsr.24106.button.E.tooltip
 		hidden_effect = {
 			set_global_flag = apsr24_talisman_alloys_focus
-			country_event = { id = apsr.24207 days = 30 random = 300 }	
 		}
 	}
 		
@@ -235,120 +280,127 @@ country_event = {
 		custom_tooltip = apsr.24106.button.F.tooltip
 		hidden_effect = {
 			set_global_flag = apsr24_talisman_rare_focus
-			country_event = { id = apsr.24207 days = 30 random = 300 }	
 		}
 	}
 }
 
-
 # сообщение 7 - сообщение что вмешательство вызвало некий сбой, и в одном из сейфов появилось неизвестное вещество
-country_event = {
+situation_event = {
 	id = apsr.24107
 	title = "apsr.24107.title"
 	desc = "apsr.24107.desc"
 	picture = GFX_evt_apsr24_detonator  
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 900 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
 		name = apsr.24107.button
 		custom_tooltip = apsr.24107.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24208 days = 350 random = 200 }	
-		}
 	}
 }
 
-
 # сообщение 8 - открытие что это и есть тот самый "детонатор". предложение использовать на одном из лидеров.
-country_event = {
+situation_event = {
 	id = apsr.24108
 	title = "apsr.24108.title"
 	desc = "apsr.24108.desc"
 	picture = GFX_evt_apsr24_detonator
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {	
-		random_owned_leader = {
-			limit = { 
-				NOR = { 
-					has_trait = leader_trait_chosen
-					has_trait = leader_trait_composer_chosen
-					has_trait = leader_trait_instrument_chosen
-					has_trait = leader_trait_eater_chosen
-					has_trait = leader_trait_whisperers_chosen
+		set_situation_locked = yes
+		target = {
+			owner = {
+				random_owned_leader = {
+					limit = { 
+						NOR = { 
+							has_trait = leader_trait_chosen
+							has_trait = leader_trait_composer_chosen
+							has_trait = leader_trait_instrument_chosen
+							has_trait = leader_trait_eater_chosen
+							has_trait = leader_trait_whisperers_chosen
+						}
+					}
+					save_event_target_as = apsr24_leader_1
+				}	
+				random_owned_leader = {
+					limit = {
+						NOR = { 
+							is_same_value = event_target:apsr24_leader_1 
+							has_trait = leader_trait_chosen
+							has_trait = leader_trait_composer_chosen
+							has_trait = leader_trait_instrument_chosen
+							has_trait = leader_trait_eater_chosen
+							has_trait = leader_trait_whisperers_chosen
+						} 
+					}
+					save_event_target_as = apsr24_leader_2
+				}	
+				random_owned_leader = {
+					limit = {
+						NOR = { 
+							is_same_value = event_target:apsr24_leader_1
+							is_same_value = event_target:apsr24_leader_2
+							has_trait = leader_trait_chosen
+							has_trait = leader_trait_composer_chosen
+							has_trait = leader_trait_instrument_chosen
+							has_trait = leader_trait_eater_chosen
+							has_trait = leader_trait_whisperers_chosen
+						} 
+					}
+					save_event_target_as = apsr24_leader_3
+				}	
+				random_owned_leader = {
+					limit = {
+						NOR = { 
+							is_same_value = event_target:apsr24_leader_1
+							is_same_value = event_target:apsr24_leader_2
+							is_same_value = event_target:apsr24_leader_3
+							has_trait = leader_trait_chosen
+							has_trait = leader_trait_composer_chosen
+							has_trait = leader_trait_instrument_chosen
+							has_trait = leader_trait_eater_chosen
+							has_trait = leader_trait_whisperers_chosen
+						} 
+					}
+					save_event_target_as = apsr24_leader_4
+				}
+				random_owned_leader = {
+					limit = {
+						NOR = { 
+							is_same_value = event_target:apsr24_leader_1
+							is_same_value = event_target:apsr24_leader_2
+							is_same_value = event_target:apsr24_leader_3
+							is_same_value = event_target:apsr24_leader_4
+							has_trait = leader_trait_chosen
+							has_trait = leader_trait_composer_chosen
+							has_trait = leader_trait_instrument_chosen
+							has_trait = leader_trait_eater_chosen
+							has_trait = leader_trait_whisperers_chosen
+						} 
+					}
+					save_event_target_as = apsr24_leader_5
 				}
 			}
-			save_event_target_as = apsr24_leader_1
-		}	
-		random_owned_leader = {
-			limit = {
-				NOR = { 
-					is_same_value = event_target:apsr24_leader_1 
-					has_trait = leader_trait_chosen
-					has_trait = leader_trait_composer_chosen
-					has_trait = leader_trait_instrument_chosen
-					has_trait = leader_trait_eater_chosen
-					has_trait = leader_trait_whisperers_chosen
-				} 
-			}
-			save_event_target_as = apsr24_leader_2
-		}	
-		random_owned_leader = {
-			limit = {
-				NOR = { 
-					is_same_value = event_target:apsr24_leader_1
-					is_same_value = event_target:apsr24_leader_2
-					has_trait = leader_trait_chosen
-					has_trait = leader_trait_composer_chosen
-					has_trait = leader_trait_instrument_chosen
-					has_trait = leader_trait_eater_chosen
-					has_trait = leader_trait_whisperers_chosen
-				} 
-			}
-			save_event_target_as = apsr24_leader_3
-		}	
-		random_owned_leader = {
-			limit = {
-				NOR = { 
-					is_same_value = event_target:apsr24_leader_1
-					is_same_value = event_target:apsr24_leader_2
-					is_same_value = event_target:apsr24_leader_3
-					has_trait = leader_trait_chosen
-					has_trait = leader_trait_composer_chosen
-					has_trait = leader_trait_instrument_chosen
-					has_trait = leader_trait_eater_chosen
-					has_trait = leader_trait_whisperers_chosen
-				} 
-			}
-			save_event_target_as = apsr24_leader_4
 		}
-		random_owned_leader = {
-			limit = {
-				NOR = { 
-					is_same_value = event_target:apsr24_leader_1
-					is_same_value = event_target:apsr24_leader_2
-					is_same_value = event_target:apsr24_leader_3
-					is_same_value = event_target:apsr24_leader_4
-					has_trait = leader_trait_chosen
-					has_trait = leader_trait_composer_chosen
-					has_trait = leader_trait_instrument_chosen
-					has_trait = leader_trait_eater_chosen
-					has_trait = leader_trait_whisperers_chosen
-				} 
-			}
-			save_event_target_as = apsr24_leader_5
-		}
+	}
+
+	after = {
+		destroy_situation = this
 	}
 		
 	option = {
@@ -356,8 +408,11 @@ country_event = {
 		custom_tooltip = apsr.24108.button.A.tooltip
 		hidden_effect = {
 			event_target:apsr24_leader_1 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }
-			remove_global_flag = apsr24_talisman_detonator	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -366,8 +421,11 @@ country_event = {
 		custom_tooltip = apsr.24108.button.B.tooltip
 		hidden_effect = {
 			event_target:apsr24_leader_2 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
-			remove_global_flag = apsr24_talisman_detonator
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -376,8 +434,11 @@ country_event = {
 		custom_tooltip = apsr.24108.button.C.tooltip
 		hidden_effect = {
 			event_target:apsr24_leader_3 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }
-			remove_global_flag = apsr24_talisman_detonator	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -386,8 +447,11 @@ country_event = {
 		custom_tooltip = apsr.24108.button.D.tooltip
 		hidden_effect = {
 			event_target:apsr24_leader_4 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
-			remove_global_flag = apsr24_talisman_detonator
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -396,12 +460,14 @@ country_event = {
 		custom_tooltip = apsr.24108.button.E.tooltip
 		hidden_effect = {
 			event_target:apsr24_leader_5 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
-			remove_global_flag = apsr24_talisman_detonator
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}	
 		}
 	}
 }
-
 
 # сообщение 9 - лидер получает перк избранный и становится бессмертным, получает много опыта
 country_event = {
@@ -413,34 +479,24 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
-	
-	immediate = {
-		set_global_flag = apsr24_talisman_detonator
-	}
 		
 	option = {
 		name = apsr.24109.button
 		custom_tooltip = apsr.24109.button.tooltip
+		event_target:apsr24_chosen_leader = { 
+			add_trait = apsr24_leader_trait_chosen
+			add_experience = 2000
+		}
 		hidden_effect = {
-			set_country_flag = apsr24_used_detonator
-			event_target:apsr24_chosen_leader = { 
-				if = {
-					limit = {
-						is_ruler = yes
-					}
-					add_trait = apsr24_leader_trait_chosen
-				}
-				else = {
-					add_trait = apsr24_leader_trait_chosen
-				}
-			}
-			remove_modifier = "apsr24_talisman_research_sponsor"
+			remove_global_flag = apsr24_talisman_detonator
 		}
 	}
 }
 
 
-## ВАРИАНТ 2 - частные организации
+
+### ЧАСТНАЯ ЛАБОРАТОРИЯ
+
 # сообщение 10 - организация крупных групп искателей (без поддержки государства)
 country_event = {
 	id = apsr.24110
@@ -451,91 +507,118 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			has_modifier = "apsr24_planet_modifier"
+		}
+	}
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 2000 }
+		random_owned_planet = {
+			limit = {
+				has_modifier = "apsr24_planet_modifier"
+			}
+			save_event_target_as = apsr24_situation_talisman_private
+		}
+		start_situation = {
+			type = apsr24_situation_talisman_private
+			target = event_target:apsr24_situation_talisman_private
+			effect = {
+				save_global_event_target_as = apsr24_situation_talisman_private_site
+			}
+		}
+	}
+	after = {
+		event_target:apsr24_situation_talisman_private = {
+			add_deposit = apsr24_searchers_base_deposit
+		}
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_locked = no
+		}
 	}
 		
 	option = {
 		name = apsr.24110.button
 		custom_tooltip = apsr.24110.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24211 days = 700 random = 1000 }	
+		icon = {
+			icon = GFX_situation_approach_balance_sheet
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_approach = apsr24_situation_talisman_private_do_nothing
 		}
 	}
 }
 
-
 # сообщение 11 - сообщение что исследуют систему появления ресурсов
-country_event = {
+situation_event = {
 	id = apsr.24111
 	title = "apsr.24111.title"
 	desc = "apsr.24111.desc"
 	picture = GFX_evt_apsr24_searchers_base
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1700 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
 		name = apsr.24111.button
 		custom_tooltip = apsr.24111.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24212 days = 700 random = 700 }	
-			event_target:apsr24_resource_planet = {
-				add_deposit = apsr24_searchers_base_deposit
-			}
-		}
 	}
 }
 
-
 # сообщение 12 - сообщение что смогли найти систему
-country_event = {
+situation_event = {
 	id = apsr.24112
 	title = "apsr.24112.title"
 	desc = "apsr.24112.desc"
 	picture = GFX_evt_apsr24_formula
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1700 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
 		name = apsr.24112.button
 		custom_tooltip = apsr.24112.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24213 days = 700 random = 700 }	
-		}
 	}
 }
 
-
 # сообщение 13 - сообщение что пытаются вмешаться в генерацию
-country_event = {
+situation_event = {
 	id = apsr.24113
 	title = "apsr.24113.title"
 	desc = "apsr.24113.desc"
 	picture = GFX_evt_apsr24_formula
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 500 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
@@ -544,7 +627,6 @@ country_event = {
 		hidden_effect = {
 			random_list = {
 				75 = { 
-					country_event = { id = apsr.24214 days = 30 random = 300 }
 					random_list = {
 						25 = {
 							set_global_flag = apsr24_talisman_energy_focus
@@ -566,15 +648,18 @@ country_event = {
 						}
 					} 
 				}				
-				25 = { country_event = { id = apsr.24259 days = 30 random = 300 } }
+				25 = { 
+					this = {
+						set_situation_flag = apsr24_situation_159
+					}
+				}
 			}
 		}
 	}
 }
 
-
 # сообщение 14 - сообщение что удачно вмешались, и увеличили шанс выпадения случайного ресурса
-country_event = {
+situation_event = {
 	id = apsr.24114
 	title = "apsr.24114.title"
 	desc = {
@@ -615,13 +700,16 @@ country_event = {
 	}
 	picture = GFX_evt_apsr24_coil 
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 500 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
@@ -629,9 +717,6 @@ country_event = {
 		custom_tooltip = apsr.24114.button_energy.tooltip
 		trigger = {
 			has_global_flag = apsr24_talisman_energy_focus
-		}
-		hidden_effect = {
-			country_event = { id = apsr.24215 days = 30 random = 300 }	
 		}
 	}
 		
@@ -641,9 +726,6 @@ country_event = {
 		trigger = {
 			has_global_flag = apsr24_talisman_minerals_focus
 		}
-		hidden_effect = {
-			country_event = { id = apsr.24215 days = 30 random = 300 }	
-		}
 	}
 		
 	option = {
@@ -651,9 +733,6 @@ country_event = {
 		custom_tooltip = apsr.24114.button_food.tooltip
 		trigger = {
 			has_global_flag = apsr24_talisman_food_focus
-		}
-		hidden_effect = {
-			country_event = { id = apsr.24215 days = 30 random = 300 }	
 		}
 	}
 		
@@ -663,9 +742,6 @@ country_event = {
 		trigger = {
 			has_global_flag = apsr24_talisman_goods_focus
 		}
-		hidden_effect = {
-			country_event = { id = apsr.24215 days = 30 random = 300 }	
-		}
 	}
 		
 	option = {
@@ -673,9 +749,6 @@ country_event = {
 		custom_tooltip = apsr.24114.button_alloys.tooltip
 		trigger = {
 			has_global_flag = apsr24_talisman_alloys_focus
-		}
-		hidden_effect = {
-			country_event = { id = apsr.24215 days = 30 random = 300 }	
 		}
 	}
 		
@@ -685,81 +758,84 @@ country_event = {
 		trigger = {
 			has_global_flag = apsr24_talisman_rare_focus
 		}
-		hidden_effect = {
-			country_event = { id = apsr.24215 days = 30 random = 300 }	
-		}
 	}
 }
 
-
 # сообщение 15 - сообщение что вмешательство вызвало некий сбой, и в одном из сейфов появилось неизвестное вещество. группы искателей будут исследовать его
-country_event = {
+situation_event = {
 	id = apsr.24115
 	title = "apsr.24115.title"
 	desc = "apsr.24115.desc"
 	picture = GFX_evt_apsr24_detonator
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
 	}
 		
 	option = {
 		name = apsr.24115.button
 		custom_tooltip = apsr.24115.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24216 days = 350 random = 700 }	
-		}
 	}
 }
 
-
 # сообщение 16 - сообщение что это и есть тот самый "детонатор". выбор возможности вмешательства
-country_event = {
+situation_event = {
 	id = apsr.24116
 	title = "apsr.24116.title"
 	desc = "apsr.24116.desc"
 	picture = GFX_evt_apsr24_detonator
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
+	
+	immediate = {
+		set_situation_locked = yes # снятие паузы после всех принятых игроком событий
+	}
 		
 	option = {
 		name = apsr.24116.button.A
 		custom_tooltip = apsr.24116.button.A.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			random_list = {
-				50 = {  
-					modifier = {
-						factor = 1.5
-						has_ethic = ethic_fanatic_militarist
-					}
-					modifier = {
-						factor = 1.25
-						OR = {
-							has_ethic = ethic_militarist
-							has_ethic = ethic_fanatic_authoritarian
+			target = {
+				owner = {
+					random_list = {
+						50 = {  
+							modifier = {
+								factor = 1.5
+								has_ethic = ethic_fanatic_militarist
+							}
+							modifier = {
+								factor = 1.25
+								OR = {
+									has_ethic = ethic_militarist
+									has_ethic = ethic_fanatic_authoritarian
+								}
+							}
+							modifier = {
+								factor = 1.1
+								has_ethic = ethic_authoritarian
+							}
+							country_event = { id = apsr.24117 days = 1 }
 						}
-					}
-					modifier = {
-						factor = 1.1
-						has_ethic = ethic_authoritarian
-					}
-					country_event = { id = apsr.24117 days = 1 }
+						50 = {
+							country_event = { id = apsr.24127 days = 1 }
+						}
+						10 = {
+							country_event = { id = apsr.24132 days = 1 }
+						}
+					}	
 				}
-				50 = {
-					country_event = { id = apsr.24127 days = 1 }
-				}
-				10 = {
-					country_event = { id = apsr.24132 days = 1 }
-				}
-			}	
+			}
 		}
 	}
 	
@@ -767,31 +843,38 @@ country_event = {
 		name = apsr.24116.button.B
 		custom_tooltip = apsr.24116.button.B.tooltip
 		trigger = {
-			resource_stockpile_compare = { resource = energy value >= 10000 }
+			target = {
+				owner = {
+					resource_stockpile_compare = { resource = energy value >= 10000 }
+				}
+			}
 		}
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			add_resource = { energy = -10000 }
-			random_list = {
-				50 = {  
-					modifier = {
-						factor = 1.25
-						has_ethic = ethic_fanatic_egalitarian
+			target = {
+				owner = {
+					add_resource = { energy = -10000 }
+					random_list = {
+						50 = {  
+							modifier = {
+								factor = 1.25
+								has_ethic = ethic_fanatic_egalitarian
+							}
+							modifier = {
+								factor = 1.1
+								has_ethic = ethic_egalitarian
+							}
+							country_event = { id = apsr.24133 days = 1 }
+						}
+						50 = {
+							modifier = {
+								factor = 0
+								has_authority = auth_corporate
+							}
+							country_event = { id = apsr.24136 days = 1 }
+						}
 					}
-					modifier = {
-						factor = 1.1
-						has_ethic = ethic_egalitarian
-					}
-					country_event = { id = apsr.24133 days = 1 }
 				}
-				50 = {
-					modifier = {
-						factor = 0
-						has_authority = auth_corporate
-					}
-					country_event = { id = apsr.24136 days = 1 }
-				}
-			}	
+			}
 		}
 	}
 	
@@ -799,29 +882,32 @@ country_event = {
 		name = apsr.24116.button.C
 		custom_tooltip = apsr.24116.button.C.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			random_list = {
-				50 = {  
-					modifier = {
-						factor = 1.25
-						OR = {
-							has_ethic = ethic_fanatic_pacifist
-							has_ethic = ethic_fanatic_xenophobe
+			target = {
+				owner = {
+					random_list = {
+						50 = {  
+							modifier = {
+								factor = 1.25
+								OR = {
+									has_ethic = ethic_fanatic_pacifist
+									has_ethic = ethic_fanatic_xenophobe
+								}
+							}
+							modifier = {
+								factor = 1.1
+								OR = {
+									has_ethic = ethic_pacifist
+									has_ethic = ethic_xenophobe
+								}
+							}
+							country_event = { id = apsr.24140 days = 1 }
 						}
-					}
-					modifier = {
-						factor = 1.1
-						OR = {
-							has_ethic = ethic_pacifist
-							has_ethic = ethic_xenophobe
+						50 = {
+							country_event = { id = apsr.24143 days = 1 }
 						}
-					}
-					country_event = { id = apsr.24140 days = 1 }
+					}	
 				}
-				50 = {
-					country_event = { id = apsr.24143 days = 1 }
-				}
-			}	
+			}
 		}
 	}
 	
@@ -829,30 +915,33 @@ country_event = {
 		name = apsr.24116.button.D
 		custom_tooltip = apsr.24116.button.D.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			random_list = {
-				50 = {  
-					modifier = {
-						factor = 1.5
-						has_ethic = ethic_fanatic_materialist
-					}
-					modifier = {
-						factor = 1.25
-						OR = {
-							has_ethic = ethic_materialist
-							has_ethic = ethic_fanatic_xenophile
+			target = {
+				owner = {
+					random_list = {
+						50 = {  
+							modifier = {
+								factor = 1.5
+								has_ethic = ethic_fanatic_materialist
+							}
+							modifier = {
+								factor = 1.25
+								OR = {
+									has_ethic = ethic_materialist
+									has_ethic = ethic_fanatic_xenophile
+								}
+							}
+							modifier = {
+								factor = 1.1
+								has_ethic = ethic_xenophile
+							}
+							country_event = { id = apsr.24148 days = 1 }	
 						}
-					}
-					modifier = {
-						factor = 1.1
-						has_ethic = ethic_xenophile
-					}
-					country_event = { id = apsr.24148 days = 1 }	
+						50 = {
+							country_event = { id = apsr.24151 days = 1 }
+						}
+					}	
 				}
-				50 = {
-					country_event = { id = apsr.24151 days = 1 }
-				}
-			}	
+			}
 		}
 	}
 	
@@ -860,13 +949,14 @@ country_event = {
 		name = apsr.24116.button.E
 		custom_tooltip = apsr.24116.button.E.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			set_timed_global_flag = { flag = apsr24_talisman_detonator days = 300 }
-			country_event = { id = apsr.24228 days = 30 random = 50 }
+			target = {
+				owner = {
+					country_event = { id = apsr.24128 days = 30 random = 50 }
+				}
+			}
 		}
 	}
 }
-
 
 # сообщение 17 - сообщение что группы захвата успешно ворвались в научный комплекс и забрали детонатор. выбор что делать дальше
 country_event = {
@@ -893,7 +983,6 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			country_event = { id = apsr.24118 days = 1 }
 		}
 	}
@@ -902,15 +991,22 @@ country_event = {
 		name = apsr.24117.button.B
 		custom_tooltip = apsr.24117.button.B.tooltip
 		trigger = {
-			OR = {
-				has_ethic = ethic_materialist
-				has_ethic = ethic_fanatic_materialist
-				has_ethic = ethic_spiritualist
-				has_ethic = ethic_fanatic_spiritualist
+			NOR = {
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				has_ethic = ethic_pacifist
+				has_ethic = ethic_fanatic_pacifist
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
 			}
 		}
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			country_event = { id = apsr.24121 days = 1 }
 		}
 	}
@@ -918,7 +1014,7 @@ country_event = {
 	option = {
 		name = apsr.24117.button.C
 		custom_tooltip = apsr.24117.button.C.tooltip
-		trigger = {
+		trigger = { 
 			OR = {
 				has_ethic = ethic_pacifist
 				has_ethic = ethic_fanatic_pacifist
@@ -929,12 +1025,10 @@ country_event = {
 			}
 		}
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			country_event = { id = apsr.24124 days = 1 }
 		}
 	}
 }
-
 
 # сообщение 18 - сообщение что комплекс уничтожен полностью со всем персоналом. подготовка к использованию
 country_event = {
@@ -948,15 +1042,21 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_flag = apsr24_situation_119
+		}
+	}
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_locked = no
+		}
 	}
 		
 	option = {
 		name = apsr.24118.button
 		custom_tooltip = apsr.24118.button.tooltip
 		hidden_effect = {
-			country_event = { id = apsr.24119 days = 350 random = 700 }
 			event_target:apsr24_resource_planet = {
 				remove_deposit = apsr24_searchers_base_deposit
 			}
@@ -964,173 +1064,183 @@ country_event = {
 	}
 }
 
-
 # сообщение 19 - подготовка закончена, предложение использовать на адмирале
-country_event = {
+situation_event = {
 	id = apsr.24119
 	title = "apsr.24119.title"
 	desc = "apsr.24119.desc"
 	picture = GFX_evt_apsr24_detonator
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
-	immediate = {	
-	
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = admiral
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					} 
+	immediate = {
+		target = {
+			owner = {
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = admiral
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							} 
+						}
+					}
+					random_owned_leader = {
+						limit = { 
+							AND = {
+								leader_class = admiral
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							} 
+						}
+						save_event_target_as = apsr24_leader_1
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_1
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = admiral
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								leader_class = admiral
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_2
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_2
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = admiral
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								leader_class = admiral
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_3
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								is_same_value = event_target:apsr24_leader_2
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_3
+					}			
 				}
 			}
-			random_owned_leader = {
-				limit = { 
-					AND = {
-						leader_class = admiral
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					} 
-				}
-				save_event_target_as = apsr24_leader_1
-			}	
 		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_1
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = admiral
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = admiral
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_2
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_2
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = admiral
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = admiral
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_3
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						is_same_value = event_target:apsr24_leader_2
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_3
-			}			
-		}
+	}
+
+	after = {
+		destroy_situation = this
 	}
 		
 	option = {
 		name = apsr.24119.button.A
 		custom_tooltip = apsr.24119.button.A.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_1 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -1138,9 +1248,12 @@ country_event = {
 		name = apsr.24119.button.B
 		custom_tooltip = apsr.24119.button.B.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_2 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -1148,17 +1261,18 @@ country_event = {
 		name = apsr.24119.button.C
 		custom_tooltip = apsr.24119.button.C.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_3 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 }
 
-
 # сообщение 20 - лидер получает перк избранный и становится бессмертным, получает много опыта и трейты 
 ### apsr.24109
-
 
 # сообщение 21 - сообщение что комплекс уничтожен полностью, персонал переведен в гос организации. подготовка к использованию
 country_event = {
@@ -1172,15 +1286,21 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_flag = apsr24_situation_122
+		}
+	}
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_locked = no
+		}
 	}
 		
 	option = {
 		name = apsr.24121.button
 		custom_tooltip = apsr.24121.button.tooltip
 		hidden_effect = {
-			country_event = { id = apsr.24122 days = 350 random = 700 }
 			event_target:apsr24_resource_planet = {
 				remove_deposit = apsr24_searchers_base_deposit
 			}
@@ -1188,172 +1308,184 @@ country_event = {
 	}
 }
 
-
 # сообщение 22 - подготовка закончена, предложение использовать на генерале
-country_event = {
+situation_event = {
 	id = apsr.24122
 	title = "apsr.24122.title"
 	desc = "apsr.24122.desc"
 	picture = GFX_evt_apsr24_detonator
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
+	
 	
 	is_triggered_only = yes
 	
 	immediate = {	
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = general
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
+		target = {
+			owner = {
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = general
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
 					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								leader_class = general
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_1
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_1
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = general
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								leader_class = general
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_2
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_2
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = general
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								leader_class = general
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_3
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								is_same_value = event_target:apsr24_leader_2
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_3
+					}			
 				}
 			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = general
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_1
-			}	
 		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_1
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = general
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = general
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_2
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_2
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = general
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = general
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_3
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						is_same_value = event_target:apsr24_leader_2
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_3
-			}			
-		}
+	}
+
+	after = {
+		destroy_situation = this
 	}
 		
 	option = {
 		name = apsr.24122.button.A
 		custom_tooltip = apsr.24122.button.A.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			event_target:apsr24_leader_1 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			event_target:apsr24_leader_1 = { save_event_target_as = apsr24_chosen_leader }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -1361,9 +1493,12 @@ country_event = {
 		name = apsr.24122.button.B
 		custom_tooltip = apsr.24122.button.B.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_2 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -1371,17 +1506,18 @@ country_event = {
 		name = apsr.24122.button.C
 		custom_tooltip = apsr.24122.button.C.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_3 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}	
 		}
 	}
 }
 
-
 # сообщение 23 - лидер получает перк избранный и становится бессмертным, получает много опыта и трейты 
 ### apsr.24109
-
 
 # сообщение 24 - сообщение что ученые оставлены в живых. подготовка к использованию
 country_event = {
@@ -1395,203 +1531,219 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_flag = apsr24_situation_125
+		}
+	}
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_locked = no
+		}
 	}
 		
 	option = {
 		name = apsr.24124.button
 		custom_tooltip = apsr.24124.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24125 days = 350 random = 700 }
-		}
 	}
 }
 
 
 # сообщение 25 - подготовка закончена, предложение использовать на адмирале или генерале
-country_event = {
+situation_event = {
 	id = apsr.24125
 	title = "apsr.24125.title"
 	desc = "apsr.24125.desc"
 	picture = GFX_evt_apsr24_detonator
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {	
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						OR = {
-							leader_class = admiral
-							leader_class = general
+		target = {
+			owner = {
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								OR = {
+									leader_class = admiral
+									leader_class = general
+								}
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
 						}
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
 					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								OR = {
+									leader_class = admiral
+									leader_class = general
+								}
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_1
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_1
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								OR = {
+									leader_class = admiral
+									leader_class = general
+								}
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								OR = {
+									leader_class = admiral
+									leader_class = general
+								}
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_2
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_2
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								OR = {
+									leader_class = admiral
+									leader_class = general
+								}
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								OR = {
+									leader_class = admiral
+									leader_class = general
+								}
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_3
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								is_same_value = event_target:apsr24_leader_2
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_3
+					}			
 				}
 			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						OR = {
-							leader_class = admiral
-							leader_class = general
-						}
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_1
-			}	
 		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_1
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						OR = {
-							leader_class = admiral
-							leader_class = general
-						}
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						OR = {
-							leader_class = admiral
-							leader_class = general
-						}
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_2
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_2
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						OR = {
-							leader_class = admiral
-							leader_class = general
-						}
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						OR = {
-							leader_class = admiral
-							leader_class = general
-						}
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_3
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						is_same_value = event_target:apsr24_leader_2
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_3
-			}			
-		}
+	}
+
+	after = {
+		destroy_situation = this
 	}
 		
 	option = {
 		name = apsr.24125.button.A
 		custom_tooltip = apsr.24125.button.A.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_1 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -1599,9 +1751,12 @@ country_event = {
 		name = apsr.24125.button.B
 		custom_tooltip = apsr.24125.button.B.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_2 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}	
 		}
 	}
 		
@@ -1609,17 +1764,18 @@ country_event = {
 		name = apsr.24125.button.C
 		custom_tooltip = apsr.24125.button.C.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_3 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 }
 
-
 # сообщение 26 - лидер получает перк избранный и становится бессмертным, получает много опыта и трейты 
 ### apsr.24109
-
 
 # сообщение 27 - сообщение что не получилось забрать силой
 country_event = {
@@ -1631,11 +1787,6 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 300 }
-	}
 		
 	option = {
 		name = apsr.24127.button
@@ -1643,10 +1794,10 @@ country_event = {
 		hidden_effect = {
 			random_list = {
 				50 = {
-					country_event = { id = apsr.24228 days = 30 random = 50 }
+					country_event = { id = apsr.24128 days = 30 random = 50 }
 				}
 				50 = {
-					country_event = { id = apsr.24231 days = 30 random = 50 }
+					country_event = { id = apsr.24131 days = 30 random = 50 }
 				}
 			}
 		}
@@ -1664,6 +1815,10 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
+	
+	after = {
+		remove_global_flag = apsr24_talisman_detonator
+	}
 		
 	option = {
 		name = apsr.24128.button.A
@@ -1672,7 +1827,6 @@ country_event = {
 			resource_stockpile_compare = { resource = energy value >= 20000 }
 		}
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			country_event = { id = apsr.24129 days = 1 }
 			add_resource = { energy = -20000 }
 		}
@@ -1685,7 +1839,6 @@ country_event = {
 			resource_stockpile_compare = { resource = energy value >= 20000 }
 		}
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			country_event = { id = apsr.24130 days = 1 }
 		}
 	}
@@ -1697,7 +1850,6 @@ country_event = {
 			resource_stockpile_compare = { resource = energy value < 20000 }
 		}
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			country_event = { id = apsr.24130 days = 1 }
 		}
 	}
@@ -1715,8 +1867,10 @@ country_event = {
 	
 	is_triggered_only = yes
 	
-	immediate = {
-		set_global_flag = apsr24_talisman_detonator
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			destroy_situation = this
+		}
 	}
 		
 	option = {
@@ -1727,13 +1881,12 @@ country_event = {
 				class = scientist
 				species = owner_main_species
 				name = random
-				skill = 3
+				skill = 5
 				leader_age_min = 25
 				leader_age_max = 45
 				event_leader = yes
 			}
 			last_created_leader = {
-				add_experience = 500
 				add_trait = apsr24_leader_trait_chosen
 			}
 		}
@@ -1752,8 +1905,10 @@ country_event = {
 	
 	is_triggered_only = yes
 	
-	immediate = {
-		set_global_flag = apsr24_talisman_detonator
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			destroy_situation = this
+		}
 	}
 		
 	option = {
@@ -1780,8 +1935,10 @@ country_event = {
 	
 	is_triggered_only = yes
 	
-	immediate = {
-		set_global_flag = apsr24_talisman_detonator
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			destroy_situation = this
+		}
 	}
 		
 	option = {
@@ -1801,10 +1958,6 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
-	
-	immediate = {
-		set_global_flag = apsr24_talisman_detonator
-	}
 	
 	immediate = {
 		event_target:apsr24_resource_planet = {
@@ -1839,6 +1992,12 @@ country_event = {
 			}
 		}
 	}	
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			destroy_situation = this
+		}
+	}
 		
 	option = {
 		name = apsr.24132.button
@@ -1850,7 +2009,6 @@ country_event = {
 		}
 	}
 }
-
 
 # сообщение 33 - детонатор куплен и теперь принадлежит игроку. подготовка к использованию
 country_event = {
@@ -1864,203 +2022,218 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_flag = apsr24_situation_134
+		}
+	}
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_locked = no
+		}
 	}
 		
 	option = {
 		name = apsr.24133.button
 		custom_tooltip = apsr.24133.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24134 days = 350 random = 700 }
-		}
 	}
 }
 
-
 # сообщение 34 - сообщение с предложением использовать на одном из лидеров (доступны только ученые и губернаторы)
-country_event = {
+situation_event = {
 	id = apsr.24134
 	title = "apsr.24134.title"
 	desc = "apsr.24134.desc"
 	picture = GFX_evt_apsr24_detonator
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {	
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						OR = {
-							leader_class = scientist
-							leader_class = governor
+		target = {
+			owner = {
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								OR = {
+									leader_class = scientist
+									leader_class = governor
+								}
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
 						}
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
 					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								OR = {
+									leader_class = scientist
+									leader_class = governor
+								}
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_1
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_1
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								OR = {
+									leader_class = scientist
+									leader_class = governor
+								}
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								OR = {
+									leader_class = scientist
+									leader_class = governor
+								}
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_2
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_2
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								OR = {
+									leader_class = scientist
+									leader_class = governor
+								}
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								OR = {
+									leader_class = scientist
+									leader_class = governor
+								}
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_3
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								is_same_value = event_target:apsr24_leader_2
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_3
+					}			
 				}
 			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						OR = {
-							leader_class = scientist
-							leader_class = governor
-						}
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_1
-			}	
 		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_1
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						OR = {
-							leader_class = scientist
-							leader_class = governor
-						}
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						OR = {
-							leader_class = scientist
-							leader_class = governor
-						}
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_2
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_2
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						OR = {
-							leader_class = scientist
-							leader_class = governor
-						}
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						OR = {
-							leader_class = scientist
-							leader_class = governor
-						}
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_3
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						is_same_value = event_target:apsr24_leader_2
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_3
-			}			
-		}
+	}
+
+	after = {
+		destroy_situation = this
 	}
 		
 	option = {
 		name = apsr.24134.button.A
 		custom_tooltip = apsr.24134.button.A.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_1 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}	
 		}
 	}
 		
@@ -2068,9 +2241,12 @@ country_event = {
 		name = apsr.24134.button.B
 		custom_tooltip = apsr.24134.button.B.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_2 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 		
@@ -2078,17 +2254,18 @@ country_event = {
 		name = apsr.24134.button.C
 		custom_tooltip = apsr.24134.button.C.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_3 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}
 		}
 	}
 }
 
-
 # сообщение 35 - лидер получает перк избранный и становится бессмертным, получает много опыта и трейты 
 ### apsr.24109
-
 
 # сообщение 36 - сообщение что лаборатория отказывается от предложения покупки
 country_event = {
@@ -2103,31 +2280,25 @@ country_event = {
 	
 	immediate = {	
 		add_resource = { energy = 10000 }
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
 	}
 		
 	option = {
 		name = apsr.24136.button
 		custom_tooltip = apsr.24136.button.tooltip
 		hidden_effect = {
-			country_event = { id = apsr.24228 days = 350 random = 700 }
+			country_event = { id = apsr.24128 days = 50 random = 70 }
 		}
 	}
 }
 
-
 # сообщение 37 - сообщение что искатели используют детонатор на одном из СВОИХ ученых. он становится избранным	(простым). игроку предлагают купить этого лидера
 ### apsr.24128
-
 
 # сообщение 38 - сообщение что ученый теперь наш. ученый становится доступен в списке лидеров.
 ### apsr.24129
 
-
 # сообщение 39 - сообщение что ученый остается в своей группе. игрок не получает НИЧЕГО
 ### apsr.24130
-
 
 # сообщение 40 - сообщение что детонатор украден и скрытно перемещен в одну из лабораторий. подготовка к использованию детонатора
 country_event = {
@@ -2141,185 +2312,200 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_flag = apsr24_situation_141
+		}
+	}
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_locked = no
+		}
 	}
 		
 	option = {
 		name = apsr.24140.button
 		custom_tooltip = apsr.24140.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24141 days = 350 random = 700 }
-		}
 	}
 }
 
-
 # сообщение 41 - сообщение с предложением использовать на одном из лидеров (доступны только ученые)
-country_event = {
+situation_event = {
 	id = apsr.24141
 	title = "apsr.24141.title"
 	desc = "apsr.24141.desc"
 	picture = GFX_evt_apsr24_detonator
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {	
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
+		target = {
+			owner = {
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = scientist
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
 					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								leader_class = scientist
+								NOR = { 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_1
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_1
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = scientist
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								leader_class = scientist
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_2
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_2
+					}			
+				}
+				if = {
+					limit = {
+						any_owned_leader = {
+							AND = {
+								leader_class = scientist
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+					}
+					random_owned_leader = {
+						limit = {
+							AND = {
+								leader_class = scientist
+								NOR = { 
+									is_same_value = event_target:apsr24_leader_1 
+									is_same_value = event_target:apsr24_leader_2
+									has_trait = leader_trait_chosen
+									has_trait = leader_trait_composer_chosen
+									has_trait = leader_trait_instrument_chosen
+									has_trait = leader_trait_eater_chosen
+									has_trait = leader_trait_whisperers_chosen
+								} 
+							}
+						}
+						save_event_target_as = apsr24_leader_3
+					}	
+				}
+				else = {
+					random_owned_leader = {
+						limit = { 
+							NOR = { 
+								is_same_value = event_target:apsr24_leader_1 
+								is_same_value = event_target:apsr24_leader_2
+								has_trait = leader_trait_chosen
+								has_trait = leader_trait_composer_chosen
+								has_trait = leader_trait_instrument_chosen
+								has_trait = leader_trait_eater_chosen
+								has_trait = leader_trait_whisperers_chosen
+							} 
+						}
+						save_event_target_as = apsr24_leader_3
+					}			
 				}
 			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_1
-			}	
 		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_1
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_2
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_2
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_3
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						is_same_value = event_target:apsr24_leader_2
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_3
-			}			
-		}
+	}
+
+	after = {
+		destroy_situation = this
 	}
 		
 	option = {
 		name = apsr.24141.button.A
 		custom_tooltip = apsr.24141.button.A.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_1 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}		
 		}
 	}
 		
@@ -2327,9 +2513,12 @@ country_event = {
 		name = apsr.24141.button.B
 		custom_tooltip = apsr.24141.button.B.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_2 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}		
 		}
 	}
 		
@@ -2337,17 +2526,18 @@ country_event = {
 		name = apsr.24141.button.C
 		custom_tooltip = apsr.24141.button.C.tooltip
 		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
 			event_target:apsr24_leader_3 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
+			target = {
+				owner = {
+					country_event = { id = apsr.24109 days = 1 }
+				}
+			}		
 		}
 	}
 }
 
-
 # сообщение 42 - лидер получает перк избранный и становится бессмертным, получает много опыта и трейты
 ### apsr.24109
-
 
 # сообщение 43 - сообщение что украсть не удалось
 country_event = {
@@ -2359,11 +2549,6 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 300 }
-	}
 		
 	option = {
 		name = apsr.24143.button
@@ -2371,32 +2556,27 @@ country_event = {
 		hidden_effect = {
 			random_list = {
 				50 = {
-					country_event = { id = apsr.24228 days = 30 random = 50 }
+					country_event = { id = apsr.24128 days = 30 random = 50 }
 				}
 				50 = {
-					country_event = { id = apsr.24231 days = 30 random = 50 }
+					country_event = { id = apsr.24131 days = 30 random = 50 }
 				}
 			}
 		}
 	}
 }
 
-
 # сообщение 44 - сообщение что искатели используют детонатор на одном из СВОИХ ученых. он становится избранным	(простым). игроку предлагают купить этого лидера
 ### apsr.24128
-
 
 # сообщение 45 - сообщение что ученый теперь наш. ученый становится доступен в списке лидеров.
 ### apsr.24129
 
-
 # сообщение 46 - сообщение что ученый остается в своей группе. игрок не получает НИЧЕГО
 ### apsr.24130
 
-
 # сообщение 47 - сообщение что детонатор продан НЕИЗВЕСТНОЙ империи. игрок не получает НИЧЕГО
 ### apsr.24131
-
 
 # сообщение 48 - лаборатория получает статус государственной. подготовка к использованию детонатора.
 country_event = {
@@ -2410,15 +2590,21 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_flag = apsr24_situation_141
+		}
+	}
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			set_situation_locked = no
+		}
 	}
 		
 	option = {
 		name = apsr.24148.button
 		custom_tooltip = apsr.24148.button.tooltip
 		hidden_effect = {
-			country_event = { id = apsr.24249 days = 350 random = 700 }
 			event_target:apsr24_resource_planet = {
 				remove_deposit = apsr24_searchers_base_deposit			
 				add_deposit = apsr24_govement_base_deposit
@@ -2429,198 +2615,10 @@ country_event = {
 
 
 # сообщение 49 - сообщение с предложением использовать на одном из лидеров (доступны только ученые)
-country_event = {
-	id = apsr.24149
-	title = "apsr.24149.title"
-	desc = "apsr.24149.desc"
-	picture = GFX_evt_apsr24_detonator
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {	
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_1
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_1
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_2
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_2
-			}			
-		}
-		if = {
-			limit = {
-				any_owned_leader = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-			}
-			random_owned_leader = {
-				limit = {
-					AND = {
-						leader_class = scientist
-						NOR = { 
-							is_same_value = event_target:apsr24_leader_1 
-							is_same_value = event_target:apsr24_leader_2
-							has_trait = leader_trait_chosen
-							has_trait = leader_trait_composer_chosen
-							has_trait = leader_trait_instrument_chosen
-							has_trait = leader_trait_eater_chosen
-							has_trait = leader_trait_whisperers_chosen
-						} 
-					}
-				}
-				save_event_target_as = apsr24_leader_3
-			}	
-		}
-		else = {
-			random_owned_leader = {
-				limit = { 
-					NOR = { 
-						is_same_value = event_target:apsr24_leader_1 
-						is_same_value = event_target:apsr24_leader_2
-						has_trait = leader_trait_chosen
-						has_trait = leader_trait_composer_chosen
-						has_trait = leader_trait_instrument_chosen
-						has_trait = leader_trait_eater_chosen
-						has_trait = leader_trait_whisperers_chosen
-					} 
-				}
-				save_event_target_as = apsr24_leader_3
-			}			
-		}
-	}
-		
-	option = {
-		name = apsr.24149.button.A
-		custom_tooltip = apsr.24149.button.A.tooltip
-		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			event_target:apsr24_leader_1 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
-		}
-	}
-		
-	option = {
-		name = apsr.24149.button.B
-		custom_tooltip = apsr.24149.button.B.tooltip
-		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			event_target:apsr24_leader_2 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
-		}
-	}
-		
-	option = {
-		name = apsr.24149.button.C
-		custom_tooltip = apsr.24149.button.C.tooltip
-		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			event_target:apsr24_leader_3 = { save_event_target_as = apsr24_chosen_leader }
-			country_event = { id = apsr.24109 days = 1 }	
-		}
-	}
-}
-
+### apsr.24141
 
 # сообщение 50 - лидер получает перк избранный и становится бессмертным, получает много опыта и трейты
 ### apsr.24109
-
 
 # сообщение 51 - сообщение что лаборатория отказывается от предложения
 country_event = {
@@ -2632,11 +2630,6 @@ country_event = {
 	location = event_target:apsr24_resource_planet
 	
 	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 300 }
-	}
 		
 	option = {
 		name = apsr.24151.button
@@ -2644,10 +2637,419 @@ country_event = {
 		hidden_effect = {
 			random_list = {
 				50 = {
-					country_event = { id = apsr.24228 days = 30 random = 50 }
+					country_event = { id = apsr.24128 days = 30 random = 50 }
 				}
 				50 = {
-					country_event = { id = apsr.24231 days = 30 random = 50 }
+					country_event = { id = apsr.24131 days = 30 random = 50 }
+				}
+			}
+		}
+	}
+}
+
+# сообщение 52 - сообщение что искатели используют детонатор на одном из СВОИХ ученых. он становится избранным	(простым). игроку предлагают купить этого лидера
+### apsr.24128
+
+# сообщение 53 - сообщение что ученый теперь наш. ученый становится доступен в списке лидеров.
+### apsr.24129
+
+# сообщение 54 - сообщение что ученый остается в своей группе. игрок не получает НИЧЕГО
+### apsr.24130
+
+# сообщение 55 - сообщение что детонатор продан НЕИЗВЕСТНОЙ империи. игрок не получает НИЧЕГО
+### apsr.24131
+
+# сообщение 56 - сообщение что искатели используют детонатор на одном из СВОИХ ученых. он становится избранным	(простым). игроку предлагают купить этого лидера
+### apsr.24128
+
+# сообщение 57 - сообщение что ученый теперь наш. ученый становится доступен в списке лидеров.
+### apsr.24129
+
+# сообщение 58 - сообщение что ученый остается в своей группе. игрок не получает НИЧЕГО
+### apsr.24130
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## ГЕШТАЛЬТ
+
+
+# сообщение 63 - сообщение с предложением попробовать вмешаться в параметры генерации ресурсов
+country_event = {
+	id = apsr.24163
+	title = "apsr.24163.title"
+	desc = "apsr.24163.desc"
+	picture = GFX_evt_apsr24_formula
+	show_sound = event_mystic_reveal
+	location = event_target:apsr24_resource_planet
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_country_flag = apsr24_talisman_story_launch
+		set_global_flag = apsr24_talisman_detonator
+	}
+	
+	option = {
+		name = apsr.24163.button.A
+		custom_tooltip = apsr.24163.button.A.tooltip
+		hidden_effect = {
+			country_event = { id = apsr.24164 days = 1 }
+		}
+	}
+		
+	option = {
+		name = apsr.24163.button.B
+		custom_tooltip = apsr.24163.button.B.tooltip
+		hidden_effect = {
+			remove_global_flag = apsr24_talisman_detonator
+		}
+	}
+}
+
+
+# сообщение 64 - сообщение что ученые теперь ищут способ вмешаться
+country_event = {
+	id = apsr.24164
+	title = "apsr.24164.title"
+	desc = "apsr.24164.desc"
+	picture = GFX_evt_apsr24_formula
+	show_sound = event_mystic_reveal
+	location = event_target:apsr24_resource_planet
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_owned_planet = {
+			limit = {
+				AND = {
+					has_deposit = apsr24_deposit
+					has_building = apsr24_building_talisman
+				}
+			}
+			save_event_target_as = apsr24_situation_talisman_gestalt
+		}
+		start_situation = {
+			type = apsr24_situation_talisman_gestalt
+			target = event_target:apsr24_situation_talisman_gestalt
+			effect = {
+				save_event_target_as = new_situation
+			}
+		}
+	}
+	after = {
+		event_target:new_situation = {
+			set_situation_locked = no
+		}
+	}
+
+	option = {
+		name = apsr.24164.button1 #ничего
+		icon = {
+			icon = GFX_situation_approach_shrug
+			icon_background = GFX_situation_approach_bg_red
+			text = set_situation_approach_icon_text
+		}
+		event_target:new_situation = {
+			set_situation_approach = apsr24_situation_talisman_gestalt_do_nothing
+		}
+	}
+
+	option = {
+		name = apsr.24164.button2 #помогать
+		icon = {
+			icon = GFX_situation_approach_energy_credits
+			icon_background = GFX_situation_approach_bg_yellow
+			text = set_situation_approach_icon_text
+		}
+		event_target:new_situation = {
+			set_situation_approach = apsr24_situation_talisman_gestalt_sponsor
+		}
+	}
+}
+
+
+# сообщение 65 - сообщение что обнаружена система в появлении ресурсов
+situation_event = {
+	id = apsr.24165
+	title = "apsr.24165.title"
+	desc = "apsr.24165.desc"
+	picture = GFX_evt_apsr24_formula
+	show_sound = event_mystic_reveal
+	situation = this
+	location = target
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+		
+	option = {
+		name = apsr.24165.button
+		custom_tooltip = apsr.24165.button.tooltip
+	}
+}
+
+
+# сообщение 66 - сообщение что нашли возможность вмешательства в генерацию
+situation_event = {
+	id = apsr.24166
+	title = "apsr.24166.title"
+	desc = "apsr.24166.desc"
+	picture = GFX_evt_apsr24_formula
+	show_sound = event_mystic_reveal
+	situation = this
+	location = target
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+		
+	option = {
+		name = apsr.24166.button
+		custom_tooltip = apsr.24166.button.tooltip
+	}
+}
+
+
+# сообщение 67 - сообщение что возможность подтвердилась, предложение увеличить шанс появления определенных ресурсов
+situation_event = {
+	id = apsr.24167
+	title = "apsr.24167.title"
+	desc = "apsr.24167.desc"
+	picture = GFX_evt_apsr24_coil
+	show_sound = event_mystic_reveal
+	situation = this
+	location = target
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+		
+	option = {
+		name = apsr.24167.button.A
+		custom_tooltip = apsr.24167.button.A.tooltip
+		hidden_effect = {
+			set_global_flag = apsr24_talisman_energy_focus
+		}
+	}
+		
+	option = {
+		name = apsr.24167.button.B
+		custom_tooltip = apsr.24167.button.B.tooltip
+		hidden_effect = {
+			set_global_flag = apsr24_talisman_minerals_focus
+		}
+	}
+		
+	option = {
+		name = apsr.24167.button.C
+		custom_tooltip = apsr.24167.button.C.tooltip
+		hidden_effect = {
+			set_global_flag = apsr24_talisman_food_focus
+		}
+	}
+		
+	option = {
+		name = apsr.24167.button.D
+		custom_tooltip = apsr.24167.button.D.tooltip
+		hidden_effect = {
+			set_global_flag = apsr24_talisman_goods_focus
+		}
+	}
+		
+	option = {
+		name = apsr.24167.button.E
+		custom_tooltip = apsr.24167.button.E.tooltip
+		hidden_effect = {
+			set_global_flag = apsr24_talisman_alloys_focus
+		}
+	}
+		
+	option = {
+		name = apsr.24167.button.F
+		custom_tooltip = apsr.24167.button.F.tooltip
+		hidden_effect = {
+			set_global_flag = apsr24_talisman_rare_focus
+		}
+	}
+}
+
+
+# сообщение 68 - сообщение что вмешательство вызвало некий сбой, и в одном из сейфов появилось неизвестное вещество
+situation_event = {
+	id = apsr.24168
+	title = "apsr.24168.title"
+	desc = "apsr.24168.desc"
+	picture = GFX_evt_apsr24_detonator
+	show_sound = event_mystic_reveal
+	situation = this
+	location = target
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+		
+	option = {
+		name = apsr.24168.button
+		custom_tooltip = apsr.24168.button.tooltip
+	}
+}
+
+
+# сообщение 69 - открытие что это вещество способно использоваться для повышения производительности поселений
+situation_event = {
+	id = apsr.24169
+	title = "apsr.24169.title"
+	desc = "apsr.24169.desc"
+	picture = GFX_evt_apsr24_detonator
+	show_sound = event_mystic_reveal
+	situation = this
+	location = target
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_situation_locked = yes
+	}
+	after = {
+		set_situation_locked = no
+	}
+		
+	option = {
+		name = apsr.24169.button
+		custom_tooltip = apsr.24169.button.tooltip
+		hidden_effect = {
+			random_list = {
+				10 = {
+					this = {
+						set_situation_flag = apsr24_situation_buff10
+					}
+				}
+				30 = {
+					this = {
+						set_situation_flag = apsr24_situation_buff5
+					}
+				}
+				60 = {
+					modifier = {
+						factor = 0.5
+						this = {
+							current_situation_approach = apsr24_situation_talisman_gestalt_sponsor
+						}
+					}
+					# buff 1%
+				}
+			}
+			remove_global_flag = apsr24_talisman_detonator
+		}
+	}
+}
+
+
+# сообщение 70 - сообщение что удалось полностью скопировать вещество. империя получает постоянный модификатор на +10% к производительности поселений
+situation_event = {
+	id = apsr.24170
+	title = "apsr.24170.title"
+	desc = "apsr.24170.desc"
+	picture = GFX_evt_apsr24_synthesis
+	show_sound = event_mystic_reveal
+	situation = this
+	location = target
+	
+	is_triggered_only = yes
+
+	after = {
+		destroy_situation = this
+	}
+		
+	option = {
+		name = apsr.24170.button
+		custom_tooltip = apsr.24170.button.tooltip
+		hidden_effect = {
+			target = {
+				owner = {
+					add_modifier = {
+						modifier = "apsr24_talisman_absolute_success"
+						days = -1
+					}
+				}
+			}			
+		}
+	}
+}
+
+
+# сообщение 71 - сообщение что удалось частично скопировать вещество. империя получает постоянный модификатор на +5% к производительности поселений
+situation_event = {
+	id = apsr.24171
+	title = "apsr.24171.title"
+	desc = "apsr.24171.desc"
+	picture = GFX_evt_apsr24_synthesis
+	show_sound = event_mystic_reveal
+	situation = this
+	location = target
+	
+	is_triggered_only = yes
+
+	after = {
+		destroy_situation = this
+	}
+		
+	option = {
+		name = apsr.24171.button
+		custom_tooltip = apsr.24171.button.tooltip
+		hidden_effect = {
+			target = {
+				owner = {
+					add_modifier = {
+						modifier = "apsr24_talisman_good_success"
+						days = -1
+					}	
 				}
 			}
 		}
@@ -2655,67 +3057,120 @@ country_event = {
 }
 
 
-# сообщение 52 - сообщение что искатели используют детонатор на одном из СВОИХ ученых. он становится избранным	(простым). игроку предлагают купить этого лидера
-### apsr.24128
+# сообщение 72 - сообщение что неудалось скопировать вещество. в результате вещества не осталось вообще. но удалось сделать некое подобие этого вещества, которое всего немного улучшает. империя получает постоянный модификатор на +1% к производительности поселений
+situation_event = {
+	id = apsr.24172
+	title = "apsr.24172.title"
+	desc = "apsr.24172.desc"
+	picture = GFX_evt_apsr24_synthesis
+	show_sound = event_mystic_reveal
+	situation = this
+	location = target
+	
+	is_triggered_only = yes
+
+	after = {
+		destroy_situation = this
+	}
+		
+	option = {
+		name = apsr.24172.button
+		custom_tooltip = apsr.24172.button.tooltip
+		hidden_effect = {
+			target = {
+				owner = {
+					add_modifier = {
+						modifier = "apsr24_talisman_small_success"
+						days = -1
+					}	
+				}
+			}			
+		}
+	}
+}
 
 
-# сообщение 53 - сообщение что ученый теперь наш. ученый становится доступен в списке лидеров.
-### apsr.24129
 
 
-# сообщение 54 - сообщение что ученый остается в своей группе. игрок не получает НИЧЕГО
-### apsr.24130
 
 
-# сообщение 55 - сообщение что детонатор продан НЕИЗВЕСТНОЙ империи. игрок не получает НИЧЕГО
-### apsr.24131
 
 
-# сообщение 56 - сообщение что искатели используют детонатор на одном из СВОИХ ученых. он становится избранным	(простым). игроку предлагают купить этого лидера
-### apsr.24128
 
 
-# сообщение 57 - сообщение что ученый теперь наш. ученый становится доступен в списке лидеров.
-### apsr.24129
 
 
-# сообщение 58 - сообщение что ученый остается в своей группе. игрок не получает НИЧЕГО
-### apsr.24130
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # сообщение 59 - сообщение что вмешались неудачно. последствия еще оцениваются
-country_event = {
+situation_event = {
 	id = apsr.24159
 	title = "apsr.24159.title"
 	desc = "apsr.24159.desc"
 	picture = GFX_evt_apsr24_coil
 	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
+	situation = this
+	location = target
 	
 	is_triggered_only = yes
 	
 	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1000 }
+		set_situation_locked = yes
 	}
 		
 	option = {
 		name = apsr.24159.button
 		custom_tooltip = apsr.24159.button.tooltip
 		hidden_effect = {
-			random_list = {
-				10 = {
-					country_event = { id = apsr.24260 days = 150 random = 150 }
-					event_target:apsr24_resource_planet = {
-						set_planet_flag = apsr24_talisman_critical_failure
+			target = {
+				owner = {
+					random_list = {
+						10 = {
+							country_event = { id = apsr.24160 days = 15 random = 15 }
+							event_target:apsr24_resource_planet = {
+								set_planet_flag = apsr24_talisman_critical_failure
+							}
+						}
+						30 = {
+							country_event = { id = apsr.24161 days = 30 random = 30 }
+							set_global_flag = apsr24_talisman_failure
+						}
+						60 = {
+							country_event = { id = apsr.24162 days = 20 random = 20 }
+						}
 					}
-				}
-				30 = {
-					country_event = { id = apsr.24261 days = 300 random = 300 }
-					set_global_flag = apsr24_talisman_failure
-				}
-				60 = {
-					country_event = { id = apsr.24262 days = 250 random = 200 }
 				}
 			}
 		}
@@ -2735,7 +3190,6 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		set_global_flag = apsr24_talisman_detonator
 		event_target:apsr24_resource_planet = {
 			if = {
 				limit = {
@@ -2743,6 +3197,13 @@ country_event = {
 				}
 				remove_building = apsr24_building_talisman
 			}
+			add_modifier = { modifier = apsr24_talisman_critical_failure days = -1 }
+		}
+	}
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			destroy_situation = this
 		}
 	}
 		
@@ -2764,8 +3225,10 @@ country_event = {
 	
 	is_triggered_only = yes
 	
-	immediate = {
-		set_global_flag = apsr24_talisman_detonator
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			destroy_situation = this
+		}
 	}
 		
 	option = {
@@ -2787,351 +3250,20 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		set_global_flag = apsr24_talisman_detonator
 		event_target:apsr24_resource_planet = {
 			add_modifier = { modifier = apsr24_talisman_failure days = -1 }
 		}		
+	}
+	
+	after = {
+		event_target:apsr24_situation_talisman_private_site = {
+			destroy_situation = this
+		}
 	}
 		
 	option = {
 		name = apsr.24162.button
 		custom_tooltip = apsr.24162.button.tooltip
-	}
-}
-
-
-
-
-
-## коллективный разум
-
-
-# сообщение 63 - сообщение с предложением попробовать вмешаться в параметры генерации ресурсов
-country_event = {
-	id = apsr.24163
-	title = "apsr.24163.title"
-	desc = "apsr.24163.desc"
-	picture = GFX_evt_apsr24_formula
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-		
-	option = {
-		name = apsr.24163.button.A
-		custom_tooltip = apsr.24163.button.A.tooltip
-		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			country_event = { id = apsr.24264 days = 1 }
-		}
-	}
-		
-	option = {
-		name = apsr.24163.button.B
-		custom_tooltip = apsr.24163.button.B.tooltip
-		hidden_effect = {
-			remove_global_flag = apsr24_talisman_detonator
-			set_global_flag = apsr24_talisman_detonator
-		}
-	}
-}
-
-
-# сообщение 64 - сообщение что ученые теперь ищут способ вмешаться
-country_event = {
-	id = apsr.24164
-	title = "apsr.24164.title"
-	desc = "apsr.24164.desc"
-	picture = GFX_evt_apsr24_formula
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1500 }
-	}
-		
-	option = {
-		name = apsr.24164.button
-		custom_tooltip = apsr.24164.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24265 days = 700 random = 900 }
-		}
-	}
-}
-
-
-# сообщение 65 - сообщение что обнаружена система в появлении ресурсов
-country_event = {
-	id = apsr.24165
-	title = "apsr.24165.title"
-	desc = "apsr.24165.desc"
-	picture = GFX_evt_apsr24_formula
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1900 }
-	}
-		
-	option = {
-		name = apsr.24165.button
-		custom_tooltip = apsr.24165.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24266 days = 700 random = 900 }
-		}
-	}
-}
-
-
-# сообщение 66 - сообщение что нашли возможность вмешательства в генерацию
-country_event = {
-	id = apsr.24166
-	title = "apsr.24166.title"
-	desc = "apsr.24166.desc"
-	picture = GFX_evt_apsr24_formula
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1900 }
-	}
-		
-	option = {
-		name = apsr.24166.button
-		custom_tooltip = apsr.24166.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24267 days = 700 random = 900 }
-		}
-	}
-}
-
-
-# сообщение 67 - сообщение что возможность подтвердилась, предложение увеличить шанс появления определенных ресурсов
-country_event = {
-	id = apsr.24167
-	title = "apsr.24167.title"
-	desc = "apsr.24167.desc"
-	picture = GFX_evt_apsr24_coil
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1300 }
-	}
-		
-	option = {
-		name = apsr.24167.button.A
-		custom_tooltip = apsr.24167.button.A.tooltip
-		hidden_effect = {
-			set_global_flag = apsr24_talisman_energy_focus
-			country_event = { id = apsr.24268 days = 300 random = 700 }	
-		}
-	}
-		
-	option = {
-		name = apsr.24167.button.B
-		custom_tooltip = apsr.24167.button.B.tooltip
-		hidden_effect = {
-			set_global_flag = apsr24_talisman_minerals_focus
-			country_event = { id = apsr.24268 days = 300 random = 700 }	
-		}
-	}
-		
-	option = {
-		name = apsr.24167.button.C
-		custom_tooltip = apsr.24167.button.C.tooltip
-		hidden_effect = {
-			set_global_flag = apsr24_talisman_food_focus
-			country_event = { id = apsr.24268 days = 300 random = 700 }	
-		}
-	}
-		
-	option = {
-		name = apsr.24167.button.D
-		custom_tooltip = apsr.24167.button.D.tooltip
-		hidden_effect = {
-			set_global_flag = apsr24_talisman_goods_focus
-			country_event = { id = apsr.24268 days = 300 random = 700 }	
-		}
-	}
-		
-	option = {
-		name = apsr.24167.button.E
-		custom_tooltip = apsr.24167.button.E.tooltip
-		hidden_effect = {
-			set_global_flag = apsr24_talisman_alloys_focus
-			country_event = { id = apsr.24268 days = 300 random = 700 }	
-		}
-	}
-		
-	option = {
-		name = apsr.24167.button.F
-		custom_tooltip = apsr.24167.button.F.tooltip
-		hidden_effect = {
-			set_global_flag = apsr24_talisman_rare_focus
-			country_event = { id = apsr.24268 days = 300 random = 700 }	
-		}
-	}
-}
-
-
-# сообщение 68 - сообщение что вмешательство вызвало некий сбой, и в одном из сейфов появилось неизвестное вещество
-country_event = {
-	id = apsr.24168
-	title = "apsr.24168.title"
-	desc = "apsr.24168.desc"
-	picture = GFX_evt_apsr24_detonator
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1300 }
-	}
-		
-	option = {
-		name = apsr.24168.button
-		custom_tooltip = apsr.24168.button.tooltip
-		hidden_effect = {
-			country_event = { id = apsr.24269 days = 300 random = 700 }
-		}
-	}
-}
-
-
-# сообщение 69 - открытие что это вещество способно использоваться для повышения производительности поселений
-country_event = {
-	id = apsr.24169
-	title = "apsr.24169.title"
-	desc = "apsr.24169.desc"
-	picture = GFX_evt_apsr24_detonator
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_timed_global_flag = { flag = apsr24_talisman_detonator days = 1000 }
-	}
-		
-	option = {
-		name = apsr.24169.button
-		custom_tooltip = apsr.24169.button.tooltip
-		hidden_effect = {
-			random_list = {
-				10 = {
-					country_event = { id = apsr.24270 days = 300 random = 300 }
-				}
-				30 = {
-					country_event = { id = apsr.24271 days = 300 random = 300 }
-				}
-				60 = {
-					country_event = { id = apsr.24272 days = 300 random = 300 }
-				}
-			}
-		}
-	}
-}
-
-
-# сообщение 70 - сообщение что удалось полностью скопировать вещество. империя получает постоянный модификатор на +10% к производительности поселений
-country_event = {
-	id = apsr.24170
-	title = "apsr.24170.title"
-	desc = "apsr.24170.desc"
-	picture = GFX_evt_apsr24_synthesis
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_global_flag = apsr24_talisman_detonator
-	}
-		
-	option = {
-		name = apsr.24170.button
-		custom_tooltip = apsr.24170.button.tooltip
-		hidden_effect = {
-			add_modifier = {
-				modifier = "apsr24_talisman_absolute_success"
-				days = -1
-			}			
-		}
-	}
-}
-
-
-# сообщение 71 - сообщение что удалось частично скопировать вещество. империя получает постоянный модификатор на +5% к производительности поселений
-country_event = {
-	id = apsr.24171
-	title = "apsr.24171.title"
-	desc = "apsr.24171.desc"
-	picture = GFX_evt_apsr24_synthesis
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_global_flag = apsr24_talisman_detonator
-	}
-		
-	option = {
-		name = apsr.24171.button
-		custom_tooltip = apsr.24171.button.tooltip
-		hidden_effect = {
-			add_modifier = {
-				modifier = "apsr24_talisman_good_success"
-				days = -1
-			}			
-		}
-	}
-}
-
-
-# сообщение 72 - сообщение что неудалось скопировать вещество. в результате вещества не осталось вообще. но удалось сделать некое подобие этого вещества, которое всего немного улучшает. империя получает постоянный модификатор на +1% к производительности поселений
-country_event = {
-	id = apsr.24172
-	title = "apsr.24172.title"
-	desc = "apsr.24172.desc"
-	picture = GFX_evt_apsr24_synthesis
-	show_sound = event_mystic_reveal
-	location = event_target:apsr24_resource_planet
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		remove_global_flag = apsr24_talisman_detonator
-		set_global_flag = apsr24_talisman_detonator
-	}
-		
-	option = {
-		name = apsr.24172.button
-		custom_tooltip = apsr.24172.button.tooltip
-		hidden_effect = {
-			add_modifier = {
-				modifier = "apsr24_talisman_small_success"
-				days = -1
-			}			
-		}
 	}
 }
 

@@ -1792,18 +1792,32 @@ make_pass_black_hole = {
 	if = {
 		limit = {
 			has_pass_black_hole = no
+			OR = {
+				has_any_subclass = yes
+				is_gestalt_node = yes
+				is_dimension_traveler = yes
+			}
 		}
-		add_trait = leader_trait_pass_black_hole
 		if = {
 			limit = {
-				is_dimension_traveler = yes
-				owner = {
-					NOT = { has_country_flag = dimension_traveler_trait_pass_black_hole }
+				OR = {
+					has_council_subclass = yes
+					is_gestalt_node = yes
 				}
 			}
-			owner = {
-				set_country_flag = dimension_traveler_trait_pass_black_hole
+			add_trait = leader_trait_pass_black_hole_councilor
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_trait = subclass_scientist_analyst
+					is_same_value = event_target:dimension_traveler_scientist
+				}
 			}
+			add_trait = leader_trait_pass_black_hole_analyst
+		}
+		else = {
+			add_trait = leader_trait_pass_black_hole
 		}
 	}
 }

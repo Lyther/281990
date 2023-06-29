@@ -364,7 +364,7 @@ event = {
 									sxx_lianxu = { prev = { set_variable = { which = sxx_leader_state value = 6 } leader_add_sxx_state_trait = { STATE = lianxu } } }
 									sxx_heti = { prev = { set_variable = { which = sxx_leader_state value = 7 } leader_add_sxx_state_trait = { STATE = heti } } }
 									sxx_dacheng = { prev = { set_variable = { which = sxx_leader_state value = 8 } leader_add_sxx_state_trait = { STATE = dacheng } } }
-									xx_dujie = { prev = { set_variable = { which = sxx_leader_state value = 9 } leader_add_sxx_state_trait = { STATE = dujie } } }
+									sxx_dujie = { prev = { set_variable = { which = sxx_leader_state value = 9 } leader_add_sxx_state_trait = { STATE = dujie } } }
 									sxx_zhenxian = { prev = { set_variable = { which = sxx_leader_state value = 10 } leader_add_sxx_state_trait = { STATE = zhenxian } } }
 									sxx_xianwang = { prev = { set_variable = { which = sxx_leader_state value = 11 } leader_add_sxx_state_trait = { STATE = xianwang } } }
 									sxx_xiandi = { prev = { set_variable = { which = sxx_leader_state value = 12 } leader_add_sxx_state_trait = { STATE = xiandi } } }
@@ -403,6 +403,25 @@ event = {
 					NOT = { has_leader_flag = sxx_leader_exists_pop }
 				}
 				add_trait = leader_trait_sxx_lost_connection_with_body
+			}
+		}
+	}
+}
+
+# 每年纠正韩立肖像
+event = {
+	id = sxx_leader.15
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		every_country = {
+			every_owned_leader = {
+				limit = {
+					has_leader_flag = sxx_hanli
+				}
+				change_leader_portrait = sxx_hanli
 			}
 		}
 	}
@@ -482,6 +501,118 @@ event = {
 						else = {
 							subtract_variable = { which = sxx_lingmai_upgrade_value value = 100 }
 						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+# This = owner of ship 1 (combatant)
+# From = owner of ship 2 (destroyed)
+# FromFrom = ship 1
+# FromFromFrom = ship 2
+# on_ship_destroyed_perp
+# 获取魂环
+country_event = {
+	id = sxx_leader.110
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		fromfrom = {
+			exists = leader
+			leader = {
+				has_trait = leader_trait_sxx_hunhuan
+			}
+		}
+	}
+
+	immediate = {
+		fromfromfrom = { # 非能量太空生命体（主要防刷虚空之云）
+			if = {
+				limit = {
+					OR = {
+						is_ship_size = leviathan_01_elder_tiyanki
+						is_ship_size = leviathan_01_voidspawn
+						is_ship_size = space_dragon_red
+						is_ship_size = space_dragon_blue # 裂爪
+						is_ship_size = space_dragon_origin # 天龙
+						is_ship_size = toxic_god
+						is_ship_size = stellarite
+						#is_ship_size = dimensional_horror 这货没打死
+						is_ship_size = hive_asteroid
+						is_ship_size = crystal_station_large
+						#is_ship_size = wraith_01_blue
+						#is_ship_size = wraith_01_red
+						#is_ship_size = wraith_01_yellow
+					}
+				}
+				root.fromfrom.leader = {
+					change_variable = {
+						which = sxx_hunhuan_count
+						value = 100
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						is_ship_size = space_dragon_baby
+						is_ship_size = space_dragon_origin_baby
+						is_ship_size = space_whale_1
+						is_ship_size = space_whale_2
+						is_ship_size = space_whale_5
+						is_ship_size = lost_swarm_adult
+						is_ship_size = space_amoeba_mother
+						is_ship_size = space_amoeba_centenarian # 泡泡
+						is_ship_size = crystal_ship_large_blue
+						is_ship_size = crystal_ship_large_green
+						is_ship_size = crystal_ship_large_yellow
+						is_ship_size = crystal_ship_large_red
+						is_ship_size = crystal_ship_large_blue_elite
+						is_ship_size = crystal_ship_large_green_elite
+						is_ship_size = crystal_ship_large_yellow_elite
+						is_ship_size = crystal_ship_large_red_elite
+					}
+				}
+				root.fromfrom.leader = {
+					change_variable = {
+						which = sxx_hunhuan_count
+						value = 10
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						is_ship_size = space_whale_3
+						is_ship_size = space_whale_4
+						is_ship_size = space_amoeba
+						is_ship_size = crystal_ship_small_blue
+						is_ship_size = crystal_ship_medium_blue
+						is_ship_size = crystal_ship_small_green
+						is_ship_size = crystal_ship_medium_green
+						is_ship_size = crystal_ship_small_yellow
+						is_ship_size = crystal_ship_medium_yellow
+						is_ship_size = crystal_ship_small_red
+						is_ship_size = crystal_ship_medium_red
+						is_ship_size = crystal_ship_small_blue_elite
+						is_ship_size = crystal_ship_medium_blue_elite
+						is_ship_size = crystal_ship_small_green_elite
+						is_ship_size = crystal_ship_medium_green_elite
+						is_ship_size = crystal_ship_small_yellow_elite
+						is_ship_size = crystal_ship_medium_yellow_elite
+						is_ship_size = crystal_ship_small_red_elite
+						is_ship_size = crystal_ship_medium_red_elite
+					}
+				}
+				root.fromfrom.leader = {
+					change_variable = {
+						which = sxx_hunhuan_count
+						value = 1
 					}
 				}
 			}

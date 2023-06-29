@@ -858,12 +858,20 @@ situation_event = {
 					factor = 0
 					has_situation_flag = time_141_triggered
 				}
+				modifier = {
+					factor = 0
+					current_stage = stage_pc_time_10
+				}
 				situation_event = { id = time.141 }
 			}
 			1 = {
 				modifier = {
 					factor = 0
 					has_situation_flag = time_142_triggered
+				}
+				modifier = {
+					factor = 0
+					current_stage = stage_pc_time_10
 				}
 				situation_event = { id = time.142 }
 			}
@@ -872,12 +880,20 @@ situation_event = {
 					factor = 0
 					has_situation_flag = time_143_triggered
 				}
+				modifier = {
+					factor = 0
+					current_stage = stage_pc_time_10
+				}
 				situation_event = { id = time.143 }
 			}
 			1 = {
 				modifier = {
 					factor = 0
 					has_situation_flag = time_144_triggered
+				}
+				modifier = {
+					factor = 0
+					current_stage = stage_pc_time_10
 				}
 				situation_event = { id = time.144 }
 			}
@@ -886,12 +902,20 @@ situation_event = {
 					factor = 0
 					has_situation_flag = time_145_triggered
 				}
+				modifier = {
+					factor = 0
+					current_stage = stage_pc_time_10
+				}
 				situation_event = { id = time.145 }
 			}
 			1 = {
 				modifier = {
 					factor = 0
 					has_situation_flag = time_146_triggered
+				}
+				modifier = {
+					factor = 0
+					current_stage = stage_pc_time_10
 				}
 				situation_event = { id = time.146 }
 			}
@@ -900,6 +924,10 @@ situation_event = {
 					factor = 0
 					has_situation_flag = time_147_triggered
 				}
+				modifier = {
+					factor = 0
+					NOT = { current_stage = stage_pc_time_10 }
+				}
 				situation_event = { id = time.147 }
 			}
 			1 = {
@@ -907,12 +935,20 @@ situation_event = {
 					factor = 0
 					has_situation_flag = time_148_triggered
 				}
+				modifier = {
+					factor = 0
+					NOT = { current_stage = stage_pc_time_10 }
+				}
 				situation_event = { id = time.148 }
 			}
 			1 = {
 				modifier = {
 					factor = 0
 					has_situation_flag = time_149_triggered
+				}
+				modifier = {
+					factor = 0
+					NOT = { current_stage = stage_pc_time_10 }
 				}
 				situation_event = { id = time.149 }
 			}
@@ -1294,7 +1330,10 @@ situation_event = {
 	
 	option = {
 		name = time.147.a
+		custom_tooltip = make_situation_pc_time_slow
 		target = {
+			add_deposit = d_time_minerals
+			add_deposit = d_time_food
 			custom_tooltip = create_6_pop
 			hidden_effect = {
 				while = {
@@ -1305,7 +1344,6 @@ situation_event = {
 				}
 			}
 		}
-		custom_tooltip = make_situation_pc_time_slow
 		hidden_effect = {
 			set_timed_situation_flag = {
 				flag = situation_slow
@@ -1317,6 +1355,10 @@ situation_event = {
 	option = {
 		name = time.147.b
 		custom_tooltip = make_situation_pc_time_fast
+		target = {
+			add_deposit = d_time_consumer_goods
+			add_deposit = d_time_engineering_research
+		}
 		owner = {
 			add_tech_option_or_research_effect = {
 				TECH = tech_enigmatic_encoder
@@ -1350,8 +1392,8 @@ situation_event = {
 	}
 	
 	after = {
+		custom_tooltip = make_situation_pc_time_stop
 		hidden_effect = {
-			custom_tooltip = make_situation_pc_time_stop
 			set_timed_situation_flag = {
 				flag = situation_stop
 				days = 1800
@@ -1363,6 +1405,8 @@ situation_event = {
 	option = {
 		name = time.148.a
 		target = {
+			add_deposit = d_time_physics_research
+			add_deposit = d_time_unity
 			custom_tooltip = create_6_pop
 			hidden_effect = {
 				while = {
@@ -1382,6 +1426,8 @@ situation_event = {
 	option = {
 		name = time.148.b
 		target = {
+			add_deposit = d_time_energy
+			add_deposit = d_time_society_research
 			add_modifier = {
 				modifier = pc_time_modifier_13
 				days = 1800
@@ -1425,7 +1471,11 @@ situation_event = {
 	
 	option = {
 		name = time.149.a
+		target = {
+			add_deposit = d_time_alloys
+		}
 		owner = {
+			add_resource = { nanites = 500 }
 			add_tech_option_or_research_effect = {
 				TECH = tech_dark_matter_deflector
 				PROGRESS = 0.2
@@ -1446,7 +1496,11 @@ situation_event = {
 	
 	option = {
 		name = time.149.b
+		target = {
+			add_deposit = d_time_alloys
+		}
 		owner = {
+			add_resource = { nanites = 500 }
 			add_tech_option_or_research_effect = {
 				TECH = tech_nanite_repair_system
 				PROGRESS = 0.2
@@ -1877,10 +1931,10 @@ fleet_event = {
 		owner = { set_country_flag = time_201_triggered }
 		solar_system = {
 			set_star_flag = time_black_hole_system
+			save_global_event_target_as = time_black_hole_system
 			star = {
 				save_global_event_target_as = time_black_hole
 			}
-			save_global_event_target_as = time_black_hole_system
 		}
 	}
 
@@ -1891,10 +1945,7 @@ fleet_event = {
 			target = root.owner
 		}
 		solar_system = {
-			random_system_planet = {
-				limit = {
-					is_star = yes
-				}
+			star = {
 				enable_special_project = {
 					name = TIME_BLACK_HOLE_PROJECT
 					location = this
@@ -1912,6 +1963,9 @@ fleet_event = {
 				value = @tier2influencereward
 				min = @tier2influencemin
 				max = @tier2influencemax
+			}
+			hidden_effect = {
+				set_country_flag = interrupt_time_black_hole_chain
 			}
 		}
 	}
@@ -1934,6 +1988,7 @@ country_event = {
 	}
 
 	immediate = {
+		set_country_flag = interrupt_time_black_hole_chain
 	}
 
 	option = {
@@ -1951,6 +2006,11 @@ country_event = {
 	location = event_target:time_black_hole_system
 
 	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:time_black_hole_leader
+	}
 
 	trigger = {
 		ruler = {
@@ -2031,6 +2091,11 @@ country_event = {
 	location = event_target:time_home_planet
 
 	is_triggered_only = yes
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:time_black_hole_leader
+	}
 
 	trigger = {
 	}
@@ -2046,24 +2111,17 @@ country_event = {
 			modifier = timelife
 			days = 360
 		}
-		if = {
-			limit = {
-				ruler = {
-					has_trait = leader_trait_ruler_time
+		event_target:time_black_hole_leader = {
+			add_trait = leader_trait_ruler_time_owner
+		}
+		hidden_effect = {
+			random_owned_planet = {
+				limit = {
+					is_variable_set = paragon_memory_vault
 				}
-			}
-			ruler = {
-				add_trait = leader_trait_ruler_time_owner
-			}
-			hidden_effect = {
-				random_owned_planet = {
-					limit = {
-						is_variable_set = paragon_memory_vault
-					}
-					change_variable = {
-						which = paragon_memory_vault
-						value = 1
-					}
+				change_variable = {
+					which = paragon_memory_vault
+					value = 1
 				}
 			}
 		}
@@ -2099,6 +2157,11 @@ country_event = {
 
 	trigger = {
 	}
+	
+	event_window_type = leader_story
+	picture_event_data = {
+		portrait = event_target:time_black_hole_leader
+	}
 
 	immediate = {
 		set_country_flag = time_black_hole_end_2
@@ -2110,7 +2173,14 @@ country_event = {
 			modifier = timedeath
 			days = 360
 		}
-		exile_leader_as = exiled_time_black_hole_leader
+		event_target:time_black_hole_leader = {
+			tooltip = {
+				kill_leader = { show_notification = no }
+			}
+			hidden_effect = {
+				exile_leader_as = exiled_time_black_hole_leader
+			}
+		}
 		if = {
 			limit = {
 				has_technology = tech_akx_worm_3
@@ -2146,6 +2216,16 @@ situation_event = {
 	}
 
 	immediate = {
+		owner = {
+			if = {
+				limit = {
+					has_country_flag = time_black_hole_end_2
+				}
+				event_target:time_black_hole_leader = {
+					kill_leader = { show_notification = no }
+				}
+			}
+		}
 	}
 
 	option = {
@@ -2180,6 +2260,17 @@ situation_event = {
 	}
 
 	immediate = {
+		owner = {
+			if = {
+				limit = {
+					has_country_flag = time_black_hole_end_2
+				}
+				event_target:time_black_hole_leader = {
+					kill_leader = { show_notification = no }
+				}
+			}
+			set_country_flag = interrupt_time_black_hole_chain
+		}
 	}
 
 	option = {
