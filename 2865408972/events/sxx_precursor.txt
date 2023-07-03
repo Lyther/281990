@@ -2958,8 +2958,8 @@ country_event = {
 		is_ai = no
 		years_passed > 50
 		NOR = {
-			#has_country_flag = ongoing_precursor_artifact
-			has_country_flag = precursor_collector_fired
+			has_country_flag = ongoing_sxx_precursor_artifact
+			has_country_flag = sxx_precursor_collector_fired
 			has_ethic = ethic_gestalt_consciousness
 		}
 		OR = {
@@ -3021,7 +3021,7 @@ country_event = {
 			years = 9
 		}
 		# Choose a relevant artifact
-		set_country_flag = precursor_collector_fired
+		set_country_flag = sxx_precursor_collector_fired
 		random_owned_planet = { save_event_target_as = collector_home }
 		if = {
 			limit = { has_event_chain = sxx_precursor1_chain }
@@ -3070,6 +3070,353 @@ country_event = {
 			remove_country_flag = sxx_precursor2_artifact_recoverer
 			remove_country_flag = sxx_precursor3_artifact_recoverer
 			remove_country_flag = sxx_precursor4_artifact_recoverer
+		}
+	}
+}
+
+# New Precursor Anomaly Found
+# via on_five_year_pulse_country = {}
+country_event = {
+	id = sxx_precursor.10001
+	title = "sxx_precursor.10001.name"
+	desc = sxx_precursor.10001.desc
+	picture = GFX_evt_archaeological_dig
+	location = event_target:sxx_precursor_planet
+	trackable = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = no
+		years_passed > 50
+		NOT = { has_country_flag = ongoing_sxx_precursor_artifact }
+		OR = {
+			AND = {
+				has_event_chain = sxx_precursor1_chain
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = sxx_precursor1_chain
+						counter = sxx_precursor1_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = sxx_precursor_1
+					any_system_planet = {
+						NOT = { has_planet_flag = precursor_world }
+						uninhabitable_regular_planet = yes
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+			AND = {
+				has_event_chain = sxx_precursor2_chain
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = sxx_precursor2_chain
+						counter = sxx_precursor2_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = sxx_precursor_2
+					any_system_planet = {
+						NOT = { has_planet_flag = precursor_world }
+						uninhabitable_regular_planet = yes
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+			AND = {
+				has_event_chain = sxx_precursor3_chain
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = sxx_precursor3_chain
+						counter = sxx_precursor3_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = sxx_precursor_3
+					any_system_planet = {
+						NOT = { has_planet_flag = precursor_world }
+						uninhabitable_regular_planet = yes
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+			AND = {
+				has_event_chain = sxx_precursor4_chain
+				NOT = {
+					has_completed_event_chain_counter = {
+						event_chain = sxx_precursor4_chain
+						counter = sxx_precursor4_artifacts
+					}
+				}
+				any_system_within_border = {
+					has_star_flag = sxx_precursor_4
+					any_system_planet = {
+						NOT = { has_planet_flag = precursor_world }
+						uninhabitable_regular_planet = yes
+						has_owner = no
+						has_anomaly = no
+						is_surveyed = {
+							who = ROOT
+							status = yes
+						}
+					}
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		# NOTE: although gestalts are ineligible for the other events in this series, that actually increases their odds of receiving this one (as opposed to nothing at all). This is because 'on_actions' do not count weightings for random_events whose triggers will fail. The same therefore applies to regular empires who have already triggered the one-off events in this series.
+		modifier = {
+			factor = 0.9
+			is_gestalt = yes
+		}
+		modifier = {
+			factor = 1.25
+			years_passed > 100
+		}
+		modifier = {
+			factor = 0.75
+			has_country_flag = recent_new_sxx_precursor
+		}
+	}
+
+	immediate = {
+		# Reduce odds of firing in (relatively) quick succession
+		set_timed_country_flag = {
+			flag = recent_new_sxx_precursor
+			years = 9
+		}
+		# Spawn a Special Project
+		if = {
+			limit = {
+				has_event_chain = sxx_precursor1_chain
+				any_system_within_border = {
+					has_star_flag = precursor_1
+				}
+			}
+			spawn_sxx_precursor1_anomaly = yes
+			break = yes
+		}
+		if = {
+			limit = {
+				has_event_chain = sxx_precursor2_chain
+				any_system_within_border = {
+					has_star_flag = precursor_2
+				}
+			}
+			spawn_sxx_precursor2_anomaly = yes
+			break = yes
+		}
+		if = {
+			limit = {
+				has_event_chain = sxx_precursor3_chain
+				any_system_within_border = {
+					has_star_flag = precursor_3
+				}
+			}
+			spawn_sxx_precursor3_anomaly = yes
+			break = yes
+		}
+		if = {
+			limit = {
+				has_event_chain = sxx_precursor4_chain
+				any_system_within_border = {
+					has_star_flag = precursor_4
+				}
+			}
+			spawn_sxx_precursor4_anomaly = yes
+			break = yes
+		}
+	}
+
+	option = {
+		name = sxx_precursor.10001.a
+		custom_tooltip = new_sxx_precursor_project
+	}
+}
+
+# Vultaum Artifact Recovered
+ship_event = {
+	id = sxx_precursor.10002
+	title = "sxx_precursor.10002.name"
+	desc = sxx_precursor.10002.desc
+	picture = GFX_evt_archaeological_dig
+	location = event_target:sxx_precursor_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = sxx_precursor1_artifact_recoverer }
+	}
+
+	after = {
+		hidden_effect = {
+			owner = { remove_country_flag = sxx_precursor1_artifact_recoverer }
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		owner = {
+			add_event_chain_counter = {
+				event_chain = sxx_precursor1_chain
+				counter = sxx_precursor1_artifacts
+				amount = 1
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = {
+				country_event = { id = sxx_precursor.97 }
+				remove_country_flag = ongoing_sxx_precursor_artifact
+			}
+		}
+	}
+}
+
+# Vultaum Artifact Recovered
+ship_event = {
+	id = sxx_precursor.10003
+	title = "sxx_precursor.10003.name"
+	desc = sxx_precursor.10002.desc
+	picture = GFX_evt_archaeological_dig
+	location = event_target:sxx_precursor_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = sxx_precursor2_artifact_recoverer }
+	}
+
+	after = {
+		hidden_effect = {
+			owner = { remove_country_flag = sxx_precursor2_artifact_recoverer }
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		owner = {
+			add_event_chain_counter = {
+				event_chain = sxx_precursor2_chain
+				counter = sxx_precursor2_artifacts
+				amount = 1
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = {
+				country_event = { id = sxx_precursor.297 }
+				remove_country_flag = ongoing_sxx_precursor_artifact
+			}
+		}
+	}
+}
+
+# Vultaum Artifact Recovered
+ship_event = {
+	id = sxx_precursor.10004
+	title = "sxx_precursor.10004.name"
+	desc = sxx_precursor.10002.desc
+	picture = GFX_evt_archaeological_dig
+	location = event_target:sxx_precursor_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = sxx_precursor3_artifact_recoverer }
+	}
+
+	after = {
+		hidden_effect = {
+			owner = { remove_country_flag = sxx_precursor3_artifact_recoverer }
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		owner = {
+			add_event_chain_counter = {
+				event_chain = sxx_precursor3_chain
+				counter = sxx_precursor3_artifacts
+				amount = 1
+			}
+			add_monthly_resource_mult = {
+				resource = physics_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = {
+				country_event = { id = sxx_precursor.497 }
+				remove_country_flag = ongoing_sxx_precursor_artifact
+			}
+		}
+	}
+}
+
+# Vultaum Artifact Recovered
+ship_event = {
+	id = sxx_precursor.10005
+	title = "sxx_precursor.10005.name"
+	desc = sxx_precursor.10002.desc
+	picture = GFX_evt_archaeological_dig
+	location = event_target:sxx_precursor_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		owner = { set_country_flag = sxx_precursor4_artifact_recoverer }
+	}
+
+	after = {
+		hidden_effect = {
+			owner = { remove_country_flag = sxx_precursor4_artifact_recoverer }
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		owner = {
+			add_event_chain_counter = {
+				event_chain = sxx_precursor4_chain
+				counter = sxx_precursor4_artifacts
+				amount = 1
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			hidden_effect = {
+				country_event = { id = sxx_precursor.697 }
+				remove_country_flag = ongoing_sxx_precursor_artifact
+			}
 		}
 	}
 }
